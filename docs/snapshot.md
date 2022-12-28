@@ -14,6 +14,28 @@ Operations using snapshots, such as capture, diff, and rollback, are performed w
 
 For a demonstration of snapshots, watch the video [Sveltos, introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4) on YouTube.
 
+### Snapshot dif
+
+[sveltoctl](https://github.com/projectsveltos/sveltosctl) snapshot diff can be used to display all the configuration changes between two snapshots:
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
++-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
+|               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION  |              MESSAGE               |
++-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
+| default/sveltos-management-workload | helm release             | mysql     | mysql          | added    |                                    |
+| default/sveltos-management-workload | helm release             | nginx     | nginx-latest   | added    |                                    |
+| default/sveltos-management-workload | helm release             | kyverno   | kyverno-latest | modified | To version: v2.5.0 From            |
+|                                     |                          |           |                |          | version v2.5.3                     |
+| default/sveltos-management-workload | /Pod                     | default   | nginx          | added    |                                    |
+| default/sveltos-management-workload | kyverno.io/ClusterPolicy |           | no-gateway     | modified | To see diff compare ConfigMap      |
+|                                     |                          |           |                |          | default/kyverno-disallow-gateway-2 |
+|                                     |                          |           |                |          | in the from folderwith ConfigMap   |
+|                                     |                          |           |                |          | default/kyverno-disallow-gateway-2 |
+|                                     |                          |           |                |          | in the to folder                   |
++-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
+```
+
 ### Rollback
 
 Rollback is a feature in which a previous configuration snapshot is used to replace the current configuration deployed by Sveltos. Rollback can be executed with the following granularities:
