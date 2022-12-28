@@ -1,4 +1,4 @@
-Snapback is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the following tasks:
+Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the following tasks:
 
 - Live snapshots of the running Sveltos configuration;
 - Recurring snapshots;
