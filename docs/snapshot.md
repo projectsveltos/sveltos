@@ -14,7 +14,7 @@ Operations using snapshots, such as capture, diff, and rollback, are performed w
 
 For a demonstration of snapshots, watch the video [Sveltos, introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4) on YouTube.
 
-### Snapshot dif
+### Snapshot diff
 
 [sveltoctl](https://github.com/projectsveltos/sveltosctl) snapshot diff can be used to display all the configuration changes between two snapshots:
 
