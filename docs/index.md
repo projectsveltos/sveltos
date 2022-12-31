@@ -7,8 +7,9 @@ Sveltos focuses not only on the ability to scale the number of clusters it can m
 ## Features List
 1. Kubernetes [addon distribution](addons.md) across multiple clusters;
 2. [Templates](template.md) instantiated reading values from management cluster;
-3. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
-4. [Snapshot and Rollback](snapshot.md).
+3. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
+4. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
+5. [Snapshot and Rollback](snapshot.md).
 
 ## Core Concepts
 
