@@ -87,6 +87,10 @@ Reconciliation consists of one of these actions on matching clusters:
 1. update a feature — whenever the ClusterProfile configuration changes or any referenced ConfigMap/Secret changes;
 1. remove a feature — whenever a Helm release or a ConfigMap/Secret is deleted from the ClusterProfile.
 
+*Continuous with configuration drift detection*
+
+See [Configuration Drift](#configuration-drift).
+
 *DryRun*
 
 See [Dry Run Mode](#dryrun-mode).
@@ -117,6 +121,20 @@ You can see the change list by viewing a generated Custom Resource Definition (C
 ```
 
 For a demonstration of dry run mode, watch the video [Sveltos, introduction to DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=4s) on YouTube.
+
+### Configuration Drift
+
+‘Configuration drift’ is a common term to describe a change that takes place in an environment. Drift is an issue because it causes systems and parts of a system that are supposed to be consistent, to become inconsistent and unpredictable.
+
+In our case, 'configuration drift' is a change of a resource deployed by Sveltos in one of the managed clusters.
+
+When sync mode is set to SyncModeContinuousWithDriftDetection for a ClusterProfile, sveltos monitors the state of managed clusters and when it detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster.
+
+In order to achieve so, when in this mode:
+- sveltos deploys a service in each managed cluster and configures this service with list of kubernetes resources deployed because of each ClusterProfile in SyncModeContinuousWithDriftDetection mode;
+- service starts a watcher for each GroupVersionKind;
+- when one of the resources being watched is modified (labels, annotations, spec or rules sections), service notifies management cluster about a potential configuration drift;
+- management cluster reacts by redeploying afftected ClusterProfiles.
 
 ## Managing labels
 

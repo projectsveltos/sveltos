@@ -36,6 +36,16 @@ make docker-build
 docker push gianlucam76/classifier-agent-amd64:${branch}
 cd ../../; rm -rf tmp
 
+# drift-detection-manager
+echo "processing drift-detection-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/drift-detection-manager.git
+cd drift-detection-manager
+git checkout ${branch}
+make docker-build
+docker push gianlucam76/drift-detection-manager-amd64:${branch}
+cd ../../; rm -rf tmp
+
 # access-manager
 echo "processing access-manager"
 rm -rf tmp; mkdir tmp; cd tmp
