@@ -169,18 +169,18 @@ spec:
                   this report is for.
                 type: string
               clusterName:
-                description: ClusterName is the name of the CAPI Cluster this ClusterReport
+                description: ClusterName is the name of the Cluster this ClusterReport
                   is for.
                 type: string
               clusterNamespace:
-                description: ClusterNamespace is the namespace of the CAPI Cluster
-                  this ClusterReport is for.
+                description: ClusterNamespace is the namespace of the Cluster this
+                  ClusterReport is for.
                 type: string
               clusterType:
                 description: ClusterType is the type of Cluster
                 type: string
               match:
-                description: Match indicates whether CAPI Cluster is currently a match
+                description: Match indicates whether Cluster is currently a match
                   for the Classifier instance this report is for
                 type: boolean
             required:
@@ -297,10 +297,10 @@ spec:
                         type: object
                       type: array
                     group:
-                      description: Group of the resource deployed in the CAPI Cluster.
+                      description: Group of the resource deployed in the Cluster.
                       type: string
                     kind:
-                      description: Kind of the resource deployed in the CAPI Cluster.
+                      description: Kind of the resource deployed in the Cluster.
                       minLength: 1
                       type: string
                     labelFilters:
@@ -335,11 +335,11 @@ spec:
                         match
                       type: integer
                     namespace:
-                      description: Namespace of the resource deployed in the CAPI
-                        Cluster. Empty for resources scoped at cluster level.
+                      description: Namespace of the resource deployed in the  Cluster.
+                        Empty for resources scoped at cluster level.
                       type: string
                     version:
-                      description: Version of the resource deployed in the CAPI Cluster.
+                      description: Version of the resource deployed in the Cluster.
                       type: string
                   required:
                   - group
@@ -383,7 +383,7 @@ spec:
                 items:
                   properties:
                     cluster:
-                      description: Cluster references the CAPI Cluster
+                      description: Cluster references the Cluster
                       properties:
                         apiVersion:
                           description: API version of the referent.
@@ -425,7 +425,7 @@ spec:
                       type: string
                     hash:
                       description: Hash represents the hash of the Classifier currently
-                        deployed in the CAPI Cluster
+                        deployed in the Cluster
                       format: byte
                       type: string
                     status:
@@ -581,6 +581,8 @@ spec:
                       - Classifier
                       - ClassifierAgent
                       - SveltosClusterManager
+                      - DriftDetectionManager
+                      - AccessManager
                       type: string
                     logLevel:
                       description: 'LogLevel is the log severity above which logs
@@ -600,6 +602,214 @@ spec:
         type: object
     served: true
     storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: resourcesummaries.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: ResourceSummary
+    listKind: ResourceSummaryList
+    plural: resourcesummaries
+    singular: resourcesummary
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ResourceSummary is the Schema for the ResourceSummary API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ResourceSummarySpec defines the desired state of ResourceSummary
+            properties:
+              chartResources:
+                description: Resources deployed by ClusterSummary because of referenced
+                  Helm charts
+                items:
+                  properties:
+                    chartName:
+                      description: ChartName is the chart name
+                      minLength: 1
+                      type: string
+                    group:
+                      description: Resources deployed by ClusterSummary because of
+                        helm charts
+                      items:
+                        properties:
+                          group:
+                            description: Group of the resource deployed in the Cluster.
+                            type: string
+                          kind:
+                            description: Kind of the resource deployed in the Cluster.
+                            minLength: 1
+                            type: string
+                          name:
+                            description: Name of the resource deployed in the Cluster.
+                            minLength: 1
+                            type: string
+                          namespace:
+                            description: Namespace of the resource deployed in the
+                              Cluster. Empty for resources scoped at cluster level.
+                            type: string
+                          version:
+                            description: Version of the resource deployed in the Cluster.
+                            type: string
+                        required:
+                        - group
+                        - kind
+                        - name
+                        - version
+                        type: object
+                      type: array
+                    releaseName:
+                      description: ReleaseName is the chart release
+                      minLength: 1
+                      type: string
+                    releaseNamespace:
+                      description: ReleaseNamespace is the namespace release will
+                        be installed
+                      minLength: 1
+                      type: string
+                  required:
+                  - chartName
+                  - releaseName
+                  - releaseNamespace
+                  type: object
+                type: array
+              resources:
+                description: Resources deployed by ClusterSummary because of referenced
+                  ConfigMaps/Secrets
+                items:
+                  properties:
+                    group:
+                      description: Group of the resource deployed in the Cluster.
+                      type: string
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the resource deployed in the Cluster.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                    version:
+                      description: Version of the resource deployed in the Cluster.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - version
+                  type: object
+                type: array
+            type: object
+          status:
+            description: ResourceSummaryStatus defines the status of ResourceSummary
+            properties:
+              helmResourceHashes:
+                description: HelmResourceHashes specifies list of resource plus hash.
+                items:
+                  properties:
+                    group:
+                      description: Group of the resource deployed in the Cluster.
+                      type: string
+                    hash:
+                      description: Hash is the hash of a resource's data.
+                      type: string
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the resource deployed in the Cluster.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                    version:
+                      description: Version of the resource deployed in the Cluster.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - version
+                  type: object
+                type: array
+              helmResourcesChanged:
+                description: Helm Resources changed.
+                type: boolean
+              resourceHashes:
+                description: ResourceHashes specifies a list of resource plus hash
+                items:
+                  properties:
+                    group:
+                      description: Group of the resource deployed in the Cluster.
+                      type: string
+                    hash:
+                      description: Hash is the hash of a resource's data.
+                      type: string
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the resource deployed in the Cluster.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                    version:
+                      description: Version of the resource deployed in the Cluster.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - version
+                  type: object
+                type: array
+              resourcesChanged:
+                description: Resources changed.
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
@@ -719,28 +929,28 @@ spec:
             properties:
               clusterProfileResources:
                 description: ClusterProfileResources is the list of resources currently
-                  deployed in a CAPI Cluster due to ClusterProfiles
+                  deployed in a Cluster due to ClusterProfiles
                 items:
                   description: ClusterProfileResource keeps info on all of the resources
-                    deployed in this CAPI Cluster due to a given ClusterProfile
+                    deployed in this Cluster due to a given ClusterProfile
                   properties:
                     Features:
                       description: Features contains the list of policies deployed
-                        in the CAPI Cluster because of a given feature
+                        in the Cluster because of a given feature
                       items:
                         properties:
                           charts:
                             description: Charts is a list of helm charts deployed
-                              in the CAPI Cluster.
+                              in the Cluster.
                             items:
                               properties:
                                 appVersion:
                                   description: AppVersion is the version of the app
-                                    deployed in the CAPI Cluster.
+                                    deployed in the Cluster.
                                   type: string
                                 chartVersion:
                                   description: ChartVersion is the version of the
-                                    helm chart deployed in the CAPI Cluster.
+                                    helm chart deployed in the Cluster.
                                   type: string
                                 lastAppliedTime:
                                   description: LastAppliedTime identifies when this
@@ -749,16 +959,16 @@ spec:
                                   type: string
                                 namespace:
                                   description: Namespace where chart is deployed in
-                                    the CAPI Cluster.
+                                    the Cluster.
                                   type: string
                                 releaseName:
                                   description: ReleaseName name of the release deployed
-                                    in the CAPI Cluster.
+                                    in the Cluster.
                                   minLength: 1
                                   type: string
                                 repoURL:
                                   description: RepoURL URL of the repo containing
-                                    the helm chart deployed in the CAPI Cluster.
+                                    the helm chart deployed in the Cluster.
                                   minLength: 1
                                   type: string
                               required:
@@ -777,16 +987,16 @@ spec:
                             type: string
                           resources:
                             description: Resources is a list of resources deployed
-                              in the CAPI Cluster.
+                              in the Cluster.
                             items:
                               properties:
                                 group:
                                   description: Group of the resource deployed in the
-                                    CAPI Cluster.
+                                    Cluster.
                                   type: string
                                 kind:
                                   description: Kind of the resource deployed in the
-                                    CAPI Cluster.
+                                    Cluster.
                                   minLength: 1
                                   type: string
                                 lastAppliedTime:
@@ -796,13 +1006,13 @@ spec:
                                   type: string
                                 name:
                                   description: Name of the resource deployed in the
-                                    CAPI Cluster.
+                                    Cluster.
                                   minLength: 1
                                   type: string
                                 namespace:
                                   description: Namespace of the resource deployed
-                                    in the CAPI Cluster. Empty for resources scoped
-                                    at cluster level.
+                                    in the Cluster. Empty for resources scoped at
+                                    cluster level.
                                   type: string
                                 owner:
                                   description: Owner is the list of ConfigMap/Secret
@@ -850,11 +1060,17 @@ spec:
                                         https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                                       type: string
                                   type: object
+                                version:
+                                  description: Version of the resource deployed in
+                                    the Cluster.
+                                  minLength: 1
+                                  type: string
                               required:
                               - group
                               - kind
                               - name
                               - owner
+                              - version
                               type: object
                             type: array
                         required:
@@ -863,7 +1079,7 @@ spec:
                       type: array
                     clusterProfileName:
                       description: ClusterProfileName is the name of the ClusterProfile
-                        matching the CAPI Cluster.
+                        matching the Cluster.
                       type: string
                   required:
                   - clusterProfileName
@@ -1023,7 +1239,7 @@ spec:
                   resources that need to be deployed in the matching CAPI clusters.
                 items:
                   description: PolicyRef specifies a resource containing one or more
-                    policy to deploy in matching CAPI Clusters.
+                    policy to deploy in matching Clusters.
                   properties:
                     kind:
                       description: 'Kind of the resource. Supported kinds are: Secrets
@@ -1071,6 +1287,7 @@ spec:
                 enum:
                 - OneTime
                 - Continuous
+                - ContinuousWithDriftDetection
                 - DryRun
                 type: string
             required:
@@ -1268,11 +1485,10 @@ spec:
                         Resource
                       properties:
                         group:
-                          description: Group of the resource deployed in the CAPI
-                            Cluster.
+                          description: Group of the resource deployed in the Cluster.
                           type: string
                         kind:
-                          description: Kind of the resource deployed in the CAPI Cluster.
+                          description: Kind of the resource deployed in the Cluster.
                           minLength: 1
                           type: string
                         lastAppliedTime:
@@ -1281,12 +1497,12 @@ spec:
                           format: date-time
                           type: string
                         name:
-                          description: Name of the resource deployed in the CAPI Cluster.
+                          description: Name of the resource deployed in the Cluster.
                           minLength: 1
                           type: string
                         namespace:
-                          description: Namespace of the resource deployed in the CAPI
-                            Cluster. Empty for resources scoped at cluster level.
+                          description: Namespace of the resource deployed in the Cluster.
+                            Empty for resources scoped at cluster level.
                           type: string
                         owner:
                           description: Owner is the list of ConfigMap/Secret containing
@@ -1327,11 +1543,16 @@ spec:
                               description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                               type: string
                           type: object
+                        version:
+                          description: Version of the resource deployed in the Cluster.
+                          minLength: 1
+                          type: string
                       required:
                       - group
                       - kind
                       - name
                       - owner
+                      - version
                       type: object
                   required:
                   - resource
@@ -1505,7 +1726,7 @@ spec:
                       CAPI clusters.
                     items:
                       description: PolicyRef specifies a resource containing one or
-                        more policy to deploy in matching CAPI Clusters.
+                        more policy to deploy in matching Clusters.
                       properties:
                         kind:
                           description: 'Kind of the resource. Supported kinds are:
@@ -1553,6 +1774,7 @@ spec:
                     enum:
                     - OneTime
                     - Continuous
+                    - ContinuousWithDriftDetection
                     - DryRun
                     type: string
                 required:
@@ -2045,7 +2267,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/sveltos-manager-amd64:dev
+        image: gianlucam76/sveltos-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -2447,7 +2669,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/classifier-amd64:dev
+        image: gianlucam76/classifier-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -2802,7 +3024,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: gianlucam76/access-manager-amd64:dev
+        image: gianlucam76/access-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3095,7 +3317,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: gianlucam76/sveltoscluster-manager-amd64:dev
+        image: gianlucam76/sveltoscluster-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
