@@ -65,3 +65,13 @@ git checkout ${branch}
 make docker-build
 docker push gianlucam76/sveltoscluster-manager-amd64:${branch}  
 cd ../../; rm -rf tmp
+
+# sveltosctl
+echo "processing sveltosctl"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/sveltosctl.git
+cd sveltosctl
+git checkout ${branch}
+make docker-build
+docker push gianlucam76/sveltosctl-amd64:${branch}
+cd ../../; rm -rf tmp
