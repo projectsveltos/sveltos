@@ -137,6 +137,8 @@ In order to achieve so, when in this mode:
 - when one of the resources being watched is modified (labels, annotations, spec or rules sections), service notifies management cluster about a potential configuration drift;
 - management cluster reacts by redeploying afftected ClusterProfiles.
 
+![Configuration drift recovery](assets/reconcile_configuration_drift.gif)
+
 ## Managing labels
 
 The core idea of Sveltos is to give users the ability to programmatically decide which addons should be deployed where by utilizing a ClusterSelector that selects all clusters with labels matching the selector. However, users were still required to manage the cluster labels manually.
