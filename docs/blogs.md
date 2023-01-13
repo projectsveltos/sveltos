@@ -7,7 +7,7 @@ Here is a list of article on Sveltos:
 
 Here is a list of YouTube videos on Sveltos:
 
-1. [Sveltos slide](https://www.youtube.com/watch?v=UfrKOPTJRCc);
+1. [Sveltos slides](https://www.youtube.com/watch?v=UfrKOPTJRCc);
 2. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s);
 3. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s);
 4. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4);
