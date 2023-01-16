@@ -19,7 +19,7 @@ Today, it's very common for organizations to run and manage multiple Kubernetes 
 Sveltos focuses not only on the ability to scale the number of clusters it can manage, but also to give visibility to exactly which add-ons are installed on each cluster.
 
 ## Features List
-1. Kubernetes [addon distribution](add-ons.md) across multiple clusters;
+1. Kubernetes [addon distribution](addons.md) across multiple clusters;
 2. [configuration drift detection](configuration.md#configuration-drift): when sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
 3. [Templates](template.md) instantiated reading values from management cluster;
 4. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
