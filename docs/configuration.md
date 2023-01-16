@@ -1,14 +1,14 @@
-## Deploying addons
+## Deploying add-ons
 
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go) is the CRD used to instructs Sveltos about:
 
-1. which Kubernetes addons to deploy;
-2. where (on which Kubernetes clusters) to deploy the addons. 
+1. which Kubernetes add-ons to deploy;
+2. where (on which Kubernetes clusters) to deploy the add-ons. 
 
 ![ClusterProfile](assets/sveltos_different_policies.png)
 
 ### Cluster Selection
-The *clusterSelector* field is a Kubernetes label selector. Sveltos uses it to detect all the clusters where addons need to be deployed.
+The *clusterSelector* field is a Kubernetes label selector. Sveltos uses it to detect all the clusters where add-ons need to be deployed.
 
 Example: clusterSelector: env=prod
 
@@ -141,7 +141,7 @@ In order to achieve so, when in this mode:
 
 ## Managing labels
 
-The core idea of Sveltos is to give users the ability to programmatically decide which addons should be deployed where by utilizing a ClusterSelector that selects all clusters with labels matching the selector. However, users were still required to manage the cluster labels manually.
+The core idea of Sveltos is to give users the ability to programmatically decide which add-ons should be deployed where by utilizing a ClusterSelector that selects all clusters with labels matching the selector. However, users were still required to manage the cluster labels manually.
 
 Sometimes it is preferable for cluster labels to change automatically as the cluster runtime state changed so that:
 
@@ -149,7 +149,7 @@ Sometimes it is preferable for cluster labels to change automatically as the clu
 2. when cluster labels change, ClusterProfile instances matched by a cluster change;
 3. because cluster starts matching new ClusterProfile, new set of add-ons are deployed.
 
-For instance, the versions of addons required and/or what addons are needed, depend on the cluster runtime state. Each time a cluster is upgraded, addon versions need to change as well.
+For instance, the versions of add-ons required and/or what add-ons are needed, depend on the cluster runtime state. Each time a cluster is upgraded, addon versions need to change as well.
 
 To address this scenarion, Sveltos introduced Classifier. It is used to dynamically classify a cluster depending on its runtime configuration. Current classification criteria are either based on the Cluster Kubernetes version or the resource deployed in the cluster.
 

@@ -1,6 +1,6 @@
 ## CLI
 
-[sveltosctl](https://github.com/projectsveltos/sveltosctl) is the command line client for Sveltos. sveltosctl nicely displays addons deployed in each Kubernetes cluster by Sveltos.
+[sveltosctl](https://github.com/projectsveltos/sveltosctl) is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
 
 ### show features
 *show features* can be used to display list of resources/helm releases deployed in each clusters by Sveltos. 
