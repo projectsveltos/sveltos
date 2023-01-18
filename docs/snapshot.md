@@ -1,3 +1,14 @@
+---
+title: Snapshot
+description: Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Snapshot allows an administrator to perform snapshots of the configuration.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the following tasks:
 
 - Live snapshots of the running Sveltos configuration;
@@ -6,7 +17,7 @@ Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically
 - Full viewing of any snapshot configuration including the differences between snapshots;
 - Rollback to any previous configuration snapshot; Full or Partial.
 
-### General Overview
+## General Overview
 
 The snapshot feature allows to capture a complete Sveltos policy configuration at an instant in time. Using snapshots from different timestamps, it is possibly to see what configuration changes occurred between two snapshots, and roll back and forward policy configurations to any saved configuration snapshot.
 
