@@ -1,15 +1,4 @@
 ---
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Corporation",
-  "name": "Projectsveltos",
-  "alternateName": "Projectsveltos Documentation",
-  "url": "https://projectsveltos.github.io/sveltos/",
-  "logo": "https://projectsveltos.github.io/sveltos/assets/logo.png"
-}
-</script>
-
 title: Kubernetes add-ons for clusterAPI
 description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of kubernetes cluster add-ons.
 tags:
