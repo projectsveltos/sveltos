@@ -1,6 +1,17 @@
+---
+title: Register Cluster
+description: Sveltos comes with support to automatically discover ClusterAPI powered clusters. Any other cluster (GKE for instance) can easily be registered with Sveltos.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. This means that if Sveltos is deployed in a management cluster with CAPI, no action needs to be taken for Sveltos to manage add-ons on ClusterAPI powered clusters. Sveltos will watch for *clusters.cluster.x-k8s.io"* instances and program those accordingly.
 
-Any other cluster (GKE for instance) can easily be registered with Sveltos. After that, Sveltos can manage Kubernetes add-ons on all the clusters seamless.
+Any other cluster (GKE for instance) can easily be registered with Sveltos. After that, Sveltos can <a href="https://projectsveltos.github.io/sveltos/configuration/">manage Kubernetes add-ons </a> on all the clusters seamless.
 
 ## Register cluster
 
