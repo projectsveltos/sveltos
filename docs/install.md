@@ -1,5 +1,5 @@
 ---
-title: How to install Sveltos - Project Sveltos
+title: How to install
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs. Learn here how to install Sveltos.
 tags:
     - Kubernetes
