@@ -36,6 +36,32 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 ```
 
+If resources contained in Secrets/ConfigMaps referenced by ClusterProfile where modified, option *raw-diff* can be used to see exactly what was changed:
+
+```
+kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00
++-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
+|                  CLUSTER                  |      RESOURCE TYPE       | NAMESPACE |         NAME          |  ACTION  |            MESSAGE             |
++-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
+| default/capi--sveltos-management-workload | kyverno.io/ClusterPolicy |           | add-default-resources | modified | use --raw-diff option to see   |
+|                                           |                          |           |                       |          | diff                           |
++-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
+
+kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00 --raw-diff
+--- kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:14:56:00
++++ kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:15:56:00
+@@ -37,7 +37,8 @@
+               "operator": "In",
+               "value": [
+                 "CREATE",
+-                "UPDATE"
++                "UPDATE",
++                "DELETE"
+               ]
+             }
+           ]
+```
+
 ### Rollback
 
 Rollback is a feature in which a previous configuration snapshot is used to replace the current configuration deployed by Sveltos. Rollback can be executed with the following granularities:

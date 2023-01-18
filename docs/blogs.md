@@ -1,3 +1,5 @@
+<a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="octicon-star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
+
 Here is a list of article on Sveltos:
 
 1. [Deploy Kubernetes add-ons](https://medium.com/@gianluca.mardente/sveltos-a-solution-to-deploy-kubernetes-add-ons-in-clusterapi-powered-clusters-b9d4b48fc819);
@@ -12,3 +14,5 @@ Here is a list of YouTube videos on Sveltos:
 3. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s);
 4. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4);
 5. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s).
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
