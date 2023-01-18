@@ -1,3 +1,14 @@
+---
+title: Configuration - Project Veltos
+description: Project Veltos is a Policy Driven Software that helps with the installation, configuration and deletion of kubernetes cluster add-ons. View Veltos configuration
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 ## Deploying add-ons
 
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go) is the CRD used to instructs Sveltos about:
