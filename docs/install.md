@@ -1,3 +1,14 @@
+---
+title: How to install Sveltos - Project Sveltos
+description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs. Learn here how to install Sveltos.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 To install Sveltos simply run:
 
 ```
@@ -12,7 +23,7 @@ If Prometheus operator is not present in your management cluster, you will see (
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
-### Get Status​
+## Get Sveltos Status​
 
 Get sveltos status and verify all pods are up and running
 
