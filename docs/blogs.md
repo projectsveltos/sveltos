@@ -1,3 +1,14 @@
+---
+title: Recources by Sveltos
+description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 <a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="octicon-star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
 
 Here is a list of article on Sveltos:
