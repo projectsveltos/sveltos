@@ -1,6 +1,6 @@
 ---
-title: Kubernetes add-ons for clusterAPI and not. 
-description: Kubernetes cluster classification based on cluster run-time state
+title: Kubernetes Cluster Classification - Project Sveltos 
+description: A Kubernetes cluster is a set of nodes that run containerized applications. Discover Kubernetes cluster classification based on cluster run-time state.
 tags:
     - Kubernetes
     - add-ons
@@ -110,13 +110,13 @@ spec:
     version: 1.25.0
 ```
 
-With the above configuration:
+With the above cluster configuration:
 
 1. Any cluster with a Kubernetes version v1.24.x will get label _gatekeeper:v3.9_ added and because of that Gatekeeper 3.9.0 helm chart will be deployed;
 2. Any cluster with a Kubernetes version v1.25.x will get label _gatekeeper:v3.10_ added and because of that Gatekeeper 3.10.0 helm chart will be deployed;
 3. As soon a cluster is upgraded from Kubernetes version v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
 
-## More examples
+### More examples
 
 1. Classify clusters based on their Kubernetes version [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/kubernetes_version.yaml)
 2. Classify clusters based on number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
