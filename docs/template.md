@@ -1,3 +1,14 @@
+---
+title: Templates
+description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. 
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. Such templates instantiation happens at time of deployment reading values from managament cluster.
 
 For instance, following *ClusterProfile* will deploy calico in any matching CAPI powered cluster fetching Pod CIDRs from CAPI Cluster instance.
