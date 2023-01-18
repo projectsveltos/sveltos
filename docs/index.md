@@ -1,6 +1,6 @@
 ---
-title: Kubernetes add-ons for clusterAPI and not.
-description: Projectsveltos is a controller that that extends the functionality of Cluster API by providing a solution for managing the installation, configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs 
+title: Kubernetes add-ons for clusterAPI
+description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of kubernetes cluster add-ons.
 tags:
     - Kubernetes
     - add-ons
@@ -16,7 +16,7 @@ authors:
 
 Today, it's very common for organizations to run and manage multiple Kubernetes clusters across different cloud providers or infrastructures. With an increasing number of clusters, consistently managing Kubernetes add-ons is not an easy task.
 
-[Sveltos](https://github.com/projectsveltos) is a lightweight application designed to manage hundreds of clusters. It does so by providing declarative APIs to deploy Kubernetes add-ons across set of clusters. 
+[Sveltos](https://github.com/projectsveltos) is a lightweight application designed to manage hundreds of clusters. It does so by providing declarative cluster APIs to deploy Kubernetes add-ons across set of clusters.
 
 Sveltos focuses not only on the ability to scale the number of clusters it can manage, but also to give visibility to exactly which add-ons are installed on each cluster.
 
