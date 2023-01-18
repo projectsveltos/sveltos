@@ -1,3 +1,4 @@
+---
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -9,7 +10,6 @@
 }
 </script>
 
----
 title: Kubernetes add-ons for clusterAPI
 description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of kubernetes cluster add-ons.
 tags:
