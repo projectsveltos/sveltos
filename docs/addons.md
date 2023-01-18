@@ -1,5 +1,5 @@
 ---
-title: Addon Distribution - Veltos
+title: Addon Distribution - Project Sveltos
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 tags:
     - Kubernetes
