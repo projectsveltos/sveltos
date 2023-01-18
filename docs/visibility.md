@@ -1,3 +1,14 @@
+---
+title: Visibility
+description: sveltosctl is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+authors:
+    - Gianluca Mardente
+---
 ## CLI
 
 [sveltosctl](https://github.com/projectsveltos/sveltosctl) is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
