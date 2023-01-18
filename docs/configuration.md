@@ -1,6 +1,6 @@
 ---
-title: Configuration - Project Veltos
-description: Project Veltos is a Policy Driven Software that helps with the installation, configuration and deletion of kubernetes cluster add-ons. View Veltos configuration
+title: Configuration - Projectsveltos
+description: Projectsveltos is a Policy Driven Software that helps with the installation, configuration and deletion of kubernetes cluster add-ons. View Veltos configuration
 tags:
     - Kubernetes
     - add-ons
