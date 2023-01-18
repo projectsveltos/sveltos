@@ -3,7 +3,7 @@
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go) is the CRD used to instructs Sveltos about:
 
 1. which Kubernetes add-ons to deploy;
-2. where (on which Kubernetes clusters) to deploy the add-ons. 
+2. where (on which Kubernetes clusters) to deploy the Kubernetes add-ons. 
 
 ![ClusterProfile](assets/sveltos_different_policies.png)
 
