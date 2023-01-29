@@ -8,6 +8,7 @@ tags:
     - add-ons
     - helm
     - clusterapi
+    - multi tenancy
 authors:
     - Gianluca Mardente
 ---
