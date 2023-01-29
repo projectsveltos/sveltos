@@ -8,6 +8,7 @@ tags:
     - clusterapi
     - kubernetes cluster classification
     - cluster runtime state
+    - multi tenancy
 authors:
     - Gianluca Mardente
 ---
