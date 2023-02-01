@@ -6,7 +6,7 @@ tags:
     - add-ons
     - helm
     - clusterapi
-    - multi tenancy
+    - multi-tenancy
 authors:
     - Gianluca Mardente
 ---
