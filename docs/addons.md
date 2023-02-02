@@ -7,6 +7,7 @@ tags:
     - helm
     - clusterapi
     - multi-tenancy
+    - Sveltos
 authors:
     - Gianluca Mardente
 ---
@@ -56,6 +57,8 @@ spec:
 ![Sveltos in action](assets/sveltos_kyverno.png)
 
 For a quick video of Sveltos, watch the video [Sveltos introduction](https://www.youtube.com/watch?v=Ai5Mr9haWKM) on YouTube.
+
+To know more about configuration, please take a look at this [section](configuration.md#deploying-add-ons).
 
 ### More examples
 

@@ -26,7 +26,7 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 
 ## Get Sveltos Status​
 
-Get sveltos status and verify all pods are up and running
+Get Sveltos status and verify all pods are up and running
 
 ```
 projectsveltos   access-manager-6f7fcdd95d-qwkwc           2/2     Running   0          2m2s

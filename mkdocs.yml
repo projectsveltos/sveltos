@@ -1,6 +1,8 @@
 site_name: Projectsveltos Documentation
 copyright: Copyright © 2022 projectsveltos. All Rights Reserved.
-site_description: Sveltos is a lightweight application designed to manage add-ons in hundreds of clusters. Projectsveltos extends functionality of Cluster API by providing a solution for managing the installation, configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs
+site_description: 'Sveltos is a lightweight application designed to manage add-ons in hundreds of clusters. Projectsveltos extends functionality of Cluster API by providing a solution for managing the installation, 
+configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs. Projectsveltos supports multi-tenancy allowing platform admins to easily grant permissions 
+to tenant admins.'
 markdown_extensions:
   - footnotes
   - attr_list
@@ -9,14 +11,16 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 nav:
     - Projectsveltos: 'index.md'
-    - 'install.md'
+    - Install: 'install.md'
     - Addon Distribution: 'addons.md'
     - Templates: 'template.md'
+    - Drift detection: 'configuration_drift'
+    - Multi-tenancy: 'multi-tenancy.md'
     - Cluster Classification: 'labels_management.md'
     - Snapshot: 'snapshot.md'
     - Register cluster: 'register-cluster.md'
+    - Visibility: 'visibility.md'
     - Configuration: 'configuration.md'
-    - 'visibility.md'
     - Blogs and videos: 'blogs.md'
 theme:
   features:

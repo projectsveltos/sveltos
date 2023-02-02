@@ -134,22 +134,6 @@ You can see the change list by viewing a generated Custom Resource Definition (C
 
 For a demonstration of dry run mode, watch the video [Sveltos, introduction to DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=4s) on YouTube.
 
-### Configuration Drift
-
-_Configuration drift_ is a common term to describe a change that takes place in an environment. Drift is an issue because it causes systems and parts of a system that are supposed to be consistent, to become inconsistent and unpredictable.
-
-In our case, _configuration drift_ is a change of a resource deployed by Sveltos in one of the managed clusters.
-
-When sync mode is set to *SyncModeContinuousWithDriftDetection* for a ClusterProfile, sveltos monitors the state of managed clusters and when it detects a configuration drift for one of the resource deployed because of that ClusterProfile, it re-syncs the cluster state back to the state described in the management cluster.
-
-In order to achieve so, when in this mode:
-
-- sveltos deploys a service in each managed cluster and configures this service with list of kubernetes resources deployed because of each ClusterProfile in SyncModeContinuousWithDriftDetection mode;
-- service starts a watcher for each GroupVersionKind with at least one resource to watch;
-- when one of the resources being watched is modified (labels, annotations, spec or rules sections), service notifies management cluster about a potential configuration drift;
-- management cluster reacts by redeploying afftected ClusterProfiles.
-
-![Configuration drift recovery](assets/reconcile_configuration_drift.gif)
 
 ## Managing labels
 
@@ -222,14 +206,14 @@ spec:
 
 ### Sveltos manager
 
-Following arguments can be used to customize sveltos manager controller:
+Following arguments can be used to customize Sveltos manager controller:
 
-1. *concurrent-reconciles*: by default sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
+1. *concurrent-reconciles*: by default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
 2. *worker-number*: number of workers performing long running task. By default this is set to 20. Increase it number of managed clusters is above 100. Read this [Medium post](https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681) to know more about how Sveltos handles long running task. 
 
 ## Classifier
 
-1. *concurrent-reconciles*: by default sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
+1. *concurrent-reconciles*: by default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
 2. *worker-number*: number of workers performing long running task. By default this is set to 20. If number of Classifier instances is in the hundreds, please consider increasing this;
 3. *report-mode*: by default Classifier controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each Classifier Agent send back ClassifierReport to management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are update of ClassifierReports.
 4. *control-plane-endpoint*: the management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable frm each managed cluster.
