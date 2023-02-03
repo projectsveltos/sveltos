@@ -35,9 +35,13 @@ projectsveltos   fm-controller-manager-74558b7dd9-xjjrr    2/2     Running   0  
 projectsveltos   sveltoscluster-manager-55f999f55d-4thzd   2/2     Running   0          2m2s
 ```
 
-### Sveltosctl
+## Configuration
 
-#### Run sveltosctl as a pod
+If you want to know more about how to configure Sveltos, please refer to this [section](configuration.md).
+
+## Sveltosctl
+
+### Run sveltosctl as a pod
 [sveltosctl](https://github.com/projectsveltos/sveltosctl) is not installed by default. 
 
 If you decide to run [sveltosctl](https://github.com/projectsveltos/sveltosctl) as a pod in the management cluster, here are the instructions:
