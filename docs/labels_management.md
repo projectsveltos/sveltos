@@ -43,7 +43,7 @@ And you want to deploy:
 2. OPA Gatekeeper version 3.9.0 in any Kubernetes cluster whose version is >= v1.24.0 && < v1.25.0
 
 You can create following ClusterProfiles and Classifiers in the management cluster:
-```
+```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -61,7 +61,7 @@ spec:
     helmChartAction: Install
 ```
 
-```
+```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -81,7 +81,7 @@ spec:
 
 Then create following Classifiers
 
-```
+```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: Classifier
 metadata:
@@ -95,7 +95,7 @@ spec:
     version: 1.25.0
 ```
 
-```
+```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: Classifier
 metadata:

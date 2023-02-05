@@ -33,7 +33,7 @@ Sveltos wants to provide a solution so that:
 ### RoleRequest CRD
 RoleRequest is the CRD introduced by Sveltos to allow platform admin to grant permissions to various tenant admins.
 
-```
+```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: RoleRequest
 metadata:
@@ -55,7 +55,7 @@ where:
 
 An example of a ConfigMap containing ClusterRole granting full edit permissions:
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -80,7 +80,7 @@ data:
 After a tenant is onboarded by platform admin, tenant admin can create ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
 
 Sveltos expects following label to be set on each ClusterProfile created by a tenant admin:
-```
+```yaml
 projectsveltos.io/admin-name: <admin>
 ```
 
@@ -93,7 +93,7 @@ If:
 
 Sveltos suggests using following Kyverno ClusterPolicy, which will take care of adding proper label to each ClusterProfile at creation time.
 
-```
+```yaml
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -124,7 +124,7 @@ spec:
 
 In the following example, all clusters matching Kubernetes label selector ***org=foo.io*** will be assigned to tenant foo:
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -158,7 +158,7 @@ spec:
 
 As soon as tenant foo posts following ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
 
-```
+```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -181,7 +181,7 @@ spec:
 If the same tenant foo tries to deploy Kyverno in a cluster not assigned to it, Sveltos will fail the deployment.
 For instance if ClusterProfile.Spec.ClusterSelector is set to ***org=bar.io*** deployment will fail.
 
-```
+```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -209,7 +209,7 @@ are shared between two tenants:
 1. tenant ***foo*** is granted full access to namespaces ***foo-eng*** and ***foo-hr***
 2. tenant ***bar*** is granted full access to namespace ***bar-resource***
 
-```
+```yaml
 # ConfigMap contains a Role which gives
 # full access to namespace ci-cd and build
 apiVersion: v1
