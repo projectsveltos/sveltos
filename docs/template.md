@@ -57,7 +57,7 @@ Sometimes, confidential information is needed when deploying an helm release `Se
 
 Let's say we need to store username and password. We can create a Secret with those information. Then in the ClusterProfile.Spec.HelmCharts section we can instructs Sveltos on which Secret contains the information we need and how to fetch it.
 
-```
+```yaml
     secretRef:
       name: <SECRET NAME>
       namespace: <SECRET NAMESPACE>

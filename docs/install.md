@@ -54,7 +54,7 @@ kubectl create -f  https://raw.githubusercontent.com/projectsveltos/sveltosctl/m
 
 Please keep in mind sveltosctl requires a PersistentVolume. So modify this section accordingly before posting the YAML.
 
-```
+```yaml
   volumeClaimTemplates:
   - metadata:
       name: snapshot
@@ -73,7 +73,7 @@ Once the pod is running,
 
 You might also want to change the timezone of sveltosctl pod by using specific timezone config and hostPath volume to set specific timezone. Currently:
 
-```
+```yaml
   volumes:
   - hostPath:
       path: /usr/share/zoneinfo/America/Los_Angeles

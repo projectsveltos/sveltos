@@ -155,7 +155,7 @@ Classifier also enables you to specify the set of labels that must be added to a
 
 Some examples can be found [here](https://github.com/projectsveltos/classifier/tree/main/examples)
 
-```
+```yaml
 # Following Classifier will match any Cluster whose
 # Kubernetes version is >= v1.24.0 and < v1.25.0
 apiVersion: lib.projectsveltos.io/v1alpha1

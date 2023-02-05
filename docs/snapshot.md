@@ -93,7 +93,6 @@ For more information on this CRD fields, please read [here](configuration.md#sna
 
 ```yaml
 ---
----
 apiVersion: utils.projectsveltos.io/v1alpha1
 kind: Snapshot
 metadata:
