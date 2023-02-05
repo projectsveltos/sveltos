@@ -34,27 +34,9 @@ The idea is simple:
 
 By simply creating an instance of [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go), Sveltos can be instructed on what add-ons to deploy and where.
 
-Following ClusterProfile instance is instructing Sveltos to deploy Kyverno helm chart in any cluster with label *env:prod*
+Following [ClusterProfile](assets/clusterprofile.md) instance is instructing Sveltos to deploy Kyverno helm chart in any cluster with label *env:prod*
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: demo
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL: https://kyverno.github.io/kyverno/
-    repositoryName: kyverno
-    chartName: kyverno/kyverno
-    chartVersion: v2.5.0
-    releaseName: kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction: Install
-```
-
-![Sveltos in action](assets/sveltos_kyverno.png)
+![Sveltos in action](assets/addons.png)
 
 For a quick video of Sveltos, watch the video [Sveltos introduction](https://www.youtube.com/watch?v=Ai5Mr9haWKM) on YouTube.
 

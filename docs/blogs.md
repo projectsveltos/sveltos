@@ -40,5 +40,8 @@ authors:
 
 ## Support us
 
-If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. It means a lot to us. **Thank you :pray:.**
+{==
 
+If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
+
+==}

@@ -23,12 +23,15 @@ Sveltos focuses not only on the ability to scale the number of clusters it can m
 
 ## Features List
 1. Kubernetes [addon distribution](addons.md) across multiple clusters;
-2. [configuration drift detection](configuration.md#configuration-drift): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
+2. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
 3. [Templates](template.md) instantiated reading values from management cluster;
 4. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
 5. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
 6. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
 7. [Snapshot and Rollback](snapshot.md).
+
+
+![Sveltos addons](assets/addons.png)
 
 ## Core Concepts
 
@@ -53,6 +56,10 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 
 ## Support us
 
-If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. It means a lot to us. **Thank you :pray:.**
+{==
+
+If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
+
+==}
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>

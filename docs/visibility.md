@@ -10,7 +10,6 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-## CLI
 
 [sveltosctl](https://github.com/projectsveltos/sveltosctl) is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
 
@@ -88,4 +87,4 @@ If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both mat
 | SveltosCluster:gke/prod-cluster             | eng   | ci-cd          | *          | *         | *              | *     |
 | SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
-```****
+```
