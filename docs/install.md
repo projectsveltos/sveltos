@@ -24,6 +24,16 @@ If Prometheus operator is not present in your management cluster, you will see (
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
+## Install using helm
+
+Sveltos pods assume to be running in the projectsveltos namespace, so please create it if not present already.
+
+```
+kubectl create namespace projectsveltos
+helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
+helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos
+```
+
 ## Get Sveltos Status​
 
 Get Sveltos status and verify all pods are up and running
