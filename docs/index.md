@@ -30,7 +30,6 @@ Sveltos focuses not only on the ability to scale the number of clusters it can m
 6. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
 7. [Snapshot and Rollback](snapshot.md).
 
-
 ![Sveltos addons](assets/addons.png)
 
 ## Core Concepts
@@ -46,6 +45,10 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 7. [Snapshot CRD](configuration.md#snapshot) is the CRD used to instruct Sveltos on collecting configuration snapshots;
 8. [SveltosCluster](register-cluster.md#register-cluster) is the CRD used to register a cluster with Sveltos (only non CAPI powered cluster needs to be manually registered with Sveltos);
 9.  [Drift detection manager](configuration.md#configuration-drift) is a controller running in each managed cluster. It watches for Kubernetes resources deployed by ClusterProfiles set in SyncModeContinuousWithDriftDetection mode. Anytime it detects a possible configuration drift, it informs management cluster so that a re-sync happens and the cluster state is brought back to the desidered state expressed in the management cluster.
+
+## ✨ Configuration and examples
+
+To know more about configuration or find some examples, please read this [section](configuration.md).
 
 ## 😻 Contributing to projectsveltos
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
