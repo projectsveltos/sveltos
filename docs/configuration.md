@@ -36,6 +36,14 @@ Both Secrets and ConfigMaps data fields can be a list of key-value pairs. Any ke
 
 Secrets are preferred if the data includes sensitive information.
 
+To create a secret that has calico YAMLs in its data field to be used by ClusterProfile:
+
+```bash
+wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
+
+kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
+```
+
 The following YAML file is an example of ConfigMap, containing multiple resources. 
 When Sveltos deploys this ConfigMap as part of our ClusterProfile, a GatewayClass and Gateway instance are automatically deployed in any matching cluster.
 
@@ -76,6 +84,48 @@ data:
               from: All
 
 ```
+
+ClusterProfile can only reference Secret of type ***addons.projectsveltos.io/cluster-profile***
+
+Here is a ClusterProfile referencing above ConfigMap and Secret.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-resources
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - name: contour-gateway
+    namespace: default
+    kind: ConfigMap
+  - name: calico
+    namespace: default
+    kind: Secret
+```
+
+When referencing ConfigMap/Secret, kind and name are required.
+Namespace is optional:
+
+- if namespace is set, it uniquely indenties a resource and that resource will be used for all matching clusters;
+- if namespace is left empty, for each matching cluster, Sveltos will use the namespace of the cluster. 
+  
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - name: contour-gateway
+    kind: ConfigMap
+```
+
+With above ClusterProfile, if we have two workload clusters matching, one in namespace _foo_ and one in namespace _bar_, Sveltos will look for ConfigMap _contour-gateway_ in namespace _foo_ for Cluster in namespace _foo_ and for a ConfigMap _contour-gateway_ in namespace _bar_ for Cluster in namespace _bar_.
+
+More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples).
 
 ### Sync mode
 
@@ -153,7 +203,7 @@ Classifier also enables you to specify the set of labels that must be added to a
 
 ![Classifier in action](assets/classifier.gif)
 
-Some examples can be found [here](https://github.com/projectsveltos/classifier/tree/main/examples)
+More examples can be found [here](https://github.com/projectsveltos/classifier/tree/main/examples)
 
 ```yaml
 # Following Classifier will match any Cluster whose

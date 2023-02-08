@@ -75,6 +75,8 @@ data:
 
 ![Multi-tenancy in action](assets/multi_tenancy.gif)
 
+More example can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples).
+
 ### ClusterProfile
 
 After a tenant is onboarded by platform admin, tenant admin can create ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
