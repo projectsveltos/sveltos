@@ -2492,7 +2492,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/sveltos-manager-amd64:main
+        image: gianlucam76/sveltos-manager-amd64:v0.4.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -2894,7 +2894,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/classifier-amd64:main
+        image: gianlucam76/classifier-amd64:v0.4.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3332,7 +3332,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/access-manager-amd64:main
+        image: gianlucam76/access-manager-amd64:v0.4.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3625,7 +3625,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: gianlucam76/sveltoscluster-manager-amd64:main
+        image: gianlucam76/sveltoscluster-manager-amd64:v0.4.1
         livenessProbe:
           httpGet:
             path: /healthz
