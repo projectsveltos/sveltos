@@ -158,6 +158,17 @@ spec:
     kind: ConfigMap
 ```
 
+Using [sveltosctl](https://github.com/projectsveltos/sveltosctl) we can verify Sveltos is aware system-admin has full access to managed cluster with label env:production
+
+```bash
+./bin/sveltosctl show admin-rbac       
++-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
+|            CLUSTER            |    ADMIN     | NAMESPACE | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
++-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
+| SveltosCluster:gke/production |     foo      | *         | *          | *         | *              | *     |
++-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
+```
+
 As soon as tenant foo posts following ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
 
 ```yaml
@@ -302,7 +313,7 @@ One of main Sveltos focuses is visibility. So it should not be a surprise that S
 If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
 ```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml), we get:
 
-```
+```bash
 ./bin/sveltosctl show admin-rbac       
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 |                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |

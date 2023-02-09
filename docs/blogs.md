@@ -49,3 +49,6 @@ To know more about configuration or find some examples, please read this [sectio
 If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
 ==}
+
+
+[![Stargazers repo roster for @projectsveltos/sveltos-manager](https://reporoster.com/stars/projectsveltos/sveltos-manager)](https://github.com/projectsveltos/sveltos-manager/stargazers)
