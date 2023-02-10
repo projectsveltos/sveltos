@@ -61,8 +61,10 @@ To know more about configuration or find some examples, please read this [sectio
 
 {==
 
-If you like the project, please leave us a [:star:](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
+If you like the project, please leave us a [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
 ==}
+
+[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager){ .md-button .md-button--primary }
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
