@@ -26,7 +26,7 @@ If you have an already existing cluster that you want Sveltos to manage, three s
     --kubeconfig=<path to file with Kubeconfig>
 ``` 
 
-It is advised (though not required) to use [sveltosctl](https://github.com/projectsveltos/sveltosctl) to register a cluster. 
+It is advised (though not required) to use [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to register a cluster. 
 
 The alternative to sveltosctl is to manually create:
 

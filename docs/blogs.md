@@ -40,7 +40,7 @@ To know more about configuration or find some examples, please read this [sectio
 ## 😻 Contributing to projectsveltos
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
 
-1. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues)
+1. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues")
 2. Chat with us on the Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q)
 3. [Contact Us](mailto:support@projectsveltos.io)
 
@@ -48,10 +48,10 @@ To know more about configuration or find some examples, please read this [sectio
 
 {==
 
-If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager)  [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager) if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
+If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons")  [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
 ==}
 
-[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager){ .md-button .md-button--primary }
+[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){ .md-button .md-button--primary }
 
-[![Stargazers repo roster for @projectsveltos/sveltos-manager](https://reporoster.com/stars/projectsveltos/sveltos-manager)](https://github.com/projectsveltos/sveltos-manager/stargazers)
+[![Stargazers repo roster for @projectsveltos/sveltos-manager](https://reporoster.com/stars/projectsveltos/sveltos-manager "Manage Kubernetes add-ons")](https://github.com/projectsveltos/sveltos-manager/stargazers)

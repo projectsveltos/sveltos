@@ -52,9 +52,9 @@ If you want to know more about how to configure Sveltos, please refer to this [s
 ## Sveltosctl
 
 ### Run sveltosctl as a pod
-[sveltosctl](https://github.com/projectsveltos/sveltosctl) is not installed by default. 
+[sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is not installed by default. 
 
-If you decide to run [sveltosctl](https://github.com/projectsveltos/sveltosctl) as a pod in the management cluster, here are the instructions:
+If you decide to run [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") as a pod in the management cluster, here are the instructions:
 
 ```
 kubectl create -f  https://raw.githubusercontent.com/projectsveltos/sveltosctl/main/manifest/utils.projectsveltos.io_snapshots.yaml

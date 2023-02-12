@@ -75,7 +75,7 @@ data:
 
 ![Multi-tenancy in action](assets/multi_tenancy.gif)
 
-More example can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples).
+More example can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multi-tenancy examples").
 
 ### ClusterProfile
 
@@ -158,7 +158,7 @@ spec:
     kind: ConfigMap
 ```
 
-Using [sveltosctl](https://github.com/projectsveltos/sveltosctl) we can verify Sveltos is aware system-admin has full access to managed cluster with label env:production
+Using [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") we can verify Sveltos is aware system-admin has full access to managed cluster with label env:production
 
 ```bash
 ./bin/sveltosctl show admin-rbac       
@@ -308,7 +308,7 @@ spec:
 
 One of main Sveltos focuses is visibility. So it should not be a surprise that Sveltos offers a CLI for displaying tenant admin RBACs.
 
-[Sveltosctl](https://github.com/projectsveltos/sveltosctl) can be used to display permissions granted to each tenant admin in each managed cluster.
+[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") can be used to display permissions granted to each tenant admin in each managed cluster.
 
 If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
 ```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml), we get:
