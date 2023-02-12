@@ -11,7 +11,7 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-[Sveltos](https://github.com/projectsveltos) is a lightweight application designed to manage hundreds of clusters. It does so by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a lightweight application designed to manage hundreds of clusters. It does so by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 
 Sveltos focuses not only on the ability to scale the number of clusters it can manage, but also to give visibility to exactly which add-ons are installed on each cluster.
 
