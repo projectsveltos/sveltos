@@ -22,13 +22,13 @@ Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically
 
 The snapshot feature allows to capture a complete Sveltos policy configuration at an instant in time. Using snapshots from different timestamps, it is possibly to see what configuration changes occurred between two snapshots, and roll back and forward policy configurations to any saved configuration snapshot.
 
-Operations using snapshots, such as capture, diff, and rollback, are performed with the Sveltos command line interface, [sveltosctl](https://github.com/projectsveltos/sveltosctl).
+Operations using snapshots, such as capture, diff, and rollback, are performed with the Sveltos command line interface, [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").
 
 For a demonstration of snapshots, watch the video [Sveltos, introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4) on YouTube.
 
 ### Snapshot diff
 
-[sveltoctl](https://github.com/projectsveltos/sveltosctl) snapshot diff can be used to display all the configuration changes between two snapshots:
+[sveltoctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") snapshot diff can be used to display all the configuration changes between two snapshots:
 
 ```
 kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 

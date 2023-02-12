@@ -12,7 +12,7 @@ authors:
 ---
 ## Deploying add-ons
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go) is the CRD used to instructs Sveltos about:
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CRD used to instructs Sveltos about:
 
 1. which Kubernetes add-ons to deploy;
 2. where (on which Kubernetes clusters) to deploy the Kubernetes add-ons. 
@@ -125,7 +125,7 @@ spec:
 
 With above ClusterProfile, if we have two workload clusters matching, one in namespace _foo_ and one in namespace _bar_, Sveltos will look for ConfigMap _contour-gateway_ in namespace _foo_ for Cluster in namespace _foo_ and for a ConfigMap _contour-gateway_ in namespace _bar_ for Cluster in namespace _bar_.
 
-More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples).
+More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
 
 ### Sync mode
 
@@ -203,7 +203,7 @@ Classifier also enables you to specify the set of labels that must be added to a
 
 ![Classifier in action](assets/classifier.gif)
 
-More examples can be found [here](https://github.com/projectsveltos/classifier/tree/main/examples)
+More examples can be found [here](https://github.com/projectsveltos/classifier/tree/main/examples "Classifier examples")
 
 ```yaml
 # Following Classifier will match any Cluster whose
@@ -234,7 +234,7 @@ The field *deployedResourceConstraints* can be used to classify a cluster based 
 
 ## Snapshot
 
-[Sveltosctl](https://github.com/projectsveltos/sveltosctl) when running as a Pod in the management cluster, can be configured to collect configuration snapshots.
+[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect configuration snapshots.
 *Snapshot* CRD is used for that.
 
 ```yaml
