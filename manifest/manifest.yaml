@@ -676,6 +676,7 @@ spec:
                       description: NotificationType specifies the type of notification
                       enum:
                       - KubernetesEvent
+                      - Slack
                       type: string
                   required:
                   - name
@@ -4120,7 +4121,16 @@ rules:
   - create
   - get
   - list
+  - patch
   - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
   - watch
 - apiGroups:
   - apiextensions.k8s.io
