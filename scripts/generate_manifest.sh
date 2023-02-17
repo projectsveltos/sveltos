@@ -79,11 +79,11 @@ do
 done
 cd ../../; rm -rf tmp
 
-# sveltoscluster-manager
-echo "processing sveltoscluster-manager"
+# healthcheck-manager
+echo "processing healthcheck-manager"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/sveltoscluster-manager.git
-cd sveltoscluster-manager
+git clone git@github.com:projectsveltos/healthcheck-manager.git
+cd healthcheck-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
