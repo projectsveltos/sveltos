@@ -24,11 +24,12 @@ Sveltos focuses not only on the ability to scale the number of clusters it can m
 ## Features List
 1. Kubernetes [addon distribution](addons.md) across multiple clusters;
 2. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
-3. [Templates](template.md) instantiated reading values from management cluster;
-4. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
-5. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
-6. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
-7. [Snapshot and Rollback](snapshot.md).
+3. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster; 
+4. [Templates](template.md) instantiated reading values from management cluster;
+5. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
+6. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
+7. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
+8. [Snapshot and Rollback](snapshot.md).
 
 ![Sveltos addons](assets/addons.png)
 
@@ -44,7 +45,8 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 6. [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the Sveltos CLI; 
 7. [Snapshot CRD](configuration.md#snapshot) is the CRD used to instruct Sveltos on collecting configuration snapshots;
 8. [SveltosCluster](register-cluster.md#register-cluster) is the CRD used to register a cluster with Sveltos (only non CAPI powered cluster needs to be manually registered with Sveltos);
-9.  [Drift detection manager](configuration.md#configuration-drift) is a controller running in each managed cluster. It watches for Kubernetes resources deployed by ClusterProfiles set in SyncModeContinuousWithDriftDetection mode. Anytime it detects a possible configuration drift, it informs management cluster so that a re-sync happens and the cluster state is brought back to the desidered state expressed in the management cluster.
+9.  [Drift detection manager](configuration.md#configuration-drift) is a controller running in each managed cluster. It watches for Kubernetes resources deployed by ClusterProfiles set in SyncModeContinuousWithDriftDetection mode. Anytime it detects a possible configuration drift, it informs management cluster so that a re-sync happens and the cluster state is brought back to the desidered state expressed in the management cluster;
+10. [ClusterHealthCheck](notifications.md#clusterhealthcheck) is the CRD used to configure Sveltos to send notifications when certain conditions happen.
 
 ## ✨ Configuration and examples
 

@@ -78,3 +78,17 @@ do
     echo "---"  >> ../../manifest/manifest.yaml 
 done
 cd ../../; rm -rf tmp
+
+# sveltoscluster-manager
+echo "processing sveltoscluster-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/sveltoscluster-manager.git
+cd sveltoscluster-manager
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
+done
+cd ../../; rm -rf tmp
