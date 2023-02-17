@@ -4060,19 +4060,19 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
+    control-plane: controller-manager
   name: projectsveltos
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sveltoscluster-manager
+  name: hc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: sveltoscluster-leader-election-role
+  name: hc-leader-election-role
   namespace: projectsveltos
 rules:
 - apiGroups:
@@ -4111,8 +4111,19 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: sveltoscluster-manager-role
+  name: hc-manager-role
 rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
 - apiGroups:
   - ""
   resources:
@@ -4121,6 +4132,88 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - config.projectsveltos.io
+  resources:
+  - clustersummaries
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - config.projectsveltos.io
+  resources:
+  - clustersummaries/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - clusterhealthchecks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - clusterhealthchecks/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - clusterhealthchecks/status
+  verbs:
+  - get
+  - patch
+  - update
 - apiGroups:
   - lib.projectsveltos.io
   resources:
@@ -4134,32 +4227,22 @@ rules:
   resources:
   - sveltosclusters
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/finalizers
-  verbs:
-  - update
 - apiGroups:
   - lib.projectsveltos.io
   resources:
   - sveltosclusters/status
   verbs:
   - get
-  - patch
-  - update
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sveltoscluster-metrics-reader
+  name: hc-metrics-reader
 rules:
 - nonResourceURLs:
   - /metrics
@@ -4169,7 +4252,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sveltoscluster-proxy-role
+  name: hc-proxy-role
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -4187,41 +4270,41 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sveltoscluster-leader-election-rolebinding
+  name: hc-leader-election-rolebinding
   namespace: projectsveltos
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: sveltoscluster-leader-election-role
+  name: hc-leader-election-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: hc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sveltoscluster-manager-rolebinding
+  name: hc-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: sveltoscluster-manager-role
+  name: hc-manager-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: hc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sveltoscluster-proxy-rolebinding
+  name: hc-proxy-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: sveltoscluster-proxy-role
+  name: hc-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: hc-manager
   namespace: projectsveltos
 ---
 apiVersion: v1
@@ -4237,7 +4320,7 @@ data:
       port: 9443
     leaderElection:
       leaderElect: true
-      resourceName: 03b9220a.projectsveltos.io
+      resourceName: 7964f530.projectsveltos.io
     # leaderElectionReleaseOnCancel defines if the leader should step down volume
     # when the Manager ends. This requires the binary to immediately end when the
     # Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
@@ -4250,15 +4333,15 @@ data:
     # leaderElectionReleaseOnCancel: true
 kind: ConfigMap
 metadata:
-  name: sveltoscluster-manager-config
+  name: hc-manager-config
   namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
-  name: sveltoscluster-manager-metrics-service
+    control-plane: controller-manager
+  name: hc-manager-metrics-service
   namespace: projectsveltos
 spec:
   ports:
@@ -4267,35 +4350,36 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    control-plane: sveltoscluster-manager
+    control-plane: controller-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
-  name: sveltoscluster-manager
+    control-plane: controller-manager
+  name: hc-manager
   namespace: projectsveltos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      control-plane: sveltoscluster-manager
+      control-plane: controller-manager
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
-        control-plane: sveltoscluster-manager
+        control-plane: controller-manager
     spec:
       containers:
       - args:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
+        - --v=5
         command:
         - /manager
-        image: gianlucam76/sveltoscluster-manager-amd64:main
+        image: gianlucam76/healthcheck-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4346,6 +4430,6 @@ spec:
             - ALL
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: sveltoscluster-manager
+      serviceAccountName: hc-manager
       terminationGracePeriodSeconds: 10
 ---
