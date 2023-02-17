@@ -78,3 +78,17 @@ do
     echo "---"  >> ../../manifest/manifest.yaml 
 done
 cd ../../; rm -rf tmp
+
+# healthcheck-manager
+echo "processing healthcheck-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/healthcheck-manager.git
+cd healthcheck-manager
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
+done
+cd ../../; rm -rf tmp

@@ -75,3 +75,13 @@ git checkout ${branch}
 make docker-build
 docker push gianlucam76/sveltosctl-amd64:${branch}
 cd ../../; rm -rf tmp
+
+# healthcheck-manager
+echo "processing healthcheck-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/healthcheck-manager.git
+cd healthcheck-manager
+git checkout ${branch}
+make docker-build
+docker push gianlucam76/healthcheck-manager-amd64:${branch}  
+cd ../../; rm -rf tmp
