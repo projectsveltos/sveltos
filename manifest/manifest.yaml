@@ -3767,19 +3767,19 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
+    control-plane: sc-manager
   name: projectsveltos
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sveltoscluster-manager
+  name: sc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: sveltoscluster-leader-election-role
+  name: sc-leader-election-role
   namespace: projectsveltos
 rules:
 - apiGroups:
@@ -3818,7 +3818,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: sveltoscluster-manager-role
+  name: sc-manager-role
 rules:
 - apiGroups:
   - ""
@@ -3866,7 +3866,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sveltoscluster-metrics-reader
+  name: sc-metrics-reader
 rules:
 - nonResourceURLs:
   - /metrics
@@ -3876,7 +3876,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sveltoscluster-proxy-role
+  name: sc-proxy-role
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -3894,41 +3894,41 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sveltoscluster-leader-election-rolebinding
+  name: sc-leader-election-rolebinding
   namespace: projectsveltos
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: sveltoscluster-leader-election-role
+  name: sc-leader-election-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: sc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sveltoscluster-manager-rolebinding
+  name: sc-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: sveltoscluster-manager-role
+  name: sc-manager-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: sc-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sveltoscluster-proxy-rolebinding
+  name: sc-proxy-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: sveltoscluster-proxy-role
+  name: sc-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: sveltoscluster-manager
+  name: sc-manager
   namespace: projectsveltos
 ---
 apiVersion: v1
@@ -3957,15 +3957,15 @@ data:
     # leaderElectionReleaseOnCancel: true
 kind: ConfigMap
 metadata:
-  name: sveltoscluster-manager-config
+  name: sc-manager-config
   namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
-  name: sveltoscluster-manager-metrics-service
+    control-plane: sc-manager
+  name: sc-manager-metrics-service
   namespace: projectsveltos
 spec:
   ports:
@@ -3974,26 +3974,26 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    control-plane: sveltoscluster-manager
+    control-plane: sc-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    control-plane: sveltoscluster-manager
-  name: sveltoscluster-manager
+    control-plane: sc-manager
+  name: sc-manager
   namespace: projectsveltos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      control-plane: sveltoscluster-manager
+      control-plane: sc-manager
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
-        control-plane: sveltoscluster-manager
+        control-plane: sc-manager
     spec:
       containers:
       - args:
@@ -4053,7 +4053,7 @@ spec:
             - ALL
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: sveltoscluster-manager
+      serviceAccountName: sc-manager
       terminationGracePeriodSeconds: 10
 ---
 apiVersion: v1
