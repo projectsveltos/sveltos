@@ -12,6 +12,15 @@ authors:
 ---
 Techsupports is a Sveltos feature which allows both platform admin and tenant admin to collect tech supports (pod logs and resources) from managed Kubernetes cluster.
 
+If following label is set on Techsupport instance created by tenant admin
+
+```
+projectsveltos.io/admin-name: <admin>
+```
+
+Sveltos will make sure tenant admin collects what it has been [authorized to by platform admin](multi-tenancy.md).
+
+
 ## Techsupport CRD
 
 Techsupport CRD is used to configure Sveltos to periodically collect tech supports from managed Kubernetes clusters. Here is a quick example. 
@@ -62,7 +71,13 @@ Please refer to [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api
 
 When techsupport is collected, Sveltos stores using following format:
 
-```techsupport/<techsupport name>/<collection time>/<cluster namespace>/<cluster name>/```
+```
+techsupport/
+  <techsupport name>/
+    <collection time>/
+      <cluster namespace>/
+        <cluster name>/
+```
 
 then two subdirectoris:
 
@@ -82,20 +97,20 @@ The ```logs``` directory then contains one subdirectory per namespace, which the
 
 ```
 root@sveltos-management-worker:/# ls -la /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/logs/kube-system/
-total 16
-drwxr-xr-x 2 root root 4096 Feb 23 01:39 .
-drwxr-xr-x 3 root root 4096 Feb 23 01:39 ..
--rw-r--r-- 1 root root    0 Feb 23 01:39 calico-kube-controllers-58dbc876ff-xcszf-calico-kube-controllers
--rw-r--r-- 1 root root  288 Feb 23 01:39 calico-node-2wdjt-calico-node
--rw-r--r-- 1 root root  286 Feb 23 01:39 calico-node-r24r6-calico-node
--rw-r--r-- 1 root root    0 Feb 23 01:39 coredns-565d847f94-5b86m-coredns
--rw-r--r-- 1 root root    0 Feb 23 01:39 coredns-565d847f94-dmhwt-coredns
--rw-r--r-- 1 root root    0 Feb 23 01:39 etcd-sveltos-management-workload-n2m8r-sgtlc-etcd
--rw-r--r-- 1 root root    0 Feb 23 01:39 kube-apiserver-sveltos-management-workload-n2m8r-sgtlc-kube-apiserver
--rw-r--r-- 1 root root    0 Feb 23 01:39 kube-controller-manager-sveltos-management-workload-n2m8r-sgtlc-kube-controller-manager
--rw-r--r-- 1 root root    0 Feb 23 01:39 kube-proxy-d8dtv-kube-proxy
--rw-r--r-- 1 root root    0 Feb 23 01:39 kube-proxy-ppxmr-kube-proxy
--rw-r--r-- 1 root root    0 Feb 23 01:39 kube-scheduler-sveltos-management-workload-n2m8r-sgtlc-kube-scheduler
+total 412
+drwxr-xr-x 2 root root   4096 Feb 23 01:39 .
+drwxr-xr-x 3 root root   4096 Feb 23 01:39 ..
+-rw-r--r-- 1 root root   5695 Feb 23 01:39 calico-kube-controllers-58dbc876ff-b8ssz-calico-kube-controllers
+-rw-r--r-- 1 root root 145743 Feb 23 01:39 calico-node-4f5p2-calico-node
+-rw-r--r-- 1 root root 109267 Feb 23 01:39 calico-node-9tzjc-calico-node
+-rw-r--r-- 1 root root    232 Feb 23 01:39 coredns-565d847f94-mn4v2-coredns
+-rw-r--r-- 1 root root    232 Feb 23 01:39 coredns-565d847f94-xxv99-coredns
+-rw-r--r-- 1 root root  53077 Feb 23 01:39 etcd-sveltos-management-workload-mwptj-skgjk-etcd
+-rw-r--r-- 1 root root  27622 Feb 23 01:39 kube-apiserver-sveltos-management-workload-mwptj-skgjk-kube-apiserver
+-rw-r--r-- 1 root root  29220 Feb 23 01:39 kube-controller-manager-sveltos-management-workload-mwptj-skgjk-kube-controller-manager
+-rw-r--r-- 1 root root   2230 Feb 23 01:39 kube-proxy-nc44r-kube-proxy
+-rw-r--r-- 1 root root   2230 Feb 23 01:39 kube-proxy-zzh7j-kube-proxy
+-rw-r--r-- 1 root root  15368 Feb 23 01:39 kube-scheduler-sveltos-management-workload-mwptj-skgjk-kube-scheduler
 ```
 
 ### Resources 
