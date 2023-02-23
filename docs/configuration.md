@@ -278,7 +278,7 @@ spec:
     namespace: default
     sinceSeconds: 600
   resources:
-  - group: ""
+  - group: "apps"
     kind: Deployment
     labelFilters:
     - key: env
