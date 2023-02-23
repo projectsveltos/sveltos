@@ -97,7 +97,7 @@ spec:
       operation: Different
       value: eng
     namespace: default
- ```
+```
 
 Please refer to [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go) for more information.
 
