@@ -53,6 +53,52 @@ Above Techsupport instance is instructing Sveltos to:
 3. collect all deployments and all secrets.
 
 __Techsupport__ CRD allows filtering pods and resources using label and field selectors.
+
+A more complex example:
+
+```yaml
+apiVersion: utils.projectsveltos.io/v1alpha1
+kind: Techsupport
+metadata:
+  name: hourly
+spec:
+  clusterSelector: env=fv
+  schedule: "00 * * * *"
+  storage: /collection
+  logs:
+  - labelFilters:
+    - key: env
+      operation: Equal
+      value: production
+    - key: department
+      operation: Different
+      value: eng
+    namespace: default
+    sinceSeconds: 600
+  resources:
+  - group: ""
+    kind: Deployment
+    labelFilters:
+    - key: env
+      operation: Equal
+      value: production
+    - key: department
+      operation: Different
+      value: eng
+    namespace: default
+    version: v1
+  - group: ""
+    kind: Service
+    labelFilters:
+    - key: env
+      operation: Equal
+      value: production
+    - key: department
+      operation: Different
+      value: eng
+    namespace: default
+ ```
+
 Please refer to [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go) for more information.
 
 ## List techsupports
