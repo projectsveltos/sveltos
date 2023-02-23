@@ -38,7 +38,7 @@ spec:
   - namespace: kube-system
     sinceSeconds: 600
   resources:
-  - group: ""
+  - group: "apps"
     version: v1
     kind: Deployment
   - group: ""
@@ -76,7 +76,7 @@ spec:
     namespace: default
     sinceSeconds: 600
   resources:
-  - group: ""
+  - group: "apps"
     version: v1
     kind: Deployment
     labelFilters:
