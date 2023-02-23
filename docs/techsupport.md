@@ -77,6 +77,7 @@ spec:
     sinceSeconds: 600
   resources:
   - group: ""
+    version: v1
     kind: Deployment
     labelFilters:
     - key: env
@@ -86,8 +87,8 @@ spec:
       operation: Different
       value: eng
     namespace: default
-    version: v1
   - group: ""
+    version: v1
     kind: Service
     labelFilters:
     - key: env
