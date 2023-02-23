@@ -16,10 +16,10 @@ git clone git@github.com:projectsveltos/libsveltos.git
 cd libsveltos
 git checkout ${branch}
 for f in config/crd/bases/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
 done
 cd ../../; rm -rf tmp
 
@@ -30,10 +30,10 @@ git clone git@github.com:projectsveltos/sveltos-manager.git
 cd sveltos-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
 done
 cd ../../; rm -rf tmp
 
@@ -44,10 +44,10 @@ git clone git@github.com:projectsveltos/classifier.git
 cd classifier
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
 done
 cd ../../; rm -rf tmp
 
@@ -58,10 +58,10 @@ git clone git@github.com:projectsveltos/access-manager.git
 cd access-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
 done
 cd ../../; rm -rf tmp
 
@@ -72,10 +72,10 @@ git clone git@github.com:projectsveltos/sveltoscluster-manager.git
 cd sveltoscluster-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
 done
 cd ../../; rm -rf tmp
 
@@ -86,9 +86,42 @@ git clone git@github.com:projectsveltos/healthcheck-manager.git
 cd healthcheck-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
+    echo "---"  >> ../../manifest/manifest.yaml
+done
+cd ../../; rm -rf tmp
+
+echo "Generate sveltosctl manifest for branch ${branch}"
+
+rm -rf  manifest/sveltosctl_manifest.yaml
+touch  manifest/sveltosctl_manifest.yaml
+
+# libsveltos
+echo "processing libsveltos"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/libsveltos.git
+cd libsveltos
+git checkout ${branch}
+for f in config/crd/bases/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/sveltosctl_manifest.yaml
+    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
+# sveltosctl
+echo "processing sveltosctl"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/sveltosctl.git
+cd sveltosctl
+git checkout ${branch}
+for f in manifest/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/sveltosctl_manifest.yaml
+    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
 done
 cd ../../; rm -rf tmp
