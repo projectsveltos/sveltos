@@ -677,6 +677,7 @@ spec:
                       enum:
                       - KubernetesEvent
                       - Slack
+                      - Webex
                       type: string
                   required:
                   - name
@@ -2869,7 +2870,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/sveltos-manager-amd64:main
+        image: projectsveltos/sveltos-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3271,7 +3272,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3709,7 +3710,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4002,7 +4003,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: gianlucam76/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4379,7 +4380,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: gianlucam76/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz

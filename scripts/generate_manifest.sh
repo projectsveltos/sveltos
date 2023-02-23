@@ -92,3 +92,36 @@ do
     echo "---"  >> ../../manifest/manifest.yaml 
 done
 cd ../../; rm -rf tmp
+
+echo "Generate sveltosctl manifest for branch ${branch}"
+
+rm -rf  manifest/sveltosctl_manifest.yaml
+touch  manifest/sveltosctl_manifest.yaml
+
+# libsveltos
+echo "processing libsveltos"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/libsveltos.git
+cd libsveltos
+git checkout ${branch}
+for f in config/crd/bases/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/sveltosctl_manifest.yaml
+    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
+# sveltosctl
+echo "processing sveltosctl"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/sveltosctl.git
+cd sveltosctl
+git checkout ${branch}
+for f in manifest/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/sveltosctl_manifest.yaml
+    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
+done
+cd ../../; rm -rf tmp

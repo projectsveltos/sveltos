@@ -39,10 +39,11 @@ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos
 Get Sveltos status and verify all pods are up and running
 
 ```
-projectsveltos   access-manager-6f7fcdd95d-qwkwc           2/2     Running   0          2m2s
-projectsveltos   classifier-manager-79b4485978-dz2xs       2/2     Running   0          2m2s
-projectsveltos   fm-controller-manager-74558b7dd9-xjjrr    2/2     Running   0          7m6s
-projectsveltos   sveltoscluster-manager-55f999f55d-4thzd   2/2     Running   0          2m2s
+projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
+projectsveltos classifier-manager-6489f67447-52xd6     2/2     Running   0  40s
+projectsveltos fm-controller-manager-55fc5f89f6-b4dwt  2/2     Running   0  40s
+projectsveltos hc-manager-7b6d7c4968-x8f7b             2/2     Running   0  39s
+projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 ```
 
 ## Configuration
@@ -57,9 +58,7 @@ If you want to know more about how to configure Sveltos, please refer to this [s
 If you decide to run [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") as a pod in the management cluster, here are the instructions:
 
 ```
-kubectl create -f  https://raw.githubusercontent.com/projectsveltos/sveltosctl/main/manifest/utils.projectsveltos.io_snapshots.yaml
-
-kubectl create -f  https://raw.githubusercontent.com/projectsveltos/sveltosctl/main/manifest/sveltosctl.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/sveltosctl_manifest.yaml
 ```
 
 Please keep in mind sveltosctl requires a PersistentVolume. So modify this section accordingly before posting the YAML.
