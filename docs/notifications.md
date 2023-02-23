@@ -40,7 +40,7 @@ Currently supported types are:
 
 1. <img src="../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> Kubernetes events (__reason=ClusterHealthCheck__);
 2. <img src="../assets/slack_logo.png" alt="Slack" width="25" />  Slack message; 
-3. <img src="../assets/webex_logo.png" alt="Webex" width="25" />  Webex notification.
+3. <img src="../assets/webex_logo.png" alt="Webex" width="25" />  Webex message.
 
 ### Example
 
