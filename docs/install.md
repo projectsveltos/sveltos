@@ -16,6 +16,10 @@ To install Sveltos simply run:
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
 ```
 
+```
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+```
+
 It will install Sveltos CRDs and resources.
 
 If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error:
@@ -44,6 +48,7 @@ projectsveltos classifier-manager-6489f67447-52xd6     2/2     Running   0  40s
 projectsveltos fm-controller-manager-55fc5f89f6-b4dwt  2/2     Running   0  40s
 projectsveltos hc-manager-7b6d7c4968-x8f7b             2/2     Running   0  39s
 projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
+projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
 ## Configuration
