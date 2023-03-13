@@ -37,20 +37,6 @@ do
 done
 cd ../../; rm -rf tmp
 
-# classifier
-echo "processing classifier"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/classifier.git
-cd classifier
-git checkout ${branch}
-for f in manifest/*.yaml
-do 
-    echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml 
-done
-cd ../../; rm -rf tmp
-
 # access-manager
 echo "processing access-manager"
 rm -rf tmp; mkdir tmp; cd tmp
@@ -93,24 +79,24 @@ do
 done
 cd ../../; rm -rf tmp
 
+# event-manager
+echo "processing event-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/event-manager.git
+cd event-manager
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
+done
+cd ../../; rm -rf tmp
+
 echo "Generate sveltosctl manifest for branch ${branch}"
 
 rm -rf  manifest/sveltosctl_manifest.yaml
 touch  manifest/sveltosctl_manifest.yaml
-
-# libsveltos
-echo "processing libsveltos"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/libsveltos.git
-cd libsveltos
-git checkout ${branch}
-for f in config/crd/bases/*.yaml
-do
-    echo "Processing $f file..."
-    cat $f >> ../../manifest/sveltosctl_manifest.yaml
-    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
-done
-cd ../../; rm -rf tmp
 
 # sveltosctl
 echo "processing sveltosctl"
@@ -123,5 +109,19 @@ do
     echo "Processing $f file..."
     cat $f >> ../../manifest/sveltosctl_manifest.yaml
     echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
+# classifier
+echo "processing classifier"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/classifier.git
+cd classifier
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
 done
 cd ../../; rm -rf tmp

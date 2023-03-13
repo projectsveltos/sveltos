@@ -38,6 +38,8 @@ Following [ClusterProfile](assets/clusterprofile.md) instance is instructing Sve
 
 ![Sveltos in action](assets/addons.png)
 
+![Sveltos in action](assets/addons_deployment.gif)
+
 For a quick video of Sveltos, watch the video [Sveltos introduction](https://www.youtube.com/watch?v=Ai5Mr9haWKM "Sveltos introduction: Kubernetes add-ons management") on YouTube.
 
 To know more about configuration, please take a look at this [section](configuration.md#deploying-add-ons).
