@@ -93,6 +93,20 @@ do
 done
 cd ../../; rm -rf tmp
 
+# event-manager
+echo "processing event-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/event-manager.git
+cd event-manager
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
+done
+cd ../../; rm -rf tmp
+
 echo "Generate sveltosctl manifest for branch ${branch}"
 
 rm -rf  manifest/sveltosctl_manifest.yaml
