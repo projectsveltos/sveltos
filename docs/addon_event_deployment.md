@@ -21,7 +21,8 @@ Sveltos supports an event-driven workflow:
 
 ## Event definition
 
-[EventSource](https://github.com/projectsveltos/libsveltos/blob/dev/api/v1alpha1/eventsource_type.go) is the CRD introduced to define an event.
+An _Event_ is a specific operation in the context of k8s objects.  To define an event, use the
+[EventSource](https://github.com/projectsveltos/libsveltos/blob/dev/api/v1alpha1/eventsource_type.go) CRD.
 
 Following EventSource instance define an __event__ as a creation/deletion of a Service with label *sveltos: fv*.
 
@@ -72,21 +73,23 @@ spec:
   end
 ```
 
+In general, script is a customizable way to define complex events easily. Use it when filtering resources using labels is not enough.
+
 When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expects following format:
 
 1. must contain a function ```function evaluate()```. This is the function that is directly invoked and passed a Kubernetes resource (inside the function ```obj``` represents the passed in Kubernetes resource). Any field of the obj can be accessed, for instance *obj.metadata.labels* to access labels;
 2. must return a Lua table with following fields:
 
-      - *matching*: is a bool indicating whether the resource matches the EventSource instance;
-      - *message*: this is a string that can be set and Sveltos will print if set.
+      - ```matching```: is a bool indicating whether the resource matches the EventSource instance;
+      - ```message```: this is a string that can be set and Sveltos will print if set.
 
 When writing an EventSource with Lua, it might be handy to validate it before using it.
 In order to do so, clone [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repo.
 Then in *pkg/evaluation/events* directory, create a directory for your resource if one does not exist already. If a directory already exists, create a subdirectory. Inside it, create:
 
-1. file named *eventsource.yaml* containing the EventSource instance with Lua script;
-2. file named *matching.yaml* containing a Kubernetes resource supposed to be a match for the Lua script created in #1 (this is optional);
-3. file named *non-matching.yaml* containing a Kubernetes resource supposed to not be a match for the Lua script created in #1 (this is optional);
+1. file named ```eventsource.yaml``` containing the EventSource instance with Lua script;
+2. file named ```matching.yaml``` containing a Kubernetes resource supposed to be a match for the Lua script created in #1 (this is optional);
+3. file named ```non-matching.yaml``` containing a Kubernetes resource supposed to not be a match for the Lua script created in #1 (this is optional);
 4. *make test*
 
 That will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
@@ -98,7 +101,7 @@ That will load the Lua script, pass it the matching (if available) and non-match
 
 Each EventBasedAddon instance: 
 
-1. references an EventSource (which defines what the event is);
+1. references an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
 2. has a clusterSelector selecting one or more managed clusters;
 3. contains list of add-ons to deploy (either referencing ConfigMaps/Secrets or Helm charts).
 
