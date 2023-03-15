@@ -23,13 +23,14 @@ authors:
 
 ## Here is a list of YouTube videos on Sveltos:
 
-1. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
-2. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
-3. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
-4. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s)
-5. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
-6. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
-7. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
+1. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
+2. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
+3. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
+4. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
+5. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s)
+6. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
+7. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
+8. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
