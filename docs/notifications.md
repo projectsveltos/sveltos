@@ -39,7 +39,7 @@ The livenessCheck field is a list of __cluster liveness checks__ to evaluate.
 Currently supported types are:
 
 1. __Addons__: Addons type instructs Sveltos to evaluate state of add-ond deployment in such a cluster;
-2. __HealthCheck__: HealthCheck type allows to define a custom health checks for any Kubernetes type.
+2. __HealthCheck__: HealthCheck type allows to define a custom health check for any Kubernetes type.
 
 ### Notifications
 The notifications fields is a list of all __notifications__ to be sent when liveness check states change.
@@ -128,10 +128,10 @@ Sveltos supports custom health checks written in [Lua](https://www.lua.org/).
 
 Its Spec section contains following fields:
 
-1. *Spec.Group*/*Spec.Version*/*Spec.Kind* fields indicating which Kubernetes resources the HealthCheck is for. Sveltos will watch and evaluate those resources anytime a change happens;
-2. *Spec.Namespace* field can be used to filter resources by namespace;
-3. *Spec.LabelFilters* field can be used to filter resources by labels;
-4. *Spec.Script* can contain a [Lua](https://www.lua.org/pil/contents.html) script, which define a custom health check.
+1. ```Spec.Group*/*Spec.Version*/*Spec.Kind`` fields indicating which Kubernetes resources the HealthCheck is for. Sveltos will watch and evaluate those resources anytime a change happens;
+2. ```Spec.Namespace``` field can be used to filter resources by namespace;
+3. ```Spec.LabelFilters``` field can be used to filter resources by labels;
+4. ```Spec.Script``` can contain a [Lua](https://www.lua.org/pil/contents.html) script, which define a custom health check.
 
 Sveltos will fetch/watch all resources of the specified GVK (eventually filtering those by namespace and labels). For each resource, Spec.Script will be evaluated.
 
