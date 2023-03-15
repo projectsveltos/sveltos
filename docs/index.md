@@ -23,14 +23,15 @@ Sveltos focuses not only on the ability to scale the number of clusters it can m
 
 ## Features List
 1. Kubernetes [addon distribution](addons.md) across multiple clusters;
-2. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
-3. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster; 
-4. [Templates](template.md) instantiated reading values from management cluster;
-5. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
-6. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
-7. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
-8. [Techsupport](techsupport.md): collect tech support from managed clusters;
-9. [Snapshot and Rollback](snapshot.md).
+2. [event driven framework](addon_event_deployment.md) to deploy add-ons as response to events in managed clusters. Event can be defined in the form of Lua script. Add-ons can be expressed as template and instantiated using information from resources in the managed clusters;
+3. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
+4. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster. Custom health checks can be passed to Sveltos in the form of [Lua script](notifications.md#healthcheck-crd);
+5. [Templates](template.md) instantiated reading values from management cluster;
+6. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
+7. [Dry run](configuration.md#dryrun-mode) to preview effect of a change; 
+8. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
+9. [Techsupport](techsupport.md): collect tech support from managed clusters;
+10. [Snapshot and Rollback](snapshot.md).
 
 ![Sveltos addons](assets/addons.png)
 

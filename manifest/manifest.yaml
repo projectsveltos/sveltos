@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: accessrequests.lib.projectsveltos.io
 spec:
@@ -62,7 +62,7 @@ spec:
               type:
                 description: Type represent the type of the request
                 enum:
-                - ClassifierAgent
+                - SveltosAgent
                 - Different
                 type: string
             required:
@@ -114,25 +114,20 @@ spec:
                     description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                     type: string
                 type: object
+                x-kubernetes-map-type: atomic
             type: object
         type: object
     served: true
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: classifierreports.lib.projectsveltos.io
 spec:
@@ -162,7 +157,6 @@ spec:
           metadata:
             type: object
           spec:
-            description: ClassifierReportSpec defines the desired state of ClassifierReport
             properties:
               classifierName:
                 description: ClassifierName is the name of the Classifier instance
@@ -206,19 +200,13 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: classifiers.lib.projectsveltos.io
 spec:
@@ -419,6 +407,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     failureMessage:
                       description: FailureMessage provides more information about
                         the error.
@@ -485,6 +474,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     managedLabels:
                       description: ManagedLabels indicates the labels being managed
                         on the cluster by this Classifier instance
@@ -520,19 +510,13 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: clusterhealthchecks.lib.projectsveltos.io
 spec:
@@ -612,6 +596,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     name:
                       description: Name of the liveness check. Must be a DNS_LABEL
                         and unique within the ClusterHealthCheck.
@@ -620,6 +605,7 @@ spec:
                       description: Type specifies the type of liveness
                       enum:
                       - Addons
+                      - HealthCheck
                       type: string
                   required:
                   - name
@@ -672,6 +658,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     type:
                       description: NotificationType specifies the type of notification
                       enum:
@@ -736,6 +723,7 @@ spec:
                               description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                               type: string
                           type: object
+                          x-kubernetes-map-type: atomic
                         failureMessage:
                           description: FailureMessage provides more information about
                             the error.
@@ -776,6 +764,9 @@ spec:
                             description: A human readable message indicating details
                               about the transition. This field may be empty.
                             type: string
+                          name:
+                            description: Condition name
+                            type: string
                           reason:
                             description: The reason for the condition's last transition
                               in CamelCase. The specific API may choose whether or
@@ -797,6 +788,7 @@ spec:
                             type: string
                         required:
                         - lastTransitionTime
+                        - name
                         - status
                         - type
                         type: object
@@ -892,6 +884,7 @@ spec:
                       description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                       type: string
                   type: object
+                  x-kubernetes-map-type: atomic
                 type: array
             type: object
         type: object
@@ -899,19 +892,13 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
@@ -962,6 +949,7 @@ spec:
                       - DriftDetectionManager
                       - AccessManager
                       - HealthCheckManager
+                      - EventManager
                       type: string
                     logLevel:
                       description: 'LogLevel is the log severity above which logs
@@ -981,19 +969,473 @@ spec:
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: eventreports.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: EventReport
+    listKind: EventReportList
+    plural: eventreports
+    singular: eventreport
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: EventReport is the Schema for the EventReport API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              clusterName:
+                description: ClusterName is the name of the Cluster this EventReport
+                  is for.
+                type: string
+              clusterNamespace:
+                description: ClusterNamespace is the namespace of the Cluster this
+                  EventReport is for.
+                type: string
+              clusterType:
+                description: ClusterType is the type of Cluster this EventReport is
+                  for.
+                type: string
+              eventSourceName:
+                description: EventSourceName is the name of the EventSource instance
+                  this report is for.
+                type: string
+              matchingResources:
+                description: MatchingResources contains a list of resources matching
+                  an event
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+              resources:
+                description: If EventSource Spec.CollectResources is set to true,
+                  all matching resources will be collected and contained in the Resources
+                  field.
+                format: byte
+                type: string
+            required:
+            - clusterName
+            - clusterNamespace
+            - clusterType
+            - eventSourceName
+            type: object
+          status:
+            description: EventReportStatus defines the observed state of EventReport
+            properties:
+              phase:
+                description: Phase represents the current phase of report.
+                enum:
+                - WaitingForDelivery
+                - Delivering
+                - Processed
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: eventsources.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: EventSource
+    listKind: EventSourceList
+    plural: eventsources
+    singular: eventsource
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: EventSource is the Schema for the EventSource API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: EventSourceSpec defines the desired state of EventSource
+            properties:
+              collectResources:
+                default: false
+                description: CollectResources indicates whether matching resources
+                  need to be collected and added to EventReport.
+                type: boolean
+              group:
+                description: Group of the resource deployed in the Cluster.
+                type: string
+              kind:
+                description: Kind of the resource deployed in the Cluster.
+                minLength: 1
+                type: string
+              labelFilters:
+                description: LabelFilters allows to filter resources based on current
+                  labels.
+                items:
+                  properties:
+                    key:
+                      description: Key is the label key
+                      type: string
+                    operation:
+                      description: Operation is the comparison operation
+                      enum:
+                      - Equal
+                      - Different
+                      type: string
+                    value:
+                      description: Value is the label value
+                      type: string
+                  required:
+                  - key
+                  - operation
+                  - value
+                  type: object
+                type: array
+              namespace:
+                description: Namespace of the resource deployed in the  Cluster. Empty
+                  for resources scoped at cluster level.
+                type: string
+              script:
+                description: Script is a text containing a lua script. Must return
+                  struct with field "matching" representing whether object is a match.
+                type: string
+              version:
+                description: Version of the resource deployed in the Cluster.
+                type: string
+            required:
+            - group
+            - kind
+            - version
+            type: object
+        type: object
+    served: true
+    storage: true
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: healthcheckreports.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: HealthCheckReport
+    listKind: HealthCheckReportList
+    plural: healthcheckreports
+    singular: healthcheckreport
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: HealthCheckReport is the Schema for the HealthCheckReport API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              clusterName:
+                description: ClusterName is the name of the Cluster this HealthCheckReport
+                  is for.
+                type: string
+              clusterNamespace:
+                description: ClusterNamespace is the namespace of the Cluster this
+                  HealthCheckReport is for.
+                type: string
+              clusterType:
+                description: ClusterType is the type of Cluster this HealthCheckReport
+                  is for.
+                type: string
+              healthCheckName:
+                description: HealthName is the name of the HealthCheck instance this
+                  report is for.
+                type: string
+              resourceStatuses:
+                description: ResourceStatuses contains a list of resources with their
+                  status
+                items:
+                  properties:
+                    healthStatus:
+                      description: HealthStatus is the health status of the object
+                      enum:
+                      - Healthy
+                      - Progressing
+                      - Degraded
+                      - Suspended
+                      type: string
+                    message:
+                      description: Message is an extra message for human consumption
+                      type: string
+                    objectRef:
+                      description: ObjectRef for which status is reported
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  required:
+                  - healthStatus
+                  - objectRef
+                  type: object
+                type: array
+            required:
+            - clusterName
+            - clusterNamespace
+            - clusterType
+            - healthCheckName
+            type: object
+          status:
+            description: HealthCheckReportStatus defines the observed state of HealthCheckReport
+            properties:
+              phase:
+                description: Phase represents the current phase of report.
+                enum:
+                - WaitingForDelivery
+                - Delivering
+                - Processed
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: healthchecks.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: HealthCheck
+    listKind: HealthCheckList
+    plural: healthchecks
+    singular: healthcheck
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: HealthCheck is the Schema for the HealthCheck API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: HealthCheckSpec defines the desired state of HealthCheck
+            properties:
+              group:
+                description: Group of the resource deployed in the Cluster.
+                type: string
+              kind:
+                description: Kind of the resource deployed in the Cluster.
+                minLength: 1
+                type: string
+              labelFilters:
+                description: LabelFilters allows to filter resources based on current
+                  labels.
+                items:
+                  properties:
+                    key:
+                      description: Key is the label key
+                      type: string
+                    operation:
+                      description: Operation is the comparison operation
+                      enum:
+                      - Equal
+                      - Different
+                      type: string
+                    value:
+                      description: Value is the label value
+                      type: string
+                  required:
+                  - key
+                  - operation
+                  - value
+                  type: object
+                type: array
+              namespace:
+                description: Namespace of the resource deployed in the  Cluster. Empty
+                  for resources scoped at cluster level.
+                type: string
+              script:
+                description: Script is a text containing a lua script. Must return
+                  a struct with field "status" set to one of the possible value of
+                  HealthStatus.
+                type: string
+              version:
+                description: Version of the resource deployed in the Cluster.
+                type: string
+            required:
+            - group
+            - kind
+            - version
+            type: object
+        type: object
+    served: true
+    storage: true
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: resourcesummaries.lib.projectsveltos.io
 spec:
@@ -1189,19 +1631,13 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: rolerequests.lib.projectsveltos.io
 spec:
@@ -1318,6 +1754,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     failureMessage:
                       description: FailureMessage provides more information about
                         the error.
@@ -1409,6 +1846,7 @@ spec:
                       description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                       type: string
                   type: object
+                  x-kubernetes-map-type: atomic
                 type: array
             type: object
         type: object
@@ -1416,19 +1854,13 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: sveltosclusters.lib.projectsveltos.io
 spec:
@@ -1481,12 +1913,6 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: v1
 kind: Namespace
@@ -1499,7 +1925,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: clusterconfigurations.config.projectsveltos.io
 spec:
@@ -1666,6 +2092,7 @@ spec:
                                         https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                                       type: string
                                   type: object
+                                  x-kubernetes-map-type: atomic
                                 version:
                                   description: Version of the resource deployed in
                                     the Cluster.
@@ -1697,18 +2124,12 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: clusterprofiles.config.projectsveltos.io
 spec:
@@ -1740,6 +2161,70 @@ spec:
           spec:
             description: ClusterProfileSpec defines the desired state of ClusterProfile
             properties:
+              clusterRefs:
+                description: ClusterRefs identifies clusters to associate to.
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
               clusterSelector:
                 description: ClusterSelector identifies clusters to associate to.
                 type: string
@@ -1818,6 +2303,7 @@ spec:
                           description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                           type: string
                       type: object
+                      x-kubernetes-map-type: atomic
                     values:
                       description: 'Values holds the values for this Helm release.
                         Go templating with the values from the referenced CAPI Cluster.
@@ -1894,8 +2380,6 @@ spec:
                 - ContinuousWithDriftDetection
                 - DryRun
                 type: string
-            required:
-            - clusterSelector
             type: object
           status:
             description: ClusterProfileStatus defines the observed state of ClusterProfile
@@ -1963,6 +2447,7 @@ spec:
                       description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                       type: string
                   type: object
+                  x-kubernetes-map-type: atomic
                 type: array
             type: object
         type: object
@@ -1970,18 +2455,12 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: clusterreports.config.projectsveltos.io
 spec:
@@ -2147,6 +2626,7 @@ spec:
                               description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                               type: string
                           type: object
+                          x-kubernetes-map-type: atomic
                         version:
                           description: Version of the resource deployed in the Cluster.
                           minLength: 1
@@ -2168,18 +2648,12 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
   name: clustersummaries.config.projectsveltos.io
 spec:
@@ -2223,6 +2697,72 @@ spec:
                 description: ClusterProfileSpec represent the configuration that will
                   be applied to the workload cluster.
                 properties:
+                  clusterRefs:
+                    description: ClusterRefs identifies clusters to associate to.
+                    items:
+                      description: "ObjectReference contains enough information to
+                        let you inspect or modify the referred object. --- New uses
+                        of this type are discouraged because of difficulty describing
+                        its usage when embedded in APIs. 1. Ignored fields.  It includes
+                        many fields which are not generally honored.  For instance,
+                        ResourceVersion and FieldPath are both very rarely valid in
+                        actual usage. 2. Invalid usage help.  It is impossible to
+                        add specific help for individual usage.  In most embedded
+                        usages, there are particular restrictions like, \"must refer
+                        only to types A and B\" or \"UID not honored\" or \"name must
+                        be restricted\". Those cannot be well described when embedded.
+                        3. Inconsistent validation.  Because the usages are different,
+                        the validation rules are different by usage, which makes it
+                        hard for users to predict what will happen. 4. The fields
+                        are both imprecise and overly precise.  Kind is not a precise
+                        mapping to a URL. This can produce ambiguity during interpretation
+                        and require a REST mapping.  In most cases, the dependency
+                        is on the group,resource tuple and the version of the actual
+                        struct is irrelevant. 5. We cannot easily change it.  Because
+                        this type is embedded in many locations, updates to this type
+                        will affect numerous schemas.  Don't make new APIs embed an
+                        underspecified API type they do not control. \n Instead of
+                        using this type, create a locally provided and used type that
+                        is well-focused on your reference. For example, ServiceReferences
+                        for admission registration: https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                        ."
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    type: array
                   clusterSelector:
                     description: ClusterSelector identifies clusters to associate
                       to.
@@ -2303,6 +2843,7 @@ spec:
                               description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                               type: string
                           type: object
+                          x-kubernetes-map-type: atomic
                         values:
                           description: 'Values holds the values for this Helm release.
                             Go templating with the values from the referenced CAPI
@@ -2380,8 +2921,6 @@ spec:
                     - ContinuousWithDriftDetection
                     - DryRun
                     type: string
-                required:
-                - clusterSelector
                 type: object
               clusterType:
                 description: ClusterType is the type of Cluster
@@ -2486,12 +3025,6 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -2954,382 +3487,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: classifier
-  name: projectsveltos
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: classifier-manager
-  namespace: projectsveltos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: classifier-leader-election-role
-  namespace: projectsveltos
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  creationTimestamp: null
-  name: classifier-manager-role
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - apiextensions.k8s.io
-  resources:
-  - customresourcedefinitions
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - clusters
-  verbs:
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - machines
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - machines/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - accessrequests
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifierreports
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - debuggingconfigurations
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters
-  verbs:
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: classifier-metrics-reader
-rules:
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: classifier-proxy-role
-rules:
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: classifier-leader-election-rolebinding
-  namespace: projectsveltos
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: classifier-leader-election-role
-subjects:
-- kind: ServiceAccount
-  name: classifier-manager
-  namespace: projectsveltos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: classifier-manager-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: classifier-manager-role
-subjects:
-- kind: ServiceAccount
-  name: classifier-manager
-  namespace: projectsveltos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: classifier-proxy-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: classifier-proxy-role
-subjects:
-- kind: ServiceAccount
-  name: classifier-manager
-  namespace: projectsveltos
----
-apiVersion: v1
-data:
-  controller_manager_config.yaml: |
-    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
-    kind: ControllerManagerConfig
-    health:
-      healthProbeBindAddress: :8081
-    metrics:
-      bindAddress: 127.0.0.1:8080
-    webhook:
-      port: 9443
-    leaderElection:
-      leaderElect: true
-      resourceName: 1aea9208.projectsveltos.io
-    # leaderElectionReleaseOnCancel defines if the leader should step down volume
-    # when the Manager ends. This requires the binary to immediately end when the
-    # Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
-    # speeds up voluntary leader transitions as the new leader don't have to wait
-    # LeaseDuration time first.
-    # In the default scaffold provided, the program ends immediately after
-    # the manager stops, so would be fine to enable this option. However,
-    # if you are doing or is intended to do any operation such as perform cleanups
-    # after the manager stops then its usage might be unsafe.
-    # leaderElectionReleaseOnCancel: true
-kind: ConfigMap
-metadata:
-  name: classifier-manager-config
-  namespace: projectsveltos
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    control-plane: classifier
-  name: classifier-manager-metrics-service
-  namespace: projectsveltos
-spec:
-  ports:
-  - name: https
-    port: 8443
-    protocol: TCP
-    targetPort: https
-  selector:
-    control-plane: classifier
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    control-plane: classifier
-  name: classifier-manager
-  namespace: projectsveltos
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      control-plane: classifier
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
-        control-plane: classifier
-    spec:
-      containers:
-      - args:
-        - --health-probe-bind-address=:8081
-        - --metrics-bind-address=127.0.0.1:8080
-        - --leader-elect
-        - --report-mode=0
-        - --v=5
-        command:
-        - /manager
-        image: projectsveltos/classifier-amd64:main
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8081
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8081
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 500m
-            memory: 128Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      - args:
-        - --secure-listen-address=0.0.0.0:8443
-        - --upstream=http://127.0.0.1:8080/
-        - --logtostderr=true
-        - --v=0
-        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0
-        name: kube-rbac-proxy
-        ports:
-        - containerPort: 8443
-          name: https
-          protocol: TCP
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: classifier-manager
-      terminationGracePeriodSeconds: 10
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
     control-plane: access-manager
   name: projectsveltos
 ---
@@ -3504,6 +3661,26 @@ rules:
   verbs:
   - get
   - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventreports
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - healthcheckreports
+  verbs:
+  - create
+  - get
+  - list
+  - update
   - watch
 - apiGroups:
   - lib.projectsveltos.io
@@ -4226,10 +4403,30 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
+  - healthcheckreports
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - healthchecks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
   - sveltosclusters
   verbs:
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - lib.projectsveltos.io
@@ -4432,5 +4629,1120 @@ spec:
       securityContext:
         runAsNonRoot: true
       serviceAccountName: hc-manager
+      terminationGracePeriodSeconds: 10
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: event-manager
+  name: projectsveltos
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: eventbasedaddons.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: EventBasedAddOn
+    listKind: EventBasedAddOnList
+    plural: eventbasedaddons
+    singular: eventbasedaddon
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: EventBasedAddOn is the Schema for the eventbasedaddons API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: EventBasedAddOnSpec defines the desired state of EventBasedAddOn
+            properties:
+              clusterSelector:
+                description: ClusterSelector identifies clusters to associate to.
+                type: string
+              eventSourceName:
+                description: EventSourceName is the name of the referenced EventSource.
+                  Resources contained in the referenced ConfigMaps/Secrets and HelmCharts
+                  will be customized using information from resources matching the
+                  EventSource in the managed cluster.
+                type: string
+              helmCharts:
+                description: Helm charts to be deployed in the matching clusters based
+                  on EventSource.
+                items:
+                  properties:
+                    chartName:
+                      description: ChartName is the chart name
+                      minLength: 1
+                      type: string
+                    chartVersion:
+                      description: ChartVersion is the chart version
+                      minLength: 1
+                      type: string
+                    helmChartAction:
+                      default: Install
+                      description: HelmChartAction is the action that will be taken
+                        on the helm chart
+                      enum:
+                      - Install
+                      - Uninstall
+                      type: string
+                    releaseName:
+                      description: ReleaseName is the chart release
+                      minLength: 1
+                      type: string
+                    releaseNamespace:
+                      description: ReleaseNamespace is the namespace release will
+                        be installed
+                      minLength: 1
+                      type: string
+                    repositoryName:
+                      description: RepositoryName is the name helm chart repository
+                      minLength: 1
+                      type: string
+                    repositoryURL:
+                      description: RepositoryURL is the URL helm chart repository
+                      minLength: 1
+                      type: string
+                    secretRef:
+                      description: SecretRef contains confidential data that needs
+                        to be used as values for templates
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    values:
+                      description: 'Values holds the values for this Helm release.
+                        Go templating with the values from the referenced CAPI Cluster.
+                        Currently following can be referenced: - Cluster => CAPI Cluster
+                        for instance - KubeadmControlPlane => the CAPI Cluster controlPlaneRef
+                        - InfrastructureProvider => the CAPI cluster infrastructure
+                        provider - SecretRef => store any confindetial information
+                        in a Secret, set SecretRef then reference it'
+                      type: string
+                  required:
+                  - chartName
+                  - chartVersion
+                  - releaseName
+                  - releaseNamespace
+                  - repositoryName
+                  - repositoryURL
+                  type: object
+                type: array
+              oneForEvent:
+                default: true
+                description: Multiple resources in a managed cluster can be a match
+                  for referenced EventSource. OneForEvent indicates whether a ClusterProfile
+                  for all resource (OneForEvent = false) or one per resource (OneForEvent
+                  = true) needs to be creted. Default to to true.
+                type: boolean
+              policyRefs:
+                description: PolicyRefs references all the ConfigMaps/Secrets containing
+                  kubernetes resources that need to be deployed in the matching clusters
+                  based on EventSource.
+                items:
+                  description: PolicyRef specifies a resource containing one or more
+                    policy to deploy in matching Clusters.
+                  properties:
+                    kind:
+                      description: 'Kind of the resource. Supported kinds are: Secrets
+                        and ConfigMaps.'
+                      enum:
+                      - Secret
+                      - ConfigMap
+                      type: string
+                    name:
+                      description: Name of the rreferenced resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the referenced resource. Namespace
+                        can be left empty. In such a case, namespace will be implicit
+                        set to cluster's namespace.
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  - namespace
+                  type: object
+                type: array
+              stopMatchingBehavior:
+                default: WithdrawPolicies
+                description: StopMatchingBehavior indicates what behavior should be
+                  when a Cluster stop matching the ClusterProfile. By default all
+                  deployed Helm charts and Kubernetes resources will be withdrawn
+                  from Cluster. Setting StopMatchingBehavior to LeavePolicies will
+                  instead leave ClusterProfile deployed policies in the Cluster.
+                type: string
+              syncMode:
+                default: Continuous
+                description: SyncMode specifies how features are synced in a matching
+                  workload cluster. - OneTime means, first time a workload cluster
+                  matches the ClusterProfile, features will be deployed in such cluster.
+                  Any subsequent feature configuration change won't be applied into
+                  the matching workload clusters; - Continuous means first time a
+                  workload cluster matches the ClusterProfile, features will be deployed
+                  in such a cluster. Any subsequent feature configuration change will
+                  be applied into the matching workload clusters. - DryRun means no
+                  change will be propagated to any matching cluster. A report instead
+                  will be generated summarizing what would happen in any matching
+                  cluster because of the changes made to ClusterProfile while in DryRun
+                  mode.
+                enum:
+                - OneTime
+                - Continuous
+                - ContinuousWithDriftDetection
+                - DryRun
+                type: string
+            required:
+            - clusterSelector
+            - eventSourceName
+            type: object
+          status:
+            description: EventBasedAddOnStatus defines the observed state of EventBasedAddOn
+            properties:
+              clusterInfo:
+                description: ClusterInfo represent the deployment status in each managed
+                  cluster
+                items:
+                  properties:
+                    cluster:
+                      description: Cluster references the Cluster
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    failureMessage:
+                      description: FailureMessage provides more information about
+                        the error.
+                      type: string
+                    hash:
+                      description: Hash represents the hash of the Classifier currently
+                        deployed in the Cluster
+                      format: byte
+                      type: string
+                    status:
+                      description: Status represents the state of the feature in the
+                        workload cluster
+                      enum:
+                      - Provisioning
+                      - Provisioned
+                      - Failed
+                      - Removing
+                      - Removed
+                      type: string
+                  required:
+                  - cluster
+                  - hash
+                  type: object
+                type: array
+              matchingClusters:
+                description: MatchingClusterRefs reference all the cluster-api Cluster
+                  currently matching ClusterProfile ClusterSelector
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: event-leader-election-role
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: event-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - config.projectsveltos.io
+  resources:
+  - clusterprofiles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - debuggingconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventbasedaddons
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventbasedaddons/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventbasedaddons/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventreports
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventsources
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters/status
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: event-leader-election-rolebinding
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: event-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: event-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: event-manager-role
+subjects:
+- kind: ServiceAccount
+  name: event-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: event-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: event-manager
+  namespace: projectsveltos
+---
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: bfaea346.projectsveltos.io
+    # leaderElectionReleaseOnCancel defines if the leader should step down volume
+    # when the Manager ends. This requires the binary to immediately end when the
+    # Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
+    # speeds up voluntary leader transitions as the new leader don't have to wait
+    # LeaseDuration time first.
+    # In the default scaffold provided, the program ends immediately after
+    # the manager stops, so would be fine to enable this option. However,
+    # if you are doing or is intended to do any operation such as perform cleanups
+    # after the manager stops then its usage might be unsafe.
+    # leaderElectionReleaseOnCancel: true
+kind: ConfigMap
+metadata:
+  name: event-manager-config
+  namespace: projectsveltos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    control-plane: event-manager
+  name: event-manager-metrics-service
+  namespace: projectsveltos
+spec:
+  ports:
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: https
+  selector:
+    control-plane: event-manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: event-manager
+  name: event-manager
+  namespace: projectsveltos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: event-manager
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: event-manager
+    spec:
+      containers:
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        - --v=5
+        command:
+        - /manager
+        image: projectsveltos/event-manager-amd64:main
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: event-manager
+      terminationGracePeriodSeconds: 10
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: classifier
+  name: projectsveltos
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: classifier-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: classifier-leader-election-role
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: classifier-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - accessrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - classifierreports
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - classifiers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - classifiers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - classifiers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - debuggingconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters/status
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: classifier-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: classifier-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: classifier-leader-election-rolebinding
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: classifier-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: classifier-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: classifier-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: classifier-manager-role
+subjects:
+- kind: ServiceAccount
+  name: classifier-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: classifier-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: classifier-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: classifier-manager
+  namespace: projectsveltos
+---
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: 1aea9208.projectsveltos.io
+    # leaderElectionReleaseOnCancel defines if the leader should step down volume
+    # when the Manager ends. This requires the binary to immediately end when the
+    # Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
+    # speeds up voluntary leader transitions as the new leader don't have to wait
+    # LeaseDuration time first.
+    # In the default scaffold provided, the program ends immediately after
+    # the manager stops, so would be fine to enable this option. However,
+    # if you are doing or is intended to do any operation such as perform cleanups
+    # after the manager stops then its usage might be unsafe.
+    # leaderElectionReleaseOnCancel: true
+kind: ConfigMap
+metadata:
+  name: classifier-manager-config
+  namespace: projectsveltos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    control-plane: classifier
+  name: classifier-manager-metrics-service
+  namespace: projectsveltos
+spec:
+  ports:
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: https
+  selector:
+    control-plane: classifier
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: classifier
+  name: classifier-manager
+  namespace: projectsveltos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: classifier
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: classifier
+    spec:
+      containers:
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        - --report-mode=0
+        - --v=5
+        command:
+        - /manager
+        image: projectsveltos/classifier-amd64:main
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 500m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: classifier-manager
       terminationGracePeriodSeconds: 10
 ---
