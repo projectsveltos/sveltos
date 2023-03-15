@@ -36,7 +36,8 @@ The clusterSelector field is a Kubernetes label selector. Sveltos uses it to det
 ### LivenessChecks
 The livenessCheck field is a list of __cluster liveness checks__ to evaluate.
 
-Currently supported types are: 
+Currently supported types are:
+
 1. __Addons__: Addons type instructs Sveltos to evaluate state of add-ond deployment in such a cluster;
 2. __HealthCheck__: HealthCheck type allows to define a custom health checks for any Kubernetes type.
 
