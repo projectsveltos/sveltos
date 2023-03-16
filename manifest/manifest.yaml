@@ -4779,11 +4779,10 @@ spec:
                   type: object
                 type: array
               oneForEvent:
-                default: true
                 description: Multiple resources in a managed cluster can be a match
                   for referenced EventSource. OneForEvent indicates whether a ClusterProfile
                   for all resource (OneForEvent = false) or one per resource (OneForEvent
-                  = true) needs to be creted. Default to to true.
+                  = true) needs to be creted.
                 type: boolean
               policyRefs:
                 description: PolicyRefs references all the ConfigMaps/Secrets containing
@@ -5105,6 +5104,7 @@ rules:
   - get
   - list
   - update
+  - watch
 - apiGroups:
   - lib.projectsveltos.io
   resources:
