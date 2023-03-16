@@ -3403,7 +3403,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltos-manager-amd64:main
+        image: projectsveltos/sveltos-manager-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3887,7 +3887,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4180,7 +4180,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4577,7 +4577,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4779,11 +4779,10 @@ spec:
                   type: object
                 type: array
               oneForEvent:
-                default: true
                 description: Multiple resources in a managed cluster can be a match
                   for referenced EventSource. OneForEvent indicates whether a ClusterProfile
                   for all resource (OneForEvent = false) or one per resource (OneForEvent
-                  = true) needs to be creted. Default to to true.
+                  = true) needs to be creted.
                 type: boolean
               policyRefs:
                 description: PolicyRefs references all the ConfigMaps/Secrets containing
@@ -5105,6 +5104,7 @@ rules:
   - get
   - list
   - update
+  - watch
 - apiGroups:
   - lib.projectsveltos.io
   resources:
@@ -5316,7 +5316,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5692,7 +5692,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:v0.7.1
         livenessProbe:
           httpGet:
             path: /healthz
