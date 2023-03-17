@@ -326,6 +326,11 @@ spec:
                       description: Namespace of the resource deployed in the  Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
+                    script:
+                      description: Script is a text containing a lua script. Must
+                        return struct with field "matching" representing whether object
+                        is a match.
+                      type: string
                     version:
                       description: Version of the resource deployed in the Cluster.
                       type: string
@@ -3403,7 +3408,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltos-manager-amd64:main
+        image: projectsveltos/sveltos-manager-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3887,7 +3892,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4180,7 +4185,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4577,7 +4582,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5043,16 +5048,22 @@ rules:
   resources:
   - configmaps
   verbs:
+  - create
+  - delete
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - ""
   resources:
   - secrets
   verbs:
+  - create
+  - delete
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - apiextensions.k8s.io
@@ -5316,7 +5327,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5692,7 +5703,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:v0.7.2
         livenessProbe:
           httpGet:
             path: /healthz
