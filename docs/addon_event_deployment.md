@@ -318,8 +318,6 @@ NAMESPACE   NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)
 default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP    54m
 ```
 
-two NetworkPolicies will be created, one per Service
-
 ```bash
 kubectl get networkpolicy -A
 NAMESPACE   NAME                    POD-SELECTOR                          AGE
