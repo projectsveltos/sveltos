@@ -22,7 +22,7 @@ Sveltos supports an event-driven workflow:
 ## Event definition
 
 An _Event_ is a specific operation in the context of k8s objects.  To define an event, use the
-[EventSource](https://github.com/projectsveltos/libsveltos/blob/dev/api/v1alpha1/eventsource_type.go) CRD.
+[EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/eventsource_type.go) CRD.
 
 Following EventSource instance define an __event__ as a creation/deletion of a Service with label *sveltos: fv*.
 
@@ -97,7 +97,7 @@ That will load the Lua script, pass it the matching (if available) and non-match
 
 ## Define the add-ons to deploy
 
-[EventBasedAddOn](https://github.com/projectsveltos/libsveltos/blob/dev/api/v1alpha1/eventbasedaddon_type.go) is the CRD introduced to define what add-ons to deploy when an event happens.
+[EventBasedAddOn](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1alpha1/eventbasedaddon_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
 Each EventBasedAddon instance: 
 

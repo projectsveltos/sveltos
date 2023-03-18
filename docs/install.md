@@ -51,6 +51,20 @@ projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
+## Verify default classifier
+
+Verify default classifier instance has been installed. 
+
+```
+kubectl get classifier
+```
+
+If not present, do install it manually
+
+```
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+```
+
 ## Configuration
 
 If you want to know more about how to configure Sveltos, please refer to this [section](configuration.md).
