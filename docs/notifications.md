@@ -124,7 +124,7 @@ Above is an example of Slack notification delivered.
 
 Sveltos supports custom health checks written in [Lua](https://www.lua.org/).
 
-[HealthCheck](https://github.com/projectsveltos/libsveltos/blob/dev/api/v1alpha1/healthcheck_type.go) is the CRD introduced by Sveltos to define custom health checks.
+[HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/healthcheck_type.go) is the CRD introduced by Sveltos to define custom health checks.
 
 Its Spec section contains following fields:
 
