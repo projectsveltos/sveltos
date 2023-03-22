@@ -272,7 +272,7 @@ spec:
         hs.matching = false
         hs.message = ""
         if obj.spec.acme ~= nil then
-          if string.find(obj.spec.acme.email, "acme-staging-v02.api.letsencrypt.org", 1, true) then
+          if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
             hs.matching = true
           end
         end
