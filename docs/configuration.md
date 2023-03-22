@@ -230,7 +230,55 @@ The field *classifierLabels* contains all the labels (key/value pair) which will
 The field *kubernetesVersionConstraints* can be used to classify a cluster based on its current Kubernetes version.
 
 ### Resource constraints
-The field *deployedResourceConstraints* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields.
+The field *deployedResourceConstraints* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
+
+Following classifier, matches any cluster with at least 30 different namespaces.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: Classifier
+metadata:
+  name: large-ns
+spec:
+  classifierLabels:
+  - key: env
+    value: large
+  deployedResourceConstraints:
+  - group: ""
+    version: v1
+    kind: Namespace
+    minCount: 30
+```
+
+Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_ 
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: Classifier
+metadata:
+  name: acme-staging-v02
+spec:
+  classifierLabels:
+  - key: issuer
+    value: acme-staging-v02
+  deployedResourceConstraints:
+  - group: "cert-manager.io"
+    version: v1
+    kind: ClusterIssuer
+    minCount: 1
+    script: |
+      function evaluate()
+        hs = {}
+        hs.matching = false
+        hs.message = ""
+        if obj.spec.acme ~= nil then
+          if string.find(obj.spec.acme.email, "acme-staging-v02.api.letsencrypt.org", 1, true) then
+            hs.matching = true
+          end
+        end
+        return hs
+      end
+```
 
 ## Snapshot
 
