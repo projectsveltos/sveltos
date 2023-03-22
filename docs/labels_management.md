@@ -117,7 +117,7 @@ With the above cluster configuration:
 2. Any cluster with a Kubernetes version v1.25.x will get label _gatekeeper:v3.10_ added and because of that Gatekeeper 3.10.0 helm chart will be deployed;
 3. As soon a cluster is upgraded from Kubernetes version v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
 
-To read more about classifier configuration, please take a look at this [section](configuration.md#managing-labels).
+To read more about classifier configuration, with more examles using resources and Lua script, please take a look at this [section](configuration.md#managing-labels).
 
 ### More examples
 
