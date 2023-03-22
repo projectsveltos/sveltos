@@ -221,6 +221,39 @@ Then in *pkg/evaluation/healthchecks* directory, create a directory for your res
 
 That will load the Lua script, pass it the healthy (if available), progressing (if available), degraded (if available), suspended (if available) resources and verify result is the expected one.
 
+### Failed Certificate
+
+Following HealthCheck will detect degraded Certificates.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: HealthCheck
+metadata:
+ name: failed-cert
+spec:
+ group: "cert-manager.io"
+ version: "v1"
+ kind: "Certificate"
+ script: |
+  function evaluate()
+    hs = {}
+    hs.ignore = true
+    if obj.status ~= nil then
+      if obj.status.conditions ~= nil then
+        for i, condition in ipairs(obj.status.conditions) do
+          if condition.type == "Ready" and condition.status == "False" then
+            hs.ignore = false
+            hs.status = "Degraded"
+            hs.message = condition.message
+            return hs
+          end
+        end
+      end
+    end
+    return hs
+  end
+```
+
 ### Another example
 
 Following HealthCheck, considers all Deployments. Any Deployment:
