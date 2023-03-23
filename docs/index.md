@@ -56,6 +56,8 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 To know more about configuration or find some examples, please read this [section](configuration.md).
 
 ## 😻 Contributing to projectsveltos
+We would love your suggestions, contributions, and help! 
+
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
 
 1. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues")
