@@ -74,7 +74,7 @@ git clone git@github.com:projectsveltos/sveltosctl.git
 cd sveltosctl
 git checkout ${branch}
 make docker-build
-docker push gianlucam76/sveltosctl-amd64:${branch}
+docker --config ${config} push projectsveltos/sveltosctl-amd64:${branch}
 cd ../../; rm -rf tmp
 
 # healthcheck-manager
