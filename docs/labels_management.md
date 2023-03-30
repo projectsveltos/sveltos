@@ -117,10 +117,79 @@ With the above cluster configuration:
 2. Any cluster with a Kubernetes version v1.25.x will get label _gatekeeper:v3.10_ added and because of that Gatekeeper 3.10.0 helm chart will be deployed;
 3. As soon a cluster is upgraded from Kubernetes version v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
 
-To read more about classifier configuration, with more examles using resources and Lua script, please take a look at this [section](configuration.md#managing-labels).
+To read more about classifier configuration, with more examles using resources and Lua script, please take a look at this [section](labels_management.md#classifier-controller-configuration).
 
 ### More examples
 
 1. Classify clusters based on their Kubernetes version [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/kubernetes_version.yaml)
 2. Classify clusters based on number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
 3. Classify clusters based on their Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
+
+
+### Deep dive: Classifier CRD
+
+[Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1alpha1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
+
+#### Classifier Labels
+The field *classifierLabels* contains all the labels (key/value pair) which will be added automatically to any cluster matching a Classifier instance.
+
+#### Kubernetes version constraints
+The field *kubernetesVersionConstraints* can be used to classify a cluster based on its current Kubernetes version.
+
+#### Resource constraints
+The field *deployedResourceConstraints* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
+
+Following classifier, matches any cluster with at least 30 different namespaces.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: Classifier
+metadata:
+  name: large-ns
+spec:
+  classifierLabels:
+  - key: env
+    value: large
+  deployedResourceConstraints:
+  - group: ""
+    version: v1
+    kind: Namespace
+    minCount: 30
+```
+
+Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_ 
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: Classifier
+metadata:
+  name: acme-staging-v02
+spec:
+  classifierLabels:
+  - key: issuer
+    value: acme-staging-v02
+  deployedResourceConstraints:
+  - group: "cert-manager.io"
+    version: v1
+    kind: ClusterIssuer
+    minCount: 1
+    script: |
+      function evaluate()
+        hs = {}
+        hs.matching = false
+        hs.message = ""
+        if obj.spec.acme ~= nil then
+          if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
+            hs.matching = true
+          end
+        end
+        return hs
+      end
+```
+
+### Classifier controller configuration
+
+1. *concurrent-reconciles*: by default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
+2. *worker-number*: number of workers performing long running task. By default this is set to 20. If number of Classifier instances is in the hundreds, please consider increasing this;
+3. *report-mode*: by default Classifier controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each Classifier Agent send back ClassifierReport to management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are update of ClassifierReports.
+4. *control-plane-endpoint*: the management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable frm each managed cluster.

@@ -26,6 +26,27 @@ Operations using snapshots, such as capture, diff, and rollback, are performed w
 
 For a demonstration of snapshots, watch the video [Sveltos, introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4) on YouTube.
 
+
+## Snapshot CRD
+
+[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect configuration snapshots.
+*Snapshot* CRD is used for that.
+
+```yaml
+---
+apiVersion: utils.projectsveltos.io/v1alpha1
+kind: Snapshot
+metadata:
+  name: hourly
+spec:
+  schedule: "0 * * * *"
+  storage: /collection
+```
+
+*schedule* field specifies when a snapshot needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
+
+*storage* field represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
+
 ### Snapshot diff
 
 [sveltoctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") snapshot diff can be used to display all the configuration changes between two snapshots:
@@ -85,19 +106,3 @@ Rollback is a feature in which a previous configuration snapshot is used to repl
 When all of the configuration files for a particular version are used to replace the current configuration, this is referred to as a full rollback.
 
 For a demonstration of rollback, watch the video [Sveltos, introduction to Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ) on YouTube.
-
-### Snapshot CRD
-
-Snapshot CRD is used to configure Sveltos to periodically take snapshots. Here is a quick example. 
-For more information on this CRD fields, please read [here](configuration.md#snapshot)
-
-```yaml
----
-apiVersion: utils.projectsveltos.io/v1alpha1
-kind: Snapshot
-metadata:
-  name: hourly
-spec:
-  schedule: "0 * * * *"
-  storage: /snapshot
-```

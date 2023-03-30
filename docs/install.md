@@ -67,7 +67,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/m
 
 ## Configuration
 
-If you want to know more about how to configure Sveltos, please refer to this [section](configuration.md).
+If you want to know more about how to configure Sveltos, please refer to this [section](addons.md#sveltos-manager-controller-configuration) and [this](labels_management.md#classifier-controller-configuration).
 
 ## Sveltosctl
 

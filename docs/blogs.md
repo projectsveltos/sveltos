@@ -35,10 +35,6 @@ authors:
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-## ✨ Configuration and examples
-
-To know more about configuration or find some examples, please read this [section](configuration.md).
-
 ## 😻 Contributing to projectsveltos
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
 

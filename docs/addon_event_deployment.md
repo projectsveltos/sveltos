@@ -94,6 +94,45 @@ Then in *pkg/evaluation/events* directory, create a directory for your resource 
 
 That will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
 
+## Event and multi-tenancy
+
+If following label is set on EventSource instance created by tenant admin
+
+```
+projectsveltos.io/admin-name: <admin>
+```
+
+Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](multi-tenancy.md).
+
+Sveltos suggests using following Kyverno ClusterPolicy, which will take care of adding proper label to each EventSource at creation time.
+
+```yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-labels
+  annotations:
+    policies.kyverno.io/title: Add Labels
+    policies.kyverno.io/description: >-
+      Adds projectsveltos.io/admin-name label on each EventSource
+      created by tenant admin. It assumes each tenant admin is
+      represented in the management cluster by a ServiceAccount.
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: add-labels
+    match:
+      resources:
+        kinds:
+        - EventSource
+        - EventBasedAddOn
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+             projectsveltos.io/admin-name: "{{serviceAccountName}}"
+```
 
 ## Define the add-ons to deploy
 
