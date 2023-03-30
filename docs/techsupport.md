@@ -100,6 +100,15 @@ spec:
     namespace: default
 ```
 
+*schedule* field specifies when a tech-support needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
+
+*storage* field represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
+
+*logs* field instructs Sveltos on which logs to collect. In above example, all logs in *default* namespace with label *env=production* and *department!=eng*. Only last *600* seconds of log will be collected.
+
+*resources* field is a list of Kubernetes resources Sveltos needs to collect. In above example, Services and Deployments from default namespace with labels matching  *env=production* and *department!=eng*.
+
+
 Please refer to [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go) for more information.
 
 ## List techsupports
@@ -187,3 +196,8 @@ drwxr-xr-x 3 root root 4096 Feb 23 01:39 ..
 -rw-r--r-- 1 root root 1958 Feb 23 01:39 kyverno-latest-svc-metrics.yaml
 -rw-r--r-- 1 root root 1946 Feb 23 01:39 kyverno-latest-svc.yaml
 ```
+
+
+[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect tech-support from managed clusters.
+*Snapshot* CRD is used for that.
+

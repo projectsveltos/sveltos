@@ -295,3 +295,42 @@ spec:
 ```
 
 [^1]: Credit for this example to https://blog.cubieserver.de/2022/argocd-health-checks-for-opa-rules/
+
+## Notifications and multi-tenancy
+
+If following label is set on HealthCheck instance created by tenant admin
+
+```
+projectsveltos.io/admin-name: <admin>
+```
+
+Sveltos will make sure tenant admin can define notifications only looking at resources it has been [authorized to by platform admin](multi-tenancy.md).
+
+Sveltos suggests using following Kyverno ClusterPolicy, which will take care of adding proper label to each HealthCheck at creation time.
+
+```yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-labels
+  annotations:
+    policies.kyverno.io/title: Add Labels
+    policies.kyverno.io/description: >-
+      Adds projectsveltos.io/admin-name label on each HealthCheck
+      created by tenant admin. It assumes each tenant admin is
+      represented in the management cluster by a ServiceAccount.
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: add-labels
+    match:
+      resources:
+        kinds:
+        - HealthCheck
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+             projectsveltos.io/admin-name: "{{serviceAccountName}}"
+```
