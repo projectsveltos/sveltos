@@ -19,6 +19,14 @@ Sveltos supports an event-driven workflow:
 2. select on which clusters watch for such events;
 3. define which add-ons to deploy when event happens.
 
+By default, add-ons are deployed in the same cluster where events are detected.
+Sveltos supports though also cross-clusters:
+
+1. if an event happens in cluster __foo__
+2. deploy add-ons in cluster __bar__
+
+See [this](#cross-clusters) for more information.
+
 ## Event definition
 
 An _Event_ is a specific operation in the context of k8s objects.  To define an event, use the
@@ -141,7 +149,7 @@ spec:
 Each EventBasedAddon instance: 
 
 1. references an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
-2. has a clusterSelector selecting one or more managed clusters;
+2. has a sourceClusterSelector selecting one or more managed clusters;
 3. contains list of add-ons to deploy (either referencing ConfigMaps/Secrets or Helm charts).
 
 For instance following EventBasedAddOn references the eventSource *sveltos-service* defined above.
@@ -153,7 +161,7 @@ kind: EventBasedAddOn
 metadata:
  name: service-network-policy
 spec:
- clusterSelector: env=fv
+ sourceClusterSelector: env=fv
  eventSourceName: sveltos-service
  oneForEvent: true
  policyRefs:
@@ -192,7 +200,7 @@ data:
 
 In above ConfigMap, __Resource__ is the Kubernetes resource in the managed cluster matching EventSource (Service instance with label sveltos:fv in this example).
 
-Anytime a *Service* with label *sveltos:fv* is created in a managed cluster matching clusterSelector, a *NetworkPolicy* is created in the managed cluster opening ingress traffic to that service from any pod with labels *app: internal*.
+Anytime a *Service* with label *sveltos:fv* is created in a managed cluster matching sourceClusterSelector, a *NetworkPolicy* is created in the managed cluster opening ingress traffic to that service from any pod with labels *app: internal*.
 
 For instance, if following *Service* is created in a managed cluster:
 
@@ -332,7 +340,7 @@ kind: EventBasedAddOn
 metadata:
  name: service-network-policy
 spec:
- clusterSelector: env=fv
+ sourceClusterSelector: env=fv
  eventSourceName: <your eventSource name>
  oneForEvent: false
  helmCharts:
@@ -407,7 +415,7 @@ metadata:
  name: ingress-configuration
  namespace: default
 spec:
- clusterSelector: env=fv
+ sourceClusterSelector: env=fv
  eventSourceName: https-service
  oneForEvent: false
  policyRefs:
@@ -548,7 +556,7 @@ kind: EventBasedAddOn
 metadata:
  name: service-network-policy
 spec:
- clusterSelector: env=fv
+ sourceClusterSelector: env=fv
  eventSourceName: eng-http-service
  oneForEvent: true
  policyRefs:
@@ -596,3 +604,205 @@ Anytime a Service exposing port 80 is created in the namespace eng in any matchi
 
 Full example (with all YAMLs) can be found [here](https://github.com/projectsveltos/demos/blob/main/httproute/README.md).
 
+### Cross clusters
+
+Sveltos by default will deploy add-ons in the very same cluster an event is detected.
+Sveltos though can also be configured for cross-cluster configuration: watch for events in a cluster and deploy add-ons in a set of different clusters.
+
+EventBasedAddOn CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
+This field is optional and not set by default. In such a case, Sveltos default behavior is to deploy add-ons in the same cluster where the event was detected.
+
+If this field is set, Sveltos behavior will change. When an event is detected in a cluster, add-ons will be deployed in all the clusters matching the label selector __destinationClusterSelector__.
+
+We can see this in action with an example of cross-cluster service discovery.
+
+We have two clusters:
+
+1. GKE cluster (labels env: production) registered with sveltos;
+2. a cluster-api cluster (label dep: eng) provisioned by docker.
+ 
+In the management cluster, we create:
+
+1. an EventSource instance that identies as a match any Service with a load balancer IP:
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: EventSource
+metadata:
+ name: load-balancer-service
+spec:
+ collectResources: true
+ group: ""
+ version: "v1"
+ kind: "Service"
+ script: |
+  function evaluate()
+    hs = {}
+    hs.matching = false
+    hs.message = ""
+    if obj.status.loadBalancer.ingress ~= nil then
+      hs.matching = true
+    end
+    return hs
+  end
+```
+1. an EventBasedAddOn instance that references EventSource defined above (and so watches for load balancer services in any cluster with label env:production, which in our example matches the GKE cluster) and deploys selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_ (in our example the cluster-api provisioned cluster)
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: EventBasedAddOn
+metadata:
+ name: service-policy
+spec:
+ sourceClusterSelector: env=production
+ destinationClusterSelector: dep=eng
+ eventSourceName: load-balancer-service
+ oneForEvent: true
+ policyRefs:
+ - name: service-policy
+   namespace: default
+   kind: ConfigMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-policy
+  namespace: default
+data:
+  service.yaml: |
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: external-{{ .Resource.metadata.name }}
+      namespace: external
+    spec:
+      selector: {}
+      ports:
+        {{ range $port := .Resource.spec.ports }}
+        - port: {{ $port.port }}
+          protocol: {{ $port.protocol }}
+          targetPort: {{ $port.targetPort }}
+        {{ end }}
+  endpoint.yaml: |
+    kind: Endpoints
+    apiVersion: v1
+    metadata:
+       name: external-{{ .Resource.metadata.name }}
+       namespace: external
+    subsets:
+    - addresses:
+      - ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}
+      ports:
+        {{ range $port := .Resource.spec.ports }}
+        - port: {{ $port.port }}
+        {{ end }}
+```
+
+As mentioned above, we are passing Sveltos a selector-less Service and we are then specifying our own Endpoints.
+The Service and Endpoints are defined as template and will be instantiated by Sveltos using information taken from load-balancer service matching the EventSource (__Resource__ in this context represent a resource matching EventSource).
+
+Now in the GKE cluster, we can create a deployment and a service of type *LoadBalancer*. 
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment-50001
+spec:
+  selector:
+    matchLabels:
+      app: products
+      department: sales
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: products
+        department: sales
+    spec:
+      containers:
+      - name: hello
+        image: "us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0"
+        env:
+        - name: "PORT"
+          value: "50001"
+```
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-lb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: products
+    department: sales
+  ports:
+  - protocol: TCP
+    port: 60000
+    targetPort: 50001
+```
+
+The Service will be assigned an IP address
+
+```yaml
+apiVersion: v1
+  kind: Service
+  metadata:
+    name: my-lb-service
+    namespace: test
+    ...
+  spec:
+    ...
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 34.172.32.172
+```
+ 
+and it will match the EventSource. As result Sveltos will deploy the selector-less Service and Endpoints in the other cluster, the cluster-api provisioned cluster. 
+The Endpoints IP address is set to the one assigned to the load balancer Service in the GKE cluster.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-my-lb-service
+  namespace: external
+  ...
+spec:
+  ports:
+  - port: 60000
+    protocol: TCP
+    targetPort: 50001
+  type: ClusterIP
+status:
+  loadBalancer: {}
+```
+
+```yaml 
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-my-lb-service
+  namespace: external
+  ...
+subsets:
+- addresses:
+  - ip: 34.172.32.172
+  ports:
+  - port: 60000
+    protocol: TCP
+```
+
+So at this point now a pod in the cluster-api provisioned cluster can reach the service in the GKE cluster:
+
+```bash 
+KUBECONFIG=<KIND CLUSTER> kubectl run --namespace=policy-demo access --rm -ti --image busybox /bin/sh
+/ # 
+/ # wget -q external-my-lb-service.external:60000 -O -
+Hello, world!
+Version: 2.0.0
+Hostname: my-deployment-50001-6664b685bc-db728
+```
+
+![Cross cluster configuration](assets/event_based_cross_cluster.gif)
