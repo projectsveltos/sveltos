@@ -46,7 +46,7 @@ spec:
       serviceAccountName: sveltosctl
       containers:
       - name: sveltosctl
-        image: projectsveltos/sveltosctl-amd64:main
+        image: projectsveltos/sveltosctl-amd64:v0.8.0
         imagePullPolicy: IfNotPresent
         command:
           - /sveltosctl
@@ -114,6 +114,9 @@ rules:
   - apiGroups: ["lib.projectsveltos.io"]
     resources:
       - classifiers
+      - eventsources
+      - healthchecks
+      - eventbasedaddons
     verbs:
       - get
       - list
@@ -189,7 +192,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
   name: snapshots.utils.projectsveltos.io
 spec:
@@ -281,7 +284,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
   name: techsupports.utils.projectsveltos.io
 spec:
