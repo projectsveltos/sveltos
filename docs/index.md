@@ -15,7 +15,7 @@ authors:
 
 [<img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo">](https://github.com/projectsveltos "Manage Kubernetes add-ons")
 
-Hey there! Are you struggling to manage Kubernetes add-ons across multiple clusters on different cloud providers or infrastructures? You're not alone! But we have great news - [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is here to help.
+Are you struggling to manage Kubernetes add-ons across multiple clusters on different cloud providers or infrastructures? You're not alone! But we have great news - [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is here to help.
 
 Sveltos is a lightweight application designed to manage hundreds of clusters effortlessly. With its declarative APIs, you can easily deploy Kubernetes add-ons across multiple clusters with ease. Plus, Sveltos provides platform admins with a solution for multi-tenancy, making it even easier to manage permissions for tenant admins.
 
@@ -54,7 +54,7 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 11. [ClusterHealthCheck](notifications.md#clusterhealthcheck) is the CRD used to configure Sveltos to send notifications when certain conditions happen.
 
 ## 😻 Contributing to projectsveltos
-Hey there! We believe in the power of community and collaboration, and that's where you come in!
+We believe in the power of community and collaboration, and that's where you come in!
 
 We would love to hear your suggestions, contributions, and feedback to make our project even better! Whether you want to report a bug, request a new feature, or just stay up-to-date with the latest news, we've got you covered.
 
