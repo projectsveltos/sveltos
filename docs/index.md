@@ -60,7 +60,9 @@ We would love to hear your suggestions, contributions, and feedback to make our 
 
 We would love your suggestions, contributions, and help! 
 
-There are plenty of ways to connect with us and get involved. You can open a bug/feature enhancement on GitHub or chat with us on Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q). And if you prefer to reach out directly, just shoot us an email at support@projectsveltos.io.
+1. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues")
+2. Chat with us on the Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q)
+3. If you prefer to reach out directly, just shoot us an [email](mailto:support@projectsveltos.io)
 
 We are always thrilled to welcome new members to our community, and your contributions are always appreciated. So don't be shy - join us today and let's make Sveltos the best it can be! ❤️
 

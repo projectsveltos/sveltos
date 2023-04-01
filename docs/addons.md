@@ -11,29 +11,21 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-Hey there! Are you looking for an easy way to manage multiple Kubernetes clusters without breaking a sweat? Look no further than [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") !
 
-Sveltos is a lightweight application designed to manage hundreds of clusters with ease. It does so by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters, making it a breeze to manage your clusters and stay on top of your game.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a lightweight application designed to manage Kubernetes add-ons in hundreds of clusters with ease. It does so by providing declarative APIs, making it a breeze to manage your clusters and stay on top of your game.
 
-But that's not all - Sveltos focuses not only on scaling the number of clusters it can manage, but also giving you complete visibility into exactly which add-ons are installed on each cluster. So you'll always know exactly what's going on and can manage your clusters with confidence.
-
-Plus, Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters, but it doesn't stop there. You can easily register any other cluster (like GKE, for instance) with Sveltos and manage Kubernetes add-ons on all clusters seamlessly.
-
-So what are you waiting for? Give Sveltos a try and start managing your clusters like a pro today!
+Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters, but it doesn't stop there. You can easily register any other cluster (like GKE, for instance) with Sveltos and manage Kubernetes add-ons on all clusters seamlessly.
 
 ![Sveltos managing clusters](assets/multi-clusters.png)
 
 ## How does Sveltos work?
 
-If you're looking for an easy and efficient way to manage Kubernetes add-ons across multiple clusters, look no further than Sveltos!
+With [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons"), you can easily deploy Helm charts or raw Kubernetes YAML across a set of Kubernetes clusters. All you need to do is define which Kubernetes add-ons to deploy and where to deploy them:
 
-With Sveltos, you can use declarative APIs to easily provision Helm charts or raw Kubernetes YAML in a set of Kubernetes clusters. And setting it up is a breeze - just configure a few custom resource definitions (CRDs) and you're good to go!
+1. Select one or more clusters using a Kubernetes [label selector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors "Kubernetes label selector");
+2. List the Kubernetes add-ons that need to be deployed on the selected clusters.
 
-Here's how it works:
-
-1. First, from the management cluster, select one or more clusters using a Kubernetes [label selector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors "Kubernetes label selector") - it's as simple as that!
-2. Next, list the Kubernetes add-ons that need to be deployed on the selected clusters.
-With Sveltos, managing your Kubernetes add-ons has never been easier. So why wait? Try Sveltos today and take your cluster management to the next level!
+It's as simple as that!
 
 ### Quick example
 
@@ -54,10 +46,6 @@ For a quick video of Sveltos, watch the video [Sveltos introduction](https://www
 3. Deploy multiple helm charts [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/multiple_helm_charts.yaml)
 
 ### Deep dive: ClusterProfile CRD
-
-Are you ready to supercharge your Kubernetes add-ons deployment process? Say hello to ClusterProfile, the ultimate custom resource definition (CRD) that enables you to instruct Sveltos exactly where and what to deploy.
-
-With ClusterProfile, you can easily deploy Helm charts or raw Kubernetes YAML across a set of Kubernetes clusters. All you need to do is define which Kubernetes add-ons to deploy and where to deploy them. Check out the [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") documentation to get started.
 
 ![ClusterProfile](assets/sveltos_different_policies.png)
 
@@ -160,7 +148,7 @@ More ClusterProfile examples can be found [here](https://github.com/projectsvelt
 
 #### Sync mode
 
-Are you tired of manually deploying your Kubernetes add-ons to each and every cluster? Say goodbye to that hassle with Sveltos and its powerful ClusterProfile feature! But wait, there's more! With Sveltos, you can configure the syncMode field to either Continuous or OneTime, depending on your deployment needs.
+With Sveltos, you can configure the syncMode field to either Continuous or OneTime, depending on your deployment needs.
 
 Let's take a closer look at the OneTime syncMode option. Once you deploy a ClusterProfile with a OneTime configuration, Sveltos will check all of your clusters for a match with the clusterSelector. Any matching clusters will have the features specified in the ClusterProfile deployed. However, if you make changes to the ClusterProfile later on, those changes will not be automatically deployed to already-matching clusters.
 
@@ -172,7 +160,7 @@ The last available option is [Configuration Drift](#configuration-drift).
 
 #### DryRun mode
 
-IImagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the DryRun syncMode configuration comes in!
+Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the DryRun syncMode configuration comes in!
 
 By deploying your ClusterProfile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
 
