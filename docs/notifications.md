@@ -12,15 +12,12 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-When a ClusterProfile instance is created, [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons")  starts watching for clusters matching ClusterProfile clusterSelector field. In each matching workload cluster, Sveltos deploys all referenced add-ons (helm charts and/or Kubernetes resource YAMLs).
 
-After all add-ons are deployed, other tools might be used to do something else. For instance, if a cluster is being provisioned to run a CI/CD pipeline, the CI/CD needs to start running only after all necessary add-ons are deployed.
+When you create a ClusterProfile instance using Sveltos, it automatically starts watching for clusters that match the ClusterProfile's clusterSelector field. Once a match is found, [Sveltos](https://github.com/projectsveltos) deploys all of the referenced add-ons, such as helm charts or Kubernetes resource YAMLs, in the matching workload cluster.
 
-To help with this scenario, Sveltos can be configured to: 
-1. assess cluster health;
-2. send notifications when cluster health changes.
+After all the necessary add-ons are deployed, you might want to perform other operations, such as running a CI/CD pipeline. However, it's important to ensure that the cluster is healthy, i.e, all necessary add-ons are deployed, before proceeding. To help with this, Sveltos can be configured to assess the cluster health and send notifications if there are any changes.
 
-Those notifications mighty be used by other tools.
+These notifications can be used by other tools to perform additional actions or trigger workflows. With Sveltos, you can easily deploy and manage Kubernetes add-ons, while ensuring the health and stability of your clusters.
 
 ## ClusterHealthCheck
 
@@ -122,9 +119,9 @@ Above is an example of Slack notification delivered.
 
 ### HealthCheck CRD
 
-Sveltos supports custom health checks written in [Lua](https://www.lua.org/).
+Are you tired of manually checking the health of your Kubernetes resources? With Sveltos, you can define custom health checks using [Lua](https://www.lua.org/) scripts! Sveltos watches and evaluates Kubernetes resources, and can send notifications when cluster health changes.
 
-[HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/healthcheck_type.go) is the CRD introduced by Sveltos to define custom health checks.
+To define a custom health check, simply create a [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/healthcheck_type.go) CRD.
 
 Its Spec section contains following fields:
 
@@ -133,7 +130,7 @@ Its Spec section contains following fields:
 3. ```Spec.LabelFilters``` field can be used to filter resources by labels;
 4. ```Spec.Script``` can contain a [Lua](https://www.lua.org/pil/contents.html) script, which define a custom health check.
 
-Sveltos will fetch/watch all resources of the specified GVK (eventually filtering those by namespace and labels). For each resource, Spec.Script will be evaluated.
+ with fields specifying which Kubernetes resources the check is for, and a Lua script defining the check. The Lua script must contain a function `evaluate()` that returns a table with a status field (__Healthy__/__Progressing__/__Degraded__/__Suspended__) and optional message field.
 
 When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expects following format:
 
