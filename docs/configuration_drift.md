@@ -4,13 +4,12 @@ _Configuration drift_ is a common term to describe a change that takes place in 
 
 In our case, _configuration drift_ is a change of a resource deployed by Sveltos in one of the managed clusters.
 
-When sync mode is set to *SyncModeContinuousWithDriftDetection* for a ClusterProfile, Sveltos monitors the state of managed clusters and when it detects a configuration drift for one of the resource deployed because of that ClusterProfile, it re-syncs the cluster state back to the state described in the management cluster.
+With Sveltos, you can set the sync mode to *SyncModeContinuousWithDriftDetection* for a ClusterProfile. This allows Sveltos to monitor the state of managed clusters and detect configuration drift for any of the resources deployed because of that ClusterProfile.
 
-In order to achieve so, when in this mode:
+When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster. In order to achieve this, Sveltos deploys a service in each managed cluster and configures it with a list of Kubernetes resources deployed for each ClusterProfile in SyncModeContinuousWithDriftDetection mode.
 
-- Sveltos deploys a service in each managed cluster and configures this service with list of kubernetes resources deployed because of each ClusterProfile in SyncModeContinuousWithDriftDetection mode;
-- service starts a watcher for each GroupVersionKind with at least one resource to watch;
-- when one of the resources being watched is modified (labels, annotations, spec or rules sections), service notifies management cluster about a potential configuration drift;
-- management cluster reacts by redeploying afftected ClusterProfiles.
+The service then starts a watcher for each GroupVersionKind with at least one resource to watch. When any of the watched resources are modified (labels, annotations, spec or rules sections), the service notifies the management cluster about a potential configuration drift. The management cluster then reacts by redeploying affected ClusterProfiles.
+
+This way, Sveltos ensures that your systems are always consistent and predictable, preventing any unexpected issues caused by configuration drift.
 
 ![Configuration drift recovery](assets/reconcile_configuration_drift.gif)

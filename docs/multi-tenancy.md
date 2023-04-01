@@ -10,7 +10,6 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-
 With Sveltos, a management cluster is used to manage add-ons in tens of clusters.
 
 When managing tens of cluster, **multi-tenancy** plays an important role.
