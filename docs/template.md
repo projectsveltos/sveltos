@@ -12,7 +12,7 @@ authors:
 ---
 Are you tired of manually defining Helm chart values and resources for each deployment? With ClusterProfile, you can define templates that are instantiated at the time of deployment, making your life easier and more efficient.
 
-For example, imagine deploying Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from a CAPI Cluster instance. With ClusterProfile, it's as simple as creating a configuration that specifies these details, and voila! Your deployment is ready to go in all matching clusters.
+For example, imagine deploying Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from corresponding CAPI Cluster instance. With ClusterProfile, it's as simple as creating a configuration that specifies these details, and voila! Your deployment is ready to go in all matching clusters.
 
 ```yaml
 ---
