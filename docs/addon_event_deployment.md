@@ -794,7 +794,32 @@ subsets:
     protocol: TCP
 ```
 
-So at this point now a pod in the cluster-api provisioned cluster can reach the service in the GKE cluster:
+So at this point now a pod in the cluster-api provisioned cluster can reach the service in the GKE cluster.
+
+Let's create namespace policy-demo and a busybox pod in the cluster-api provisioned cluster:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: busybox
+  name: busybox
+  namespace: policy-demo
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - sleep 360000
+    image: busybox:1.28
+    imagePullPolicy: Always
+    name: busybox
+  nodeSelector:
+    kubernetes.io/os: linux
+```
+
+Then reach the service in the GKE cluster from the busybox pod in the cluster-api provisioned cluster"
 
 ```bash 
 KUBECONFIG=<KIND CLUSTER> kubectl run --namespace=policy-demo access --rm -ti --image busybox /bin/sh
