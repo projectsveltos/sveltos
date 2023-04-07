@@ -1,6 +1,17 @@
-## CLI
+---
+title: Visibility
+description: sveltosctl is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+    - multi-tenancy
+authors:
+    - Gianluca Mardente
+---
 
-[sveltosctl](https://github.com/projectsveltos/sveltosctl) is the command line client for Sveltos. sveltosctl nicely displays addons deployed in each Kubernetes cluster by Sveltos.
+[sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
 
 ### show features
 *show features* can be used to display list of resources/helm releases deployed in each clusters by Sveltos. 
@@ -55,4 +66,25 @@ Such information is useful to see what clusters would be affected by a change be
 | ClusterProfile |                    | kyverno                    | default/sveltos-management-workload |
 | ConfigMap      | default            | kyverno-disallow-gateway   | default/sveltos-management-workload |
 +----------------+--------------------+----------------------------+-------------------------------------+
+```
+
+### show admin-rbac
+
+*show admin-rbac* can be used to display permissions granted to tenant admins in each managed clusters by platform admin.
+
+If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
+```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/main/examples/shared_access.yaml), we get:
+
+```
+./bin/sveltosctl show admin-rbac       
++---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+|                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
++---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+| Cluster:default/sveltos-management-workload | eng   | build          | *          | *         | *              | *     |
+| Cluster:default/sveltos-management-workload | eng   | ci-cd          | *          | *         | *              | *     |
+| Cluster:default/sveltos-management-workload | hr    | human-resource | *          | *         | *              | *     |
+| SveltosCluster:gke/prod-cluster             | eng   | build          | *          | *         | *              | *     |
+| SveltosCluster:gke/prod-cluster             | eng   | ci-cd          | *          | *         | *              | *     |
+| SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
++---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 ```
