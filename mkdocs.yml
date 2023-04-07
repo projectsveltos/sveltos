@@ -1,24 +1,43 @@
 site_name: Projectsveltos Documentation
 copyright: Copyright © 2022 projectsveltos. All Rights Reserved.
-site_description: Sveltos is a lightweight application designed to manage addons in hundreds of clusters
+site_description: 'Sveltos is a lightweight application designed to manage add-ons in hundreds of clusters. Projectsveltos extends functionality of Cluster API by providing a solution for managing the installation, 
+configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs. Projectsveltos supports multi-tenancy allowing platform admins to easily grant permissions 
+to tenant admins.'
 markdown_extensions:
+  - attr_list
   - footnotes
+  - attr_list
+  - pymdownx.critic
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences  
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 nav:
-    - Overview: 'index.md'
-    - 'install.md'
+    - Projectsveltos: 'index.md'
+    - Install: 'install.md'
+    - Quick Start: 'quick_start.md'
     - Addon Distribution: 'addons.md'
     - Templates: 'template.md'
-    - Multi-tenancy: 'multi-tenancy.md'
+    - Drift detection: 'configuration_drift.md'
+    - Event based add-on deployment: 'addon_event_deployment.md'
     - Cluster Classification: 'labels_management.md'
+    - Notifications: 'notifications.md'
+    - Multi-tenancy: 'multi-tenancy.md'
+    - Tech support: 'techsupport.md'
     - Snapshot: 'snapshot.md'
     - Register cluster: 'register-cluster.md'
-    - 'configuration.md'
-    - 'visibility.md'
+    - Visibility: 'visibility.md'
     - Blogs and videos: 'blogs.md'
 theme:
   features:
-    - navigation.tabs
-    - navigation.tracking
+    - content.code.copy
+    - search.share
+    - navigation.sections
+    - navigation.footer
   name: material
   logo: assets/logo.png
   palette:
@@ -47,3 +66,7 @@ extra:
       link: https://github.com/projectsveltos
     - icon: fontawesome/brands/medium
       link: https://medium.com/@gianluca.mardente
+    - icon: fontawesome/brands/product-hunt
+      link: https://www.producthunt.com/products/projectsveltos
+extra_css:
+  - stylesheets/extra.css

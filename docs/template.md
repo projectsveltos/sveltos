@@ -1,6 +1,18 @@
-Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. Such templates instantiation happens at time of deployment reading values from managament cluster.
+---
+title: Templates
+description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. 
+tags:
+    - Kubernetes
+    - add-ons
+    - helm
+    - clusterapi
+    - multi-tenancy
+authors:
+    - Gianluca Mardente
+---
+Are you tired of manually defining Helm chart values and resources for each deployment? With ClusterProfile, you can define templates that are instantiated at the time of deployment, making your life easier and more efficient.
 
-For instance, following *ClusterProfile* will deploy calico in any matching CAPI powered cluster fetching Pod CIDRs from CAPI Cluster instance.
+For example, imagine deploying Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from corresponding CAPI Cluster instance. With ClusterProfile, it's as simple as creating a configuration that specifies these details, and voila! Your deployment is ready to go in all matching clusters.
 
 ```yaml
 ---
@@ -28,7 +40,7 @@ spec:
           {{ end }}
 ```
 
-Any resource contained in ConfigMap/Secret can also be defined as a template. In order to optmize deployment time, to be treated as template such resource need to have following annotation `projectsveltos.io/template` added.
+Get ready to speed up your deployment time! With Sveltos, you can define any resource contained in a ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This will ensure that the template is instantiated at the time of deployment, making your deployments faster and more efficient. So go ahead and optimize your deployment time with Sveltos!
 
 ## Variables
 
@@ -41,11 +53,13 @@ Templates have access to the following variables:
 
 ### Confidential data
 
-Sometimes, confidential information is needed when deploying an helm release `SecretRef`. In this case Sveltos allows storing the information in a Secret. Sveltos will fetch it at deployment time.
+Sometimes, confidential information is needed when deploying an helm release.
 
-Let's say we need to store username and password. We can create a Secret with those information. Then in the ClusterProfile.Spec.HelmCharts section we can instructs Sveltos on which Secret contains the information we need and how to fetch it.
+With Sveltos, you can easily store your sensitive data in a Secret and have it fetched at deployment time (`SecretRef` to refer to it).
 
-```
+Imagine needing to store your username and password. Simply create a Secret with those details, and in the ClusterProfile.Spec.HelmCharts section, tell Sveltos which Secret holds the information you need and how to retrieve it. It's that easy! No more worrying about exposing confidential data during deployment.
+
+```yaml
     secretRef:
       name: <SECRET NAME>
       namespace: <SECRET NAMESPACE>

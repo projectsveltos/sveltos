@@ -1,0 +1,562 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: projectsveltos
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sveltosctl
+  namespace: projectsveltos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sveltosctl
+  namespace: projectsveltos
+  labels:
+    app: sveltosctl
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: sveltosctl
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sveltosctl
+  namespace: projectsveltos
+  labels:
+    app.kubernetes.io/name: sveltosctl
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sveltosctl
+  replicas: 1
+  serviceName: "sveltosctl"
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sveltosctl
+    spec:
+      serviceAccountName: sveltosctl
+      containers:
+      - name: sveltosctl
+        image: projectsveltos/sveltosctl-amd64:dev
+        imagePullPolicy: IfNotPresent
+        command:
+          - /sveltosctl
+        args:
+          - snapshot
+          - reconciler
+          - v=5
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /collection
+          name: collection
+        - mountPath: /etc/localtime
+          name: tz-config
+        - mountPath: /tmp
+          name: tmp
+      volumes:
+      - emptyDir: {}
+        name: tmp
+      - hostPath:
+          path: /usr/share/zoneinfo/America/Los_Angeles
+        name: tz-config
+  volumeClaimTemplates:
+  - metadata:
+      name: collection
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: sveltosctl
+rules:
+  - apiGroups: [""]
+    resources:
+      - configmaps
+      - secrets
+      - namespaces
+    verbs:
+      - get
+      - list
+      - create
+      - update
+  - apiGroups: ["config.projectsveltos.io"]
+    resources:
+      - clusterconfigurations
+      - clusterreports
+    verbs:
+      - get
+      - list
+  - apiGroups: ["config.projectsveltos.io"]
+    resources:
+      - clusterprofiles
+    verbs:
+      - get
+      - list
+      - create
+      - update
+  - apiGroups: ["lib.projectsveltos.io"]
+    resources:
+      - classifiers
+      - eventsources
+      - healthchecks
+      - eventbasedaddons
+    verbs:
+      - get
+      - list
+  - apiGroups: ["lib.projectsveltos.io"]
+    resources:
+      - sveltosclusters
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups: ["utils.projectsveltos.io"]
+    resources:
+      - snapshots
+      - techsupports
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups: ["utils.projectsveltos.io"]
+    resources:
+    - snapshots/finalizers
+    - techsupports/finalizers
+    verbs:
+    - patch
+    - update      
+  - apiGroups: ["utils.projectsveltos.io"]
+    resources:
+      - snapshots/status
+      - techsupports/status
+    verbs:
+      - '*'
+  - apiGroups: ["cluster.x-k8s.io"]
+    resources:
+      - clusters
+      - machines
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups: ["lib.projectsveltos.io"]
+    resources:
+      - rolerequests
+      - rolerequests/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sveltosctl
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sveltosctl
+subjects:
+- kind: ServiceAccount
+  name: sveltosctl
+  namespace: projectsveltos 
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
+  name: snapshots.utils.projectsveltos.io
+spec:
+  group: utils.projectsveltos.io
+  names:
+    kind: Snapshot
+    listKind: SnapshotList
+    plural: snapshots
+    singular: snapshot
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Snapshot is the Schema for the snapshot API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SnapshotSpec defines the desired state of Snapshot
+            properties:
+              schedule:
+                description: Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
+                type: string
+              startingDeadlineSeconds:
+                description: Optional deadline in seconds for starting the job if
+                  it misses scheduled time for any reason.  Missed jobs executions
+                  will be counted as failed ones.
+                format: int64
+                type: integer
+              storage:
+                description: Storage represents directory where snapshots will be
+                  stored. It must be an existing directory. Snapshots will be stored
+                  in this directory in a subdirectory named with Snapshot instance
+                  name.
+                type: string
+              successfulSnapshotLimit:
+                description: The number of successful finished snapshots to retains.
+                  If specified, only SuccessfulSnapshotLimit will be retained. Once
+                  such number is reached, for any new successful snapshots, the oldest
+                  one is deleted.
+                format: int32
+                type: integer
+            required:
+            - schedule
+            - storage
+            type: object
+          status:
+            description: SnapshotStatus defines the observed state of Snapshot
+            properties:
+              failureMessage:
+                description: FailureMessage provides more information about the error,
+                  if any occurred
+                type: string
+              lastRunStatus:
+                description: Status indicates what happened to last snapshot collection.
+                enum:
+                - Collected
+                - InProgress
+                - Failed
+                type: string
+              lastRunTime:
+                description: Information when was the last time a snapshot was successfully
+                  scheduled.
+                format: date-time
+                type: string
+              nextScheduleTime:
+                description: Information when next snapshot is scheduled
+                format: date-time
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
+  name: techsupports.utils.projectsveltos.io
+spec:
+  group: utils.projectsveltos.io
+  names:
+    kind: Techsupport
+    listKind: TechsupportList
+    plural: techsupports
+    singular: techsupport
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Techsupport is the Schema for the snapshot API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: TechsupportSpec defines the desired state of Techsupport
+            properties:
+              clusterSelector:
+                description: ClusterSelector identifies clusters to collect techsupport
+                  from.
+                type: string
+              logs:
+                description: Logs indicates what pods' log to collect
+                items:
+                  description: LogFilter allows to select which logs to collect
+                  properties:
+                    labelFilters:
+                      description: LabelFilters allows to filter pods based on current
+                        labels.
+                      items:
+                        properties:
+                          key:
+                            description: Key is the label key
+                            type: string
+                          operation:
+                            description: Operation is the comparison operation
+                            enum:
+                            - Equal
+                            - Different
+                            type: string
+                          value:
+                            description: Value is the label value
+                            type: string
+                        required:
+                        - key
+                        - operation
+                        - value
+                        type: object
+                      type: array
+                    namespace:
+                      description: Namespace of the pods deployed in the Cluster.
+                      type: string
+                    sinceSeconds:
+                      description: A relative time in seconds before the current time
+                        from which to collect logs. If this value precedes the time
+                        a pod was started, only logs since the pod start will be returned.
+                        If this value is in the future, no logs will be returned.
+                        Only one of sinceSeconds or sinceTime may be specified.
+                      format: int64
+                      type: integer
+                  type: object
+                type: array
+              resources:
+                description: Resources indicates what resorces to collect
+                items:
+                  description: Resource indicates the type of resources to collect.
+                  properties:
+                    fieldFilters:
+                      description: 'FieldFilters allows to filter resources based
+                        on current field values. Internally uses FieldSelector so
+                        only fields supported by FieldSelector can be used. Current
+                        list: https://github.com/kubernetes/kubernetes/blob/9d577d8a29893062dfbd669997396dbd01ab0e47/pkg/apis/core/v1/conversion.go#L33'
+                      items:
+                        properties:
+                          field:
+                            description: Field is the field
+                            type: string
+                          operation:
+                            description: Operation is the comparison operation
+                            enum:
+                            - Equal
+                            - Different
+                            type: string
+                          value:
+                            description: Value is the field value
+                            type: string
+                        required:
+                        - field
+                        - operation
+                        - value
+                        type: object
+                      type: array
+                    group:
+                      description: Group of the resource deployed in the Cluster.
+                      type: string
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    labelFilters:
+                      description: LabelFilters allows to filter resources based on
+                        current labels.
+                      items:
+                        properties:
+                          key:
+                            description: Key is the label key
+                            type: string
+                          operation:
+                            description: Operation is the comparison operation
+                            enum:
+                            - Equal
+                            - Different
+                            type: string
+                          value:
+                            description: Value is the label value
+                            type: string
+                        required:
+                        - key
+                        - operation
+                        - value
+                        type: object
+                      type: array
+                    namespace:
+                      description: Namespace of the resource deployed in the Cluster.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                    version:
+                      description: Version of the resource deployed in the Cluster.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - version
+                  type: object
+                type: array
+              schedule:
+                description: Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
+                type: string
+              startingDeadlineSeconds:
+                description: Optional deadline in seconds for starting the job if
+                  it misses scheduled time for any reason.  Missed jobs executions
+                  will be counted as failed ones.
+                format: int64
+                type: integer
+              storage:
+                description: Storage represents directory where techsupports will
+                  be stored. It must be an existing directory. Techsupports will be
+                  stored in this directory in a subdirectory named with Techsupport
+                  instance name.
+                type: string
+              successfulTechsupportLimit:
+                description: The number of successful finished techsupport to retains.
+                  If specified, only SuccessfulTechsupportLimit will be retained.
+                  Once such number is reached, for any new successful snapshots, the
+                  oldest one is deleted.
+                format: int32
+                type: integer
+              tar:
+                default: false
+                description: If set denerates a tar file with all collected logs/resources
+                type: boolean
+            required:
+            - clusterSelector
+            - schedule
+            - storage
+            type: object
+          status:
+            description: TechsupportStatus defines the observed state of Techsupport
+            properties:
+              failureMessage:
+                description: FailureMessage provides more information about the error,
+                  if any occurred
+                type: string
+              lastRunStatus:
+                description: Status indicates what happened to last techsupport collection.
+                enum:
+                - Collected
+                - InProgress
+                - Failed
+                type: string
+              lastRunTime:
+                description: Information when was the last time a snapshot was successfully
+                  scheduled.
+                format: date-time
+                type: string
+              machingClusters:
+                description: MatchingClusterRefs reference all the clusters currently
+                  matching Techsupport
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+              nextScheduleTime:
+                description: Information when next snapshot is scheduled
+                format: date-time
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
