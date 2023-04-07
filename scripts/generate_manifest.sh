@@ -23,11 +23,11 @@ do
 done
 cd ../../; rm -rf tmp
 
-# sveltos-manager
-echo "processing sveltos-manager"
+# addon-manager
+echo "processing addon-manager"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/sveltos-manager.git
-cd sveltos-manager
+git clone git@github.com:projectsveltos/addon-manager.git
+cd addon-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
