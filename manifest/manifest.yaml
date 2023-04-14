@@ -1674,10 +1674,6 @@ spec:
           spec:
             description: RoleRequestSpec defines the desired state of RoleRequest
             properties:
-              admin:
-                description: Admin is the name of the admin for which those permissions
-                  are requested
-                type: string
               clusterSelector:
                 description: ClusterSelector identifies clusters where permissions
                   requestes in this instance will be granted
@@ -1711,8 +1707,18 @@ spec:
                   - namespace
                   type: object
                 type: array
+              serviceAccountName:
+                description: ServiceAccountName is the name of the ServiceAccount
+                  representing a tenant admin for which those permissions are requested
+                type: string
+              serviceAccountNamespace:
+                description: ServiceAccountNamespace is the name of the ServiceAccount
+                  representing a tenant admin for which those permissions are requested
+                type: string
             required:
             - clusterSelector
+            - serviceAccountName
+            - serviceAccountNamespace
             type: object
           status:
             description: RoleRequestStatus defines the status of RoleRequest
@@ -2270,45 +2276,6 @@ spec:
                       description: RepositoryURL is the URL helm chart repository
                       minLength: 1
                       type: string
-                    secretRef:
-                      description: SecretRef contains confidential data that needs
-                        to be used as values for templates
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: 'If referring to a piece of an object instead
-                            of an entire object, this string should contain a valid
-                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container
-                            within a pod, this would take on a value like: "spec.containers{name}"
-                            (where "name" refers to the name of the container that
-                            triggered the event) or if no container name is specified
-                            "spec.containers[2]" (container with index 2 in this pod).
-                            This syntax is chosen only to have some well-defined way
-                            of referencing a part of an object. TODO: this design
-                            is not final and this field is subject to change in the
-                            future.'
-                          type: string
-                        kind:
-                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                          type: string
-                        name:
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        namespace:
-                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                          type: string
-                        resourceVersion:
-                          description: 'Specific resourceVersion to which this reference
-                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                          type: string
-                        uid:
-                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     values:
                       description: 'Values holds the values for this Helm release.
                         Go templating with the values from the referenced CAPI Cluster.
@@ -2332,9 +2299,16 @@ spec:
                   kubernetes resources that need to be deployed in the matching CAPI
                   clusters.
                 items:
-                  description: PolicyRef specifies a resource containing one or more
-                    policy to deploy in matching Clusters.
                   properties:
+                    deploymentType:
+                      default: Remote
+                      description: DeploymentType indicates whether resources need
+                        to be deployed into the management cluster (local) or the
+                        managed cluster (remote)
+                      enum:
+                      - Local
+                      - Remote
+                      type: string
                     kind:
                       description: 'Kind of the resource. Supported kinds are: Secrets
                         and ConfigMaps.'
@@ -2385,6 +2359,61 @@ spec:
                 - ContinuousWithDriftDetection
                 - DryRun
                 type: string
+              templateResourceRefs:
+                description: TemplateResourceRefs is a list of resource to collect
+                  from the management cluster. Those resources' values will be used
+                  to instantiate templates contained in referenced PolicyRefs and
+                  Helm charts
+                items:
+                  properties:
+                    identifier:
+                      description: Identifier is how the resource will be referred
+                        to in the template
+                      type: string
+                    resource:
+                      description: Resource references a Kubernetes instance in the
+                        management cluster to fetch and use during template instantiation.
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: 'If referring to a piece of an object instead
+                            of an entire object, this string should contain a valid
+                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container
+                            within a pod, this would take on a value like: "spec.containers{name}"
+                            (where "name" refers to the name of the container that
+                            triggered the event) or if no container name is specified
+                            "spec.containers[2]" (container with index 2 in this pod).
+                            This syntax is chosen only to have some well-defined way
+                            of referencing a part of an object. TODO: this design
+                            is not final and this field is subject to change in the
+                            future.'
+                          type: string
+                        kind:
+                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                        resourceVersion:
+                          description: 'Specific resourceVersion to which this reference
+                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        uid:
+                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  required:
+                  - identifier
+                  - resource
+                  type: object
+                type: array
             type: object
           status:
             description: ClusterProfileStatus defines the observed state of ClusterProfile
@@ -2809,46 +2838,6 @@ spec:
                           description: RepositoryURL is the URL helm chart repository
                           minLength: 1
                           type: string
-                        secretRef:
-                          description: SecretRef contains confidential data that needs
-                            to be used as values for templates
-                          properties:
-                            apiVersion:
-                              description: API version of the referent.
-                              type: string
-                            fieldPath:
-                              description: 'If referring to a piece of an object instead
-                                of an entire object, this string should contain a
-                                valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                For example, if the object reference is to a container
-                                within a pod, this would take on a value like: "spec.containers{name}"
-                                (where "name" refers to the name of the container
-                                that triggered the event) or if no container name
-                                is specified "spec.containers[2]" (container with
-                                index 2 in this pod). This syntax is chosen only to
-                                have some well-defined way of referencing a part of
-                                an object. TODO: this design is not final and this
-                                field is subject to change in the future.'
-                              type: string
-                            kind:
-                              description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                              type: string
-                            name:
-                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                              type: string
-                            namespace:
-                              description: 'Namespace of the referent. More info:
-                                https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                              type: string
-                            resourceVersion:
-                              description: 'Specific resourceVersion to which this
-                                reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                              type: string
-                            uid:
-                              description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                              type: string
-                          type: object
-                          x-kubernetes-map-type: atomic
                         values:
                           description: 'Values holds the values for this Helm release.
                             Go templating with the values from the referenced CAPI
@@ -2873,9 +2862,16 @@ spec:
                       containing kubernetes resources that need to be deployed in
                       the matching CAPI clusters.
                     items:
-                      description: PolicyRef specifies a resource containing one or
-                        more policy to deploy in matching Clusters.
                       properties:
+                        deploymentType:
+                          default: Remote
+                          description: DeploymentType indicates whether resources
+                            need to be deployed into the management cluster (local)
+                            or the managed cluster (remote)
+                          enum:
+                          - Local
+                          - Remote
+                          type: string
                         kind:
                           description: 'Kind of the resource. Supported kinds are:
                             Secrets and ConfigMaps.'
@@ -2926,6 +2922,63 @@ spec:
                     - ContinuousWithDriftDetection
                     - DryRun
                     type: string
+                  templateResourceRefs:
+                    description: TemplateResourceRefs is a list of resource to collect
+                      from the management cluster. Those resources' values will be
+                      used to instantiate templates contained in referenced PolicyRefs
+                      and Helm charts
+                    items:
+                      properties:
+                        identifier:
+                          description: Identifier is how the resource will be referred
+                            to in the template
+                          type: string
+                        resource:
+                          description: Resource references a Kubernetes instance in
+                            the management cluster to fetch and use during template
+                            instantiation.
+                          properties:
+                            apiVersion:
+                              description: API version of the referent.
+                              type: string
+                            fieldPath:
+                              description: 'If referring to a piece of an object instead
+                                of an entire object, this string should contain a
+                                valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                                For example, if the object reference is to a container
+                                within a pod, this would take on a value like: "spec.containers{name}"
+                                (where "name" refers to the name of the container
+                                that triggered the event) or if no container name
+                                is specified "spec.containers[2]" (container with
+                                index 2 in this pod). This syntax is chosen only to
+                                have some well-defined way of referencing a part of
+                                an object. TODO: this design is not final and this
+                                field is subject to change in the future.'
+                              type: string
+                            kind:
+                              description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                              type: string
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                              type: string
+                            namespace:
+                              description: 'Namespace of the referent. More info:
+                                https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                              type: string
+                            resourceVersion:
+                              description: 'Specific resourceVersion to which this
+                                reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                              type: string
+                            uid:
+                              description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                              type: string
+                          type: object
+                          x-kubernetes-map-type: atomic
+                      required:
+                      - identifier
+                      - resource
+                      type: object
+                    type: array
                 type: object
               clusterType:
                 description: ClusterType is the type of Cluster
@@ -2947,8 +3000,8 @@ spec:
                   properties:
                     deployedGroupVersionKind:
                       description: DeployedGroupVersionKind contains all GroupVersionKinds
-                        deployed in the workload cluster because of this feature.
-                        Each element has format kind.version.group
+                        deployed in either the workload cluster or the management
+                        cluster because of this feature. Each element has format kind.version.group
                       items:
                         type: string
                       type: array
@@ -2988,7 +3041,6 @@ spec:
                       type: string
                   required:
                   - featureID
-                  - status
                   type: object
                 type: array
                 x-kubernetes-list-type: atomic
@@ -3095,6 +3147,15 @@ rules:
   - secrets
   verbs:
   - get
+  - list
+  - watch
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - get
+  - impersonate
   - list
   - watch
 - apiGroups:
@@ -3271,6 +3332,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
+  name: addon-manager-role-extra
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
   name: addon-metrics-reader
 rules:
 - nonResourceURLs:
@@ -3318,6 +3385,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: addon-manager-role
+subjects:
+- kind: ServiceAccount
+  name: addon-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: addon-manager-rolebinding-extra
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: addon-manager-role-extra
 subjects:
 - kind: ServiceAccount
   name: addon-manager
@@ -3408,7 +3488,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltos-manager-amd64:dev
+        image: projectsveltos/addon-manager-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3892,7 +3972,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4185,7 +4265,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4582,7 +4662,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4731,45 +4811,6 @@ spec:
                       description: RepositoryURL is the URL helm chart repository
                       minLength: 1
                       type: string
-                    secretRef:
-                      description: SecretRef contains confidential data that needs
-                        to be used as values for templates
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: 'If referring to a piece of an object instead
-                            of an entire object, this string should contain a valid
-                            JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container
-                            within a pod, this would take on a value like: "spec.containers{name}"
-                            (where "name" refers to the name of the container that
-                            triggered the event) or if no container name is specified
-                            "spec.containers[2]" (container with index 2 in this pod).
-                            This syntax is chosen only to have some well-defined way
-                            of referencing a part of an object. TODO: this design
-                            is not final and this field is subject to change in the
-                            future.'
-                          type: string
-                        kind:
-                          description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                          type: string
-                        name:
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        namespace:
-                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                          type: string
-                        resourceVersion:
-                          description: 'Specific resourceVersion to which this reference
-                            is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                          type: string
-                        uid:
-                          description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     values:
                       description: 'Values holds the values for this Helm release.
                         Go templating with the values from the referenced CAPI Cluster.
@@ -4799,9 +4840,16 @@ spec:
                   kubernetes resources that need to be deployed in the matching clusters
                   based on EventSource.
                 items:
-                  description: PolicyRef specifies a resource containing one or more
-                    policy to deploy in matching Clusters.
                   properties:
+                    deploymentType:
+                      default: Remote
+                      description: DeploymentType indicates whether resources need
+                        to be deployed into the management cluster (local) or the
+                        managed cluster (remote)
+                      enum:
+                      - Local
+                      - Remote
+                      type: string
                     kind:
                       description: 'Kind of the resource. Supported kinds are: Secrets
                         and ConfigMaps.'
@@ -5402,7 +5450,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5778,7 +5826,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:dev
         livenessProbe:
           httpGet:
             path: /healthz

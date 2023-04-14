@@ -34,7 +34,7 @@ spec:
       installation:
         calicoNetwork:
           ipPools:
-          {{ range $cidr := .Cluster.Spec.ClusterNetwork.Pods.CIDRBlocks }}
+          {{ range $cidr := .Cluster.spec.clusterNetwork.pods.cidrBlocks }}
             - cidr: {{ $cidr }}
               encapsulation: VXLAN
           {{ end }}
@@ -50,20 +50,3 @@ Templates have access to the following variables:
 2. CAPI Cluster infrastructure provider. Keyword is `InfrastructureProvider`
 3. CAPI Cluster kubeadm provider. Keyword is `KubeadmControlPlane` 
 4. For cluster registered with Sveltos, the SveltosCluster instance. Keyword is `SveltosCluster` 
-
-### Confidential data
-
-Sometimes, confidential information is needed when deploying an helm release.
-
-With Sveltos, you can easily store your sensitive data in a Secret and have it fetched at deployment time (`SecretRef` to refer to it).
-
-Imagine needing to store your username and password. Simply create a Secret with those details, and in the ClusterProfile.Spec.HelmCharts section, tell Sveltos which Secret holds the information you need and how to retrieve it. It's that easy! No more worrying about exposing confidential data during deployment.
-
-```yaml
-    secretRef:
-      name: <SECRET NAME>
-      namespace: <SECRET NAMESPACE>
-    values: |
-      password: "{{ printf "%s" .SecretRef.Data.PASSWORD | b64dec }}"
-      username: "{{ printf "%s" .SecretRef.Data.USERNAME | b64dec }}
-```
