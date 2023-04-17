@@ -13,7 +13,7 @@ authors:
 To install Sveltos simply run:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/dev/manifest/manifest.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
 ```
 
 ```
