@@ -317,17 +317,23 @@ metadata:
       created by tenant admin. It assumes each tenant admin is
       represented in the management cluster by a ServiceAccount.
 spec:
-  validationFailureAction: enforce
   background: false
   rules:
-  - name: add-labels
+  - exclude:
+      any:
+      - clusterRoles:
+        - cluster-admin
     match:
-      resources:
-        kinds:
-        - HealthCheck
+      all:
+      - resources:
+          kinds:
+          - HealthCheck
     mutate:
       patchStrategicMerge:
         metadata:
           labels:
-             projectsveltos.io/admin-name: "{{serviceAccountName}}"
+            +(projectsveltos.io/serviceaccount-name): '{{serviceAccountName}}'
+            +(projectsveltos.io/serviceaccount-namespace): '{{serviceAccountNamespace}}'
+    name: add-labels
+  validationFailureAction: enforce
 ```

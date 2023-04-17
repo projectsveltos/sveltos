@@ -79,12 +79,14 @@ spec:
 
 Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. Such templates instantiation happens at time of deployment reading values from managament cluster.
 
-Templates have access to the following variables:
+When using templates, there are certain resources that are accessible by default. These resources include:
 
 1. CAPI Cluster instance. Keyword is `Cluster`
 2. CAPI Cluster infrastructure provider. Keyword is `InfrastructureProvider`
 3. CAPI Cluster kubeadm provider. Keyword is `KubeadmControlPlane` 
 4. For cluster registered with Sveltos, the SveltosCluster instance. Keyword is `SveltosCluster` 
+
+Additionally, Sveltos can be set up to [retrieve any resource from the management cluster](template.md#variables) and make it available to the templates.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -105,7 +107,7 @@ spec:
       installation:
         calicoNetwork:
           ipPools:
-          {{ range $cidr := .Cluster.Spec.ClusterNetwork.Pods.CIDRBlocks }}
+          {{ range $cidr := .Cluster.spec.clusterNetwork.pods.cidrBlocks }}
             - cidr: {{ $cidr }}
               encapsulation: VXLAN
           {{ end }}
