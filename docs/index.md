@@ -25,14 +25,14 @@ Say goodbye to the headache of managing Kubernetes add-ons across multiple clust
 
 ## Features List
 1. Kubernetes [addon distribution](addons.md) across multiple clusters;
-2. [event driven framework](addon_event_deployment.md) to deploy add-ons as response to events in managed clusters. Event can be defined in the form of Lua script. Add-ons can be expressed as template and instantiated using information from resources in the managed clusters;
-3. Sveltos' event driven framework can also be configured for [cross-cluster configuration](https://projectsveltos.github.io/sveltos/addon_event_deployment/#cross-clusters);
-4. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
-5. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster. Custom health checks can be passed to Sveltos in the form of [Lua script](notifications.md#healthcheck-crd);
-6. [Templates](template.md) instantiated reading values from management cluster;
-7. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
-8. [Dry run](addons.md#dryrun-mode) to preview effect of a change; 
-9. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
+2. [Templates](template.md): express add-ons as templates and have those instantiated reading values from management cluster;
+3. [event driven framework](addon_event_deployment.md) to deploy add-ons as response to events in managed clusters. Event can be defined in the form of Lua script;
+4. Sveltos' event driven framework can also be configured for [cross-cluster configuration](https://projectsveltos.github.io/sveltos/addon_event_deployment/#cross-clusters);
+5. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
+6. [Dry run](dryrun.md) to preview effect of a change; 
+7. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster. Custom health checks can be passed to Sveltos in the form of [Lua script](notifications.md#healthcheck-crd);
+8. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
+9. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
 10. [Techsupport](techsupport.md): collect tech support from managed clusters;
 11. [Snapshot and Rollback](snapshot.md).
 

@@ -336,7 +336,7 @@ data:
 Deploying add-on is just one of the many features Sveltos offers. Please consider reading full documentation how to cover more complex scenarios with Sveltos:
 
 1. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
-2. [Dry run](addons.md#dryrun-mode) to preview effect of a change; 
+2. [Dry run](dryrun.md) to preview effect of a change; 
 3. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster. Custom health checks can be passed to Sveltos in the form of [Lua script](notifications.md#healthcheck-crd);
 4. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
 5. [Techsupport](techsupport.md): collect tech support from managed clusters;

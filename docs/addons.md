@@ -154,38 +154,9 @@ Let's take a closer look at the OneTime syncMode option. Once you deploy a Clust
 
 Now, if you're looking for real-time deployment and updates, the Continuous syncMode is the way to go. With Continuous, any changes made to the ClusterProfile will be immediately reconciled into matching clusters. This means that you can add new features, update existing ones, and remove them as necessary, all without lifting a finger. Sveltos will deploy, update, or remove features in matching clusters as needed, making your life as a Kubernetes admin a breeze.
 
-But what about DryRun, you ask? Stay tuned for more information on that feature in a separate [section](#dryrun-mode). In the meantime, try out Sveltos and its powerful ClusterProfile syncMode options for hassle-free Kubernetes add-on management.
+But what about DryRun, you ask? Stay tuned for more information on that feature in a separate [section](dryrun.md). In the meantime, try out Sveltos and its powerful ClusterProfile syncMode options for hassle-free Kubernetes add-on management.
 
 The last available option is [Configuration Drift](#configuration-drift).
-
-#### DryRun mode
-
-Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the DryRun syncMode configuration comes in!
-
-By deploying your ClusterProfile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
-
-Once the dry run workflow is complete, you'll receive a detailed list of all the potential changes that would have been made to each matching cluster. This allows you to carefully inspect and validate these changes before deploying the new ClusterProfile configuration.
-
-If you're interested in viewing this change list, you can check out the generated Custom Resource Definition (CRD) called ClusterReport. But let's be real, it's much simpler to just use the sveltosctl CLI command, like this:
-
-```
-./bin/sveltosctl show dryrun
-
-+-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
-|               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION   |            MESSAGE             | CLUSTER PROFILE  |
-+-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
-| default/sveltos-management-workload | helm release             | kyverno   | kyverno-latest | Install   |                                | dryrun           |
-| default/sveltos-management-workload | helm release             | nginx     | nginx-latest   | Install   |                                | dryrun           |
-| default/sveltos-management-workload | :Pod                     | default   | nginx          | No Action | Object already deployed.       | dryrun           |
-|                                     |                          |           |                |           | And policy referenced by       |                  |
-|                                     |                          |           |                |           | ClusterProfile has not changed |                  |
-|                                     |                          |           |                |           | since last deployment.         |                  |
-| default/sveltos-management-workload | kyverno.io:ClusterPolicy |           | no-gateway     | Create    |                                | dryrun           |
-+-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
-
-```
-
-For a demonstration of dry run mode, watch the video [Sveltos, introduction to DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=4s) on YouTube.
 
 ### Sveltos manager controller configuration
 
