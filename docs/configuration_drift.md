@@ -4,7 +4,17 @@ _Configuration drift_ is a common term to describe a change that takes place in 
 
 In our case, _configuration drift_ is a change of a resource deployed by Sveltos in one of the managed clusters.
 
-With Sveltos, you can set the sync mode to *SyncModeContinuousWithDriftDetection* for a ClusterProfile. This allows Sveltos to monitor the state of managed clusters and detect configuration drift for any of the resources deployed because of that ClusterProfile.
+With Sveltos, you can set the sync mode to *ContinuousWithDriftDetection* for a ClusterProfile. This allows Sveltos to monitor the state of managed clusters and detect configuration drift for any of the resources deployed because of that ClusterProfile.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno
+spec:
+  syncMode: ContinuousWithDriftDetection
+  ...
+```
 
 When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster. In order to achieve this, Sveltos deploys a service in each managed cluster and configures it with a list of Kubernetes resources deployed for each ClusterProfile in SyncModeContinuousWithDriftDetection mode.
 
