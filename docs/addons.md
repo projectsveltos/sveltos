@@ -5,6 +5,7 @@ tags:
     - Kubernetes
     - add-ons
     - helm
+    - kustomize
     - clusterapi
     - multi-tenancy
     - Sveltos
@@ -20,7 +21,7 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 ## How does Sveltos work?
 
-With [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons"), you can easily deploy Helm charts or raw Kubernetes YAML across a set of Kubernetes clusters. All you need to do is define which Kubernetes add-ons to deploy and where to deploy them:
+With [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons"), you can easily deploy Helm charts, resources assembled with Kustomize or raw Kubernetes YAML across a set of Kubernetes clusters. All you need to do is define which Kubernetes add-ons to deploy and where to deploy them:
 
 1. Select one or more clusters using a Kubernetes [label selector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors "Kubernetes label selector");
 2. List the Kubernetes add-ons that need to be deployed on the selected clusters.
@@ -44,6 +45,8 @@ For a quick video of Sveltos, watch the video [Sveltos introduction](https://www
 1. Deploy calico in each CAPI powered cluster [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/calico.yaml)
 2. Deploy Kyverno in each cluster [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/kyverno.yaml)
 3. Deploy multiple helm charts [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/multiple_helm_charts.yaml)
+4. Deploy resources assembled with Kustomize [clusterprofile.yaml](https://github.com/projectsveltos/addon-manager/blob/main/examples/kustomize.yaml)
+5. Deploy resources assembled with Kustomize contained in a ConfigMap [clusterprofile.yaml](https://github.com/projectsveltos/addon-manager/blob/main/examples/kustomize_with_configmap.yaml)
 
 ### Deep dive: ClusterProfile CRD
 
@@ -55,6 +58,103 @@ To select the clusters where you want to deploy add-ons, simply use the *cluster
 #### Helm charts
 
 With the *helmCharts* field, you can list the Helm charts you want to deploy. Sveltos will deploy the Helm charts in the exact order you define them.
+
+#### Resources assembled with Kustomize
+
+With the *kustomizationRefs* field, you can list directories containing resources assembled with Kustomize. Directories can be:
+1. GitRepository (requires flux to be synced);
+2. OCIRepository (requires flux to be synced);
+3. Bucket (requires flux to be synced);
+4. ConfigMap whose BinaryData section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
+5. Secret (type addons.projectsveltos.io/cluster-profile) whose Data section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
+
+##### Kustomize with Flux GitRepository
+
+The following YAML is an example of Sveltos is referencing a Flux GitRepository. The git repository `https://github.com/gianlucam76/kustomize` contains several kustomize directories. In this example, Sveltos will run Kustomize on `helloWorld` directory and deploy the output of kustomize in the namespace `eng` in each managed cluster matching the clusterSelector.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux-system
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  kustomizationRefs:
+  - namespace: flux-system
+    name: flux-system
+    kind: GitRepository
+    path: ./helloWorld/
+    targetNamespace: eng
+```
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  timeout: 60s
+  url: ssh://git@github.com/gianlucam76/kustomize
+```
+
+```bash
+kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl show addons
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+| default/sveltos-management-workload | apps:Deployment | eng       | the-deployment | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
+| default/sveltos-management-workload | :Service        | eng       | the-service    | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
+| default/sveltos-management-workload | :ConfigMap      | eng       | the-map        | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+```
+
+##### Kustomize with ConfigMap
+
+If you have a directories containing Kustomize resources, you can put that content in a ConfigMap (or Secret) and have ClusterProfile reference it.
+
+In this example we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, then we create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
+
+```bash
+git clone git@github.com:gianlucam76/kustomize.git 
+tar -czf kustomize.tar.gz -C kustomize/helloWorldWithOverlays .
+kubectl create configmap kustomize --from-file=kustomize.tar.gz
+```
+
+Following ClusterProfile, will use Kustomize SDK to get all resources that need to be deployed and deploy those in the `production` namespace in each managed cluster matching the clusterSelector.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: kustomize-with-configmap 
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  kustomizationRefs:
+  - namespace: default
+    name: kustomize
+    kind: ConfigMap
+    path: ./overlays/production/
+    targetNamespace: production
+```
+
+```bash
+kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl show addons
++-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
+|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE  |           NAME            | VERSION |             TIME              |     CLUSTER PROFILES     |
++-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
+| default/sveltos-management-workload | apps:Deployment | production | production-the-deployment | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
+| default/sveltos-management-workload | :Service        | production | production-the-service    | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
+| default/sveltos-management-workload | :ConfigMap      | production | production-the-map        | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
++-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
+```
 
 #### Kubernetes resources
 

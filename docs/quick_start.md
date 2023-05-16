@@ -75,6 +75,35 @@ spec:
    kind: Secret
 ```
 
+## Deploy resources assembled with Kustomize
+
+Sveltos can work along with Flux to deploy content of Kustomize directories.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux-system
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  kustomizationRefs:
+  - namespace: flux-system
+    name: flux-system
+    kind: GitRepository
+    path: ./helloWorld/
+    targetNamespace: eng
+```
+
+Full examples can be found [here](addons.md#kustomize-with-flux-gitrepository).
+ClusterProfile can reference:
+1. GitRepository (synced with flux);
+2. OCIRepository (synced with flux);
+3. Bucket (synced with flux);
+4. ConfigMap whose BinaryData section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
+5. Secret (type addons.projectsveltos.io/cluster-profile) whose Data section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
+
+
 ## Express your add-ons as template
 
 Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. Such templates instantiation happens at time of deployment reading values from managament cluster.
