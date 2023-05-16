@@ -96,7 +96,9 @@ spec:
 ```
 
 Full examples can be found [here](addons.md#kustomize-with-flux-gitrepository).
+
 ClusterProfile can reference:
+
 1. GitRepository (synced with flux);
 2. OCIRepository (synced with flux);
 3. Bucket (synced with flux);
