@@ -2002,8 +2002,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: clusterconfigurations.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -2207,8 +2206,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: clusterprofiles.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -2612,8 +2610,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: clusterreports.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -2904,8 +2901,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: clustersummaries.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -3399,7 +3395,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: addon-manager-role
 rules:
 - apiGroups:
@@ -3558,14 +3553,6 @@ rules:
   - patch
   - update
 - apiGroups:
-  - config.projectsveltos.io
-  resources:
-  - gitrepositories
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - controlplane.cluster.x-k8s.io
   resources:
   - kubeadmcontrolplanes
@@ -3601,6 +3588,54 @@ rules:
   - lib.projectsveltos.io
   resources:
   - sveltosclusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - buckets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - buckets/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - gitrepositories
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - gitrepositories/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - ocirepositories
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - ocirepositories/status
   verbs:
   - get
   - list
@@ -3765,7 +3800,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-manager-amd64:main
+        image: projectsveltos/addon-manager-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -3779,13 +3814,6 @@ spec:
             port: 8081
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 500m
-            memory: 128Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -4249,7 +4277,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4542,7 +4570,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4939,7 +4967,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5778,7 +5806,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6154,7 +6182,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:v0.10.1
         livenessProbe:
           httpGet:
             path: /healthz
