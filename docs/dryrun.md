@@ -1,4 +1,18 @@
-DryRun mode
+---
+title: Sveltos dry run
+description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+tags:
+    - Kubernetes
+    - Sveltos
+    - add-ons
+    - helm
+    - clusterapi
+    - dry run
+authors:
+    - Gianluca Mardente
+---
+
+# DryRun mode
 
 Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the DryRun syncMode configuration comes in!
 

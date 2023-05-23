@@ -1,3 +1,17 @@
+---
+title: Recources by Sveltos
+description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+tags:
+    - Kubernetes
+    - Sveltos
+    - add-ons
+    - helm
+    - clusterapi
+    - configuration drift detection
+authors:
+    - Gianluca Mardente
+---
+
 ### Configuration Drift
 
 _Configuration drift_ is a common term to describe a change that takes place in an environment. Drift is an issue because it causes systems and parts of a system that are supposed to be consistent, to become inconsistent and unpredictable.
