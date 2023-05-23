@@ -1,5 +1,5 @@
 ---
-title: Kubernetes add-ons management for tens of clusters
+title: Kubernetes add-ons management for tens of clusters quick start
 description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of kubernetes cluster add-ons.
 tags:
     - Kubernetes

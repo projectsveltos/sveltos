@@ -9,6 +9,7 @@ tags:
     - multi-tenancy
     - Sveltos
     - event driven
+    - cross cluster configuration
 authors:
     - Gianluca Mardente
 ---

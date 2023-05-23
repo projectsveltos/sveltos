@@ -5,6 +5,8 @@ tags:
     - Kubernetes
     - add-ons
     - helm
+    - kustomize
+    - carvel ytt
     - clusterapi
     - multi-tenancy
 authors:

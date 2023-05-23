@@ -1,3 +1,17 @@
+---
+title: Extending Sveltos
+description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+tags:
+    - Kubernetes
+    - Sveltos
+    - add-ons
+    - helm
+    - clusterapi
+    - dry run
+authors:
+    - Gianluca Mardente
+---
+
 # Sveltos extension
 
 This tutorial will guide you through the process of extending Sveltos with your own controller. The tutorial focuses on extending Sveltos by using a new controller that can allocate a storage bucket from Google Cloud, followed by Sveltos deploying a pod in the managed cluster to upload a file to that bucket, all using a single YAML configuration.
