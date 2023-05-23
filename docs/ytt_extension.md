@@ -26,7 +26,7 @@ The `ytt controller` offers the capability to process Carvel ytt files using dif
 
 ![Sveltos managing clusters](assets/flux-ytt-sveltos.png)
 
-We can leverage GitRepository as a source for ytt controller. For example, in the provided GitHub repository [ytt-examples](https://github.com/gianlucam76/ytt-examples), we can find the ytt files that Flux will sync. To instruct the ytt controller to fetch files from this repository, create a YttSource CRD instance with the following configuration:
+We can leverage GitRepository as a source for ytt controller[^1]. For example, in the provided GitHub repository [ytt-examples](https://github.com/gianlucam76/ytt-examples), we can find the ytt files that Flux will sync. To instruct the ytt controller to fetch files from this repository, create a YttSource CRD instance with the following configuration:
 
 ```yaml
 apiVersion: extension.projectsveltos.io/v1alpha1
@@ -42,7 +42,7 @@ spec:
 
 The `path` field specifies the location within the Git repository where the ytt files are stored. Once Flux detects changes in the repository and syncs it, the ytt-controller will automatically invoke the ytt module and store the output in the Status section of the YttSource instance.
 
-At this point, you can use Sveltos' [template](template.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. Here's an example configuration using a ClusterProfile[^1]:
+At this point, you can use Sveltos' [template](template.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. Here's an example configuration using a ClusterProfile[^2]:
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -186,4 +186,22 @@ status:
       db_password: staging-password
 ```
 
-[^1]: Instructing Sveltos involves the initial step of retrieving a resource from the management cluster, which is the YttSource instance named `yttsource-flux` in the `default` namespace. Sveltos is then responsible for deploying the resources found within the `ytt-resources` ConfigMap. However, this ConfigMap acts as a template, requiring instantiation before deployment. Within the Data section of the ConfigMap, there is a single entry called `resource.yaml`. After instantiation, this entry will contain the content that the ytt controller has stored in the YttSource instance.
+[^2]: Instructing Sveltos involves the initial step of retrieving a resource from the management cluster, which is the YttSource instance named `yttsource-flux` in the `default` namespace. Sveltos is then responsible for deploying the resources found within the `ytt-resources` ConfigMap. However, this ConfigMap acts as a template, requiring instantiation before deployment. Within the Data section of the ConfigMap, there is a single entry called `resource.yaml`. After instantiation, this entry will contain the content that the ytt controller has stored in the YttSource instance.
+[^1]: Flux is present in the management cluster and it is used to sync from GitHub repository. The GitRepository instance is following
+```yaml  
+  apiVersion: source.toolkit.fluxcd.io/v1
+  kind: GitRepository
+  metadata:
+    finalizers:
+    - finalizers.fluxcd.io
+    name: flux-system
+    namespace: flux-system
+  spec:
+    interval: 1m0s
+    ref:
+      branch: main
+    secretRef:
+      name: flux-system
+    timeout: 60s
+    url: ssh://git@github.com/gianlucam76/kustomize
+```
