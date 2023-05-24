@@ -26,7 +26,7 @@ But that's not all! Sveltos not only helps you scale the number of clusters you 
 Say goodbye to the headache of managing Kubernetes add-ons across multiple clusters and hello to Sveltos - your new best friend in cluster management!
 
 ## Features List
-1. Kubernetes [addon distribution](addons.md) across multiple clusters. Add-ons can be expressed as Helm charts, resources assembled with Kustomize, resource YAMLs;
+1. Kubernetes [addon distribution](addons.md) across multiple clusters. Add-ons can be expressed as Helm charts, resources assembled with Kustomize, resource YAMLs. [Carvel ytt](ytt_extension.md) is also supported as an extension;
 2. [Templates](template.md): express add-ons as templates and have those instantiated reading values from management cluster;
 3. [event driven framework](addon_event_deployment.md) to deploy add-ons as response to events in managed clusters. Event can be defined in the form of Lua script;
 4. Sveltos' event driven framework can also be configured for [cross-cluster configuration](https://projectsveltos.github.io/sveltos/addon_event_deployment/#cross-clusters);
