@@ -302,3 +302,9 @@ data:
       token: {{ (index .MgtmResources "AutoscalerSecret").data.token }}
       ca.crt: {{ $data:=(index .MgtmResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
+
+## More examples
+Other examples can be found:
+
+1. [Sveltos and Carvel Ytt](ytt_extension.md);
+2. [Sveltos and Jsonnet](jsonnet_extension.md).
