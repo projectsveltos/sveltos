@@ -203,5 +203,5 @@ status:
     secretRef:
       name: flux-system
     timeout: 60s
-    url: ssh://git@github.com/gianlucam76/kustomize
+    url: ssh://git@github.com/gianlucam76/ytt-examples
 ```
