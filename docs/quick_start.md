@@ -105,7 +105,9 @@ ClusterProfile can reference:
 4. ConfigMap whose BinaryData section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
 5. Secret (type addons.projectsveltos.io/cluster-profile) whose Data section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
 
-
+## Carvel ytt and Jsonnet
+Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the [Carvel ytt](ytt_extension.md) and [Jsonnet](jsonnet_extension.md) sections.
+ 
 ## Express your add-ons as template
 
 Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. Such templates instantiation happens at time of deployment reading values from managament cluster.
