@@ -14,7 +14,7 @@ authors:
     - Gianluca Mardente
 ---
 
-![Github Stars](https://img.shields.io/github/stars/projectsveltos/addon-manager)
+<a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
 
 [<img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo">](https://github.com/projectsveltos "Manage Kubernetes add-ons")
 
