@@ -7,14 +7,24 @@ config=${2}
 
 echo "Generate and upload docker images for branch ${branch} -- ${config}"
 
-# addon-manager
-echo "processing addon-manager"
+# addon-controller
+echo "processing addon-controller"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-manager.git
-cd addon-manager
+git clone git@github.com:projectsveltos/addon-controller.git
+cd addon-controller
 git checkout ${branch}
 make docker-build
-docker --config ${config} push projectsveltos/addon-manager-amd64:${branch}  
+docker --config ${config} push projectsveltos/addon-controller-amd64:${branch}  
+cd ../../; rm -rf tmp
+
+# addon-constraint-controller
+echo "processing addon-constraint-controller"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/addon-constraint-controller.git
+cd addon-constraint-controller
+git checkout ${branch}
+make docker-build
+docker --config ${config} push projectsveltos/addon-constraint-controller-amd64:${branch}  
 cd ../../; rm -rf tmp
 
 # classifier

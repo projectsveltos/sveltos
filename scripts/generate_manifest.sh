@@ -23,11 +23,25 @@ do
 done
 cd ../../; rm -rf tmp
 
-# addon-manager
-echo "processing addon-manager"
+# addon-controller
+echo "processing addon-controller"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-manager.git
-cd addon-manager
+git clone git@github.com:projectsveltos/addon-controller.git
+cd addon-controller
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml 
+done
+cd ../../; rm -rf tmp
+
+# addon-constraint-controller
+echo "processing addon-constraint-controller"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/addon-constraint-controller.git
+cd addon-constraint-controller
 git checkout ${branch}
 for f in manifest/*.yaml
 do 

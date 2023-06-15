@@ -26,7 +26,7 @@ Our management cluster is a Kind cluster that is running on a laptop. To deploy 
 kubectl get pods -n projectsveltos
 NAME                                  READY   STATUS    RESTARTS   AGE
 access-manager-69d7fd69fc-7mm2p       2/2     Running   0          3m58s
-addon-manager-6ccff8d976-99sdb        2/2     Running   0          3m58s
+addon-controller-6ccff8d976-99sdb     2/2     Running   0          3m58s
 classifier-manager-6489f67447-q5gs2   2/2     Running   0          3m54s
 event-manager-56ffd458f7-fchkv        2/2     Running   0          3m55s
 hc-manager-7b6d7c4968-52wj2           2/2     Running   0          3m55s
@@ -47,7 +47,7 @@ To deploy the controller in the management cluster, please refer to the instruct
 Before posting the necessary Sveltos ClusterProfile, we need to grant Sveltos permission to create bucket instance in the management clusters.
 
 ```bash
-kubectl edit clusterrole addon-manager-role-extra
+kubectl edit clusterrole addon-controller-role-extra
 ```
 
 and edit rules by adding
