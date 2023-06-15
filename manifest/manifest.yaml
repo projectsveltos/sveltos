@@ -2222,7 +2222,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: addon-controller
+    control-plane: addon-manager
   name: projectsveltos
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -3582,7 +3582,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: addon-controller
+  name: addon-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3626,7 +3626,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-controller-role
+  name: addon-manager-role
 rules:
 - apiGroups:
   - ""
@@ -3908,7 +3908,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: addon-controller-role-extra
+  name: addon-manager-role-extra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -3949,33 +3949,33 @@ roleRef:
   name: addon-leader-election-role
 subjects:
 - kind: ServiceAccount
-  name: addon-controller
+  name: addon-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-controller-rolebinding
+  name: addon-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-controller-role
+  name: addon-manager-role
 subjects:
 - kind: ServiceAccount
-  name: addon-controller
+  name: addon-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-controller-rolebinding-extra
+  name: addon-manager-rolebinding-extra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-controller-role-extra
+  name: addon-manager-role-extra
 subjects:
 - kind: ServiceAccount
-  name: addon-controller
+  name: addon-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3988,7 +3988,7 @@ roleRef:
   name: addon-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: addon-controller
+  name: addon-manager
   namespace: projectsveltos
 ---
 apiVersion: v1
@@ -4017,15 +4017,15 @@ data:
     # leaderElectionReleaseOnCancel: true
 kind: ConfigMap
 metadata:
-  name: addon-controller-config
+  name: addon-manager-config
   namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: addon-controller
-  name: addon-controller-metrics-service
+    control-plane: addon-manager
+  name: addon-manager-metrics-service
   namespace: projectsveltos
 spec:
   ports:
@@ -4034,26 +4034,26 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    control-plane: addon-controller
+    control-plane: addon-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    control-plane: addon-controller
-  name: addon-controller
+    control-plane: addon-manager
+  name: addon-manager
   namespace: projectsveltos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      control-plane: addon-controller
+      control-plane: addon-manager
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
-        control-plane: addon-controller
+        control-plane: addon-manager
     spec:
       containers:
       - args:
@@ -4063,14 +4063,14 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:main
+        image: projectsveltos/addon-manager-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8081
           initialDelaySeconds: 15
           periodSeconds: 20
-        name: controller
+        name: manager
         readinessProbe:
           httpGet:
             path: /readyz
@@ -4110,7 +4110,7 @@ spec:
             - ALL
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: addon-controller
+      serviceAccountName: addon-manager
       terminationGracePeriodSeconds: 10
       volumes:
       - emptyDir: {}
@@ -4120,7 +4120,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    control-plane: addon-controller
+    control-plane: addon-manager
   name: fm-controller-manager-metrics-monitor
   namespace: projectsveltos
 spec:
@@ -4133,7 +4133,7 @@ spec:
       insecureSkipVerify: true
   selector:
     matchLabels:
-      control-plane: addon-controller
+      control-plane: addon-manager
 
 ---
 apiVersion: v1
@@ -4491,7 +4491,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-constraint-controller-amd64:main
+        image: projectsveltos/addon-constraint-controller-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4942,7 +4942,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5235,7 +5235,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5632,7 +5632,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6470,7 +6470,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6846,7 +6846,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:v0.11.0
         livenessProbe:
           httpGet:
             path: /healthz
