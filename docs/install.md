@@ -44,7 +44,7 @@ Get Sveltos status and verify all pods are up and running
 
 ```
 projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
-projectsveltos addon-manager-df8965884-x7hp5           2/2     Running   0  40s
+projectsveltos addon-controller-df8965884-x7hp5        2/2     Running   0  40s
 projectsveltos classifier-manager-6489f67447-52xd6     2/2     Running   0  40s
 projectsveltos hc-manager-7b6d7c4968-x8f7b             2/2     Running   0  39s
 projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s

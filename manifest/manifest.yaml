@@ -129,6 +129,232 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
+  name: addonconstraints.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: AddonConstraint
+    listKind: AddonConstraintList
+    plural: addonconstraints
+    singular: addonconstraint
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: AddonConstraint is the Schema for the AddonConstraint API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AddonConstraintSpec defines the desired state of AddonConstraint
+            properties:
+              clusterRefs:
+                description: ClusterRefs identifies clusters to associate to.
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+              clusterSelector:
+                description: ClusterSelector identifies clusters to associate to.
+                type: string
+              openAPIValidationRefs:
+                description: OpenAPIValidationRefs is a list of OpenAPI validations.
+                  In the matching clusters, add-ons will be deployed only if all validations
+                  pass.
+                items:
+                  properties:
+                    kind:
+                      description: 'Kind of the resource. Supported kinds are: - flux
+                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
+                      enum:
+                      - GitRepository
+                      - OCIRepository
+                      - Bucket
+                      - ConfigMap
+                      - Secret
+                      type: string
+                    name:
+                      description: Name of the referenced resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the referenced resource.
+                      minLength: 1
+                      type: string
+                    path:
+                      description: Path to the directory containing the openapi validations.
+                        Defaults to 'None', which translates to the root path of the
+                        SourceRef. Ignored for ConfigMap/Secret.
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  - namespace
+                  type: object
+                type: array
+            type: object
+          status:
+            description: AddonConstraintStatus defines the observed state of AddonConstraint
+            properties:
+              failureMessage:
+                description: FailureMessage provides more information if an error
+                  occurs.
+                type: string
+              matchingClusters:
+                description: MatchingClusterRefs reference all the clusters currently
+                  matching ClusterSelector
+                items:
+                  description: "ObjectReference contains enough information to let
+                    you inspect or modify the referred object. --- New uses of this
+                    type are discouraged because of difficulty describing its usage
+                    when embedded in APIs. 1. Ignored fields.  It includes many fields
+                    which are not generally honored.  For instance, ResourceVersion
+                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
+                    usage help.  It is impossible to add specific help for individual
+                    usage.  In most embedded usages, there are particular restrictions
+                    like, \"must refer only to types A and B\" or \"UID not honored\"
+                    or \"name must be restricted\". Those cannot be well described
+                    when embedded. 3. Inconsistent validation.  Because the usages
+                    are different, the validation rules are different by usage, which
+                    makes it hard for users to predict what will happen. 4. The fields
+                    are both imprecise and overly precise.  Kind is not a precise
+                    mapping to a URL. This can produce ambiguity during interpretation
+                    and require a REST mapping.  In most cases, the dependency is
+                    on the group,resource tuple and the version of the actual struct
+                    is irrelevant. 5. We cannot easily change it.  Because this type
+                    is embedded in many locations, updates to this type will affect
+                    numerous schemas.  Don't make new APIs embed an underspecified
+                    API type they do not control. \n Instead of using this type, create
+                    a locally provided and used type that is well-focused on your
+                    reference. For example, ServiceReferences for admission registration:
+                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
+                    ."
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: 'If referring to a piece of an object instead of
+                        an entire object, this string should contain a valid JSON/Go
+                        field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within
+                        a pod, this would take on a value like: "spec.containers{name}"
+                        (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]"
+                        (container with index 2 in this pod). This syntax is chosen
+                        only to have some well-defined way of referencing a part of
+                        an object. TODO: this design is not final and this field is
+                        subject to change in the future.'
+                      type: string
+                    kind:
+                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      type: string
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                    resourceVersion:
+                      description: 'Specific resourceVersion to which this reference
+                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      type: string
+                    uid:
+                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+              openapiValidations:
+                additionalProperties:
+                  format: byte
+                  type: string
+                description: OpenapiValidations contains all validations collected
+                  from all existing referenced resources
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
   name: classifierreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -947,7 +1173,8 @@ spec:
                       description: Component indicates which Sveltos component the
                         configuration applies to.
                       enum:
-                      - SveltosManager
+                      - AddonManager
+                      - AddonConstraintManager
                       - Classifier
                       - ClassifierAgent
                       - SveltosClusterManager
@@ -1995,7 +2222,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: addon-manager
+    control-plane: addon-controller
   name: projectsveltos
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -2305,7 +2532,8 @@ spec:
                 description: ClusterSelector identifies clusters to associate to.
                 type: string
               helmCharts:
-                description: Helm charts
+                description: Helm charts is a list of helm charts that need to be
+                  deployed
                 items:
                   properties:
                     chartName:
@@ -2360,7 +2588,9 @@ spec:
                   type: object
                 type: array
               kustomizationRefs:
-                description: Kustomization refs
+                description: Kustomization refs is a list of kustomization paths.
+                  Kustomization will be run on those paths and the outcome will be
+                  deployed.
                 items:
                   properties:
                     deploymentType:
@@ -2374,8 +2604,7 @@ spec:
                       type: string
                     kind:
                       description: 'Kind of the resource. Supported kinds are: - flux
-                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret (which
-                        will be mounted as volume)'
+                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
                       enum:
                       - GitRepository
                       - OCIRepository
@@ -2384,7 +2613,7 @@ spec:
                       - Secret
                       type: string
                     name:
-                      description: Name of the rreferenced resource.
+                      description: Name of the referenced resource.
                       minLength: 1
                       type: string
                     namespace:
@@ -2433,7 +2662,7 @@ spec:
                       - ConfigMap
                       type: string
                     name:
-                      description: Name of the rreferenced resource.
+                      description: Name of the referenced resource.
                       minLength: 1
                       type: string
                     namespace:
@@ -3015,7 +3244,8 @@ spec:
                       to.
                     type: string
                   helmCharts:
-                    description: Helm charts
+                    description: Helm charts is a list of helm charts that need to
+                      be deployed
                     items:
                       properties:
                         chartName:
@@ -3071,7 +3301,9 @@ spec:
                       type: object
                     type: array
                   kustomizationRefs:
-                    description: Kustomization refs
+                    description: Kustomization refs is a list of kustomization paths.
+                      Kustomization will be run on those paths and the outcome will
+                      be deployed.
                     items:
                       properties:
                         deploymentType:
@@ -3085,8 +3317,7 @@ spec:
                           type: string
                         kind:
                           description: 'Kind of the resource. Supported kinds are:
-                            - flux GitRepository;OCIRepository;Bucket - ConfigMap/Secret
-                            (which will be mounted as volume)'
+                            - flux GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
                           enum:
                           - GitRepository
                           - OCIRepository
@@ -3095,7 +3326,7 @@ spec:
                           - Secret
                           type: string
                         name:
-                          description: Name of the rreferenced resource.
+                          description: Name of the referenced resource.
                           minLength: 1
                           type: string
                         namespace:
@@ -3144,7 +3375,7 @@ spec:
                           - ConfigMap
                           type: string
                         name:
-                          description: Name of the rreferenced resource.
+                          description: Name of the referenced resource.
                           minLength: 1
                           type: string
                         namespace:
@@ -3351,7 +3582,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: addon-manager
+  name: addon-controller
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3395,7 +3626,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-manager-role
+  name: addon-controller-role
 rules:
 - apiGroups:
   - ""
@@ -3587,6 +3818,22 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
+  - addonconstraints
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - addonconstraints/status
+  verbs:
+  - get
+  - list
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
   - debuggingconfigurations
   verbs:
   - get
@@ -3661,7 +3908,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: addon-manager-role-extra
+  name: addon-controller-role-extra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -3702,33 +3949,33 @@ roleRef:
   name: addon-leader-election-role
 subjects:
 - kind: ServiceAccount
-  name: addon-manager
+  name: addon-controller
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-manager-rolebinding
+  name: addon-controller-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-manager-role
+  name: addon-controller-role
 subjects:
 - kind: ServiceAccount
-  name: addon-manager
+  name: addon-controller
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-manager-rolebinding-extra
+  name: addon-controller-rolebinding-extra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-manager-role-extra
+  name: addon-controller-role-extra
 subjects:
 - kind: ServiceAccount
-  name: addon-manager
+  name: addon-controller
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3741,7 +3988,7 @@ roleRef:
   name: addon-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: addon-manager
+  name: addon-controller
   namespace: projectsveltos
 ---
 apiVersion: v1
@@ -3770,15 +4017,15 @@ data:
     # leaderElectionReleaseOnCancel: true
 kind: ConfigMap
 metadata:
-  name: addon-manager-config
+  name: addon-controller-config
   namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: addon-manager
-  name: addon-manager-metrics-service
+    control-plane: addon-controller
+  name: addon-controller-metrics-service
   namespace: projectsveltos
 spec:
   ports:
@@ -3787,26 +4034,26 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    control-plane: addon-manager
+    control-plane: addon-controller
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    control-plane: addon-manager
-  name: addon-manager
+    control-plane: addon-controller
+  name: addon-controller
   namespace: projectsveltos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      control-plane: addon-manager
+      control-plane: addon-controller
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
-        control-plane: addon-manager
+        control-plane: addon-controller
     spec:
       containers:
       - args:
@@ -3816,14 +4063,14 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-manager-amd64:main
+        image: projectsveltos/addon-controller-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8081
           initialDelaySeconds: 15
           periodSeconds: 20
-        name: manager
+        name: controller
         readinessProbe:
           httpGet:
             path: /readyz
@@ -3863,7 +4110,7 @@ spec:
             - ALL
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: addon-manager
+      serviceAccountName: addon-controller
       terminationGracePeriodSeconds: 10
       volumes:
       - emptyDir: {}
@@ -3873,7 +4120,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    control-plane: addon-manager
+    control-plane: addon-controller
   name: fm-controller-manager-metrics-monitor
   namespace: projectsveltos
 spec:
@@ -3886,8 +4133,410 @@ spec:
       insecureSkipVerify: true
   selector:
     matchLabels:
-      control-plane: addon-manager
+      control-plane: addon-controller
 
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: addon-constraint-manager
+  name: projectsveltos
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: addon-constraint-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-constraint-leader-election-role
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: addon-constraint-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - addonconstraints
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - addonconstraints/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - addonconstraints/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - debuggingconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - buckets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - buckets/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - gitrepositories
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - gitrepositories/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - ocirepositories
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  resources:
+  - ocirepositories/status
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: addon-constraint-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: addon-constraint-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-constraint-leader-election-rolebinding
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-constraint-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: addon-constraint-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: addon-constraint-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: addon-constraint-manager-role
+subjects:
+- kind: ServiceAccount
+  name: addon-constraint-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: addon-constraint-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: addon-constraint-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: addon-constraint-manager
+  namespace: projectsveltos
+---
+apiVersion: v1
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfig
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: 85339645.projectsveltos.io
+    # leaderElectionReleaseOnCancel defines if the leader should step down volume
+    # when the Manager ends. This requires the binary to immediately end when the
+    # Manager is stopped, otherwise, this setting is unsafe. Setting this significantly
+    # speeds up voluntary leader transitions as the new leader don't have to wait
+    # LeaseDuration time first.
+    # In the default scaffold provided, the program ends immediately after
+    # the manager stops, so would be fine to enable this option. However,
+    # if you are doing or is intended to do any operation such as perform cleanups
+    # after the manager stops then its usage might be unsafe.
+    # leaderElectionReleaseOnCancel: true
+kind: ConfigMap
+metadata:
+  name: addon-constraint-manager-config
+  namespace: projectsveltos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    control-plane: addon-constraint-manager
+  name: addon-constraint-manager-metrics-service
+  namespace: projectsveltos
+spec:
+  ports:
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: https
+  selector:
+    control-plane: addon-constraint-manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: addon-constraint-manager
+  name: addon-constraint-manager
+  namespace: projectsveltos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: addon-constraint-manager
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: addon-constraint-manager
+    spec:
+      containers:
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        - --v=5
+        command:
+        - /manager
+        image: projectsveltos/addon-constraint-controller-amd64:main
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: addon-constraint-manager
+      terminationGracePeriodSeconds: 10
 ---
 apiVersion: v1
 kind: Namespace
@@ -5165,8 +5814,7 @@ spec:
                       type: string
                     kind:
                       description: 'Kind of the resource. Supported kinds are: - flux
-                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret (which
-                        will be mounted as volume)'
+                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
                       enum:
                       - GitRepository
                       - OCIRepository
@@ -5175,7 +5823,7 @@ spec:
                       - Secret
                       type: string
                     name:
-                      description: Name of the rreferenced resource.
+                      description: Name of the referenced resource.
                       minLength: 1
                       type: string
                     namespace:
@@ -5230,7 +5878,7 @@ spec:
                       - ConfigMap
                       type: string
                     name:
-                      description: Name of the rreferenced resource.
+                      description: Name of the referenced resource.
                       minLength: 1
                       type: string
                     namespace:

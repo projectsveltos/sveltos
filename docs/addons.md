@@ -45,8 +45,8 @@ For a quick video of Sveltos, watch the video [Sveltos introduction](https://www
 1. Deploy calico in each CAPI powered cluster [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/calico.yaml)
 2. Deploy Kyverno in each cluster [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/kyverno.yaml)
 3. Deploy multiple helm charts [clusterprofile.yaml](https://raw.githubusercontent.com/projectsveltos/sveltos-manager/main/examples/multiple_helm_charts.yaml)
-4. Deploy resources assembled with Kustomize [clusterprofile.yaml](https://github.com/projectsveltos/addon-manager/blob/main/examples/kustomize.yaml)
-5. Deploy resources assembled with Kustomize contained in a ConfigMap [clusterprofile.yaml](https://github.com/projectsveltos/addon-manager/blob/main/examples/kustomize_with_configmap.yaml)
+4. Deploy resources assembled with Kustomize [clusterprofile.yaml](https://github.com/projectsveltos/addon-controller/blob/main/examples/kustomize.yaml)
+5. Deploy resources assembled with Kustomize contained in a ConfigMap [clusterprofile.yaml](https://github.com/projectsveltos/addon-controller/blob/main/examples/kustomize_with_configmap.yaml)
 
 ### Deep dive: ClusterProfile CRD
 

@@ -118,7 +118,7 @@ When using Sveltos, the same principle applies to Helm charts. The `values` sect
 
 At Sveltos, we adhere to the least privilege principle, which means that Sveltos does not have all the necessary permissions to fetch resources from the management cluster by default. Therefore, when using `templateResourceRefs`, you need to provide Sveltos with the correct RBACs.
 
-Providing the necessary RBACs to Sveltos is a straightforward process. Sveltos' ServiceAccount is tied to the **addon-manager-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit that role.
+Providing the necessary RBACs to Sveltos is a straightforward process. Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit that role.
 
 If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](multi-tenancy.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
 
