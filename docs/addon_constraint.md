@@ -130,6 +130,10 @@ PUT: replace status of the specified Deployment
 
 These URIs provide examples of the various actions that can be performed on a deployment resource within the Kubernetes API. When creating an openAPI policy for Sveltos to use, it is important to ensure that the paths defined in the policy align with the schema illustrated above. This will help maintain consistency and compatibility with the expected URI structure for deploying and managing resources within Kubernetes.
 
+
+![Add-on constraints in action](assets/addon_constraint.gif)
+
+
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
