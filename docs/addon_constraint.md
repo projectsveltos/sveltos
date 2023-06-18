@@ -1,5 +1,5 @@
 ---
-title: Kubernetes add-on constraint - Project Sveltos
+title: Sveltos - Kubernetes Add-on Constraint Controller | Load and Enforce Add-on Constraint
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 tags:
     - Kubernetes
