@@ -11,7 +11,7 @@ authors:
     - Gianluca Mardente
 ---
 
-# Deploy add-ons
+# Deploy Kubernetes add-ons
 
 The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action (see [install](install.md) section first).
 
