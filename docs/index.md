@@ -1,5 +1,5 @@
 ---
-title: Kubernetes add-on controller
+title: Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons
 description: Sveltos is a lightweight application that simplifies the deployment and management of add-ons in Kubernetes clusters. With Sveltos Kubernetes add-on controller, automate the deployment process and ensure consistency across your cluster environment.
 tags:
     - Kubernetes
@@ -17,6 +17,8 @@ authors:
 <a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
 
 [<img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo">](https://github.com/projectsveltos "Manage Kubernetes add-ons")
+
+<h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
 
 Are you struggling to manage Kubernetes add-ons across multiple clusters on different cloud providers or infrastructures? You're not alone! But we have great news - [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is here to help.
 
