@@ -1,6 +1,6 @@
 ---
-title: Kubernetes add-ons management for tens of clusters
-description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of kubernetes cluster add-ons.
+title: Kubernetes add-on controller
+description: Sveltos is a lightweight application that simplifies the deployment and management of add-ons in Kubernetes clusters. With Sveltos Kubernetes add-on controller, automate the deployment process and ensure consistency across your cluster environment.
 tags:
     - Kubernetes
     - add-ons
@@ -20,7 +20,7 @@ authors:
 
 Are you struggling to manage Kubernetes add-ons across multiple clusters on different cloud providers or infrastructures? You're not alone! But we have great news - [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is here to help.
 
-Sveltos is a lightweight application designed to manage hundreds of clusters effortlessly. With its declarative APIs, you can easily deploy Kubernetes add-ons across multiple clusters with ease. Plus, Sveltos provides platform admins with a solution for multi-tenancy, making it even easier to manage permissions for tenant admins.
+Sveltos is a lightweight application designed to manage hundreds of clusters effortlessly. Sveltos Kubernetes add-on controller simplifies the deployment and management of add-ons in Kubernetes clusters. With Sveltos controller, you can easily automate the deployment process and ensure consistency across your cluster environment. Plus, Sveltos provides platform admins with a solution for multi-tenancy, making it even easier to manage permissions for tenant admins.
 
 But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
 
