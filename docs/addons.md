@@ -1,5 +1,5 @@
 ---
-title: Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons
+title: Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 tags:
     - Kubernetes
@@ -13,7 +13,7 @@ authors:
     - Gianluca Mardente
 ---
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a lightweight application designed to manage Kubernetes add-ons in hundreds of clusters with ease. It does so by providing declarative APIs, making it a breeze to manage your clusters and stay on top of your game.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a simple, yet powerful Kubernetes add-on controller that makes it easy to manage your add-ons. It does so by providing declarative APIs, making it a breeze to manage your clusters and stay on top of your game.
 
 Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters, but it doesn't stop there. You can easily register any other cluster (like GKE, for instance) with Sveltos and manage Kubernetes add-ons on all clusters seamlessly.
 
