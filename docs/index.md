@@ -28,19 +28,38 @@ But that's not all! Sveltos not only helps you scale the number of clusters you 
 
 Say goodbye to the headache of managing Kubernetes add-ons across multiple clusters and hello to Sveltos - your new best friend in cluster management!
 
-## Features List
-1. Kubernetes [addon distribution](addons.md) across multiple clusters. Add-ons can be expressed as Helm charts, resources assembled with Kustomize, resource YAMLs. [Carvel ytt](ytt_extension.md) and [Jsonnet](jsonnet_extension.md) are also supported as an extension;
-2. [Templates](template.md): express add-ons as templates and have those instantiated reading values from management cluster;
-3. [Addon constraints](addon_constraint.md): OpenAPI can be utilized to define custom add-on constraints. When deploying add-ons with Sveltos, these constraints will be enforced by Sveltos to ensure compliance;
-4. [event driven framework](addon_event_deployment.md) to deploy add-ons as response to events in managed clusters. Event can be defined in the form of Lua script;
-5. Sveltos' event driven framework can also be configured for [cross-cluster configuration](https://projectsveltos.github.io/sveltos/addon_event_deployment/#cross-clusters);
-6. [configuration drift detection](configuration_drift.md): when Sveltos detects a configuration drift, it re-syncs the cluster state back to the state described in the management cluster;
-7. [Dry run](dryrun.md) to preview effect of a change; 
-8. [Notification](notifications.md): Sveltos can be configured to send notifications when for instance all add-ons are deployed in a cluster. Custom health checks can be passed to Sveltos in the form of [Lua script](notifications.md#healthcheck-crd);
-9. Kubernetes [cluster classification](labels_management.md) and automatic label management based on cluster runtime states;
-10. [Multi-tenancy](multi-tenancy.md) allowing platform admin to easily grant permissions to tenant admins and have Sveltos enforces those;
-11. [Techsupport](techsupport.md): collect tech support from managed clusters;
-12. [Snapshot and Rollback](snapshot.md).
+## Add-on Distribution
+
+* Deploy [add-ons](addons.md) across multiple clusters
+* Support for Helm charts, Kustomize, YAML, [Carvel ytt](ytt_extension.md) and [Jsonnet](jsonnet_extension.md)
+* Configurable deployment strategies
+* Automatic rollbacks
+
+## Templates
+
+* Create [templates](template.md) to express add-ons
+* Use templates to instantiate add-ons from management cluster values
+
+## Addon Constraints
+
+* Define custom [add-on constraints](addon_constraint.md)
+* Enforce constraints when deploying add-ons
+
+## Event Driven Framework
+
+* Deploy add-ons in response to [events](addon_event_deployment.md)
+* Define events in Lua scripts
+* Configure framework for [cross-cluster configuration](https://projectsveltos.github.io/sveltos/addon_event_deployment/#cross-clusters)
+
+## Other Features
+
+* [Configuration drift detection](configuration_drift.md)
+* [Dry run](dryrun.md)
+* [Notifications](notifications.md)
+* Kubernetes [cluster classification](labels_management.md)
+* [Multi-tenancy](multi-tenancy.md)
+* [Techsupport](techsupport.md)
+* [Snapshot and rollback](snapshot.md)
 
 ![Sveltos addons](assets/addons.png)
 
@@ -61,6 +80,8 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 11. [ClusterHealthCheck](notifications.md#clusterhealthcheck) is the CRD used to configure Sveltos to send notifications when certain conditions happen.
 
 ## 😻 Contributing to projectsveltos
+We love to hear from our community!
+
 We believe in the power of community and collaboration, and that's where you come in!
 
 We would love to hear your suggestions, contributions, and feedback to make our project even better! Whether you want to report a bug, request a new feature, or just stay up-to-date with the latest news, we've got you covered.
