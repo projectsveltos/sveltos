@@ -13,7 +13,7 @@ authors:
 ---
 <a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="octicon-star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
 
-## Here is a list of article on Sveltos:
+## Here is a list of articles on Sveltos:
 
 1. [Deploy Kubernetes add-ons](https://medium.com/@gianluca.mardente/sveltos-a-solution-to-deploy-kubernetes-add-ons-in-clusterapi-powered-clusters-b9d4b48fc819)
 2. [Sveltos and Kustomize](https://dev.to/gianlucam76/kubernetes-add-ons-management-introducing-kustomize-integration-with-sveltos-2cpn)
