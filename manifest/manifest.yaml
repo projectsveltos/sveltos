@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: accessrequests.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -127,22 +126,21 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
-  name: addonconstraints.lib.projectsveltos.io
+    controller-gen.kubebuilder.io/version: v0.12.0
+  name: addoncompliances.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
   names:
-    kind: AddonConstraint
-    listKind: AddonConstraintList
-    plural: addonconstraints
-    singular: addonconstraint
+    kind: AddonCompliance
+    listKind: AddonComplianceList
+    plural: addoncompliances
+    singular: addoncompliance
   scope: Cluster
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: AddonConstraint is the Schema for the AddonConstraint API
+        description: AddonCompliance is the Schema for the AddonCompliance API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -157,7 +155,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: AddonConstraintSpec defines the desired state of AddonConstraint
+            description: AddonComplianceSpec defines the desired state of AddonCompliance
             properties:
               clusterRefs:
                 description: ClusterRefs identifies clusters to associate to.
@@ -226,6 +224,41 @@ spec:
               clusterSelector:
                 description: ClusterSelector identifies clusters to associate to.
                 type: string
+              luaValidationRefs:
+                description: LuaValidationRefs is a list of validations defined in
+                  Lua language. In the matching clusters, add-ons will be deployed
+                  only if all validations pass.
+                items:
+                  properties:
+                    kind:
+                      description: 'Kind of the resource. Supported kinds are: - flux
+                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
+                      enum:
+                      - GitRepository
+                      - OCIRepository
+                      - Bucket
+                      - ConfigMap
+                      - Secret
+                      type: string
+                    name:
+                      description: Name of the referenced resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: Namespace of the referenced resource.
+                      minLength: 1
+                      type: string
+                    path:
+                      description: Path to the directory containing the openapi validations.
+                        Defaults to 'None', which translates to the root path of the
+                        SourceRef. Ignored for ConfigMap/Secret.
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  - namespace
+                  type: object
+                type: array
               openAPIValidationRefs:
                 description: OpenAPIValidationRefs is a list of OpenAPI validations.
                   In the matching clusters, add-ons will be deployed only if all validations
@@ -263,12 +296,19 @@ spec:
                 type: array
             type: object
           status:
-            description: AddonConstraintStatus defines the observed state of AddonConstraint
+            description: AddonComplianceStatus defines the observed state of AddonCompliance
             properties:
               failureMessage:
                 description: FailureMessage provides more information if an error
                   occurs.
                 type: string
+              luaValidations:
+                additionalProperties:
+                  format: byte
+                  type: string
+                description: LuaValidations contains all validations collected from
+                  all existing referenced resources
+                type: object
               matchingClusters:
                 description: MatchingClusterRefs reference all the clusters currently
                   matching ClusterSelector
@@ -353,8 +393,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: classifierreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -432,8 +471,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: classifiers.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -747,8 +785,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: clusterhealthchecks.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1129,8 +1166,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1174,7 +1210,7 @@ spec:
                         configuration applies to.
                       enum:
                       - AddonManager
-                      - AddonConstraintManager
+                      - AddonComplianceManager
                       - Classifier
                       - ClassifierAgent
                       - SveltosClusterManager
@@ -1207,8 +1243,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: eventreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1353,8 +1388,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: eventsources.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1445,8 +1479,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: healthcheckreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1579,8 +1612,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: healthchecks.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1667,8 +1699,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: resourcesummaries.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1935,8 +1966,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: rolerequests.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2164,8 +2194,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2229,7 +2258,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: clusterconfigurations.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -2433,7 +2462,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: clusterprofiles.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -2839,7 +2868,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: clusterreports.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -3130,7 +3159,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: clustersummaries.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -3818,7 +3847,7 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addonconstraints
+  - addoncompliances
   verbs:
   - get
   - list
@@ -3826,7 +3855,7 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addonconstraints/status
+  - addoncompliances/status
   verbs:
   - get
   - list
@@ -4140,19 +4169,19 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: addon-constraint-manager
+    control-plane: addon-compliance-manager
   name: projectsveltos
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: addon-constraint-manager
+  name: addon-compliance-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: addon-constraint-leader-election-role
+  name: addon-compliance-leader-election-role
   namespace: projectsveltos
 rules:
 - apiGroups:
@@ -4190,7 +4219,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-constraint-manager-role
+  name: addon-compliance-manager-role
 rules:
 - apiGroups:
   - ""
@@ -4253,7 +4282,7 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addonconstraints
+  - addoncompliances
   verbs:
   - create
   - delete
@@ -4265,13 +4294,13 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addonconstraints/finalizers
+  - addoncompliances/finalizers
   verbs:
   - update
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addonconstraints/status
+  - addoncompliances/status
   verbs:
   - get
   - patch
@@ -4354,7 +4383,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-constraint-metrics-reader
+  name: addon-compliance-metrics-reader
 rules:
 - nonResourceURLs:
   - /metrics
@@ -4364,7 +4393,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-constraint-proxy-role
+  name: addon-compliance-proxy-role
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -4382,41 +4411,41 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: addon-constraint-leader-election-rolebinding
+  name: addon-compliance-leader-election-rolebinding
   namespace: projectsveltos
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: addon-constraint-leader-election-role
+  name: addon-compliance-leader-election-role
 subjects:
 - kind: ServiceAccount
-  name: addon-constraint-manager
+  name: addon-compliance-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-constraint-manager-rolebinding
+  name: addon-compliance-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-constraint-manager-role
+  name: addon-compliance-manager-role
 subjects:
 - kind: ServiceAccount
-  name: addon-constraint-manager
+  name: addon-compliance-manager
   namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-constraint-proxy-rolebinding
+  name: addon-compliance-proxy-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-constraint-proxy-role
+  name: addon-compliance-proxy-role
 subjects:
 - kind: ServiceAccount
-  name: addon-constraint-manager
+  name: addon-compliance-manager
   namespace: projectsveltos
 ---
 apiVersion: v1
@@ -4445,15 +4474,15 @@ data:
     # leaderElectionReleaseOnCancel: true
 kind: ConfigMap
 metadata:
-  name: addon-constraint-manager-config
+  name: addon-compliance-manager-config
   namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: addon-constraint-manager
-  name: addon-constraint-manager-metrics-service
+    control-plane: addon-compliance-manager
+  name: addon-compliance-manager-metrics-service
   namespace: projectsveltos
 spec:
   ports:
@@ -4462,26 +4491,26 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    control-plane: addon-constraint-manager
+    control-plane: addon-compliance-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    control-plane: addon-constraint-manager
-  name: addon-constraint-manager
+    control-plane: addon-compliance-manager
+  name: addon-compliance-manager
   namespace: projectsveltos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      control-plane: addon-constraint-manager
+      control-plane: addon-compliance-manager
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
-        control-plane: addon-constraint-manager
+        control-plane: addon-compliance-manager
     spec:
       containers:
       - args:
@@ -4491,7 +4520,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-constraint-controller-amd64:main
+        image: projectsveltos/addon-compliance-controller-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4535,7 +4564,7 @@ spec:
             - ALL
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: addon-constraint-manager
+      serviceAccountName: addon-compliance-manager
       terminationGracePeriodSeconds: 10
 ---
 apiVersion: v1
@@ -4592,7 +4621,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: access-manager-role
 rules:
 - apiGroups:
@@ -5050,7 +5078,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: sc-manager-role
 rules:
 - apiGroups:
@@ -5343,7 +5370,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: hc-manager-role
 rules:
 - apiGroups:
@@ -5697,8 +5723,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: eventbasedaddons.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -6183,7 +6208,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: event-manager-role
 rules:
 - apiGroups:
@@ -6578,7 +6602,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: classifier-manager-role
 rules:
 - apiGroups:
