@@ -17,14 +17,14 @@ make docker-build
 docker --config ${config} push projectsveltos/addon-controller-amd64:${branch}  
 cd ../../; rm -rf tmp
 
-# addon-constraint-controller
-echo "processing addon-constraint-controller"
+# addon-compliance-controller
+echo "processing addon-compliance-controller"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-constraint-controller.git
-cd addon-constraint-controller
+git clone git@github.com:projectsveltos/addon-compliance-controller.git
+cd addon-compliance-controller
 git checkout ${branch}
 make docker-build
-docker --config ${config} push projectsveltos/addon-constraint-controller-amd64:${branch}  
+docker --config ${config} push projectsveltos/addon-compliance-controller-amd64:${branch}  
 cd ../../; rm -rf tmp
 
 # classifier

@@ -40,10 +40,10 @@ Say goodbye to the headache of managing Kubernetes add-ons across multiple clust
 * Create [templates](template.md) to express add-ons
 * Use templates to instantiate add-ons from management cluster values
 
-## Addon Constraints
+## Addon Compliances
 
-* Define custom [add-on constraints](addon_constraint.md)
-* Enforce constraints when deploying add-ons
+* Define custom [add-on compliances](addon_compliance.md)
+* Enforce compliances when deploying add-ons
 
 ## Event Driven Framework
 

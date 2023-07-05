@@ -37,11 +37,11 @@ do
 done
 cd ../../; rm -rf tmp
 
-# addon-constraint-controller
-echo "processing addon-constraint-controller"
+# addon-compliance-controller
+echo "processing addon-compliance-controller"
 rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-constraint-controller.git
-cd addon-constraint-controller
+git clone git@github.com:projectsveltos/addon-compliance-controller.git
+cd addon-compliance-controller
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
