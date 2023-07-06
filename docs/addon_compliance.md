@@ -362,5 +362,5 @@ If you want to validate your Lua policies:
 4. run `make test` from repo directory.
 
 
-Running `make test` will initiate the validation process, which thoroughly tests your Lua policies against the provided resource files. This procedure ensures that your defined policy is not only syntactically correct but also functionally accurate. By executing the validation tests, you can gain confidence in the correctness and reliability of your OpenAPI policies.
+Running `make test` will initiate the validation process, which thoroughly tests your Lua policies against the provided resource files. This procedure ensures that your defined policy is not only syntactically correct but also functionally accurate. By executing the validation tests, you can gain confidence in the correctness and reliability of your policies written in Lua.
 By following these steps, you can easily validate your Lua policies using the Sveltos addon-controller repository.
