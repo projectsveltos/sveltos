@@ -154,17 +154,17 @@ The Service will be assigned an IP address
 
 ```yaml
 apiVersion: v1
-  kind: Service
-  metadata:
-    name: my-lb-service
-    namespace: test
-    ...
-  spec:
-    ...
-  status:
-    loadBalancer:
-      ingress:
-      - ip: 34.172.32.172
+kind: Service
+metadata:
+  name: my-lb-service
+  namespace: test
+  ...
+spec:
+  ...
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.172.32.172
 ```
  
 and it will match the EventSource. As result Sveltos will deploy the selector-less Service and Endpoints in the other cluster, the cluster-api provisioned cluster. 

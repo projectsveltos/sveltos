@@ -1,5 +1,5 @@
 ---
-title: Notifications - Projectsveltos
+title: Viewing resources - Projectsveltos
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 tags:
     - Kubernetes
@@ -13,32 +13,20 @@ authors:
     - Gianluca Mardente
 ---
 
-Projectsveltos CLI can be used to display information about resorces in managed clusters.
+While managing multiple clusters, it is important to have a central location for viewing a summary of resources in all To effectively manage multiple clusters, having a centralized location to view a summary of resources is crucial. Here are a few reasons why:
 
-For instance, to display information about all deployments in each managed cluster, just create a __ClusterHealthCheck__ and a __HealthCheck__.
-Notice that:
+1. Centralized Visibility: A central location provides a unified view of resource summaries, allowing you to monitor and visualize the health of all your clusters in one place. This simplifies issue detection, trend identification, and problem troubleshooting across multiple clusters.
+2. Efficient Troubleshooting and Issue Resolution: With a centralized resource view, you can swiftly identify the affected cluster when an issue arises, compare it with others, and narrow down potential causes. This comprehensive overview of resource states and dependencies enables efficient troubleshooting and quicker problem resolution.
+3. Enhanced Security and Compliance: Centralized resource visibility strengthens security and compliance monitoring. It enables you to monitor cluster configurations, identify security vulnerabilities, and ensure consistent adherence to compliance standards across all clusters. You can easily track and manage access controls, network policies, and other security-related aspects from a single location.
 
-- HealthCheck instance contains a Lua script which examine all deployments in managed cluster;
-- __ClusterHealthCheck__ clusterSelector field allows to filter on which managed clusters deployments need to be examined.
- 
+Using Projectsveltos can facilitate the display of information about resources in managed clusters.
+
+## Display deployments from managed clusters
+
+To showcase information about deployments in each managed cluster, you can utilize a combination of a __ClusterHealthCheck__ and a __HealthCheck__. Here's how you can achieve this:
+
+1. Create a HealthCheck instance that contains a Lua script responsible for examining all deployments in the managed cluster. In the example below, deployments with a difference between the number of available replicas and requested replicas are identified as degraded:
 ```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterHealthCheck
-metadata:
-  name: production
-spec:
-  clusterSelector: env=fv
-  livenessChecks:
-  - name: deployment
-    type: HealthCheck
-    livenessSourceRef:
-      kind: HealthCheck
-      apiVersion: lib.projectsveltos.io/v1alpha1
-      name: deployment-replicas
-  notifications:
-  - name: event
-    type: KubernetesEvent
----
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
@@ -75,8 +63,31 @@ spec:
      return hs
    end
 ```
+ 
+ 2. use the ClusterHealthCheck and set the clusterSelector field to filter which managed clusters' deployments should be examined. In the following example, all managed clusters that match the cluster label selector env=fv are considered:
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: ClusterHealthCheck
+metadata:
+  name: production
+spec:
+  clusterSelector: env=fv
+  livenessChecks:
+  - name: deployment
+    type: HealthCheck
+    livenessSourceRef:
+      kind: HealthCheck
+      apiVersion: lib.projectsveltos.io/v1alpha1
+      name: deployment-replicas
+  notifications:
+  - name: event
+    type: KubernetesEvent
 
-   then we can use __sveltosctl show resources__ command to see in a single place information from resources from each managed clusters matching the __ClusterHealthCheck__ clusterSelector field.
+```
+
+By following these steps, you can create a HealthCheck instance with a Lua script to evaluate deployments in a managed cluster and a ClusterHealthCheck instance to filter the clusters that should be examined based on their labels. This approach enables you to display information about deployments across specific managed clusters effectively.
+
+To obtain a consolidated view of resource information, __sveltosctl show resources__ command can be used. Here's an example of the command output:
 
 ```bash
 kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources --kind=deployment 
@@ -126,28 +137,17 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources -
 +-----------------------------+--------------------------+----------------+-----------------------------------------+----------------------------+
 ```
 
-It is possible to filter by cluster and/or resource
+Here are the available options to filter what show resources will display:
 
 ```bash
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources --help                                                                  
-Usage:
-  sveltosctl show resources [options] [--group=<group>] [--kind=<kind>] [--namespace=<namespace>] 
-  [--cluster-namespace=<name>] [--cluster=<name>] [--full] [--verbose]
-
-     --group=<group>              Show Kubernetes resources deployed in clusters matching this group.
-                                  If not specified all groups are considered.
-     --kind=<kind>                Show Kubernetes resources deployed in clusters matching this Kind.
-                                  If not specified all kinds are considered.
-     --namespace=<namespace>      Show Kubernetes resources in this namespace. 
-                                  If not specified all namespaces are considered.
-     --cluster-namespace=<name>   Show Kubernetes resources in clusters in this namespace.
-                                  If not specified all namespaces are considered.
-     --cluster=<name>             Show Kubernetes resources in cluster with name.
-                                  If not specified all cluster names are considered.
-     --full                       If specified, full resources are printed
+--group=<group>: Show Kubernetes resources deployed in clusters matching this group. If not specified, all groups are considered.
+--kind=<kind>: Show Kubernetes resources deployed in clusters matching this Kind. If not specified, all kinds are considered.
+--namespace=<namespace>: Show Kubernetes resources in this namespace. If not specified, all namespaces are considered.
+--cluster-namespace=<name>: Show Kubernetes resources in clusters in this namespace. If not specified, all namespaces are considered.
+--cluster=<name>: Show Kubernetes resources in the cluster with the specified name. If not specified, all cluster names are considered.
 ```
 
-Using the option __--full__ it is possible to display the full resources
+Additionally, using the __--full option__, you can display the complete details of the resources:
 
 ```bash
 kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources --full
@@ -161,3 +161,104 @@ Object:  object:
     creationTimestamp: "2023-07-11T14:03:15Z"
     ...
 ``` 
+
+## Display Kyverno PolicyReports
+
+In this example we will define an HealthCheck containing a Lua script that will:
+
+1. examine all Kyverno PolicyReports;
+2. will report all resources in violation of the policy and rule. 
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: HealthCheck
+metadata:
+ name: deployment-replicas
+spec:
+ collectResources: true
+ group: "apps"
+ version: v1
+ kind: Deployment
+ script: |
+   function evaluate()
+     hs = {}
+     hs.status = "Healthy"
+     hs.message = ""
+     for i, result in ipairs(obj.results) do
+       if result.result == "fail" then
+          hs.status = "Degraded"
+          for j, r in ipairs(result.resources) do
+             hs.message = hs.message .. " " .. r.namespace .. "/" .. r.name
+          end
+       end
+     end
+     if hs.status == "Healthy" then
+       hs.ignore = true
+     end
+     return hs
+   end
+```
+
+As before, we also need to have a ClusterHealthCheck instance to instruct Sveltos which clusters to watch.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: ClusterHealthCheck
+metadata:
+  name: production
+spec:
+  clusterSelector: env=fv
+  livenessChecks:
+  - name: kyverno-policy-reports
+    type: HealthCheck
+    livenessSourceRef:
+      kind: HealthCheck
+      apiVersion: lib.projectsveltos.io/v1alpha1
+      name: kyverno-policy-reports
+  notifications:
+  - name: event
+    type: KubernetesEvent
+```
+
+assuming we have deployed an nginx deployment using __latest__ in one of our managed cluster[^1]
+
+```bash
+ubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources  
++-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
+|               CLUSTER               |              GVK               | NAMESPACE |           NAME           |                 MESSAGE                 |
++-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
+| default/sveltos-management-workload | wgpolicyk8s.io/v1alpha2,       | nginx     | cpol-disallow-latest-tag |  nginx/nginx-deployment                 |
+|                                     | Kind=PolicyReport              |           |                          | nginx/nginx-deployment-6b7f675859       |
+|                                     |                                |           |                          | nginx/nginx-deployment-6b7f675859-fp6tm |
+|                                     |                                |           |                          | nginx/nginx-deployment-6b7f675859-kkft8 |
++-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
+```
+
+[^1]:
+To deploy Kyverno and a ClusterPolicy in each managed cluster matching label selector __env=fv__ we can use this ClusterProfile
+```yaml
+  apiVersion: config.projectsveltos.io/v1alpha1
+  kind: ClusterProfile
+  metadata:
+    name: kyverno
+  spec:
+    clusterSelector: env=fv
+    helmCharts:
+    - chartName: kyverno/kyverno
+      chartVersion: v3.0.1
+      helmChartAction: Install
+      releaseName: kyverno-latest
+      releaseNamespace: kyverno
+      repositoryName: kyverno
+      repositoryURL: https://kyverno.github.io/kyverno/
+    policyRefs:
+    - deploymentType: Remote
+      kind: ConfigMap
+      name: kyverno-latest
+      namespace: default
+```
+where ConfigMap contains [this](https://kyverno.io/policies/best-practices/disallow-latest-tag/disallow-latest-tag/) Kyverno ClusterPolicy
+```bash
+wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
+kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
+```
