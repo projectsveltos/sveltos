@@ -78,8 +78,8 @@ spec:
 
    then we can use __sveltosctl show resources__ command to see in a single place information from resources from each managed clusters matching the __ClusterHealthCheck__ clusterSelector field.
 
-   ```bash
-   kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources --kind=deployment 
+```bash
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources --kind=deployment 
 +-----------------------------+--------------------------+----------------+-----------------------------------------+----------------------------+
 |           CLUSTER           |           GVK            |   NAMESPACE    |                  NAME                   |          MESSAGE           |
 +-----------------------------+--------------------------+----------------+-----------------------------------------+----------------------------+
