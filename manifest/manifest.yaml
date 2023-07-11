@@ -1579,6 +1579,12 @@ spec:
                           type: string
                       type: object
                       x-kubernetes-map-type: atomic
+                    resource:
+                      description: If HealthCheck Spec.CollectResources is set to
+                        true, resource will be collected and contained in the Resource
+                        field.
+                      format: byte
+                      type: string
                   required:
                   - healthStatus
                   - objectRef
@@ -1643,6 +1649,11 @@ spec:
           spec:
             description: HealthCheckSpec defines the desired state of HealthCheck
             properties:
+              collectResources:
+                default: false
+                description: CollectResources indicates whether matching resources
+                  need to be collected and added to EventReport.
+                type: boolean
               group:
                 description: Group of the resource deployed in the Cluster.
                 type: string
