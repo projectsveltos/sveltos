@@ -13,7 +13,7 @@ authors:
     - Gianluca Mardente
 ---
 
-While managing multiple clusters, it is important to have a central location for viewing a summary of resources in all To effectively manage multiple clusters, having a centralized location to view a summary of resources is crucial. Here are a few reasons why:
+Managing multiple clusters effectively requires a centralized location for viewing a summary of resources. Here are some key reasons why this is important:
 
 1. Centralized Visibility: A central location provides a unified view of resource summaries, allowing you to monitor and visualize the health of all your clusters in one place. This simplifies issue detection, trend identification, and problem troubleshooting across multiple clusters.
 2. Efficient Troubleshooting and Issue Resolution: With a centralized resource view, you can swiftly identify the affected cluster when an issue arises, compare it with others, and narrow down potential causes. This comprehensive overview of resource states and dependencies enables efficient troubleshooting and quicker problem resolution.
