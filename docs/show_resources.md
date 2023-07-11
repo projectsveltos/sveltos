@@ -223,7 +223,7 @@ spec:
 assuming we have deployed an nginx deployment using __latest__ in one of our managed cluster[^1]
 
 ```bash
-ubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources  
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show resources  
 +-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
 |               CLUSTER               |              GVK               | NAMESPACE |           NAME           |                 MESSAGE                 |
 +-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
