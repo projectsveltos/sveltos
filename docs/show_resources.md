@@ -21,6 +21,8 @@ Managing multiple clusters effectively requires a centralized location for viewi
 
 Using Projectsveltos can facilitate the display of information about resources in managed clusters.
 
+![Sveltosctl show resources](assets/show_resources.png)
+
 ## Display deployments replicas from managed clusters
 
 To showcase information about deployments in each managed cluster, you can utilize a combination of a __ClusterHealthCheck__ and a __HealthCheck__. Here's how you can achieve this:
