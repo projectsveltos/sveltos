@@ -21,7 +21,7 @@ Managing multiple clusters effectively requires a centralized location for viewi
 
 Using Projectsveltos can facilitate the display of information about resources in managed clusters.
 
-## Display deployments from managed clusters
+## Display deployments replicas from managed clusters
 
 To showcase information about deployments in each managed cluster, you can utilize a combination of a __ClusterHealthCheck__ and a __HealthCheck__. Here's how you can achieve this:
 
@@ -161,6 +161,108 @@ Object:  object:
     creationTimestamp: "2023-07-11T14:03:15Z"
     ...
 ``` 
+
+## Display deployments images from managed clusters
+
+Using following __HealthCheck__ instance, Sveltos will collect and display deployment images in each managed cluster
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: HealthCheck
+metadata:
+ name: deployment-replicas
+spec:
+ collectResources: true
+ group: "apps"
+ version: v1
+ kind: Deployment
+ namespace: nginx
+ script: |
+   function evaluate()
+     hs = {}
+     hs.status = "Progressing"
+     hs.message = ""
+     if obj.status ~= nil then
+       if obj.status.availableReplicas ~= nil then
+         if obj.status.availableReplicas == obj.spec.replicas then
+           hs.status = "Healthy"
+         else
+           hs.status = "Progressing"
+         end
+       end
+       if obj.status.unavailableReplicas ~= nil then
+          hs.status = "Degraded"
+       end
+     end
+
+     for i, container in ipairs(obj.spec.template.spec.containers) do
+       hs.message = "Image: " .. container.image
+     end
+     return hs
+   end
+```
+
+```bash
+./sveltosctl show resources  
++-----------------------------+--------------------------+-----------+------------------+---------------------+
+|           CLUSTER           |           GVK            | NAMESPACE |       NAME       |       MESSAGE       |
++-----------------------------+--------------------------+-----------+------------------+---------------------+
+| default/clusterapi-workload | apps/v1, Kind=Deployment | nginx     | nginx-deployment | Image: nginx:1.14.2 |
+| gke/pre-production          |                          | nginx     | nginx-deployment | Image: nginx:latest |
+| gke/production              |                          | nginx     | nginx-deployment | Image: nginx:1.14.2 |
++-----------------------------+--------------------------+-----------+------------------+---------------------+
+```
+
+## Display the names of all the Pods belonging to that Deployment
+
+Using following __HealthCheck__ instance
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: HealthCheck
+metadata:
+ name: pod-in-deployment
+spec:
+ collectResources: true
+ group: ""
+ version: v1
+ kind: Pod
+ script: |
+   function setContains(set, key)
+    return set[key] ~= nil
+   end
+
+   function evaluate()
+     hs = {}
+     hs.status = "Healthy"
+     hs.message = ""
+     hs.ignore = true
+     if obj.metadata.labels ~= nil then
+       if setContains(obj.metadata.labels, "app") then
+         if obj.status.phase == "Running" then
+           hs.ignore = false
+           hs.message = "Deployment: " .. obj.metadata.labels["app"]
+         end
+       end
+     end
+     return hs
+   end
+```
+
+```bash
+./sveltosctl show resources --kind=pod --namespace=nginx
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+|           CLUSTER           |      GVK      | NAMESPACE |               NAME                |      MESSAGE      |
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+| default/clusterapi-workload | /v1, Kind=Pod | nginx     | nginx-deployment-85996f8dbd-7tctq | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-85996f8dbd-tz4gd | Deployment: nginx |
+| gke/pre-production          |               | nginx     | nginx-deployment-c4f7848dc-6jtwg  | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-c4f7848dc-trllk  | Deployment: nginx |
+| gke/production              |               | nginx     | nginx-deployment-676cf9b46d-k84pb | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-676cf9b46d-mmbl4 | Deployment: nginx |
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+```
+
 
 ## Display Kyverno PolicyReports
 
