@@ -280,9 +280,9 @@ metadata:
  name: deployment-replicas
 spec:
  collectResources: true
- group: "apps"
- version: v1
- kind: Deployment
+ group: wgpolicyk8s.io
+ version: v1alpha2
+ kind: PolicyReport
  script: |
    function evaluate()
      hs = {}
