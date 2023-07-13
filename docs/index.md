@@ -53,6 +53,7 @@ Say goodbye to the headache of managing Kubernetes add-ons across multiple clust
 
 ## Other Features
 
+* [Centralised Resource Display for Multiple Kubernetes Clusters](show_resources.md)
 * [Configuration drift detection](configuration_drift.md)
 * [Dry run](dryrun.md)
 * [Notifications](notifications.md)
