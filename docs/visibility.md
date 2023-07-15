@@ -13,17 +13,17 @@ authors:
 
 [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
 
-### show features
-*show features* can be used to display list of resources/helm releases deployed in each clusters by Sveltos. 
+### show addons
+*show addons* can be used to display list of Kubernetes add-ons deployed in each clusters by Sveltos. 
 Displayed information contains:
 
-- the CAPI Cluster in the form namespace/name;
+- the CAPI/Sveltos Cluster in the form namespace/name;
 - resource/helm chart information;
 - time resource/helm chart was deployed;
 - ClusterProfiles that caused resource/helm chart to be deployed in the cluster.
 
 ```
-./bin/sveltosctl show features
+./bin/sveltosctl show addons
 +-------------------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 |               CLUSTER               | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILE |
 +-------------------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -32,14 +32,14 @@ Displayed information contains:
 +-------------------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 ```
 
-show features command allows filtering by:
+show addons command allows filtering by:
 
 - clusters' namespace
 - clusters' name
 - ClusterProfile
 
 ```
-./bin/sveltosctl show features --help
+./bin/sveltosctl show addons --help
 Usage:
   sveltosctl show features [options] [--namespace=<name>] [--cluster=<name>] [--clusterprofile=<name>] [--verbose]
 
