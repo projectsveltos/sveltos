@@ -25,7 +25,7 @@ Sveltos enables the definition of compliance requirements for a group of cluster
 1. [OpenAPI](https://swagger.io/specification/): OpenAPI is a specification for describing APIs. Sveltos can use OpenAPI to define a schema for the APIs exposed by Kubernetes add-ons. This schema can then be used to validate incoming requests and ensure that the data is correctly formatted and structured.
 2. [Lua](https://www.lua.org): Lua is a scripting language that can be used to execute arbitrary code. Sveltos can use Lua to write custom compliance checks. For example, Sveltos could be configured to check that all deployments have a corresponding HorizontalPodAutoscaler.
 
-By combining OpenAPI and Lua, Sveltos provides a comprehensive solution for enforcing Kubernetes add-on compliance. This helps organizations in ensuring that their Kubernetes clusters are both secure and compliant with industry regulations and standards.
+By combining OpenAPI and Lua, Sveltos provides a comprehensive solution for enforcing Kubernetes add-on compliance[^1]. This helps organizations in ensuring that their Kubernetes clusters are both secure and compliant with industry regulations and standards.
 
 Here are some additional benefits of using Sveltos to enforce Kubernetes add-on compliance:
 
@@ -364,3 +364,5 @@ If you want to validate your Lua policies:
 
 Running `make test` will initiate the validation process, which thoroughly tests your Lua policies against the provided resource files. This procedure ensures that your defined policy is not only syntactically correct but also functionally accurate. By executing the validation tests, you can gain confidence in the correctness and reliability of your policies written in Lua.
 By following these steps, you can easily validate your Lua policies using the Sveltos addon-controller repository.
+
+[^1]: If your clusters use mutating webhooks, you should carefully consider whether Sveltos add-on compliance will be effective for you. This is because Sveltos cannot see what mutating webhooks do, so it cannot guarantee that your clusters will be compliant. 
