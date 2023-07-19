@@ -48,6 +48,25 @@ Usage:
      --clusterprofile=<name> Show features deployed because of this clusterprofile. If not specified all clusterprofile names are considered.
 ```
 
+### show resources
+
+Using Projectsveltos can facilitate the display of information about resources in managed clusters.
+See this [section](show_resources.md) for more details.
+
+```bash
+./sveltosctl show resources --kind=pod --namespace=nginx
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+|           CLUSTER           |      GVK      | NAMESPACE |               NAME                |      MESSAGE      |
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+| default/clusterapi-workload | /v1, Kind=Pod | nginx     | nginx-deployment-85996f8dbd-7tctq | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-85996f8dbd-tz4gd | Deployment: nginx |
+| gke/pre-production          |               | nginx     | nginx-deployment-c4f7848dc-6jtwg  | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-c4f7848dc-trllk  | Deployment: nginx |
+| gke/production              |               | nginx     | nginx-deployment-676cf9b46d-k84pb | Deployment: nginx |
+|                             |               | nginx     | nginx-deployment-676cf9b46d-mmbl4 | Deployment: nginx |
++-----------------------------+---------------+-----------+-----------------------------------+-------------------+
+```
+
 ### show usage
 
 *show usage* displays following information:
