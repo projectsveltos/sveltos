@@ -2012,9 +2012,16 @@ spec:
                 description: ClusterSelector identifies clusters where permissions
                   requestes in this instance will be granted
                 type: string
+              expirationSeconds:
+                description: ExpirationSeconds is the requested duration of validity
+                  of the TokenRequest associated to ServiceAccount. If not specified,
+                  default value is used
+                format: int64
+                type: integer
               roleRefs:
-                description: PolicyRefs references all the ConfigMaps containing kubernetes
-                  Roles/ClusterRoles that need to be deployed in the matching clusters.
+                description: RoleRefs references all the Secret/ConfigMaps containing
+                  kubernetes Roles/ClusterRoles that need to be deployed in the matching
+                  clusters.
                 items:
                   description: PolicyRef specifies a resource containing one or more
                     policy to deploy in matching Clusters.
