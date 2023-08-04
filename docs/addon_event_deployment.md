@@ -44,7 +44,7 @@ spec:
  group: ""
  version: "v1"
  kind: "Service"
- labelsFilters:
+ labelFilters:
  - key: sveltos
    operation: Equal
    value: fv
