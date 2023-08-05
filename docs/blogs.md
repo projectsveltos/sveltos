@@ -30,7 +30,7 @@ authors:
 
 ## Here is a list of videos on Sveltos:
 
-1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.linkedin.com/events/hands-ontutorialofprojectsvelto7092879560484024320/theater/)
+1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
 2. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
 3. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
 4. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
