@@ -28,7 +28,7 @@ authors:
 11. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
 12. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 
-## Here is a list of YouTube videos on Sveltos:
+## Here is a list of videos on Sveltos:
 
 1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.linkedin.com/events/hands-ontutorialofprojectsvelto7092879560484024320/theater/)
 2. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
