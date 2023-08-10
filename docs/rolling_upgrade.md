@@ -9,6 +9,13 @@ authors:
     - Gianluca Mardente
 ---
 
+ConfigMaps and Secrets are Kubernetes resources designed to decouple configuration details from application code, fostering a clear separation between configuration data and the application logic. This separation yields several compelling advantages, making the practice of mounting ConfigMaps and Secrets a crucial component of Kubernetes deployments.
+
+1. Configuration Flexibility: Applications often require various configuration settings to function optimally across different environments. By mounting ConfigMaps, developers can modify configuration parameters without altering the application code. This not only streamlines the development process but also allows for on-the-fly adjustments, facilitating smooth transitions between development, testing, and production environments.
+2. Enhanced Security: Secrets, such as sensitive authentication tokens, passwords, and API keys, contain critical information that must be safeguarded. Instead of hardcoding these sensitive details directly into the application code, they can be stored as Secrets and mounted into pods only when necessary. This mitigates the risk of inadvertent exposure and helps maintain a higher level of security.
+
+## React to ConfigMap/Secret changes
+
 Sveltos has the capability to monitor changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. This functionality can be activated by simply setting the __reloader__ field to true in the ClusterProfile, as demonstrated in the following example YAML configuration:
 
 ```yaml
