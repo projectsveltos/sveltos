@@ -9,7 +9,7 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos has the capability to monitor changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. To enable this functionality, you can activate the reloader feature by setting the __reloader__ field to true in the ClusterProfile, as demonstrated in the following example YAML configuration:
+Sveltos has the capability to monitor changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. This functionality can be activated by simply setting the __reloader__ field to true in the ClusterProfile, as demonstrated in the following example YAML configuration:
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -44,7 +44,7 @@ sveltosctl show addons
 
 Whenever the ConfigMap that is mounted by a Deployment undergoes modifications, Sveltos will automatically initiate a rolling upgrade process for the Deployment.
 
-![SVeltos: triggering rolling upgrades](assets/rolling_upgrades.gif)
+![Sveltos: triggering rolling upgrades](assets/rolling_upgrades.gif)
 
 By setting the __reloader__ field to true in the ClusterProfile, you enable automated rolling upgrades that ensure the latest configurations are consistently applied to your applications. This significantly simplifies the maintenance and enhancement of your Kubernetes cluster, promoting stability and efficient resource utilization.
 
