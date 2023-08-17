@@ -13,7 +13,20 @@ authors:
 
 # Deploy Kubernetes add-ons
 
-The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action (see [install](install.md) section first).
+The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action. In order to do so you need
+a management cluster with projectsveltos.
+
+If you have a management cluster already, see [install](install.md) section first to deploy projectsveltos.
+
+If you want to try projectsveltos with a test cluster:
+
+``` bash
+1. git clone https://github.com/projectsveltos/addon-controller
+2. make quickstart
+```
+
+Above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos, 
+create a workload cluster powered by clusterAPI.
 
 ## Deploy Helm charts
 
