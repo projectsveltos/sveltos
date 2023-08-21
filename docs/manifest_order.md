@@ -158,6 +158,7 @@ metadata:
 spec:
  sourceClusterSelector: env=fv
  eventSourceName: postgresql-deployment-health
+ stopMatchingBehavior: LeavePolicies
  policyRefs:
  - name: postgresql-job
    namespace: default
@@ -214,6 +215,7 @@ metadata:
 spec:
  sourceClusterSelector: env=fv
  eventSourceName: postgresql-job-completed
+ stopMatchingBehavior: LeavePolicies
  policyRefs:
  - name: todo-app
    namespace: default
@@ -274,6 +276,7 @@ metadata:
 spec:
  sourceClusterSelector: env=fv
  eventSourceName: todo-app-health
+ stopMatchingBehavior: LeavePolicies
  policyRefs:
  - name: todo-insert-data
    namespace: default
