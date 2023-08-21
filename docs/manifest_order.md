@@ -85,6 +85,8 @@ By using events, you can ensure that your application is rolled out in a control
 
 ![Sveltos Resource Deployment Order](assets/sveltos_resource_order.png)
 
+![Sveltos Resource Deployment Order](assets/sveltos_resource_order.gif)
+
 ### Deploy PostgreSQL deployment and service
 
 With ConfigMap __postgresql-deployment__ and __postgresql-service__ containing respectively PostgreSQL Deployment and Service[^1], following ClusterProfile
@@ -277,8 +279,6 @@ spec:
    namespace: default
    kind: ConfigMap
 ```
-
-![Sveltos Resource Deployment Order](assets/sveltos_resource_order.gif)
 
 [^1]: Get PostgreSQL YAML
 ```bash
