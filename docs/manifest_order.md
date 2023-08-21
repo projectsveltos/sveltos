@@ -89,7 +89,7 @@ By using events, you can ensure that your application is rolled out in a control
 
 ### Deploy PostgreSQL deployment and service
 
-With ConfigMap __postgresql-deployment__ and __postgresql-service__ containing respectively PostgreSQL Deployment and Service[^1], following ClusterProfile
+[^5]With ConfigMap __postgresql-deployment__ and __postgresql-service__ containing respectively PostgreSQL Deployment and Service[^1], following ClusterProfile
 will instruct Sveltos to create PostgreSQL deployment and service in all managed clusters with labels __env: fv__.
 
 ```yaml
@@ -308,3 +308,6 @@ kubectl create configmap todo-app --from-file todo_app.yaml
 wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_insert.yaml
 kubectl create configmap todo-insert-data --from-file todo_insert.yaml
 ```
+
+[^5]: The example used in this document is based on and modified from [here](https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/04-syncwaves-hooks.html).
+
