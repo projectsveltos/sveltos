@@ -32,6 +32,7 @@ Say goodbye to the headache of managing Kubernetes add-ons across multiple clust
 
 * Deploy [add-ons](addons.md) across multiple clusters
 * Support for Helm charts, Kustomize, YAML, [Carvel ytt](ytt_extension.md) and [Jsonnet](jsonnet_extension.md)
+* [Deploy Kubernetes Resources in a Controlled and Orderly Manner](https://projectsveltos.github.io/sveltos/manifest_order/)
 * Configurable deployment strategies
 * Automatic rollbacks
 
