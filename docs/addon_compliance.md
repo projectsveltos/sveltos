@@ -20,7 +20,7 @@ Sveltos is a tool that facilitates the deployment of Kubernetes add-ons across m
 
 When programmatically deploying add-ons using Sveltos, it is crucial to ensure that the deployed add-ons adhere to specific compliance requirements. These requirements may differ depending on the cluster, with production clusters typically having more stringent requirements compared to test clusters.
 
-Sveltos enables the definition of compliance requirements for a group of clusters and enforces those requirements for all add-ons deployed to those clusters. It employs two technologies to enforce compliance:
+Sveltos enables the definition of compliance requirements[^2] for a group of clusters and enforces those requirements for all add-ons deployed to those clusters. It employs two technologies to enforce compliance:
 
 1. [OpenAPI](https://swagger.io/specification/): OpenAPI is a specification for describing APIs. Sveltos can use OpenAPI to define a schema for the APIs exposed by Kubernetes add-ons. This schema can then be used to validate incoming requests and ensure that the data is correctly formatted and structured.
 2. [Lua](https://www.lua.org): Lua is a scripting language that can be used to execute arbitrary code. Sveltos can use Lua to write custom compliance checks. For example, Sveltos could be configured to check that all deployments have a corresponding HorizontalPodAutoscaler.
@@ -366,3 +366,5 @@ Running `make test` will initiate the validation process, which thoroughly tests
 By following these steps, you can easily validate your Lua policies using the Sveltos addon-controller repository.
 
 [^1]: If your clusters use mutating webhooks, you should carefully consider whether Sveltos add-on compliance will be effective for you. This is because Sveltos cannot see what mutating webhooks do, so it cannot guarantee that your clusters will be compliant. 
+
+[^2]: Helm charts containing both CustomResourceDefinitions and instances of such CRDs cannot be deployed on clusters where compliance validations where defined. This is because helm dry run won't return full list of resources the helm chart would deploy and so Sveltos won't be able to validate.
