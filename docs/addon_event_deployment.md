@@ -180,6 +180,8 @@ kind: ConfigMap
 metadata:
   name: network-policy
   namespace: default
+  annotations:
+    projectsveltos.io/template: ok
 data:
   networkpolicy.yaml: |
     kind: NetworkPolicy
@@ -434,6 +436,8 @@ kind: ConfigMap
 metadata:
   name: ingress
   namespace: default
+  annotations:
+    projectsveltos.io/template: ok
 data:
   ingress.yaml: |
     apiVersion: networking.k8s.io/v1
@@ -576,6 +580,8 @@ kind: ConfigMap
 metadata:
   name: http-routes
   namespace: default
+  annotations:
+    projectsveltos.io/template: ok
 data:
   http-route.yaml: |
     kind: HTTPRoute
