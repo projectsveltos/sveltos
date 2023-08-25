@@ -74,6 +74,8 @@ kind: ConfigMap
 metadata:
   name: service-policy
   namespace: default
+  annotations:
+    projectsveltos.io/template: ok
 data:
   service.yaml: |
     kind: Service
