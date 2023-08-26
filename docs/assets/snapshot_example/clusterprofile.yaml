@@ -1,0 +1,13 @@
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: guestbook
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - kind: ConfigMap
+    name: database
+    namespace: default
+  - kind: ConfigMap
+    name: frontend
+    namespace: default

@@ -106,3 +106,122 @@ Rollback is a feature in which a previous configuration snapshot is used to repl
 When all of the configuration files for a particular version are used to replace the current configuration, this is referred to as a full rollback.
 
 For a demonstration of rollback, watch the video [Sveltos, introduction to Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ) on YouTube.
+
+### PHP Guestbook application with Redis
+
+This example shows how to deploy a multi-tier web application in Kubernetes using Sveltos and how to use snapshot to quickly see changes.
+The application consists of the following components:
+
+1. A single-instance Redis to store guestbook entries
+2. Multiple web frontend instances
+
+The first step is to create two ConfigMaps:
+
+```
+wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database.yaml
+kubectl create configmap database --from-file database.yaml
+```
+
+```
+wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/frontend.yaml
+kubectl create configmap frontend --from-file frontend.yaml
+```
+
+The [database.yaml](assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, 
+exposed via a service. The [frontend.yaml](assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook 
+application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, 
+depending on whether the request is a read or a write.
+
+Once the ConfigMaps have been created, you can create a ClusterProfile instance:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/clusterprofile.yaml
+```
+
+This will deploy all necessary resources in all managed cluster matching ClusterProfile cluster selector field.
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show addons 
++-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+|           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
++-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+| default/clusterapi-workload | :Service        | test      | frontend       | N/A     | 2023-08-26 04:53:22 -0700 PDT | guestbook        |
+| default/clusterapi-workload | apps:Deployment | test      | redis-leader   | N/A     | 2023-08-26 04:53:21 -0700 PDT | guestbook        |
+| default/clusterapi-workload | :Service        | test      | redis-leader   | N/A     | 2023-08-26 04:53:21 -0700 PDT | guestbook        |
+| default/clusterapi-workload | apps:Deployment | test      | redis-follower | N/A     | 2023-08-26 04:53:21 -0700 PDT | guestbook        |
+| default/clusterapi-workload | :Service        | test      | redis-follower | N/A     | 2023-08-26 04:53:22 -0700 PDT | guestbook        |
+| default/clusterapi-workload | apps:Deployment | test      | frontend       | N/A     | 2023-08-26 04:53:22 -0700 PDT | guestbook        |
++-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
+```
+
+If you want guests to be able to access your guestbook, you must configure the frontend Service to be externally visible, so a client 
+can request the Service from outside the Kubernetes cluster. 
+However a Kubernetes user can use kubectl port-forward to access the service even though it uses a ClusterIP.
+
+Cluster in this example, was created with [__make quickstart__](quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
+Command is then
+
+```
+KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/frontend 8080:80
+```
+
+Load the page http://localhost:8080 in your browser to view your guestbook
+
+![Guestbook](assets/snapshot_example/guestbook.png)
+
+The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes to your configuration over time, or for debugging issues.
+With system in this state, we can take a Sveltos configuration snaphost
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list 
++-----------------+---------------------+
+| SNAPSHOT POLICY |        DATE         |
++-----------------+---------------------+
+| hourly          | 2023-08-26:05:00:00 |
++-----------------+---------------------+
+```
+
+Let's say, later on a change is made. For instance, __redis-follower__ Service label selector is inadvertently modified.
+
+```
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database_broken.yaml
+```
+
+Entries in the database are not visible anymore. Of course we can debug this issue. 
+But if we simply want to see what has changed we can simply take a new snapshot
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
++-----------------+---------------------+
+| SNAPSHOT POLICY |        DATE         |
++-----------------+---------------------+
+| hourly          | 2023-08-26:05:00:00 |
+| hourly          | 2023-08-26:05:20:00 |
++-----------------+---------------------+
+```
+
+and then look at the configuration differences
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00
++-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
+|              CLUSTER              | RESOURCE TYPE | NAMESPACE |      NAME      |  ACTION  |            MESSAGE             |
++-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
+| default/capi--clusterapi-workload | /Service      | test      | redis-follower | modified | use --raw-diff option to see   |
+|                                   |               |           |                |          | diff                           |
++-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
+```
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00 --raw-diff
+--- /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:00:00
++++ /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:20:00
+@@ -13,7 +13,7 @@
+     # the port that this service should serve on
+   - port: 6379
+   selector:
+-    app: redis
++    app: redis-follower
+     role: follower
+     tier: backend
+```
