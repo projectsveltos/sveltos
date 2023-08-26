@@ -111,6 +111,7 @@ rules:
       - list
       - create
       - update
+      - delete
   - apiGroups: ["lib.projectsveltos.io"]
     resources:
       - classifiers
@@ -122,6 +123,9 @@ rules:
     verbs:
       - get
       - list
+      - create
+      - update
+      - delete
   - apiGroups: ["lib.projectsveltos.io"]
     resources:
       - sveltosclusters
