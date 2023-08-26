@@ -225,3 +225,9 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --
      role: follower
      tier: backend
 ```
+
+To fix this, we can simply ask Sveltos to revert back to working snapshot
+
+```
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot rollback --snapshot=hourly --sample=2023-08-26:05:00:00
+```
