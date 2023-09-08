@@ -46,7 +46,7 @@ spec:
       serviceAccountName: sveltosctl
       containers:
       - name: sveltosctl
-        image: projectsveltos/sveltosctl-amd64:main
+        image: projectsveltos/sveltosctl-amd64:v0.15.3
         imagePullPolicy: IfNotPresent
         command:
           - /sveltosctl
@@ -111,7 +111,6 @@ rules:
       - list
       - create
       - update
-      - delete
   - apiGroups: ["lib.projectsveltos.io"]
     resources:
       - classifiers
@@ -123,9 +122,7 @@ rules:
     verbs:
       - get
       - list
-      - create
       - update
-      - delete
   - apiGroups: ["lib.projectsveltos.io"]
     resources:
       - sveltosclusters
@@ -173,6 +170,7 @@ rules:
       - get
       - list
       - watch
+      - update
   - apiGroups: ["apiextensions.k8s.io"]
     resources:
       - customresourcedefinitions
