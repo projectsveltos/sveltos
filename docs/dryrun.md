@@ -1,6 +1,6 @@
 ---
 title: Sveltos dry run
-description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+description: Sveltos' DryRun mode, a powerful feature that lets you test important changes without any actual impact on your managed clusters. Learn how to configure your ClusterProfile with DryRun syncMode and run a safe simulation of planned operations. Receive detailed reports on potential changes, inspect them, and validate configurations before applying them. Experience peace of mind in managing your clusters with Sveltos' risk-free DryRun mode. 
 tags:
     - Kubernetes
     - Sveltos

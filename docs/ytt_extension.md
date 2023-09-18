@@ -1,6 +1,6 @@
 ---
 title: Recources by Sveltos
-description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+description: Learn how to integrate Carvel ytt with Sveltos by installing the convenient jsonnet controller.
 tags:
     - Kubernetes
     - Sveltos

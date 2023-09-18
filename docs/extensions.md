@@ -1,6 +1,6 @@
 ---
 title: Extending Sveltos
-description: With Sveltos' resources such as blog posts and videos, you will discover more about our application that extends the functionality of Cluster API.
+description: Learn how Sveltos coordinates with Crossplane or any other open source projects. Discover how to use Sveltos to create Google Cloud Storage Buckets for managed clusters and deploy applications that interact with these buckets. Dive into the YAML code that instructs Sveltos, explore the process step-by-step, and witness the seamless coordination between Sveltos and Crossplane in action.
 tags:
     - Kubernetes
     - Sveltos
