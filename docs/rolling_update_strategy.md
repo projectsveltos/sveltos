@@ -22,7 +22,7 @@ To support this, Sveltos has two ClusterProfile Spec fields: `MaxUpdate` and `Va
 
 ## MaxUpdate
 
-Indicates the maximum number of clusters that can be updated concurrently. Value can be an absolute number (e.g., 5) or a percentage of desired pods (e.g., 10%). Defaults to 100%.
+Indicates the maximum number of clusters that can be updated concurrently. Value can be an absolute number (e.g., 5) or a percentage of desired managed clusters (e.g., 10%). Defaults to 100%.
 
 Example: When this field is set to 30%, when the list of add-ons/applications in ClusterProfile changes, only 30% of matching clusters will be updated in parallel. Only when updates in those clusters succeed will other matching clusters be updated.
 
