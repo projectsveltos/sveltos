@@ -44,6 +44,8 @@ spec:
 
 Likewise for YAMLs, you can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the time of deployment, making your deployments faster and more efficient.
 
+Sveltos supports the template functions that are included from the [Sprig](https://masterminds.github.io/sprig/) open source project.
+
 ## Variables
 
 By default, templates have access to the following managment cluster resources:
