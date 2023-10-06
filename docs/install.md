@@ -10,17 +10,29 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-To install Sveltos simply run:
+
+Sveltos is a set of Kubernetes controllers that can manage add-ons and applications in multiple clusters from a central management cluster.
+
+Sveltos can operate in two modes:
+
+1. Default mode: Sveltos deploys agents (sveltos-agent and drift-detection-manager) in the managed clusters;
+2. Agent in management cluster mode: Sveltos deploys agents in the management cluster.
+
+To install Sveltos in mode #1, run the following commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
-```
-
-```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-It will install Sveltos CRDs and resources.
+To install Sveltos in mode #2, run the following commands:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+```
+
+Either way,  Sveltos CRDs and resources will be installed.
 
 If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error:
 
