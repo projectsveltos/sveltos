@@ -2854,6 +2854,44 @@ spec:
       serviceAccountName: addon-compliance-manager
       terminationGracePeriodSeconds: 10
 ---
+# When addon-controller is configured to deploy drift-detection-manager
+# in the management cluster, addon-controller will create a Service and
+# a Deployment per cluster matching at least one ClusterProfile in 
+# ContinuousWithDriftDetection mode.
+# Those extra permissions are needed.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-controller-role-dtm-in-mgmt-cluster
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - "*"
+- apiGroups:
+  - "apps"
+  resources:
+  - deployments
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-controller-rolebinging-dtm-in-mgmt-cluster
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-controller-role-dtm-in-mgmt-cluster
+subjects:
+- kind: ServiceAccount
+  name: addon-controller
+  namespace: projectsveltos
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -5044,6 +5082,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --report-mode=0
+        - --agent-in-mgmt-cluster
         - --v=5
         command:
         - /manager
@@ -7505,6 +7544,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --report-mode=0
+        - --agent-in-mgmt-cluster
         - --v=5
         command:
         - /manager
@@ -7561,4 +7601,234 @@ spec:
         runAsNonRoot: true
       serviceAccountName: classifier-manager
       terminationGracePeriodSeconds: 10
+---
+# When classifier is configured to deploy sveltos-agent in the management cluster, 
+# sveltos-agent will create a Service and a Deployment per cluster.
+# Those extra permissions are needed.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: classifier-role-sveltos-agent-in-mgmt-cluster
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - "*"
+- apiGroups:
+  - "apps"
+  resources:
+  - deployments
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: classifier-rolebinding-sveltos-agent-in-mgmt-cluster
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: classifier-role-sveltos-agent-in-mgmt-cluster
+subjects:
+- kind: ServiceAccount
+  name: classifier-manager
+  namespace: projectsveltos
+---
+# Those YAML are all needed when sveltos-agent is started in the management cluster. 
+# Those are not installed by classifier when deploying sveltos-agent in the management
+# cluster to avoid granting classifier extra permissions
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sveltos-agent-manager
+  namespace: projectsveltos
+---
+# When running in the management cluster, sveltos-agent needs to access Secret containing
+# Kubeconfig for managed cluster (and consequently access Cluster/SveltosCluster to verify existance)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sveltos-agent-manager-role
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - 'secrets'
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sveltos-agent-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sveltos-agent-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sveltos-agent-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sveltos-agent-manager-role
+subjects:
+- kind: ServiceAccount
+  name: sveltos-agent-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sveltos-agent-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sveltos-agent-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: sveltos-agent-manager
+  namespace: projectsveltos
+
+---
+# Those YAML are all needed when drift-detection-manager is started in the
+# management cluster. Those are not installed by addon-controller when deploying
+# drift-detection-manager in the management cluster to avoid granting addon-controller
+# extra permissions
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: drift-detection-manager
+  namespace: projectsveltos
+---
+# When running in the management cluster, drift-detection-manager needs
+# to access Secret containing Kubeconfig for managed cluster (and consequently
+# access Cluster/SveltosCluster to verify existance)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-manager-role
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - 'secrets'
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: drift-detection-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: drift-detection-manager-role
+subjects:
+- kind: ServiceAccount
+  name: drift-detection-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: drift-detection-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: drift-detection-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: drift-detection-manager
+  namespace: projectsveltos
+---
 ---
