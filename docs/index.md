@@ -20,13 +20,13 @@ authors:
 
 <h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
 
-Are you struggling to manage Kubernetes add-ons across multiple clusters on different cloud providers or infrastructures? You're not alone! But we have great news - [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is here to help.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that makes it easy to deploy and manage add-ons across multiple clusters. It supports a variety of add-on formats, including Helm charts, raw YAMLs, Kustomize, Carvel ytt, and Jsonnet.
 
-Sveltos is a lightweight application designed to manage hundreds of clusters effortlessly. Sveltos Kubernetes add-on controller simplifies the deployment and management of add-ons in Kubernetes clusters. With Sveltos controller, you can easily automate the deployment process and ensure consistency across your cluster environment. Plus, Sveltos provides platform admins with a solution for multi-tenancy, making it even easier to manage permissions for tenant admins.
+Sveltos uses templates to represent add-ons, which can then be instantiated on each cluster during deployment. This allows you to use the same add-on configuration across all of your clusters, while still allowing for some variation, such as different add-on configuration values.
+
+Sveltos can get the information it needs to instantiate the templates from either the management cluster or the managed clusters themselves. This flexibility makes Sveltos a powerful tool for managing add-ons in a variety of environments.
 
 But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
-
-Say goodbye to the headache of managing Kubernetes add-ons across multiple clusters and hello to Sveltos - your new best friend in cluster management!
 
 ## Add-on Distribution
 
