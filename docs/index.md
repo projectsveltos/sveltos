@@ -20,11 +20,16 @@ authors:
 
 <h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that makes it easy to deploy and manage add-ons across multiple clusters. It supports a variety of add-on formats, including Helm charts, raw YAMLs, Kustomize, Carvel ytt, and Jsonnet.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that simplifies the deployment and management of add-ons and applications across multiple clusters. It runs in the management cluster and can programmatically deploy and manage add-ons and applications on any cluster in the fleet, including the management cluster itself. Sveltos supports a variety of add-on formats, including Helm charts, raw YAML, Kustomize, Carvel ytt, and Jsonnet.
 
-Sveltos uses templates to represent add-ons, which can then be instantiated on each cluster during deployment. This allows you to use the same add-on configuration across all of your clusters, while still allowing for some variation, such as different add-on configuration values.
+![Sveltos in the management cluster](assets/multi-clusters.png)
 
-Sveltos can get the information it needs to instantiate the templates from either the management cluster or the managed clusters themselves. This flexibility makes Sveltos a powerful tool for managing add-ons in a variety of environments.
+
+Sveltos allows you to represent add-ons and applications as templates. Before deploying to managed clusters, Sveltos instantiates these templates. Sveltos can gather the information required to instantiate the templates from either the management cluster or the managed clusters themselves.
+
+This enables you to use the same add-on configuration across all of your clusters, while still allowing for some variation, such as different add-on configuration values. In other words, Sveltos lets you define add-ons and applications in a reusable way. You can then deploy these definitions to multiple clusters, with minor adjustments as needed. This can save you a lot of time and effort, especially if you manage a large number of clusters.
+
+Sveltos also has an event-driven framework that allows you to deploy add-ons and applications in an orderly manner, or to deploy add-ons in response to certain events.
 
 But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
 
