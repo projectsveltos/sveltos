@@ -53,7 +53,7 @@ for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
     # for managing a shard
-    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
         continue
     fi
 
@@ -97,7 +97,7 @@ for f in manifest/*.yaml
 do
     # this file contains the template to start a deployment
     # for managing a shard
-    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
         continue
     fi
 
@@ -119,7 +119,7 @@ for f in manifest/*.yaml
 do
     # this file contains the template to start a deployment
     # for managing a shard
-    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
         continue
     fi
 
@@ -141,7 +141,7 @@ for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
     # for managing a shard
-    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
         continue
     fi
 
@@ -163,7 +163,7 @@ for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
     # for managing a shard
-    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
         continue
     fi
 
