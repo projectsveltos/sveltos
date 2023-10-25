@@ -6,9 +6,9 @@
 
 <img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200">
 
-Please refere to sveltos [documentation](https://projectsveltos.github.io/sveltos/).
+Please refer to the Sveltos [documentation website](https://projectsveltos.github.io/sveltos/).
 
-## Contributing 
+## Contributing
 
 ❤️ Your contributions are always welcome! If you want to contribute, have questions, noticed any bug or want to get the latest project news, you can connect with us in the following ways:
 
