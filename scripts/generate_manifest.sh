@@ -51,6 +51,12 @@ cd addon-controller
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"drift_detection_manager_rbac.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -88,7 +94,13 @@ git clone git@github.com:projectsveltos/sveltoscluster-manager.git
 cd sveltoscluster-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -104,7 +116,13 @@ git clone git@github.com:projectsveltos/healthcheck-manager.git
 cd healthcheck-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -121,6 +139,12 @@ cd event-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -137,6 +161,12 @@ cd classifier
 git checkout ${branch}
 for f in manifest/*.yaml
 do 
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"sveltos_agent_rbac.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
