@@ -32,14 +32,16 @@ authors:
 ## Here is a list of videos on Sveltos:
 
 1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
-2. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
-3. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
-4. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
-5. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
-6. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s)
-7. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
-8. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
-9. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
+2. [KubeVela Commmunity Meeting:Sveltos intro](https://www.youtube.com/watch?v=A5Y0XTnoS7k)
+3. [Collabnix, Docker and DevOps Show-n-Tell](https://www.youtube.com/live/Kiv2SVhI8qg?si=a6vr7PQrhxwOCn5G&t=2h5m55s)
+4. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
+5. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
+6. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
+7. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
+8. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s)
+9. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
+10. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
+11. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
