@@ -106,3 +106,13 @@ git checkout ${branch}
 make docker-build
 docker --config ${config} push projectsveltos/event-manager-amd64:${branch}  
 cd ../../; rm -rf tmp
+
+# shard-controller
+echo "processing shard-controller"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/shard-controller.git
+cd shard-controller
+git checkout ${branch}
+make docker-build
+docker --config ${config} push projectsveltos/shard-controller-amd64:${branch}  
+cd ../../; rm -rf tmp
