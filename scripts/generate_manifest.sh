@@ -255,7 +255,7 @@ done
 cd ../../; rm -rf tmp
 
 function add_agent_in_mgmt_cluster_option() {
-    echo "Add agent-in-mgmt-cluster option to classifier and addon-controller"
+    echo "Add agent-in-mgmt-cluster option to classifier and addon-controller and shard-controller"
 
     old_value="report-mode=0"
 
