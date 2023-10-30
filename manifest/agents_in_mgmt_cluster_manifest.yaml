@@ -2725,7 +2725,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-compliance-controller-amd64:dev
+        image: projectsveltos/addon-compliance-controller-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -4952,7 +4952,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:dev
+        image: projectsveltos/addon-controller-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5344,7 +5344,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:dev
+        image: projectsveltos/access-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5554,7 +5554,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:dev
+        image: projectsveltos/sveltoscluster-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5879,7 +5879,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:dev
+        image: projectsveltos/healthcheck-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6716,7 +6716,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:dev
+        image: projectsveltos/event-manager-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7009,7 +7009,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:dev
+        image: projectsveltos/classifier-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7516,9 +7516,11 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --v=5
+        - --report-mode=0
+        - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:dev
+        image: projectsveltos/shard-controller-amd64:main
         livenessProbe:
           httpGet:
             path: /healthz
