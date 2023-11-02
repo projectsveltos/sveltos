@@ -26,8 +26,9 @@ authors:
 9. [Kubernetes add-on compliance with Projectsveltos and Lua](https://medium.com/@gianluca.mardente/kubernetes-add-on-compliance-with-projectsveltos-and-lua-940de565b53a)
 10. [Handle long running tasks](https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681)
 11. [L4-L7 with Sveltos](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c)
-12. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
-13. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
+12. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
+13. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
+14. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 
 ## Here is a list of videos on Sveltos:
 
