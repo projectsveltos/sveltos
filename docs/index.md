@@ -62,7 +62,7 @@ But that's not all! Sveltos not only helps you scale the number of clusters you 
 * [Centralised Resource Display for Multiple Kubernetes Clusters](show_resources.md)
 * [Configuration drift detection](configuration_drift.md)
 * [Dry run](dryrun.md)
-* [Notifications](notifications.md)
+* [Notifications](observability.md)
 * Kubernetes [cluster classification](labels_management.md)
 * [Multi-tenancy](multi-tenancy.md)
 * [Techsupport](techsupport.md)
@@ -81,7 +81,7 @@ Sveltos is a set of Kubernetes custom resource definitions (CRDs) and controller
 5. [Classifier CRD](labels_management.md#deep-dive-classifier-crd) is the CRD used to instructs Sveltos on how to classify a cluster;
 6. [Classifier](labels_management.md#classifier-controller-configuration) is a controller running in the management cluster. Its counterpart, *Classifier Agent* is a controller running in each managed cluster. Classifier distributes Classifier CRD instances to any managed cluster. Classifier Agent watches for cluster runtime state (kubernetes version and/or resources deployed) and Classifier CRD instances. It reports back to management cluster whether a managed cluster is a match or not for each Classifier instance;
 7. [Drift detection manager](configuration_drift.md#configuration-drift) is a controller running in each managed cluster. It watches for Kubernetes resources deployed by ClusterProfiles set in SyncModeContinuousWithDriftDetection mode. Anytime it detects a possible configuration drift, it informs management cluster so that a re-sync happens and the cluster state is brought back to the desidered state expressed in the management cluster;
-8. [ClusterHealthCheck](notifications.md#clusterhealthcheck) is the CRD used to configure Sveltos to send notifications when certain conditions happen;
+8. [ClusterHealthCheck](observability.md#clusterhealthcheck) is the CRD used to configure Sveltos to send notifications when certain conditions happen;
 9. [Shard controller](sharding.md) is a controller running in the management cluster. It watches for managed cluster annotations. When it detects a new cluster shard, the shard controller automatically deploys a new set of Projectsveltos controllers to manage that shard.
 10. [RoleRequest CRD](multi-tenancy.md#rolerequest-crd) is the CRD used to allow platform admin to grant permissions to tenant admins;
 11. [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the Sveltos CLI; 
