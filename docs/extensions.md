@@ -169,7 +169,7 @@ and edit rules by adding
 ```yaml
 rules:
 - apiGroups:
-  - "demo.projectsveltos.io"
+  - storage.gcp.upbound.io
   resources:
   - buckets
   verbs:
