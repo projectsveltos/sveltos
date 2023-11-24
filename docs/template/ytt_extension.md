@@ -24,7 +24,7 @@ The `ytt controller` offers the capability to process Carvel ytt files using dif
 
 ## Using GitRepository
 
-![Sveltos managing clusters](assets/flux-ytt-sveltos.png)
+![Sveltos managing clusters](../assets/flux-ytt-sveltos.png)
 
 We can leverage GitRepository as a source for ytt controller[^1]. For example, in the provided GitHub repository [ytt-examples](https://github.com/gianlucam76/ytt-examples), we can find the ytt files that Flux will sync. To instruct the ytt controller to fetch files from this repository, create a YttSource CRD instance with the following configuration:
 

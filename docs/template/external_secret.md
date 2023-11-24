@@ -23,13 +23,13 @@ Here are some of the benefits of using Secret Manager:
 
 [External Secrets Operator](https://external-secrets.io) is an open source Kubernetes operator that integrates external secret management systems like AWS Secrets Manager, HashiCorp Vault, Google Secrets Manager, Azure Key Vault, IBM Cloud Secrets Manager, and many more. The goal of External Secrets Operator is to synchronize secrets from external APIs into Kubernetes.  The operator reads information from external APIs and automatically injects the values into a Kubernetes Secret. If the secret from the external API changes, the controller will reconcile the state in the cluster and update the secrets accordingly.
 
-![External Secret Operator](assets/external_secret_operator.png)
+![External Secret Operator](../assets/external_secret_operator.png)
 
 ## Distribute Secret to managed clusters
 
 When managing a multitude of Kubernetes clusters, External Secrets Operator can be deployed in the management cluster. Sveltos can then be used to distribute the secret to managed clusters.
 
-![External Secret Operator with Sveltos](assets/external_secret.gif)
+![External Secret Operator with Sveltos](../assets/external_secret.gif)
 
 - External Secret Operator fetches secrets from an external API and creates Kubernetes secrets;
 - Sveltos distributes fetched secret to managed clusters;
@@ -44,7 +44,7 @@ To properly follow this tutorial, make sure you have installed the following too
 - [external-secrets](https://external-secrets.io/v0.8.5/introduction/getting-started/#installing-with-helm) deployed in the management cluster
 - gcloud cli installed
 
-![External Secret Operator with Sveltos](assets/eso_sveltos.png)
+![External Secret Operator with Sveltos](../assets/eso_sveltos.png)
 
 ```
 yourproject=<your-google-cloud-project-name-here>

@@ -24,7 +24,7 @@ The `jsonnet controller` offers the capability to process jsonnet files using di
 
 ## Using GitRepository
 
-![Sveltos managing clusters](assets/flux-jsonnet-sveltos.png)
+![Sveltos managing clusters](../assets/flux-jsonnet-sveltos.png)
 
 We can leverage GitRepository as a source for jsonnet controller[^1]. For example, in the provided GitHub repository [jsonnet-examples](https://github.com/gianlucam76/jsonnet-examples), we can find the jsonnet files that Flux will sync. To instruct the jsonnet controller to fetch files from this repository, create a JsonnetSource CRD instance with the following configuration:
 

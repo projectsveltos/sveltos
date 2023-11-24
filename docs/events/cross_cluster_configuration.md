@@ -240,4 +240,4 @@ Version: 2.0.0
 Hostname: my-deployment-50001-6664b685bc-db728
 ```
 
-![Cross cluster configuration](assets/event_based_cross_cluster.gif)
+![Cross cluster configuration](../assets/event_based_cross_cluster.gif)

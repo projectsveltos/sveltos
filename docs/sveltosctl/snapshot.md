@@ -127,8 +127,8 @@ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/s
 kubectl create configmap frontend --from-file frontend.yaml
 ```
 
-The [database.yaml](assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, 
-exposed via a service. The [frontend.yaml](assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook 
+The [database.yaml](../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, 
+exposed via a service. The [frontend.yaml](../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook 
 application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, 
 depending on whether the request is a read or a write.
 
@@ -158,7 +158,7 @@ If you want guests to be able to access your guestbook, you must configure the f
 can request the Service from outside the Kubernetes cluster. 
 However a Kubernetes user can use kubectl port-forward to access the service even though it uses a ClusterIP.
 
-Cluster in this example, was created with [__make quickstart__](quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
+Cluster in this example, was created with [__make quickstart__](../install/quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
 Command is then
 
 ```
@@ -167,7 +167,7 @@ KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/fron
 
 Load the page http://localhost:8080 in your browser to view your guestbook
 
-![Guestbook](assets/snapshot_example/guestbook.png)
+![Guestbook](../assets/snapshot_example/guestbook.png)
 
 The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes to your configuration over time, or for debugging issues.
 With system in this state, we can take a Sveltos configuration snaphost
