@@ -16,7 +16,7 @@ This can be achieved by adding the annotation ```sharding.projectsveltos.io/key`
 Sveltos has a controller running in the management cluster, called the ```shard controller```, which watches for cluster annotations. 
 When it detects a new cluster shard, the shard controller deploys automatically a new set of Projectsveltos controllers to manage that shard.
 
-![Event driven add-ons deployment in action](assets/sharding.gif)
+![Event driven add-ons deployment in action](../assets/sharding.gif)
 
 The benefits of using a sharding strategy include:
 

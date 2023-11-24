@@ -21,7 +21,7 @@ Managing multiple clusters effectively requires a centralized location for viewi
 
 Using Projectsveltos can facilitate the display of information about resources in managed clusters.
 
-![Sveltosctl show resources](assets/show_resources.png)
+![Sveltosctl show resources](../assets/show_resources.png)
 
 ## Display deployments replicas from managed clusters
 

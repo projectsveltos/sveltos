@@ -12,7 +12,7 @@ authors:
 ---
 Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. This means that if Sveltos is deployed in a management cluster with CAPI, no action needs to be taken for Sveltos to manage add-ons on ClusterAPI powered clusters. Sveltos will watch for *clusters.cluster.x-k8s.io"* instances and program those accordingly.
 
-Any other cluster (GKE for instance) can easily be registered with Sveltos. After that, Sveltos can <a href="https://projectsveltos.github.io/sveltos/configuration/">manage Kubernetes add-ons </a> on all the clusters seamless.
+Any other cluster (GKE for instance) can easily be registered with Sveltos. After that, Sveltos can [manage Kubernetes add-ons](../addons/addons.md) on all the clusters seamless.
 
 ## Register cluster
 
@@ -21,6 +21,7 @@ If you have an already existing cluster that you want Sveltos to manage, three s
 1. In the cluster to be managed by Sveltos, generate a *ServiceAccount* for Sveltos and generate a kubeconfig associated to that account. Store the kubeconfig in a file locally;
 2. in the management cluster, create, if not existing already, the namespace where you want to register your external cluster;
 3. point sveltosctl to the management cluster, use *sveltosctl register cluster* command passing the file containing the kubeconfig generated in step above. Sveltoctl will generate all necessary kubernetes resources (SveltosCluster and Secret) in the management cluster. For instance:
+
 ```
 ./bin/sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
@@ -33,7 +34,15 @@ The alternative to sveltosctl is to manually create:
 1. Secret with name ```<cluster-name>-sveltos-kubeconfig``` with Data section containing the Kubeconfig
 2. SveltosCluster instance (only name needs to be set)
 
-## Example: registering GKE cluster
+## Registering Civo cluster
+If you are using [Civo Cloud](https://www.civo.com) simply download the cluster Kubeconfig, then 
+
+```
+./bin/sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+    --kubeconfig=<path to file with Kubeconfig>
+``` 
+
+## Registering GKE cluster
 
 Following is an example showing how a GKE cluster can be registered with Sveltos:
 

@@ -18,7 +18,7 @@ If following label is set on Techsupport instance created by tenant admin
 projectsveltos.io/admin-name: <admin>
 ```
 
-Sveltos will make sure tenant admin collects what it has been [authorized to by platform admin](multi-tenancy.md).
+Sveltos will make sure tenant admin collects what it has been [authorized to by platform admin](../multi-tenancy.md).
 
 
 ## Techsupport CRD

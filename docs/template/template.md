@@ -12,7 +12,7 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos is a powerful tool that allows you to define templates that are instantiated at the time of deployment, eliminating the need to manually define Helm chart values and resources for each cluster. By using ClusterProfile, you can significantly reduce your deployment time and improve efficiency.
+Sveltos allows you to represent add-ons and applications as templates. Before deploying to managed clusters, Sveltos instantiates these templates. Sveltos can gather the information required to instantiate the templates from either the management cluster or the managed clusters themselves.
 
 For example, let's say you need to deploy Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With ClusterProfile, you can create a configuration that specifies these details, and the deployment will be ready to go in all matching clusters.
 
@@ -42,7 +42,7 @@ spec:
           {{ end }}
 ```
 
-Likewise for YAMLs, you can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the time of deployment, making your deployments faster and more efficient.
+Likewise, you can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the time of deployment, making your deployments faster and more efficient.
 
 Sveltos supports the template functions that are included from the [Sprig](https://masterminds.github.io/sprig/) open source project.
 
@@ -122,7 +122,7 @@ At Sveltos, we adhere to the least privilege principle, which means that Sveltos
 
 Providing the necessary RBACs to Sveltos is a straightforward process. Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit that role.
 
-If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](multi-tenancy.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
+If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](../multi-tenancy.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
 
 ### Namespace
 
@@ -228,7 +228,7 @@ data:
 
 ### Putting all together
 
-![Dynamically create resource in management cluster](assets/autoscaler.gif)
+![Dynamically create resource in management cluster](../assets/autoscaler.gif)
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -304,9 +304,3 @@ data:
       token: {{ (index .MgtmResources "AutoscalerSecret").data.token }}
       ca.crt: {{ $data:=(index .MgtmResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
-
-## More examples
-Other examples can be found:
-
-1. [Sveltos and Carvel Ytt](ytt_extension.md);
-2. [Sveltos and Jsonnet](jsonnet_extension.md).
