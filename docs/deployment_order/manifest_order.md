@@ -17,10 +17,9 @@ Sveltos can help you solve this problem by allowing you to specify the order in 
 
 ## ClusterProfile order
 
-There are two ways to do this:
-
 1. Using the _helmCharts_ field in a ClusterProfile: The helmCharts field allows you to specify a list of Helm charts that need to be deployed. Sveltos will deploy the Helm charts in the order that they are listed in this field.
 2. Using the _policyRefs_ field in a ClusterProfile: The policyRefs field allows you to reference a list of ConfigMap and Secret resources whose contents need to be deployed. Sveltos will deploy the resources in the order that they are listed in this field.
+3. Using the _kustomizationRefs_ field in a ClusterProfile: The kustomizationRefs field allows you to reference a list of sources containing kustomization files. Sveltos will deploy the resources in the order that they are listed in this field.
 
 Here are some examples:
 
@@ -70,74 +69,3 @@ spec:
     namespace: default
     kind: ConfigMap
 ```
-
-## ClusterProfile dependsOn field
-
-A ClusterProfile instance can rely on other ClusterProfiles to specify a deployment order for add-ons and applications. The *dependsOn* property defines a list of prerequisite ClusterProfiles. In any managed cluster that matches this ClusterProfile, the add-ons and applications defined in this instance will only be deployed after all add-ons and applications in the specified dependency ClusterProfiles have been successfully deployed.
-
- For example, if the ClusterProfile instance *cp-kubevela* relies on the ClusterProfile instance *cp-kyverno*, this can be configured by simply setting the dependsOn field in the *cp-kubevela* ClusterProfile.
-
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile 
-metadata: 
-  name: cp-kubevela
-spec:
-  dependsOn:
-  - cp-kyverno
-  clusterSelector: env=production
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL: https://kubevela.github.io/charts
-    repositoryName: kubevela
-    chartName: kubevela/vela-core
-    chartVersion: 1.9.6
-    releaseName: kubevela-core-latest
-    releaseNamespace: vela-system
-    helmChartAction: Install
-```
-
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: cp-kyverno
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
-
-This is equivalent of creating a single ClusterProfile. 
-
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: cp-kyverno
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-  - repositoryURL: https://kubevela.github.io/charts
-    repositoryName: kubevela
-    chartName: kubevela/vela-core
-    chartVersion: 1.9.6
-    releaseName: kubevela-core-latest
-    releaseNamespace: vela-system
-    helmChartAction: Install
-```
-
-Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
