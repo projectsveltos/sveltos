@@ -36,6 +36,8 @@ spec:
 
 ## Multiple Helm charts
 
+Sveltos installs Helm charts in the order specified when multiple charts are listed. 
+
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
