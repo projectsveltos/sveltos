@@ -11,15 +11,19 @@ authors:
     - Gianluca Mardente
 ---
 
-[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI"), the command-line interface (CLI) for Sveltos, is available but not mandatory for using Sveltos. It offers a convenient CLI experience. Binaries for each release can be found on the [releases page](https://github.com/projectsveltos/sveltosctl/releases).
+The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI"), is the command-line interface (CLI) for Sveltos. This is an available option to query Sveltos resources, but not a mandatory option.
 
-### Run sveltosctl as a pod
+### Option 1: Binaries
 
-Binaries are sufficient unless you require the [Techsupport](../sveltosctl/techsupport.md) and [Snapshot](../sveltosctl/snapshot.md) features.
+It offers a convenient CLI experience. The Binaries for each release are available at the [releases page](https://github.com/projectsveltos/sveltosctl/releases).
+
+The Binaries are sufficient for register worker clusters, query Sveltos resources etc. unless you require the [Techsupport](../sveltosctl/techsupport.md) and the [Snapshot](../sveltosctl/snapshot.md) features. For that, use "Option 2: Run sveltosctl as a pod".
+
+### Option 2: Run sveltosctl as a pod
 
 If you choose to run sveltosctl as a pod in the management cluster, the YAML configuration is available [here](https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/sveltosctl_manifest.yaml).
 
-Remember that sveltosctl necessitates a PersistentVolume. Before posting the YAML, make the necessary adjustments to this section.
+Remember that sveltosctl necessitates a PersistentVolume. Before posting the YAML, make the necessary adjustments to the below section.
 
 ```yaml
   volumeClaimTemplates:
@@ -47,3 +51,4 @@ You might also want to change the timezone of sveltosctl pod by using specific t
       type: File
     name: tz-config
 ```
+**Please note:** the Sveltos CLI pod cannot be used as a way to register a worker kubernetes cluster. For that, use the Sveltos Binaries.
