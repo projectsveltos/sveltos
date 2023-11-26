@@ -11,6 +11,8 @@ authors:
     - Gianluca Mardente
 ---
 
+## What is Projectsveltos
+
 Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, Sveltos can manage add-ons and applications in multiple clusters.
 
 ## Installation
@@ -19,26 +21,29 @@ To install Sveltos, run the following commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
+
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
-[^2]
 
 In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each managed clusters.
-If you don't want to have any Sveltos agent in any managed cluster, run the following commands:
+
+If you do not want to have any Sveltos agent in any managed cluster, run the following commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
+
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-In this mode, Sveltos agents will be created, per managed cluster, in the management cluster itself.
+In this mode, Sveltos agents will be created, per managed cluster, in the management cluster itself[^2].
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
-## Install using helm
+## Helm installation
 
 ```
 helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
+
 helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 ```
 
