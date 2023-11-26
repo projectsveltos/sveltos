@@ -90,7 +90,7 @@ If you leave the namespace field empty, Sveltos will search for the ConfigMap or
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
-  name: deploy-kyverno
+  name: deploy-resources
 spec:
   clusterSelector: env=fv
   policyRefs:
