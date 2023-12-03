@@ -17,6 +17,8 @@ Sveltos is a set of Kubernetes controllers deployed in the management cluster. F
 
 ## Installation
 
+### Mode 1: Agent Installation Managed Cluster
+
 To install Sveltos, run the following commands:
 
 ```
@@ -25,9 +27,11 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/m
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each managed clusters.
+In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in **each managed clusters**.
 
-If you do not want to have any Sveltos agent in any managed cluster, run the following commands:
+### Mode 2: Agentless Installation Managed Cluster
+
+If you do not want to have any Sveltos agent in **any managed cluster**, run the following commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
