@@ -11,7 +11,7 @@ authors:
     - Gianluca Mardente
 ---
 
-# Deploy Kubernetes add-ons
+# Deploy Kubernetes Add-ons
 
 The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action.
 
@@ -28,7 +28,7 @@ If you want to try the projectsveltos with a **test cluster**, follow the steps 
 The above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos, 
 create a workload cluster powered by clusterAPI using Docker as infrastructure provider.
 
-## Deploy Helm charts
+## Deploy Helm Charts
 
 To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_ create this ClusterProfile instance in the management cluster:
 
@@ -50,7 +50,7 @@ spec:
     helmChartAction:  Install
 ```
 
-## Deploy raw YAMl/JSON
+## Deploy Raw YAMl/JSON
 
 Download this file
 
@@ -88,7 +88,7 @@ spec:
    kind: Secret
 ```
 
-## Deploy resources assembled with Kustomize
+## Deploy Resources Assembled with Kustomize
 
 Sveltos can work along with Flux to deploy content of Kustomize directories.
 
