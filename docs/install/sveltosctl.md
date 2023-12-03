@@ -10,6 +10,7 @@ tags:
 authors:
     - Gianluca Mardente
 ---
+## sveltosctl
 
 The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI"), is the command-line interface (CLI) for Sveltos. This is an available option to query Sveltos resources, but not a mandatory option.
 
@@ -19,7 +20,7 @@ It offers a convenient CLI experience. The Binaries for each release are availab
 
 The Binaries are sufficient for register worker clusters, query Sveltos resources etc. unless you require the [Techsupport](../sveltosctl/techsupport.md) and the [Snapshot](../sveltosctl/snapshot.md) features. For that, use "Option 2: Run sveltosctl as a pod".
 
-### Option 2: Run sveltosctl as a pod
+### Option 2: Run sveltosctl as Pod
 
 If you choose to run sveltosctl as a pod in the management cluster, the YAML configuration is available [here](https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/sveltosctl_manifest.yaml).
 
@@ -53,6 +54,6 @@ You might also want to change the timezone of sveltosctl pod by using specific t
 ```
 {==
 
-**Please note:** the Sveltos CLI pod cannot be used as a way to register a worker kubernetes cluster. For that, use the Sveltos Binaries.
+**Please note:** The Sveltos CLI pod cannot be used as a way to register a worker kubernetes cluster. For that, use the Sveltos Binaries.
 
 ==}

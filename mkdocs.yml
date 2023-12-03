@@ -1,111 +1,109 @@
 site_name: Projectsveltos Documentation
 copyright: Copyright © 2022 projectsveltos. All Rights Reserved.
-site_description: 'Sveltos is a lightweight application designed to manage add-ons in hundreds of clusters. Projectsveltos extends functionality of Cluster API by providing a solution for managing the installation, 
-configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs. Projectsveltos supports multi-tenancy allowing platform admins to easily grant permissions 
-to tenant admins.'
+site_description: 'Sveltos is a lightweight application designed to manage add-ons in hundreds of clusters. Projectsveltos extends functionality of Cluster API by providing a solution for managing the installation, configuration, upgrade, and deletion of kubernetes cluster add-ons using Helm charts and/or Kubernetes resource YAMLs. Projectsveltos supports multi-tenancy allowing platform admins to easily grant permissions to tenant admins.'
 markdown_extensions:
-  - attr_list
-  - footnotes
-  - attr_list
-  - pymdownx.critic
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.superfences  
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+- attr_list
+- footnotes
+- attr_list
+- pymdownx.critic
+- pymdownx.highlight:
+    anchor_linenums: true
+- pymdownx.inlinehilite
+- pymdownx.snippets
+- pymdownx.superfences
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji
+    emoji_generator: !!python/name:materialx.emoji.to_svg
 nav:
-    - Projectsveltos: 'index.md'
-    - Installation:
-      - Quick Start: 'install/quick_start.md'
-      - Install: 'install/install.md'
-      - Sveltosctl: 'install/sveltosctl.md'
-    - Deploying add-ons and applications: 
-      - Addon Distribution: 'addons/addons.md'
-      - Deploy Helm Charts: 'addons/helm_charts.md'
-      - Deploy YAML/JSON Kubernetes manifests: 'addons/raw_yaml.md'
-      - Deploy Kubernetes manifests assembled with Kustomize: 'addons/kustomize.md'
-      - Combining all together: 'addons/combining_all.md'
-      - Deep dive on ClusterProfile: 'addons/clusterprofile.md'
-    - Templates:
-      - Expressing Helm charts and resources as templates: 'template/template.md'
-      - Integrating with Crossplane: 'template/crossplane.md'
-      - External Secret Management: 'template/external_secret.md'
-      - Support for Carvel ytt: 'template/ytt_extension.md'
-      - Support for Jsonnet: 'template/jsonnet_extension.md'
-      - Integrate Sveltos with your own controller: 'template/bring_your_own_controller.md'
-    - Resource Deployment Order:
-       - Resource Deployment Order with ClusterProfile: 'deployment_order/manifest_order.md'
-       - ClusterProfile dependsOn field: 'deployment_order/depends_on.md'
-       - Resource Deployment Order with events: 'deployment_order/order_with_events.md'
-    - Register Cluster:
-      - Register cluster: 'register/register-cluster.md'
-      - Manage add-ons in the management cluster: 'register/management_cluster.md'
-    - ConfigurationDrift detection: 'configuration_drift.md'
-    - DryRun: 'dryrun.md'
-    - Using Rolling Updates to Minimize Downtime and Risk: 'rolling_update_strategy.md'
-    - Deployment, StatefulSet, DaemonSet Rolling upgrades: 'rolling_upgrade.md'
-    - Event framework:
-      - Event based add-on deployment: 'events/addon_event_deployment.md'
-      - Cross cluster configuration: 'events/cross_cluster_configuration.md'    
-    - Addon Compliance: 'addon_compliance.md'
-    - Cluster Classification: 'labels_management.md'
-    - Cluster Observability:
-      - Notifications: 'observability/notifications.md'
-      - Send Slack and Webex message: 'observability/addons.md'
-      - Send Slack message for Pods in crashloopbackoff: 'observability/crashloopbackoff.md'
-      - Deployment health: 'observability/deployment_health.md'
-      - Detect degraded certificates: 'observability/failed_certificate.md'
-      - Show resources: 'observability/show_resources.md'
-    - Scalability:
-      - Vertical Scaling: 'scalability/configuration.md'
-      - Horizontal Scaling: 'scalability/sharding.md'
-    - Sveltosctl features:
-      - Visibility: 'sveltosctl/visibility.md'
-      - Tech support: 'sveltosctl/techsupport.md'
-      - Snapshot: 'sveltosctl/snapshot.md'
-    - Multi-tenancy: 'multi-tenancy.md'
-    - Blogs and videos: 'blogs.md'
+- Projectsveltos: 'index.md'
+- Installation:
+  - Quick Start: 'install/quick_start.md'
+  - Install: 'install/install.md'
+  - Sveltosctl: 'install/sveltosctl.md'
+- Register Cluster:
+  - Register cluster: 'register/register-cluster.md'
+  - Manage add-ons in the management cluster: 'register/management_cluster.md'
+- Deploying add-ons and applications:
+  - Addon Distribution: 'addons/addons.md'
+  - Deploy Helm Charts: 'addons/helm_charts.md'
+  - Deploy YAML/JSON Kubernetes manifests: 'addons/raw_yaml.md'
+  - Deploy Kubernetes manifests assembled with Kustomize: 'addons/kustomize.md'
+  - Combining all together: 'addons/combining_all.md'
+  - Deep dive on ClusterProfile: 'addons/clusterprofile.md'
+- Templates:
+  - Expressing Helm charts and resources as templates: 'template/template.md'
+  - Integrating with Crossplane: 'template/crossplane.md'
+  - External Secret Management: 'template/external_secret.md'
+  - Support for Carvel ytt: 'template/ytt_extension.md'
+  - Support for Jsonnet: 'template/jsonnet_extension.md'
+  - Integrate Sveltos with your own controller: 'template/bring_your_own_controller.md'
+- Resource Deployment Order:
+  - Resource Deployment Order with ClusterProfile: 'deployment_order/manifest_order.md'
+  - ClusterProfile dependsOn field: 'deployment_order/depends_on.md'
+  - Resource Deployment Order with events: 'deployment_order/order_with_events.md'
+- ConfigurationDrift detection: 'configuration_drift.md'
+- DryRun: 'dryrun.md'
+- Using Rolling Updates to Minimize Downtime and Risk: 'rolling_update_strategy.md'
+- Deployment, StatefulSet, DaemonSet Rolling upgrades: 'rolling_upgrade.md'
+- Event framework:
+  - Event based add-on deployment: 'events/addon_event_deployment.md'
+  - Cross cluster configuration: 'events/cross_cluster_configuration.md'
+- Addon Compliance: 'addon_compliance.md'
+- Cluster Classification: 'labels_management.md'
+- Cluster Observability:
+  - Notifications: 'observability/notifications.md'
+  - Send Slack and Webex message: 'observability/addons.md'
+  - Send Slack message for Pods in crashloopbackoff: 'observability/crashloopbackoff.md'
+  - Deployment health: 'observability/deployment_health.md'
+  - Detect degraded certificates: 'observability/failed_certificate.md'
+  - Show resources: 'observability/show_resources.md'
+- Scalability:
+  - Vertical Scaling: 'scalability/configuration.md'
+  - Horizontal Scaling: 'scalability/sharding.md'
+- Sveltosctl features:
+  - Visibility: 'sveltosctl/visibility.md'
+  - Tech support: 'sveltosctl/techsupport.md'
+  - Snapshot: 'sveltosctl/snapshot.md'
+- Multi-tenancy: 'multi-tenancy.md'
+- Blogs and videos: 'blogs.md'
 theme:
   features:
-    - content.code.copy
-    - search.share
-    - navigation.footer
-    - navigation.instant.progress
+  - content.code.copy
+  - search.share
+  - navigation.footer
+  - navigation.instant.progress
   name: material
   logo: assets/logo.png
   palette:
-    - scheme: default
-      primary: light blue
-      accent: blue
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Palette toggle for dark mode
-    - scheme: slate
-      primary: light blue
-      accent: blue
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+  - scheme: default
+    primary: light blue
+    accent: blue
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  # Palette toggle for dark mode
+  - scheme: slate
+    primary: light blue
+    accent: blue
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
 repo_url: https://github.com/projectsveltos
 repo_name: projectsveltos
 extra:
   social:
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/projectsveltos
-      name: squidfunk on Twitter
-      link: https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q
-    - icon: fontawesome/brands/github
-      link: https://github.com/projectsveltos
-    - icon: fontawesome/brands/medium
-      link: https://medium.com/@gianluca.mardente
-    - icon: fontawesome/brands/product-hunt
-      link: https://www.producthunt.com/products/projectsveltos
+  - icon: fontawesome/brands/twitter
+    link: https://twitter.com/projectsveltos
+    name: squidfunk on Twitter
+    link: https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q
+  - icon: fontawesome/brands/github
+    link: https://github.com/projectsveltos
+  - icon: fontawesome/brands/medium
+    link: https://medium.com/@gianluca.mardente
+  - icon: fontawesome/brands/product-hunt
+    link: https://www.producthunt.com/products/projectsveltos
 extra_css:
-  - stylesheets/extra.css
+- stylesheets/extra.css
 plugins:
-    - search
-  
+- search
+

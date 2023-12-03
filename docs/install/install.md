@@ -43,7 +43,7 @@ In this mode, Sveltos agents will be created, per managed cluster, in the manage
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
-## Helm installation
+## Helm Installation
 
 ```
 helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
