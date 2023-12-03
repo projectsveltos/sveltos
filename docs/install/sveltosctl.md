@@ -51,4 +51,8 @@ You might also want to change the timezone of sveltosctl pod by using specific t
       type: File
     name: tz-config
 ```
+{==
+
 **Please note:** the Sveltos CLI pod cannot be used as a way to register a worker kubernetes cluster. For that, use the Sveltos Binaries.
+
+==}
