@@ -42,16 +42,9 @@ spec:
     namespace: cert-manager
     script: |
       function evaluate()
-        hs = {}
-        hs.healthy = false
-        hs.message = "available replicas not matching requested replicas"
-        if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nil
-           then
-            if obj.status.availableReplicas == obj.spec.replicas then
-              hs.healthy = true
-            end
-          end
+        local hs = {healthy = false, message = "available replicas not matching requested replicas"}
+        if obj.status and obj.status.availableReplicas ~= nil and obj.status.availableReplicas == obj.spec.replicas then
+          hs.healthy = true
         end
         return hs
       end
