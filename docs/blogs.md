@@ -63,4 +63,5 @@ If you like the project, please [give us a](https://github.com/projectsveltos/sv
 
 [:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Kubernetes add-on controller"){ .md-button .md-button--primary }
 
-[![Stargazers repo roster for @projectsveltos/addon-controller](https://reporoster.com/stars/projectsveltos/addon-controller "stargazers")](https://github.com/projectsveltos/addon-controller/stargazers)
+[![Stargazers repo roster for @projectsveltos/addon-controller](http://reporoster.com/stars/projectsveltos/addon-controller)](https://github.com/projectsveltos/addon-controller/stargazers)
+
