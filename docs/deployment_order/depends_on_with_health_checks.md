@@ -46,7 +46,7 @@ spec:
         hs.healthy = false
         hs.message = "available replicas not matching requested replicas"
         if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nilq:q
+          if obj.status.availableReplicas ~= nil
            then
             if obj.status.availableReplicas == obj.spec.replicas then
               hs.healthy = true
