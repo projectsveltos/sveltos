@@ -1,5 +1,5 @@
 ---
-title: How to install
+title: How to install sveltosctl
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs. Learn here how to install Sveltos.
 tags:
     - Kubernetes
@@ -52,8 +52,5 @@ You might also want to change the timezone of sveltosctl pod by using specific t
       type: File
     name: tz-config
 ```
-{==
 
-**Please note:** The Sveltos CLI pod cannot be used as a way to register a worker kubernetes cluster. For that, use the Sveltos Binaries.
-
-==}
+**Please note:** The Sveltos CLI pod cannot be used as a way to register a worker Kubernetes cluster. For that, use the Sveltos Binaries.

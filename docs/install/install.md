@@ -27,11 +27,11 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/m
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in **each managed clusters**.
+In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each **managed clusters**.
 
 ### Mode 2: Agentless Installation Managed Cluster
 
-If you do not want to have any Sveltos agent in **any managed cluster**, run the following commands:
+If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -51,7 +51,7 @@ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
 helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 ```
 
-Please note that Sveltos pods assume to be running in the *projectsveltos* namespace.
+**Please note:** Sveltos pods assume to be running in the *projectsveltos* namespace.
 
 ## Get Sveltos Status​
 
