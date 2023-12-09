@@ -28,7 +28,7 @@ Sveltos allows add-ons and applications to be represented as templates. Before d
 
 With templates, the same add-on configuration can be used across all of the managed clusters, while still allowing for some variation, such as different add-on configuration values. This approach facilitates the definition and deployment of add-ons and applications in a reusable manner, enabling the application of these definitions across multiple clusters with minimal adjustments. This strategy significantly reduces administrative overhead, particularly in environments managing a large number of clusters.
 
-Sveltos also has an event-driven framework that allows you to deploy add-ons and applications in an orderly manner, or to deploy add-ons in response to certain events.
+Sveltos provides precise control over add-on deployment order. Add-ons within a ClusterProfile are deployed in the exact order they appear, ensuring a predictable and controlled rollout. Furthermore, ClusterProfiles can depend on others, guaranteeing that dependent add-ons only deploy after their dependencies are fully operational. Finally Sveltos' event-driven framework offers additional flexibility. This framework allows for deploying add-ons and applications in response to specific events, enabling dynamic and adaptable deployments based on your needs.
 
 But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
 
