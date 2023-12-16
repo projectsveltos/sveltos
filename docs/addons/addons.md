@@ -45,7 +45,7 @@ It is as simple as that!
 The below example deploys a Kyverno helm chart in every cluster with the label *env=prod*.
 
 ### Step 1: Register Clusters
-The first step is to ensure the CAPI clusters are successful registered with Sevltos. If you did not register your clusters yet, follow the instructions mentioned [here](../register/register-cluster.md).
+The first step is to ensure the CAPI clusters are successfully registered with Sevltos. If you have not registered the clusters yet, follow the instructions mentioned [here](../register/register-cluster.md).
 
 If you already register the CAPI clusters, ensure they are listed and ready to receive add-ons.
 
@@ -60,7 +60,7 @@ cluster13   true    v1.26.9+rke2r1   sveltos-agent=present
 **Please note:** The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command mentioned above.
 
 ### Step 2: Add Kubernetes Label
-The second step is to assing a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assing the label *env=prod*.
+The second step is to assign a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assign the label *env=prod*.
 
 ```bash
 kubectl label sveltosclusters cluster12 env=prod -n projectsveltos
@@ -74,7 +74,7 @@ cluster13   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
 
 ### Step 3: Create the ClusterProfile
 
-The third step is to create a ClusterProfile Kubernetes resources and apply it to the management cluster.
+The third step is to create a ClusterProfile Kubernetes resource and apply it to the management cluster.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
