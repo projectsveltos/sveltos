@@ -12,8 +12,9 @@ tags:
 authors:
     - Gianluca Mardente
 ---
+## ClusterProfiles
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos on which add-ons to deploy on a set of clusters. 
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters. 
 
 ### Spec.ClusterSelector 
 
@@ -25,7 +26,7 @@ clusterSelector: env=prod
 
 ### Spec.HelmCharts
 
-*helmCharts* field consists in a list of helm charts to be deployed in the clusters matching clusterSelector;
+*helmCharts* field consists of a list of helm charts to be deployed to the clusters matching clusterSelector;
 
 ```yaml
   helmCharts:
@@ -42,10 +43,10 @@ clusterSelector: env=prod
 
 *policyRefs* field references a list of ConfigMaps/Secrets, each containing Kubernetes resources to be deployed in the clusters matching clusterSelector.
 
-This field is a slice of *PolicyRef* structs. Each PolictRef has following fields:
+This field is a slice of *PolicyRef* structs. Each PolictRef has the following fields:
 
 - *Kind*: The kind of the referenced resource. The supported kinds are Secret and ConfigMap.
-- *Namespace*: The namespace of the referenced resource. This field is optional, and if it is empty, the namespace will be set to the matching cluster's namespace.
+- *Namespace*: The namespace of the referenced resource. This field is optional, and if empty, the namespace will be set to the matching cluster's namespace.
 - *Name*: The name of the referenced resource. This field must be at least one character long.
 - *DeploymentType*: The deployment type of the referenced resource. This field indicates whether the resource should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.
 
@@ -62,9 +63,9 @@ policyRefs:
 ```
 
 ### Spec.KustomizationRefs
-*kustomizationRefs* field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching clusterSelector. 
+*kustomizationRefs* field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified. 
 
-This field is a slice of *KustomizationRef* structs. Each KustomizationRef has following fields:
+This field is a slice of *KustomizationRef* structs. Each KustomizationRef has the following fields:
 
 - *Kind*: The kind of the referenced resource. The supported kinds are:
     
@@ -121,12 +122,13 @@ spec:
     helmChartAction:  Install
 ```
 
-When a cluster matches this ClusterProfile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the ClusterProfile, the Kyverno Helm chart will be uninstalled. However, if the *stopMatchingBehavior* property is set to *LeavePolicies*, Sveltos will retain the Kyverno Helm chart in the cluster.
+When a cluster matches the ClusterProfile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the ClusterProfile, the Kyverno Helm chart will be uninstalled. However, if the *stopMatchingBehavior* property is set to *LeavePolicies*, Sveltos will retain the Kyverno Helm chart in the cluster.
 
 ### Spec.Reloader
 
 The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets.
 When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
+
 Please refer to this [section](../rolling_upgrade.md) for more information.
 
 ### Spec.MaxUpdate

@@ -13,18 +13,19 @@ authors:
     - Gianluca Mardente
 ---
 
-The ClusterProfile *Spec.PolicyRefs* is a list of Secrets/ConfigMaps. Both Secrets and ConfigMaps data fields can be a list of key-value pairs. Any key is acceptable, and as value, there can be multiple objects in yaml or json format.
+The ClusterProfile *Spec.PolicyRefs* is a list of Secrets/ConfigMaps. Both Secrets and ConfigMaps data fields can be a list of key-value pairs. Any key is acceptable, and the value can be multiple objects in YAML or JSON format.
 
-To create a Secret containing Calico YAMLs, use the following command
+To create a Secret containing Calico YAMLs, use the below commands.
 
 ```bash
 wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
 
 kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
 ```
-[^1]
 
-This YAML file exemplifies a ConfigMap that holds multiple resources. When a ClusterProfile instance references this ConfigMap, a GatewayClass and Gateway instance are automatically deployed in any managed cluster that adheres to the ClusterProfile's *clusterSelector*.
+**Please note:** A ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***
+
+The YAML file exemplifies a ConfigMap that holds multiple resources. When a ClusterProfile instance references this ConfigMap, a GatewayClass and a Gateway instance are automatically deployed in any managed cluster that adheres to the ClusterProfile's *clusterSelector*.
 
 ```yaml
 ---
@@ -64,7 +65,7 @@ data:
 
 ```
 
-Here is an example of a ClusterProfile that references the ConfigMap and Secret we created above:
+The below code represents a ClusterProfile resource that references the ConfigMap and Secret we created above.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -82,7 +83,7 @@ spec:
     kind: Secret
 ```
 
-When a ClusterProfile references a ConfigMap or Secret, the kind and name fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace,name,kind, and that resource will be used for all matching clusters.
+When a ClusterProfile references a ConfigMap or Secret, the **kind** and **name** fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace,name,kind, and that resource will be used for all matching clusters.
 
 If you leave the namespace field empty, Sveltos will search for the ConfigMap or Secret with the provided name within the namespace of each matching cluster.
   
@@ -98,8 +99,6 @@ spec:
     kind: ConfigMap
 ```
 
-Considering the provided ClusterProfile, if we have two workload clusters matching, one in the _foo_ namespace and the other in the _bar_ namespace, Sveltos will search for the ConfigMap _contour-gateway_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _contour-gateway_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
+Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _contour-gateway_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _contour-gateway_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
-
-[^1]: Remember that ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***
