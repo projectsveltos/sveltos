@@ -13,9 +13,13 @@ authors:
     - Gianluca Mardente
 ---
 
-ClusterProfile *Spec.HelmCharts* can list all the Helm charts you want to deploy. Sveltos will deploy the Helm charts in the exact order you define them.
+## Helm Chart Deployment
 
-## Single Helm chart
+ClusterProfile *Spec.HelmCharts* can list all the Helm charts you want to deploy.
+
+**Please note:** Sveltos will deploy the Helm charts in the exact order you define them.
+
+### Single Helm chart
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -28,15 +32,13 @@ spec:
   - repositoryURL:    https://kyverno.github.io/kyverno/
     repositoryName:   kyverno
     chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
+    chartVersion:     v3.1.1
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
 ```
 
-## Multiple Helm charts
-
-Sveltos installs Helm charts in the order specified when multiple charts are listed. 
+### Multiple Helm charts
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -59,9 +61,10 @@ spec:
     chartVersion:     6.58.9
     releaseName:      grafana
     releaseNamespace: grafana
+    helmChartAction:  Install
 ```
 
-## Passing values to Helm chart
+## Pass values to Helm charts
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -75,7 +78,7 @@ spec:
   - repositoryURL:    https://kyverno.github.io/kyverno/
     repositoryName:   kyverno
     chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
+    chartVersion:     v3.1.1
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
@@ -84,7 +87,7 @@ spec:
         replicas: 1
 ```
 
-## Expressing Helm values as templates
+## Express Helm values as templates
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1

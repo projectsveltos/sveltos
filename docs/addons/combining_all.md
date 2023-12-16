@@ -13,6 +13,8 @@ authors:
     - Gianluca Mardente
 ---
 
+## Scenario
+
 A ClusterProfile can have a combination of Helm charts, raw YAML/JSON, and Kustomize configurations.
 
 Consider a scenario where you want to utilize Kyverno to prevent the deployment of images with the 'latest' tag[^1]. To achieve this, you can create a ClusterProfile that:
@@ -20,14 +22,14 @@ Consider a scenario where you want to utilize Kyverno to prevent the deployment 
 - Deploys the Kyverno Helm chart
 - Deploys a Kyverno policy that enforces image validation, ensuring the image specifies a tag other than 'latest'
 
-Download the Kyverno policy and create a ConfigMap containing it within the management cluster.
+Download the Kyverno policy and create a ConfigMap containing the policy within the management cluster.
 
 ```
 wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
 kubectl create configmap disallow-latest-tag --from-file disallow-latest-tag.yaml
 ```
 
-To deploy Kyverno and a ClusterPolicy across all managed clusters matching the label selector _env=fv_, utilize this ClusterProfile."
+To deploy Kyverno and a ClusterPolicy across all managed clusters matching the Sveltos label selector *env=fv*, utilize the below ClusterProfile."
 
 ```yaml
   apiVersion: config.projectsveltos.io/v1alpha1
