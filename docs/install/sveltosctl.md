@@ -40,7 +40,7 @@ Remember that sveltosctl necessitates a PersistentVolume. Before posting the YAM
 
 Once the pod is running,
 ```
- kubectl exec -it -n projectsveltos sveltosctl-0   -- ./sveltosctl --help
+sveltosctl --help
 ```
 
 You might also want to change the timezone of sveltosctl pod by using specific timezone config and hostPath volume to set specific timezone. Currently:
