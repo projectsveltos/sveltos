@@ -18,7 +18,7 @@ Simply insert credentials to your cloud projects, define your cluster, and watch
 f you're using Claudie and want Sveltos to automatically detect your Claudie-powered clusters, deploy this [controller](https://github.com/gianlucam76/claudie-sveltos-integration):
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/gianlucam76/claudie-sveltos-integration/main/manifest/manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/gianlucam76/claudie-sveltos-integration/main/manifest/manifest.yaml
 ```
 
 This controller continuously monitors Claudie's secrets and creates corresponding SveltosCluster objects. Conversely, when a secret is deleted, the controller ensures the corresponding SveltosCluster object is also removed. 

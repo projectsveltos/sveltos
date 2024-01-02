@@ -18,9 +18,9 @@ The ClusterProfile *Spec.PolicyRefs* is a list of Secrets/ConfigMaps. Both Secre
 To create a Secret containing Calico YAMLs, use the below commands.
 
 ```bash
-wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
+$ wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
 
-kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
+$ kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
 ```
 
 **Please note:** A ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***

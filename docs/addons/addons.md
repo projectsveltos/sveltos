@@ -50,7 +50,7 @@ The first step is to ensure the CAPI clusters are successfully registered with S
 If you already register the CAPI clusters, ensure they are listed and ready to receive add-ons.
 
 ```bash
-kubectl get sveltosclusters -n projectsveltos --show-labels
+$ kubectl get sveltosclusters -n projectsveltos --show-labels
 
 NAME        READY   VERSION          LABELS
 cluster12   true    v1.26.9+rke2r1   sveltos-agent=present
@@ -63,9 +63,9 @@ cluster13   true    v1.26.9+rke2r1   sveltos-agent=present
 The second step is to assign a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assign the label *env=prod*.
 
 ```bash
-kubectl label sveltosclusters cluster12 env=prod -n projectsveltos
-kubectl label sveltosclusters cluster13 env=prod -n projectsveltos
-kubectl get sveltosclusters -n projectsveltos --show-labels
+$ kubectl label sveltosclusters cluster12 env=prod -n projectsveltos
+$ kubectl label sveltosclusters cluster13 env=prod -n projectsveltos
+$ kubectl get sveltosclusters -n projectsveltos --show-labels
 
 NAME        READY   VERSION          LABELS
 cluster12   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
@@ -95,9 +95,9 @@ spec:
 ```
 
 ```bash
-kubectl apply -f "kyverno_cluster_profile.yaml"
+$ kubectl apply -f "kyverno_cluster_profile.yaml"
 
-sveltosctl show addons
+$ sveltosctl show addons
 
 +--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 |         CLUSTER          | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
