@@ -46,7 +46,7 @@ spec:
       serviceAccountName: sveltosctl
       containers:
       - name: sveltosctl
-        image: projectsveltos/sveltosctl-amd64:main
+        image: projectsveltos/sveltosctl-amd64:dev
         imagePullPolicy: IfNotPresent
         command:
           - /sveltosctl
@@ -106,6 +106,7 @@ rules:
   - apiGroups: ["config.projectsveltos.io"]
     resources:
       - clusterprofiles
+      - profiles
     verbs:
       - get
       - list
@@ -368,31 +369,6 @@ spec:
                 items:
                   description: Resource indicates the type of resources to collect.
                   properties:
-                    fieldFilters:
-                      description: 'FieldFilters allows to filter resources based
-                        on current field values. Internally uses FieldSelector so
-                        only fields supported by FieldSelector can be used. Current
-                        list: https://github.com/kubernetes/kubernetes/blob/9d577d8a29893062dfbd669997396dbd01ab0e47/pkg/apis/core/v1/conversion.go#L33'
-                      items:
-                        properties:
-                          field:
-                            description: Field is the field
-                            type: string
-                          operation:
-                            description: Operation is the comparison operation
-                            enum:
-                            - Equal
-                            - Different
-                            type: string
-                          value:
-                            description: Value is the field value
-                            type: string
-                        required:
-                        - field
-                        - operation
-                        - value
-                        type: object
-                      type: array
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
