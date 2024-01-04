@@ -68,29 +68,30 @@ metadata:
  name: postgresql-deployment-health
 spec:
  collectResources: false
- group: "apps"
- version: "v1"
- kind: "Deployment"
- namespace: todo
- script: |
-  function evaluate()
-    hs = {}
-    hs.matching = false
-    hs.message = ""
-    if obj.metadata.name == "postgresql" then
-      if obj.status ~= nil then
-        if obj.status.availableReplicas ~= nil then
-          if obj.status.availableReplicas == obj.spec.replicas then
-            hs.matching = true
+ resourceSelectors:
+ - group: "apps"
+   version: "v1"
+   kind: "Deployment"
+   namespace: todo
+   evaluate: |
+    function evaluate()
+      hs = {}
+      hs.matching = false
+      hs.message = ""
+      if obj.metadata.name == "postgresql" then
+        if obj.status ~= nil then
+          if obj.status.availableReplicas ~= nil then
+            if obj.status.availableReplicas == obj.spec.replicas then
+              hs.matching = true
+            end
           end
         end
       end
+      return hs
     end
-    return hs
-  end
 ---
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: deploy-insert-table-job
 spec:
@@ -127,27 +128,28 @@ metadata:
  name: postgresql-job-completed
 spec:
  collectResources: false
- group: "batch"
- version: "v1"
- kind: "Job"
- namespace: todo
- script: |
-  function evaluate()
-    hs = {}
-    hs.matching = false
-    hs.message = ""
-    if obj.metadata.name == "todo-table" then
-      if obj.status ~= nil then
-        if obj.status.succeeded == 1 then
-          hs.matching = true
+ resourceSelectors:
+ - group: "batch"
+   version: "v1"
+   kind: "Job"
+   namespace: todo
+   evaluate: |
+    function evaluate()
+      hs = {}
+      hs.matching = false
+      hs.message = ""
+      if obj.metadata.name == "todo-table" then
+        if obj.status ~= nil then
+          if obj.status.succeeded == 1 then
+            hs.matching = true
+          end
         end
       end
+      return hs
     end
-    return hs
-  end
 ---
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: deploy-todo-app
 spec:
@@ -186,29 +188,30 @@ metadata:
  name: todo-app-health
 spec:
  collectResources: false
- group: "apps"
- version: "v1"
- kind: "Deployment"
- namespace: todo
- script: |
-  function evaluate()
-    hs = {}
-    hs.matching = false
-    hs.message = ""
-    if obj.metadata.name == "todo-gitops" then
-      if obj.status ~= nil then
-        if obj.status.availableReplicas ~= nil then
-          if obj.status.availableReplicas == obj.spec.replicas then
-            hs.matching = true
+ resourceSelectors:
+ - group: "apps"
+   version: "v1"
+   kind: "Deployment"
+   namespace: todo
+   evaluate: |
+    function evaluate()
+      hs = {}
+      hs.matching = false
+      hs.message = ""
+      if obj.metadata.name == "todo-gitops" then
+        if obj.status ~= nil then
+          if obj.status.availableReplicas ~= nil then
+            if obj.status.availableReplicas == obj.spec.replicas then
+              hs.matching = true
+            end
           end
         end
       end
+      return hs
     end
-    return hs
-  end
 ---
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: insert-data
 spec:

@@ -2705,7 +2705,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-compliance-controller-amd64:dev
+        image: projectsveltos/addon-compliance-controller-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5760,7 +5760,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-container: manager
+        kubectl.kubernetes.io/default-container: controller
       labels:
         control-plane: addon-controller
     spec:
@@ -5773,7 +5773,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:dev
+        image: projectsveltos/addon-controller-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6165,7 +6165,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:dev
+        image: projectsveltos/access-manager-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6375,7 +6375,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:dev
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6700,7 +6700,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:dev
+        image: projectsveltos/healthcheck-manager-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7604,7 +7604,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:dev
+        image: projectsveltos/event-manager-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7896,7 +7896,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:dev
+        image: projectsveltos/classifier-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -8176,7 +8176,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:dev
+        image: projectsveltos/shard-controller-amd64:v0.21.0
         livenessProbe:
           httpGet:
             path: /healthz
