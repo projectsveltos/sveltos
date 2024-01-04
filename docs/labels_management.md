@@ -128,22 +128,26 @@ The field *kubernetesVersionConstraints* can be used to classify a cluster based
 #### Resource constraints
 The field *deployedResourceConstraints* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
 
-Following classifier, matches any cluster with at least 30 different namespaces.
+Following classifier, matches any cluster with a Service with label __sveltos:fv__.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: Classifier
 metadata:
-  name: large-ns
+  name: sveltos-service
 spec:
   classifierLabels:
-  - key: env
-    value: large
-  deployedResourceConstraints:
-  - group: ""
-    version: v1
-    kind: Namespace
-    minCount: 30
+  - key: sveltos-service
+    value: present
+  deployedResourceConstraint:
+    resourceSelectors:
+    - group: ""
+      version: v1
+      kind: Service
+      labelFilters:
+      - key: sveltos
+        operation: Equal
+        value: fv
 ```
 
 Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_ 
@@ -158,23 +162,32 @@ spec:
   - key: issuer
     value: acme-staging-v02
   deployedResourceConstraints:
-  - group: "cert-manager.io"
-    version: v1
-    kind: ClusterIssuer
-    minCount: 1
-    script: |
-      function evaluate()
-        hs = {}
-        hs.matching = false
-        hs.message = ""
-        if obj.spec.acme ~= nil then
-          if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
-            hs.matching = true
+    resourceSelectors:
+    - group: "cert-manager.io"
+      version: v1
+      kind: ClusterIssuer
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          hs.message = ""
+          if obj.spec.acme ~= nil then
+            if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
+              hs.matching = true
+            end
           end
+          return hs
         end
-        return hs
-      end
 ```
+
+A Classifier can also look at resources of different kinds all together. 
+__AggregatedClassification__ is optional and can be used to specify a Lua function that will be used to further detect whether the subset of the resources selected using the ResourceSelectors field are a match for this Classifier.
+The function will receive the array of resources selected by ResourceSelectors. If this field is not specified, a cluster is a match for Classifier instance, if all ResourceSelectors returns at least one match.
+This field allows to perform more complex evaluation on the resources, looking at all resources together. This can be useful for more sophisticated tasks, such as identifying resources that are related to each other or that have similar properties.
+The Lua function must return a struct with:
+
+- "matching" field: boolean indicating whether cluster is a match;
+- "message" field: (optional) message.
 
 ### Classifier controller configuration
 

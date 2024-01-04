@@ -17,7 +17,7 @@ authors:
 Sveltos by default will deploy add-ons in the very same cluster an [event](addon_event_deployment.md) is detected.
 Sveltos though can also be configured for cross-cluster configuration: watch for events in a cluster and deploy add-ons in a set of different clusters.
 
-EventBasedAddOn CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
+EventTrigger CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
 This field is optional and not set by default. In such a case, Sveltos default behavior is to deploy add-ons in the same cluster where the event was detected.
 
 If this field is set, Sveltos behavior will change. When an event is detected in a cluster, add-ons will be deployed in all the clusters matching the label selector __destinationClusterSelector__.
@@ -39,24 +39,25 @@ metadata:
  name: load-balancer-service
 spec:
  collectResources: true
- group: ""
- version: "v1"
- kind: "Service"
- script: |
-  function evaluate()
-    hs = {}
-    hs.matching = false
-    hs.message = ""
-    if obj.status.loadBalancer.ingress ~= nil then
-      hs.matching = true
+ resourceSelectors:
+ - group: ""
+   version: "v1"
+   kind: "Service"
+   evaluate: |
+    function evaluate()
+      hs = {}
+      hs.matching = false
+      hs.message = ""
+      if obj.status.loadBalancer.ingress ~= nil then
+        hs.matching = true
+      end
+      return hs
     end
-    return hs
-  end
 ```
-1. an EventBasedAddOn instance that references EventSource defined above (and so watches for load balancer services in any cluster with label env:production, which in our example matches the GKE cluster) and deploys selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_ (in our example the cluster-api provisioned cluster)
+1. an EventTrigger instance that references EventSource defined above (and so watches for load balancer services in any cluster with label env:production, which in our example matches the GKE cluster) and deploys selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_ (in our example the cluster-api provisioned cluster)
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: service-policy
 spec:
