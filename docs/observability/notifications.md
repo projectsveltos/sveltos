@@ -45,7 +45,8 @@ Currently supported types are:
 
 1. <img src="../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> Kubernetes events (__reason=ClusterHealthCheck__);
 2. <img src="../../assets/slack_logo.png" alt="Slack" width="25" />  Slack message; 
-3. <img src="../../assets/webex_logo.png" alt="Webex" width="25" />  Webex message.
+3. <img src="../../assets/webex_logo.png" alt="Webex" width="25" />  Webex message;
+4. <img src="../../assets/discord_logo.png" alt="Discord" width="25" />  Discord message.
 
 
 ### HealthCheck CRD
