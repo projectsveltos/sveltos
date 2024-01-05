@@ -53,7 +53,7 @@ By default, templates have access to the following managment cluster resources:
 1. CAPI Cluster instance. Keyword is `Cluster`
 2. CAPI Cluster infrastructure provider. Keyword is `InfrastructureProvider`
 3. CAPI Cluster kubeadm provider. Keyword is `KubeadmControlPlane` 
-4. For cluster registered with Sveltos, the SveltosCluster instance. Keyword is `SveltosCluster` 
+4. For cluster registered with Sveltos, the SveltosCluster instance. Keyword is `Cluster` 
 
 In addition, Sveltos can fetch any resource from the management cluster. You can set the **templateResourceRefs** in the ClusterProfile Spec section to instruct Sveltos to do so.
 

@@ -5,7 +5,6 @@ tags:
     - Kubernetes
     - add-ons
     - compliance
-    - openapi
 authors:
     - Gianluca Mardente
 ---
@@ -20,12 +19,11 @@ Sveltos is a tool that facilitates the deployment of Kubernetes add-ons across m
 
 When programmatically deploying add-ons using Sveltos, it is crucial to ensure that the deployed add-ons adhere to specific compliance requirements. These requirements may differ depending on the cluster, with production clusters typically having more stringent requirements compared to test clusters.
 
-Sveltos enables the definition of compliance requirements[^2] for a group of clusters and enforces those requirements for all add-ons deployed to those clusters. It employs two technologies to enforce compliance:
+Sveltos enables the definition of compliance requirements[^2] for a group of clusters and enforces those requirements for all add-ons deployed to those clusters. It employs Lua to enforce compliance:
 
-1. [OpenAPI](https://swagger.io/specification/): OpenAPI is a specification for describing APIs. Sveltos can use OpenAPI to define a schema for the APIs exposed by Kubernetes add-ons. This schema can then be used to validate incoming requests and ensure that the data is correctly formatted and structured.
-2. [Lua](https://www.lua.org): Lua is a scripting language that can be used to execute arbitrary code. Sveltos can use Lua to write custom compliance checks. For example, Sveltos could be configured to check that all deployments have a corresponding HorizontalPodAutoscaler.
+1. [Lua](https://www.lua.org): Lua is a scripting language that can be used to execute arbitrary code. Sveltos can use Lua to write custom compliance checks. For example, Sveltos could be configured to check that all deployments have a corresponding HorizontalPodAutoscaler.
 
-By combining OpenAPI and Lua, Sveltos provides a comprehensive solution for enforcing Kubernetes add-on compliance[^1]. This helps organizations in ensuring that their Kubernetes clusters are both secure and compliant with industry regulations and standards.
+By using Lua, Sveltos provides a comprehensive solution for enforcing Kubernetes add-on compliance[^1]. This helps organizations in ensuring that their Kubernetes clusters are both secure and compliant with industry regulations and standards.
 
 Here are some additional benefits of using Sveltos to enforce Kubernetes add-on compliance:
 
@@ -46,20 +44,16 @@ metadata:
  name: depl-replica
 spec:
   clusterSelector: env=production
-  openAPIValidationRefs:
-  - namespace: default
-    name: openapi-deployment
-    kind: ConfigMap
   luaValidationRefs:
   - namespace: default
     name: depl-horizontalpodautoscaler
     kind: ConfigMap
 ```
 
-Above instance is definining a set of compliances (contained in the referenced ConfigMaps) which needs to be enforced in any managed cluster matching the clusterSelector field.
+Above instance is definining a set of compliances (contained in the referenced ConfigMap) which needs to be enforced in any managed cluster matching the clusterSelector field.
 ClusterSelector field is just a pure Kubernetes label selector. So any cluster with label `env: production` will be a match.
 
-The referenced ConfigMap contains an openAPI validation or a Lua validation. 
+The referenced ConfigMap contains a Lua validation. 
 
 ### ConfigMap with a Lua policy
 
@@ -129,99 +123,6 @@ metadata:
   namespace: default
 ```
 
-### OpenAPI compliance policy
-
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: AddonCompliance
-metadata:
- name: depl-replica
-spec:
-  clusterSelector: env=production
-  openAPIValidationRefs:
-  - namespace: default
-    name: openapi-deployment
-    kind: ConfigMap
-```
-
-Following ConfigMap contains an OpenAPI policy enforcing that any deployment in any namespace must have at least 3 replicas.
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: openapi-deployment
-  namespace: default
-data:
-  openapi.yaml: |
-    openapi: 3.0.0
-    info:
-      title: Kubernetes Replica Validation
-      version: 1.0.0
-
-    paths:
-      /apis/apps/v1/namespaces/{namespace}/deployments:
-        post:
-          parameters:
-            - in: path
-              name: namespace
-              required: true
-              schema:
-                type: string
-                minimum: 1
-              description: The namespace of the resource
-          summary: Create/Update a new deployment
-          requestBody:
-            required: true
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Deployment'
-          responses:
-            '200':
-              description: OK
-
-    components:
-      schemas:
-        Deployment:
-          type: object
-          properties:
-            metadata:
-              type: object
-              properties:
-                name:
-                  type: string
-            spec:
-              type: object
-              properties:
-                replicas:
-                  type: integer
-                  minimum: 3
-```
-
-The [Kubernetes API](https://kubernetes.io/docs/reference/using-api/api-concepts/) is a programmatic interface provided via HTTP, which operates on resources using a RESTful approach. Before deploying a resource, Sveltos validates it against all the compliances associated with the cluster.
-
-For example, when deploying a deployment resource, Sveltos builds the URI based on the desired action using the openapi policy. The following URIs illustrate the structure (using deployments as an example, but the pattern applies to other resource types as well):
-
-```
-/apis/apps/v1/namespaces/{namespace}/deployments
-POST: create a Deployment
-
-/apis/apps/v1/namespaces/{namespace}/deployments/{name}
-PATCH: partially update the specified Deployment
-PUT: replace the specified Deployment
-
-/apis/apps/v1/namespaces/{namespace}/deployments/{name}/scale
-PATCH: partially update scale of the specified Deployment
-PUT: replace scale of the specified Deployment
-
-/apis/apps/v1/namespaces/{namespace}/deployments/{name}/status
-PATCH: partially update status of the specified Deployment
-PUT: replace status of the specified Deployment
-```
-
-These URIs provide examples of the various actions that can be performed on a deployment resource within the Kubernetes API. When creating an openAPI policy for Sveltos to use, it is important to ensure that the paths defined in the policy align with the schema illustrated above. This will help maintain consistency and compatibility with the expected URI structure for deploying and managing resources within Kubernetes.
-
 ## Sveltos implementation details
 
 There are two main components involved:
@@ -262,26 +163,8 @@ spec:
         replicas: 1
 ```
 
-Following error is reported back
+An error is reported back
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterSummary
-...
-status:
-  featureSummaries:
-  - failureMessage: |
-      OpenAPI validation depl-replica-ConfigMap:default/openapi-deployment-0 failed request body has an error: doesn't match schema #/components/schemas/Deployment: Error at "/spec/replicas": number must be at least 3
-      Schema:
-        {
-          "minimum": 3,
-          "type": "integer"
-        }
-
-      Value:
-        1
-    featureID: Helm
-```
 
 Changing the replicas to 3, will make sure Kyverno helm chart satisfies all compliances and helm chart is deployed:
 
@@ -332,22 +215,6 @@ However, there are more significant advantages to consider:
 2. **Consistency in Resource Deployment**: Another important aspect is the behavior regarding resource deployment. In the case of an Helm chart, it often deploys multiple resources together. With this approach, a strict rule applies: either all resources are valid and satisfy the existing compliances, or none of them are deployed. This ensures consistency and avoids partial or incomplete deployments, providing a reliable and predictable deployment process.
 
 By considering these advantages, you can make an informed decision when choosing between this approach and utilizing an admission controller for your cluster management and add-on deployment needs.
-
-## Validating your OpenAPI policies
-
-If you want to validate your OpenAPI policies:
-
-1. clone sveltos addon-controller repo: git clone  git@github.com:projectsveltos/addon-controller.git
-2. cd controllers/validate_openapi
-3. Create your own directory within the `validate_openapi` directory. Inside this directory, create the following files:
-- `openapi_policy.yaml`: This file should contain your OpenAPI policy.
-- `valid_resource.yaml`: This file should contain a resource that satisfies the OpenAPI policy.
-- `invalid_resource.yaml`: This file should contain a resource that does not satisfy the OpenAPI policy.
-4. run `make test` from repo directory.
-
-
-Running `make test` will initiate the validation process, which thoroughly tests your OpenAPI policies against the provided resource files. This procedure ensures that your defined policy is not only syntactically correct but also functionally accurate. By executing the validation tests, you can gain confidence in the correctness and reliability of your OpenAPI policies.
-By following these steps, you can easily validate your OpenAPI policies using the Sveltos addon-controller repository.
 
 ## Validating your Lua policies
 

@@ -17,9 +17,9 @@ Sveltos supports an event-driven workflow:
 
 1. define what an event is;
 2. select on which clusters watch for such events;
-3. define which add-ons to deploy when event happens.
+3. define the event trigger: which add-ons/applications to deploy when event happens.
 
-By default, add-ons are deployed in the same cluster where events are detected.
+By default, add-ons/applications are deployed in the same cluster where events are detected.
 Sveltos supports though also cross-clusters:
 
 1. if an event happens in cluster __foo__
@@ -41,13 +41,14 @@ metadata:
  name: sveltos-service
 spec:
  collectResources: true
- group: ""
- version: "v1"
- kind: "Service"
- labelFilters:
- - key: sveltos
-   operation: Equal
-   value: fv
+ resourceSelectors:
+ - group: ""
+   version: "v1"
+   kind: "Service"
+   labelFilters:
+   - key: sveltos
+     operation: Equal
+     value: fv
 ```
 
 Sveltos supports custom events written in [Lua](https://www.lua.org/). 
@@ -60,25 +61,26 @@ metadata:
  name: sveltos-service
 spec:
  collectResources: true
- group: ""
- version: "v1"
- kind: "Service"
- script: |
-  function evaluate()
-    hs = {}
-    hs.matching = false
-    hs.message = ""
-    if obj.metadata.labels ~= nil then
-      for key, value in pairs(obj.metadata.labels) do
-        if key == "sveltos" then
-          if value == "fv" then
-            hs.matching = true
+ resourceSelectors:
+ - group: ""
+   version: "v1"
+   kind: "Service"
+   evaluate: |
+    function evaluate()
+      hs = {}
+      hs.matching = false
+      hs.message = ""
+      if obj.metadata.labels ~= nil then
+        for key, value in pairs(obj.metadata.labels) do
+          if key == "sveltos" then
+            if value == "fv" then
+              hs.matching = true
+            end
           end
         end
       end
+      return hs
     end
-    return hs
-  end
 ```
 
 In general, script is a customizable way to define complex events easily. Use it when filtering resources using labels is not enough.
@@ -101,6 +103,68 @@ Then in *pkg/evaluation/events* directory, create a directory for your resource 
 4. *make test*
 
 That will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
+
+Resources of different kinds can be examined together. The __AggregatedSelection__ is an optional field and can be used to specify a Lua function that will be used to further select a subset of the resources that have already been selected using the ResourceSelector field.
+The function will receive the array of resources selected by ResourceSelectors.  This field allows to perform more complex filtering or selection operations on the resources, looking at all resources together.
+This can be useful for more sophisticated tasks, such as identifying resources that are related to each other or that have similar properties.
+The Lua function must return a struct with:
+
+- "resources" field: slice of matching resorces;
+- "message" field: (optional) message.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: EventSource
+metadata:
+ name: sveltos-service
+spec:
+ collectResources: true
+ resourceSelectors:
+ - group: "apps"
+   version: "v1"
+   kind: "Deployment"
+ - kind: HorizontalPodAutoscaler
+   group: "autoscaling"
+   version: v2
+ aggregatedSelection: |
+      function getKey(namespace, name)
+        return namespace .. ":" .. name
+      end
+
+      function evaluate()
+        local hs = {}
+        hs.message = ""
+
+        local deployments = {}
+        local autoscalers = {}
+        local deploymentsWithNoAutoscaler = {}
+
+        for _, resource in ipairs(resources) do
+          local kind = resource.kind
+          if kind == "Deployment" then
+            key = getKey(resource.metadata.namespace, resource.metadata.name)
+            deployments[key] = true
+          elseif kind == "HorizontalPodAutoscaler" then
+            table.insert(autoscalers, resource)
+          end
+        end
+
+        -- Check for each horizontalPodAutoscaler if there is a matching Deployment
+        for _,hpa in ipairs(autoscalers) do
+            key = getKey(hpa.metadata.namespace, hpa.spec.scaleTargetRef.name)
+            if hpa.spec.scaleTargetRef.kind == "Deployment" then
+              if not deployments[key] then
+                table.insert(unusedAutoscalers, hpa)
+              end
+            end
+        end
+
+        if #unusedAutoscalers > 0 then
+          hs.resources = unusedAutoscalers
+        end
+        return hs
+      end
+```
 
 ## Event and multi-tenancy
 
@@ -137,7 +201,7 @@ spec:
       - resources:
           kinds:
           - EventSource
-          - EventBasedAddOn
+          - EventTrigger
     mutate:
       patchStrategicMerge:
         metadata:
@@ -150,7 +214,7 @@ spec:
 
 ## Define the add-ons to deploy
 
-[EventBasedAddOn](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1alpha1/eventbasedaddon_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
+[EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1alpha1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
 Each EventBasedAddon instance: 
 
@@ -158,12 +222,12 @@ Each EventBasedAddon instance:
 2. has a sourceClusterSelector selecting one or more managed clusters;
 3. contains list of add-ons to deploy (either referencing ConfigMaps/Secrets or Helm charts).
 
-For instance following EventBasedAddOn references the eventSource *sveltos-service* defined above.
+For instance following EventTrigger references the eventSource *sveltos-service* defined above.
 It referenced a ConfigMap that contains a *NetworkPolicy* expressed as a template.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: service-network-policy
 spec:
@@ -275,7 +339,7 @@ This is achieved with following flow:
 1. sveltos-agent in the managed cluster consumes EventSource instances and detects when an event happens;
 2. when event happens, event is reported to management cluster (along with resources, since EventSource *Spec.CollectResources* is set to true) in the form of __EventReport__;
 3. event-manager pod running in the management cluster, consumes the EventReport and:
-      - creates a new ConfigMap in the *projectsveltos* namespace, whose content is derived from ConfigMap the EventBasedAddOn instance references, and instantiated using information coming the resource in the managed cluster (Service instance with label sveltos:fv);
+      - creates a new ConfigMap in the *projectsveltos* namespace, whose content is derived from ConfigMap the EventTrigger instance references, and instantiated using information coming the resource in the managed cluster (Service instance with label sveltos:fv);
       - creates a ClusterProfile.
 
 ### EventSource CollectResources setting
@@ -317,9 +381,9 @@ apiVersion: lib.projectsveltos.io/v1alpha1
 
 where resources is simply base64 encoded representation of the Service.
 
-### EventBasedAddOn OneForEvent setting
+### EventTrigger OneForEvent setting
 
-EventBasedAddOn OneForEvent (false by default) field indicates whether to create one ClusterProfile for Kubernetes resource matching the referenced EventSource, or one for all resources.
+EventTrigger OneForEvent (false by default) field indicates whether to create one ClusterProfile for Kubernetes resource matching the referenced EventSource, or one for all resources.
 
 In above example, if we create another Service in the managed cluster with label *sveltos: fv*
 
@@ -344,7 +408,7 @@ Another example can be found [here](addon_event_deployment.md#yet-another-exampl
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: service-network-policy
 spec:
@@ -392,33 +456,34 @@ metadata:
  name: https-service
 spec:
  collectResources: true
- group: ""
- version: "v1"
- kind: "Service"
- namespace: eng
- script: |
-   function evaluate()
-     hs = {}
-     hs.matching = false
-     if obj.spec.ports ~= nil then
-       for _,p in pairs(obj.spec.ports) do
-         if p.port == 443 or p.port == 8443 then
-           hs.matching = true
+ resourceSelectors:
+ - group: ""
+   version: "v1"
+   kind: "Service"
+   namespace: eng
+   evaluate: |
+     function evaluate()
+       hs = {}
+       hs.matching = false
+       if obj.spec.ports ~= nil then
+         for _,p in pairs(obj.spec.ports) do
+           if p.port == 443 or p.port == 8443 then
+             hs.matching = true
+           end
          end
        end
+       return hs
      end
-     return hs
-   end
 ```
 
-Following EventBasedAddOn instance is referencing the EventSource instance defined above, and it is referencing a ConfigMap containing a template for an Ingress resource.
+Following EventTrigger instance is referencing the EventSource instance defined above, and it is referencing a ConfigMap containing a template for an Ingress resource.
 Note that *oneForEvent* field is set to false, instructing Sveltos to create a single Ingress for all Service instances in the managed cluster matching the EventSource.
 
 When *oneForEvent* is set to false, when instantiating the Ingress template, *Resources* is an array containing all Services in the managed cluster matching the EventSource. Any field can be accessed.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: ingress-configuration
  namespace: default
@@ -541,28 +606,29 @@ metadata:
  name: eng-http-service
 spec:
  collectResources: true
- group: ""
- version: "v1"
- kind: "Service"
- namespace: eng
- script: |
-   function evaluate()
-     hs = {}
-     hs.matching = false
-     if obj.spec.ports ~= nil then
-       for _,p in pairs(obj.spec.ports) do
-         if p.port == 80 then
-           hs.matching = true
+ resourceSelectors:
+ - group: ""
+   version: "v1"
+   kind: "Service"
+   namespace: eng
+   evaluate: |
+     function evaluate()
+       hs = {}
+       hs.matching = false
+       if obj.spec.ports ~= nil then
+         for _,p in pairs(obj.spec.ports) do
+           if p.port == 80 then
+             hs.matching = true
+           end
          end
        end
+       return hs
      end
-     return hs
-   end
 ```
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventBasedAddOn
+kind: EventTrigger
 metadata:
  name: service-network-policy
 spec:
