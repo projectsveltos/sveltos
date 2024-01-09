@@ -28,11 +28,26 @@ Sveltos allows add-ons and applications to be represented as templates. Before d
 
 With templates, the same add-on configuration can be used across all of the managed clusters, while still allowing for some variation, such as different add-on configuration values. This approach facilitates the definition and deployment of add-ons and applications in a reusable manner, enabling the application of these definitions across multiple clusters with minimal adjustments. This strategy significantly reduces administrative overhead, particularly in environments managing a large number of clusters.
 
-Sveltos provides precise control over add-on deployment order. Add-ons within a ClusterProfile are deployed in the exact order they appear, ensuring a predictable and controlled rollout. Furthermore, ClusterProfiles can depend on others, guaranteeing that dependent add-ons only deploy after their dependencies are fully operational. Finally Sveltos' event-driven framework offers additional flexibility. This framework allows for deploying add-ons and applications in response to specific events, enabling dynamic and adaptable deployments based on your needs.
+Sveltos provides precise control over add-on deployment order. Add-ons within a Profile/ClusterProfile are deployed in the exact order they appear, ensuring a predictable and controlled rollout. Furthermore, Profiles/ClusterProfiles can depend on others, guaranteeing that dependent add-ons only deploy after their dependencies are fully operational. Finally Sveltos' event-driven framework offers additional flexibility. This framework allows for deploying add-ons and applications in response to specific events, enabling dynamic and adaptable deployments based on your needs.
 
 But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
 
 ![Sveltos addons](assets/addons.png)
+
+## Profiles vs. ClusterProfiles
+
+Projectsveltos offers two powerful tools for managing cluster configurations: Profiles and ClusterProfiles. Understanding their distinctions is crucial for efficient setup and administration.
+
+Scope and Visibility:
+
+- ClusterProfiles: Apply across all clusters in any namespace. Ideal for platform admins maintaining global consistency and managing settings like networking, security, and resource allocation.
+- Profiles: Limited to a specific namespace, granting granular control to tenant admins. This isolation ensures teams manage, from the management cluster, their managed clusters independently without impacting others.
+
+![Profile vs ClusterProfile](assets/profile_vs_clusterprofile.png)
+In such an environment:
+
+- ✅ Global Consistency can be ensured by platform admins using ClusterProfiles.
+- ✅ Profiles empower tenant admins to specify what is needed in their clusters without interfering with other tenant’s clusters.
 
 ## 😻 Contributing to projectsveltos
 We love to hear from our community!
