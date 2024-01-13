@@ -12,9 +12,11 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos allows you to represent add-ons and applications as templates. Before deploying to managed clusters, Sveltos instantiates these templates. Sveltos can gather the information required to instantiate the templates from either the management cluster or the managed clusters themselves.
+## Introduction to Templates
 
-For example, let's say you need to deploy Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With ClusterProfile, you can create a configuration that specifies these details, and the deployment will be ready to go in all matching clusters.
+Sveltos allows you to represent add-ons and applications as templates. Before deploying to managed clusters, Sveltos instantiates the templates. It can gather the information required to instantiate them from either the **management cluster** or the **registered managed clusters**.
+
+Let's imagine you would like to deploy Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With the ClusterProfile, you can create a configuration that specifies these requirements, and the deployment will be pushed to all the matching clusters based on the Sveltos label. In the example delow, the label is set to *end=fv*.
 
 ```yaml
 ---
