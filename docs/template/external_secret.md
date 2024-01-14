@@ -11,13 +11,15 @@ authors:
     - Gianluca Mardente
 ---
 
+## What is a Kubernetes Secret
+
 A secret is any piece of information that you want to keep confidential, such as API keys, passwords, certificates, and SSH keys. Secret Manager systems store your secrets in a secure, encrypted format, and provides you with a simple, secure way to access them.
 
-Here are some of the benefits of using Secret Manager:
+Benefits of using a Secret Manager:
 
-1. Security: Secret Manager uses strong encryption to protect your secrets. Your secrets are never stored in plaintext, and they are only accessible to authorized users.
-2. Convenience: Secret Manager makes it easy to manage your secrets. You can store, access, and rotate your secrets from anywhere.
-3. Auditability: Secret Manager provides detailed audit logs that track who accessed your secrets and when. This helps you to track down security incidents and to comply with security regulations.
+1. **Security:** The Secret Manager uses strong encryption to protect your secrets. Your secrets are never stored in plaintext, and they are only accessible to authorized users only.
+2. **Convenience:** The Secret Manager makes it easy to manage the secrets. You can store, access, and rotate your secrets from anywhere.
+3. **Auditability:** The Secret Manager provides detailed audit logs that track who accessed your secrets and when. This helps you to track down security incidents and to comply with security regulations.
 
 ## External Secret Operator
 
@@ -27,47 +29,52 @@ Here are some of the benefits of using Secret Manager:
 
 ## Distribute Secret to managed clusters
 
-When managing a multitude of Kubernetes clusters, External Secrets Operator can be deployed in the management cluster. Sveltos can then be used to distribute the secret to managed clusters.
+When managing a multitude of Kubernetes clusters, External Secrets Operator can be deployed in the management cluster. Sveltos can be used to distribute the secrets to the managed clusters.
 
 ![External Secret Operator with Sveltos](../assets/external_secret.gif)
 
-- External Secret Operator fetches secrets from an external API and creates Kubernetes secrets;
-- Sveltos distributes fetched secret to managed clusters;
-- If the secret from the external API changes, External Secret Operator will reconcile the state in the management cluster and update the secrets accordingly;
+- The External Secret Operator fetches secrets from an external API and creates Kubernetes secrets;
+- Sveltos distributes fetched secrets to the managed clusters;
+- If the secret from the external API changes, the External Secret Operator will reconcile the state in the management cluster and update the secrets accordingly;
 - Sveltos will reconcile the state in each managed cluster where secret was distributed.
 
-## Tutorial using Google Cloud Secret Manager
+## Example using Google Cloud Secret Manager
 
-To properly follow this tutorial, make sure you have installed the following tools:
+To properly follow the example, please ensure you have installed the below tools:
 
-- management cluster with Sveltos
+- Sveltos management cluster
 - [external-secrets](https://external-secrets.io/v0.8.5/introduction/getting-started/#installing-with-helm) deployed in the management cluster
 - gcloud cli installed
 
 ![External Secret Operator with Sveltos](../assets/eso_sveltos.png)
 
 ```
-yourproject=<your-google-cloud-project-name-here>
-gcloud config set project $yourproject
-gcloud services enable secretmanager.googleapis.com
+$ yourproject=<your-google-cloud-project-name-here>
+
+$ gcloud config set project $yourproject
+
+$ gcloud services enable secretmanager.googleapis.com
 ```
 
 Create a secret inside Google Cloud Secret Manager
 
 ```
-echo -ne '{"password":"yoursecret"}' | gcloud secrets create yoursecret --data-file=-
-gcloud iam service-accounts create external-secrets
-gcloud secrets add-iam-policy-binding yoursecret --member "serviceAccount:external-secrets@$yourproject.iam.gserviceaccount.com" --role "roles/secretmanager.secretAccessor"
+$ echo -ne '{"password":"yoursecret"}' | gcloud secrets create yoursecret --data-file=-
+
+$ gcloud iam service-accounts create external-secrets
+
+$ gcloud secrets add-iam-policy-binding yoursecret --member "serviceAccount:external-secrets@$yourproject.iam.gserviceaccount.com" --role "roles/secretmanager.secretAccessor"
 ```
 
-And create a key for the service account.
+Create a key for the service account.
 
 ```
-gcloud iam service-accounts keys create key.json --iam-account=external-secrets@$yourproject.iam.gserviceaccount.com
-kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials=key.json
+$ gcloud iam service-accounts keys create key.json --iam-account=external-secrets@$yourproject.iam.gserviceaccount.com
+
+$ kubectl create secret generic gcpsm-secret --from-file=secret-access-credentials=key.json
 ```
 
-Now configure External Secret Operator to fetch secret from Google Cloud Secret Manager and creates a secret in the management kubernetes cluster.
+Now configure External Secret Operator to fetch secrets from Google Cloud Secret Manager and creates a secret in the Kubernetes management cluster.
 
 ```yaml
 >cat <<EOF | kubectl apply -f -
@@ -139,16 +146,16 @@ data:
     kind: Secret
     metadata:
       name: eso
-      namespace: {{ (index .MgtmResources "ExternalSecret").metadata.namespace }}
+      namespace: {{ (index .MgmtResources "ExternalSecret").metadata.namespace }}
     data:
-      content: {{ (index .MgtmResources "ExternalSecret").data.content }}
+      content: {{ (index .MgmtResources "ExternalSecret").data.content }}
 EOF
 ```
 
 Using sveltos CLI, it is possible to verify Sveltos has propagated the information to all managed clusters.
 
 ```
-sveltosctl show addons
+$ sveltosctl show addons
 +-----------------------------+---------------+-----------+------+---------+-------------------------------+------------------+
 |           CLUSTER           | RESOURCE TYPE | NAMESPACE | NAME | VERSION |             TIME              | CLUSTER PROFILES |
 +-----------------------------+---------------+-----------+------+---------+-------------------------------+------------------+
