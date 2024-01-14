@@ -21,7 +21,7 @@ To register the management cluster to Sveltos, the **sveltosctl** binary can be 
 **Please note:** The kubeconfig should point to the management cluster.
 
 ```
-sveltosctl register mgmt-cluster
+$ sveltosctl register mgmt-cluster
 ```
 
 This will create a SveltosCluster in the namespace __mgmt__ representing the management cluster.

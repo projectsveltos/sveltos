@@ -22,9 +22,9 @@ Sveltos is a set of Kubernetes controllers deployed in the management cluster. F
 To install Sveltos, run the following commands:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
 
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
 In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each **managed clusters**.
@@ -34,9 +34,9 @@ In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-d
 If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
 
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
 In this mode, Sveltos agents will be created, per managed cluster, in the management cluster itself[^2].
@@ -46,9 +46,9 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 ## Helm Installation
 
 ```
-helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
+$ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
 
-helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
+$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 ```
 
 **Please note:** Sveltos pods assume to be running in the *projectsveltos* namespace.

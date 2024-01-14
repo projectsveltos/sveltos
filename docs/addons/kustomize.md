@@ -48,7 +48,7 @@ spec:
 ```
 
 ```bash
-sveltosctl show addons
+$ sveltosctl show addons
 +-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 |               CLUSTER               |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
 +-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -65,9 +65,11 @@ If you have directories containing Kustomize resources, you can put the content 
 In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, and then create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
 
 ```bash
-git clone git@github.com:gianlucam76/kustomize.git 
-tar -czf kustomize.tar.gz -C kustomize/helloWorldWithOverlays .
-kubectl create configmap kustomize --from-file=kustomize.tar.gz
+$ git clone git@github.com:gianlucam76/kustomize.git 
+
+$ tar -czf kustomize.tar.gz -C kustomize/helloWorldWithOverlays .
+
+$ kubectl create configmap kustomize --from-file=kustomize.tar.gz
 ```
 
 The below ClusterProfile will use the Kustomize SDK to get all the resources that need to be deployed. Then it will deploy those in the `production` namespace in each managed cluster with the Sveltos clusterSelector *env=fv*.
@@ -89,7 +91,7 @@ spec:
 ```
 
 ```bash
-sveltosctl show addons
+$ sveltosctl show addons
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
 |               CLUSTER               |  RESOURCE TYPE  | NAMESPACE  |           NAME            | VERSION |             TIME              |     CLUSTER PROFILES     |
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+

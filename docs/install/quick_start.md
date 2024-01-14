@@ -20,9 +20,9 @@ Before you begin, please ensure you already have a management cluster with proje
 If you want to try the projectsveltos with a **test cluster**, follow the steps below:
 
 ``` bash
-1. git clone https://github.com/projectsveltos/addon-controller
+$ git clone https://github.com/projectsveltos/addon-controller
 
-2. make quickstart
+$ make quickstart
 ```
 
 The above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos, 
@@ -55,7 +55,7 @@ spec:
 Download this file
 
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/demos/main/httproute/gateway-class.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/demos/main/httproute/gateway-class.yaml
 ```
 
 which contains:
@@ -69,7 +69,7 @@ which contains:
 and create a Secret in the management cluster containing the contents of the downloaded file:
 
 ```bash
-kubectl create secret generic contour-gateway-provisioner-secret --from-file=contour-gateway-provisioner.yaml --type=addons.projectsveltos.io/cluster-profile
+$ kubectl create secret generic contour-gateway-provisioner-secret --from-file=contour-gateway-provisioner.yaml --type=addons.projectsveltos.io/cluster-profile
 ```
 
 To deploy all these resources in any cluster with labels *env: fv*, create a ClusterProfile instance in the management cluster referencing the Secret created above:
