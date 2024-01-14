@@ -148,7 +148,7 @@ EOF
 Using sveltos CLI, it is possible to verify Sveltos has propagated the information to all managed clusters.
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show addons
+sveltosctl show addons
 +-----------------------------+---------------+-----------+------+---------+-------------------------------+------------------+
 |           CLUSTER           | RESOURCE TYPE | NAMESPACE | NAME | VERSION |             TIME              | CLUSTER PROFILES |
 +-----------------------------+---------------+-----------+------+---------+-------------------------------+------------------+

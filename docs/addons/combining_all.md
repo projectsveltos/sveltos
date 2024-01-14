@@ -25,7 +25,7 @@ Consider a scenario where you want to utilize Kyverno to prevent the deployment 
 Download the Kyverno policy and create a ConfigMap containing the policy within the management cluster.
 
 ```
-wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
+$ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
 kubectl create configmap disallow-latest-tag --from-file disallow-latest-tag.yaml
 ```
 

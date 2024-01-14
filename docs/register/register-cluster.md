@@ -23,13 +23,13 @@ If you already have an existing cluster and you want Sveltos to manage it, three
 3. Point sveltosctl to the management cluster, use *sveltosctl register cluster* command passing the file containing the kubeconfig generated in the step above. Sveltoctl will generate all necessary Kubernetes resources (SveltosCluster and Secret) in the management cluster. For instance:
 
 ```
-sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
 ``` 
 
 It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to register a cluster.
 
-**Note:** If you are unsure how to generate a Kubernetes ServiceAccount and a kubeconfig associated with it, have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh) [^1]. Read the script comments to get more clarity on the use and expected outcomes.
+**Please note:** If you are unsure how to generate a Kubernetes ServiceAccount and a kubeconfig associated with it, have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh) [^1]. Read the script comments to get more clarity on the use and expected outcomes.
 
 An alternative is to manually create:
 
@@ -40,7 +40,7 @@ An alternative is to manually create:
 If you use [Civo Cloud](https://www.civo.com), simply download the cluster Kubeconfig and perform the below.
 
 ```
-sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
 ```
 
@@ -60,7 +60,7 @@ Follow the below steps to register a GKE cluster with Sveltos.
 If you use Rancher's next-generation Kubernetes distribution [RKE2](https://docs.rke2.io/), you will only need to download the kubeconfig either from the Rancher UI under the Cluster Management section or via SSH into the RKE2 Cluster and under the */etc/rancher/rke2/rke2.yaml* directory. Run the below command.
 
 ```
-sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
 ```
 
