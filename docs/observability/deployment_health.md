@@ -23,30 +23,40 @@ Following HealthCheck, considers all Deployments. Any Deployment:
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
- name: deployment-replicas
+  name: deployment-replicas
 spec:
- group: "apps"
- version: v1
- kind: Deployment
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Progressing"
-     hs.message = ""
-     if obj.status ~= nil then
-       if obj.status.availableReplicas ~= nil then
-         if obj.status.availableReplicas == obj.spec.replicas then
-           hs.status = "Healthy"
-         else
-           hs.status = "Progressing"
-           hs.message = "expected replicas: " .. obj.spec.replicas .. " available: " .. obj.status.availableReplicas
-         end
-       end
-       if obj.status.unavailableReplicas ~= nil then
-          hs.status = "Degraded"
-          hs.message = "deployments have unavailable replicas"
-       end
-     end
-     return hs
-   end
+  resourceSelectors:
+  - group: "apps"
+    version: v1
+    kind: Deployment
+  evaluateHealth: |
+    function evaluate()
+      local statuses = {}
+      status = "Progressing"
+      message = ""
+
+      for _,resource in ipairs(resources) do
+        if resource.status ~= nil then
+          if resource.status.availableReplicas ~= nil then
+            if resource.status.availableReplicas == resource.spec.replicas then
+              status = "Healthy"
+            else
+              status = "Progressing"
+              message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
+            end
+          end
+          if resource.status.unavailableReplicas ~= nil then
+            status = "Degraded"
+            message = "deployments have unavailable replicas"
+          end
+        end
+        table.insert(statuses, {resource=resource, status = status, message = message})
+      end
+      
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      return hs
+    end
 ```

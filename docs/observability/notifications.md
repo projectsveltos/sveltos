@@ -80,31 +80,41 @@ At the end, we return the hs object to Sveltos.
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
- name: opa-configmaps
+  name: opa-configmaps
 spec:
- group: ""
- version: v1
- kind: ConfigMap
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Healthy"
-     hs.ignore = true
-     local opa_annotation = "openpolicyagent.org/policy-status"
-     if obj.metadata.annotations ~= nil then
-       if obj.metadata.annotations[opa_annotation] ~= nil then
-         hs.ignore = false
-         if obj.metadata.annotations[opa_annotation] == '{"status":"ok"}' then
-           hs.status = "Healthy"
-           hs.message = "Policy loaded successfully"
-         else
-           hs.status = "Degraded"
-           hs.message = obj.metadata.annotations[opa_annotation]
-         end
-       end
-     end
-     return hs
-   end
+  resourceSelectors:
+  - group: ""
+    version: v1
+    kind: ConfigMap
+  evaluateHealth: |
+    function evaluate()
+      statuses = {}
+
+      status = "Healthy"
+      message = ""
+
+      local opa_annotation = "openpolicyagent.org/policy-status"
+     
+      for _,resource in ipairs(resources) do
+        if resource.metadata.annotations ~= nil then
+          if resource.metadata.annotations[opa_annotation] ~= nil then
+            if obj.metadata.annotations[opa_annotation] == '{"status":"ok"}' then
+              status = "Healthy"
+              message = "Policy loaded successfully"
+            else
+              status = "Degraded"
+              message = obj.metadata.annotations[opa_annotation]
+            end
+            table.insert(statuses, {resource=resource, status = status, message = message})  
+          end
+        end
+      end  
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      return hs
+    end
 ```
 
 Following ClusterHealthCheck, will sends a Webex message as notification anytime a ConfigMap
