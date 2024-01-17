@@ -21,25 +21,32 @@ kind: HealthCheck
 metadata:
  name: failed-cert
 spec:
- group: "cert-manager.io"
- version: "v1"
- kind: "Certificate"
- script: |
-  function evaluate()
-    hs = {}
-    hs.ignore = true
-    if obj.status ~= nil then
-      if obj.status.conditions ~= nil then
-        for i, condition in ipairs(obj.status.conditions) do
-          if condition.type == "Ready" and condition.status == "False" then
-            hs.ignore = false
-            hs.status = "Degraded"
-            hs.message = condition.message
-            return hs
+  resourceSelectors:
+  - group: "cert-manager.io"
+    version: "v1"
+    kind: "Certificate"
+  evaluateHealth: |
+    function evaluate()
+      local statuses = {}
+
+      for _,resource in ipairs(resources) do
+        if resource.status ~= nil then
+          if resource.status.conditions ~= nil then
+            for i, condition in ipairs(resource.status.conditions) do
+              if condition.type == "Ready" and condition.status == "False" then
+                status = "Degraded"
+                message = condition.message
+                table.insert(statuses, {resource=resource, status = status, message = message})
+              end
+            end
           end
         end
       end
+
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      return hs
     end
-    return hs
-  end
 ```
