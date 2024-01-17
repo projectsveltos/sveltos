@@ -12,9 +12,15 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos allows you to represent add-ons and applications as templates. Before deploying to managed clusters, Sveltos instantiates these templates. Sveltos can gather the information required to instantiate the templates from either the management cluster or the managed clusters themselves.
+## Introduction to Templates
 
-For example, let's say you need to deploy Calico in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With ClusterProfile, you can create a configuration that specifies these details, and the deployment will be ready to go in all matching clusters.
+Sveltos allows you to represent add-ons and applications as templates. Before deploying to the managed clusters, Sveltos instantiates these templates. It can gather the information required either from the management cluster or the managed clusters.
+
+### Example - Calico Deployment
+
+Let's assume you woild like to deploy Calico CNI in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With the ClusterProfile definition, you can create a configuration that specifies these details, and the deployment will be distributed to all matching clusters.
+
+In the below example, we use the Sveltos label `env=fv` to match all the cluster who need to get Calico as the desired CNI.
 
 ```yaml
 ---
@@ -48,16 +54,20 @@ Sveltos supports the template functions that are included from the [Sprig](https
 
 ## Variables
 
-By default, templates have access to the following managment cluster resources:
+By default, the templates have access to the below managment cluster resources:
 
-1. CAPI Cluster instance. Keyword is `Cluster`
-2. CAPI Cluster infrastructure provider. Keyword is `InfrastructureProvider`
-3. CAPI Cluster kubeadm provider. Keyword is `KubeadmControlPlane` 
-4. For cluster registered with Sveltos, the SveltosCluster instance. Keyword is `Cluster` 
+1. CAPI Cluster instance. The keyword is `Cluster`
+2. CAPI Cluster infrastructure provider. The keyword is `InfrastructureProvider`
+3. CAPI Cluster kubeadm provider. The keyword is `KubeadmControlPlane` 
+4. For cluster registered with Sveltos, the SveltosCluster instance. The keyword is `Cluster` 
 
-In addition, Sveltos can fetch any resource from the management cluster. You can set the **templateResourceRefs** in the ClusterProfile Spec section to instruct Sveltos to do so.
+Additionally, Sveltos can fetch any resource from the management cluster. You can set the **templateResourceRefs** in the ClusterProfile Spec section to instruct Sveltos to do so.
 
-For example, the following YAML instructs Sveltos to fetch the Secret instance autoscaler in the namespace default and make it available to the template with the keyword AutoscalerSecret.
+### Example - Autoscaler Definition
+
+#### ClusterProfile
+
+The below YAML defintion file instructs Sveltos to fetch the Secret instance autoscaler in the namespace **default** and make it available to the template with the keyword AutoscalerSecret.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -79,7 +89,9 @@ spec:
     namespace: default
 ```
 
-The ConfigMap default/info referenced by ClusterProfile can then be expressed as a template:
+#### ConfigMap
+
+The ConfigMap default/info referenced by the ClusterProfile above can then be expressed as a template:
 
 ```yaml
 apiVersion: v1
@@ -96,44 +108,48 @@ data:
     kind: Secret
     metadata:
       name: autoscaler
-      namespace: {{ (index .MgtmResources "AutoscalerSecret").metadata.namespace }}
+      namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
     data:
-      token: {{ (index .MgtmResources "AutoscalerSecret").data.token }}
-      ca.crt: {{ $data:=(index .MgtmResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+      token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
+      ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
 
-Note that MgtmResources is internally defined as
+**Please Note:** The MgmtResources are internally defined as
 
 ```go
-MgtmResources          map[string]map[string]interface{}
+MgmtResources          map[string]map[string]interface{}
 ```
 
 If you want to refer to any resource fetched by Sveltos within a template, you can do so using the following syntax:
 
 ```yaml
-(index .MgtmResources "<Identifier>")
+(index .MgmtResources "<Identifier>")
 ```
 
-When using Sveltos, the same principle applies to Helm charts. The `values` section of a Helm chart can reference any field of a Secret instance named `autoscaler` in the `default` namespace by referring to it as `AutoscalerSecret`.
+The same principle as above is applied to Helm charts. The `values` section of a Helm chart can reference any field of a Secret instance named `autoscaler` in the `default` namespace by referring to it as `AutoscalerSecret`.
 
-### Extra RBACs
+### RBAC
 
-At Sveltos, we adhere to the least privilege principle, which means that Sveltos does not have all the necessary permissions to fetch resources from the management cluster by default. Therefore, when using `templateResourceRefs`, you need to provide Sveltos with the correct RBACs.
+ Sveltos adhere to the least privilege principle. That means that Sveltos does not have all the necessary permissions to fetch resources from the management cluster by default. Therefore, when using `templateResourceRefs`, you need to provide Sveltos with the correct RBAC.
 
-Providing the necessary RBACs to Sveltos is a straightforward process. Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit that role.
+Providing the necessary RBACs to Sveltos is a straightforward process. The Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit the role.
 
 If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](../multi-tenancy.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
 
 ### Namespace
 
-When using `templateResourceRefs` to fetch resources in Sveltos, the namespace field is optional. Here's how it works:
+When using `templateResourceRefs` to fetch resources, the namespace field is optional. 
+
+#### How it works
 
 1. If the namespace field is set, Sveltos will fetch the resource in that specific namespace.
 2. If the namespace field is left empty, Sveltos will fetch the resource in the namespace of the cluster at the time of deployment.
 
-## Dynamically Creating Resources in the Management Cluster
+## Example - Autoscaler Dynamic Resource Creation
 
-When deploying add-ons in a managed cluster, there may be a need to first dynamically create resources in the management cluster and then use their values to instantiate add-ons in the managed cluster. For example, when deploying `autoscaler` with [ClusterAPI](https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/autoscaling.html) one option is to deploy the autoscaler in the managed cluster and provide it with a Kubeconfig to access the management cluster so it can scale up/down the nodes in the managed cluster using the ClusterAPI resources.
+When deploying add-ons in a managed cluster, there may be a need to first dynamically create resources in the management cluster and then use their values to instantiate add-ons in the managed cluster.
+
+For example, when deploying the `autoscaler` with [ClusterAPI](https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/autoscaling.html), one option is to deploy the autoscaler in the managed cluster and provide it with a Kubeconfig to access the management cluster so it can scale up/down the nodes in the managed cluster using the ClusterAPI resources.
 
 ```
 Management cluster            Managed cluster
@@ -144,19 +160,16 @@ Management cluster            Managed cluster
 +---------------+             +------------+
 ```
 
-We want Sveltos to take care of everything, so we instruct Sveltos to perform the following tasks for each managed cluster:
+We want Sveltos to take care of everything. So we instruct Sveltos to perform the following tasks for each managed cluster:
 
 1. Create a ServiceAccount for the autoscaler instance in the management cluster.
 2. Deploy the autoscaler in the managed cluster.
 3. Pass the autoscaler instance a Kubeconfig associated with the ServiceAccount created in step 1.
 
-Let us now explore how to accomplish this task with ease..
 
-### Instruct Sveltos to deploy resources in the management cluster
+### Step 1: Create SA Management Cluster
 
 When a new cluster matches the ClusterProfile's `clusterSelector`, we want Sveltos to automatically create a *ServiceAccount* and a *Secret* for that ServiceAccount in the management cluster. To achieve this, we can reference a ConfigMap containing the necessary resources and set `deploymentType: Local` to instruct Sveltos to deploy the resources in the management cluster.
-
-Here's an example YAML code block that demonstrates how to achieve this:
 
 ```yaml
   policyRefs:
@@ -171,15 +184,15 @@ Here's an example YAML code block that demonstrates how to achieve this:
 
 In the above code block, the ConfigMap named `serviceaccount-autoscaler` contains the template for the ServiceAccount and the Secret, which will be deployed in the management cluster. The `deploymentType` is set to `Local` to indicate that the resources should be deployed in the management cluster.
 
-When using Sveltos to deploy resources in the management cluster, remember to [grant Sveltos](#extra-rbacs) permissions to do so.
+To below the resource above, please remember to [grant Sveltos](#extra-rbacs) permissions to do so.
 
 This ServiceAccount will be given permission to manage MachineDeployment for a specific clusterAPI powered cluster (we are leaving this part out).
 
-### Deploy Autoscaler in the managed cluster
+### Step 2: Deploy Autoscaler Managed Cluster
 
 When deploying autoscaler in the managed cluster, it is necessary to provide a Kubeconfig associated with the ServiceAccount that was created earlier. This enables the autoscaler running in the managed cluster to communicate with the management cluster and scale up/down the number of machines in the cluster.
 
-To achieve this, the Secret Sveltos that was created in the management cluster needs to be fetched. We can do this by using the following YAML code:
+To achieve this, the Secret Sveltos created in the management cluster needs to be fetched. We can do this by the use of the below code:
 
 ```yaml
   templateResourceRefs:
@@ -189,7 +202,7 @@ To achieve this, the Secret Sveltos that was created in the management cluster n
     identifier: AutoscalerSecret
 ```
 
-Since we are not specifying the namespace, Sveltos will automatically fetch this Secret from the cluster namespace.
+**Please Note:** Since we are not specifying the namespace, Sveltos will automatically fetch this Secret from the cluster namespace.
 
 Next, we need to instruct Sveltos to take the content of the ConfigMap secret-info in the default namespace and deploy it to the managed cluster (`deploymentType: Remote`).
 
@@ -220,13 +233,13 @@ data:
     kind: Secret
     metadata:
       name: autoscaler
-      namespace: {{ (index .MgtmResources "AutoscalerSecret").metadata.namespace }}
+      namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
     data:
-      token: {{ (index .MgtmResources "AutoscalerSecret").data.token }}
-      ca.crt: {{ $data:=(index .MgtmResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+      token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
+      ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
 
-### Putting all together
+### Autoscaler All-in-One - YAML Definition
 
 ![Dynamically create resource in management cluster](../assets/autoscaler.gif)
 
@@ -299,8 +312,8 @@ data:
     kind: Secret
     metadata:
       name: autoscaler
-      namespace: {{ (index .MgtmResources "AutoscalerSecret").metadata.namespace }}
+      namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
     data:
-      token: {{ (index .MgtmResources "AutoscalerSecret").data.token }}
-      ca.crt: {{ $data:=(index .MgtmResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+      token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
+      ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```

@@ -13,14 +13,14 @@ authors:
     - Gianluca Mardente
 ---
 
-The ClusterProfile *Spec.PolicyRefs* is a list of Secrets/ConfigMaps. Both Secrets and ConfigMaps data fields can be a list of key-value pairs. Any key is acceptable, and the value can be multiple objects in YAML or JSON format.
+The ClusterProfile *Spec.PolicyRefs* is a list of Secrets/ConfigMaps. Both Secrets and ConfigMaps data fields can be a list of key-value pairs. Any key is acceptable, and the value can be multiple objects in YAML or JSON format[^1].
 
 To create a Secret containing Calico YAMLs, use the below commands.
 
 ```bash
-wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
+$ wget https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
 
-kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
+$ kubectl create secret generic calico --from-file=calico.yaml --type=addons.projectsveltos.io/cluster-profile
 ```
 
 **Please note:** A ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***
@@ -102,3 +102,5 @@ spec:
 Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _contour-gateway_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _contour-gateway_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
+
+[^1]:A ConfigMap is not designed to hold large chunks of data. The data stored in a ConfigMap cannot exceed 1 MiB. If you need to store settings that are larger than this limit, you may want to consider mounting a volume or use a separate database or file service.

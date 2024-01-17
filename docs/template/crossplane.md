@@ -16,7 +16,7 @@ authors:
 
 ![Sveltos, ClusterAPI and Crossplane](../assets/sveltos_clusterapi_crossplane.gif)
 
-In this tutorial, we will use Sveltos to coordinate with Crossplane to create a Google Cloud Storage Bucket for each managed cluster. We will then deploy an application in each managed cluster that uploads a file to the proper bucket.
+In this example, we will use Sveltos to coordinate with Crossplane to create a Google Cloud Storage Bucket for each managed cluster. We will then deploy an application in each managed cluster that uploads a file to the proper bucket.
 
 The following YAML code:
 
@@ -24,7 +24,7 @@ The following YAML code:
 2. Instructs Sveltos to fetch the Bucket CR instance, and use the Bucket status __url__ and __id__ fields to instantiate a Pod template.
 3. Deploys the Pod in the managed cluster.
 
-Once the Pod is deployed, it will upload a file to the my-bucket bucket.
+Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -93,10 +93,10 @@ data:
       name: gcs-credentials
       namespace: default
       annotations:
-        bucket: "{{ (index .MgtmResources "CrossplaneBucket").status.atProvider.url }}"
+        bucket: "{{ (index .MgmtResources "CrossplaneBucket").status.atProvider.url }}"
     type: Opaque
     data:
-      service-account.json: {{ $data:=(index .MgtmResources "Credentials").data }} {{ (index $data "creds") }}
+      service-account.json: {{ $data:=(index .MgmtResources "Credentials").data }} {{ (index $data "creds") }}
   pod.yaml: |
     apiVersion: v1
     kind: Pod
@@ -104,7 +104,7 @@ data:
       name: create-and-upload-to-gcs
       namespace: default
       annotations:
-        bucket: {{ (index .MgtmResources "CrossplaneBucket").status.atProvider.url }}
+        bucket: {{ (index .MgmtResources "CrossplaneBucket").status.atProvider.url }}
     spec:
       containers:
       - name: uploader
@@ -115,7 +115,7 @@ data:
           - |
             echo "Hello world" > /tmp/hello.txt
             gcloud auth activate-service-account --key-file=/var/run/secrets/cloud.google.com/service-account.json
-            gsutil cp /tmp/hello.txt gs://{{ (index .MgtmResources "CrossplaneBucket").metadata.name }}
+            gsutil cp /tmp/hello.txt gs://{{ (index .MgmtResources "CrossplaneBucket").metadata.name }}
         volumeMounts:
           - name: gcp-sa
             mountPath: /var/run/secrets/cloud.google.com/
