@@ -10,20 +10,25 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-Techsupports is a Sveltos feature which allows both platform admin and tenant admin to collect tech supports (pod logs and resources) from managed Kubernetes cluster.
 
-If following label is set on Techsupport instance created by tenant admin
+## Introduction to Techsupport
+
+Techsupports is a Sveltos feature which allows both the platform admin and the tenant admin to collect tech supports (pod logs and resources) from managed Kubernetes cluster.
+
+To do that, add the below label to the Techsupport instance created by the tenant admin.
 
 ```
 projectsveltos.io/admin-name: <admin>
 ```
 
-Sveltos will make sure tenant admin collects what it has been [authorized to by platform admin](../multi-tenancy.md).
+Sveltos will make sure the tenant admin collects what it has been [authorized to by platform admin](../multi-tenancy.md).
 
 
 ## Techsupport CRD
 
-Techsupport CRD is used to configure Sveltos to periodically collect tech supports from managed Kubernetes clusters. Here is a quick example. 
+Techsupport CRD is used to configure Sveltos to periodically collect tech supports from managed Kubernetes clusters.
+
+### Example 1
 
 ```yaml
 apiVersion: utils.projectsveltos.io/v1alpha1
@@ -46,15 +51,15 @@ spec:
     kind: Secret
 ```
 
-Above Techsupport instance is instructing Sveltos to:
+The above YAML Techsupport definition instructs Sveltos to:
 
-1. consider any managed Kubernetes cluster matching the __clusterSelector__ field;
-2. collect logs from all pods in the kube-system namespace. The __sinceSeconds__ field specifies how much logs need to be collected. In this example the last 600 seconds for each pod;
-3. collect all deployments and all secrets.
+1. Consider any managed Kubernetes cluster matching the __clusterSelector__ field;
+2. Collect logs from all pods in the kube-system namespace. The __sinceSeconds__ field specifies how many logs need to be collected. In this example the last 600 seconds for each pod;
+3. Collect all deployments and all secrets.
 
-__Techsupport__ CRD allows filtering pods and resources using label and field selectors.
+The __Techsupport__ CRD allows filtering pods and resources using the label and the field selectors.
 
-A more complex example:
+### Example 2
 
 ```yaml
 apiVersion: utils.projectsveltos.io/v1alpha1
@@ -100,23 +105,23 @@ spec:
     namespace: default
 ```
 
-*schedule* field specifies when a tech-support needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
+- *schedule* field specifies when a tech-support needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
 
-*storage* field represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
+- *storage* field represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
 
-*logs* field instructs Sveltos on which logs to collect. In above example, all logs in *default* namespace with label *env=production* and *department!=eng*. Only last *600* seconds of log will be collected.
+- *logs* field instructs Sveltos which logs to collect. In the above example, all the logs in *default* namespace with the label set to *env=production* and the *department!=eng* will be collected. Additionally, only the last *600* seconds of the log will be collected.
 
-*resources* field is a list of Kubernetes resources Sveltos needs to collect. In above example, Services and Deployments from default namespace with labels matching  *env=production* and *department!=eng*.
+- *resources* field is a list of Kubernetes resources Sveltos will collect logs. In the above example, Services and Deployments from the default namespace with the labels matching  *env=production* and *department!=eng* will be collected.
 
 
-Please refer to [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go) for more information.
+For more information, refer to the [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go).
 
 ## List techsupports
 
 [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI")  can be used to display collected techsupports.
 
 ```
-./sveltosctl techsupport list 
+$ sveltosctl techsupport list 
 +--------------------+---------------------+
 | TECHSUPPORT POLICY |        DATE         |
 +--------------------+---------------------+
@@ -135,7 +140,7 @@ techsupport/
         <cluster name>/
 ```
 
-then two subdirectoris:
+then two subdirectory:
 
 1. ```logs```
 2. ```resources```
@@ -143,16 +148,16 @@ then two subdirectoris:
 For instance:
 
 ```
-root@sveltos-management-worker:/# ls /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/
+$ ls /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default sveltos-management-workload/
 logs  resources
 ```
 
 ### Logs
 
-The ```logs``` directory then contains one subdirectory per namespace, which then contains logs collected for the pods in that namespace.
+The ```logs``` directory contains one subdirectory per namespace, which contains logs collected for the pods in the defined namespace.
 
 ```
-root@sveltos-management-worker:/# ls -la /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/logs/kube-system/
+$ ls -la /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/logs/kube-system/
 total 412
 drwxr-xr-x 2 root root   4096 Feb 23 01:39 .
 drwxr-xr-x 3 root root   4096 Feb 23 01:39 ..
@@ -171,11 +176,11 @@ drwxr-xr-x 3 root root   4096 Feb 23 01:39 ..
 
 ### Resources 
 
-The ```resources``` directory then contains one subdirectory per namespace.
-In each namespace subirectory then all collected resources from that namespace organized per Kind.
+The ```resources``` directory contains one subdirectory per namespace.
+In each subirectory, all the collected resources are organized per Kind.
 
 ```
-root@sveltos-management-worker:/# ls -la /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/resources/
+$ ls -la /techsupport/hourly/2023-02-22\:17\:39\:00/Capi\:default/sveltos-management-workload/resources/
 total 28
 drwxr-xr-x 7 root root 4096 Feb 23 01:39 .
 drwxr-xr-x 4 root root 4096 Feb 23 01:39 ..
@@ -197,7 +202,4 @@ drwxr-xr-x 3 root root 4096 Feb 23 01:39 ..
 -rw-r--r-- 1 root root 1946 Feb 23 01:39 kyverno-latest-svc.yaml
 ```
 
-
-[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect tech-support from managed clusters.
-*Snapshot* CRD is used for that.
-
+[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect tech-support from managed clusters with the [Snapshot](../sveltosctl/snapshot.md) CRD definition.

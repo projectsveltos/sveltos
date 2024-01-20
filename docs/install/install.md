@@ -66,5 +66,9 @@ projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
+## Next Steps
+
+Contiunue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
+
 [^1]: sveltos-agent will be deployed if there is at least one Classifier instance in the management cluster. Drift detection manager will be deployed if there is a ClusterProfile instance with SyncMode set to *ContinuousWithDriftDetection*.
 [^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
