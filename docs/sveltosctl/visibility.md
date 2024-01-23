@@ -11,19 +11,22 @@ authors:
     - Gianluca Mardente
 ---
 
-[sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
+## Introduction to Sveltoctl Visibility
+
+The sveltosctl nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.
 
 ### show addons
-*show addons* can be used to display list of Kubernetes add-ons deployed in each clusters by Sveltos. 
-Displayed information contains:
+*show addons* can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos. 
 
-- the CAPI/Sveltos Cluster in the form namespace/name;
-- resource/helm chart information;
-- time resource/helm chart was deployed;
+The displayed information are:
+
+- The CAPI/Sveltos Cluster in the form namespace/name;
+- Resource/helm chart information;
+- Time resource/helm chart was deployed;
 - ClusterProfiles that caused resource/helm chart to be deployed in the cluster.
 
 ```
-./bin/sveltosctl show addons
+$ sveltosctl show addons
 +-------------------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 |               CLUSTER               | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILE |
 +-------------------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -39,7 +42,7 @@ show addons command allows filtering by:
 - ClusterProfile
 
 ```
-./bin/sveltosctl show addons --help
+$ sveltosctl show addons --help
 Usage:
   sveltosctl show features [options] [--namespace=<name>] [--cluster=<name>] [--clusterprofile=<name>] [--verbose]
 
@@ -51,10 +54,11 @@ Usage:
 ### show resources
 
 Using Projectsveltos can facilitate the display of information about resources in managed clusters.
-See this [section](../observability/show_resources.md) for more details.
+
+Checkout the [observability section](../observability/show_resources.md) for more details.
 
 ```bash
-./sveltosctl show resources --kind=pod --namespace=nginx
+$ sveltosctl show resources --kind=pod --namespace=nginx
 +-----------------------------+---------------+-----------+-----------------------------------+-------------------+
 |           CLUSTER           |      GVK      | NAMESPACE |               NAME                |      MESSAGE      |
 +-----------------------------+---------------+-----------+-----------------------------------+-------------------+
@@ -69,16 +73,16 @@ See this [section](../observability/show_resources.md) for more details.
 
 ### show usage
 
-*show usage* displays following information:
+*show usage* displays below information:
 
-- which clusters are currently a match for a ClusterProfile;
-- for ConfigMap/Secret list of clusters where their content is currently deployed.
+- Which clusters are currently a match for a ClusterProfile;
+- For ConfigMap/Secret list of clusters where their content is currently deployed.
 
 
 Such information is useful to see what clusters would be affected by a change before making such a change.
 
 ```
-./bin/sveltosctl show usage 
+$ sveltosctl show usage 
 +----------------+--------------------+----------------------------+-------------------------------------+
 | RESOURCE KIND  | RESOURCE NAMESPACE |       RESOURCE NAME        |              CLUSTERS               |
 +----------------+--------------------+----------------------------+-------------------------------------+
@@ -89,13 +93,13 @@ Such information is useful to see what clusters would be affected by a change be
 
 ### show admin-rbac
 
-*show admin-rbac* can be used to display permissions granted to tenant admins in each managed clusters by platform admin.
+*show admin-rbac* can be used to display permissions granted to tenant admins in each managed clusters by the platform admin.
 
 If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
 ```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/main/examples/shared_access.yaml), we get:
 
 ```
-./bin/sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac       
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 |                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
