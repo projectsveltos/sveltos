@@ -7,9 +7,10 @@ import (
 	"regexp"
 	"strings"
 
-	libsveltosutils "github.com/projectsveltos/libsveltos/lib/utils"
 	"gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+
+	libsveltosutils "github.com/projectsveltos/libsveltos/lib/utils"
 )
 
 const (
