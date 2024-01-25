@@ -10,7 +10,10 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the following tasks:
+
+## Introduction to Snapshot
+
+Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the below tasks:
 
 - Live snapshots of the running Sveltos configuration;
 - Recurring snapshots;
@@ -20,12 +23,11 @@ Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically
 
 ## General Overview
 
-The snapshot feature allows to capture a complete Sveltos policy configuration at an instant in time. Using snapshots from different timestamps, it is possibly to see what configuration changes occurred between two snapshots, and roll back and forward policy configurations to any saved configuration snapshot.
+The snapshot feature allows to capture a complete Sveltos policy configuration at an instant in time. Using snapshots from different timestamps, it is possibly to identify what configuration changes occurred between snapshots, and roll back and forward policy configurations to any saved configuration snapshot.
 
-Operations using snapshots, such as capture, diff, and rollback, are performed with the Sveltos command line interface, [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").
+Operations using snapshots, such as capture, diff, and rollback, are performed with the Sveltos CLI, [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").
 
-For a demonstration of snapshots, watch the video [Sveltos, introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4) on YouTube.
-
+Checkout Youtube for a [Sveltos introduction to Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4).
 
 ## Snapshot CRD
 
@@ -52,7 +54,7 @@ spec:
 [sveltoctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") snapshot diff can be used to display all the configuration changes between two snapshots:
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 |               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION  |              MESSAGE               |
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
@@ -69,10 +71,10 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 ```
 
-If resources contained in Secrets/ConfigMaps referenced by ClusterProfile where modified, option *raw-diff* can be used to see exactly what was changed:
+If resources contained in Secrets/ConfigMaps referenced by ClusterProfile were modified, the option *raw-diff* can be used to determine what changed.
 
 ```
-kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
 |                  CLUSTER                  |      RESOURCE TYPE       | NAMESPACE |         NAME          |  ACTION  |            MESSAGE             |
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
@@ -80,7 +82,7 @@ kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./svel
 |                                           |                          |           |                       |          | diff                           |
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
 
-kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00 --raw-diff
+kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00 --raw-diff
 --- kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:14:56:00
 +++ kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:15:56:00
 @@ -37,7 +37,8 @@
@@ -97,20 +99,21 @@ kubectl exec -it -n projectsveltos                      sveltosctl-0   -- ./svel
 
 ### Rollback
 
-Rollback is a feature in which a previous configuration snapshot is used to replace the current configuration deployed by Sveltos. Rollback can be executed with the following granularities:
+Rollback is the feature in which a previous configuration snapshot is used to replace a current configuration deployed by Sveltos. Rollback can be executed with the below granularities:
 
-- namespace — rolls back only ConfigMaps/Secrets and Cluster labels in this namespace. If no namespace is specified, all namespaces are updated;
-- cluster — rolls back only labels for a cluster with this name. If no cluster name is specified, labels for all clusters are updated;
-- clusterprofile — rolls back only ClusterProfiles with this name. If no ClusterProfile name is specified, all ClusterProfiles are updated;
+- namespace: Rolls back only ConfigMaps/Secrets and Cluster labels in the defined namespace. If no namespace is defined, **all namespaces** are updated;
+- cluster: Rolls back only labels for a cluster with this name. If no cluster name is specified, labels for **all clusters** are updated;
+- clusterprofile: Rolls back only ClusterProfiles with this name. If no ClusterProfile name is specified, **all ClusterProfiles** are updated;
 
-When all of the configuration files for a particular version are used to replace the current configuration, this is referred to as a full rollback.
+When all the configuration files for a particular version are used to replace the current configuration, it is referred to as a full rollback.
 
-For a demonstration of rollback, watch the video [Sveltos, introduction to Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ) on YouTube.
+Checkout Youtube for a [Sveltos, introduction to Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ).
 
-### PHP Guestbook application with Redis
+### Example - PHP Guestbook application with Redis
 
 This example shows how to deploy a multi-tier web application in Kubernetes using Sveltos and how to use snapshot to quickly see changes.
-The application consists of the following components:
+
+The application consists of the below components:
 
 1. A single-instance Redis to store guestbook entries
 2. Multiple web frontend instances
@@ -118,30 +121,31 @@ The application consists of the following components:
 The first step is to create two ConfigMaps:
 
 ```
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database.yaml
-kubectl create configmap database --from-file database.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database.yaml
+
+$ kubectl create configmap database --from-file database.yaml
 ```
 
 ```
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/frontend.yaml
-kubectl create configmap frontend --from-file frontend.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/frontend.yaml
+
+$ kubectl create configmap frontend --from-file frontend.yaml
 ```
 
-The [database.yaml](../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, 
-exposed via a service. The [frontend.yaml](../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook 
-application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, 
-depending on whether the request is a read or a write.
+The [database.yaml](../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, exposed via a service.
+
+The [frontend.yaml](../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write.
 
 Once the ConfigMaps have been created, you can create a ClusterProfile instance:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/clusterprofile.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/clusterprofile.yaml
 ```
 
 This will deploy all necessary resources in all managed cluster matching ClusterProfile cluster selector field.
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show addons 
+$ sveltosctl show addons 
 +-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
 +-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -154,23 +158,19 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl show addons
 +-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 ```
 
-If you want guests to be able to access your guestbook, you must configure the frontend Service to be externally visible, so a client 
-can request the Service from outside the Kubernetes cluster. 
-However a Kubernetes user can use kubectl port-forward to access the service even though it uses a ClusterIP.
+If you want guests to be able to access your guestbook, you must configure the frontend Service to be externally visible, so a client can request the Service from outside the Kubernetes cluster. However, a Kubernetes user can use ```kubectl port-forward``` to access the service even though it uses a ClusterIP.
 
 Cluster in this example, was created with [__make quickstart__](../install/quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
-Command is then
 
 ```
-KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/frontend 8080:80
+$ KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/frontend 8080:80
 ```
 
 Load the page http://localhost:8080 in your browser to view your guestbook
 
 ![Guestbook](../assets/snapshot_example/guestbook.png)
 
-The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes to your configuration over time, or for debugging issues.
-With system in this state, we can take a Sveltos configuration snaphost
+The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes of the configuration over time, or for debugging purposes.
 
 ```
 kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list 
@@ -181,17 +181,17 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
 +-----------------+---------------------+
 ```
 
-Let's say, later on a change is made. For instance, __redis-follower__ Service label selector is inadvertently modified.
+Let's assume, later on a change is made. For instance, the __redis-follower__ Service label selector is inadvertently modified.
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database_broken.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database_broken.yaml
 ```
 
 Entries in the database are not visible anymore. Of course we can debug this issue. 
-But if we simply want to see what has changed we can simply take a new snapshot
+But if we simply want to see what has changed we can take a new snapshot
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
 +-----------------+---------------------+
 | SNAPSHOT POLICY |        DATE         |
 +-----------------+---------------------+
@@ -203,7 +203,7 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
 and then look at the configuration differences
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00
 +-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
 |              CLUSTER              | RESOURCE TYPE | NAMESPACE |      NAME      |  ACTION  |            MESSAGE             |
 +-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
@@ -213,7 +213,7 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --
 ```
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00 --raw-diff
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00 --raw-diff
 --- /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:00:00
 +++ /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:20:00
 @@ -13,7 +13,7 @@
@@ -229,5 +229,5 @@ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --
 To fix this, we can simply ask Sveltos to revert back to working snapshot
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot rollback --snapshot=hourly --sample=2023-08-26:05:00:00
+$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot rollback --snapshot=hourly --sample=2023-08-26:05:00:00
 ```
