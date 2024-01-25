@@ -17,16 +17,6 @@ make docker-build
 docker --config ${config} push projectsveltos/addon-controller-amd64:${branch}  
 cd ../../; rm -rf tmp
 
-# addon-compliance-controller
-echo "processing addon-compliance-controller"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-compliance-controller.git
-cd addon-compliance-controller
-git checkout ${branch}
-make docker-build
-docker --config ${config} push projectsveltos/addon-compliance-controller-amd64:${branch}  
-cd ../../; rm -rf tmp
-
 # classifier
 echo "processing classifier"
 rm -rf tmp; mkdir tmp; cd tmp
