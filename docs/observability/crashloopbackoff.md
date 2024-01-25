@@ -24,27 +24,42 @@ Using following HealthCheck and ClusterhealthCheck instances, we are instructing
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
- name: crashing-pod
+  name: crashing-pod
 spec:
- group: ""
- version: v1
- kind: Pod
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Healthy"
-     hs.ignore = true
-     if obj.status.containerStatuses then
-        local containerStatuses = obj.status.containerStatuses
-        for _, containerStatus in ipairs(containerStatuses) do
-          if containerStatus.state.waiting and containerStatus.state.waiting.reason == "CrashLoopBackOff" then
-            hs.status = "Degraded"
-            hs.ignore = false
-            hs.message = obj.metadata.namespace .. "/" .. obj.metadata.name .. ":" .. containerStatus.state.waiting.message
-            if containerStatus.lastState.terminated and containerStatus.lastState.terminated.reason then
-              hs.message = hs.message .. "\nreason:" .. containerStatus.lastState.terminated.reason
+  resourceSelectors:
+  - group: ""
+    version: v1
+    kind: Pod
+  evaluateHealth: |
+    function evaluate()
+      local statuses = {}
+
+      for _,resource in ipairs(resources) do
+        ignore = true
+        if resource.status.containerStatuses then
+          local containerStatuses = resource.status.containerStatuses
+          for _, containerStatus in ipairs(containerStatuses) do
+            if containerStatus.state.waiting and containerStatus.state.waiting.reason == "CrashLoopBackOff" then
+              ignore = false
+              status = "Degraded"
+              message = resource.metadata.namespace .. "/" .. resource.metadata.name .. ":" .. containerStatus.state.waiting.message
+              if containerStatus.lastState.terminated and containerStatus.lastState.terminated.reason then
+                message = message .. "\nreason:" .. containerStatus.lastState.terminated.reason
+              end
             end
           end
+          if not ignore then
+            table.insert(statuses, {resource=resource, status = status, message = message})
+          end
+        end
+      end
+      
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      return hs
+    end        
 ```
 
 ```yaml

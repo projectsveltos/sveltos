@@ -1,4 +1,3 @@
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -121,232 +120,6 @@ spec:
     subresources:
       status: {}
 ---
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  name: addoncompliances.lib.projectsveltos.io
-spec:
-  group: lib.projectsveltos.io
-  names:
-    kind: AddonCompliance
-    listKind: AddonComplianceList
-    plural: addoncompliances
-    singular: addoncompliance
-  scope: Cluster
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: AddonCompliance is the Schema for the AddonCompliance API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: AddonComplianceSpec defines the desired state of AddonCompliance
-            properties:
-              clusterRefs:
-                description: ClusterRefs identifies clusters to associate to.
-                items:
-                  description: "ObjectReference contains enough information to let
-                    you inspect or modify the referred object. --- New uses of this
-                    type are discouraged because of difficulty describing its usage
-                    when embedded in APIs. 1. Ignored fields.  It includes many fields
-                    which are not generally honored.  For instance, ResourceVersion
-                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
-                    usage help.  It is impossible to add specific help for individual
-                    usage.  In most embedded usages, there are particular restrictions
-                    like, \"must refer only to types A and B\" or \"UID not honored\"
-                    or \"name must be restricted\". Those cannot be well described
-                    when embedded. 3. Inconsistent validation.  Because the usages
-                    are different, the validation rules are different by usage, which
-                    makes it hard for users to predict what will happen. 4. The fields
-                    are both imprecise and overly precise.  Kind is not a precise
-                    mapping to a URL. This can produce ambiguity during interpretation
-                    and require a REST mapping.  In most cases, the dependency is
-                    on the group,resource tuple and the version of the actual struct
-                    is irrelevant. 5. We cannot easily change it.  Because this type
-                    is embedded in many locations, updates to this type will affect
-                    numerous schemas.  Don't make new APIs embed an underspecified
-                    API type they do not control. \n Instead of using this type, create
-                    a locally provided and used type that is well-focused on your
-                    reference. For example, ServiceReferences for admission registration:
-                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
-                    ."
-                  properties:
-                    apiVersion:
-                      description: API version of the referent.
-                      type: string
-                    fieldPath:
-                      description: 'If referring to a piece of an object instead of
-                        an entire object, this string should contain a valid JSON/Go
-                        field access statement, such as desiredState.manifest.containers[2].
-                        For example, if the object reference is to a container within
-                        a pod, this would take on a value like: "spec.containers{name}"
-                        (where "name" refers to the name of the container that triggered
-                        the event) or if no container name is specified "spec.containers[2]"
-                        (container with index 2 in this pod). This syntax is chosen
-                        only to have some well-defined way of referencing a part of
-                        an object. TODO: this design is not final and this field is
-                        subject to change in the future.'
-                      type: string
-                    kind:
-                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                      type: string
-                    name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                      type: string
-                    namespace:
-                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                      type: string
-                    resourceVersion:
-                      description: 'Specific resourceVersion to which this reference
-                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                      type: string
-                    uid:
-                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                      type: string
-                  type: object
-                  x-kubernetes-map-type: atomic
-                type: array
-              clusterSelector:
-                description: ClusterSelector identifies clusters to associate to.
-                type: string
-              luaValidationRefs:
-                description: LuaValidationRefs is a list of validations defined in
-                  Lua language. In the matching clusters, add-ons will be deployed
-                  only if all validations pass.
-                items:
-                  properties:
-                    kind:
-                      description: 'Kind of the resource. Supported kinds are: - flux
-                        GitRepository;OCIRepository;Bucket - ConfigMap/Secret'
-                      enum:
-                      - GitRepository
-                      - OCIRepository
-                      - Bucket
-                      - ConfigMap
-                      - Secret
-                      type: string
-                    name:
-                      description: Name of the referenced resource.
-                      minLength: 1
-                      type: string
-                    namespace:
-                      description: Namespace of the referenced resource.
-                      minLength: 1
-                      type: string
-                    path:
-                      description: Path to the directory containing the lua validations.
-                        Defaults to 'None', which translates to the root path of the
-                        SourceRef. Ignored for ConfigMap/Secret.
-                      type: string
-                  required:
-                  - kind
-                  - name
-                  - namespace
-                  type: object
-                type: array
-            type: object
-          status:
-            description: AddonComplianceStatus defines the observed state of AddonCompliance
-            properties:
-              failureMessage:
-                description: FailureMessage provides more information if an error
-                  occurs.
-                type: string
-              luaValidations:
-                additionalProperties:
-                  format: byte
-                  type: string
-                description: LuaValidations contains all validations collected from
-                  all existing referenced resources
-                type: object
-              matchingClusters:
-                description: MatchingClusterRefs reference all the clusters currently
-                  matching ClusterSelector
-                items:
-                  description: "ObjectReference contains enough information to let
-                    you inspect or modify the referred object. --- New uses of this
-                    type are discouraged because of difficulty describing its usage
-                    when embedded in APIs. 1. Ignored fields.  It includes many fields
-                    which are not generally honored.  For instance, ResourceVersion
-                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
-                    usage help.  It is impossible to add specific help for individual
-                    usage.  In most embedded usages, there are particular restrictions
-                    like, \"must refer only to types A and B\" or \"UID not honored\"
-                    or \"name must be restricted\". Those cannot be well described
-                    when embedded. 3. Inconsistent validation.  Because the usages
-                    are different, the validation rules are different by usage, which
-                    makes it hard for users to predict what will happen. 4. The fields
-                    are both imprecise and overly precise.  Kind is not a precise
-                    mapping to a URL. This can produce ambiguity during interpretation
-                    and require a REST mapping.  In most cases, the dependency is
-                    on the group,resource tuple and the version of the actual struct
-                    is irrelevant. 5. We cannot easily change it.  Because this type
-                    is embedded in many locations, updates to this type will affect
-                    numerous schemas.  Don't make new APIs embed an underspecified
-                    API type they do not control. \n Instead of using this type, create
-                    a locally provided and used type that is well-focused on your
-                    reference. For example, ServiceReferences for admission registration:
-                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
-                    ."
-                  properties:
-                    apiVersion:
-                      description: API version of the referent.
-                      type: string
-                    fieldPath:
-                      description: 'If referring to a piece of an object instead of
-                        an entire object, this string should contain a valid JSON/Go
-                        field access statement, such as desiredState.manifest.containers[2].
-                        For example, if the object reference is to a container within
-                        a pod, this would take on a value like: "spec.containers{name}"
-                        (where "name" refers to the name of the container that triggered
-                        the event) or if no container name is specified "spec.containers[2]"
-                        (container with index 2 in this pod). This syntax is chosen
-                        only to have some well-defined way of referencing a part of
-                        an object. TODO: this design is not final and this field is
-                        subject to change in the future.'
-                      type: string
-                    kind:
-                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                      type: string
-                    name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                      type: string
-                    namespace:
-                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                      type: string
-                    resourceVersion:
-                      description: 'Specific resourceVersion to which this reference
-                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
-                      type: string
-                    uid:
-                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
-                      type: string
-                  type: object
-                  x-kubernetes-map-type: atomic
-                type: array
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
----
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -423,7 +196,6 @@ spec:
     storage: true
     subresources:
       status: {}
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -732,7 +504,6 @@ spec:
     storage: true
     subresources:
       status: {}
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1115,7 +886,6 @@ spec:
     subresources:
       status: {}
 ---
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1164,7 +934,6 @@ spec:
                         configuration applies to.
                       enum:
                       - AddonManager
-                      - AddonComplianceManager
                       - Classifier
                       - ClassifierAgent
                       - SveltosClusterManager
@@ -1191,7 +960,6 @@ spec:
         type: object
     served: true
     storage: true
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1337,7 +1105,6 @@ spec:
     subresources:
       status: {}
 ---
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1453,7 +1220,6 @@ spec:
         type: object
     served: true
     storage: true
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1593,7 +1359,6 @@ spec:
     subresources:
       status: {}
 ---
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1632,59 +1397,85 @@ spec:
               collectResources:
                 default: false
                 description: CollectResources indicates whether matching resources
-                  need to be collected and added to EventReport.
+                  need to be collected and added to HealthReport.
                 type: boolean
-              group:
-                description: Group of the resource deployed in the Cluster.
-                type: string
-              kind:
-                description: Kind of the resource deployed in the Cluster.
+              evaluateHealth:
+                description: 'The EvaluateHealth field specifies a Lua function responsible
+                  for evaluating the health of the resources selected by resourceSelectors.
+                  This function can assess the health of each resource independently
+                  or consider inter-resource relationships. The function must be named
+                  *evaluate* and can access all objects identified by resourceSelectors
+                  using the *resources* variable. It should return an array of structured
+                  instances, each containing the following fields: - resource: The
+                  resource being evaluated - healthStatus: The health status of the
+                  resource, which can be one of "Healthy", "Progressing", "Degraded",
+                  or "Suspended" - message: An optional message providing additional
+                  information about the health status'
                 minLength: 1
                 type: string
-              labelFilters:
-                description: LabelFilters allows to filter resources based on current
-                  labels.
+              resourceSelectors:
+                description: ResourceSelectors identifies what resources to select
+                  to evaluate health
                 items:
+                  description: ResourceSelector defines what resources are a match
                   properties:
-                    key:
-                      description: Key is the label key
+                    evaluate:
+                      description: Evaluate contains a function "evaluate" in lua
+                        language. The function will be passed one of the object selected
+                        based on above criteria. Must return struct with field "matching"
+                        representing whether object is a match and an optional "message"
+                        field.
                       type: string
-                    operation:
-                      description: Operation is the comparison operation
-                      enum:
-                      - Equal
-                      - Different
+                    group:
+                      description: Group of the resource deployed in the Cluster.
                       type: string
-                    value:
-                      description: Value is the label value
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    labelFilters:
+                      description: LabelFilters allows to filter resources based on
+                        current labels.
+                      items:
+                        properties:
+                          key:
+                            description: Key is the label key
+                            type: string
+                          operation:
+                            description: Operation is the comparison operation
+                            enum:
+                            - Equal
+                            - Different
+                            type: string
+                          value:
+                            description: Value is the label value
+                            type: string
+                        required:
+                        - key
+                        - operation
+                        - value
+                        type: object
+                      type: array
+                    namespace:
+                      description: Namespace of the resource deployed in the  Cluster.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                    version:
+                      description: Version of the resource deployed in the Cluster.
                       type: string
                   required:
-                  - key
-                  - operation
-                  - value
+                  - group
+                  - kind
+                  - version
                   type: object
                 type: array
-              namespace:
-                description: Namespace of the resource deployed in the  Cluster. Empty
-                  for resources scoped at cluster level.
-                type: string
-              script:
-                description: Script is a text containing a lua script. Must return
-                  a struct with field "status" set to one of the possible value of
-                  HealthStatus.
-                type: string
-              version:
-                description: Version of the resource deployed in the Cluster.
-                type: string
             required:
-            - group
-            - kind
-            - version
+            - evaluateHealth
+            - resourceSelectors
             type: object
         type: object
     served: true
     storage: true
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1785,7 +1576,6 @@ spec:
     subresources:
       status: {}
 ---
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1854,7 +1644,6 @@ spec:
         type: object
     served: true
     storage: true
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2122,7 +1911,6 @@ spec:
     subresources:
       status: {}
 ---
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -2356,7 +2144,6 @@ spec:
     storage: true
     subresources:
       status: {}
----
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2752,11 +2539,6 @@ spec:
       serviceAccountName: addon-compliance-manager
       terminationGracePeriodSeconds: 10
 ---
-# When addon-controller is configured to deploy drift-detection-manager
-# in the management cluster, addon-controller will create a Service and
-# a Deployment per cluster matching at least one ClusterProfile in 
-# ContinuousWithDriftDetection mode.
-# Those extra permissions are needed.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -2768,13 +2550,13 @@ rules:
   resources:
   - services
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
-  - "apps"
+  - apps
   resources:
   - deployments
   verbs:
-  - "*"
+  - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -3285,6 +3067,68 @@ spec:
                       - Install
                       - Uninstall
                       type: string
+                    options:
+                      description: Options allows to set flags which are used during
+                        installation.
+                      properties:
+                        atomic:
+                          default: false
+                          description: if set, the installation process deletes the
+                            installation on failure. The --wait flag will be set automatically
+                            if --atomic is used Default to false
+                          type: boolean
+                        createNamespace:
+                          default: true
+                          description: Create the release namespace if not present.
+                            Defaults to true
+                          type: boolean
+                        dependencyUpdate:
+                          default: false
+                          description: update dependencies if they are missing before
+                            installing the chart Default to false
+                          type: boolean
+                        disableHooks:
+                          default: false
+                          description: prevent hooks from running during install Default
+                            to false
+                          type: boolean
+                        disableOpenAPIValidation:
+                          default: false
+                          description: if set, the installation process will not validate
+                            rendered templates against the Kubernetes OpenAPI Schema
+                            Default to false
+                          type: boolean
+                        labels:
+                          additionalProperties:
+                            type: string
+                          description: Labels that would be added to release metadata.
+                          type: object
+                        skipCRDs:
+                          default: false
+                          description: SkipCRDs controls whether CRDs should be installed
+                            during install/upgrade operation. By default, CRDs are
+                            installed if not already present.
+                          type: boolean
+                        timeout:
+                          description: time to wait for any individual Kubernetes
+                            operation (like Jobs for hooks) (default 5m0s)
+                          type: string
+                        wait:
+                          default: false
+                          description: if set, will wait until all Pods, PVCs, Services,
+                            and minimum number of Pods of a Deployment, StatefulSet,
+                            or ReplicaSet are in a ready state before marking the
+                            release as successful. It will wait for as long as --timeout
+                            Default to false
+                          type: boolean
+                        waitForJobs:
+                          default: false
+                          description: if set and --wait enabled, will wait until
+                            all Jobs have been completed before marking the release
+                            as successful. It will wait for as long as --timeout Default
+                            to false
+                          type: boolean
+                      type: object
                     releaseName:
                       description: ReleaseName is the chart release
                       minLength: 1
@@ -4260,6 +4104,69 @@ spec:
                           - Install
                           - Uninstall
                           type: string
+                        options:
+                          description: Options allows to set flags which are used
+                            during installation.
+                          properties:
+                            atomic:
+                              default: false
+                              description: if set, the installation process deletes
+                                the installation on failure. The --wait flag will
+                                be set automatically if --atomic is used Default to
+                                false
+                              type: boolean
+                            createNamespace:
+                              default: true
+                              description: Create the release namespace if not present.
+                                Defaults to true
+                              type: boolean
+                            dependencyUpdate:
+                              default: false
+                              description: update dependencies if they are missing
+                                before installing the chart Default to false
+                              type: boolean
+                            disableHooks:
+                              default: false
+                              description: prevent hooks from running during install
+                                Default to false
+                              type: boolean
+                            disableOpenAPIValidation:
+                              default: false
+                              description: if set, the installation process will not
+                                validate rendered templates against the Kubernetes
+                                OpenAPI Schema Default to false
+                              type: boolean
+                            labels:
+                              additionalProperties:
+                                type: string
+                              description: Labels that would be added to release metadata.
+                              type: object
+                            skipCRDs:
+                              default: false
+                              description: SkipCRDs controls whether CRDs should be
+                                installed during install/upgrade operation. By default,
+                                CRDs are installed if not already present.
+                              type: boolean
+                            timeout:
+                              description: time to wait for any individual Kubernetes
+                                operation (like Jobs for hooks) (default 5m0s)
+                              type: string
+                            wait:
+                              default: false
+                              description: if set, will wait until all Pods, PVCs,
+                                Services, and minimum number of Pods of a Deployment,
+                                StatefulSet, or ReplicaSet are in a ready state before
+                                marking the release as successful. It will wait for
+                                as long as --timeout Default to false
+                              type: boolean
+                            waitForJobs:
+                              default: false
+                              description: if set and --wait enabled, will wait until
+                                all Jobs have been completed before marking the release
+                                as successful. It will wait for as long as --timeout
+                                Default to false
+                              type: boolean
+                          type: object
                         releaseName:
                           description: ReleaseName is the chart release
                           minLength: 1
@@ -4633,6 +4540,7 @@ spec:
                       - Provisioning
                       - Provisioned
                       - Failed
+                      - FailedNonRetriable
                       - Removing
                       - Removed
                       type: string
@@ -4811,6 +4719,68 @@ spec:
                       - Install
                       - Uninstall
                       type: string
+                    options:
+                      description: Options allows to set flags which are used during
+                        installation.
+                      properties:
+                        atomic:
+                          default: false
+                          description: if set, the installation process deletes the
+                            installation on failure. The --wait flag will be set automatically
+                            if --atomic is used Default to false
+                          type: boolean
+                        createNamespace:
+                          default: true
+                          description: Create the release namespace if not present.
+                            Defaults to true
+                          type: boolean
+                        dependencyUpdate:
+                          default: false
+                          description: update dependencies if they are missing before
+                            installing the chart Default to false
+                          type: boolean
+                        disableHooks:
+                          default: false
+                          description: prevent hooks from running during install Default
+                            to false
+                          type: boolean
+                        disableOpenAPIValidation:
+                          default: false
+                          description: if set, the installation process will not validate
+                            rendered templates against the Kubernetes OpenAPI Schema
+                            Default to false
+                          type: boolean
+                        labels:
+                          additionalProperties:
+                            type: string
+                          description: Labels that would be added to release metadata.
+                          type: object
+                        skipCRDs:
+                          default: false
+                          description: SkipCRDs controls whether CRDs should be installed
+                            during install/upgrade operation. By default, CRDs are
+                            installed if not already present.
+                          type: boolean
+                        timeout:
+                          description: time to wait for any individual Kubernetes
+                            operation (like Jobs for hooks) (default 5m0s)
+                          type: string
+                        wait:
+                          default: false
+                          description: if set, will wait until all Pods, PVCs, Services,
+                            and minimum number of Pods of a Deployment, StatefulSet,
+                            or ReplicaSet are in a ready state before marking the
+                            release as successful. It will wait for as long as --timeout
+                            Default to false
+                          type: boolean
+                        waitForJobs:
+                          default: false
+                          description: if set and --wait enabled, will wait until
+                            all Jobs have been completed before marking the release
+                            as successful. It will wait for as long as --timeout Default
+                            to false
+                          type: boolean
+                      type: object
                     releaseName:
                       description: ReleaseName is the chart release
                       minLength: 1
@@ -5590,22 +5560,6 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - addoncompliances
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - addoncompliances/status
-  verbs:
-  - get
-  - list
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - debuggingconfigurations
   verbs:
   - get
@@ -5805,6 +5759,7 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
+        - --version=main
         command:
         - /manager
         image: projectsveltos/addon-controller-amd64:main
@@ -5878,7 +5833,6 @@ spec:
   selector:
     matchLabels:
       control-plane: addon-controller
-
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -6843,6 +6797,68 @@ spec:
                       - Install
                       - Uninstall
                       type: string
+                    options:
+                      description: Options allows to set flags which are used during
+                        installation.
+                      properties:
+                        atomic:
+                          default: false
+                          description: if set, the installation process deletes the
+                            installation on failure. The --wait flag will be set automatically
+                            if --atomic is used Default to false
+                          type: boolean
+                        createNamespace:
+                          default: true
+                          description: Create the release namespace if not present.
+                            Defaults to true
+                          type: boolean
+                        dependencyUpdate:
+                          default: false
+                          description: update dependencies if they are missing before
+                            installing the chart Default to false
+                          type: boolean
+                        disableHooks:
+                          default: false
+                          description: prevent hooks from running during install Default
+                            to false
+                          type: boolean
+                        disableOpenAPIValidation:
+                          default: false
+                          description: if set, the installation process will not validate
+                            rendered templates against the Kubernetes OpenAPI Schema
+                            Default to false
+                          type: boolean
+                        labels:
+                          additionalProperties:
+                            type: string
+                          description: Labels that would be added to release metadata.
+                          type: object
+                        skipCRDs:
+                          default: false
+                          description: SkipCRDs controls whether CRDs should be installed
+                            during install/upgrade operation. By default, CRDs are
+                            installed if not already present.
+                          type: boolean
+                        timeout:
+                          description: time to wait for any individual Kubernetes
+                            operation (like Jobs for hooks) (default 5m0s)
+                          type: string
+                        wait:
+                          default: false
+                          description: if set, will wait until all Pods, PVCs, Services,
+                            and minimum number of Pods of a Deployment, StatefulSet,
+                            or ReplicaSet are in a ready state before marking the
+                            release as successful. It will wait for as long as --timeout
+                            Default to false
+                          type: boolean
+                        waitForJobs:
+                          default: false
+                          description: if set and --wait enabled, will wait until
+                            all Jobs have been completed before marking the release
+                            as successful. It will wait for as long as --timeout Default
+                            to false
+                          type: boolean
+                      type: object
                     releaseName:
                       description: ReleaseName is the chart release
                       minLength: 1
@@ -7904,6 +7920,7 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
+        - --version=main
         command:
         - /manager
         image: projectsveltos/classifier-amd64:main
@@ -7960,9 +7977,6 @@ spec:
       serviceAccountName: classifier-manager
       terminationGracePeriodSeconds: 10
 ---
-# When classifier is configured to deploy sveltos-agent in the management cluster, 
-# sveltos-agent will create a Service and a Deployment per cluster.
-# Those extra permissions are needed.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -7974,13 +7988,13 @@ rules:
   resources:
   - services
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
-  - "apps"
+  - apps
   resources:
   - deployments
   verbs:
-  - "*"
+  - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -7996,26 +8010,21 @@ subjects:
   name: classifier-manager
   namespace: projectsveltos
 ---
-# Those YAML are all needed when sveltos-agent is started in the management cluster. 
-# Those are not installed by classifier when deploying sveltos-agent in the management
-# cluster to avoid granting classifier extra permissions
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: sveltos-agent-manager
   namespace: projectsveltos
 ---
-# When running in the management cluster, sveltos-agent needs to access Secret containing
-# Kubeconfig for managed cluster (and consequently access Cluster/SveltosCluster to verify existance)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: sveltos-agent-manager-role
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
-  - 'secrets'
+  - secrets
   verbs:
   - get
   - list
@@ -8090,30 +8099,22 @@ subjects:
 - kind: ServiceAccount
   name: sveltos-agent-manager
   namespace: projectsveltos
-
 ---
-# Those YAML are all needed when drift-detection-manager is started in the
-# management cluster. Those are not installed by addon-controller when deploying
-# drift-detection-manager in the management cluster to avoid granting addon-controller
-# extra permissions
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: drift-detection-manager
   namespace: projectsveltos
 ---
-# When running in the management cluster, drift-detection-manager needs
-# to access Secret containing Kubeconfig for managed cluster (and consequently
-# access Cluster/SveltosCluster to verify existance)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: drift-detection-manager-role
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
-  - 'secrets'
+  - secrets
   verbs:
   - get
   - list

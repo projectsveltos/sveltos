@@ -32,38 +32,49 @@ To showcase information about deployments in each managed cluster, you can utili
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
- name: deployment-replicas
+  name: deployment-replicas
 spec:
- collectResources: true
- group: "apps"
- version: v1
- kind: Deployment
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Progressing"
-     hs.message = ""
-     if obj.spec.replicas == 0 then
-       hs.ignore=true
-       return hs
-     end
-     if obj.status ~= nil then
-       if obj.status.availableReplicas ~= nil then
-         if obj.status.availableReplicas == obj.spec.replicas then
-           hs.status = "Healthy"
-           hs.message = "All replicas " .. obj.spec.replicas .. " are healthy"
-         else
-           hs.status = "Progressing"
-           hs.message = "expected replicas: " .. obj.spec.replicas .. " available: " .. obj.status.availableReplicas
-         end
-       end
-       if obj.status.unavailableReplicas ~= nil then
-          hs.status = "Degraded"
-          hs.message = "deployments have unavailable replicas"
-       end
-     end
-     return hs
-   end
+  collectResources: true
+  resourceSelectors:
+  - group: "apps"
+    version: v1
+    kind: Deployment
+  evaluateHealth: |
+    function evaluate()
+      local statuses = {}
+      
+      status = "Progressing"
+      message = ""
+     
+      for _,resource in ipairs(resources) do
+        if resource.spec.replicas == 0 then
+          continue
+        end
+        
+        if resource.status ~= nil then
+          if resource.status.availableReplicas ~= nil then
+            if resource.status.availableReplicas == resource.spec.replicas then
+              status = "Healthy"
+              message = "All replicas " .. resource.spec.replicas .. " are healthy"
+            else
+              status = "Progressing"
+              message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
+            end
+          end
+          if resource.status.unavailableReplicas ~= nil then
+            status = "Degraded"
+            message = "deployments have unavailable replicas"
+          end
+        end
+        table.insert(statuses, {resource=resource, status = status, message = message})
+      end
+
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      return hs
+    end
 ```
  
  2. use the ClusterHealthCheck and set the clusterSelector field to filter which managed clusters' deployments should be examined. In the following example, all managed clusters that match the cluster label selector env=fv are considered:
@@ -277,30 +288,41 @@ In this example we will define an HealthCheck containing a Lua script that will:
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: HealthCheck
 metadata:
- name: deployment-replicas
+  name: deployment-replicas
 spec:
- collectResources: true
- group: wgpolicyk8s.io
- version: v1alpha2
- kind: PolicyReport
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Healthy"
-     hs.message = ""
-     for i, result in ipairs(obj.results) do
-       if result.result == "fail" then
-          hs.status = "Degraded"
-          for j, r in ipairs(result.resources) do
-             hs.message = hs.message .. " " .. r.namespace .. "/" .. r.name
+  collectResources: true
+  resourceSelectors:
+  - group: wgpolicyk8s.io
+    version: v1alpha2
+    kind: PolicyReport
+  evaluateHealth: |
+    function evaluate()
+      local statuses  = {}
+      status = "Healthy"
+      message = ""
+
+      for _,resource in ipairs(resources) do
+        for i, result in ipairs(resource.results) do
+          if result.result == "fail" then
+            status = "Degraded"
+            for j, r in ipairs(result.resources) do
+              message = message .. " " .. r.namespace .. "/" .. r.name
+            end
           end
-       end
-     end
-     if hs.status == "Healthy" then
-       hs.ignore = true
-     end
-     return hs
-   end
+        end
+
+        if status ~= "Healthy" then
+          table.insert(statuses, {resource=resource, status = status, message = message})
+        end
+      end
+      
+      local hs = {}
+      if #statuses > 0 then
+        hs.resources = statuses 
+      end
+      
+      return hs
+    end
 ```
 
 As before, we also need to have a ClusterHealthCheck instance to instruct Sveltos which clusters to watch.
