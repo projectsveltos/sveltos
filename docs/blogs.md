@@ -23,7 +23,6 @@ authors:
 6. [Event driven add-on deployment](https://medium.com/p/43366ba9894d)
 7. [Scaling Event-Driven Applications Made Easy with Sveltos Kubernetes Cross-Cluster Configuration](https://link.medium.com/GEhxO5orKyb)
 8. [Sveltos: Simplifying Kubernetes Add-on Deployment and Constraints](https://medium.com/p/13fdfd3d9904)
-9. [Kubernetes add-on compliance with Projectsveltos and Lua](https://medium.com/@gianluca.mardente/kubernetes-add-on-compliance-with-projectsveltos-and-lua-940de565b53a)
 10. [Handle long running tasks](https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681)
 11. [L4-L7 with Sveltos](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c)
 12. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
