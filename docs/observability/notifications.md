@@ -168,7 +168,7 @@ If following label is set on HealthCheck instance created by tenant admin
 projectsveltos.io/admin-name: <admin>
 ```
 
-Sveltos will make sure tenant admin can define notifications only looking at resources it has been [authorized to by platform admin](../multi-tenancy.md).
+Sveltos will make sure tenant admin can define notifications only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy.md).
 
 Sveltos suggests using following Kyverno ClusterPolicy, which will take care of adding proper label to each HealthCheck at creation time.
 

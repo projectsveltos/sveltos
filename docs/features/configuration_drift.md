@@ -36,4 +36,4 @@ The service then starts a watcher for each GroupVersionKind with at least one re
 
 This way, Sveltos ensures that your systems are always consistent and predictable, preventing any unexpected issues caused by configuration drift.
 
-![Configuration drift recovery](assets/reconcile_configuration_drift.gif)
+![Configuration drift recovery](../assets/reconcile_configuration_drift.gif)
