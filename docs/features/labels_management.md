@@ -22,7 +22,7 @@ Once Classifier is deployed in the management cluster, it is distributed to each
 
 By combining Classifier with ClusterProfiles, Sveltos can monitor the runtime status for each cluster, update cluster labels when the cluster runtime state changes, and deploy and upgrade Kubernetes add-ons accordingly. With Sveltos, managing cluster labels and add-ons has never been easier.
 
-![Classifier in action](assets/classifier.gif)
+![Classifier in action](../assets/classifier.gif)
 
 ## A simple use case: upgrade helm charts automatically when Kubernetes cluster is upgraded
 Suppose you are managing several Kubernetes clusters with different versions.

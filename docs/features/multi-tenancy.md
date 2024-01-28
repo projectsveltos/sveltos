@@ -72,7 +72,7 @@ data:
       verbs: ["*"]
 ```
 
-![Multi-tenancy in action](assets/multi_tenancy.gif)
+![Multi-tenancy in action](../assets/multi_tenancy.gif)
 
 More example can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multi-tenancy examples").
 
