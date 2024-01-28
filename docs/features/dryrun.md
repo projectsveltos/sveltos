@@ -12,11 +12,17 @@ authors:
     - Gianluca Mardente
 ---
 
-# DryRun mode
+## What is the DryRun mode in Kubernetes?
 
-Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the DryRun syncMode configuration comes in!
+In Kubernetes, the "dry run" functionality allows users to simulate the execution of the commands they want to apply.
 
-By deploying your ClusterProfile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
+## Sveltos DryRun - Explained
+
+Sveltos takes it one step further. Imagine we are about to perform important changes to a ClusterProfile, but we are unsure what the results will be. The risk of uncertainty is big and we do not want to  cause any unwanted side effects to the Production environment. That's where the DryRun syncMode configuration comes in!
+
+By deploying a ClusterProfile with the `syncMode` set to `DryRun`, we can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be performed to the matching clusters during this dry run workflow.
+
+### Configuraton Example
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -28,12 +34,14 @@ spec:
   ...
 ```
 
-Once the dry run workflow is complete, you'll receive a detailed list of all the potential changes that would have been made to each matching cluster. This allows you to carefully inspect and validate these changes before deploying the new ClusterProfile configuration.
+Once the dry run workflow is complete, you'll receive a detailed list of all the potential changes that would have been made to the matching cluster. This allows us to carefully inspect and validate the changes before deploying the new ClusterProfile configuration.
 
-If you're interested in viewing this change list, you can check out the generated Custom Resource Definition (CRD) called ClusterReport. But let's be real, it's much simpler to just use the sveltosctl CLI command, like this:
+If you are interested in viewing the change list, you can check out the generated Custom Resource Definition (CRD) with the name ClusterReport.
+
+Below is a snippet from the sveltosctl utility.
 
 ```
-./bin/sveltosctl show dryrun
+$ sveltosctl show dryrun
 
 +-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
 |               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION   |            MESSAGE             | CLUSTER PROFILE  |
@@ -49,4 +57,6 @@ If you're interested in viewing this change list, you can check out the generate
 
 ```
 
-For a demonstration of dry run mode, watch the video [Sveltos, introduction to DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=4s) on YouTube.
+## More Resources
+
+For a quick demonstration of the dry run mode, watch the [Sveltos, introduction to DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=4s) video on YouTube.
