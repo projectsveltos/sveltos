@@ -9,14 +9,16 @@ authors:
     - Gianluca Mardente
 ---
 
-ConfigMaps and Secrets are Kubernetes resources designed to decouple configuration details from application code, fostering a clear separation between configuration data and the application logic. This separation yields several compelling advantages, making the practice of mounting ConfigMaps and Secrets a crucial component of Kubernetes deployments.
+## Introduction to Rolling Upgrades
+
+ConfigMaps and Secrets are Kubernetes resources designed to decouple configuration details from application code, fostering a clear separation between the configuration data and the application logic. This separation yields several compelling advantages, making the practice of mounting ConfigMaps and Secrets a crucial component of Kubernetes deployments.
 
 1. Configuration Flexibility: Applications often require various configuration settings to function optimally across different environments. By mounting ConfigMaps, developers can modify configuration parameters without altering the application code. This not only streamlines the development process but also allows for on-the-fly adjustments, facilitating smooth transitions between development, testing, and production environments.
 2. Enhanced Security: Secrets, such as sensitive authentication tokens, passwords, and API keys, contain critical information that must be safeguarded. Instead of hardcoding these sensitive details directly into the application code, they can be stored as Secrets and mounted into pods only when necessary. This mitigates the risk of inadvertent exposure and helps maintain a higher level of security.
 
 ## React to ConfigMap/Secret changes
 
-Sveltos has the capability to monitor changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. This functionality can be activated by simply setting the __reloader__ field to true in the ClusterProfile, as demonstrated in the following example YAML configuration:
+Sveltos has the capability to **monitor** changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. This functionality can be activated by setting the __reloader__ field to `true` in the ClusterProfile, as demonstrated in the below YAML configuration.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -35,12 +37,12 @@ spec:
     kind: ConfigMap
 ```
 
-where __nginx__ ConfigMap contains a Deployment mounting a ConfigMap[^1].
+The __nginx__ ConfigMap contains a Deployment mounting a ConfigMap[^1].
 
 The above ClusterProfile is responsible for deploying both a ConfigMap instance and a Deployment instance, with the latter mounting a ConfigMap.
 
 ```bash
-sveltosctl show addons          
+& sveltosctl show addons          
 +-----------------------------+---------------------------------+-----------+---------------------+---------+-------------------------------+------------------------------+
 |           CLUSTER           |          RESOURCE TYPE          | NAMESPACE |        NAME         | VERSION |             TIME              |       CLUSTER PROFILES       |
 +-----------------------------+---------------------------------+-----------+---------------------+---------+-------------------------------+------------------------------+
@@ -53,11 +55,11 @@ Whenever the ConfigMap that is mounted by a Deployment undergoes modifications, 
 
 ![Sveltos: triggering rolling upgrades](../assets/rolling_upgrades.gif)
 
-By setting the __reloader__ field to true in the ClusterProfile, you enable automated rolling upgrades that ensure the latest configurations are consistently applied to your applications. This significantly simplifies the maintenance and enhancement of your Kubernetes cluster, promoting stability and efficient resource utilization.
+By setting the __reloader__ field to `true`, you enable **automated rolling upgrades** that ensure the latest configurations are consistently applied down the applications. This significantly simplifies the maintenance and enhancement of your Kubernetes cluster, promoting stability and efficient resource utilization.
 
 1. Deployments: When a ConfigMap or Secret mounted by a Deployment is modified, Sveltos promptly detects the change and initiates a rolling upgrade for that Deployment. This ensures that any changes in configuration or secrets are promptly and securely propagated to the running instances of the application.
 2. StatefulSets: Similar to Deployments, StatefulSets can take advantage of Sveltos' monitoring capabilities. Modifications to the ConfigMap or Secret mounted by a StatefulSet will trigger rolling updates for the StatefulSet instances. This allows for controlled and consistent updates to stateful applications while maintaining data integrity.
-3. DaemonSets: Sveltos extends its monitoring to DaemonSets as well. If a ConfigMap or Secret used by a DaemonSet is modified, Sveltos takes the initiative to perform a rolling upgrade across all the nodes where the DaemonSet is deployed. This way, any changes made to the resources are efficiently propagated throughout the cluster.
+3. DaemonSets: Sveltos extends its monitoring to DaemonSets. If a ConfigMap or a Secret used by a DaemonSet is modified, Sveltos takes the initiative to perform a rolling upgrade across all the nodes where the DaemonSet is deployed. This way, any changes made to the resources are efficiently propagated throughout the cluster.
 
 [^1]:__nginx-data__ ConfigMap
 ```yaml

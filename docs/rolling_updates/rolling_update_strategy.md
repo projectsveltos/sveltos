@@ -11,26 +11,30 @@ authors:
     - Gianluca Mardente
 ---
 
-# Rolling Update Strategy for ClusterProfiles
+## ClusterProfile Rolling Update Strategy
 
-A ClusterProfile might match more than one cluster. When adding or modifying a ClusterProfile, it is helpful to:
+A ClusterProfile might match more than one clusters. When adding or modifying a ClusterProfile, it is helpful to:
 
-- Incrementally add the new configuration to a few clusters at a time.
-- Validate health before declaring deployment successful in a given managed cluster.
+- Incrementally add a new configuration to a few clusters at a time.
+- Validate the health of the deployment before declaring it successful.
 
-To support this, Sveltos has two ClusterProfile Spec fields: `MaxUpdate` and `ValidateHealths`.
+To support this, Sveltos uses two `ClusterProfile Spec` fields: `MaxUpdate` and `ValidateHealths`.
 
-## MaxUpdate
+### MaxUpdate
 
-Indicates the maximum number of clusters that can be updated concurrently. Value can be an absolute number (e.g., 5) or a percentage of desired managed clusters (e.g., 10%). Defaults to 100%.
+`MaxUpdate` indicates the maximum number of clusters that can be updated concurrently. The value can be an absolute number (e.g., 5) or a percentage of the desired managed clusters (e.g., 10%). The default vlue is set to 100%.
 
-Example: When this field is set to 30%, when the list of add-ons/applications in ClusterProfile changes, only 30% of matching clusters will be updated in parallel. Only when updates in those clusters succeed will other matching clusters be updated.
+#### Example
 
-## ValidateHealths
+When the field is set to 30%, the list of add-ons/applications in ClusterProfile changes, only 30% of the matching clusters will be updated in parallel. Only when the updates in these clusters succeed, it will proceed with the update of the remaining clusters
 
-A slice of health validation expressed using the Lua language.
+### ValidateHealths
 
-For instance, when deploying Helm charts, it is possible to instruct Sveltos to check deployment health (number of active replicas) before declaring the Helm chart deployment successful.
+The `validateHealths` field in a ClusterProfile Spec allows you to specify health validation checks that Sveltos should perform before declaring an update successful. These checks are expressed using the Lua language.
+
+#### Example
+
+For instance, when deploying Helm charts, it is possible to instruct Sveltos to check the deployments health (number of active replicas) before declaring the Helm chart deployment successful.
 
 ```yaml
 validateHealths:
@@ -56,21 +60,19 @@ validateHealths:
     end
 ```
 
-Above instructs Sveltos to fetch all deployments in the kyverno namespace. For each one of those, the Lua script is evaluated.
+The above YAML definition instructs Sveltos to fetch all the deployments in the kyverno namespace. For each of those, the Lua script is evaluated.
 
-The `validateHealths` field in a ClusterProfile Spec allows you to specify health validation checks that Sveltos should perform before declaring an update successful. These checks are expressed using the Lua language.
+The Lua function must be named `evaluate`. It is passed as a single argument, which is an instance of the object being validated (`obj`). The function must return a struct containing a field `healthy`, which is a boolean indicating whether the resource is healthy or not. The struct can also have an optional field `message`, which will be reported back by Sveltos if the resource is not healthy.
 
-The Lua function must be named `evaluate`. It is passed a single argument, which is an instance of the object being validated (`obj`). The function must return a struct containing a field `healthy`, which is a boolean indicating whether the resource is healthy or not. The struct can also have an optional field `message`, which will be reported back by Sveltos if the resource is not healthy.
-
-## Benefits of a Rolling Update Strategy
+## Rolling Update Strategy Benefits
 
 A rolling update strategy allows you to update your clusters gradually, minimizing downtime and risk. By updating a few clusters at a time, you can identify and resolve any issues before rolling out the update to all of your clusters. Additionally, you can use the ValidateHealths field to ensure that your clusters are healthy before declaring the update successful.
 
-## How to Use the Rolling Update Strategy
+## All in One - Example Rolling Update Strategy
 
-To use the rolling update strategy, simply set the MaxUpdate field in your ClusterProfile Spec to the desired number of clusters to update concurrently. You can also use the ValidateHealths field to specify any health validation checks that you want to perform.
+To use the rolling update strategy, simply set the `MaxUpdate` field in the ClusterProfile Spec to the desired number of clusters to update concurrently. You can also use the `ValidateHealths` field to specify any health validation checks that you want to perform.
 
-For example, the following ClusterProfile Spec would update a maximum of 30% of matching clusters concurrently and would check that the number of active replicas for all deployments in the kyverno namespace is matches the requested replicas before declaring the update successful:
+The following ClusterProfile Spec would update a maximum of 30% of matching clusters concurrently, and would check that the number of active replicas for all deployments in the kyverno namespace matche the requested replicas before declaring the update successful.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -115,16 +117,16 @@ spec:
       end
 ```
 
-## Verify your Lua script
+### Manual Verification Lua Script
 
-To verify your Lua script without a cluster, you can follow these steps:
+To verify the Lua script without a cluster, you can follow steps pointers.
 
-- Clone [addon-controller](https://github.com/projectsveltos/addon-controller) repo
-- Navigate to the `controllers/health_policies/deployment_health directory`: ```cd controllers/health_policies/deployment_health```
-- create a directory ```mkdir my_script```
-- Create a new file named `lua_policy.lua` in the directory you just created, and add your `evaluate` function to it.
-- Create a new file named `valid_resource.yaml` in the same directory, and add a healthy resource to it. This is a resource that your evaluate function should evaluate to healthy.
-- Create a new file named `invalid_resource.yaml` in the same directory, and add a non-healthy resource to it. This is a resource that your evaluate function should evaluate to false.
-- Run the following command to build and run the unit tests: ```make ut```
+1. Clone [addon-controller](https://github.com/projectsveltos/addon-controller) repo
+2. Navigate to the `controllers/health_policies/deployment_health directory`: ```cd controllers/health_policies/deployment_health```
+3. Create a directory ```mkdir my_script```
+4. Create a new file named `lua_policy.lua` in the directory you just created, and add your `evaluate` function to it.
+5. Create a new file named `valid_resource.yaml` in the same directory, and add a healthy resource to it. This is a resource that your evaluate function should evaluate to healthy.
+6. Create a new file named `invalid_resource.yaml` in the same directory, and add a non-healthy resource to it. This is a resource that your evaluate function should evaluate to false.
+7. Run the following command to build and run the unit tests: ```make ut```
 
-If the unit tests pass, then your Lua script is valid.
+**Please Note:** If the unit tests pass, the Lua script is valid.
