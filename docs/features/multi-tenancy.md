@@ -10,27 +10,29 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-With Sveltos, a management cluster is used to manage add-ons in tens of clusters.
 
-When managing tens of cluster, **multi-tenancy** plays an important role.
+## Introduction to Multi-Tenancy
 
-Common forms of multi-tenancy are:
+With Sveltos, a management cluster is used to manage add-ons in tens of clusters. When managing tens of clusters, **multi-tenancy** plays an important role.
 
-1. share a cluster between multiple teams within an organization, each of whom may operate one or more workloads. These workloads frequently need to communicate with each other, and with other workloads located on the same or different clusters;
-2. one (or more) cluster(s) fully reserved for an organization.
+### Common forms of multi-tenancy
 
-In both forms, we can define:
+1. Share a cluster between multiple teams within an organization, each of whom may operate one or more workloads. These workloads frequently need to communicate with each other, and with other workloads located on the same or different clusters;
+2. One (or more) cluster(s) fully reserved for an organization.
 
-1. **platform admin** is the admin with cluster-admin access to all the managed clusters;
-2. **tenant admin** is the admin with access to the clusters/namespaces assigned to them by the platform admin. Tenant admin manages applications for a tenant.
+#### Defined Roles
 
-Sveltos wants to provide a solution so that:
+1. **platform admin**: Is the admin with the cluster-admin access to all the managed clusters;
+2. **tenant admin**: Is the admin with access to the clusters/namespaces assigned to them by the platform admin. Tenant admin manages applications for a tenant.
 
-1. platform admin onboards tenant admins and easily defines what each tenant can do in which clusters;
-2. tenant admins manage tenant applications from a single place, the management cluster.
+#### Sveltos Solution
 
-### RoleRequest CRD
-RoleRequest is the CRD introduced by Sveltos to allow platform admin to grant permissions to various tenant admins.
+1. **Platform admin** onboards tenant admins and easily define what each tenant can do in which clusters;
+2. **Tenant admin** manage tenant applications from a single place, the management cluster.
+
+## Sveltos RoleRequest CRD
+
+`RoleRequest` is the CRD introduced by Sveltos to allow platform admins to grant permissions to various tenant admins.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -46,13 +48,13 @@ spec:
     kind: ConfigMap
 ```
 
-where:
+Based on the above YAML definition, we specify the below fields:
 
-1. admin: identifies the tenant admin to whom permissions are granted;
-2. clusterSelector: is a Kubernetes label selector. Sveltos uses it to detect all the clusters where permissions need to be granted;
-3. roleRefs: references ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining permissions being granted to the tenant admin.
+1. **admin:** Identifies the tenant admin to whom permissions are granted;
+2. **clusterSelector:** Is a Kubernetes label selector. Sveltos uses it to detect all the clusters where permissions need to be granted;
+3. **roleRefs:** References ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining permissions being granted to the tenant admin.
 
-An example of a ConfigMap containing ClusterRole granting full edit permissions:
+An example of a ConfigMap containing a ClusterRole granting definition with full edit permissions can be found below.
 
 ```yaml
 apiVersion: v1
@@ -74,25 +76,27 @@ data:
 
 ![Multi-tenancy in action](../assets/multi_tenancy.gif)
 
-More example can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multi-tenancy examples").
+## More Examples
 
-### ClusterProfile
+More examples can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multi-tenancy examples").
 
-After a tenant is onboarded by platform admin, tenant admin can create ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
+### Example - ClusterProfile Definition
 
-Sveltos expects following label to be set on each ClusterProfile created by a tenant admin:
+After a tenant is onboarded by the platform admin, the tenant admin can create ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
+
+Sveltos expects the following label to be set on each ClusterProfile created by a tenant admin:
 ```yaml
 projectsveltos.io/admin-name: <admin>
 ```
 
-where ***admin*** must match RoleRequest.Spec.Admin field.
+where ***admin*** must match the `RoleRequest.Spec.Admin` field.
 
 If:
 
-1. each tenant admin is a ServiceAccount in the management cluster;
+1. Each tenant admin is a ServiceAccount in the management cluster;
 2. [Kyverno](https://kyverno.io) is deployed in the management cluster;
 
-Sveltos suggests using following Kyverno ClusterPolicy, which will take care of adding proper label to each ClusterProfile at creation time.
+Sveltos suggests using the below Kyverno ClusterPolicy, which will take care of adding proper labels to each ClusterProfile at creation time.
 
 ```yaml
 apiVersion: kyverno.io/v1
@@ -127,9 +131,9 @@ spec:
   validationFailureAction: enforce
 ```
 
-### Fully reserving clusters to a tenant
+### Example - Tenant Cluster Reservation
 
-In the following example, all clusters matching Kubernetes label selector ***org=foo.io*** will be assigned to tenant foo:
+In the below example, all clusters matching the Kubernetes label selector ***org=foo.io*** will be assigned to the tenant with the name `foo`.
 
 ```yaml
 apiVersion: v1
@@ -163,10 +167,10 @@ spec:
     kind: ConfigMap
 ```
 
-Using [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") we can verify Sveltos is aware system-admin has full access to managed cluster with label env:production
+We can use of the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to check the permissions given to the tenant `foo`. We expect the tenant to have full access to the managed cluster with the label set to `env:production`
 
 ```bash
-./bin/sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac       
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 |            CLUSTER            |    ADMIN     | NAMESPACE | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
@@ -174,7 +178,7 @@ Using [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") w
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 ```
 
-As soon as tenant foo posts following ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
+As soon as the tenant `foo` posts the nbelow ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -196,8 +200,9 @@ spec:
     helmChartAction:  Install
 ```
 
-If the same tenant foo tries to deploy Kyverno in a cluster not assigned to it, Sveltos will fail the deployment.
-For instance if ClusterProfile.Spec.ClusterSelector is set to ***org=bar.io*** deployment will fail.
+If the same tenant tries to deploy Kyverno in a cluster not assigned to it, Sveltos will fail the deployment.
+
+For instance, if the `ClusterProfile.Spec.ClusterSelector` is set to ***org=bar.io***, the deployment will fail.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -219,13 +224,13 @@ spec:
     helmChartAction:  Install
 ```
 
-### Sharing cluster between multiple tenants
+### Example - Share Cluster Between Tenants
 
-In following examples, all clusters matching label selector ***env=internal***
+In the below examples, all clusters matching the label selector ***env=internal***
 are shared between two tenants:
 
-1. tenant ***foo*** is granted full access to namespaces ***foo-eng*** and ***foo-hr***
-2. tenant ***bar*** is granted full access to namespace ***bar-resource***
+1. Tenant ***foo*** is granted full access to namespaces ***foo-eng*** and ***foo-hr***
+2. Tenant ***bar*** is granted full access to namespace ***bar-resource***
 
 ```yaml
 # ConfigMap contains a Role which gives
@@ -309,17 +314,15 @@ spec:
     kind: ConfigMap
 ```
 
-### Display tenant admin permissions
+### Display Tenant Admin Permissions
 
-One of main Sveltos focuses is visibility. So it should not be a surprise that Sveltos offers a CLI for displaying tenant admin RBACs.
+Sveltos heavily focuses on the visibility of the clusters. The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") can be used to display permissions granted to each tenant admin in each managed cluster.
 
-[Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") can be used to display permissions granted to each tenant admin in each managed cluster.
-
-If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
-```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml), we get:
+If we have two clusters, a ClusterAPI powered and a SveltosCluster, both matching the label selector
+```env=internal``` and we post the [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml), we get the below output.
 
 ```bash
-./bin/sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac       
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 |                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
