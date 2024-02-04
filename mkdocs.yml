@@ -16,6 +16,10 @@ markdown_extensions:
     emoji_generator: !!python/name:materialx.emoji.to_svg
 nav:
 - Projectsveltos: 'index.md'
+- Use Cases:
+  - Use Case 1: 'use_cases/use_case_1.md'
+  - Use Case 2: 'use_cases/use_case_2.md'
+  - Use Case 3: 'use_cases/use_case_3.md'
 - Installation:
   - Quick Start: 'install/quick_start.md'
   - Install: 'install/install.md'
@@ -24,10 +28,10 @@ nav:
   - Visibility: 'sveltosctl/visibility.md'
   - Tech support: 'sveltosctl/techsupport.md'
   - Snapshot: 'sveltosctl/snapshot.md'
-- Register Cluster:
-  - Register cluster: 'register/register-cluster.md'
-  - Manage add-ons in the management cluster: 'register/management_cluster.md'
-  - Claudie Powered Clusters: 'register/claudie.md'
+- Register Clusters:
+  - Register Cluster: 'register/register-cluster.md'
+  - Register Management Cluster: 'register/register_management_cluster.md'
+  - Register Claudie Powered Clusters: 'register/register_claudie_cluster.md'
 - Deploy add-ons and applications:
   - Distribute Add-ons: 'addons/addons.md'
   - Deploy Helm Charts: 'addons/helm_charts.md'
@@ -36,8 +40,8 @@ nav:
   - ClusterProfile Example: 'addons/combining_all.md'
   - Deep dive into ClusterProfiles: 'addons/clusterprofile.md'
   - Deep dive into Profiles: 'addons/profile.md'
-- Templates:
-  - Helm charts and resources as templates: 'template/template.md'
+- Templating:
+  - Helm Charts and Resources as Templates: 'template/template.md'
   - Support for Carvel ytt: 'template/ytt_extension.md'
   - Support for Jsonnet: 'template/jsonnet_extension.md'
   - Example Integration with Crossplane: 'template/crossplane.md'
@@ -48,12 +52,12 @@ nav:
   - Configuration Drift detection: 'features/configuration_drift.md'
   - Cluster Classification: 'features/labels_management.md'
   - Multi-tenancy: 'features/multi-tenancy.md'
+- Event Framework:
+  - Event Based Add-on Deployment: 'events/addon_event_deployment.md'
+  - Example Cross-cluster Configuration: 'events/example_cross_cluster_configuration.md'
 - Rolling Updates:
   - Rolling Upgrade Deployment, StatefulSet, DaemonSet: 'rolling_updates/rolling_upgrade.md'
   - Example Rolling Update to Minimize Downtime and Risk: 'rolling_updates/rolling_update_strategy.md'
-- Event framework:
-  - Event based add-on deployment: 'events/addon_event_deployment.md'
-  - Cross cluster configuration: 'events/cross_cluster_configuration.md'
 - Cluster Observability:
   - Notifications: 'observability/notifications.md'
   - Send Slack, Webex and Discord notifications: 'observability/addons.md'

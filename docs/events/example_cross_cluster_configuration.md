@@ -14,24 +14,27 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos by default will deploy add-ons in the very same cluster an [event](addon_event_deployment.md) is detected.
-Sveltos though can also be configured for cross-cluster configuration: watch for events in a cluster and deploy add-ons in a set of different clusters.
+## Introduction to Event Driven Addon Distrubution
+
+Sveltos by default will deploy add-ons in the same way an [event](addon_event_deployment.md) is detected.
+Sveltos can be configured for cross-cluster configuration. That means, it will watch for events in a cluster and deploy add-ons in a set of different clusters.
 
 EventTrigger CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
-This field is optional and not set by default. In such a case, Sveltos default behavior is to deploy add-ons in the same cluster where the event was detected.
+This field is optional and **not** set by default. Sveltos default behaviour is to deploy add-ons in the same cluster where the event was detected. If this field is set, Sveltos behaviour will change and when an event is detected in a cluster, add-ons will get deployed in all the clusters matching the label selector __destinationClusterSelector__.
 
-If this field is set, Sveltos behavior will change. When an event is detected in a cluster, add-ons will be deployed in all the clusters matching the label selector __destinationClusterSelector__.
+### Example: Cross Cluster Service Discovery
 
-We can see this in action with an example of cross-cluster service discovery.
+To understand the concept mentioned above, let's have a look at a cross-cluster service discovery example.
 
-We have two clusters:
+Two clusters with the description below are defined.
 
 1. GKE cluster (labels env: production) registered with sveltos;
-2. a cluster-api cluster (label dep: eng) provisioned by docker.
+2. A cluster-api cluster (label dep: eng) provisioned by docker.
  
-In the management cluster, we create:
+#### Management Cluster
 
-1. an EventSource instance that identies as a match any Service with a load balancer IP:
+1. An EventSource instance that matches any Service with a load balancer IP
+
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: EventSource
@@ -54,7 +57,9 @@ spec:
       return hs
     end
 ```
-1. an EventTrigger instance that references EventSource defined above (and so watches for load balancer services in any cluster with label env:production, which in our example matches the GKE cluster) and deploys selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_ (in our example the cluster-api provisioned cluster)
+2. An EventTrigger instance that references the EventSource defined above. It deploys the selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_.
+
+
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: EventTrigger
@@ -107,10 +112,13 @@ data:
         {{ end }}
 ```
 
-As mentioned above, we are passing Sveltos a selector-less Service and we are then specifying our own Endpoints.
-The Service and Endpoints are defined as template and will be instantiated by Sveltos using information taken from load-balancer service matching the EventSource (__Resource__ in this context represent a resource matching EventSource).
+As mentioned above, we pass Sveltos a selector-less Service and we then specify our own Endpoints.
 
-Now in the GKE cluster, we can create a deployment and a service of type *LoadBalancer*. 
+The Service and Endpoints are defined as templates and will be instantiated by Sveltos using the information taken from the load-balancer service matching the EventSource (__Resource__ in this context represent a resource matching EventSource).
+
+#### GKE Cluster
+
+In the GKE cluster we create a deployment and a service of type *LoadBalancer*. 
 
 ```yaml
 apiVersion: apps/v1
@@ -153,7 +161,7 @@ spec:
     targetPort: 50001
 ```
 
-The Service will be assigned an IP address
+The Service will be assigned to an IP address.
 
 ```yaml
 apiVersion: v1
@@ -170,8 +178,9 @@ status:
     - ip: 34.172.32.172
 ```
  
-and it will match the EventSource. As result Sveltos will deploy the selector-less Service and Endpoints in the other cluster, the cluster-api provisioned cluster. 
-The Endpoints IP address is set to the one assigned to the load balancer Service in the GKE cluster.
+Once this is done, it will match the EventSource. Sveltos will deploy the selector-less Service and the Endpoints in the other cluster, the cluster-api provisioned cluster. 
+
+The Endpoints IP address is set to the one assigned to the loadBalancer Service in the GKE cluster.
 
 ```yaml
 apiVersion: v1
@@ -207,7 +216,7 @@ subsets:
 
 So at this point now a pod in the cluster-api provisioned cluster can reach the service in the GKE cluster.
 
-Let's create namespace policy-demo and a busybox pod in the cluster-api provisioned cluster:
+Let us create a namespace policy-demo and a busybox pod in the cluster-api provisioned cluster:
 
 ```yaml
 apiVersion: v1
