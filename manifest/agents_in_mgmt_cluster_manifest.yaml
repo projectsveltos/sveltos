@@ -2933,11 +2933,14 @@ spec:
                       - Remote
                       type: string
                     kind:
-                      description: 'Kind of the resource. Supported kinds are: Secrets
-                        and ConfigMaps.'
+                      description: 'Kind of the resource. Supported kinds are: - ConfigMap/Secret
+                        - flux GitRepository;OCIRepository;Bucket'
                       enum:
-                      - Secret
+                      - GitRepository
+                      - OCIRepository
+                      - Bucket
                       - ConfigMap
+                      - Secret
                       type: string
                     name:
                       description: Name of the referenced resource.
@@ -2948,6 +2951,11 @@ spec:
                         namespace can be left empty. In such a case, namespace will
                         be implicit set to cluster's namespace. For Profile namespace
                         must be left empty. Profile namespace will be used.
+                      type: string
+                    path:
+                      description: Path to the directory containing the YAML files.
+                        Defaults to 'None', which translates to the root path of the
+                        SourceRef. Used only for GitRepository;OCIRepository;Bucket
                       type: string
                   required:
                   - kind
@@ -3974,10 +3982,13 @@ spec:
                           type: string
                         kind:
                           description: 'Kind of the resource. Supported kinds are:
-                            Secrets and ConfigMaps.'
+                            - ConfigMap/Secret - flux GitRepository;OCIRepository;Bucket'
                           enum:
-                          - Secret
+                          - GitRepository
+                          - OCIRepository
+                          - Bucket
                           - ConfigMap
+                          - Secret
                           type: string
                         name:
                           description: Name of the referenced resource.
@@ -3989,6 +4000,11 @@ spec:
                             will be implicit set to cluster's namespace. For Profile
                             namespace must be left empty. Profile namespace will be
                             used.
+                          type: string
+                        path:
+                          description: Path to the directory containing the YAML files.
+                            Defaults to 'None', which translates to the root path
+                            of the SourceRef. Used only for GitRepository;OCIRepository;Bucket
                           type: string
                       required:
                       - kind
@@ -4585,11 +4601,14 @@ spec:
                       - Remote
                       type: string
                     kind:
-                      description: 'Kind of the resource. Supported kinds are: Secrets
-                        and ConfigMaps.'
+                      description: 'Kind of the resource. Supported kinds are: - ConfigMap/Secret
+                        - flux GitRepository;OCIRepository;Bucket'
                       enum:
-                      - Secret
+                      - GitRepository
+                      - OCIRepository
+                      - Bucket
                       - ConfigMap
+                      - Secret
                       type: string
                     name:
                       description: Name of the referenced resource.
@@ -4600,6 +4619,11 @@ spec:
                         namespace can be left empty. In such a case, namespace will
                         be implicit set to cluster's namespace. For Profile namespace
                         must be left empty. Profile namespace will be used.
+                      type: string
+                    path:
+                      description: Path to the directory containing the YAML files.
+                        Defaults to 'None', which translates to the root path of the
+                        SourceRef. Used only for GitRepository;OCIRepository;Bucket
                       type: string
                   required:
                   - kind
@@ -5446,10 +5470,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.23.0
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:main
+        image: projectsveltos/addon-controller-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -5835,7 +5859,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:main
+        image: projectsveltos/access-manager-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6040,7 +6064,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:main
+        image: projectsveltos/sveltoscluster-manager-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6360,7 +6384,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:main
+        image: projectsveltos/healthcheck-manager-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -6666,11 +6690,14 @@ spec:
                       - Remote
                       type: string
                     kind:
-                      description: 'Kind of the resource. Supported kinds are: Secrets
-                        and ConfigMaps.'
+                      description: 'Kind of the resource. Supported kinds are: - ConfigMap/Secret
+                        - flux GitRepository;OCIRepository;Bucket'
                       enum:
-                      - Secret
+                      - GitRepository
+                      - OCIRepository
+                      - Bucket
                       - ConfigMap
+                      - Secret
                       type: string
                     name:
                       description: Name of the referenced resource.
@@ -6681,6 +6708,11 @@ spec:
                         namespace can be left empty. In such a case, namespace will
                         be implicit set to cluster's namespace. For Profile namespace
                         must be left empty. Profile namespace will be used.
+                      type: string
+                    path:
+                      description: Path to the directory containing the YAML files.
+                        Defaults to 'None', which translates to the root path of the
+                        SourceRef. Used only for GitRepository;OCIRepository;Bucket
                       type: string
                   required:
                   - kind
@@ -7321,7 +7353,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:main
+        image: projectsveltos/event-manager-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7607,10 +7639,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.23.0
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:main
+        image: projectsveltos/classifier-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
@@ -8099,7 +8131,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:main
+        image: projectsveltos/shard-controller-amd64:v0.23.0
         livenessProbe:
           httpGet:
             path: /healthz
