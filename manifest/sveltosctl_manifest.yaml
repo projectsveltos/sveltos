@@ -46,7 +46,7 @@ spec:
       serviceAccountName: sveltosctl
       containers:
       - name: sveltosctl
-        image: projectsveltos/sveltosctl-amd64:main
+        image: projectsveltos/sveltosctl-amd64:v0.23.0
         imagePullPolicy: IfNotPresent
         command:
           - /sveltosctl
@@ -119,6 +119,7 @@ rules:
       - healthchecks
       - healthcheckreports
       - eventtriggers
+      - addoncompliances
     verbs:
       - get
       - list
