@@ -103,4 +103,116 @@ Consider the provided ClusterProfile, when we have two workload clusters matchin
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
 
+## Flux Sources
+
+Sveltos can seamlessly integrate with __Flux__ to automatically deploy YAML manifests stored in a Git repository or a Bucket. This powerful combination allows you to manage your Kubernetes configurations in a central location and leverage Sveltos for targeted deployments across clusters.
+
+### Example: Deploying Kyverno with Flux and Sveltos
+Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a kyverno directory with all the YAML needed to deploy Kyverno. 
+
+Here's how to leverage Flux and Sveltos to automatically deploy Kyverno to clusters:
+
+#### 1. Set up Flux in the Management Cluster:
+
+Run Flux in your management cluster and configure it to synchronize the Git repository containing your Kyverno manifests. Use a __GitRepository__ resource similar to the following:
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  timeout: 60s
+  url: https://github.com/gianlucam76/yaml_flux.git
+```
+
+#### 2. Create a Sveltos ClusterProfile:
+
+Define a Sveltos ClusterProfile referencing the flux-system Git repository and specifying the kyverno directory as the source for deployment:
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno-resources
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+    path: kyverno
+```
+
+This ClusterProfile targets clusters with the __env=fv__ label and fetches deployment information from the kyverno directory within the flux-system Git repository managed by Flux.
+
+#### Templating with Git Repository/Bucket Content:
+
+The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can also be a template[^2].To enable templating, annotate the referenced GitRepository instance with __"projectsveltos.io/template: true"__. 
+When Sveltos processes the template, it will:
+
+- Read the content of all files inside the specified path.
+- Instantiate the templates using data from resources in the management cluster, similar to how it currently works with referenced Secrets and ConfigMaps.
+
+This allows you to dynamically customize deployments based on the specific characteristics of your clusters, further enhancing flexibility and automation.
+
+Let's get hands-on! The content in the "template" directory of this [repository](https://github.com/gianlucam76/yaml_flux.git) serves as a perfect example.
+
+``` yaml
+# Sveltos will instantiate this template before deploying to matching managed cluster
+# Sveltos will get the ClusterAPI Cluster instance representing the cluster in the
+# managed cluster, and use that resource data to instintiate this ConfigMap before
+# deploying it
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Cluster.metadata.name }}
+  namespace: default
+data:
+  controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
+ ``` 
+
+Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__.
+
+The corresponding ClusterProfile demonstrates how this works:
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux-template-example
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+    path: template
+```
+
+This ClusterProfile will use information from the "Cluster" resource in the management cluster to populate the template and then deploy it.
+
+An example of __ConfigMap__ deployed in a managed cluster:
+
+```yaml
+apiVersion: v1
+data:
+  controlPlaneEndpoint: 172.18.0.4:6443
+kind: ConfigMap
+metadata:
+  ...
+  name: clusterapi-workload
+  namespace: default
+  ...
+```
+
+Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
+
 [^1]:A ConfigMap is not designed to hold large chunks of data. The data stored in a ConfigMap cannot exceed 1 MiB. If you need to store settings that are larger than this limit, you may want to consider mounting a volume or use a separate database or file service.
+[^2]: Want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
