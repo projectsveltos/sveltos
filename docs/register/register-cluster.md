@@ -10,7 +10,7 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-Sveltos comes with support to automatically discover [ClusterAPI](clusterapi.md) powered clusters. If Sveltos is deployed in a management cluster with ClusterAPI (CAPI), no further action is required for Sveltos to manage add-ons on CAPI-powered clusters. Sveltos will watch for *clusters.cluster.x-k8s.io"* instances and program those accordingly.
+Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. If Sveltos is deployed in a management cluster with ClusterAPI (CAPI), no further action is required for Sveltos to manage add-ons on CAPI-powered clusters. Sveltos will watch for *clusters.cluster.x-k8s.io"* instances and program those accordingly.
 
 Other clusters (on-prem, Cloud) can registered with Sveltos easily. Afterwards, Sveltos can [manage Kubernetes add-ons](../addons/addons.md) on all the clusters seamlessly.
 
