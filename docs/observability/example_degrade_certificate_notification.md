@@ -13,7 +13,9 @@ authors:
     - Gianluca Mardente
 ---
 
-Following HealthCheck will detect degraded Certificates.
+## Example: Degrade Certificates Notification
+
+The below `HealthCheck` YAML definition will detect degrade Certificates.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
