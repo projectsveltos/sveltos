@@ -13,12 +13,14 @@ authors:
     - Gianluca Mardente
 ---
 
+## Example: Slack Notification for Pods in Crashloopbackoff
+
 ![Send Slack Notification for Pods in Crashloopbackoff state](../assets/notification.gif)
 
-Using following HealthCheck and ClusterhealthCheck instances, we are instructing Sveltos to:
+The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to instruct Sveltos to:
 
-1. detect pods in crashloopbackoff state in any cluster with labels __env=fv```
-2. send a Slack notification when such an event is detected
+1. Detect pods in a crashloopbackoff state for every cluster that matched the labels __env=fv```
+2. Send a Slack notification when an event is detected
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -86,4 +88,4 @@ spec:
      namespace: default
 ```
 
-All YAMLs can be found [here](https://github.com/projectsveltos/demos/tree/main/observability)
+The YAML defintions can be found [here](https://github.com/projectsveltos/demos/tree/main/observability).

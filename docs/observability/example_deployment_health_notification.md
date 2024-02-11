@@ -13,11 +13,13 @@ authors:
     - Gianluca Mardente
 ---
 
-Following HealthCheck, considers all Deployments. Any Deployment:
+## Example: Deployment Health Notification
 
-1. with number of available replicas matching number of requested replicas is marked as Healthy;
-2. with number of available replicas different than number of requested replicas is marked as Progressing;
-3. with number of unavailable replicas set and different than zero, is marked as Degraded.
+The below `HealthCheck` YAML definition considers all the cluster Deployments. It matches any `Deployment`:
+
+1. With the number of available replicas matching the number of requested replicas, it is marked as `Healthy`;
+2. With the number of available replicas different than the number of requested replicas, it is marked as `Progressing`;
+3. With the number of unavailable replicas set and different than zero, it is marked as `Degraded`.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
