@@ -176,7 +176,7 @@ metadata:
   namespace: default
 data:
   controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
- ```
+```
 
 Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__.
 

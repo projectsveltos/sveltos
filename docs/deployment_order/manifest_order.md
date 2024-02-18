@@ -10,20 +10,22 @@ authors:
     - Gianluca Mardente
 ---
 
-When deploying Kubernetes resources in a cluster, it is sometimes necessary to deploy them in a specific order. For example, a CustomResourceDefinition (CRD) 
-must exist before any custom resources of that type can be created.
+## Introduction to Deployment Resource Order
 
-Sveltos can help you solve this problem by allowing you to specify the order in which Kubernetes resources are deployed.
+When Kubernetes resources are deployed in a cluster, it is sometimes necessary to deploy them in a specific order. For example, a CustomResourceDefinition (CRD) 
+must exist before a custom resources of that type can be created.
 
-## ClusterProfile order
+Sveltos can assist solving this problem by allowing users to specify the order in which Kubernetes resources are deployed.
 
-1. Using the _helmCharts_ field in a ClusterProfile: The helmCharts field allows you to specify a list of Helm charts that need to be deployed. Sveltos will deploy the Helm charts in the order that they are listed in this field.
-2. Using the _policyRefs_ field in a ClusterProfile: The policyRefs field allows you to reference a list of ConfigMap and Secret resources whose contents need to be deployed. Sveltos will deploy the resources in the order that they are listed in this field.
-3. Using the _kustomizationRefs_ field in a ClusterProfile: The kustomizationRefs field allows you to reference a list of sources containing kustomization files. Sveltos will deploy the resources in the order that they are listed in this field.
+## ClusterProfile Order
 
-Here are some examples:
+1. ClusterProfile _helmCharts_ field: The `helmCharts` field allows users to specify a list of Helm charts that need to get deployed. Sveltos will deploy the Helm charts in the order they appear in the list (top-down approach).
+2. ClusterProfile _policyRefs_ field: The `policyRefs` field allows you to reference a list of ConfigMap and Secret resources whose contents need to get deployed. Sveltos will deploy the resources in the order they appear (top-down approach).
+3. ClusterProfile _kustomizationRefs_ field: The `kustomizationRefs` field allows you to reference a list of sources containing kustomization files. Sveltos will deploy the resources in the order they appear in the list (top-down approach)
 
-- The following ClusterProfile will first deploy the Prometheus Helm chart and then the Grafana Helm chart:
+### Example: Prometheus and Grafana definition
+
+- The below ClusterProfile definition will first deploy the Prometheus Helm chart and then the Grafana Helm chart.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -52,7 +54,9 @@ spec:
 
 ![Sveltos Helm Chart Order](../assets/helm_chart_order.gif)
 
-- The following ClusterProfile will first deploy the ConfigMap resource named postgresql-deployment and then the ConfigMap resource named postgresql-service:
+### Example: PostgreSQL Resource Deployment
+
+- The below ClusterProfile will first deploy the ConfigMap resource named `postgresql-deployment` and then the ConfigMap resource named `postgresql-service`.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1

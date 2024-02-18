@@ -10,10 +10,11 @@ authors:
     - Gianluca Mardente
 ---
 
-When managing multiple applications across different teams, each requiring the presence of __cert-manager__ within the cluster, consider utilizing a ClusterProfile to deploy cert-manager centrally. 
-This approach enables other ClusterProfiles, responsible for deploying applications that depend on cert-manager, to leverage the dependsOn field to ensure cert-manager is present prior to application deployment.
+Managing multiple applications across different teams, each of them requiring the presence of the __cert-manager__, consider utilizing a ClusterProfile to deploy cert-manager **centrally**.
 
-To guarantee that cert-manager is not only deployed but also functioning correctly, employ the __validateHealths__ flag. The following ClusterProfile will deploy cert-manager in any cluster matching the label selector env=fv and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before marking this ClusterProfile as provisioned in the matching cluster.
+This approach enables other ClusterProfiles, responsible for deploying applications that depend on cert-manager, to leverage the `dependsOn` field to ensure the cert-manager is present prior to application deployment.
+
+To guarantee that cert-manager is not only deployed but also functional, employ the __validateHealths__ flag. The below ClusterProfile will deploy cert-manager in any cluster matching the label selector `env=fv` and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before setting the ClusterProfile as `provisioned`.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -50,7 +51,9 @@ spec:
       end
 ```
 
-Now the ClusterPofile to deploy __nginx ingress__ can specify it depends on __cert-manager__ ClusterProfile:
+### Example: Nginx and Cert Manager
+
+In the below example, the ClusterPofile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
