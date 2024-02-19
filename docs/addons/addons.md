@@ -25,17 +25,16 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/profile_types.go "Profile to manage Kubernetes add-ons") are the CustomerResourceDefinitions used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
-__ClusterProfile__ is a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
+- __ClusterProfile__: It iss a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
 
-__Profile__, on the other hand, is a namespace-scoped resource that is specific to a single namespace. It can only match clusters and reference resources within its own namespace.
+- __Profile__: It is a namespace-scoped resource that is specific to a single namespace. It can only match clusters and reference resources within its own namespace.
 
-By creating a **ClusterProfile** instance, you can easily deploy:
+By creating a **ClusterProfile** instance, you can easily deploy the below across a set of Kubernetes clusters.
 
-- Helm charts;
-- resources assembled with Kustomize;
-- raw Kubernetes YAML/JSON manifests;
+- Helm charts
+- Resources assembled with Kustomize
+- Raw Kubernetes YAML/JSON manifests
 
-across a set of Kubernetes clusters.
 
 Define which Kubernetes add-ons to deploy and where:
 
@@ -44,14 +43,14 @@ Define which Kubernetes add-ons to deploy and where:
 
 It is as simple as that!
 
-## Example - Kyverno ClusterProfile
+## Example: Kyverno ClusterProfile
 
-The below example deploys a Kyverno helm chart in every cluster with the label *env=prod*.
+The below example deploys a Kyverno helm chart in every cluster with the label selector set to *env=prod*.
 
 ### Step 1: Register Clusters
 The first step is to ensure the CAPI clusters are successfully registered with Sevltos. If you have not registered the clusters yet, follow the instructions mentioned [here](../register/register-cluster.md).
 
-If you already register the CAPI clusters, ensure they are listed and ready to receive add-ons.
+If you have already registered the CAPI clusters, ensure they are listed and ready to receive add-ons.
 
 ```bash
 $ kubectl get sveltosclusters -n projectsveltos --show-labels
@@ -61,7 +60,7 @@ cluster12   true    v1.26.9+rke2r1   sveltos-agent=present
 cluster13   true    v1.26.9+rke2r1   sveltos-agent=present
 ```
 
-**Please note:** The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command mentioned above.
+**Please note:** The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command above.
 
 ### Step 2: Add Kubernetes Label
 The second step is to assign a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assign the label *env=prod*.
@@ -78,7 +77,7 @@ cluster13   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
 
 ### Step 3: Create the ClusterProfile
 
-The third step is to create a ClusterProfile Kubernetes resource and apply it to the management cluster.
+The third step is to create a ClusterProfile Kubernetes resource and apply it to the **management** cluster.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -114,6 +113,8 @@ $ sveltosctl show addons
 ![Sveltos in action](../assets/addons.png)
 
 ![Sveltos in action](../assets/addons_deployment.gif)
+
+**Note:** If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../sveltosctl/sveltosctl.md). 
 
 ## More Resources
 
