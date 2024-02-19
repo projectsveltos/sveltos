@@ -68,7 +68,7 @@ The Lua function must be named `evaluate`. It is passed as a single argument, wh
 
 A rolling update strategy allows you to update your clusters gradually, minimizing downtime and risk. By updating a few clusters at a time, you can identify and resolve any issues before rolling out the update to all of your clusters. Additionally, you can use the ValidateHealths field to ensure that your clusters are healthy before declaring the update successful.
 
-## All in One - Example Rolling Update Strategy
+## All in One: Example Rolling Update Strategy
 
 To use the rolling update strategy, simply set the `MaxUpdate` field in the ClusterProfile Spec to the desired number of clusters to update concurrently. You can also use the `ValidateHealths` field to specify any health validation checks that you want to perform.
 

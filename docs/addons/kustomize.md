@@ -13,7 +13,9 @@ authors:
     - Gianluca Mardente
 ---
 
-The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository. The git repository, located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this instance, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for each managed cluster matching the Sveltos *clusterSelector*.
+## Example: Introduction to Kustomize and Sveltos
+
+The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository. The git repository, located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every managed cluster matching the Sveltos *clusterSelector*.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -58,11 +60,11 @@ $ sveltosctl show addons
 +-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 ```
 
-### Kustomize with ConfigMap
+### Kustomize with ConfigMaps
 
-If you have directories containing Kustomize resources, you can put the content in a ConfigMap (or Secret) and have a ClusterProfile to reference it.
+If you have directories containing Kustomize resources, you can include them in a ConfigMap (or a Secret) and have a ClusterProfile reference it.
 
-In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, and then create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
+In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, and then we create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
 
 ```bash
 $ git clone git@github.com:gianlucam76/kustomize.git 
@@ -72,7 +74,7 @@ $ tar -czf kustomize.tar.gz -C kustomize/helloWorldWithOverlays .
 $ kubectl create configmap kustomize --from-file=kustomize.tar.gz
 ```
 
-The below ClusterProfile will use the Kustomize SDK to get all the resources that need to be deployed. Then it will deploy those in the `production` namespace in each managed cluster with the Sveltos clusterSelector *env=fv*.
+The below ClusterProfile will use the Kustomize SDK to get all the resources needed for deployment. Then will deploy these in the `production` namespace of the managed clusters with the Sveltos clusterSelector set to *env=fv*.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1

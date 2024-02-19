@@ -15,11 +15,11 @@ authors:
 
 ## Helm Chart Deployment
 
-ClusterProfile *Spec.HelmCharts* can list all the Helm charts you want to deploy.
+The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get deployed to the managed clusters with a specific label selector.
 
-**Please note:** Sveltos will deploy the Helm charts in the exact order you define them.
+**Please note:** Sveltos will deploy the Helm charts in the exact order they are defined (top-down approach).
 
-### Single Helm chart
+### Example: Single Helm chart
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -38,7 +38,9 @@ spec:
     helmChartAction:  Install
 ```
 
-### Multiple Helm charts
+In the above YAML definition, we install Kyverno on a managed cluster with the label selector set to *env=prod*.
+
+### Example: Multiple Helm charts
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -64,7 +66,9 @@ spec:
     helmChartAction:  Install
 ```
 
-## Pass values to Helm charts
+In the above YAML definition, we first install the Prometheus community Helm chart and afterwards the Grafana Helm chart. The two defined Helm charts will get deployed on a managed cluster with the label selector set to *env=fv*.
+
+### Example: Update Helm Chart Values
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -87,7 +91,7 @@ spec:
         replicas: 1
 ```
 
-## Express Helm values as templates
+### Example: Express Helm Values as Templates
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
