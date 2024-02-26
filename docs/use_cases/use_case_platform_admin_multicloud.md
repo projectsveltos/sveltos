@@ -21,7 +21,7 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 ![Sveltos managing clusters](../assets/multi-clusters.png)
 
-## Platform Administrator and Multicloud Environment
+## Platform Administrators and Multicloud Environments
 
 In today's fast-paced and ever-evolving IT landscape, where the [multicloud](https://www.google.com/search?q=what+is+a+multicloud&oq=what+is+a+multicloud&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDQyNzBqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8) concept is becoming increasingly popular, automating the creation of Kubernetes clusters and managing their lifecycle programmatically is a crucial task for Kubernetes platform administrators.
 
