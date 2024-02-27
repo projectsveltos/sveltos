@@ -21,7 +21,7 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 ![Sveltos managing clusters](../assets/multi-clusters.png)
 
-## Platform Administrators and Multicloud Environments
+## Platform Administrators and Multicloud Environment
 
 In today's fast-paced and ever-evolving IT landscape, where the [multicloud](https://www.google.com/search?q=what+is+a+multicloud&oq=what+is+a+multicloud&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDQyNzBqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8) concept is becoming increasingly popular, automating the creation of Kubernetes clusters and managing their lifecycle programmatically is a crucial task for Kubernetes platform administrators.
 
@@ -31,25 +31,27 @@ The cluster creation is one aspect that various open-source solutions exist to a
 
 What are the benefits of a central Kubernetes management cluster to manage other clusters?
 
-- Centralised Management: A cluster management cluster allows administrators to manage multiple clusters from a single place, making it easier to maintain consistency and reduce the risk of configuration issues.
+- **Centralised Management:** A cluster management cluster allows administrators to manage multiple clusters from a single place, making it easier to maintain consistency and reduce the risk of configuration issues.
 
-- Consistency: It allows administrators to automate processes to ensure consistent configurations and deployments across clusters, reducing the risk of errors and enhancing reliability.
+- **Consistency:** It allows administrators to automate processes to ensure consistent configurations and deployments across clusters, reducing the risk of errors and enhancing reliability.
 
-- Scalability: It can assist organisations to scale their infrastructure by easing the creation, deployment, and management of multiple clusters.
+- **Scalability:** It can assist organisations to scale their infrastructure by easing the creation, deployment, and management of multiple clusters.
 
-- Cost Optimisation: Centralising control enables efficient resource usage and reduces operational costs associated with managing Kubernetes clusters.
+- **Cost Optimisation:** Centralising control enables efficient resource usage and reduces operational costs associated with managing Kubernetes clusters.
 
-- Better Security: A cluster management cluster can be configured with security-related add-ons, such as network policies and secrets management, to ensure all managed clusters are securely deployed.
+- **Better Security:** A cluster management cluster can be configured with security-related add-ons, such as network policies and secrets management, to ensure all managed clusters are securely deployed.
 
-- Increased Automation: It can be integrated with a continuous integration/continuous deployment (CI/CD) pipeline, making it easier to automate the deployment of new clusters and add-ons, and reducing the time and effort involved in managing the infrastructure.
+- **Increased Automation:** It can be integrated with a continuous integration/continuous deployment (CI/CD) pipeline, making it easier to automate the deployment of new clusters and add-ons, and reducing the time and effort involved in managing the infrastructure.
 
 ### Sveltos add-on Managament Solution
 
 Sveltos allows platform administrators to utilise the CRD with the name `ClusterProfile` to perform Kubernetes [add-on](../addons/addons.md) deployment. Within a Sveltos ClusterProfile, we define the below points.
 
-1. What are the Kubernetes add-ons to get deployed (Helm charts, Kustomize, YAML/JSON manifests)?
-2. Where they should get deployed?
+1. What Kubernetes add-ons to get deployed (Helm charts, Kustomize, YAML/JSON manifests)?
+2. Where should they get deployed?
 3. List the add-ons deployed
+
+### Example YAML Definition
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
