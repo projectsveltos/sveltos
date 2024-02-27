@@ -2221,6 +2221,11 @@ spec:
     subresources:
       status: {}
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: projectsveltos
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -2239,11 +2244,6 @@ rules:
   - deployments
   verbs:
   - '*'
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
