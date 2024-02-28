@@ -32,7 +32,15 @@ We mentioned two terms in the challenges above: `platform administrator` and `te
 
 - **Tenant administrator:** Is the persona that has admin access to the cluster or the namespaces where applications are running. The permissions are assigned by the platform administrator.
 
-## Sveltos Multitenancy Solution
+## Sveltos Multitenancy Solution: full isolation
+
+A common multi-tenant scenario involves assigning dedicated namespaces within the management cluster for each tenant. Tenant admins then create and manage clusters within their designated namespace and use Profile instances to define list of add-ons and applications to deploy in their managed clusters.
+
+Similar to ClusterProfiles, Profiles utilize a cluster selector and list of add-ons and applications. However,  Profiles operate within a specific namespace, matching only clusters created in that namespace. 
+
+![Profile vs ClusterProfile](../assets/profile_vs_clusterprofile.png)
+
+## Sveltos Multitenancy Solution: tenants sharing clusters
 
 Sveltos allows platform administrators to utilise the CRD with the name `RoleRequest` that will effectively grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy.md).
 
