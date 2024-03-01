@@ -78,7 +78,7 @@ func getResources(dirName, fileName string) []*unstructured.Unstructured {
 	}
 
 	resources := make([]*unstructured.Unstructured, 0)
-	elements := strings.Split(string(content), "---\n")
+	elements := splitBySeparatorLine(string(content))
 	for i := range elements {
 		section := removeCommentsAndEmptyLines(elements[i])
 		if section == "" {
@@ -94,6 +94,30 @@ func getResources(dirName, fileName string) []*unstructured.Unstructured {
 	}
 
 	return resources
+}
+
+func splitBySeparatorLine(content string) []string {
+	var sections []string
+	currentSection := ""
+
+	lines := strings.Split(content, "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "---") && strings.TrimSpace(line) == "---" {
+			if currentSection != "" {
+				sections = append(sections, currentSection)
+			}
+			currentSection = ""
+		} else {
+			currentSection += line + "\n" // Include newline for consistency
+		}
+	}
+
+	// Add the last section if it exists
+	if currentSection != "" {
+		sections = append(sections, currentSection)
+	}
+
+	return sections
 }
 
 func removeCommentsAndEmptyLines(text string) string {
