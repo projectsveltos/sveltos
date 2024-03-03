@@ -45,10 +45,11 @@ The notifications fields is a list of all __notifications__ to be sent when the 
 
 The supported types are:
 
-1. <img src="../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> Kubernetes events (__reason=ClusterHealthCheck__);
-2. <img src="../../assets/slack_logo.png" alt="Slack" width="25" />  Slack message; 
-3. <img src="../../assets/webex_logo.png" alt="Webex" width="25" />  Webex message;
-4. <img src="../../assets/discord_logo.png" alt="Discord" width="25" />  Discord message
+1. <img src="../../assets/slack_logo.png" alt="Slack" width="25" />  [Slack](./example_addon_notification.md#slack)
+2. <img src="../../assets/webex_logo.png" alt="Webex" width="25" />  [Webex](./example_addon_notification.md#webex)
+4. <img src="../../assets/teams_logo.svg" alt="Teams" width="25" />  [Teams](./example_addon_notification.md#teams)
+3. <img src="../../assets/discord_logo.png" alt="Discord" width="25" />  [Discord](./example_addon_notification.md#discord)
+5. <img src="../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> [Kubernetes events](./example_addon_notification.md#kubernetes-event) (__reason=ClusterHealthCheck__)
 
 
 ### HealthCheck CRD
