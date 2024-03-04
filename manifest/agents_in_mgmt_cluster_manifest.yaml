@@ -2221,10 +2221,10 @@ spec:
     storage: true
     subresources:
       status: {}
----
-apiVersion: v1
-kind: Namespace
-metadata:
+---   
+apiVersion: v1 
+kind: Namespace 
+metadata: 
   name: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5599,10 +5599,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=v0.25.0
+        - --version=main
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:v0.25.0
+        image: projectsveltos/addon-controller-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -5930,7 +5930,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:v0.25.0
+        image: projectsveltos/access-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -6077,7 +6077,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:v0.25.0
+        image: projectsveltos/sveltoscluster-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -6339,7 +6339,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:v0.25.0
+        image: projectsveltos/healthcheck-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7308,7 +7308,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:v0.25.0
+        image: projectsveltos/event-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7536,10 +7536,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=v0.25.0
+        - --version=main
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:v0.25.0
+        image: projectsveltos/classifier-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7626,6 +7626,26 @@ metadata:
   name: sveltos-agent-manager-role
 rules:
 - apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - debuggingconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - ""
   resources:
   - secrets
@@ -7651,34 +7671,6 @@ rules:
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: sveltos-agent-metrics-reader
-rules:
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: sveltos-agent-proxy-role
-rules:
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: sveltos-agent-manager-rolebinding
@@ -7686,19 +7678,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: sveltos-agent-manager-role
-subjects:
-- kind: ServiceAccount
-  name: sveltos-agent-manager
-  namespace: projectsveltos
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: sveltos-agent-proxy-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: sveltos-agent-proxy-role
 subjects:
 - kind: ServiceAccount
   name: sveltos-agent-manager
@@ -7943,7 +7922,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:v0.25.0
+        image: projectsveltos/shard-controller-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:

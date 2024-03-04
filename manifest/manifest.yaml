@@ -5565,10 +5565,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=v0.25.0
+        - --version=main
         command:
         - /manager
-        image: projectsveltos/addon-controller-amd64:v0.25.0
+        image: projectsveltos/addon-controller-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -5896,7 +5896,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager-amd64:v0.25.0
+        image: projectsveltos/access-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -6043,7 +6043,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager-amd64:v0.25.0
+        image: projectsveltos/sveltoscluster-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -6305,7 +6305,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager-amd64:v0.25.0
+        image: projectsveltos/healthcheck-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7274,7 +7274,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager-amd64:v0.25.0
+        image: projectsveltos/event-manager-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7501,10 +7501,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=v0.25.0
+        - --version=main
         command:
         - /manager
-        image: projectsveltos/classifier-amd64:v0.25.0
+        image: projectsveltos/classifier-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7694,7 +7694,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:v0.25.0
+        image: projectsveltos/shard-controller-amd64:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
