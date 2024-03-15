@@ -196,7 +196,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: snapshots.utils.projectsveltos.io
 spec:
   group: utils.projectsveltos.io
@@ -213,14 +213,19 @@ spec:
         description: Snapshot is the Schema for the snapshot API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -231,22 +236,24 @@ spec:
                 description: Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
                 type: string
               startingDeadlineSeconds:
-                description: Optional deadline in seconds for starting the job if
-                  it misses scheduled time for any reason.  Missed jobs executions
-                  will be counted as failed ones.
+                description: |-
+                  Optional deadline in seconds for starting the job if it misses scheduled
+                  time for any reason.  Missed jobs executions will be counted as failed ones.
                 format: int64
                 type: integer
               storage:
-                description: Storage represents directory where snapshots will be
-                  stored. It must be an existing directory. Snapshots will be stored
-                  in this directory in a subdirectory named with Snapshot instance
-                  name.
+                description: |-
+                  Storage represents directory where snapshots will be stored.
+                  It must be an existing directory.
+                  Snapshots will be stored in this directory in a subdirectory named
+                  with Snapshot instance name.
                 type: string
               successfulSnapshotLimit:
-                description: The number of successful finished snapshots to retains.
-                  If specified, only SuccessfulSnapshotLimit will be retained. Once
-                  such number is reached, for any new successful snapshots, the oldest
-                  one is deleted.
+                description: |-
+                  The number of successful finished snapshots to retains.
+                  If specified, only SuccessfulSnapshotLimit will be retained. Once such
+                  number is reached, for any new successful snapshots, the oldest one is
+                  deleted.
                 format: int32
                 type: integer
             required:
@@ -257,8 +264,9 @@ spec:
             description: SnapshotStatus defines the observed state of Snapshot
             properties:
               failureMessage:
-                description: FailureMessage provides more information about the error,
-                  if any occurred
+                description: |-
+                  FailureMessage provides more information about the error, if
+                  any occurred
                 type: string
               lastRunStatus:
                 description: Status indicates what happened to last snapshot collection.
@@ -287,7 +295,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: techsupports.utils.projectsveltos.io
 spec:
   group: utils.projectsveltos.io
@@ -304,14 +312,19 @@ spec:
         description: Techsupport is the Schema for the snapshot API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -354,11 +367,10 @@ spec:
                       description: Namespace of the pods deployed in the Cluster.
                       type: string
                     sinceSeconds:
-                      description: A relative time in seconds before the current time
-                        from which to collect logs. If this value precedes the time
-                        a pod was started, only logs since the pod start will be returned.
-                        If this value is in the future, no logs will be returned.
-                        Only one of sinceSeconds or sinceTime may be specified.
+                      description: |-
+                        A relative time in seconds before the current time from which to collect logs.
+                        If this value precedes the time a pod was started, only logs since the pod start will be returned.
+                        If this value is in the future, no logs will be returned. Only one of sinceSeconds or sinceTime may be specified.
                       format: int64
                       type: integer
                   type: object
@@ -399,7 +411,8 @@ spec:
                         type: object
                       type: array
                     namespace:
-                      description: Namespace of the resource deployed in the Cluster.
+                      description: |-
+                        Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
                     version:
@@ -415,22 +428,24 @@ spec:
                 description: Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
                 type: string
               startingDeadlineSeconds:
-                description: Optional deadline in seconds for starting the job if
-                  it misses scheduled time for any reason.  Missed jobs executions
-                  will be counted as failed ones.
+                description: |-
+                  Optional deadline in seconds for starting the job if it misses scheduled
+                  time for any reason.  Missed jobs executions will be counted as failed ones.
                 format: int64
                 type: integer
               storage:
-                description: Storage represents directory where techsupports will
-                  be stored. It must be an existing directory. Techsupports will be
-                  stored in this directory in a subdirectory named with Techsupport
-                  instance name.
+                description: |-
+                  Storage represents directory where techsupports will be stored.
+                  It must be an existing directory.
+                  Techsupports will be stored in this directory in a subdirectory named
+                  with Techsupport instance name.
                 type: string
               successfulTechsupportLimit:
-                description: The number of successful finished techsupport to retains.
-                  If specified, only SuccessfulTechsupportLimit will be retained.
-                  Once such number is reached, for any new successful snapshots, the
-                  oldest one is deleted.
+                description: |-
+                  The number of successful finished techsupport to retains.
+                  If specified, only SuccessfulTechsupportLimit will be retained. Once such
+                  number is reached, for any new successful snapshots, the oldest one is
+                  deleted.
                 format: int32
                 type: integer
               tar:
@@ -446,8 +461,9 @@ spec:
             description: TechsupportStatus defines the observed state of Techsupport
             properties:
               failureMessage:
-                description: FailureMessage provides more information about the error,
-                  if any occurred
+                description: |-
+                  FailureMessage provides more information about the error, if
+                  any occurred
                 type: string
               lastRunStatus:
                 description: Status indicates what happened to last techsupport collection.
@@ -462,66 +478,67 @@ spec:
                 format: date-time
                 type: string
               machingClusters:
-                description: MatchingClusterRefs reference all the clusters currently
-                  matching Techsupport
+                description: |-
+                  MatchingClusterRefs reference all the clusters currently matching
+                  Techsupport
                 items:
-                  description: "ObjectReference contains enough information to let
-                    you inspect or modify the referred object. --- New uses of this
-                    type are discouraged because of difficulty describing its usage
-                    when embedded in APIs. 1. Ignored fields.  It includes many fields
-                    which are not generally honored.  For instance, ResourceVersion
-                    and FieldPath are both very rarely valid in actual usage. 2. Invalid
-                    usage help.  It is impossible to add specific help for individual
-                    usage.  In most embedded usages, there are particular restrictions
-                    like, \"must refer only to types A and B\" or \"UID not honored\"
-                    or \"name must be restricted\". Those cannot be well described
-                    when embedded. 3. Inconsistent validation.  Because the usages
-                    are different, the validation rules are different by usage, which
-                    makes it hard for users to predict what will happen. 4. The fields
-                    are both imprecise and overly precise.  Kind is not a precise
-                    mapping to a URL. This can produce ambiguity during interpretation
-                    and require a REST mapping.  In most cases, the dependency is
-                    on the group,resource tuple and the version of the actual struct
-                    is irrelevant. 5. We cannot easily change it.  Because this type
-                    is embedded in many locations, updates to this type will affect
-                    numerous schemas.  Don't make new APIs embed an underspecified
-                    API type they do not control. \n Instead of using this type, create
-                    a locally provided and used type that is well-focused on your
-                    reference. For example, ServiceReferences for admission registration:
-                    https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533
-                    ."
+                  description: |-
+                    ObjectReference contains enough information to let you inspect or modify the referred object.
+                    ---
+                    New uses of this type are discouraged because of difficulty describing its usage when embedded in APIs.
+                     1. Ignored fields.  It includes many fields which are not generally honored.  For instance, ResourceVersion and FieldPath are both very rarely valid in actual usage.
+                     2. Invalid usage help.  It is impossible to add specific help for individual usage.  In most embedded usages, there are particular
+                        restrictions like, "must refer only to types A and B" or "UID not honored" or "name must be restricted".
+                        Those cannot be well described when embedded.
+                     3. Inconsistent validation.  Because the usages are different, the validation rules are different by usage, which makes it hard for users to predict what will happen.
+                     4. The fields are both imprecise and overly precise.  Kind is not a precise mapping to a URL. This can produce ambiguity
+                        during interpretation and require a REST mapping.  In most cases, the dependency is on the group,resource tuple
+                        and the version of the actual struct is irrelevant.
+                     5. We cannot easily change it.  Because this type is embedded in many locations, updates to this type
+                        will affect numerous schemas.  Don't make new APIs embed an underspecified API type they do not control.
+
+
+                    Instead of using this type, create a locally provided and used type that is well-focused on your reference.
+                    For example, ServiceReferences for admission registration: https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533 .
                   properties:
                     apiVersion:
                       description: API version of the referent.
                       type: string
                     fieldPath:
-                      description: 'If referring to a piece of an object instead of
-                        an entire object, this string should contain a valid JSON/Go
-                        field access statement, such as desiredState.manifest.containers[2].
-                        For example, if the object reference is to a container within
-                        a pod, this would take on a value like: "spec.containers{name}"
-                        (where "name" refers to the name of the container that triggered
-                        the event) or if no container name is specified "spec.containers[2]"
-                        (container with index 2 in this pod). This syntax is chosen
-                        only to have some well-defined way of referencing a part of
-                        an object. TODO: this design is not final and this field is
-                        subject to change in the future.'
+                      description: |-
+                        If referring to a piece of an object instead of an entire object, this string
+                        should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within a pod, this would take on a value like:
+                        "spec.containers{name}" (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]" (container with
+                        index 2 in this pod). This syntax is chosen only to have some well-defined way of
+                        referencing a part of an object.
+                        TODO: this design is not final and this field is subject to change in the future.
                       type: string
                     kind:
-                      description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      description: |-
+                        Kind of the referent.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
                       type: string
                     name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                      description: |-
+                        Name of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                       type: string
                     namespace:
-                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      description: |-
+                        Namespace of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
                       type: string
                     resourceVersion:
-                      description: 'Specific resourceVersion to which this reference
-                        is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                      description: |-
+                        Specific resourceVersion to which this reference is made, if any.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
                       type: string
                     uid:
-                      description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                      description: |-
+                        UID of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
                       type: string
                   type: object
                   x-kubernetes-map-type: atomic
