@@ -8625,7 +8625,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller-amd64:main
+        image: projectsveltos/shard-controller-amd64:v0.26.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -8653,10 +8653,10 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 128Mi
+            memory: 256Mi
           requests:
             cpu: 10m
-            memory: 64Mi
+            memory: 128Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
