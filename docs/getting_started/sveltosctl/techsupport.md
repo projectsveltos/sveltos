@@ -21,7 +21,7 @@ To do that, add the below label to the Techsupport instance created by the tenan
 projectsveltos.io/admin-name: <admin>
 ```
 
-Sveltos will make sure the tenant admin collects what it has been [authorized to by platform admin](../features/multi-tenancy.md).
+Sveltos will make sure the tenant admin collects what it has been [authorized to by platform admin](../../features/multi-tenancy.md).
 
 
 ## Techsupport CRD

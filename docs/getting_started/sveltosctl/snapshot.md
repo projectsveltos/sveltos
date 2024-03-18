@@ -54,7 +54,7 @@ spec:
 [sveltoctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") snapshot diff can be used to display all the configuration changes between two snapshots:
 
 ```
-$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
+$ ./sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 |               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION  |              MESSAGE               |
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
@@ -74,7 +74,7 @@ $ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff 
 If resources contained in Secrets/ConfigMaps referenced by ClusterProfile were modified, the option *raw-diff* can be used to determine what changed.
 
 ```
-$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00
+$ ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
 |                  CLUSTER                  |      RESOURCE TYPE       | NAMESPACE |         NAME          |  ACTION  |            MESSAGE             |
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
@@ -82,7 +82,7 @@ $ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot  diff
 |                                           |                          |           |                       |          | diff                           |
 +-------------------------------------------+--------------------------+-----------+-----------------------+----------+--------------------------------+
 
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00 --raw-diff
+$ ./sveltosctl snapshot  diff --snapshot=hourly --from-sample=2023-01-17:14:56:00 --to-sample=2023-01-17:15:56:00 --raw-diff
 --- kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:14:56:00
 +++ kyverno.io/ClusterPolicy add-default-resources from /snapshot/hourly/2023-01-17:15:56:00
 @@ -37,7 +37,8 @@
@@ -132,9 +132,9 @@ $ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets
 $ kubectl create configmap frontend --from-file frontend.yaml
 ```
 
-The [database.yaml](../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, exposed via a service.
+The [database.yaml](../../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, exposed via a service.
 
-The [frontend.yaml](../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write.
+The [frontend.yaml](../../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write.
 
 Once the ConfigMaps have been created, you can create a ClusterProfile instance:
 
@@ -168,12 +168,12 @@ $ KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/fr
 
 Load the page http://localhost:8080 in your browser to view your guestbook
 
-![Guestbook](../assets/snapshot_example/guestbook.png)
+![Guestbook](../../assets/snapshot_example/guestbook.png)
 
 The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes of the configuration over time, or for debugging purposes.
 
 ```
-kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list 
+$ ./sveltosctl snapshot list 
 +-----------------+---------------------+
 | SNAPSHOT POLICY |        DATE         |
 +-----------------+---------------------+
@@ -191,7 +191,7 @@ Entries in the database are not visible anymore. Of course we can debug this iss
 But if we simply want to see what has changed we can take a new snapshot
 
 ```
-$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
+$ ./sveltosctl snapshot list
 +-----------------+---------------------+
 | SNAPSHOT POLICY |        DATE         |
 +-----------------+---------------------+
@@ -203,7 +203,7 @@ $ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot list
 and then look at the configuration differences
 
 ```
-$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00
+$ ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00
 +-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
 |              CLUSTER              | RESOURCE TYPE | NAMESPACE |      NAME      |  ACTION  |            MESSAGE             |
 +-----------------------------------+---------------+-----------+----------------+----------+--------------------------------+
@@ -213,7 +213,7 @@ $ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff 
 ```
 
 ```
-$ kubectl exec -it -n projectsveltos sveltosctl-0 -- ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00 --raw-diff
+$ ./sveltosctl snapshot diff --snapshot=hourly --from-sample=2023-08-26:05:00:00 --to-sample=2023-08-26:05:20:00 --raw-diff
 --- /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:00:00
 +++ /Service test/redis-follower from /collection/snapshot/hourly/2023-08-26:05:20:00
 @@ -13,7 +13,7 @@
