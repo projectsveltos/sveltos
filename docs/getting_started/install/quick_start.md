@@ -108,7 +108,7 @@ spec:
     targetNamespace: eng
 ```
 
-Full examples can be found [here](../addons/kustomize.md).
+Full examples can be found [here](../../addons/kustomize.md).
 
 ClusterProfile can reference:
 
@@ -119,4 +119,4 @@ ClusterProfile can reference:
 5. Secret (type addons.projectsveltos.io/cluster-profile) whose Data section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
 
 ## Carvel ytt and Jsonnet
-Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the [Carvel ytt](../template/ytt_extension.md) and [Jsonnet](../template/jsonnet_extension.md) sections.
+Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the [Carvel ytt](../../template/ytt_extension.md) and [Jsonnet](../../template/jsonnet_extension.md) sections.
