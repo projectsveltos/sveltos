@@ -18,7 +18,7 @@ If you are new to Sveltos, please go through the [deploy Kubernetes add-ons](../
 
 ## Deploy Sveltos in the management cluster
 
-Our management cluster is a Kind cluster running on a laptop. To deploy Sveltos on the management cluster, follow the steps described in the [instructions](../install/install.md) documentation.
+Our management cluster is a Kind cluster running on a laptop. To deploy Sveltos on the management cluster, follow the steps described in the [instructions](../getting_started/install/install.md) documentation.
 
 ```bash
 $ kubectl get pods -n projectsveltos
