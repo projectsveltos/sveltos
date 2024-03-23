@@ -17,11 +17,11 @@ authors:
 
 Sveltos can seamlessly integrate with __Flux__ to automatically deploy YAML manifests stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
 
-## Example: Deploy Kyverno with Flux and Sveltos
+## Example: Deploy Nginx Ingress with Flux and Sveltos
 
-Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a kyverno directory with all the YAML needed to deploy Kyverno. 
+Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a _nginx-ingress_ directory with all the YAML needed to deploy Nginx[^2]. 
 
-Below, we demonstrate how to leverage Flux and Sveltos to automatically deploy Kyverno to managed clusters.
+Below, we demonstrate how to leverage Flux and Sveltos to automatically deploy Nginx Ingress to managed clusters.
 
 ### Step 1: Configure Flux in the Management Cluster
 
@@ -45,13 +45,94 @@ spec:
 
 ### Step 2: Create a Sveltos ClusterProfile
 
-Define a Sveltos ClusterProfile referencing the flux-system Git repository and defining the Kyverno directory as the source of the deployment.
+Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _nginx-ingress_ directory as the source of the deployment.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
-  name: deploy-kyverno-resources
+  name: deploy-nginx-ingress
+spec:
+  clusterSelector: env=fv
+  policyRefs:
+  - kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+    path: nginx-ingress
+```
+
+This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
+
+```
+sveltosctl show addons                                     
++-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
+|           CLUSTER           |                RESOURCE TYPE                 | NAMESPACE |                 NAME                  | VERSION |             TIME              |              PROFILES               |
++-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
+| default/clusterapi-workload | :ConfigMap                                   | default   | nginx-ingress-leader                  | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | rbac.authorization.k8s.io:ClusterRole        |           | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | rbac.authorization.k8s.io:RoleBinding        | default   | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | apps:Deployment                              | default   | nginx-stable-nginx-ingress-controller | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | :ServiceAccount                              | default   | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | :ConfigMap                                   | default   | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | rbac.authorization.k8s.io:ClusterRoleBinding |           | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | rbac.authorization.k8s.io:Role               | default   | nginx-stable-nginx-ingress            | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | :Service                                     | default   | nginx-stable-nginx-ingress-controller | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
+| default/clusterapi-workload | networking.k8s.io:IngressClass               |           | nginx                                 | N/A     | 2024-03-23 11:43:10 +0100 CET | ClusterProfile/deploy-nginx-ingress |
++-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
+```
+
+## Example: Deploy Kyverno policies with Flux and Sveltos
+
+### Step 1: Configure Flux in the Management Cluster
+
+Run Flux in your management cluster and configure it to synchronize the Git repository containing your Kyverno manifests. Use a __GitRepository__ resource similar to the below.
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  timeout: 60s
+  url: https://github.com/gianlucam76/yaml_flux.git
+```
+
+### Step 2: Create a Sveltos ClusterProfile
+
+Define a ClusterProfile deploying Kyverno helm chart
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    https://kyverno.github.io/kyverno/
+    repositoryName:   kyverno
+    chartName:        kyverno/kyverno
+    chartVersion:     v3.1.4
+    releaseName:      kyverno-latest
+    releaseNamespace: kyverno
+    helmChartAction:  Install
+```
+
+Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _kyverno__ directory as the source of the deployment.
+This directory contains a list of Kyverno ClusterPolicies.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno-policies
 spec:
   clusterSelector: env=fv
   policyRefs:
@@ -59,9 +140,25 @@ spec:
     name: flux-system
     namespace: flux-system
     path: kyverno
+  dependsOn: 
+  - deploy-kyverno
 ```
 
-This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the Kyverno directory within the flux-system Git repository managed by Flux.
+This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.
+
+Kyverno Helm chart and all Kyverno policies contained in the git repository under the _kyverno_ directory are deployed:
+
+```
+sveltosctl show addons     
++-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
+|           CLUSTER           |      RESOURCE TYPE       | NAMESPACE |           NAME            | VERSION |             TIME              |                PROFILES                |
++-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
+| default/clusterapi-workload | helm chart               | kyverno   | kyverno-latest            | 3.1.4   | 2024-03-23 11:39:30 +0100 CET | ClusterProfile/deploy-kyverno          |
+| default/clusterapi-workload | kyverno.io:ClusterPolicy |           | restrict-image-registries | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
+| default/clusterapi-workload | kyverno.io:ClusterPolicy |           | disallow-latest-tag       | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
+| default/clusterapi-workload | kyverno.io:ClusterPolicy |           | require-ro-rootfs         | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
++-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
+```
 
 ## Example: Template with Git Repository/Bucket Content
 
@@ -126,3 +223,4 @@ metadata:
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
 [^1]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
+[^2]: The YAML was obtained by running ```helm template nginx-stable nginx-stable/nginx-ingress```
