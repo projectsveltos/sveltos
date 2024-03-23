@@ -16,7 +16,7 @@ Apart from having Sveltos to manage add-ons on managed clusters, you can have it
 
 ### Option 1: sveltosctl Approach
 
-To register the management cluster to Sveltos, the **sveltosctl** binary can be used. If the **sveltosctl** binary is not installed in your system, follow the instructions **[here](../sveltosctl/sveltosctl.md)**.
+To register the management cluster to Sveltos, the **sveltosctl** binary can be used. If the **sveltosctl** binary is not installed in your system, follow the instructions **[here](../getting_started/sveltosctl/sveltosctl.md)**.
 
 **Please note:** The kubeconfig should point to the management cluster.
 

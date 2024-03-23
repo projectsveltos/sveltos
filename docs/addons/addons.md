@@ -114,7 +114,7 @@ $ sveltosctl show addons
 
 ![Sveltos in action](../assets/addons_deployment.gif)
 
-**Note:** If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../sveltosctl/sveltosctl.md). 
+**Note:** If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../getting_started/sveltosctl/sveltosctl.md). 
 
 ## More Resources
 
