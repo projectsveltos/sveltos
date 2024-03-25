@@ -44,6 +44,8 @@ kind: GitRepository
 metadata:
   name: flux-system
   namespace: flux-system
+  annotations:
+    projectsveltos.io/template: "true"
 spec:
   interval: 1m0s
   ref:
