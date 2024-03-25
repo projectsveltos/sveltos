@@ -134,7 +134,7 @@ The same principle as above is applied to Helm charts. The `values` section of a
 
 Providing the necessary RBACs to Sveltos is a straightforward process. The Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit the role.
 
-If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](../features/multi-tenancy.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
+If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](../features/multi-tenancy-sharing-cluster.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
 
 ### Namespace
 

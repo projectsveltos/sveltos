@@ -42,7 +42,7 @@ Similar to ClusterProfiles, Profiles utilize a cluster selector and list of add-
 
 ## Sveltos Multitenancy Solution: Cluster Sharing Between Tenants
 
-Sveltos allows platform administrators to utilise the CRD with the name `RoleRequest` that will effectively grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy.md).
+Sveltos allows platform administrators to utilise the CRD with the name `RoleRequest` that will effectively grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy-sharing-cluster.md).
 
 ### Example - RoleRequest YAML Definition
 
@@ -125,4 +125,4 @@ If the tenant admin tries to deploy the same ClusterProfile definition to a clus
 
 ## More Resources
 
-For more information about the Sveltos multitenancy capabilities, have a look [here](../features/multi-tenancy.md).
+For more information about the Sveltos multitenancy capabilities, have a look [here](../features/multi-tenancy-sharing-cluster.md).
