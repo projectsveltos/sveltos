@@ -21,11 +21,13 @@ Sveltos can seamlessly integrate with __Flux__ to automatically deploy YAML mani
 
 Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a _nginx-ingress_ directory with all the YAML needed to deploy Nginx[^2]. 
 
-Below, we demonstrate how to leverage Flux and Sveltos to automatically deploy Nginx Ingress to managed clusters.
+Below, we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Run Flux in your management cluster and configure it to synchronize the Git repository containing your Kyverno manifests. Use a __GitRepository__ resource similar to the below.
+Install and run Flux in the management cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
+
+Use a __GitRepository__ resource similar to the below.
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -45,7 +47,7 @@ spec:
 
 ### Step 2: Create a Sveltos ClusterProfile
 
-Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _nginx-ingress_ directory as the source of the deployment.
+Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -64,7 +66,7 @@ spec:
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
 
 ```
-sveltosctl show addons                                     
+$ sveltosctl show addons                                     
 +-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
 |           CLUSTER           |                RESOURCE TYPE                 | NAMESPACE |                 NAME                  | VERSION |             TIME              |              PROFILES               |
 +-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
@@ -85,7 +87,9 @@ sveltosctl show addons
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Run Flux in your management cluster and configure it to synchronize the Git repository containing your Kyverno manifests. Use a __GitRepository__ resource similar to the below.
+Install and run Flux in your management cluster and configure it to synchronise the Git repository containing the Kyverno manifests.
+
+Use a __GitRepository__ resource similar to the below.
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -105,7 +109,7 @@ spec:
 
 ### Step 2: Create a Sveltos ClusterProfile
 
-Define a ClusterProfile deploying Kyverno helm chart
+Define a ClusterProfile to deploy the Kyverno helm chart.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -126,6 +130,7 @@ spec:
 ```
 
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _kyverno__ directory as the source of the deployment.
+
 This directory contains a list of Kyverno ClusterPolicies.
 
 ```yaml
@@ -146,10 +151,10 @@ spec:
 
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.
 
-Kyverno Helm chart and all Kyverno policies contained in the git repository under the _kyverno_ directory are deployed:
+The Kyverno Helm chart and all the Kyverno policies contained in the Git repository under the _kyverno_ directory are deployed:
 
 ```
-sveltosctl show addons     
+$ sveltosctl show addons     
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
 |           CLUSTER           |      RESOURCE TYPE       | NAMESPACE |           NAME            | VERSION |             TIME              |                PROFILES                |
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
@@ -162,7 +167,8 @@ sveltosctl show addons
 
 ## Example: Template with Git Repository/Bucket Content
 
-The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can also be a template[^1].To enable templating, annotate the referenced GitRepository instance with __"projectsveltos.io/template: true"__. 
+The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can be templates[^1].To enable templating, annotate the referenced `GitRepository` instance with __"projectsveltos.io/template: true"__.
+
 When Sveltos processes the template, it will perform the below.
 
 - Read the content of all files inside the specified path
@@ -171,6 +177,8 @@ When Sveltos processes the template, it will perform the below.
 This allows dynamic deployment customisation based on the specific characteristics of the clusters, further enhancing flexibility and automation.
 
 Let's try it out! The content in the "template" directory of this [repository](https://github.com/gianlucam76/yaml_flux.git) serves as the perfect example.
+
+### Template Definition
 
 ``` yaml
 # Sveltos will instantiate this template before deploying to matching managed cluster
@@ -186,9 +194,29 @@ data:
   controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
 ```
 
+### GitRepository Definition
+
 Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
 
-The below ClusterProfile demonstrates how this works.
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+  annotations:
+    projectsveltos.io/template: "true"
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  timeout: 60s
+  url: https://github.com/gianlucam76/yaml_flux.git
+```
+
+### ClusterProfile Definition
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -204,9 +232,9 @@ spec:
     path: template
 ```
 
-The ClusterProfile will use the information from the "Cluster" resource in the management cluster to populate the template and then deploy it.
+The ClusterProfile will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.
 
-An example of __ConfigMap__ deployed in a managed cluster is found below.
+An example of a deployed __ConfigMap__ in the managed cluster can be found below.
 
 ```yaml
 apiVersion: v1
