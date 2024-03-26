@@ -15,27 +15,27 @@ authors:
 
 ## Introduction to Sveltos and Flux
 
-With the latest release of Sveltos [v0.23.0](https://github.com/orgs/projectsveltos/discussions/454), the existing integration with [Flux](https://fluxcd.io/) is greatly enhanced. Flux is a CNCF graduate project that offers users a set of continuous and progressive delivery solutions for Kubernetes which are open and extensible.
+With the latest release of Sveltos [v0.23.0](https://github.com/orgs/projectsveltos/discussions/454), the existing integration with [Flux](https://fluxcd.io/) was enhanced. Flux is a CNCF graduate project that offers users a set of continuous and progressive delivery solutions for Kubernetes which are open and extensible.
 
-By integrating Flux with Sveltos, we can automate the synchronisation of the desired Kubernetes add-ons, removing any manual steps and ensuring consistent deployment across clusters.
+By integrating Flux with Sveltos, we can automate the synchronisation of any desired Kubernetes add-ons, removing any manual steps and ensuring consistent deployment across different clusters.
 
 ![Flux and Sveltos Integration](../assets/flux_and_sveltos.png)
 
 ## What are the benefits of the integration?
 
-1. **Centralised Configuration:** Store YAML/JSON manifests in a central Git repository or a bucket
+1. **Centralised Configuration:** Store YAML/JSON manifests in a central Git repository or a Bucket
 2. **Continuous Synchronisation of Resources:** Running Flux in the management cluster will ensure the continuous synchronisation of the configuration
 3. **Consistent Deployments:** Define Sveltos ClusterProfiles to confidently deploy Kubernetes add-ons in matching clusters
 
 ## How it works?
 
-We can store all the required Kubernetes resources in a Git repository and let Flux take care of the continuous synchronisation of those. Below, we demonstrate how to leverage Flux and Sveltos to automatically deploy a HelloWorld application to several managed clusters.
+We can store all the required Kubernetes resources in a Git repository and let Flux take care of the continuous synchronisation of the resources. Below, we demonstrate how to leverage Flux and Sveltos to deploy a HelloWorld application to several managed clusters.
 
 - Example Repository: https://github.com/gianlucam76/kustomize/
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Run Flux in the management cluster and configure it to synchronise the Git repository which contains the HelloWorld manifests. Use a GitRepository resource similar to the below YAML definitions.
+Install and run Flux in the management cluster. Configure it to synchronise the Git repository which contains the `HelloWorld` manifests. Use a GitRepository resource similar to the below YAML definitions. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
 
 ```yaml
 ---
@@ -58,9 +58,11 @@ spec:
 
 The above definition will look for updates of the main branch of the specified repository every minute.
 
+**Please Note:** If you use the Flux CLI to bootstrap a Git repo, the `GitRepository` Kubernetes resource will be created from Flux automatically.
+
 ### Step 2: Create a Sveltos ClusterProfile
 
-Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository` resource and define the HelloWorld directory as the source of the deployment. In the below YAML definition, application will get deployed on Cluster with the label selector set to *env=fv*.
+Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository` resource and define the HelloWorld directory as the deployment source. In the below YAML definition, an application will get deployed on the managed cluster with the label selector set to *env=fv*.
 
 
 ```yaml
@@ -79,9 +81,9 @@ spec:
     targetNamespace: eng
 ```
 
-Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster that matches the label selector `env=fv` in the `eng` namespace.
+Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector `env=fv` in the `eng` namespace.
 
-**Note:** The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. 
+**Note:** The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. For the templates deployment, we will have to ensure the `GitRepository` Kubernetes resource includes the `projectsveltos.io/template: "true"` annotation.
 
 ## More Resources
 
