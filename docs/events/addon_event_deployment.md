@@ -176,7 +176,7 @@ spec:
 
 ## Events and Multi-tenancy
 
-If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy.md).
+If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
 
 ```
 projectsveltos.io/admin-name: <admin>
