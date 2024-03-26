@@ -35,8 +35,6 @@ kind: GitRepository
 metadata:
   name: flux-system
   namespace: flux-system
-  annotations:
-    projectsveltos.io/template: "true"
 spec:
   interval: 1m0s
   ref:
@@ -180,6 +178,8 @@ This allows dynamic deployment customisation based on the specific characteristi
 
 Let's try it out! The content in the "template" directory of this [repository](https://github.com/gianlucam76/yaml_flux.git) serves as the perfect example.
 
+### Template Definition
+
 ``` yaml
 # Sveltos will instantiate this template before deploying to matching managed cluster
 # Sveltos will get the ClusterAPI Cluster instance representing the cluster in the
@@ -194,8 +194,29 @@ data:
   controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
 ```
 
+### GitRepository Definition
+
 Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
 
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+  annotations:
+    projectsveltos.io/template: "true"
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  timeout: 60s
+  url: https://github.com/gianlucam76/yaml_flux.git
+```
+
+### ClusterProfile Definition
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
