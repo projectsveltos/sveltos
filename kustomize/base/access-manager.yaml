@@ -1,0 +1,310 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: access-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: access-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/token
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - machines/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - accessrequests
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - accessrequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - accessrequests/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - classifierreports
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - debuggingconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - eventreports
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - healthcheckreports
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - rolerequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - rolerequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - rolerequests/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: access-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: access-manager-role
+subjects:
+- kind: ServiceAccount
+  name: access-manager
+  namespace: projectsveltos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: access-manager
+  name: access-manager
+  namespace: projectsveltos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: access-manager
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: access-manager
+    spec:
+      containers:
+      - args:
+        - --diagnostics-address=:8443
+        - --v=5
+        command:
+        - /manager
+        image: projectsveltos/access-manager-amd64:main
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        ports:
+        - containerPort: 8443
+          name: metrics
+          protocol: TCP
+        - containerPort: 9440
+          name: healthz
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: access-manager
+      terminationGracePeriodSeconds: 10
+---

@@ -1,17 +1,21 @@
 #!/bin/bash
 
-# DO NOT INVOKE DIRECTLY. Use Makefile target generate-manifest
+# DO NOT INVOKE DIRECTLY. Use Makefile target generate-kustomize
 
 branch=${1}
 
-echo "Generate manifest for branch ${branch}"
+echo "Generate kustomize for branch ${branch}"
 
-rm -rf  manifest/manifest.yaml
-touch  manifest/manifest.yaml
-rm -rf  manifest/agents_in_mgmt_cluster_manifest.yaml
-touch  manifest/agents_in_mgmt_cluster_manifest.yaml
+rm -rf  kustomize/base/*.yaml
+rm -rf  kustomize/components/crds/*.yaml
+rm -rf  kustomize/overlays/agentless-mode/kustomization.yaml
+rm -rf  kustomize/overlays/agentless-mode/drift_detection_manager_rbac.yaml
+rm -rf  kustomize/overlays/agentless-mode/drift-detection-manager.yaml
+rm -rf  kustomize/overlays/agentless-mode/sveltos-agent.yaml
+rm -rf  kustomize/overlays/agentless-mode/sveltos_agent_rbac.yaml
 
 # libsveltos
+echo ""
 echo "processing libsveltos"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/libsveltos.git
@@ -20,19 +24,18 @@ git checkout ${branch}
 for f in config/crd/bases/*.yaml
 do 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cp $f ../../kustomize/components/crds/.
 done
 cd ../../; rm -rf tmp
 
 # addon-controller
+echo ""
 echo "processing addon-controller"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/addon-controller.git
 cd addon-controller
 git checkout ${branch}
+touch ../../kustomize/base/addon-controller.yaml
 for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
@@ -46,42 +49,43 @@ do
         continue
     fi
 
+    # ignore service monitor
+    if [[ "$f" == *"service_monitor.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"drift_detection_manager_rbac.yaml"* ]]; then
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cp $f ../../kustomize/overlays/agentless-mode/.
     else
-        cat $f >> ../../manifest/manifest.yaml
-        echo "---"  >> ../../manifest/manifest.yaml
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cat $f >> ../../kustomize/base/addon-controller.yaml
     fi
 done
 cd ../../; rm -rf tmp
 
 # access-manager
+echo ""
 echo "processing access-manager"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/access-manager.git
 cd access-manager
 git checkout ${branch}
+touch ../../kustomize/base/access-manager.yaml
 for f in manifest/*.yaml
 do 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../kustomize/base/access-manager.yaml
 done
 cd ../../; rm -rf tmp
 
 # sveltoscluster-manager
+echo ""
 echo "processing sveltoscluster-manager"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/sveltoscluster-manager.git
 cd sveltoscluster-manager
 git checkout ${branch}
+touch ../../kustomize/base/sveltoscluster-manager.yaml
 for f in manifest/*.yaml
 do
     # this file contains the template to start a deployment
@@ -91,19 +95,18 @@ do
     fi
 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../kustomize/base/sveltoscluster-manager.yaml
 done
 cd ../../; rm -rf tmp
 
 # healthcheck-manager
+echo ""
 echo "processing healthcheck-manager"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/healthcheck-manager.git
 cd healthcheck-manager
 git checkout ${branch}
+touch ../../kustomize/base/healthcheck-manager.yaml
 for f in manifest/*.yaml
 do
     # this file contains the template to start a deployment
@@ -113,19 +116,18 @@ do
     fi
 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../kustomize/base/healthcheck-manager.yaml
 done
 cd ../../; rm -rf tmp
 
 # event-manager
+echo ""
 echo "processing event-manager"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/event-manager.git
 cd event-manager
 git checkout ${branch}
+touch ../../kustomize/base/event-manager.yaml
 for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
@@ -135,19 +137,18 @@ do
     fi
 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../kustomize/base/event-manager.yaml
 done
 cd ../../; rm -rf tmp
 
 # classifier
+echo ""
 echo "processing classifier"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/classifier.git
 cd classifier
 git checkout ${branch}
+touch ../../kustomize/base/classifier.yaml
 for f in manifest/*.yaml
 do 
     # this file contains the template to start a deployment
@@ -163,31 +164,25 @@ do
 
     echo "Processing $f file..."
     if [[ "$f" == *"sveltos_agent_rbac.yaml"* ]]; then
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cp $f ../../kustomize/overlays/agentless-mode/.
     else
-        cat $f >> ../../manifest/manifest.yaml
-        echo "---"  >> ../../manifest/manifest.yaml 
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cat $f >> ../../kustomize/base/classifier.yaml
     fi
 done
 cd ../../; rm -rf tmp
 
 # sveltos-agent
+echo ""
 echo "processing sveltos-agent"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/sveltos-agent.git
 cd sveltos-agent
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cp $f ../../kustomize/overlays/agentless-mode/sveltos-agent.yaml
     else
        echo "Ignoring $f file"
     fi
@@ -195,6 +190,7 @@ done
 cd ../../; rm -rf tmp
 
 # drift-detection-manager
+echo ""
 echo "processing drift-detection-manager"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/drift-detection-manager.git
@@ -204,9 +200,7 @@ for f in manifest/*.yaml
 do 
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
-        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        cp $f ../../kustomize/overlays/agentless-mode/drift-detection-manager.yaml
     else
        echo "Ignoring $f file"
     fi
@@ -214,50 +208,18 @@ done
 cd ../../; rm -rf tmp
 
 # shard-controller
+echo ""
 echo "processing shard-controller"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/shard-controller.git
 cd shard-controller
 git checkout ${branch}
+touch ../../kustomize/base/shard-controller.yaml
 for f in manifest/*.yaml
 do 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../kustomize/base/shard-controller.yaml
 done
 cd ../../; rm -rf tmp
 
-echo "Generate sveltosctl manifest for branch ${branch}"
-
-rm -rf  manifest/sveltosctl_manifest.yaml
-touch  manifest/sveltosctl_manifest.yaml
-
-# sveltosctl
-echo "processing sveltosctl"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/sveltosctl.git
-cd sveltosctl
-git checkout ${branch}
-for f in manifest/*.yaml
-do
-    echo "Processing $f file..."
-    cat $f >> ../../manifest/sveltosctl_manifest.yaml
-    echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
-done
-cd ../../; rm -rf tmp
-
-function add_agent_in_mgmt_cluster_option() {
-    echo "Add agent-in-mgmt-cluster option to classifier and addon-controller and shard-controller"
-
-    old_value="report-mode=0"
-
-    new_value="report-mode=0
-        - --agent-in-mgmt-cluster"
-    
-    file="manifest/agents_in_mgmt_cluster_manifest.yaml"
-    perl -i -pe "s#$old_value#$new_value#g" "$file"
-}
-
-add_agent_in_mgmt_cluster_option
+echo ""

@@ -53,6 +53,23 @@ $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --
 
 **Please note:** Sveltos pods assume to be running in the *projectsveltos* namespace.
 
+<!---TODO: Enable after v0.27.0
+## Kustomize Installation
+
+```
+$ $ kustomize build https://github.com/projectsveltos/sveltos.git/kustomize/base\?ref\=main | kubectl apply -f -
+
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+```
+
+If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
+
+```
+$ kustomize build https://github.com/projectsveltos/sveltos.git/kustomize/overlays/agentless-mode\?ref\=main | kubectl apply -f -
+
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+```
+-->
 ## Get Sveltos Status​
 
 Get Sveltos status and verify all pods are up and running

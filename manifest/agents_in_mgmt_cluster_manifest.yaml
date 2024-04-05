@@ -2903,11 +2903,6 @@ spec:
     subresources:
       status: {}
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: projectsveltos
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -2940,6 +2935,11 @@ subjects:
 - kind: ServiceAccount
   name: addon-controller
   namespace: projectsveltos
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: projectsveltos
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -6528,6 +6528,8 @@ spec:
         - --diagnostics-address=:8443
         - --report-mode=0
         - --agent-in-mgmt-cluster
+        - --agent-in-mgmt-cluster
+        - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
         - --version=main
@@ -8465,6 +8467,8 @@ spec:
         - --diagnostics-address=:8443
         - --report-mode=0
         - --agent-in-mgmt-cluster
+        - --agent-in-mgmt-cluster
+        - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
         - --version=main
@@ -8850,6 +8854,8 @@ spec:
         - --diagnostics-address=:8443
         - --v=5
         - --report-mode=0
+        - --agent-in-mgmt-cluster
+        - --agent-in-mgmt-cluster
         - --agent-in-mgmt-cluster
         command:
         - /manager
