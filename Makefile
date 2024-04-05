@@ -1,4 +1,4 @@
-TAG ?= dev
+TAG ?= v0.27.0
 
 generate-manifest:
 	scripts/generate_manifest.sh ${TAG}
@@ -9,4 +9,4 @@ generate-kustomize:
 	cd scripts/kustomize_cleanup; go build kustomize_cleanup.go;./kustomize_cleanup;cd ..
 
 upload-docker-images:
-	scripts/upload_docker_images.sh ${TAG} ${DOCKER_CONFIG}
+	scripts/upload_docker_images.sh ${TAG}
