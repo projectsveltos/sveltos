@@ -110,9 +110,7 @@ spec:
     repositoryName: kyverno
     repositoryURL: https://kyverno.github.io/kyverno/
   setRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: ClusterSet
-    name: prod
+  - prod # name of the ClusterSet
 ```
 
 #### Sveltos Deploys Kyverno
@@ -133,9 +131,7 @@ spec:
     repositoryName: kyverno
     repositoryURL: https://kyverno.github.io/kyverno/
   setRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: ClusterSet
-    name: prod
+  - prod
 status:
   matchingClusters:
   - apiVersion: lib.projectsveltos.io/v1alpha1
@@ -212,9 +208,7 @@ spec:
     repositoryName: kyverno
     repositoryURL: https://kyverno.github.io/kyverno/
   setRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: ClusterSet
-    name: prod
+  - prod
 status:
   matchingClusters:
   - apiVersion: lib.projectsveltos.io/v1alpha1

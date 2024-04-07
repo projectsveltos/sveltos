@@ -225,7 +225,7 @@ spec:
 Each EventBasedAddon instance: 
 
 1. References an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
-2. Has a sourceClusterSelector selecting one or more managed clusters;
+2. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 3. Contains a list of add-ons to deploy (either referencing ConfigMaps/Secrets or Helm charts)
 
 For example, the below EventTrigger references the eventSource *sveltos-service* defined above.
@@ -452,3 +452,5 @@ kubectl get networkpolicy -A
 NAMESPACE   NAME                    POD-SELECTOR                          AGE
 default     front-my-service        app.kubernetes.io/name=MyApp          10m40s
 ```
+
+[^1]: EventTrigger can also reference a [_ClusterSet_](../features/set.md) to select one or more managed clusters.
