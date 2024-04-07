@@ -26,11 +26,12 @@ authors:
 9. [Sveltos Event Framework and Cilium Gateway API](https://medium.com/@eleni.grosdouli/5-step-approach-projectsveltos-event-framework-for-kubernetes-deployment-with-cilium-gateway-api-6c0c03fa26db)
 10. [Sveltos DryRun Capability](https://medium.com/@eleni.grosdouli/5-step-approach-dry-run-kubernetes-resources-with-projectsveltos-161ced473446)
 11. [Sveltos: Simplifying Kubernetes Add-on Deployment and Constraints](https://medium.com/p/13fdfd3d9904)
-12. [Handle long running tasks](https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681)
-13. [L4-L7 with Sveltos](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c)
-14. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
-15. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
-16. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
+12. [Simplify Sveltos and Flux integration](https://medium.com/@eleni.grosdouli/5-step-approach-projectsveltos-integration-with-flux-5e68fb584a3c)
+13. [Handle long running tasks](https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681)
+14. [L4-L7 with Sveltos](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c)
+15. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
+16. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
+17. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 
 
 ## Sveltos Video List
