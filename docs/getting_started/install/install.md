@@ -48,6 +48,10 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 ```
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
 
+$ helm repo update
+
+$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
+
 $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 ```
 
