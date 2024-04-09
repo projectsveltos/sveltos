@@ -52,7 +52,7 @@ $ helm repo update
 
 $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 
-$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
+$ helm list -n projectsveltos
 ```
 
 **Please note:** Sveltos pods assume to be running in the *projectsveltos* namespace.
