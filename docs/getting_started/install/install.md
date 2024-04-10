@@ -60,7 +60,7 @@ $ helm list -n projectsveltos
 ## Kustomize Installation
 
 ```
-$ kustomize build  https://github.com/projectsveltos/sveltos.git//kustomize/base/\?ref\=main |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=main |kubectl apply -f -
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
@@ -68,7 +68,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
 
 ```
-$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode/\?ref=\main |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=main |kubectl apply -f -
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
