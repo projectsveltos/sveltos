@@ -223,3 +223,20 @@ done
 cd ../../; rm -rf tmp
 
 echo ""
+
+# register-mgmt-cluster
+echo ""
+echo "processing register-mgmt-cluster"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/register-mgmt-cluster.git
+cd register-mgmt-cluster
+git checkout ${branch}
+touch ../../kustomize/base/register-mgmt-cluster.yaml
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../kustomize/base/register-mgmt-cluster.yaml
+done
+cd ../../; rm -rf tmp
+
+echo ""

@@ -14,20 +14,16 @@ authors:
 
 Apart from having Sveltos to manage add-ons on managed clusters, you can have it on **management clusters** as well. By management cluster, we refer to the cluster where Sveltos is deployed.
 
-### Option 1: sveltosctl Approach
-
-To register the management cluster to Sveltos, the **sveltosctl** binary can be used. If the **sveltosctl** binary is not installed in your system, follow the instructions **[here](../getting_started/sveltosctl/sveltosctl.md)**.
-
-**Please note:** The kubeconfig should point to the management cluster.
+When Sveltos is deployed, it automatically registers the management cluster.
 
 ```
-$ sveltosctl register mgmt-cluster
+kubectl get sveltoscluster -A --show-labels
+NAMESPACE   NAME   READY   VERSION   LABELS
+mgmt        mgmt   true    v1.29.1   <none>
 ```
 
-This will create a SveltosCluster in the namespace __mgmt__ representing the management cluster.
+If you want to add labels:
 
-### Option 2: Standard Register Cluster Approach
-
-If you want to register the management cluster as any other cluster with Sveltos, follow the instructions found [here](register-cluster.md).
-
-Once the management cluster is registered, Sveltos can be used to deploy helm charts, kustomize files, and YAMLs to the management cluster as well. This makes it easier to manage add-ons and applications across multiple clusters, including the management cluster.
+```
+kubectl label sveltoscluster -n mgmt mgmt cluster=mgmt
+```
