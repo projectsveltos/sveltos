@@ -62,6 +62,17 @@ spec:
                   Paused can be used to prevent controllers from processing the
                   SveltosCluster and all its associated objects.
                 type: boolean
+              tokenRequestRenewalOption:
+                description: TokenRequestRenewalOption contains options describing
+                  how to renew TokenRequest
+                properties:
+                  renewTokenRequestInterval:
+                    description: RenewTokenRequestInterval is the interval at which
+                      to renew the TokenRequest
+                    type: string
+                required:
+                - renewTokenRequestInterval
+                type: object
             type: object
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
@@ -70,6 +81,11 @@ spec:
                 description: |-
                   FailureMessage is a human consumable message explaining the
                   misconfiguration
+                type: string
+              lastReconciledTokenRequestAt:
+                description: |-
+                  LastReconciledTokenRequestAt is the last time the TokenRequest
+                  was renewed.
                 type: string
               ready:
                 description: Ready is the state of the cluster.

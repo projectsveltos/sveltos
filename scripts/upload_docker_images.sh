@@ -95,3 +95,12 @@ cd shard-controller
 git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
+
+# register-mgmt-cluster
+echo "processing register-mgmt-cluster"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/register-mgmt-cluster.git
+cd register-mgmt-cluster
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp

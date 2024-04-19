@@ -2881,6 +2881,17 @@ spec:
                   Paused can be used to prevent controllers from processing the
                   SveltosCluster and all its associated objects.
                 type: boolean
+              tokenRequestRenewalOption:
+                description: TokenRequestRenewalOption contains options describing
+                  how to renew TokenRequest
+                properties:
+                  renewTokenRequestInterval:
+                    description: RenewTokenRequestInterval is the interval at which
+                      to renew the TokenRequest
+                    type: string
+                required:
+                - renewTokenRequestInterval
+                type: object
             type: object
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
@@ -2889,6 +2900,11 @@ spec:
                 description: |-
                   FailureMessage is a human consumable message explaining the
                   misconfiguration
+                type: string
+              lastReconciledTokenRequestAt:
+                description: |-
+                  LastReconciledTokenRequestAt is the last time the TokenRequest
+                  was renewed.
                 type: string
               ready:
                 description: Ready is the state of the cluster.
@@ -2902,6 +2918,11 @@ spec:
     storage: true
     subresources:
       status: {}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -2935,11 +2956,6 @@ subjects:
 - kind: ServiceAccount
   name: addon-controller
   namespace: projectsveltos
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: projectsveltos
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -5094,12 +5110,6 @@ spec:
                         Status indicates whether ClusterSummary can manage the helm
                         chart or there is a conflict
                       type: string
-                    metadataHash:
-                      description: |-
-                        MetadataHash represents of a unique value for the extra metadata, extraLabels
-                        and extraAnnotations, deployed on this helm chart
-                      format: byte
-                      type: string
                     releaseName:
                       description: ReleaseName is the chart release
                       minLength: 1
@@ -5116,6 +5126,11 @@ spec:
                       enum:
                       - Managing
                       - Conflict
+                      type: string
+                    valuesHash:
+                      description: ValuesHash represents of a unique value for the
+                        values section
+                      format: byte
                       type: string
                   required:
                   - releaseName
@@ -6768,6 +6783,7 @@ rules:
   verbs:
   - get
   - list
+  - update
   - watch
 - apiGroups:
   - authentication.k8s.io
@@ -8769,4 +8785,49 @@ spec:
         runAsNonRoot: true
       serviceAccountName: shard-controller
       terminationGracePeriodSeconds: 10
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: register-mgmt-cluster
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: register-mgmt-cluster-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: register-mgmt-cluster
+  namespace: projectsveltos
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: register-mgmt-cluster-job
+  namespace: projectsveltos
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - args:
+        - --labels=
+        image: projectsveltos/register-mgmt-cluster:v0.28.0
+        imagePullPolicy: IfNotPresent
+        name: register-mgmt-cluster
+        resources:
+          requests:
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      restartPolicy: Never
+      serviceAccountName: register-mgmt-cluster
 ---
