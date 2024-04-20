@@ -26,7 +26,7 @@ $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> -
 
 The above command will generate a kubeconfig file and register the cluster with Sveltos.
 
-If the kubeconfig of the managed cluster is not available, use the below steps to generate a new one with the right permissions and perform a registration with Sveltos.
+Alternatively, if a different kubeconfig is needed for the managed cluster registration, users can utilise the `sveltosctl generate kubeconfig` command. It allows Sveltos to create the required ServiceAccount alongside the kubeconfig. To proceed with the registration process, follow the steps listed below.
 
 1. Generate the kubeconfig: Use the `sveltosctl generate kubeconfig` command while pointing it to the cluster you want Sveltos to manage. The command will create a ServiceAccount with `cluster-admin` permissions and generate the kubeconfig based on it. [^1]
 2. Register the Cluster: Use the `sveltosctl register cluster` pointing it to the Sveltos management cluster. Provide the following options:
