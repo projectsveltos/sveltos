@@ -33,50 +33,41 @@ The commands will download the calico.yaml manifest file and afterwards create a
 
 ### Example: Create a ConfigMap
 
-The YAML definition below exemplifies a ConfigMap that holds multiple resources. When a ClusterProfile instance references the ConfigMap, a `GatewayClass` and a `Gateway` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
+The YAML definition below exemplifies a ConfigMap that holds multiple resources[^2]. When a ClusterProfile instance references the ConfigMap, a `Namespace` and a `Deployment` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
 
 ```yaml
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: contour-gateway
+  name: nginx
   namespace: default
 data:
-  gatewayclass.yaml: |
-    kind: GatewayClass
-    apiVersion: gateway.networking.k8s.io/v1beta1
-    metadata:
-      name: contour
-    spec:
-      controllerName: projectcontour.io/projectcontour/contour
-  gateway.yaml: |
+  namespace.yaml: |
     kind: Namespace
     apiVersion: v1
     metadata:
-      name: projectcontour
-    ---
-    kind: Gateway
-    apiVersion: gateway.networking.k8s.io/v1beta1
+      name: nginx
+  deployment.yaml: |
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-     name: contour
-     namespace: projectcontour
+      name: nginx-deployment
+      namespace: nginx  
     spec:
-      gatewayClassName: contour
-      listeners:
-        - name: http
-          protocol: HTTP
-          port: 80
-          allowedRoutes:
-            namespaces:
-              from: All
-
-```
-
-Another way to create a Kubernetes ConfigMap resource is with the imperative approach. The below command will create the same ConfigMap resource in the management cluster.
-
-```bash
-$ kubectl create configmap contour-gateway --from-file=gatewayclass.yaml --from-file=gateway.yaml
+      replicas: 2 # number of pods to run
+      selector:
+        matchLabels:
+          app: nginx
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx:latest # public image from Docker Hub
+            ports:
+            - containerPort: 80
 ```
 
 Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the ConfigMap and the Secret created above.
@@ -89,7 +80,7 @@ metadata:
 spec:
   clusterSelector: env=fv
   policyRefs:
-  - name: contour-gateway
+  - name: nginx
     namespace: default
     kind: ConfigMap
   - name: calico
@@ -113,14 +104,18 @@ metadata:
 spec:
   clusterSelector: env=fv
   policyRefs:
-  - name: contour-gateway
+  - name: nginx
     kind: ConfigMap
 ```
 
-Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _contour-gateway_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _contour-gateway_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
+Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _nginx_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _ngix_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
 [^1]:A ConfigMap is not designed to hold large chunks of data. The data stored in a ConfigMap cannot exceed 1 MiB. If you need to store settings that are larger than this limit, you may want to consider mounting a volume or use a separate database or file service.
+[^2]: Another way to create a Kubernetes ConfigMap resource is with the imperative approach. The below command will create the same ConfigMap resource in the management cluster.
+```bash
+$ kubectl create configmap nginx --from-file=namespace.yaml --from-file=deployment.yaml
+```
