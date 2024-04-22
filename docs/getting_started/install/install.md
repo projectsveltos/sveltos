@@ -13,13 +13,19 @@ authors:
 
 ## What is Projectsveltos
 
-Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, Sveltos can manage add-ons and applications in multiple clusters.
+Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, it can manage add-ons and applications to multiple clusters.
 
-## Installation
+## Installation Modes
+
+Sveltos supports two modes: **Mode 1** and **Mode 2**.
+
+- **Mode 1:** Will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each **managed cluster**.
+
+- **Mode 2:** Sveltos agents will be created, per managed cluster, in the management cluster[^2]. The agents, while centrally located, will still monitor their designated managed cluster’s API server.
 
 ### Mode 1: Local Agent Mode
 
-To install Sveltos, run the following commands:
+To install Sveltos in mode 1, run the commands below.
 
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
@@ -27,11 +33,9 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-In this mode, Sveltos will deploy up to two agents, *sveltos-agent* and *drift-detection-manager*[^1], in each **managed clusters**.
+### Mode 2: Centralised Agent Mode
 
-### Mode 2: Centralized Agent Mode
-
-If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
+If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -39,12 +43,13 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-In this mode, Sveltos agents will be created, per managed cluster, in the management cluster itself[^2].
-The agents, while centrally located, still exclusively monitor their designated managed cluster’s API server.
-
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
-## Helm Installation
+## Deployment Options
+
+Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
+
+### Helm Installation
 
 ```
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
@@ -58,7 +63,9 @@ $ helm list -n projectsveltos
 
 **Please note:** Sveltos pods assume to be running in the *projectsveltos* namespace.
 
-## Kustomize Installation
+### Kustomize Installation
+
+#### Mode 1: Local Agent Mode
 
 ```
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=main |kubectl apply -f -
@@ -66,7 +73,7 @@ $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-If you do not want to have any Sveltos agent in any **managed cluster**, run the following commands:
+#### Mode 2: Centralised Agent Mode
 
 ```
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=main |kubectl apply -f -
@@ -74,9 +81,9 @@ $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overl
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
 ```
 
-## Get Sveltos Status​
+## Sveltos Verification
 
-Get Sveltos status and verify all pods are up and running
+Get the Sveltos status and verify that all pods are Up and Running.
 
 ```
 projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
