@@ -48,7 +48,7 @@ It is as simple as that!
 The below example deploys a Kyverno helm chart in every cluster with the label selector set to *env=prod*.
 
 ### Step 1: Register Clusters
-The first step is to ensure the CAPI clusters are successfully registered with Sevltos. If you have not registered the clusters yet, follow the instructions mentioned [here](../register/register-cluster.md).
+The first step is to ensure the CAPI clusters are successfully registered with Sveltos. If you have not registered the clusters yet, follow the instructions mentioned [here](../register/register-cluster.md).
 
 If you have already registered the CAPI clusters, ensure they are listed and ready to receive add-ons.
 
