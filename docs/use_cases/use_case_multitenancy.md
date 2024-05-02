@@ -53,8 +53,9 @@ kind: RoleRequest
 metadata:
   name: full-access
 spec:
+  serviceAccountName: "eng"
+  serviceAccountNamespace: "default"
   clusterSelector: env=prod
-  admin: eng
   roleRefs:
   - name: full-access
     namespace: default
@@ -62,9 +63,10 @@ spec:
 ```
 Based on the above YAML definition, we defined the below fields:
 
-- admin: Identifies the tenant admin where permissions will be granted;
-- clusterSelector: This is a Kubernetes label selector. Sveltos uses the label to detect all the clusters where permissions need to be granted;
-- roleRefs: References ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining the permissions to be granted.
+- `serviceAccountName`: The service account the permission will be applied to;
+- `serviceAccountNamespace`: The namespace the service account has been deployed in the **management cluster**
+- `clusterSelector`: This is a Kubernetes label selector. Sveltos uses the label to detect all the clusters where permissions need to be granted;
+- `roleRefs`: References ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining the permissions to be granted.
 
 The configMap in the example above can be something similar to be below YAML definition.
 
@@ -101,7 +103,8 @@ kind: ClusterProfile
 metadata:
   name: deploy-kyverno
   labels:
-    projectsveltos.io/admin-name: eng
+    projectsveltos.io/serviceaccount-name: eng
+    projectsveltos.io/serviceaccount-namespace: default
 spec:
   clusterSelector: env=prod
   syncMode: Continuous
@@ -119,9 +122,9 @@ spec:
     kind: ConfigMap
 ```
 
-In the ClusterProfile definition above we allow the tenant admin *eng* to deploy Kyverno v3.0.1 to the cluster it has access to. This is the cluster with the label selector set to `env=prod`.
+In the ClusterProfile definition above we allow the service account *eng* found in the *default* namespace to deploy Kyverno v3.0.1 to the cluster it has access to. This is the cluster with the label selector set to `env=prod`.
 
-If the tenant admin tries to deploy the same ClusterProfile definition to a cluster with a clusterSelector set to *env=test*, the deployment should fail it does not have permissions in clusters with the mentioned clusterSelector.
+If the service account tries to deploy the same ClusterProfile definition to a cluster with a clusterSelector set to *env=test*, the deployment should fail it does not have permissions in clusters with the mentioned clusterSelector.
 
 ## More Resources
 

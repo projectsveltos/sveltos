@@ -22,8 +22,8 @@ With Sveltos, a management cluster is used to manage add-ons in tens of clusters
 
 #### Defined Roles
 
-1. **platform admin**: Is the admin with the cluster-admin access to all the managed clusters;
-2. **tenant admin**: Is the admin with access to the clusters/namespaces assigned to them by the platform admin. Tenant admin manages applications for a tenant.
+1. **Platform admin**: Is the admin with the cluster-admin access to all the managed clusters;
+2. **Tenant admin**: Is the admin with access to the clusters/namespaces assigned to them by the platform admin. Tenant admin manages applications for a tenant.
 
 #### Sveltos Solution
 
@@ -40,8 +40,9 @@ kind: RoleRequest
 metadata:
   name: full-access
 spec:
+  serviceAccountName: "eng"
+  serviceAccountNamespace: "default"
   clusterSelector: dep=eng
-  admin: eng
   roleRefs:
   - name: full-access
     namespace: default
@@ -50,9 +51,10 @@ spec:
 
 Based on the above YAML definition, we specify the below fields:
 
-1. **admin:** Identifies the tenant admin to whom permissions are granted;
-2. **clusterSelector:** Is a Kubernetes label selector. Sveltos uses it to detect all the clusters where permissions need to be granted;
-3. **roleRefs:** References ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining permissions being granted to the tenant admin.
+- `serviceAccountName`: The service account the permission will be applied to;
+- `serviceAccountNamespace`: The namespace the service account has been deployed in the **management cluster**
+- `clusterSelector`: This is a Kubernetes label selector. Sveltos uses the label to detect all the clusters where permissions need to be granted;
+- `roleRefs`: References ConfigMaps/Secrets each containing one or more Kubernetes [ClusterRoles/Roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) defining the permissions to be granted.
 
 An example of a ConfigMap containing a ClusterRole granting definition with full edit permissions can be found below.
 
@@ -82,14 +84,14 @@ More examples can be found [here](https://github.com/projectsveltos/access-manag
 
 ### Example - ClusterProfile Definition
 
-After a tenant is onboarded by the platform admin, the tenant admin can create ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
+After a tenant is onboarded by the platform admin, the service account created in the step above can create a ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
 
-Sveltos expects the following label to be set on each ClusterProfile created by a tenant admin:
+Sveltos expects the following labels to be set on each ClusterProfile.
+
 ```yaml
-projectsveltos.io/admin-name: <admin>
+projectsveltos.io/serviceaccount-name: <service account name>
+projectsveltos.io/serviceaccount-namespace: <service account defined namespace>
 ```
-
-where ***admin*** must match the `RoleRequest.Spec.Admin` field.
 
 If:
 
@@ -159,15 +161,16 @@ kind: RoleRequest
 metadata:
   name: full-access
 spec:
+  serviceAccountName: "foo"
+  serviceAccountNamespace: "default"
   clusterSelector: org=foo.io
-  admin: foo
   roleRefs:
   - name: full-access
     namespace: default
     kind: ConfigMap
 ```
 
-We can use of the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to check the permissions given to the tenant `foo`. We expect the tenant to have full access to the managed cluster with the label set to `env:production`
+We can use of the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to check the permissions given to the service account `foo`. We expect the service account to have full access to the managed cluster with the label set to `env:production`
 
 ```bash
 $ sveltosctl show admin-rbac       
@@ -178,7 +181,7 @@ $ sveltosctl show admin-rbac
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 ```
 
-As soon as the tenant `foo` posts the nbelow ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
+As soon as the service account `foo` posts the below ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -186,7 +189,8 @@ kind: ClusterProfile
 metadata:
   name: deploy-kyverno
   labels:
-    projectsveltos.io/admin-name: foo
+    projectsveltos.io/serviceaccount-name: foo
+    projectsveltos.io/serviceaccount-namespace: default
 spec:
   clusterSelector: org=foo.io
   syncMode: Continuous
@@ -200,7 +204,7 @@ spec:
     helmChartAction:  Install
 ```
 
-If the same tenant tries to deploy Kyverno in a cluster not assigned to it, Sveltos will fail the deployment.
+If the same service account tries to deploy Kyverno in a cluster not assigned to it, Sveltos will fail the deployment.
 
 For instance, if the `ClusterProfile.Spec.ClusterSelector` is set to ***org=bar.io***, the deployment will fail.
 
@@ -210,7 +214,8 @@ kind: ClusterProfile
 metadata:
   name: deploy-kyverno
   labels:
-    projectsveltos.io/admin-name: foo
+    projectsveltos.io/serviceaccount-name: foo
+    projectsveltos.io/serviceaccount-namespace: default
 spec:
   clusterSelector: org=bar.io
   syncMode: Continuous
@@ -229,8 +234,8 @@ spec:
 In the below examples, all clusters matching the label selector ***env=internal***
 are shared between two tenants:
 
-1. Tenant ***foo*** is granted full access to namespaces ***foo-eng*** and ***foo-hr***
-2. Tenant ***bar*** is granted full access to namespace ***bar-resource***
+1. Service Account ***eng*** is granted full access to namespaces ***foo-eng*** and ***foo-hr***
+2. Service Account ***hr*** is granted full access to namespace ***bar-resource***
 
 ```yaml
 # ConfigMap contains a Role which gives
@@ -262,16 +267,17 @@ data:
       resources: ["*"]
       verbs: ["*"]
 ---
-# RoleRequest gives admin 'eng' access to namespaces
-# 'ci-cd' and 'cuild' in all clusters matching the label
+# RoleRequest gives the service account 'eng' access to namespaces
+# 'ci-cd' and 'build' in all clusters matching the label
 # selector env=internal
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: RoleRequest
 metadata:
   name: foo-access
 spec:
+  serviceAccountName: "eng"
+  serviceAccountNamespace: "default"
   clusterSelector: env=internal
-  admin: foo
   roleRefs:
   - name: foo-shared-access
     namespace: default
@@ -298,7 +304,7 @@ data:
       resources: ["*"]
       verbs: ["*"]
 ---
-# RoleRequest gives admin 'hr' access to namespace
+# RoleRequest gives service account 'hr' access to namespace
 # 'human-resource' in all clusters matching the label
 # selector env=internal
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -306,8 +312,9 @@ kind: RoleRequest
 metadata:
   name: bar-access
 spec:                       
+  serviceAccountName: "hr"
+  serviceAccountNamespace: "default"
   clusterSelector: env=internal
-  admin: bar
   roleRefs:
   - name: bar-shared-access
     namespace: default
