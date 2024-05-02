@@ -6,16 +6,16 @@ tags:
     - add-ons
     - helm
     - clusterapi
-    - multi-tenancy
+    - multitenancy
 authors:
     - Gianluca Mardente
 ---
 
-## Introduction to Multi-Tenancy
+## Introduction to Multitenancy
 
-With Sveltos, a management cluster is used to manage add-ons in tens of clusters. When managing tens of clusters, **multi-tenancy** plays an important role.
+With Sveltos, a management cluster is used to manage add-ons in tens of clusters. When managing tens of clusters, **multitenancy** plays an important role.
 
-### Common forms of multi-tenancy
+### Common forms of multitenancy
 
 1. Share a cluster between multiple teams within an organization, each of whom may operate one or more workloads. These workloads frequently need to communicate with each other, and with other workloads located on the same or different clusters;
 2. One (or more) cluster(s) fully reserved for an organization.
@@ -76,15 +76,15 @@ data:
       verbs: ["*"]
 ```
 
-![Multi-tenancy in action](../assets/multi_tenancy.gif)
+![Multitenancy in action](../assets/multi_tenancy.gif)
 
 ## More Examples
 
-More examples can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multi-tenancy examples").
+More examples can be found [here](https://github.com/projectsveltos/access-manager/tree/main/examples "Kubernetes multitenancy examples").
 
 ### Example - ClusterProfile Definition
 
-After a tenant is onboarded by the platform admin, the service account created in the step above can create a ClusterProfiles and Sveltos will take care of deploying them to all matching clusters.
+After a tenant is onboarded by the platform admin, the service account created in the step above can use a ClusterProfiles and Sveltos will take care of deploying the defined resources to all matching clusters.
 
 Sveltos expects the following labels to be set on each ClusterProfile.
 
@@ -135,7 +135,7 @@ spec:
 
 ### Example - Tenant Cluster Reservation
 
-In the below example, all clusters matching the Kubernetes label selector ***org=foo.io*** will be assigned to the tenant with the name `foo`.
+In the example below, all clusters matching the Kubernetes label selector ***org=foo.io*** will be assigned to the service account with the name `foo`.
 
 ```yaml
 apiVersion: v1
@@ -181,7 +181,7 @@ $ sveltosctl show admin-rbac
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 ```
 
-As soon as the service account `foo` posts the below ClusterProfile, Sveltos will deploy Kyverno in any cluster matching ***org=foo.io*** label selector.
+As soon as the service account `foo` posts the below ClusterProfile, Sveltos will deploy Kyverno in any cluster matching the label selector set to ***org=foo.io***.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -239,7 +239,7 @@ are shared between two tenants:
 
 ```yaml
 # ConfigMap contains a Role which gives
-# full access to namespace ci-cd and build
+# full access to namespaces ci-cd and build
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -286,7 +286,7 @@ spec:
 ---
 
 # ConfigMap contains a Role which gives
-# full access to namespace human-resource
+# full access to the namespace human-resource
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -304,7 +304,7 @@ data:
       resources: ["*"]
       verbs: ["*"]
 ---
-# RoleRequest gives service account 'hr' access to namespace
+# RoleRequest gives service account 'hr' access to the namespace
 # 'human-resource' in all clusters matching the label
 # selector env=internal
 apiVersion: lib.projectsveltos.io/v1alpha1
