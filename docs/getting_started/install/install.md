@@ -51,7 +51,7 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 
 Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
 
-**Note:** Ensure Sveltos is deployed in the `projectsveltos` namespace. This is a requiredment.
+**Note:** Ensure Sveltos is deployed in the `projectsveltos` namespace. This is a requirement.
 
 ### Helm Installation
 
