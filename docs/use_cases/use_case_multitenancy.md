@@ -89,13 +89,13 @@ data:
       verbs: ["*"]
 ```
 
-If we have a look at the above YAML definitions, what will happen from a Sveltos point of view? By referencing the ConfigMap `default/full-access`, the `RoleRequest` with the name `full-access` will reserve a cluster matching the `clusterSelector` *env=prod* to the tenant admin with the name `eng`.
+If we have a look at the YAML definitions above, what will happen from a Sveltos point of view? By referencing the ConfigMap `default/full-access`, the `RoleRequest` with the name `full-access` will reserve a cluster matching the `clusterSelector` *env=prod* to the service account with the name `eng`.
 
 ### Example - Tenant Admin Application Management
 
-Once the `RoleRequest` instance has been created, the defined tenant admin can use the Sveltos `ClusterProfile` CRD. The only requirement from a ClusterProfile point of view, is to define the label `projectsveltos.io/admin-name: <admin>` to the ClusterProfile instance.
+Once the `RoleRequest` instance has been created, the defined tenant admin can use the Sveltos `ClusterProfile` CRD. The only requirement from a ClusterProfile point of view, is to define the labels `projectsveltos.io/serviceaccount-name: <service account name>` and `projectsveltos.io/serviceaccount-namespace: <service account namespace>` to the ClusterProfile instance.
 
-**Note:** The tenant admin name defined should be a Kubernetes `ServiceAccount` on the management cluster.
+**Note:** The service account name defined should be a Kubernetes `ServiceAccount` on the **management cluster**.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
