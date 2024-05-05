@@ -1,5 +1,5 @@
 ---
-title: Recources by Sveltos
+title: Sveltos Configuration Drift
 description: Discover how Sveltos tackles Configuration Drift - the common challenge of maintaining consistency in an evolving environment. Learn how Sveltos monitors and rectifies configuration drift in managed clusters, ensuring your systems remain consistent and predictable. Explore the proactive approach to prevent unexpected issues caused by configuration drift with Sveltos. Configuration drift recovery made simple.
 tags:
     - Kubernetes

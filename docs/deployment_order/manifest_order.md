@@ -1,5 +1,5 @@
 ---
-title: Resource Deployment Order
+title: Resource Deployment Order - Manifest Order
 description: Describe how Sveltos can be instructed to follow an order when deploying resources
 tags:
     - Kubernetes
