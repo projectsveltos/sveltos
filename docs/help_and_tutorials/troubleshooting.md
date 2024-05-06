@@ -30,7 +30,7 @@ I0428 09:05:01.496715 2181388 version.go:65] "Git commit:       2fb25f7e7a15a3ad
 ## Common Issues
 
 ## Sveltos ClusterProfile, Profile is not applied to the cluster/s
-This is a very common case scenario where the deployed Sveltos `ClusterProfile`, and `Profile` resources are deployed to the targeted cluster/s. This might be due to an issue with the Sveltos installation, incorrect Sveltos namespace installation, incorrect `cluster-label` set to the cluster or something else that might be disallowing the deployment.
+This is a very common case scenario where the deployed Sveltos `ClusterProfile`, and `Profile` resources are not deployed to the targeted cluster/s. This might be due to an issue with the Sveltos installation, incorrect Sveltos namespace installation, incorrect `cluster-label` set to the cluster or something else that might be disallowing the deployment.
 
 ### Sveltos Installation Namespace
 It is a **requirement** for Sveltos to get installed in the `projectsveltos` namespace. If Sveltos is installed in a different namespace, issues with the Kubernetes resources deployment will arise.
