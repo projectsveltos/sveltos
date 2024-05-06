@@ -1,5 +1,5 @@
 ---
-title: Projectsveltos horizontal scaling
+title: Projectsveltos Sharding
 description: Sveltos can manage add-ons and applications in hundreds of clusters, and it can be scaled horizontally by easily adding an annotation to managed clusters.
 tags:
     - Kubernetes

@@ -1,5 +1,5 @@
 ---
-title: Resource Deployment Order
+title: Resource Deployment Order - depends-on
 description: Describe how Sveltos can be instructed to follow an order when deploying resources
 tags:
     - Kubernetes

@@ -1,5 +1,5 @@
 ---
-title: Visibility
+title: Sveltos Visibility
 description: sveltosctl is the command line client for Sveltos. sveltosctl nicely displays add-ons deployed in each Kubernetes cluster by Sveltos.
 tags:
     - Kubernetes

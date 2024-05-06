@@ -1,5 +1,5 @@
 ---
-title: Register Cluster
+title: Register Cluster - Claudie Cluster
 description: Sveltos comes with support to automatically discover ClusterAPI powered clusters. Any other cluster (GKE for instance) can easily be registered with Sveltos.
 tags:
     - Kubernetes
