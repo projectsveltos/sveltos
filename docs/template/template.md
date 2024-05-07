@@ -50,7 +50,21 @@ spec:
 
 Likewise, you can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the time of deployment, making your deployments faster and more efficient.
 
-Sveltos supports the template functions that are included from the [Sprig](https://masterminds.github.io/sprig/) open source project.
+Sveltos supports the template functions that are included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over 70 template functions for Go’s template language. Some of the functions (for the full list please refer to [Sprig repo]([Sprig](https://masterminds.github.io/sprig/))):
+
+1. **String Functions**: trim, wrap, randAlpha, plural, etc.
+2. **String List Functions**: splitList, sortAlpha, etc.
+3. **Integer Math Functions**: add, max, mul, etc.
+4. **Integer Slice Functions**: until, untilStep
+5. **Float Math Functions**: addf, maxf, mulf, etc.
+6. **Date Functions**: now, date, etc.
+7. **Defaults Functions**: default, empty, coalesce, fromJson, toJson, toPrettyJson, toRawJson, ternary
+8. **Encoding Functions**: b64enc, b64dec, etc.
+9. **Lists and List Functions**: list, first, uniq, etc.
+10. **Dictionaries and Dict Functions**: get, set, dict, hasKey, pluck, dig, deepCopy, etc.
+11. **Type Conversion Functions**: atoi, int64, toString, etc.
+12. **Path and Filepath Functions**: base, dir, ext, clean, isAbs, osBase, osDir, osExt, osClean, osIsAbs
+13. **Flow Control Functions**: fail
 
 ## Variables
 
