@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -59,6 +59,8 @@ spec:
                       - AccessManager
                       - HealthCheckManager
                       - EventManager
+                      - ShardController
+                      - UIBackend
                       type: string
                     logLevel:
                       description: 'LogLevel is the log severity above which logs
