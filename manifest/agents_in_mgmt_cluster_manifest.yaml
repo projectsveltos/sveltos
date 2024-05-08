@@ -6933,10 +6933,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.29.1
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: projectsveltos/addon-controller:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7267,7 +7267,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager:main
+        image: projectsveltos/access-manager:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7415,7 +7415,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: projectsveltos/sveltoscluster-manager:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7677,7 +7677,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager:main
+        image: projectsveltos/healthcheck-manager:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -8852,7 +8852,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager:main
+        image: projectsveltos/event-manager:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9080,10 +9080,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.29.1
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: projectsveltos/classifier:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9466,7 +9466,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: projectsveltos/shard-controller:main
+        image: projectsveltos/shard-controller:v0.29.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9539,7 +9539,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: projectsveltos/register-mgmt-cluster:main
+        image: projectsveltos/register-mgmt-cluster:v0.29.1
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
