@@ -331,3 +331,9 @@ data:
       token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
       ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
+
+# Learn More About Templates
+
+1. **Helm Charts**: See the "Example: Express Helm Values as Templates" section in [here](../addons/helm_charts.md#example-express-helm-values-as-templates)
+2. **YAML & JSON**: refer to the "Example Template with Git Repository/Bucket Content" section in [here](../addons/example_flux_sources.md#example-template-with-git-repositorybucket-content)
+1. **Kustomize**: Substitution and templating are explained in this [section](../addons/kustomize.md#substitution-and-templating)

@@ -248,6 +248,35 @@ metadata:
   ...
 ```
 
+### Express Path as Template
+
+The __path__ field within a policyRefs object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux-system
+spec:
+  clusterSelector: region=west
+  syncMode: Continuous
+  policyRefs:
+  - kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+    path: '{{ index .Cluster.metadata.annotations "environment" }}/helloWorld'
+```
+
+Sveltos uses the cluster instance in the management cluster to populate the template in the path field.
+The template expression ```{{ index .Cluster.metadata.annotations "environment" }}``` retrieves the value of the annotation named __environment__ from the cluster's metadata.
+
+For instance:
+
+1. Cluster A: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.
+2. Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.
+
+This approach allows for flexible configuration based on individual cluster environments.
+
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
 [^1]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
