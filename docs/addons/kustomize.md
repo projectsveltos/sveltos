@@ -214,6 +214,36 @@ sveltosctl show addons
 +-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+----------------------------+
 ```
 
+### Express Path as Template
+
+The __path__ field within a kustomizationRef object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux-system
+spec:
+  clusterSelector: region=west
+  syncMode: Continuous
+  kustomizationRefs:
+  - namespace: flux-system
+    name: flux-system
+    kind: GitRepository
+    path: '{{ index .Cluster.metadata.annotations "environment" }}/helloWorld'
+    targetNamespace: eng
+```
+
+Sveltos uses the cluster instance in the management cluster to populate the template in the path field.
+The template expression ```{{ index .Cluster.metadata.annotations "environment" }}``` retrieves the value of the annotation named __environment__ from the cluster's metadata.
+
+For instance:
+
+1. Cluster A: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.
+2. Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.
+
+This approach allows for flexible configuration based on individual cluster environments.
+
 ### Kustomize with ConfigMaps
 
 If you have directories containing Kustomize resources, you can include them in a ConfigMap (or a Secret) and have a ClusterProfile reference it.
