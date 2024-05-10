@@ -29,11 +29,67 @@ I0428 09:05:01.496715 2181388 version.go:65] "Git commit:       2fb25f7e7a15a3ad
 
 ## Common Issues
 
+## Sveltos Installation Namespace
+It is a **requirement** for Sveltos to get installed in the `projectsveltos` namespace. If Sveltos is installed in a different namespace, issues with the Kubernetes resources deployment will arise.
+
 ## Sveltos ClusterProfile, Profile is not applied to the cluster/s
 This is a very common case scenario where the deployed Sveltos `ClusterProfile`, and `Profile` resources are not deployed to the targeted cluster/s. This might be due to an issue with the Sveltos installation, incorrect Sveltos namespace installation, incorrect `cluster-label` set to the cluster or something else that might be disallowing the deployment.
 
-### Sveltos Installation Namespace
-It is a **requirement** for Sveltos to get installed in the `projectsveltos` namespace. If Sveltos is installed in a different namespace, issues with the Kubernetes resources deployment will arise.
+The _Status_ section of a ClusterProfile or Profile instance displays all clusters that meet its criteria. These matching clusters are listed under the __matchingClusters__ field.
+
+Here's an example of what the _Status_ section might look like:
+
+```yaml
+status:
+  matchingClusters:
+  - apiVersion: cluster.x-k8s.io/v1beta1
+    kind: Cluster
+    name: clusterapi-workload
+    namespace: default
+  - apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: SveltosCluster
+    name: mgmt
+    namespace: mgmt
+```
+
+To confirm if a specific cluster is considered a match for a ClusterProfile or Profile, check the __matchingClusters__ list within the _Status_ section of the ClusterProfile/Profile instance. 
+If the cluster details are present in the list, then Sveltos considered it a matching cluster.
+
+Sveltos automatically creates a ClusterSummary resource whenever a cluster aligns with a configured ClusterProfile or Profile. This summary serves as a record of the cluster's configuration and deployment status.
+
+Imagine a SveltosCluster named __mgmt__ residing in the __mgmt__ namespace, with labels indicating environment (env=fv). Now, consider a ClusterProfile named __deploy-kyverno__ that has a `clusterSelector` targeting clusters with the label env=fv.
+If these conditions are met, Sveltos will generate a __ClusterSummary__ within the mgmt namespace. This ClusterSummary will resemble the following:
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterSummary
+metadata:
+  name: deploy-kyverno-sveltos-mgmt
+  namespace: mgmt
+spec:
+  clusterName: mgmt
+  clusterNamespace: mgmt
+  clusterType: Sveltos
+  clusterProfileSpec:
+    clusterSelector: env=fv
+    helmCharts:
+    - chartName: kyverno/kyverno
+      chartVersion: v3.1.4
+      helmChartAction: Install
+      releaseName: kyverno-latest
+      releaseNamespace: kyverno
+      repositoryName: kyverno
+      repositoryURL: https://kyverno.github.io/kyverno/
+status:
+  dependencies: no dependencies
+  featureSummaries:
+  - featureID: Helm
+    hash: ujsdjTgHzPfqEx3bHtAIFcs3kjSvcuTkRCXc3o7AqrY=
+    lastAppliedTime: "2024-05-10T14:25:58Z"
+    status: Provisioned
+```
+
+The _Status_ section of a ClusterSummary is crucial. It reflects whether the configured add-ons or applications are successfully deployed (Provisioned). If any issues arise during deployment, a _FailureMessage_ field will appear, providing details about the encountered error.
 
 ### Check the Overall Sveltos Installation (Management Cluster)
 ```bash
@@ -47,6 +103,22 @@ $ kubectl describe pod <pod-name> -n projectsveltos
 
 $ kubectl logs <pod-name> -n projectsveltos -f
 ```
+
+### Fixing ‘Cannot Re-Use a Name That Is Still In Use’ 
+
+Are you encountering the error "cannot re-use a name that is still in use" while deploying Helm charts with Sveltos? Don't worry, this is a common issue with a straightforward solution.
+
+The error typically arises when a secret related to a previous Helm chart deployment still lingers in the target namespace of your managed cluster. These lingering secrets can cause naming conflicts when deploying new charts.
+
+While pointing to your managed cluster, run the following command to list all secrets in your desired namespace, filtering for those associated with Helm:
+
+```
+kubectl -n <your namespace> get secrets | grep helm
+```
+
+If the command reveals any secrets with a status of "pending-install," proceed to delete them.
+
+By removing lingering secrets, you eliminate potential naming conflicts and pave the way for smooth Helm chart deployments using Sveltos.
 
 ### Check Sveltos Registered Clusters
 ```bash
@@ -107,9 +179,6 @@ If the cluster labels are incorrect, we can overwrite them with the below comman
 $ kubectl label sveltoscluster <cluster-name> -n <cluster namespace> env=dev --overwrite
 ```
 - `env=dev` is the new label set to the cluster
-
-### Check ClusterSummary, ClusterProfile, Profile Kubernetes Resources
-Every time Sveltos deploys a `Profile` or a `ClusterProfile`, a `clustersummary`,  a `clusterprofile` or a `profile` Kubernetes resources are created. We can check the status of the resources and try to understand what is failing.
 
 #### Validate 
 ```bash

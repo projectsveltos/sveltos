@@ -15,7 +15,7 @@ authors:
 
 ## Example: Introduction to Kustomize and Sveltos
 
-The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository. The git repository, located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every managed cluster matching the Sveltos *clusterSelector*.
+The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1]. The git repository, located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every managed cluster matching the Sveltos *clusterSelector*.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -285,4 +285,22 @@ $ sveltosctl show addons
 | default/sveltos-management-workload | :Service        | production | production-the-service    | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
 | default/sveltos-management-workload | :ConfigMap      | production | production-the-map        | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
+```
+
+[^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux
+spec:
+  clusterSelector: cluster=mgmt
+  helmCharts:
+  - chartName: flux2/flux2
+    chartVersion: 2.12.4
+    helmChartAction: Install
+    releaseName: flux2
+    releaseNamespace: flux2
+    repositoryName: flux2
+    repositoryURL: https://fluxcd-community.github.io/helm-charts
 ```

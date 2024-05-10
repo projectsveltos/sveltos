@@ -15,7 +15,7 @@ authors:
 
 ## Flux Sources
 
-Sveltos can seamlessly integrate with __Flux__ to automatically deploy YAML manifests stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
+Sveltos can seamlessly integrate with __Flux__[^1] to automatically deploy YAML manifests stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
 
 ## Example: Deploy Nginx Ingress with Flux and Sveltos
 
@@ -279,5 +279,22 @@ This approach allows for flexible configuration based on individual cluster envi
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
-[^1]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
-[^2]: The YAML was obtained by running ```helm template nginx-stable nginx-stable/nginx-ingress```
+[^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: flux
+spec:
+  clusterSelector: cluster=mgmt
+  helmCharts:
+  - chartName: flux2/flux2
+    chartVersion: 2.12.4
+    helmChartAction: Install
+    releaseName: flux2
+    releaseNamespace: flux2
+    repositoryName: flux2
+    repositoryURL: https://fluxcd-community.github.io/helm-charts
+```
+[^2]: The YAML was obtained by running ```helm template nginx-stable nginx-stable/nginx-ingress```.
+[^3]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
