@@ -14,13 +14,13 @@ authors:
 
 ## Introduction to Templates
 
-Sveltos allows you to represent add-ons and applications as templates. Before deploying to the managed clusters, Sveltos instantiates these templates. It can gather the information required either from the management cluster or the managed clusters.
+Sveltos lets you define add-ons and applications using templates. Before deploying to the managed clusters, Sveltos instantiates these templates using information gathered from the management cluster.
 
 ### Example - Calico Deployment
 
-Let's assume you woild like to deploy Calico CNI in multiple CAPI-powered clusters while fetching Pod CIDRs from the corresponding CAPI Cluster instance. With the ClusterProfile definition, you can create a configuration that specifies these details, and the deployment will be distributed to all matching clusters.
+Imagine you want to set up Calico CNI on several clusters powered by CAPI, automatically fetching Pod CIDRs from each cluster. Sveltos's ClusterProfile definition lets you create a configuration with these details, and it will automatically deploy Calico to all matching clusters.
 
-In the below example, we use the Sveltos label `env=fv` to match all the cluster who need to get Calico as the desired CNI.
+In the example below, we use the Sveltos label _env=fv_ to identify all clusters that should use Calico as their CNI.
 
 ```yaml
 ---
@@ -75,13 +75,13 @@ By default, the templates have access to the below managment cluster resources:
 3. CAPI Cluster kubeadm provider. The keyword is `KubeadmControlPlane` 
 4. For cluster registered with Sveltos, the SveltosCluster instance. The keyword is `Cluster` 
 
-Additionally, Sveltos can fetch any resource from the management cluster. You can set the **templateResourceRefs** in the ClusterProfile Spec section to instruct Sveltos to do so.
+Additionally, Sveltos can fetch any resource from the management cluster. You can set the **templateResourceRefs** in the ClusterProfile/Profile Spec section to instruct Sveltos to do so.
 
 ### Example - Autoscaler Definition
 
 #### ClusterProfile
 
-The below YAML defintion file instructs Sveltos to fetch the Secret instance autoscaler in the namespace **default** and make it available to the template with the keyword AutoscalerSecret.
+This YAML definition tells Sveltos to find a Secret named _autoscaler_ in the _default_ namespace. Sveltos then makes this Secret available to your template using the keyword _AutoscalerSecret_.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -92,20 +92,20 @@ spec:
   clusterSelector: env=fv
   templateResourceRefs:
   - resource:
+      apiVersion: v1 
       kind: Secret
       name: autoscaler
       namespace: default
     identifier: AutoscalerSecret
-  ...
   policyRefs:
   - kind: ConfigMap
     name: info
     namespace: default
 ```
 
-#### ConfigMap
+By adding a special annotation (`projectsveltos.io/template: "true"`) to a ConfigMap named _info_ (also in the _default_ namespace), we can define a template within it.
 
-The ConfigMap default/info referenced by the ClusterProfile above can then be expressed as a template:
+Here's the template:
 
 ```yaml
 apiVersion: v1
@@ -128,36 +128,120 @@ data:
       ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
 
-**Please Note:** The MgmtResources are internally defined as
+ Sveltos will use the content of the _AutoscalerSecret_ to fill in the placeholders when deploying the resources to your managed clusters.
 
-```go
-MgmtResources          map[string]map[string]interface{}
-```
-
-If you want to refer to any resource fetched by Sveltos within a template, you can do so using the following syntax:
+**Please Note:** Sveltos stores information about fetched resources internally using a __map__ data structure. You don't need to worry about the technical details.
+To use any resource that Sveltos has found for you, simply use this syntax in your YAML template:
 
 ```yaml
 (index .MgmtResources "<Identifier>")
 ```
 
-The same principle as above is applied to Helm charts. The `values` section of a Helm chart can reference any field of a Secret instance named `autoscaler` in the `default` namespace by referring to it as `AutoscalerSecret`.
+Replace `<Identifier>` with the name you gave that resource in your ClusterProfile definition (like _AutoscalerSecret_).
+
+This works the same way for Helm charts. Inside the `values` section of your Helm chart, you can reference any data stored in the autoscaler Secret from the _default_ namespace using the same identifier (_AutoscalerSecret_).
 
 ### RBAC
 
- Sveltos adhere to the least privilege principle. That means that Sveltos does not have all the necessary permissions to fetch resources from the management cluster by default. Therefore, when using `templateResourceRefs`, you need to provide Sveltos with the correct RBAC.
+Sveltos adhere to the least privilege principle. That means that Sveltos does not have all the necessary permissions to fetch resources from the management cluster by default. Therefore, when using `templateResourceRefs`, you need to provide Sveltos with the correct RBAC.
 
 Providing the necessary RBACs to Sveltos is a straightforward process. The Sveltos' ServiceAccount is tied to the **addon-controller-role-extra** ClusterRole. To grant Sveltos the necessary permissions, simply edit the role.
 
 If the ClusterProfile is created by a tenant administrator as part of a [multi-tenant setup](../features/multi-tenancy-sharing-cluster.md), Sveltos will act on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures that Kubernetes RBACs are enforced, which restricts the tenant's access to only authorized resources.
 
-### Namespace
+### templateResourceRefs: Namespace and Name
 
-When using `templateResourceRefs` to fetch resources, the namespace field is optional. 
+When using `templateResourceRefs` to find resources in the management cluster, the namespace field is optional. 
 
-#### How it works
+1. If you provide a namespace (like _default_), Sveltos will look for the resource in that specific namespace.
+2. Leaving the namespace field blank tells Sveltos to search for the resource in the same namespace as the cluster during deployment.
 
-1. If the namespace field is set, Sveltos will fetch the resource in that specific namespace.
-2. If the namespace field is left empty, Sveltos will fetch the resource in the namespace of the cluster at the time of deployment.
+The name field in `templateResourceRefs` can also be a template. This allows you to dynamically generate names based on information available during deployment.
+You can use special keywords like _.ClusterNamespace_ and _.ClusterName_ within the name template to reference the namespace and name of the cluster where the resource is about to be deployed.
+For example, the following template will create a name by combining the cluster's namespace and name:
+
+```yaml
+name: "{{ .ClusterNamespace }}-{{ .ClusterName }}"
+```
+
+## Example - Replicate Secrets with Sveltos
+
+In this scenario, imagine the management cluster has External Secret Operator set up. This operator acts as a bridge, securely fetching secrets from a separate system. These secrets are stored safely within the management cluster.
+
+Now, suppose the following YAML code represents a Secret within the management cluster managed by External Secret Operator:
+
+```yaml
+apiVersion: v1
+data:
+  key1: dmFsdWUx
+  key2: dmFsdWUy
+kind: Secret
+metadata:
+  creationTimestamp: "2024-05-27T13:51:00Z"
+  name: external-secret-operator
+  namespace: default
+  resourceVersion: "28731"
+  uid: 99411506-8f5e-4846-9628-58f82b3d01be
+type: Opaque
+```
+
+We want to replicate across all our `production` clusters. Sveltos can automate this process. Here's a step-by-step approach.
+
+We'll first create a ConfigMap named _replicate-external-secret-operator-secret_ in the _default_ namespace. The data section of this ConfigMap will act as a template for deploying the secret.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: replicate-external-secret-operator-secret
+  namespace: default
+  annotations:
+    projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+data:
+  secret.yaml: |
+    # This template references the Secret fetched by Sveltos (ESOSecret)
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ (index .MgmtResources "ESOSecret").metadata.name }}
+      namespace: {{ (index .MgmtResources "ESOSecret").metadata.namespace }}
+    data:
+      {{ range $key, $value := (index .MgmtResources "ESOSecret").data }}
+        {{$key}}: {{ $value }}
+      {{ end }}
+```
+
+- The `projectsveltos.io/template: "true"` annotation tells Sveltos this is a template.
+- The template references a placeholder named _ESOSecret_, which will be filled with the actual secret data later.
+
+Next, we'll define a ClusterProfile named _replicate-external-secret-operator-secret_. This profile instructs Sveltos on how to deploy the secrets:
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: replicate-external-secret-operator-secret
+spec:
+  clusterSelector: env=production
+  templateResourceRefs:
+  - resource:
+      apiVersion: v1 
+      kind: Secret
+      name: external-secret-operator
+      namespace: default
+    identifier: ESOSecret
+  policyRefs:
+  - kind: ConfigMap
+    name: replicate-external-secret-operator-secret
+    namespace: default
+```
+
+- The clusterSelector targets clusters with the label `env=production`.
+- The templateResourceRefs section tells Sveltos to fetch the Secret named _external-secret-operator_ from the _default_ namespace. This secret managed by External Secret Operator that holds the actual data we want to replicate.
+- The identifier: _ESOSecret_ connects this fetched secret to the placeholder in the template.
+- The policyRefs section references the ConfigMap we created earlier, which contains the template for deploying the secret.
+
+By following these steps, Sveltos will automatically deploy the secrets managed by the External Secret Operator to all your production clusters. This ensures consistent and secure access to these secrets across your production environment.
 
 ## Example - Autoscaler Dynamic Resource Creation
 
