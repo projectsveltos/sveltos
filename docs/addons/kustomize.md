@@ -21,13 +21,13 @@ The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
-  name: flux-system
+  name: hello-world
 spec:
   clusterSelector: env=fv
   syncMode: Continuous
   kustomizationRefs:
-  - namespace: flux-system
-    name: flux-system
+  - namespace: flux2
+    name: flux2
     kind: GitRepository
     path: ./helloWorld/
     targetNamespace: eng
@@ -37,27 +37,25 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: flux-system
-  namespace: flux-system
+  name: flux2
+  namespace: flux2
 spec:
   interval: 1m0s
   ref:
     branch: main
-  secretRef:
-    name: flux-system
   timeout: 60s
   url: ssh://git@github.com/gianlucam76/kustomize
 ```
 
 ```bash
 $ sveltosctl show addons
-+-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
-|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
-+-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
-| default/sveltos-management-workload | apps:Deployment | eng       | the-deployment | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
-| default/sveltos-management-workload | :Service        | eng       | the-service    | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
-| default/sveltos-management-workload | :ConfigMap      | eng       | the-map        | N/A     | 2023-05-16 00:48:11 -0700 PDT | flux-system      |
-+-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
+|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              |           PROFILES              |
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
+| default/sveltos-management-workload | apps:Deployment | eng       | the-deployment | N/A     | 2023-05-16 00:48:11 -0700 PDT | ClusterProfile/hello-world      |
+| default/sveltos-management-workload | :Service        | eng       | the-service    | N/A     | 2023-05-16 00:48:11 -0700 PDT | ClusterProfile/hello-world      |
+| default/sveltos-management-workload | :ConfigMap      | eng       | the-map        | N/A     | 2023-05-16 00:48:11 -0700 PDT | ClusterProfile/hello-world      |
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
 ```
 
 ## Substitution and Templating
@@ -90,13 +88,14 @@ Now, imagine Sveltos receives a ClusterProfile containing the following key-valu
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
-  name: flux-system
+  name: hello-world-with-values
 spec:
+  clusterSelector: env=fv
   kustomizationRefs:
   - deploymentType: Remote
     kind: GitRepository
-    name: flux-system
-    namespace: flux-system
+    name: flux2
+    namespace: flux2
     path: ./template/helloWorld/
     targetNamespace: eng
     values:
@@ -166,14 +165,14 @@ This is a fully working example:
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
-  name: flux-system
+  name: hello-world-with-template
 spec:
   clusterSelector: env=fv
   kustomizationRefs:
   - deploymentType: Remote
     kind: GitRepository
-    name: flux-system
-    namespace: flux-system
+    name: flux2
+    namespace: flux2
     path: ./template/helloWorld/
     targetNamespace: eng
     values:
@@ -190,15 +189,12 @@ with GitRepository
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: flux-system
-  namespace: flux-system
-  ...
+  name: flux2
+  namespace: flux2
 spec:
   interval: 1m0s
   ref:
     branch: main
-  secretRef:
-    name: flux-system
   timeout: 60s
   url: https://github.com/gianlucam76/kustomize.git
 ```
@@ -207,11 +203,11 @@ spec:
 sveltosctl show addons 
 +-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+----------------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |              TIME              |          PROFILES          |
-+-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+----------------------------+
-| default/clusterapi-workload | apps:Deployment | eng       | the-deployment | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/flux-system |
-| default/clusterapi-workload | :Service        | eng       | the-service    | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/flux-system |
-| default/clusterapi-workload | :ConfigMap      | eng       | the-map        | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/flux-system |
-+-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+----------------------------+
++-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+--------------------------------------+
+| default/clusterapi-workload | apps:Deployment | eng       | the-deployment | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/hello-world-with-template |
+| default/clusterapi-workload | :Service        | eng       | the-service    | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/hello-world-with-template |
+| default/clusterapi-workload | :ConfigMap      | eng       | the-map        | N/A     | 2024-05-01 11:43:54 +0200 CEST | ClusterProfile/hello-world-with-template |
++-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+--------------------------------------+
 ```
 
 ### Express Path as Template
@@ -227,8 +223,8 @@ spec:
   clusterSelector: region=west
   syncMode: Continuous
   kustomizationRefs:
-  - namespace: flux-system
-    name: flux-system
+  - namespace: flux2
+    name: flux2
     kind: GitRepository
     path: '{{ index .Cluster.metadata.annotations "environment" }}/helloWorld'
     targetNamespace: eng
@@ -278,9 +274,9 @@ spec:
 
 ```bash
 $ sveltosctl show addons
-+-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
-|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE  |           NAME            | VERSION |             TIME              |     CLUSTER PROFILES     |
-+-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
+|               CLUSTER               |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              |           PROFILES              |
++-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
 | default/sveltos-management-workload | apps:Deployment | production | production-the-deployment | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
 | default/sveltos-management-workload | :Service        | production | production-the-service    | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
 | default/sveltos-management-workload | :ConfigMap      | production | production-the-map        | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
