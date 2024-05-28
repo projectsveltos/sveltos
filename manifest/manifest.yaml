@@ -5419,6 +5419,35 @@ spec:
                   Dependencies is a summary reporting the status of the dependencies
                   for the associated ClusterProfile
                 type: string
+              deployedGVKs:
+                description: |-
+                  DeployedGVKs reports the list of GVKs deployed by ClusterSummary
+                  in a managed cluster
+                items:
+                  properties:
+                    deployedGroupVersionKind:
+                      description: |-
+                        DeployedGroupVersionKind contains all GroupVersionKinds deployed in either
+                        the workload cluster or the management cluster because of this feature.
+                        Each element has format kind.version.group
+                      items:
+                        type: string
+                      type: array
+                    featureID:
+                      description: FeatureID is an indentifier of the feature whose
+                        status is reported
+                      enum:
+                      - Resources
+                      - Helm
+                      - Kustomize
+                      type: string
+                  required:
+                  - featureID
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - featureID
+                x-kubernetes-list-type: map
               featureSummaries:
                 description: |-
                   FeatureSummaries reports the status of each workload cluster feature
@@ -5433,6 +5462,7 @@ spec:
                         DeployedGroupVersionKind contains all GroupVersionKinds deployed in either
                         the workload cluster or the management cluster because of this feature.
                         Each element has format kind.version.group
+                        Deprecated: Replaced by FeatureDeploymentInfo field instead
                       items:
                         type: string
                       type: array
@@ -5477,6 +5507,9 @@ spec:
                   - featureID
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - featureID
+                x-kubernetes-list-type: map
               helmReleaseSummaries:
                 description: |-
                   HelmReleaseSummaries reports the status of each helm chart
@@ -6967,10 +7000,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.31.0
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: projectsveltos/addon-controller:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7301,7 +7334,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager:main
+        image: projectsveltos/access-manager:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7449,7 +7482,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: projectsveltos/sveltoscluster-manager:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7711,7 +7744,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager:main
+        image: projectsveltos/healthcheck-manager:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -8909,7 +8942,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager:main
+        image: projectsveltos/event-manager:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9136,10 +9169,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.31.0
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: projectsveltos/classifier:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9329,7 +9362,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller:main
+        image: projectsveltos/shard-controller:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9402,7 +9435,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: projectsveltos/register-mgmt-cluster:main
+        image: projectsveltos/register-mgmt-cluster:v0.31.0
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:

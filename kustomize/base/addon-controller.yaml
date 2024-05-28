@@ -444,10 +444,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.31.0
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: projectsveltos/addon-controller:v0.31.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
