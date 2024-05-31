@@ -106,19 +106,19 @@ $ kubectl logs <pod-name> -n projectsveltos -f
 
 ### Fixing ‘Cannot Re-Use a Name That Is Still In Use’ 
 
-Are you encountering the error "cannot re-use a name that is still in use" while deploying Helm charts with Sveltos? Don't worry, this is a common issue with a straightforward solution.
+Do you encounter the error "**cannot re-use a name that is still in use**" while deploying Helm charts with Sveltos? Don't worry, this is a common issue with a straightforward solution.
 
-The error typically arises when a secret related to a previous Helm chart deployment still lingers in the target namespace of your managed cluster. These lingering secrets can cause naming conflicts when deploying new charts.
+The error typically arises when a secret related to a previous Helm chart deployment still lingers in the target namespace of the **managed** cluster. These lingering secrets can cause naming conflicts when deploying new charts.
 
-While pointing to your managed cluster, run the following command to list all secrets in your desired namespace, filtering for those associated with Helm:
+Pointing to the managed cluster, run the below command to list all secrets in the desired namespace, filtering for those associated with Helm.
 
 ```
-kubectl -n <your namespace> get secrets | grep helm
+$ kubectl -n <your namespace> get secrets | grep helm
 ```
 
-If the command reveals any secrets with a status of "pending-install," proceed to delete them.
+If the command reveals any secrets with a status of "**pending-install**", proceed and delete them.
 
-By removing lingering secrets, you eliminate potential naming conflicts and pave the way for smooth Helm chart deployments using Sveltos.
+By removing the lingering secrets, we eliminate potential naming conflicts and pave the way for smooth Helm chart deployments.
 
 ### Check Sveltos Registered Clusters
 ```bash
