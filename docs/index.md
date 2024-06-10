@@ -20,49 +20,41 @@ authors:
 
 <h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that simplifies the deployment and management of add-ons and applications across multiple clusters. Sveltos runs in the management cluster and can programmatically deploy and manage add-ons and applications on any cluster in the fleet, including the management cluster itself. Sveltos supports a variety of add-on formats, including Helm charts, raw YAML/JSON, Kustomize, Carvel ytt, and Jsonnet.
+## What is Sveltos?
+
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that simplifies the deployment and management of Kubernetes add-ons and applications across **multiple** clusters whether on-prem, in the cloud or a multitenant environment.
+
+Sveltos runs in a **management cluster**. It assists users in programmatically deploying and managing Kubernetes add-ons and applications to **any** cluster in the fleet, including the management cluster.
+
+Sveltos supports a variety of add-on formats, including **Helm charts**, raw **YAML/JSON**, **Kustomize**, **Carvel ytt**, and **Jsonnet**.
 
 ![Sveltos in the management cluster](assets/multi-clusters.png)
 
-Sveltos allows add-ons and applications to be represented as templates. Before deploying to managed clusters, Sveltos instantiates these templates. Sveltos can gather the information required to instantiate the templates from either the management cluster or the managed clusters themselves.
+## Features
 
-With templates, the same add-on configuration can be used across all of the managed clusters, while still allowing for some variation, such as different add-on configuration values. This approach facilitates the definition and deployment of add-ons and applications in a reusable manner, enabling the application of these definitions across multiple clusters with minimal adjustments. This strategy significantly reduces administrative overhead, particularly in environments managing a large number of clusters.
+* **Observability**: Sveltos offers different endpoints for notifications. The notifications can be used by other tools to perform additional actions or trigger workflows. The supported types are Slack, Teams, Discord, WebEx, and Kubernetes events.
+* **Templating**: Patching the rendered resources made easy! Sveltos allows Kubernetes add-ons and applications to be represented as templates. Before deploying to the **managed** clusters, Sveltos instantiates the templates with information gathered from either the **management** or the **managed** clusters. This allows consistent definition across multiple clusters with minimal adjustments and administration overhead.
+* **Orchestrated Deployment Order**: The Sveltos CDRs (Custom Resource Definition) are deployed in the exact order they appear in the definition file. That ensures a predictable and controlled deployment order.
+* **Multitenancy**: Sveltos was created with the multitenancy concept in mind.Sveltos `ClusterProfile` and `Profile` resources allow platform administrators to facilitate full isolation or tenants sharing a cluster.
+* **Events**: `Sveltos Event Framework` allows the deployment of add-ons and applications in response to specific events with the use of the [Lua](https://www.lua.org/) language. That allows dynamic and adaptable deployments based on different needs and use cases.
 
-Sveltos provides precise control over add-on deployment order. Add-ons within a Profile/ClusterProfile are deployed in the exact order they appear, ensuring a predictable and controlled rollout. Furthermore, Profiles/ClusterProfiles can depend on others, guaranteeing that dependent add-ons only deploy after their dependencies are fully operational. Finally Sveltos' event-driven framework offers additional flexibility. This framework allows for deploying add-ons and applications in response to specific events, enabling dynamic and adaptable deployments based on your needs.
+## Why Sveltos?
 
-But that's not all! Sveltos not only helps you scale the number of clusters you can manage, but it also provides visibility into exactly which add-ons are installed on each cluster. So you can stay on top of your cluster management game and never miss a beat.
+Sveltos was built to address the challenges posed by various CI/CD tools. Sveltos was designed to complement or even replace existing GitOps tools, and its integration with **Flux CD** significantly enhances the GitOps approach at scale.
 
-![Sveltos addons](assets/addons.png)
-
-## Profiles vs. ClusterProfiles
-
-Projectsveltos offers two powerful tools for managing cluster configurations: Profiles and ClusterProfiles. Understanding their distinctions is crucial for efficient setup and administration.
-
-Scope and Visibility:
-
-- ClusterProfiles: Apply across all clusters in any namespace. Ideal for platform admins maintaining global consistency and managing settings like networking, security, and resource allocation.
-- Profiles: Limited to a specific namespace, granting granular control to tenant admins. This isolation ensures teams manage, from the management cluster, their managed clusters independently without impacting others.
-
-![Profile vs ClusterProfile](assets/profile_vs_clusterprofile.png)
-In such an environment:
-
-- ✅ Global Consistency can be ensured by platform admins using ClusterProfiles.
-- ✅ Profiles empower tenant admins to specify what is needed in their clusters without interfering with other tenant’s clusters.
+Key features of Sveltos include multitenancy, agent-based drift notification and synchronisation, and resource optimisation. These features ensure **secure**, **reliable**, and **stable** deployments of Kubernetes add-ons and applications, while reducing operational costs in both on-prem and cloud environments.
 
 ## 😻 Contributing to projectsveltos
-We love to hear from our community!
 
-We believe in the power of community and collaboration, and that's where you come in!
+We love to hear from you! We believe in the power of community and collaboration!
 
-We would love to hear your suggestions, contributions, and feedback to make our project even better! Whether you want to report a bug, request a new feature, or just stay up-to-date with the latest news, we've got you covered.
+Your ideas and feedback are important to us. Whether you want to report a bug, suggest a new feature, or stay updated with our latest news, we are here for you.
 
-We would love your suggestions, contributions, and help! 
-
-1. Open a bug/feature enhancement on github [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues")
+1. Open a bug/feature enhancement on GitHub [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues")
 2. Chat with us on the Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q)
 3. If you prefer to reach out directly, just shoot us an [email](mailto:support@projectsveltos.io)
 
-We are always thrilled to welcome new members to our community, and your contributions are always appreciated. So don't be shy - join us today and let's make Sveltos the best it can be! ❤️
+We are always thrilled to welcome new members to our community, and your contributions are always appreciated. Do not be shy - join us today and let's make Sveltos the best it can be! ❤️
 
 ## Support us
 
