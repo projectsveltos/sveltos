@@ -11,7 +11,7 @@ authors:
     - Gianluca Mardente
 ---
 
-## What is Projectsveltos
+## What is Sveltos?
 
 Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, it can manage add-ons and applications to multiple clusters.
 
