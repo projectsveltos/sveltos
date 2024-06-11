@@ -4009,6 +4009,9 @@ spec:
                   - resource
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - identifier
+                x-kubernetes-list-type: map
               tier:
                 default: 100
                 description: |-
@@ -5340,6 +5343,9 @@ spec:
                       - resource
                       type: object
                     type: array
+                    x-kubernetes-list-map-keys:
+                    - identifier
+                    x-kubernetes-list-type: map
                   tier:
                     default: 100
                     description: |-
@@ -6261,6 +6267,9 @@ spec:
                   - resource
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - identifier
+                x-kubernetes-list-type: map
               tier:
                 default: 100
                 description: |-
@@ -7034,10 +7043,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.32.0
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: projectsveltos/addon-controller:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7368,7 +7377,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager:main
+        image: projectsveltos/access-manager:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7516,7 +7525,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: projectsveltos/sveltoscluster-manager:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -7778,7 +7787,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager:main
+        image: projectsveltos/healthcheck-manager:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -8976,7 +8985,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager:main
+        image: projectsveltos/event-manager:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9204,10 +9213,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.32.0
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: projectsveltos/classifier:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9590,7 +9599,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: projectsveltos/shard-controller:main
+        image: projectsveltos/shard-controller:v0.32.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -9663,7 +9672,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: projectsveltos/register-mgmt-cluster:main
+        image: projectsveltos/register-mgmt-cluster:v0.32.0
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -9676,4 +9685,5 @@ spec:
             - ALL
       restartPolicy: Never
       serviceAccountName: register-mgmt-cluster
+  ttlSecondsAfterFinished: 360
 ---
