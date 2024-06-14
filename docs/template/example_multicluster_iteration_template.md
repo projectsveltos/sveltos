@@ -144,8 +144,8 @@ Once the `ClusterProfile` resource gets deployed on the managements cluster, all
 $ kubectl get sveltoscluster -A --show-labels
 
 NAMESPACE  NAME    READY  VERSION    LABELS
-civo    cluster-1  true  v1.29.2+k3s1  sveltos-agent=present,type=nats
-civo    cluster-2  true  v1.28.7+k3s1  sveltos-agent=present,type=nats
+civo    cluster-1  true  v1.29.2+k3s1  sveltos-agent=present
+civo    cluster-2  true  v1.28.7+k3s1  sveltos-agent=present
 mgmt    mgmt    true  v1.30.0    sveltos-agent=present,type=mgmt
 ```
 
