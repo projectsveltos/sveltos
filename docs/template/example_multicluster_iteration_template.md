@@ -14,7 +14,7 @@ authors:
 
 ## Use Case Description
 
-There are a number of cases when platform administrators or operators have to discover and iterate through multiple clustes to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.
+There are a number of cases where platform administrators or operators want to discover and iterate through multiple clustes to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.
 
 The use case can be easily achieved by Sveltos with the use of the [templating](../template/template.md) functionality and [Sveltos Event Franmework](../events/addon_event_deployment.md).
 
@@ -77,7 +77,7 @@ spec:
 
 ## Automatic Service Creation
 
-Lets assume the managed clusters where the service should get deployed has the Sveltos cluster label set to `type:nats`. The below YAML defintion will create a new `ClusterProfile` resource that points to the `EventReport` mentioned above and deploy a `ConfigMap` defined as a template.
+Lets assume the clusters where the service should get deployed has the cluster label set to `type:nats`. The below YAML defintion will create a Sveltos `ClusterProfile` resource that points to the `EventReport` mentioned above and deploy a `ConfigMap` defined as a template.
 
 ### ClusterProfile
 
@@ -136,7 +136,7 @@ data:
 
 ## Results
 
-Once the `ClusterProfile` resource gets deployed on the managements cluster, all the managed clusters with the cluster label set to `type:nats` should get the Kubernetes service with the name `nats-{{ $cluster.name }}`.
+Once the `ClusterProfile` resource gets deployed on the management cluster, all the clusters with the label set to `type:nats` should get the Kubernetes service with the name `nats-{{ $cluster.name }}`.
 
 ### Sveltos Clusters
 
@@ -146,7 +146,8 @@ $ kubectl get sveltoscluster -A --show-labels
 NAMESPACE  NAME    READY  VERSION    LABELS
 civo    cluster-1  true  v1.29.2+k3s1  sveltos-agent=present
 civo    cluster-2  true  v1.28.7+k3s1  sveltos-agent=present
-mgmt    mgmt    true  v1.30.0    sveltos-agent=present,type=mgmt
+mgmt    mgmt       true  v1.30.0       sveltos-agent=present,type=mgmt
+nats    cluster-3  true  v1.28.7+k3s1  type=nats
 ```
 
 ### Kubernetes Services
@@ -159,11 +160,13 @@ nats-cluster-1  ExternalName  <none>    placeholder  <none>  68s
 nats-cluster-2  ExternalName  <none>    placeholder  <none>  68s
 ```
 
+**Note:** The output above is from the `cluster-3`.
+
 ## Automatic Updates Advantages
 The beauty of Sveltos is its automatic reaction to changes. If we create or destroy managed clusters, Sveltos will automatically:
 
-1. Detect the change through the detect-clusters EventSource
-2. Re-evaluate the nats-services template with the updated data
+1. Detect the change through the detect-clusters `EventSource`
+2. Re-evaluate the nats-services template with updated data
 3. Add or remove Service instances in the mentioned clusters as needed
 
 This ensures the clusters remain **dynamically updated** based on the managed cluster configuration.
