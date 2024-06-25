@@ -26,7 +26,7 @@ Download the Kyverno policy and create a ConfigMap containing the policy within 
 
 ```
 $ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
-kubectl create configmap disallow-latest-tag --from-file disallow-latest-tag.yaml
+$ kubectl create configmap disallow-latest-tag --from-file disallow-latest-tag.yaml
 ```
 
 To deploy Kyverno and a ClusterPolicy across all managed clusters matching the Sveltos label selector *env=fv*, utilize the below ClusterProfile."

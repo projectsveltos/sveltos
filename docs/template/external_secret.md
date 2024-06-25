@@ -123,6 +123,7 @@ spec:
   clusterSelector: env=fv
   templateResourceRefs:
   - resource:
+      apiVersion: v1
       kind: Secret
       name: imported-secret
       namespace: default

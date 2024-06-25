@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+  
+resources:
+- access-manager.yaml
+- addon-controller.yaml
+- classifier.yaml
+- event-manager.yaml
+- healthcheck-manager.yaml
+- namespace.yaml
+- register-mgmt-cluster.yaml
+- shard-controller.yaml
+- sveltoscluster-manager.yaml
+components:
+- ../components/crds

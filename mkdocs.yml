@@ -16,59 +16,75 @@ markdown_extensions:
     emoji_generator: !!python/name:materialx.emoji.to_svg
 nav:
 - Projectsveltos: 'index.md'
-- Installation:
-  - Quick Start: 'install/quick_start.md'
-  - Install: 'install/install.md'
-  - Sveltosctl: 'install/sveltosctl.md'
-- Register Cluster:
-  - Register cluster: 'register/register-cluster.md'
-  - Manage add-ons in the management cluster: 'register/management_cluster.md'
-  - ClusterAPI Powered Clusters: 'register/clusterapi.md'
-  - Claudie Powered Clusters: 'register/claudie.md'
+- Use Cases:
+  - Platform Administrators, Multicloud and Add-ons: 'use_cases/use_case_platform_admin_multicloud.md'
+  - Platform Administrators and Multitenancy: 'use_cases/use_case_multitenancy.md'
+  - Sveltos and Flux Integration: 'use_cases/use_case_flux_integration.md'
+- Getting Started:
+  - Installation:
+    - Quick Start: 'getting_started/install/quick_start.md'
+    - Install: 'getting_started/install/install.md'
+  - Sveltosctl:
+    - Sveltosctl: 'getting_started/sveltosctl/sveltosctl.md'
+    - Visibility: 'getting_started/sveltosctl/visibility.md'
+    - Tech support: 'getting_started/sveltosctl/techsupport.md'
+    - Snapshot: 'getting_started/sveltosctl/snapshot.md'
+- Register Clusters:
+  - Register Cluster: 'register/register-cluster.md'
+  - Register Management Cluster: 'register/register_management_cluster.md'
+  - Register Claudie Powered Clusters: 'register/register_claudie_cluster.md'
 - Deploy add-ons and applications:
   - Distribute Add-ons: 'addons/addons.md'
   - Deploy Helm Charts: 'addons/helm_charts.md'
   - Deploy YAML/JSON Kubernetes manifests: 'addons/raw_yaml.md'
+  - Example Flux Sources: 'addons/example_flux_sources.md'
   - Deploy Kustomize Kubernetes manifests: 'addons/kustomize.md'
+  - Add-on rollout strategy: 'addons/rolling_update_strategy.md'
   - ClusterProfile Example: 'addons/combining_all.md'
   - Deep dive into ClusterProfiles: 'addons/clusterprofile.md'
   - Deep dive into Profiles: 'addons/profile.md'
-- Templates:
-  - Helm charts and resources as templates: 'template/template.md'
+- Templating:
+  - Introduction to Templates: 'template/intro_template.md'
+  - Helm Charts and Resources as Templates: 'template/template_generic_examples.md'
   - Support for Carvel ytt: 'template/ytt_extension.md'
   - Support for Jsonnet: 'template/jsonnet_extension.md'
+  - Example Mutlicluster Iteration and Deployment: 'template/example_multicluster_iteration_template.md'
   - Example Integration with Crossplane: 'template/crossplane.md'
   - Example Integration with External Secret Management: 'template/external_secret.md'
   - Example Integrate Sveltos with own controller: 'template/bring_your_own_controller.md'
 - Resource Deployment Order:
-  - Resource Deployment Order with ClusterProfile: 'deployment_order/manifest_order.md'
-  - ClusterProfile dependsOn field: 'deployment_order/depends_on.md'
-  - ClusterProfile dependsOn and validateHealths: 'deployment_order/depends_on_with_health_checks.md'
-  - Resource Deployment Order with events: 'deployment_order/order_with_events.md'
-- ConfigurationDrift detection: 'configuration_drift.md'
-- DryRun: 'dryrun.md'
-- Using Rolling Updates to Minimize Downtime and Risk: 'rolling_update_strategy.md'
-- Deployment, StatefulSet, DaemonSet Rolling upgrades: 'rolling_upgrade.md'
-- Event framework:
-  - Event based add-on deployment: 'events/addon_event_deployment.md'
-  - Cross cluster configuration: 'events/cross_cluster_configuration.md'
-- Addon Compliance: 'addon_compliance.md'
-- Cluster Classification: 'labels_management.md'
+  - Profile Resource Deployment Order: 'deployment_order/manifest_order.md'
+  - Profile dependsOn field: 'deployment_order/depends_on.md'
+  - Profile dependsOn and validateHealths: 'deployment_order/depends_on_with_health_checks.md'
+  - Profile Tiers: 'deployment_order/tiers.md'
+  - Scenario 'Event Framework and Resource Deployment': 'deployment_order/order_with_events.md'
+- Features:
+  - DryRun: 'features/dryrun.md'
+  - Configuration Drift detection: 'features/configuration_drift.md'
+  - Dynamic Cluster Management and Failover: 'features/set.md'
+  - Rolling Upgrade Deployment, StatefulSet, DaemonSet: 'features/rolling_upgrade.md'
+  - Cluster Classification: 'features/labels_management.md'
+  - Multi-tenancy:
+    - Full Isolation: 'features/multi-tenancy-full-isolation.md'
+    - Tenants Sharing Clusters: 'features/multi-tenancy-sharing-cluster.md'
+- Event Framework:
+  - Automatically deploy Add-ons upon specific cluster events.: 'events/addon_event_deployment.md'
+  - Example Service Event Trigger: 'events/example_service_event_trigger.md'
+  - Example API Gateway with Contour: 'events/example_api_gateway_contour.md'
+  - Example Cross-cluster Configuration: 'events/example_cross_cluster_configuration.md'
 - Cluster Observability:
   - Notifications: 'observability/notifications.md'
-  - Send Slack, Webex and Discord notifications: 'observability/addons.md'
-  - Send Slack message for Pods in crashloopbackoff: 'observability/crashloopbackoff.md'
-  - Deployment health: 'observability/deployment_health.md'
-  - Detect degraded certificates: 'observability/failed_certificate.md'
-  - Show resources: 'observability/show_resources.md'
+  - Examples for Slack, Teams, Webex, Discord Notifications and k8s events: 'observability/example_addon_notification.md'
+  - Example Slack Notification for Pods in crashloopbackoff: 'observability/example_crashloopbackoff_notification.md'
+  - Example Deployment Health Notification: 'observability/example_deployment_health_notification.md'
+  - Example Detect Degrade Certificates Notification: 'observability/example_degrade_certificate_notification.md'
+  - Display Resources: 'observability/display_resources.md'
+  - Cross-Resource Evaluation: 'observability/different_resources.md'
 - Scalability:
   - Vertical Scaling: 'scalability/configuration.md'
   - Horizontal Scaling: 'scalability/sharding.md'
-- Sveltosctl features:
-  - Visibility: 'sveltosctl/visibility.md'
-  - Tech support: 'sveltosctl/techsupport.md'
-  - Snapshot: 'sveltosctl/snapshot.md'
-- Multi-tenancy: 'multi-tenancy.md'
+- Help and Tutorials:
+  - Troubleshooting: 'help_and_tutorials/troubleshooting.md'
 - Blogs and videos: 'blogs.md'
 theme:
   features:
@@ -110,4 +126,5 @@ extra_css:
 - stylesheets/extra.css
 plugins:
 - search
-
+extra_javascript:
+  - javascripts/extra.js

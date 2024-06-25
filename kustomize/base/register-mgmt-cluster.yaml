@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: register-mgmt-cluster
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: register-mgmt-cluster-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: register-mgmt-cluster
+  namespace: projectsveltos
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: register-mgmt-cluster-job
+  namespace: projectsveltos
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - args:
+        - --labels=
+        image: projectsveltos/register-mgmt-cluster:main
+        imagePullPolicy: IfNotPresent
+        name: register-mgmt-cluster
+        resources:
+          requests:
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      restartPolicy: Never
+      serviceAccountName: register-mgmt-cluster
+  ttlSecondsAfterFinished: 360
+---

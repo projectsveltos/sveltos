@@ -1,0 +1,97 @@
+# Those YAML are all needed when drift-detection-manager is started in the
+# management cluster. Those are not installed by addon-controller when deploying
+# drift-detection-manager in the management cluster to avoid granting addon-controller
+# extra permissions
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: drift-detection-manager
+  namespace: projectsveltos
+---
+# When running in the management cluster, drift-detection-manager needs
+# to access Secret containing Kubeconfig for managed cluster (and consequently
+# access Cluster/SveltosCluster to verify existance)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-manager-role
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - 'secrets'
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.x-k8s.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - lib.projectsveltos.io
+  resources:
+  - sveltosclusters
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: drift-detection-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: drift-detection-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: drift-detection-manager-role
+subjects:
+- kind: ServiceAccount
+  name: drift-detection-manager
+  namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: drift-detection-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: drift-detection-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: drift-detection-manager
+  namespace: projectsveltos
+---

@@ -1,5 +1,5 @@
 ---
-title: Resource Deployment Order
+title: Resource Deployment Order - Order with Events
 description: Describe how Sveltos can be instructed to follow an order when deploying resources
 tags:
     - Kubernetes
@@ -10,12 +10,13 @@ authors:
     - Gianluca Mardente
 ---
 
+## Scenario Description
 
-In some cases, it is necessary to deploy Kubernetes resources only after other resources are in a healthy state. For example, a Job that creates a table in a database should not be deployed until the database Deployment is healthy.
+In some cases, it is necessary to deploy Kubernetes resources only after other resources are in a `healthy` state. For example, a Job that creates a table in a database should not be deployed until the database Deployment is healthy.
 
-Sveltos can help you solve this problem by allowing you to use events to control the rollout of your application.
+Sveltos can assist with this problem by allowing you to use events to control the rollout of your application.
 
-An event is a notification that is sent when a certain condition is met. For example, you could create an event that is sent when the database Deployment becomes healthy.
+An event is a notification that is sent when a certain condition is met. For example, you can create an event that it is sent when a database Deployment becomes healthy.
 
 You can then use this event to trigger the deployment of the Job that creates the table in the database.
 
@@ -25,10 +26,10 @@ By using events, you can ensure that your application is rolled out in a control
 
 ![Sveltos Resource Deployment Order](../assets/sveltos_resource_order.gif)
 
-### Deploy PostgreSQL deployment and service
+### PostgreSQL Deployment and Service
 
-[^5]With ConfigMap __postgresql-deployment__ and __postgresql-service__ containing respectively PostgreSQL Deployment and Service[^1], following ClusterProfile
-will instruct Sveltos to create PostgreSQL deployment and service in all managed clusters with labels __env: fv__.
+[^5]With the ConfigMap __postgresql-deployment__ and the __postgresql-service__ containing respectively PostgreSQL Deployment and Service[^1], the below ClusterProfile
+will instruct Sveltos to create a PostgreSQL Deployment and Service in all clusters matching the label __env: fv__.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -47,7 +48,7 @@ spec:
 ```
 
 ```bash
-./sveltosctl show addons
+$ sveltosctl show addons
 
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |    NAME    | VERSION |             TIME              | CLUSTER PROFILES |
@@ -59,7 +60,7 @@ spec:
 
 ### Create a Table in the database
 
-With ConfigMap __postgresql-job__ containing a Job that creates table Todo in the database[^2], following will instruct Sveltos to wait for PostgreSQL Deployment to be healthy and only then deply the Job.
+With the ConfigMap __postgresql-job__ containing a Job that creates a table Todo in the database[^2], the below YAML definition instruct Sveltos to wait for the PostgreSQL Deployment to be healthy and only then deply the Job.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -104,10 +105,10 @@ spec:
    kind: ConfigMap
 ```
 
-As soon as PostgreSQL deployment is healthy, Sveltos will deploy the Job. The Job will then create table __Todo__.
+As soon as the PostgreSQL Deployment is `healthy`, Sveltos will deploy the Job. The Job will create table __Todo__.
 
 ```bash
-./sveltosctl show addons                                       
+$ sveltosctl show addons                                       
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |    NAME    | VERSION |             TIME              |       CLUSTER PROFILES       |
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
@@ -117,9 +118,9 @@ As soon as PostgreSQL deployment is healthy, Sveltos will deploy the Job. The Jo
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
 ```
 
-### Deploy todo app
+### Deploy todo App
 
-With ConfigMap __todo-app__ containing the todo app (ServiceAccount, Deployment, Service)[^3], following will instruct Sveltos to deploy todo app only after previous Job is done creating the table in the database.
+With the ConfigMap __todo-app__ containing the todo app (ServiceAccount, Deployment, Service)[^3], the below YAML defintion instructs Sveltos to deploy the `todo` app only after previous Job is complete.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -163,7 +164,7 @@ spec:
 ```
 
 ```bash
-./sveltosctl show addons
+$ sveltosctl show addons
 +-----------------------------+---------------------------+-----------+-------------+---------+-------------------------------+------------------------------+
 |           CLUSTER           |       RESOURCE TYPE       | NAMESPACE |    NAME     | VERSION |             TIME              |       CLUSTER PROFILES       |
 +-----------------------------+---------------------------+-----------+-------------+---------+-------------------------------+------------------------------+
@@ -177,9 +178,9 @@ spec:
 +-----------------------------+---------------------------+-----------+-------------+---------+-------------------------------+------------------------------+
 ```
 
-### Write entry to database
+### Write Entry to Database
 
-With ConfigMap __todo-insert-data__ containing a Job which will add an entry to databse[^4], following will instruct Sveltos to deploy such Job only after todo app is healthy.
+With the ConfigMap __todo-insert-data__ containing a Job which will add an entry to databse[^4], the below YAML definition instructs Sveltos to deploy a Job only after the `todo` app is `healthy`.
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -224,30 +225,38 @@ spec:
    kind: ConfigMap
 ```
 
+## Scenario Resources
+
 [^1]: Get PostgreSQL YAML
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_deployment.yaml
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_service.yaml
-kubectl create configmap postgresql-deployment --from-file postgresql_deployment.yaml 
-kubectl create configmap postgresql-service --from-file postgresql_service.yaml 
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_deployment.yaml
+
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_service.yaml
+
+$ kubectl create configmap postgresql-deployment --from-file postgresql_deployment.yaml 
+
+$ kubectl create configmap postgresql-service --from-file postgresql_service.yaml 
 ```
 
 [^2]: Get Job YAML
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_job.yaml
-kubectl create configmap postgresql-job --from-file postgresql_job.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_job.yaml
+
+$ kubectl create configmap postgresql-job --from-file postgresql_job.yaml
 ```
 
 [^3]: Get todo-app YAML
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_app.yaml
-kubectl create configmap todo-app --from-file todo_app.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_app.yaml
+
+$ kubectl create configmap todo-app --from-file todo_app.yaml
 ```
 
 [^4]: Get Job YAML
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_insert.yaml
-kubectl create configmap todo-insert-data --from-file todo_insert.yaml
+$ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_insert.yaml
+
+$ kubectl create configmap todo-insert-data --from-file todo_insert.yaml
 ```
 
 [^5]: The example used in this document is based on and modified from [here](https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/04-syncwaves-hooks.html).

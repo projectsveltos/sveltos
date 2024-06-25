@@ -1,0 +1,35 @@
+# When classifier is configured to deploy sveltos-agent in the management cluster, 
+# sveltos-agent will create a Service and a Deployment per cluster.
+# Those extra permissions are needed.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: classifier-role-sveltos-agent-in-mgmt-cluster
+  namespace: projectsveltos
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - "*"
+- apiGroups:
+  - "apps"
+  resources:
+  - deployments
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: classifier-rolebinding-sveltos-agent-in-mgmt-cluster
+  namespace: projectsveltos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: classifier-role-sveltos-agent-in-mgmt-cluster
+subjects:
+- kind: ServiceAccount
+  name: classifier-manager
+  namespace: projectsveltos

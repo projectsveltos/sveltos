@@ -27,22 +27,6 @@ do
 done
 cd ../../; rm -rf tmp
 
-# addon-compliance-controller
-echo "processing addon-compliance-controller"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/addon-compliance-controller.git
-cd addon-compliance-controller
-git checkout ${branch}
-for f in manifest/*.yaml
-do 
-    echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-done
-cd ../../; rm -rf tmp
-
 # addon-controller
 echo "processing addon-controller"
 rm -rf tmp; mkdir tmp; cd tmp
@@ -54,6 +38,11 @@ do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
+        continue
+    fi
+
+    # this file is only used to run FV in agentless mode
+    if [[ "$f" == *"deployment-agentless.yaml"* ]]; then
         continue
     fi
 
@@ -167,6 +156,11 @@ do
         continue
     fi
 
+        # this file is only used to run FV in agentless mode
+    if [[ "$f" == *"deployment-agentless.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"sveltos_agent_rbac.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -235,6 +229,22 @@ do
 done
 cd ../../; rm -rf tmp
 
+# register-mgmt-cluster
+echo "processing register-mgmt-cluster"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/register-mgmt-cluster.git
+cd register-mgmt-cluster
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml
+    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
 echo "Generate sveltosctl manifest for branch ${branch}"
 
 rm -rf  manifest/sveltosctl_manifest.yaml
@@ -255,7 +265,7 @@ done
 cd ../../; rm -rf tmp
 
 function add_agent_in_mgmt_cluster_option() {
-    echo "Add agent-in-mgmt-cluster option to classifier and addon-controller"
+    echo "Add agent-in-mgmt-cluster option to classifier and addon-controller and shard-controller"
 
     old_value="report-mode=0"
 

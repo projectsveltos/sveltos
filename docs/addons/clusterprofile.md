@@ -93,10 +93,10 @@ Now, if you're looking for real-time deployment and updates, the *Continuous* sy
 
 *ContinuousWithDriftDetection* instructs Sveltos to monitor the state of managed clusters and detect a configuration drift for any of the resources deployed because of that ClusterProfile.
 When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster.
-To know more about configuration drift detection, refer to this [section](../configuration_drift.md).
+To know more about configuration drift detection, refer to this [section](../features/configuration_drift.md).
 
 Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the *DryRun* syncMode configuration comes in. By deploying your ClusterProfile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises. 
-To know more about dry run, refer to this [section](../dryrun.md).
+To know more about dry run, refer to this [section](../features/dryrun.md).
 
 ### Spec.StopMatchingBehavior
 
@@ -129,7 +129,7 @@ When a cluster matches the ClusterProfile, Kyverno Helm chart will be deployed i
 The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets.
 When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
 
-Please refer to this [section](../rolling_upgrade.md) for more information.
+Please refer to this [section](../features/rolling_upgrade.md) for more information.
 
 ### Spec.MaxUpdate
 
@@ -137,7 +137,7 @@ A ClusterProfile might match more than one cluster. When a change is maded to a 
 The *maxUpdate* field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the ClusterProfile's add-ons or applications.
 The specified value can be an absolute number (e.g., 5) or a percentage of the desired cluster count (e.g., 10%). The default value is 100%, allowing all matching Clusters to be updated simultaneously.
 For instance, if set to 30%, when modifications are made to the ClusterProfile's add-ons or applications, only 30% of matching Clusters will be updated concurrently. Updates to the remaining matching Clusters will only commence upon successful completion of updates in the initially targeted Clusters. This approach ensures a controlled and manageable update process, minimizing potential disruptions to the overall cluster environment.
-Please refer to this [section](../rolling_update_strategy.md) for more information.
+Please refer to this [section](../addons/rolling_update_strategy.md) for more information.
 
 ### Spec.ValidateHealths
 
@@ -147,7 +147,7 @@ The ValidateHealths property accepts a slice of Lua functions, where each functi
 
 Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.
  
-Please refer to this [section](../rolling_update_strategy.md) for more information.
+Please refer to this [section](../addons/rolling_update_strategy.md) for more information.
 
 Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:
 

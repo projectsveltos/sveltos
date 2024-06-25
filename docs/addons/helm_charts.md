@@ -15,11 +15,11 @@ authors:
 
 ## Helm Chart Deployment
 
-ClusterProfile *Spec.HelmCharts* can list all the Helm charts you want to deploy.
+The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get deployed to the managed clusters with a specific label selector.
 
-**Please note:** Sveltos will deploy the Helm charts in the exact order you define them.
+**Please note:** Sveltos will deploy the Helm charts in the exact order they are defined (top-down approach).
 
-### Single Helm chart
+### Example: Single Helm chart
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -38,7 +38,9 @@ spec:
     helmChartAction:  Install
 ```
 
-### Multiple Helm charts
+In the above YAML definition, we install Kyverno on a managed cluster with the label selector set to *env=prod*.
+
+### Example: Multiple Helm charts
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -64,7 +66,9 @@ spec:
     helmChartAction:  Install
 ```
 
-## Pass values to Helm charts
+In the above YAML definition, we first install the Prometheus community Helm chart and afterwards the Grafana Helm chart. The two defined Helm charts will get deployed on a managed cluster with the label selector set to *env=fv*.
+
+### Example: Update Helm Chart Values
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -87,7 +91,89 @@ spec:
         replicas: 1
 ```
 
-## Express Helm values as templates
+### Example: Update Helm Chart Values From Referenced ConfigMap/Secret
+
+Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets. 
+
+For instance, we can create a file __cleanup-controller.yaml__ with following content
+
+```yaml
+cleanupController:
+  livenessProbe:
+    httpGet:
+      path: /health/liveness
+      port: 9443
+      scheme: HTTPS
+    initialDelaySeconds: 16
+    periodSeconds: 31
+    timeoutSeconds: 5
+    failureThreshold: 2
+    successThreshold: 1
+```
+
+then create a ConfigMap with it:
+
+```
+kubectl create configmap cleanup-controller --from-file=cleanup-controller.yaml
+```
+
+We can then create another file __admission_controller.yaml__ with following content:
+
+```yaml
+admissionController:
+  readinessProbe:
+    httpGet:
+      path: /health/readiness
+      port: 9443
+      scheme: HTTPS
+    initialDelaySeconds: 6
+    periodSeconds: 11
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+```
+
+then create a ConfigMap with it:
+
+```
+kubectl create configmap admission-controller --from-file=admission-controller.yaml
+```
+
+Within your Sveltos ClusterProfile YAML, define the helmCharts section. Here, you specify the Helm chart details and leverage valuesFrom to reference the ConfigMaps. 
+This injects the probe configurations from the ConfigMaps into the Helm chart values during deployment.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: kyverno
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    https://kyverno.github.io/kyverno/
+    repositoryName:   kyverno
+    chartName:        kyverno/kyverno
+    chartVersion:     v3.1.1
+    releaseName:      kyverno-latest
+    releaseNamespace: kyverno
+    helmChartAction:  Install
+    values: |
+      admissionController:
+        replicas: 1
+    valuesFrom:
+    - kind: ConfigMap
+      name: cleanup-controller
+      namespace: default
+    - kind: ConfigMap
+      name: admission-controller
+      namespace: default        
+```
+
+### Example: Express Helm Values as Templates
+
+Both the __values__ section and the content stored in referenced ConfigMaps and Secrets can be written using templates. 
+Sveltos will instantiate these templates using resources in the management cluster. Finally Sveltos deploy the Helm chart with the final, resolved values.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1
@@ -143,4 +229,26 @@ spec:
           rollingUpdate:
             maxSurge: 0
             maxUnavailable: 1
+```
+
+### Example: OCI Registry
+
+For OCI charts, please note that the chartName needs to have whole URL.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: vault
+spec:
+  clusterSelector: env=fv
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    oci://registry-1.docker.io/bitnamicharts/vault
+    repositoryName:   oci-vault
+    chartName:        oci://registry-1.docker.io/bitnamicharts/vault
+    chartVersion:     0.7.2
+    releaseName:      vault
+    releaseNamespace: vault
+    helmChartAction:  Install
 ```
