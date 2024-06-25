@@ -104,3 +104,12 @@ cd register-mgmt-cluster
 git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
+
+# conversion-webhook
+echo "processing conversion-webhook"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/conversion-webhook.git
+cd conversion-webhook
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
