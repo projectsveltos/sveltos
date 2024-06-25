@@ -53,12 +53,6 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - sveltosclusters/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - sveltosclusters/status
   verbs:
   - get
@@ -104,7 +98,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: projectsveltos/sveltoscluster-manager:dev
         livenessProbe:
           failureThreshold: 3
           httpGet:
