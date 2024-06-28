@@ -29,7 +29,8 @@ $ kubectl create secret generic calico --from-file=calico.yaml --type=addons.pro
 
 The commands will download the calico.yaml manifest file and afterwards create a Kubernetes secret of type `generic` by defining the file downloaded in the previous command plus defining the needed `type=addons.projectsveltos.io/cluster-profile`.
 
-**Please note:** A ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***
+!!! note
+    A ClusterProfile can only reference Secrets of type ***addons.projectsveltos.io/cluster-profile***
 
 ### Example: Create a ConfigMap
 
@@ -88,7 +89,8 @@ spec:
     kind: Secret
 ```
 
-**Note:** The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
+!!! note
+  The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
 
 When a ClusterProfile references a ConfigMap or a Secret, the **kind** and **name** fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.
 

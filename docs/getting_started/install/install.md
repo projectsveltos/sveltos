@@ -45,13 +45,15 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
 
-**Note:** Both deployments will perform the Sveltos installation in the `projectsveltos` namespace.
+!!! warning
+    Both deployments will perform the Sveltos installation in the `projectsveltos` namespace.
 
 ## Deployment Options
 
 Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
 
-**Note:** Ensure Sveltos is deployed in the `projectsveltos` namespace. This is a requirement.
+!!! warning
+    Ensure Sveltos is deployed in the `projectsveltos` namespace. This is a requirement.
 
 ### Helm Installation
 

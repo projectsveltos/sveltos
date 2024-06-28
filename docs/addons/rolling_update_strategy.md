@@ -129,4 +129,5 @@ To verify the Lua script without a cluster, you can follow steps pointers.
 6. Create a new file named `invalid_resource.yaml` in the same directory, and add a non-healthy resource to it. This is a resource that your evaluate function should evaluate to false.
 7. Run the following command to build and run the unit tests: ```make ut```
 
-**Please Note:** If the unit tests pass, the Lua script is valid.
+!!! tip
+    If the unit tests pass, the Lua script is valid.

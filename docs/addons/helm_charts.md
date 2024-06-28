@@ -17,7 +17,8 @@ authors:
 
 The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get deployed to the managed clusters with a specific label selector.
 
-**Please note:** Sveltos will deploy the Helm charts in the exact order they are defined (top-down approach).
+!!! note 
+    Sveltos will deploy the Helm charts in the exact order they are defined (top-down approach).
 
 ### Example: Single Helm chart
 
@@ -233,7 +234,8 @@ spec:
 
 ### Example: OCI Registry
 
-For OCI charts, please note that the chartName needs to have whole URL.
+!!! tip
+    For OCI charts, the chartName needs to have whole URL.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1

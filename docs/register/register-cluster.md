@@ -111,4 +111,5 @@ If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy,
     $ sveltosctl register cluster --namespace=projectsveltos --cluster=vcluster-dev --kubeconfig=~/demo/vcluster/multi-tenant/kubeconfig/vcluster-dev.yaml --labels=env=dev
     ```
 
-[^1]: **Note:** As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
+[^1]: !!!note
+        As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.

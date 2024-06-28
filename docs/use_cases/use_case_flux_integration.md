@@ -58,7 +58,8 @@ spec:
 
 The above definition will look for updates of the main branch of the specified repository every minute.
 
-**Please Note:** If you use the Flux CLI to bootstrap a Git repo, the `GitRepository` Kubernetes resource will be created from Flux automatically.
+!!! Info
+    If you use the Flux CLI to bootstrap a Git repo, the `GitRepository` Kubernetes resource will be created from Flux automatically.
 
 ### Step 2: Create a Sveltos ClusterProfile
 
@@ -83,7 +84,8 @@ spec:
 
 Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector `env=fv` in the `eng` namespace.
 
-**Note:** The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. For the templates deployment, we will have to ensure the `GitRepository` Kubernetes resource includes the `projectsveltos.io/template: "true"` annotation.
+!!! note
+    The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. For the templates deployment, we will have to ensure the `GitRepository` Kubernetes resource includes the `projectsveltos.io/template: "true"` annotation.
 
 ## More Resources
 

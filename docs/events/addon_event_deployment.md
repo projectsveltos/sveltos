@@ -109,70 +109,70 @@ Inside the newly created directory or subdirectory, create the below.
 3. A file named ```non-matching.yaml``` containing a Kubernetes resource supposed to not be a match for the Lua script created in #1 (this is optional);
 4. Run *make test*
 
-### Note
+!!! tip
 
-The above steps will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
+    The above steps will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
 
-Resources of different kinds can be examined together. The __AggregatedSelection__ is an optional field and can be used to specify a Lua function that will be used to further select a subset of the resources that have already been selected using the ResourceSelector field. The function will receive the array of resources selected by the `ResourceSelectors` and can be used as a way to perform more complex filtering or selection operations on the resources, looking at all of them together.
+    Resources of different kinds can be examined together. The __AggregatedSelection__ is an optional field and can be used to specify a Lua function that will be used to further select a subset of the resources that have already been selected using the ResourceSelector field. The function will receive the array of resources selected by the `ResourceSelectors` and can be used as a way to perform more complex filtering or selection operations on the resources, looking at all of them together.
 
-The Lua function must return a struct with:
+    The Lua function must return a struct with:
 
-- `resources` field: slice of matching resorces;
-- `message` field: (optional) message.
+    - `resources` field: slice of matching resorces;
+    - `message` field: (optional) message.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: sveltos-service
-spec:
- collectResources: true
- resourceSelectors:
- - group: "apps"
-   version: "v1"
-   kind: "Deployment"
- - kind: HorizontalPodAutoscaler
-   group: "autoscaling"
-   version: v2
- aggregatedSelection: |
-      function getKey(namespace, name)
-        return namespace .. ":" .. name
-      end
-
-      function evaluate()
-        local hs = {}
-        hs.message = ""
-
-        local deployments = {}
-        local autoscalers = {}
-        local deploymentsWithNoAutoscaler = {}
-
-        for _, resource in ipairs(resources) do
-          local kind = resource.kind
-          if kind == "Deployment" then
-            key = getKey(resource.metadata.namespace, resource.metadata.name)
-            deployments[key] = true
-          elseif kind == "HorizontalPodAutoscaler" then
-            table.insert(autoscalers, resource)
+    ```yaml
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: sveltos-service
+    spec:
+    collectResources: true
+    resourceSelectors:
+    - group: "apps"
+      version: "v1"
+      kind: "Deployment"
+    - kind: HorizontalPodAutoscaler
+      group: "autoscaling"
+      version: v2
+    aggregatedSelection: |
+          function getKey(namespace, name)
+            return namespace .. ":" .. name
           end
-        end
 
-        -- Check for each horizontalPodAutoscaler if there is a matching Deployment
-        for _,hpa in ipairs(autoscalers) do
-            key = getKey(hpa.metadata.namespace, hpa.spec.scaleTargetRef.name)
-            if hpa.spec.scaleTargetRef.kind == "Deployment" then
-              if not deployments[key] then
-                table.insert(unusedAutoscalers, hpa)
+          function evaluate()
+            local hs = {}
+            hs.message = ""
+
+            local deployments = {}
+            local autoscalers = {}
+            local deploymentsWithNoAutoscaler = {}
+
+            for _, resource in ipairs(resources) do
+              local kind = resource.kind
+              if kind == "Deployment" then
+                key = getKey(resource.metadata.namespace, resource.metadata.name)
+                deployments[key] = true
+              elseif kind == "HorizontalPodAutoscaler" then
+                table.insert(autoscalers, resource)
               end
             end
-        end
 
-        if #unusedAutoscalers > 0 then
-          hs.resources = unusedAutoscalers
-        end
-        return hs
-      end
-```
+            -- Check for each horizontalPodAutoscaler if there is a matching Deployment
+            for _,hpa in ipairs(autoscalers) do
+                key = getKey(hpa.metadata.namespace, hpa.spec.scaleTargetRef.name)
+                if hpa.spec.scaleTargetRef.kind == "Deployment" then
+                  if not deployments[key] then
+                    table.insert(unusedAutoscalers, hpa)
+                  end
+                end
+            end
+
+            if #unusedAutoscalers > 0 then
+              hs.resources = unusedAutoscalers
+            end
+            return hs
+          end
+    ```
 
 ## Events and Multi-tenancy
 
@@ -439,7 +439,8 @@ For more examples, have a look [here](addon_event_deployment.md#yet-another-exam
 
 ### Cleanup 
 
-Please Note: Based on the example above, if a Service is deleted, the NetworkPolicy is also removed automatically by Sveltos.
+!!! note
+    Based on the example above, if a Service is deleted, the NetworkPolicy is also removed automatically by Sveltos.
 
 ```bash
 kubectl get services -A --selector=sveltos=fv   
