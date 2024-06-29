@@ -50,6 +50,115 @@ spec:
 
 Likewise, we can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
+## Example - Deploy Kyverno with different replicas
+
+In this example we have two Civo clusters registered to be managed by Sveltos:
+
+```
+kubectl get sveltoscluster -n civo --show-labels
+NAME       READY   VERSION        LABELS
+cluster1   true    v1.29.2+k3s1   env=demo,projectsveltos.io/k8s-version=v1.29.2
+cluster2   true    v1.29.2+k3s1   env=demo,projectsveltos.io/k8s-version=v1.29.2
+```
+
+and two ConfigMaps
+
+```
+kubectl get configmap -n civo                   
+NAME               DATA   AGE
+cluster1           1      43m
+cluster2           1      43m
+```
+
+The content of ConfigMap `civo/cluster1` is
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster1
+  namespace: civo
+data:
+  values: |
+    admissionController:
+      replicas: 3
+    backgroundController:
+      replicas: 3
+    cleanupController:
+      replicas: 3
+    reportsController:
+      replicas: 3
+```
+
+while the content of ConfigMap `civo/cluster2` is
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster2
+  namespace: civo
+data:
+  values: |
+    admissionController:
+      replicas: 1
+    backgroundController:
+      replicas: 1
+    cleanupController:
+      replicas: 1
+    reportsController:
+      replicas: 1
+```
+
+Following ClusterProfile
+
+```yaml
+apiVersion: config.projectsveltos.io/v1alpha1
+kind: ClusterProfile
+metadata:
+  name: deploy-kyverno
+spec:
+  clusterSelector: env=demo
+  templateResourceRefs:
+  - resource:
+      apiVersion: v1
+      kind: ConfigMap
+      name: "{{ .ClusterName }}"
+    identifier: ConfigData
+  helmCharts:
+  - repositoryURL:    https://kyverno.github.io/kyverno/
+    repositoryName:   kyverno
+    chartName:        kyverno/kyverno
+    chartVersion:     v3.1.4
+    releaseName:      kyverno-latest
+    releaseNamespace: kyverno
+    helmChartAction:  Install
+    values: |
+      {{ (index .MgmtResources "ConfigData").data.values }}
+```
+
+will deploy Kyverno with _3_ replicas on cluster1
+
+```
+KUBECONFIG=civo-cluster1-kubeconfig kubectl get deployments -n kyverno
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+kyverno-background-controller   3/3     3            3           15m
+kyverno-reports-controller      3/3     3            3           15m
+kyverno-cleanup-controller      3/3     3            3           15m
+kyverno-admission-controller    3/3     3            3           15m
+```
+
+and Kyverno with _1_ replica on cluster2
+
+```
+KUBECONFIG=civo-cluster2-kubeconfig kubectl get deployments -n kyverno
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+kyverno-reports-controller      1/1     1            1           17m
+kyverno-background-controller   1/1     1            1           17m
+kyverno-cleanup-controller      1/1     1            1           17m
+kyverno-admission-controller    1/1     1            1           17m
+```
+
 ## Example - Autoscaler Definition
 
 ### ClusterProfile
