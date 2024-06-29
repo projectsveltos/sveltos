@@ -95,7 +95,8 @@ If we have a look at the YAML definitions above, what will happen from a Sveltos
 
 Once the `RoleRequest` instance has been created, the defined tenant admin can use the Sveltos `ClusterProfile` CRD. The only requirement from a ClusterProfile point of view, is to define the labels `projectsveltos.io/serviceaccount-name: <service account name>` and `projectsveltos.io/serviceaccount-namespace: <service account namespace>` to the ClusterProfile instance.
 
-**Note:** The service account name defined should be a Kubernetes `ServiceAccount` on the **management cluster**.
+!!! note
+    The service account name defined should be a Kubernetes `ServiceAccount` on the **management cluster**.
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1alpha1

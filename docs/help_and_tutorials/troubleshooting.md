@@ -21,7 +21,7 @@ $ kubectl get job register-mgmt-cluster-job -n projectsveltos -o=jsonpath='{.spe
 ```
 
 ### sveltosctl Version
-```bash
+```bash hl_lines="2-3"
 $ sveltosctl version
 I0428 09:05:01.496691 2181388 version.go:64] "Client Version:   v0.27.0-17-2fb25f7e7a15a3"
 I0428 09:05:01.496715 2181388 version.go:65] "Git commit:       2fb25f7e7a15a3adc351e569f79ec1f80ae1ac7e" 
@@ -164,7 +164,8 @@ If you are not able to reach the cluster via the specified kubeconfig file, it c
 #### Step 2: Network Connectivity
 If `Step 1` is fine and we can access the cluster resources with the `kubeconfig`, continue the investigation with the network and firewall setup in the environment. Ensure nothing is blocking the traffic from the management cluster to the managed cluster.
 
-**Note:** In specific Operating Systems (Suse Enterprise Linux), the security hardening disallowed the `sveltosctl` to validate and register the cluster due to the certificate issue. In this case, we have to import the cluster certificate to the trusted store.
+!!! tip
+    In specific Operating Systems (Suse Enterprise Linux), the security hardening disallowed the `sveltosctl` to validate and register the cluster due to the certificate issue. In this case, we have to import the cluster certificate to the trusted store.
 
 ### Check Labels set to Registered Clusters
 

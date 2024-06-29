@@ -60,7 +60,8 @@ cluster12   true    v1.26.9+rke2r1   sveltos-agent=present
 cluster13   true    v1.26.9+rke2r1   sveltos-agent=present
 ```
 
-**Please note:** The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command above.
+!!! note
+    The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command above.
 
 ### Step 2: Add Kubernetes Label
 The second step is to assign a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assign the label *env=prod*.
@@ -114,7 +115,8 @@ $ sveltosctl show addons
 
 ![Sveltos in action](../assets/addons_deployment.gif)
 
-**Note:** If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../getting_started/sveltosctl/sveltosctl.md). 
+!!! note
+    If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../getting_started/sveltosctl/sveltosctl.md).
 
 ## More Resources
 

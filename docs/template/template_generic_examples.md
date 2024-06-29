@@ -212,7 +212,8 @@ data:
 
 Sveltos will use the content of the _AutoscalerSecret_ to fill in the placeholders when deploying the resources to your managed clusters.
 
-**Please Note:** Sveltos stores information about fetched resources internally using a __map__ data structure. You do not need to worry about the technical details.
+!!! tip
+    Sveltos stores information about fetched resources internally using a __map__ data structure. You do not need to worry about the technical details.
 
 To use any resource that Sveltos has found based on the defintion, simply use the syntax below in the YAML template:
 
@@ -360,7 +361,8 @@ To achieve this, the Secret Sveltos created in the management cluster needs to b
     identifier: AutoscalerSecret
 ```
 
-**Please Note:** Since we are not specifying the namespace, Sveltos will automatically fetch this Secret from the cluster namespace.
+!!! note
+    Since we are not specifying the namespace, Sveltos will automatically fetch this Secret from the cluster namespace.
 
 Next, we need to instruct Sveltos to take the content of the ConfigMap secret-info in the default namespace and deploy it to the managed cluster (`deploymentType: Remote`).
 

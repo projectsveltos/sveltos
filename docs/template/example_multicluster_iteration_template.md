@@ -132,7 +132,8 @@ data:
     {{ end }}
 ```
 
-**Note:** The ConfigMap resource will create the `nats-{{ $cluster.name }}` services in the `default` namespace on every cluster with the cluster label set to `type:nats`.
+!!!note
+    The ConfigMap resource will create the `nats-{{ $cluster.name }}` services in the `default` namespace on every cluster with the cluster label set to `type:nats`.
 
 ## Results
 
@@ -160,7 +161,8 @@ nats-cluster-1  ExternalName  <none>    placeholder  <none>  68s
 nats-cluster-2  ExternalName  <none>    placeholder  <none>  68s
 ```
 
-**Note:** The output above is from the `cluster-3`.
+!!!note
+    The output above is from the `cluster-3`.
 
 ## Automatic Updates Advantages
 The beauty of Sveltos is its automatic reaction to changes. If we create or destroy managed clusters, Sveltos will automatically:

@@ -163,10 +163,11 @@ LAST SEEN   TYPE      REASON               OBJECT                  MESSAGE
 16s         Warning   ClusterHealthCheck   clusterhealthcheck/hc   cluster Capi:default/sveltos-management-workload...
 ```
 
-**Note:** The Event type will be set to: `type: Normal` when the add-ons are deployed.
+!!! tip
+    The Event type will be set to: `type: Normal` when the add-ons are deployed.
+
 
 The Event message contains the below information on the cluster:
-1. Cluster `type: Capi or Sveltos`
-2. Cluster `namespace`
-3. Cluster `name`
-
+  1. Cluster `type: Capi or Sveltos`
+  1. Cluster `namespace`
+  1. Cluster `name`

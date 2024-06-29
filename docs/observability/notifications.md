@@ -150,22 +150,22 @@ spec:
      namespace: default
 ```
 
-**Note:**
+!!! tip
 
-If the Lua language is preferred to write the HealthCheck, it might be handy to validate the definition before use.
+    If the Lua language is preferred to write the HealthCheck, it might be handy to validate the definition before use.
 
-This can be achieved by cloning the [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repository. In the *pkg/evaluation/healthchecks* directory, create a directory for the deployed resources if it does not exist already. If a directory already exists, create a subdirectory instead.
+    This can be achieved by cloning the [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repository. In the *pkg/evaluation/healthchecks* directory, create a directory for the deployed resources if it does not exist already. If a directory already exists, create a subdirectory instead.
 
-In the directory or the subdirectory, create the below points.
+    In the directory or the subdirectory, create the below points.
 
-1. The file named *healthcheck.yaml* containing the HealthCheck instance with Lua script;
-2. The file named *healthy.yaml* containing a Kubernetes resource supposed to be Healthy for the Lua script created in #1 (this is optional);
-3. The file named *progressing.yaml* containing a Kubernetes resource supposed to be Progressing for the Lua script created in #1 (this is optional);
-4. The file named *degraded.yaml* containing a Kubernetes resource supposed to be Degraded for the Lua script created in #1 (this is optional);
-3. The file named *suspended.yaml* containing a Kubernetes resource supposed to be Suspended for the Lua script created in #1 (this is optional);
-5. *make test*
+    1. The file named *healthcheck.yaml* containing the HealthCheck instance with Lua script;
+    2. The file named *healthy.yaml* containing a Kubernetes resource supposed to be Healthy for the Lua script created in #1 (this is optional);
+    3. The file named *progressing.yaml* containing a Kubernetes resource supposed to be Progressing for the Lua script created in #1 (this is optional);
+    4. The file named *degraded.yaml* containing a Kubernetes resource supposed to be Degraded for the Lua script created in #1 (this is optional);
+    3. The file named *suspended.yaml* containing a Kubernetes resource supposed to be Suspended for the Lua script created in #1 (this is optional);
+    5. *make test*
 
-As mentioned above, one of the following statuses will get returned (`Healthy`, `Progressing`, `Degraded` or `Suspended`) once the resources are verified.
+    As mentioned above, one of the following statuses will get returned (`Healthy`, `Progressing`, `Degraded` or `Suspended`) once the resources are verified.
 
 
 [^1]: Credit for this example to https://blog.cubieserver.de/2022/argocd-health-checks-for-opa-rules/

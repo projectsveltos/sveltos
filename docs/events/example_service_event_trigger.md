@@ -48,7 +48,8 @@ spec:
 
 The below EventTrigger instance is referencing the EventSource instance defined above, and it is referencing a ConfigMap containing a template for an Ingress resource.
 
-Please Note: The *oneForEvent* field is set to `false` and instructs Sveltos to create a single Ingress for all Service instances in the managed cluster matching the EventSource.
+!!! note
+    The *oneForEvent* field is set to `false` and instructs Sveltos to create a single Ingress for all Service instances in the managed cluster matching the EventSource.
 
 When *oneForEvent* is set to `false`, when instantiating the Ingress template, *Resources* is an array containing all Services in the managed cluster matching the EventSource. Any field can be accessed.
 

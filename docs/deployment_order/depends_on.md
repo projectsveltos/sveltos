@@ -122,7 +122,8 @@ spec:
     helmChartAction: Install
 ```
 
-**Note:** Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
+!!! note
+    Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
 
 [^1]: To create the ConfigMaps with Kyverno policies used in this example
 ```
