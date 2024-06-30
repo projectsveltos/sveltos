@@ -51,29 +51,30 @@ Sveltos allows platform administrators to utilise the CRD with the name `Cluster
 2. Where should they get deployed?
 3. List the add-ons deployed
 
-### Example YAML Definition
+!!! example
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+    spec:
+      clusterSelector: env=prod
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+      policyRefs:
+      - name: disallow-latest-tag # (1)
+        namespace: default
+        kind: ConfigMap
+    ```
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-kyverno
-spec:
-  clusterSelector: env=prod
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-  policyRefs:
-  - name: disallow-latest-tag # Reference a ConfigMap that contains a Kyverno ClusterPolicy
-    namespace: default
-    kind: ConfigMap
-```
+    1. Reference a ConfigMap that contains a Kyverno ClusterPolicy
 
 The above YAML definition will install Kyverno and once the deployment is Ready, a Kyverno policy will get deployed to the cluster matching the Sveltos label selector `env=prod`.
 

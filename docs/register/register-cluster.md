@@ -21,7 +21,11 @@ The instructions below will walk readers through registering an existing Kuberne
 If the kubeconfig in place has multiple contexts, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster you want to register.
 
 ```
-$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> --fleet-cluster-context=<context name> --labels=key1=value1,key2=value2
+$ sveltosctl register cluster \
+    --namespace=<namespace> \
+    --cluster=<cluster name> \
+    --fleet-cluster-context=<context name> \
+    --labels=key1=value1,key2=value2
 ```
 
 The above command will generate a kubeconfig file and register the cluster with Sveltos.
@@ -64,7 +68,9 @@ Note: The command assumes you have kubectl configured to access the Sveltos **ma
 If you use [Civo Cloud](https://www.civo.com), simply download the cluster Kubeconfig and perform the below.
 
 ```
-$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+$ sveltosctl register cluster \
+    --namespace=<namespace> \
+    --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
 ```
 
@@ -81,7 +87,9 @@ $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
 If you use Rancher's next-generation Kubernetes distribution [RKE2](https://docs.rke2.io/), you will only need to download the kubeconfig either from the Rancher UI under the Cluster Management section or via SSH into the RKE2 Cluster and under the */etc/rancher/rke2/rke2.yaml* directory. Run the below command.
 
 ```
-$ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
+$ sveltosctl register cluster \
+    --namespace=<namespace> \
+    --cluster=<cluster name> \
     --kubeconfig=<path to file with Kubeconfig>
 ```
 
@@ -103,12 +111,19 @@ If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy,
     ```
 5. Perform a Sveltos registration
     ```bash
-    $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
-        --kubeconfig=<path to file with Kubeconfig> --labels=key1=value1,key2=value2
+    $ sveltosctl register cluster \
+        --namespace=<namespace> \
+        --cluster=<cluster name> \
+        --kubeconfig=<path to file with Kubeconfig> \
+        --labels=key1=value1,key2=value2
     ```
     Example
     ```bash
-    $ sveltosctl register cluster --namespace=projectsveltos --cluster=vcluster-dev --kubeconfig=~/demo/vcluster/multi-tenant/kubeconfig/vcluster-dev.yaml --labels=env=dev
+    $ sveltosctl register cluster \
+        --namespace=projectsveltos \
+        --cluster=vcluster-dev \
+        --kubeconfig=~/demo/vcluster/multi-tenant/kubeconfig/vcluster-dev.yaml \
+        --labels=env=dev
     ```
 
 [^1]: !!!note

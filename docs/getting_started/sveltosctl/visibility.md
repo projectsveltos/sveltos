@@ -13,7 +13,7 @@ authors:
 
 ## Introduction to Sveltoctl Visibility
 
-The sveltosctl nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.
+**sveltosctl** nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.
 
 ### show addons
 *show addons* can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos. 
