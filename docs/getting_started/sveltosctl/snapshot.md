@@ -34,20 +34,20 @@ Checkout Youtube for a [Sveltos introduction to Snapshots](https://www.youtube.c
 [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") when running as a Pod in the management cluster, can be configured to collect configuration snapshots.
 *Snapshot* CRD is used for that.
 
-```yaml
----
-apiVersion: utils.projectsveltos.io/v1alpha1
-kind: Snapshot
-metadata:
-  name: hourly
-spec:
-  schedule: "0 * * * *"
-  storage: /collection
-```
+!!! example "Example - Snapshot"
+    ```yaml
+    apiVersion: utils.projectsveltos.io/v1alpha1
+    kind: Snapshot
+    metadata:
+      name: hourly
+    spec:
+      schedule: "0 * * * *" # (1)
+      storage: /collection # (2)
+    ```
 
-*schedule* field specifies when a snapshot needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
+    1. Specifies when a snapshot needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
 
-*storage* field represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
+    2. Represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
 
 ### Snapshot diff
 

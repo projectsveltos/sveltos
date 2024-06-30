@@ -38,23 +38,26 @@ We can store all the required Kubernetes resources in a Git repository and let F
 Install and run Flux in the management cluster. Configure it to synchronise the Git repository which contains the `HelloWorld` manifests. Use a GitRepository resource similar to the below YAML definitions. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
 
 ```yaml
----
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: flux-system
   namespace: flux-system
   annotations:
-    projectsveltos.io/template: "true"
+    projectsveltos.io/template: "true" # (1)
 spec:
-  interval: 1m0s
+  interval: 1m0s # (2)
   ref:
     branch: main
   secretRef:
     name: flux-system
   timeout: 60s
-  url: https://github.com/gianlucam76/kustomize.git
+  url: https://github.com/gianlucam76/kustomize.git # (3)
 ```
+
+1. Enable Sveltos templating functionality. More information have a look [here](../template/intro_template.md).
+2. How often to sync with the reposiroty
+3. Reflects the repository we want to use
 
 The above definition will look for updates of the main branch of the specified repository every minute.
 
@@ -67,7 +70,6 @@ Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository`
 
 
 ```yaml
----
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

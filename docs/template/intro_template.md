@@ -18,7 +18,7 @@ Sveltos lets you define add-ons and applications using templates. Before deployi
 
 ## Template Functions
 
-Sveltos supports the template functions included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over **70 template functions** for Go’s template language. Some of the functions are listed below. For the full list, please refer to [Sprig repo]([Sprig](https://masterminds.github.io/sprig/).
+Sveltos supports the template functions included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over **70 template functions** for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.
 
 1. **String Functions**: trim, wrap, randAlpha, plural, etc.
 1. **String List Functions**: splitList, sortAlpha, etc.

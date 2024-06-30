@@ -44,23 +44,21 @@ Similar to ClusterProfiles, Profiles utilize a cluster selector and list of add-
 
 Sveltos allows platform administrators to utilise the CRD with the name `RoleRequest` that will effectively grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy-sharing-cluster.md).
 
-### Example - RoleRequest YAML Definition
-
-```yaml
----
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: RoleRequest
-metadata:
-  name: full-access
-spec:
-  serviceAccountName: "eng"
-  serviceAccountNamespace: "default"
-  clusterSelector: env=prod
-  roleRefs:
-  - name: full-access
-    namespace: default
-    kind: ConfigMap
-```
+!!! example "Example RoleRequest"
+    ```yaml
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: RoleRequest
+    metadata:
+      name: full-access
+    spec:
+      serviceAccountName: "eng"
+      serviceAccountNamespace: "default"
+      clusterSelector: env=prod
+      roleRefs:
+      - name: full-access
+        namespace: default
+        kind: ConfigMap
+    ```
 Based on the above YAML definition, we defined the below fields:
 
 - `serviceAccountName`: The service account the permission will be applied to;
@@ -70,24 +68,24 @@ Based on the above YAML definition, we defined the below fields:
 
 The configMap in the example above can be something similar to be below YAML definition.
 
-```yaml
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: full-access
-  namespace: default
-data:
-  role.yaml: |
-    apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRole
+!!! example "Example ConfigMap"
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
     metadata:
-      name: eng-full-access
-    rules:
-    - apiGroups: ["*"]
-      resources: ["*"]
-      verbs: ["*"]
-```
+      name: full-access
+      namespace: default
+    data:
+      role.yaml: |
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: eng-full-access
+        rules:
+        - apiGroups: ["*"]
+          resources: ["*"]
+          verbs: ["*"]
+    ```
 
 If we have a look at the YAML definitions above, what will happen from a Sveltos point of view? By referencing the ConfigMap `default/full-access`, the `RoleRequest` with the name `full-access` will reserve a cluster matching the `clusterSelector` *env=prod* to the service account with the name `eng`.
 
@@ -98,30 +96,33 @@ Once the `RoleRequest` instance has been created, the defined tenant admin can u
 !!! note
     The service account name defined should be a Kubernetes `ServiceAccount` on the **management cluster**.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-kyverno
-  labels:
-    projectsveltos.io/serviceaccount-name: eng
-    projectsveltos.io/serviceaccount-namespace: default
-spec:
-  clusterSelector: env=prod
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-  policyRefs:
-  - name: disallow-latest-tag # Reference a ConfigMap that contains a Kyverno ClusterPolicy
-    namespace: default
-    kind: ConfigMap
-```
+!!! example "Example ClusterProfile"
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+      labels:
+        projectsveltos.io/serviceaccount-name: eng
+        projectsveltos.io/serviceaccount-namespace: default
+    spec:
+      clusterSelector: env=prod
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+      policyRefs:
+      - name: disallow-latest-tag # (1)
+        namespace: default
+        kind: ConfigMap
+    ```
+
+    1. Reference a ConfigMap that contains a Kyverno ClusterPolicy
 
 In the ClusterProfile definition above we allow the service account *eng* found in the *default* namespace to deploy Kyverno v3.0.1 to the cluster it has access to. This is the cluster with the label selector set to `env=prod`.
 

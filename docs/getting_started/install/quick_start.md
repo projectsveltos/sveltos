@@ -32,23 +32,24 @@ create a workload cluster powered by clusterAPI using Docker as infrastructure p
 
 To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_ create this ClusterProfile instance in the management cluster:
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-kyverno
-spec:
-  clusterSelector: env=fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.1.0
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example "Example - Helm Chart"
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+    spec:
+      clusterSelector: env=fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.1.0
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
 
 ## Deploy Raw YAMl/JSON
 
@@ -69,44 +70,48 @@ which contains:
 and create a Secret in the management cluster containing the contents of the downloaded file:
 
 ```bash
-$ kubectl create secret generic contour-gateway-provisioner-secret --from-file=contour-gateway-provisioner.yaml --type=addons.projectsveltos.io/cluster-profile
+$ kubectl create secret generic contour-gateway-provisioner-secret \
+    --from-file=contour-gateway-provisioner.yaml \
+    --type=addons.projectsveltos.io/cluster-profile
 ```
 
 To deploy all these resources in any cluster with labels *env: fv*, create a ClusterProfile instance in the management cluster referencing the Secret created above:
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
- name: gateway-configuration
-spec:
- clusterSelector: env=fv
- syncMode: Continuous
- policyRefs:
- - name: contour-gateway-provisioner-secret
-   namespace: default
-   kind: Secret
-```
+!!! example "Example - Raw Yaml/Json"
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+    name: gateway-configuration
+    spec:
+    clusterSelector: env=fv
+    syncMode: Continuous
+    policyRefs:
+    - name: contour-gateway-provisioner-secret
+      namespace: default
+      kind: Secret
+    ```
 
 ## Deploy Resources Assembled with Kustomize
 
 Sveltos can work along with Flux to deploy content of Kustomize directories.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: flux-system
-spec:
-  clusterSelector: env=fv
-  syncMode: Continuous
-  kustomizationRefs:
-  - namespace: flux-system
-    name: flux-system
-    kind: GitRepository
-    path: ./helloWorld/
-    targetNamespace: eng
-```
+!!! example "Example - Kustomize"
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: flux-system
+    spec:
+      clusterSelector: env=fv
+      syncMode: Continuous
+      kustomizationRefs:
+      - namespace: flux-system
+        name: flux-system
+        kind: GitRepository
+        path: ./helloWorld/
+        targetNamespace: eng
+    ```
 
 Full examples can be found [here](../../addons/kustomize.md).
 

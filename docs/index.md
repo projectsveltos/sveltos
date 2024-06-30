@@ -58,12 +58,10 @@ We are always thrilled to welcome new members to our community, and your contrib
 
 ## Support us
 
-{==
+!!! tip ""
+    If you like the project, please <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank">give us a</a> <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank" class="heart">:octicons-star-fill-24:</a> if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
-If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons")  [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
-==}
+[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){:target="_blank" .md-button}
 
-[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){ .md-button .md-button--primary }
-
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.** -->

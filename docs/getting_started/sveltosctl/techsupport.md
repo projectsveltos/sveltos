@@ -28,28 +28,27 @@ Sveltos will make sure the tenant admin collects what it has been [authorized to
 
 Techsupport CRD is used to configure Sveltos to periodically collect tech supports from managed Kubernetes clusters.
 
-### Example 1
-
-```yaml
-apiVersion: utils.projectsveltos.io/v1alpha1
-kind: Techsupport
-metadata:
-  name: hourly
-spec:
-  clusterSelector: env=fv
-  schedule: "00 * * * *"
-  storage: /collection
-  logs:
-  - namespace: kube-system
-    sinceSeconds: 600
-  resources:
-  - group: "apps"
-    version: v1
-    kind: Deployment
-  - group: ""
-    version: v1
-    kind: Secret
-```
+!!! example "Example 1"
+    ```yaml
+    apiVersion: utils.projectsveltos.io/v1alpha1
+    kind: Techsupport
+    metadata:
+      name: hourly
+    spec:
+      clusterSelector: env=fv
+      schedule: "00 * * * *"
+      storage: /collection
+      logs:
+      - namespace: kube-system
+        sinceSeconds: 600
+      resources:
+      - group: "apps"
+        version: v1
+        kind: Deployment
+      - group: ""
+        version: v1
+        kind: Secret
+    ```
 
 The above YAML Techsupport definition instructs Sveltos to:
 
@@ -59,51 +58,50 @@ The above YAML Techsupport definition instructs Sveltos to:
 
 The __Techsupport__ CRD allows filtering pods and resources using the label and the field selectors.
 
-### Example 2
-
-```yaml
-apiVersion: utils.projectsveltos.io/v1alpha1
-kind: Techsupport
-metadata:
-  name: hourly
-spec:
-  clusterSelector: env=fv
-  schedule: "00 * * * *"
-  storage: /collection
-  logs:
-  - labelFilters:
-    - key: env
-      operation: Equal
-      value: production
-    - key: department
-      operation: Different
-      value: eng
-    namespace: default
-    sinceSeconds: 600
-  resources:
-  - group: "apps"
-    version: v1
-    kind: Deployment
-    labelFilters:
-    - key: env
-      operation: Equal
-      value: production
-    - key: department
-      operation: Different
-      value: eng
-    namespace: default
-  - group: ""
-    version: v1
-    kind: Service
-    labelFilters:
-    - key: env
-      operation: Equal
-      value: production
-    - key: department
-      operation: Different
-      value: eng
-    namespace: default
-```
+!!! example "Example 2"
+    ```yaml
+    apiVersion: utils.projectsveltos.io/v1alpha1
+    kind: Techsupport
+    metadata:
+      name: hourly
+    spec:
+      clusterSelector: env=fv
+      schedule: "00 * * * *"
+      storage: /collection
+      logs:
+      - labelFilters:
+        - key: env
+          operation: Equal
+          value: production
+        - key: department
+          operation: Different
+          value: eng
+        namespace: default
+        sinceSeconds: 600
+      resources:
+      - group: "apps"
+        version: v1
+        kind: Deployment
+        labelFilters:
+        - key: env
+          operation: Equal
+          value: production
+        - key: department
+          operation: Different
+          value: eng
+        namespace: default
+      - group: ""
+        version: v1
+        kind: Service
+        labelFilters:
+        - key: env
+          operation: Equal
+          value: production
+        - key: department
+          operation: Different
+          value: eng
+        namespace: default
+    ```
 
 - *schedule* field specifies when a tech-support needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
 
