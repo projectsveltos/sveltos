@@ -37,14 +37,16 @@ With Sveltos, a management cluster is used to manage add-ons in tens of clusters
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: RoleRequest
     metadata:
       name: full-access
     spec:
       serviceAccountName: "eng"
       serviceAccountNamespace: "default"
-      clusterSelector: dep=eng
+      clusterSelector:
+        matchLabels:
+          dep: eng
       roleRefs:
       - name: full-access
         namespace: default
@@ -163,14 +165,16 @@ In the example below, all clusters matching the Kubernetes label selector ***org
           verbs: ["*"]
 
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: RoleRequest
     metadata:
       name: full-access
     spec:
       serviceAccountName: "foo"
       serviceAccountNamespace: "default"
-      clusterSelector: org=foo.io
+      clusterSelector:
+        matchLabels:
+          org: foo.io
       roleRefs:
       - name: full-access
         namespace: default
@@ -193,7 +197,7 @@ As soon as the service account `foo` posts the below ClusterProfile, Sveltos wil
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
@@ -201,7 +205,9 @@ As soon as the service account `foo` posts the below ClusterProfile, Sveltos wil
         projectsveltos.io/serviceaccount-name: foo
         projectsveltos.io/serviceaccount-namespace: default
     spec:
-      clusterSelector: org=foo.io
+      clusterSelector:
+        matchLabels:
+          org: foo.io
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -220,7 +226,7 @@ For instance, if the `ClusterProfile.Spec.ClusterSelector` is set to ***org=bar.
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
@@ -228,7 +234,9 @@ For instance, if the `ClusterProfile.Spec.ClusterSelector` is set to ***org=bar.
         projectsveltos.io/serviceaccount-name: foo
         projectsveltos.io/serviceaccount-namespace: default
     spec:
-      clusterSelector: org=bar.io
+      clusterSelector:
+        matchLabels:
+          org: bar.io
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -283,14 +291,16 @@ are shared between two tenants:
     # RoleRequest gives the service account 'eng' access to namespaces
     # 'ci-cd' and 'build' in all clusters matching the label
     # selector env=internal
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: RoleRequest
     metadata:
       name: foo-access
     spec:
       serviceAccountName: "eng"
       serviceAccountNamespace: "default"
-      clusterSelector: env=internal
+      clusterSelector:
+        matchLabels:
+          env: internal
       roleRefs:
       - name: foo-shared-access
         namespace: default
@@ -319,14 +329,16 @@ are shared between two tenants:
     # RoleRequest gives service account 'hr' access to the namespace
     # 'human-resource' in all clusters matching the label
     # selector env=internal
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: RoleRequest
     metadata:
       name: bar-access
     spec:                       
       serviceAccountName: "hr"
       serviceAccountNamespace: "default"
-      clusterSelector: env=internal
+      clusterSelector:
+        matchLabels:
+          env: internal
       roleRefs:
       - name: bar-shared-access
         namespace: default

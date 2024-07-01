@@ -36,7 +36,7 @@ To instruct the jsonnet controller to fetch files from this repository, create a
 
 ```yaml
 ---
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: JsonnetSource
 metadata:
   name: jsonnetsource-flux
@@ -53,21 +53,23 @@ spec:
 
 The `path` field specifies the location within the Git repository where the jsonnet file is stored. Once Flux detects changes in the repository and syncs it, the jsonnet-controller will automatically invoke the jsonnet module and store the output in the Status section of the JsonnetSource instance.
 
-At this point, you can use the Sveltos' [template](template.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
+At this point, you can use the Sveltos' [template](template_generic_examples.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
 
 ### ClusterProfile
 !!! example "Example - ClusterProfile and Resources Definition"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
-          apiVersion: extension.projectsveltos.io/v1alpha1
+          apiVersion: extension.projectsveltos.io/v1beta1
           kind: JsonnetSource
           name: jsonnetsource-flux
           namespace: default
@@ -120,7 +122,7 @@ $ kubectl create configmap jsonnet --from-file=jsonnet.tar.gz=jsonnet.tar.gz
 
 ```yaml
 ---
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: JsonnetSource
 metadata:
   name: jsonnetsource-configmap
@@ -136,13 +138,12 @@ spec:
 Outcome will be same as seen above with Flux GitRepository:
 
 ```yaml
----
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: JsonnetSource
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"extension.projectsveltos.io/v1alpha1","kind":"JsonnetSource","metadata":{"annotations":{},"name":"jsonnetsource-configmap","namespace":"default"},"spec":{"kind":"ConfigMap","name":"jsonnet","namespace":"default","path":"./main.jsonnet","variables":{"namespace":"production"}}}
+      {"apiVersion":"extension.projectsveltos.io/v1beta1","kind":"JsonnetSource","metadata":{"annotations":{},"name":"jsonnetsource-configmap","namespace":"default"},"spec":{"kind":"ConfigMap","name":"jsonnet","namespace":"default","path":"./main.jsonnet","variables":{"namespace":"production"}}}
   creationTimestamp: "2023-05-26T08:28:48Z"
   generation: 1
   name: jsonnetsource-configmap

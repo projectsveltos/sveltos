@@ -23,12 +23,14 @@ Sveltos has the capability to **monitor** changes within ConfigMap and Secret re
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: nginx
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       reloader: true
       policyRefs:
       - name: nginx-data

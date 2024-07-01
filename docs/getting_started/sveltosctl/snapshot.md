@@ -37,7 +37,7 @@ Checkout Youtube for a [Sveltos introduction to Snapshots](https://www.youtube.c
 !!! example "Example - Snapshot"
     ```yaml
     ---
-    apiVersion: utils.projectsveltos.io/v1alpha1
+    apiVersion: utils.projectsveltos.io/v1beta1
     kind: Snapshot
     metadata:
       name: hourly

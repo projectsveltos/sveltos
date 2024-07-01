@@ -32,12 +32,14 @@ Techsupport CRD is used to configure Sveltos to periodically collect tech suppor
     ```yaml
     cat > techsupport.yaml <<EOF
     ---
-    apiVersion: utils.projectsveltos.io/v1alpha1
+    apiVersion: utils.projectsveltos.io/v1beta1
     kind: Techsupport
     metadata:
       name: hourly
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       schedule: "00 * * * *"
       storage: /collection
       logs:
@@ -65,12 +67,14 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
     ```yaml
     cat > techsupport_advanced.yaml <<EOF
     ---
-    apiVersion: utils.projectsveltos.io/v1alpha1
+    apiVersion: utils.projectsveltos.io/v1beta1
     kind: Techsupport
     metadata:
       name: hourly
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       schedule: "00 * * * *"
       storage: /collection
       logs:
@@ -118,7 +122,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
 - *resources* field is a list of Kubernetes resources Sveltos will collect logs. In the above example, Services and Deployments from the default namespace with the labels matching  *env=production* and *department!=eng* will be collected.
 
 
-For more information, refer to the [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1alpha1/techsupport_types.go).
+For more information, refer to the [CRD](https://github.com/projectsveltos/sveltosctl/blob/main/api/v1beta1/techsupport_types.go).
 
 ## List techsupports
 

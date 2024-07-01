@@ -41,12 +41,14 @@ An initial ClusterProfile named `validation-and-monitoring` deploys Kyverno (v3.
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: validation-and-monitoring
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       continueOnConflict: true
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -78,12 +80,14 @@ Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
     name: kyverno
     spec:
-    clusterSelector: region=west
+    clusterSelector:
+      matchLabels:
+        region: west
     helmCharts:
     - repositoryURL:    https://kyverno.github.io/kyverno/
       repositoryName:   kyverno
@@ -103,13 +107,15 @@ We can leverage tiers to prioritize the upgrade for west regions. Here's a revis
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
     spec:
       tier: 50
-      clusterSelector: region=west
+      clusterSelector:
+        matchLabels:
+          region: west
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno

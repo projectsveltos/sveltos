@@ -81,12 +81,14 @@ Once the required Kubernetes resources are created/deployed, the below example r
     ```yaml
     cat > clusterprofile_deploy_nginx.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:      
+          env: fv
       policyRefs:
       - name: nginx
         namespace: default
@@ -108,12 +110,14 @@ If you leave the namespace field empty, Sveltos will search for the ConfigMap or
   
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: deploy-resources
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   policyRefs:
   - name: nginx
     kind: ConfigMap
@@ -122,6 +126,64 @@ spec:
 Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _nginx_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _ngix_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
+
+
+### Template-based Referencing for ConfigMaps and Secrets
+
+We can express ConfigMap and Secret names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+
+Available cluster information :
+
+- cluster namespace: use `.Cluster.metadata.namespace`
+- cluster name: `.Cluster.metadata.name` 
+- cluster type: `.Cluster.kind` 
+
+Consider two SveltosCluster instances in the _civo_ namespace:
+
+```bash
+kubectl get sveltoscluster -n civo --show-labels
+NAME             READY   VERSION        LABELS
+pre-production   true    v1.29.2+k3s1   env=civo,projectsveltos.io/k8s-version=v1.29.2
+production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v1.28.7
+```
+
+Additionally, there are two ConfigMaps named _nginx-pre-production_ and _nginx-production_ (both containing a _nginx_ deployment) within the civo namespace:
+
+```bash
+kubectl get configmap -n civo                   
+NAME                   DATA   AGE
+nginx-pre-production   2      4m59s
+nginx-production       2      4m41s
+```
+
+The only difference between these ConfigMaps is the __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
+
+Following ClusterProfile:
+
+1. *Matches both SveltosClusters*
+2. *Dynamic ConfigMap Selection*:
+    - For the `pre-production` cluster, the profile should use the `nginx-pre-production` ConfigMap.
+    - For the `production` cluster, the profile should use the `nginx-production` ConfigMap.
+
+```yaml hl_lines="9-11"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: deploy-nginx
+spec:
+  clusterSelector:
+    matchLabels:
+      env: civo
+  policyRefs:
+  - name: nginx-{{ .Cluster.metadata.name }}
+    kind: ConfigMap
+```
+This approach provides a flexible and centralized way to reference ConfigMaps and Secrets based on cluster information.
+
+## Template
+
+Define the content for resources in your `PolicyRefs` using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster.
+See the template section [template section](../template/template_generic_examples.md) for details.
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 

@@ -39,16 +39,16 @@ Two clusters with the description below are defined.
     ```yaml
     cat > eventsource.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: load-balancer-service
+      name: load-balancer-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: ""
-      version: "v1"
-      kind: "Service"
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
       evaluate: |
         function evaluate()
           hs = {}
@@ -67,19 +67,23 @@ Two clusters with the description below are defined.
     ```yaml
     cat > eventtrigger.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta11
     kind: EventTrigger
     metadata:
-    name: service-policy
+      name: service-policy
     spec:
-    sourceClusterSelector: env=production
-    destinationClusterSelector: dep=eng
-    eventSourceName: load-balancer-service
-    oneForEvent: true
-    policyRefs:
-    - name: service-policy
-      namespace: default
-      kind: ConfigMap
+      sourceClusterSelector:
+        matchLabels:
+          env: production
+      destinationClusterSelector:
+        matchLabels:
+          dep: eng
+      eventSourceName: load-balancer-service
+      oneForEvent: true
+      policyRefs:
+      - name: service-policy
+        namespace: default
+        kind: ConfigMap
     ---
     apiVersion: v1
     kind: ConfigMap

@@ -24,7 +24,7 @@ The below `HealthCheck` YAML definition considers all the cluster Deployments. I
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
       name: deployment-replicas

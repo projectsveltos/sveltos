@@ -25,7 +25,7 @@ The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
       name: crashing-pod
@@ -69,18 +69,20 @@ The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
     name: crashing-pod
     spec:
-    clusterSelector: env=fv
+    clusterSelector:
+      matchLabels:
+        env: fv
     livenessChecks:
     - name: crashing-pod
       type: HealthCheck
       livenessSourceRef:
         kind: HealthCheck
-        apiVersion: lib.projectsveltos.io/v1alpha1
+        apiVersion: lib.projectsveltos.io/v1beta1
         name: crashing-pod
     notifications:
     - name: slack

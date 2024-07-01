@@ -30,12 +30,14 @@ Sveltos can assist solving this problem by allowing users to specify the order i
 !!! example "Example - ClusterProfile Monitoring"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: prometheus-grafana
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://prometheus-community.github.io/helm-charts
@@ -63,12 +65,14 @@ Sveltos can assist solving this problem by allowing users to specify the order i
 !!! Example "Example - ClusterProfile Database"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: postgresql
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       policyRefs:
       - name: postgresql-deployment
         namespace: default

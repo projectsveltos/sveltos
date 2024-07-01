@@ -678,10 +678,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=dev
+        - --version=main
         command:
         - /manager
-        image: projectsveltos/addon-controller:dev
+        image: projectsveltos/addon-controller:main
         livenessProbe:
           failureThreshold: 3
           httpGet:

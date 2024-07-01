@@ -29,7 +29,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: projectsveltos/register-mgmt-cluster:dev
+        image: projectsveltos/register-mgmt-cluster:main
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -42,5 +42,5 @@ spec:
             - ALL
       restartPolicy: Never
       serviceAccountName: register-mgmt-cluster
-  ttlSecondsAfterFinished: 360
+  ttlSecondsAfterFinished: 240
 ---

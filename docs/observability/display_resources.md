@@ -36,7 +36,7 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
       name: deployment-replicas
@@ -89,18 +89,20 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: deployment
         type: HealthCheck
         livenessSourceRef:
           kind: HealthCheck
-          apiVersion: lib.projectsveltos.io/v1alpha1
+          apiVersion: lib.projectsveltos.io/v1beta1
           name: deployment-replicas
       notifications:
       - name: event
@@ -191,39 +193,40 @@ The below __HealthCheck__ instance will instruct Sveltos to collect and display 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
-    name: deployment-replicas
+      name: deployment-replicas
     spec:
-    collectResources: true
-    group: "apps"
-    version: v1
-    kind: Deployment
-    namespace: nginx
-    script: |
-      function evaluate()
-        hs = {}
-        hs.status = "Progressing"
-        hs.message = ""
-        if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nil then
-            if obj.status.availableReplicas == obj.spec.replicas then
-              hs.status = "Healthy"
-            else
-              hs.status = "Progressing"
+      collectResources: true
+      resourceSelectors:
+      - group: "apps"
+        version: v1
+        kind: Deployment
+        namespace: nginx
+      evaluateHealth: |
+        function evaluate()
+          hs = {}
+          hs.status = "Progressing"
+          hs.message = ""
+          if obj.status ~= nil then
+            if obj.status.availableReplicas ~= nil then
+              if obj.status.availableReplicas == obj.spec.replicas then
+                hs.status = "Healthy"
+              else
+                hs.status = "Progressing"
+              end
+            end
+            if obj.status.unavailableReplicas ~= nil then
+              hs.status = "Degraded"
             end
           end
-          if obj.status.unavailableReplicas ~= nil then
-              hs.status = "Degraded"
-          end
-        end
 
-        for i, container in ipairs(obj.spec.template.spec.containers) do
-          hs.message = "Image: " .. container.image
+          for i, container in ipairs(obj.spec.template.spec.containers) do
+            hs.message = "Image: " .. container.image
+          end
+          return hs
         end
-        return hs
-      end
     ```
 
 ```bash
@@ -244,35 +247,36 @@ The below __HealthCheck__ instance will instruct Sveltos to collect and display 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
-    name: pod-in-deployment
+      name: pod-in-deployment
     spec:
-    collectResources: true
-    group: ""
-    version: v1
-    kind: Pod
-    script: |
-      function setContains(set, key)
-        return set[key] ~= nil
-      end
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: v1
+        kind: Pod
+      evaluateHealth: |
+        function setContains(set, key)
+          return set[key] ~= nil
+        end
 
-      function evaluate()
-        hs = {}
-        hs.status = "Healthy"
-        hs.message = ""
-        hs.ignore = true
-        if obj.metadata.labels ~= nil then
-          if setContains(obj.metadata.labels, "app") then
-            if obj.status.phase == "Running" then
-              hs.ignore = false
-              hs.message = "Deployment: " .. obj.metadata.labels["app"]
+        function evaluate()
+          hs = {}
+          hs.status = "Healthy"
+          hs.message = ""
+          hs.ignore = true
+          if obj.metadata.labels ~= nil then
+            if setContains(obj.metadata.labels, "app") then
+              if obj.status.phase == "Running" then
+                hs.ignore = false
+                hs.message = "Deployment: " .. obj.metadata.labels["app"]
+              end
             end
           end
+          return hs
         end
-        return hs
-      end
     ```
 
 ```bash
@@ -300,7 +304,7 @@ In this example we will define an `HealthCheck` instance with a Lua script that 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
       name: deployment-replicas
@@ -345,18 +349,20 @@ As before, we need to have a `ClusterHealthCheck` instance to instruct Sveltos w
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: kyverno-policy-reports
         type: HealthCheck
         livenessSourceRef:
           kind: HealthCheck
-          apiVersion: lib.projectsveltos.io/v1alpha1
+          apiVersion: lib.projectsveltos.io/v1beta1
           name: kyverno-policy-reports
       notifications:
       - name: event
@@ -382,12 +388,14 @@ To deploy Kyverno and a ClusterPolicy in each managed cluster matching the label
 
 ```yaml
   ---
-  apiVersion: config.projectsveltos.io/v1alpha1
+  apiVersion: config.projectsveltos.io/v1beta1
   kind: ClusterProfile
   metadata:
     name: kyverno
   spec:
-    clusterSelector: env=fv
+    clusterSelector:
+      matchLabels:
+        env: fv
     helmCharts:
     - chartName: kyverno/kyverno
       chartVersion: v3.0.1

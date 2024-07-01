@@ -38,12 +38,14 @@ Suppose you are managing several Kubernetes clusters with different versions and
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-gatekeeper-3-10
     spec:
-      clusterSelector: gatekeeper=v3-10
+      clusterSelector:
+        matchLabels:
+          gatekeeper: v3-10
       syncMode: Continuous
       helmCharts:
       - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
@@ -58,12 +60,14 @@ Suppose you are managing several Kubernetes clusters with different versions and
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-gatekeeper-3-9
     spec:
-      clusterSelector: gatekeeper=v3-9
+      clusterSelector:
+        matchLabels:
+          gatekeeper: v3-9
       syncMode: Continuous
       helmCharts:
       - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
@@ -80,7 +84,7 @@ Suppose you are managing several Kubernetes clusters with different versions and
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: Classifier
     metadata:
       name: deploy-gatekeeper-3-10
@@ -96,7 +100,7 @@ Suppose you are managing several Kubernetes clusters with different versions and
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: Classifier
     metadata:
       name: deploy-gatekeeper-3-9
@@ -130,7 +134,7 @@ To read more about the classifier configuration, with examles using the resource
 
 ### Classifier CRD - Deep dive
 
-[Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1alpha1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
+[Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
 
 #### Classifier Labels
 The field *classifierLabels* contains all the labels (key/value pair) which will be added automatically to any cluster matching a Classifier instance.
@@ -146,7 +150,7 @@ Following classifier, matches any cluster with a Service with label __sveltos:fv
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: Classifier
     metadata:
       name: sveltos-service
@@ -170,7 +174,7 @@ Following classifier, matches any cluster with a ClusterIssuer using _acme-stagi
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: Classifier
     metadata:
       name: acme-staging-v02

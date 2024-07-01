@@ -74,12 +74,13 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
     ```yaml
     cat > bucket.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=production
+      clusterSelector: 
+        matchLabels:
+          env: production
       templateResourceRefs:
       - resource:
           apiVersion: demo.projectsveltos.io/v1alpha1

@@ -23,7 +23,7 @@ The notifications can be used by other tools to perform additional actions or tr
 
 ## ClusterHealthCheck
 
-[ClusterHealthCheck](https://github.com/projectsveltos/libsveltos/raw/main/api/v1alpha1/clusterhealthcheck_type.go) is the CRD that can be used to:
+[ClusterHealthCheck](https://github.com/projectsveltos/libsveltos/raw/main/api/v1beta1/clusterhealthcheck_type.go) is the CRD that can be used to:
 
 1. Define the cluster health checks;
 2. Instruct Sveltos **when** and **how** to send notifications
@@ -53,7 +53,7 @@ The supported types are:
 
 
 ### HealthCheck CRD
-To define a custom health check, simply create a [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/healthcheck_type.go) instance.
+To define a custom health check, simply create a [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) instance.
 
 The `HealthCheck` specification can can contain the below fields:
 
@@ -85,7 +85,7 @@ At the end, we return the `hs` object to Sveltos.
 !!! example "Example - HealthCheck Definition"
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
       name: opa-configmaps
@@ -131,18 +131,20 @@ with an incorrect OPA policy is detected.
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
     name: hc
     spec:
-    clusterSelector: env=fv
+    clusterSelector:
+      matchLabels:
+        env: fv
     livenessChecks:
     - name: deployment
       type: HealthCheck
       livenessSourceRef:
         kind: HealthCheck
-        apiVersion: lib.projectsveltos.io/v1alpha1
+        apiVersion: lib.projectsveltos.io/v1beta1
         name: opa-configmaps
     notifications:
     - name: webex

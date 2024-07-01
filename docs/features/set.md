@@ -51,17 +51,19 @@ civo    cluster2  true  v1.28.7+k3s1  env=prod
 
 #### Create a ClusterSet
 
-A ClusterSet named __prod__ is created with `clusterSelector: env=prod` to match all prod clusters and `maxReplicas: 1` to ensure only one cluster is active at a time.
+A ClusterSet named __prod__ is created with `clusterSelector` to match all prod clusters and `maxReplicas: 1` to ensure only one cluster is active at a time.
 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterSet
     metadata:
       name: prod
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       maxReplicas: 1
     ```
 
@@ -71,26 +73,28 @@ Sveltos identifies both clusters as matches (`status.matchingClusterRefs`) and s
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterSet
     metadata:
       name: prod
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       maxReplicas: 1
     status:
       matchingClusterRefs:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster1
         namespace: civo
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster2
         namespace: civo
       namespace: civo
       selectedClusterRefs:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster2
         namespace: civo
@@ -102,7 +106,7 @@ A ClusterProfile named kyverno is deployed referencing the prod ClusterSet.
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
@@ -125,7 +129,7 @@ Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the clus
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
@@ -142,7 +146,7 @@ Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the clus
       - prod
     status:
       matchingClusters:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster2
         namespace: civo
@@ -179,21 +183,23 @@ The ClusterSet automatically picks another healthy cluster from the matching one
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterSet
     metadata:
       name: prod
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       maxReplicas: 1
     status:
       matchingClusterRefs:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster1
         namespace: civo
       selectedClusterRefs:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster1
         namespace: civo
@@ -206,7 +212,7 @@ The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in t
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
@@ -223,7 +229,7 @@ The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in t
       - prod
     status:
       matchingClusters:
-      - apiVersion: lib.projectsveltos.io/v1alpha1
+      - apiVersion: lib.projectsveltos.io/v1beta1
         kind: SveltosCluster
         name: cluster1
         namespace: civo

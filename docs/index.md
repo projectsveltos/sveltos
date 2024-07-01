@@ -14,7 +14,10 @@ authors:
     - Gianluca Mardente
 ---
 
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
 <a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
+
 
 [<img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo">](https://github.com/projectsveltos "Manage Kubernetes add-ons")
 

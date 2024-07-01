@@ -23,17 +23,17 @@ The below EventSource instance will match any Service in namespace *eng* exposin
     ```yaml
     cat > eventsource.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: https-service
+      name: https-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: ""
-      version: "v1"
-      kind: "Service"
-      namespace: eng
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        namespace: eng
       evaluate: |
         function evaluate()
           hs = {}
@@ -61,19 +61,20 @@ When *oneForEvent* is set to `false`, when instantiating the Ingress template, *
     ```yaml
     cat > eventtrigger.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
-    name: ingress-configuration
-    namespace: default
+      name: ingress-configuration
     spec:
-    sourceClusterSelector: env=fv
-    eventSourceName: https-service
-    oneForEvent: false
-    policyRefs:
-    - name: ingress
-      namespace: default
-      kind: ConfigMap
+      sourceClusterSelector:
+        matchLabels:
+          env: fv
+      eventSourceName: https-service
+      oneForEvent: false
+      policyRefs:
+      - name: ingress
+        namespace: default
+        kind: ConfigMap
     ---
     apiVersion: v1
     kind: ConfigMap
@@ -139,7 +140,7 @@ metadata:
   name: ingress
   namespace: default
   ownerReferences:
-  - apiVersion: config.projectsveltos.io/v1alpha1
+  - apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     name: sveltos-rgdn6jsy9zivek7e9mtz
     uid: 29f3552b-be4b-447f-bfc0-aedbad5b21db
