@@ -30,17 +30,19 @@ Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
     ```yaml
     cat > crossplane_google_bucket.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
           apiVersion: storage.gcp.upbound.io/v1beta1
           kind: Bucket
-          name: crossplane-bucket-{{ .ClusterNamespace }}-{{ .ClusterName }}
+          name: crossplane-bucket-{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}
         identifier: CrossplaneBucket
       - resource:
           apiVersion: v1

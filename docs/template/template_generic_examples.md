@@ -25,12 +25,14 @@ In the example below, we use the Sveltos cluster label `env=fv` to identify all 
 !!! example "Example - ClusterProfile Calico Deployment"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-calico
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchSelector:
+          env: fv
       helmCharts:
       - repositoryURL:    https://projectcalico.docs.tigera.io/charts
         repositoryName:   projectcalico
@@ -120,12 +122,14 @@ Following ClusterProfile
 !!! example "Example - ClusterProfile Kyverno"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
     spec:
-      clusterSelector: env=demo
+      clusterSelector:
+        matchLabels:
+          env: demo
       templateResourceRefs:
       - resource:
           apiVersion: v1
@@ -175,12 +179,14 @@ This YAML definition instruct Sveltos to find a Secret named _autoscaler_ in the
 !!! example "Example - ClusterProfile Resource Definition"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
           apiVersion: v1 
@@ -295,12 +301,14 @@ Next, we will define a `ClusterProfile` named _replicate-external-secret-operato
 !!! example "Example - ClusterProfile Resources Definition"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: replicate-external-secret-operator-secret
     spec:
-      clusterSelector: env=production
+      clusterSelector:
+        matchLabels:
+          env: production
       templateResourceRefs:
       - resource:
           apiVersion: v1 
@@ -425,12 +433,14 @@ The content of this ConfigMap is a template that uses the information contained 
 !!! example "Example - Autoscaler Deployment"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta11
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
           kind: Secret

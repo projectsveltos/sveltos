@@ -255,3 +255,5 @@ do
     cat $f >> ../../kustomize/base/conversion-webhook.yaml
 done
 cd ../../; rm -rf tmp
+
+echo ""

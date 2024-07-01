@@ -243,6 +243,20 @@ do
 done
 cd ../../; rm -rf tmp
 
+# conversion-webhook
+echo "processing conversion-webhook"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/conversion-webhook.git
+cd conversion-webhook
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml
+done
+cd ../../; rm -rf tmp
+
 echo "Generate sveltosctl manifest for branch ${branch}"
 
 rm -rf  manifest/sveltosctl_manifest.yaml

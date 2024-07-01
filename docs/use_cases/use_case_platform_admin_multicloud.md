@@ -54,12 +54,14 @@ Sveltos allows platform administrators to utilise the CRD with the name `Cluster
 !!! example "Example - ClusterProfile"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/

@@ -21,12 +21,14 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
 !!! example ""
     ```yaml
     ---
-      apiVersion: config.projectsveltos.io/v1alpha1
+      apiVersion: config.projectsveltos.io/v1beta1
       kind: ClusterProfile
       metadata:
         name: kyverno-policies
       spec:
-        clusterSelector: env=fv
+        clusterSelector:
+          matchLabels:
+            env: fv
         dependsOn:
         - kyverno
         policyRefs:
@@ -43,12 +45,14 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
 !!! example ""
     ```yaml
       ---
-      apiVersion: config.projectsveltos.io/v1alpha1
+      apiVersion: config.projectsveltos.io/v1beta1
       kind: ClusterProfile
       metadata:
         name: kyverno
       spec:
-        clusterSelector: env=fv
+        clusterSelector:
+          matchLabels:
+            env: fv
         helmCharts:
         - chartName: kyverno/kyverno
           chartVersion: v3.0.1
@@ -66,14 +70,16 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile 
     metadata: 
       name: cp-kubevela
     spec:
       dependsOn:
       - cp-kyverno
-      clusterSelector: env=production
+      clusterSelector:
+        matchLabels:
+          env: production
       syncMode: Continuous
       helmCharts:
       - repositoryURL: https://kubevela.github.io/charts
@@ -88,12 +94,14 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: cp-kyverno
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
@@ -109,12 +117,14 @@ The above example is equivalent of creating a single ClusterProfile.
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: cp-kyverno
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
