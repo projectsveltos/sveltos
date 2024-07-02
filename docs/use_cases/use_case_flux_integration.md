@@ -69,7 +69,8 @@ The above definition will look for updates of the main branch of the specified r
 Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository` resource and define the HelloWorld directory as the deployment source. In the below YAML definition, an application will get deployed on the managed cluster with the label selector set to *env=fv*.
 
 
-```yaml
+```bash
+cat > cluster_profile_flux.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -82,6 +83,7 @@ spec:
     namespace: flux-system
     path: ./helloWorld/
     targetNamespace: eng
+EOF
 ```
 
 Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector `env=fv` in the `eng` namespace.

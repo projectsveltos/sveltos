@@ -81,6 +81,7 @@ cluster13   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
 The third step is to create a ClusterProfile Kubernetes resource and apply it to the **management** cluster.
 
 ```yaml
+cat > clusterprofile_kyverno.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -96,10 +97,11 @@ spec:
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
+EOF
 ```
 
 ```bash
-$ kubectl apply -f "kyverno_cluster_profile.yaml"
+$ kubectl apply -f "clusterprofile_kyverno.yaml"
 
 $ sveltosctl show addons
 

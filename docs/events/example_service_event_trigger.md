@@ -107,7 +107,7 @@ data:
 If we have two Service instance in the managed cluster in the namespace `eng`
 
 ```bash
-kubectl get service -n eng
+$ kubectl get service -n eng
 NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
 my-service     ClusterIP   10.225.83.46   <none>        80/TCP,443/TCP    15m
 my-service-2   ClusterIP   10.225.108.8   <none>        80/TCP,8443/TCP   14m

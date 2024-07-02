@@ -34,6 +34,7 @@ To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_
 
 !!! example "Example - Helm Chart"
     ```yaml
+    cat > clusterprofile_kyverno.yaml <<EOF
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
@@ -49,6 +50,7 @@ To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
+    EOF
     ```
 
 ## Deploy Raw YAMl/JSON
@@ -79,6 +81,7 @@ To deploy all these resources in any cluster with labels *env: fv*, create a Clu
 
 !!! example "Example - Raw Yaml/Json"
     ```yaml
+    cat > clusterprofile_gateway.yaml <<EOF
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
@@ -90,6 +93,7 @@ To deploy all these resources in any cluster with labels *env: fv*, create a Clu
     - name: contour-gateway-provisioner-secret
       namespace: default
       kind: Secret
+    EOF
     ```
 
 ## Deploy Resources Assembled with Kustomize
@@ -98,6 +102,7 @@ Sveltos can work along with Flux to deploy content of Kustomize directories.
 
 !!! example "Example - Kustomize"
     ```yaml
+    cat > clusterprofile_flux.yaml <<EOF
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
@@ -111,6 +116,7 @@ Sveltos can work along with Flux to deploy content of Kustomize directories.
         kind: GitRepository
         path: ./helloWorld/
         targetNamespace: eng
+    EOF
     ```
 
 Full examples can be found [here](../../addons/kustomize.md).

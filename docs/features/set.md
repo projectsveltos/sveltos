@@ -43,7 +43,7 @@ This scenario demonstrates active/passive failover with a ClusterSet.
 We have two Civo clusters registered with Sveltos, all labeled `env:prod`.
 
 ```
-kubectl get sveltoscluster -A --show-labels
+$ kubectl get sveltoscluster -A --show-labels
 NAMESPACE  NAME    READY  VERSION    LABELS
 civo    cluster1  true  v1.29.2+k3s1  env=prod
 civo    cluster2  true  v1.28.7+k3s1  env=prod
@@ -141,7 +141,7 @@ status:
 ```
 
 ```
-sveltosctl show addons  
+$ sveltosctl show addons  
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 |    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
@@ -158,7 +158,7 @@ In this example, __cluster2__ was deleted.
 Sveltos detected that and marked the cluster as not ready
 
 ```
-kubectl get sveltoscluster -A
+$ kubectl get sveltoscluster -A
 NAMESPACE NAME   READY VERSION
 civo    cluster1 true  v1.29.2+k3s1
 civo    cluster2       v1.28.7+k3s1
@@ -218,7 +218,7 @@ status:
 ```
 
 ```
-sveltosctl show addons  
+$ sveltosctl show addons  
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 |    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+

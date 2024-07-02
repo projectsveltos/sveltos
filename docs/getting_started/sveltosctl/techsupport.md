@@ -30,6 +30,7 @@ Techsupport CRD is used to configure Sveltos to periodically collect tech suppor
 
 !!! example "Example 1"
     ```yaml
+    cat > techsupport.yaml <<EOF
     apiVersion: utils.projectsveltos.io/v1alpha1
     kind: Techsupport
     metadata:
@@ -48,6 +49,7 @@ Techsupport CRD is used to configure Sveltos to periodically collect tech suppor
       - group: ""
         version: v1
         kind: Secret
+    EOF
     ```
 
 The above YAML Techsupport definition instructs Sveltos to:
@@ -60,6 +62,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
 
 !!! example "Example 2"
     ```yaml
+    cat > techsupport_advanced.yaml <<EOF
     apiVersion: utils.projectsveltos.io/v1alpha1
     kind: Techsupport
     metadata:
@@ -101,6 +104,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
           operation: Different
           value: eng
         namespace: default
+    EOF
     ```
 
 - *schedule* field specifies when a tech-support needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).

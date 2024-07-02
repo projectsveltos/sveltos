@@ -23,7 +23,7 @@ The use case can be easily achieved by Sveltos with the use of the [templating](
 Sveltos `Event Framework` will be used to dynamically detect all **managed** clusters (of type SveltosCluster) that are different from the management cluster. The management cluster has the Sveltos cluster label set to `type:mgmt`.
 
 ```yaml
----
+cat > eventsource_eventtrigger.yaml <<EOF
 apiVersion: lib.projectsveltos.io/v1alpha1
 kind: EventSource
 metadata:
@@ -50,13 +50,14 @@ spec:
  sourceClusterSelector: type=mgmt
  eventSourceName: detect-clusters
  oneForEvent: false
+EOF
 ```
 
 Once the above YAML definition file is applied to the **management** cluster, an `EventReport` resource named `detect-clusters` will be created within the `projectsveltos` namespace.
 
 The report stores the information about all discovered managed clusters. Sveltos templating feature can reference the resource to retrieve a **list** of managed clusters. This allows a dynamic configuration based on the cluster environment.
 
-### EventRepor Output
+### EventReport Output
 
 ```yaml
 apiVersion: lib.projectsveltos.io/v1alpha1
@@ -82,7 +83,7 @@ Lets assume the clusters where the service should get deployed has the cluster l
 ### ClusterProfile
 
 ```yaml
----
+cat > clusterprofile_nats.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -100,12 +101,13 @@ spec:
   - kind: ConfigMap
     name: nats-services
     namespace: default
+EOF
 ```
 
 ### ConfigMap
 
 ```yaml
----
+cat > cm_nats_services.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -130,6 +132,7 @@ data:
         type: ExternalName
     ---
     {{ end }}
+EOF
 ```
 
 !!!note

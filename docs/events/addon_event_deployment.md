@@ -396,7 +396,7 @@ The EventTrigger `OneForEvent` (false by default) field indicates whether to cre
 In the above example, if we create another Service in the managed cluster with the label set to *sveltos: fv*
 
 ```bash
-kubectl get services -A --selector=sveltos=fv   
+$ kubectl get services -A --selector=sveltos=fv   
 NAMESPACE   NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 default     another-service   ClusterIP   10.225.134.41    <none>        443/TCP   24m
 default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP    52m
@@ -405,7 +405,7 @@ default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP 
 two NetworkPolicies will be created, one per Service.
 
 ```bash
-kubectl get networkpolicy -A
+$ kubectl get networkpolicy -A
 NAMESPACE   NAME                    POD-SELECTOR                          AGE
 default     front-another-service   app.kubernetes.io/name=MyApp-secure   8m40s
 default     front-my-service        app.kubernetes.io/name=MyApp          8m40s
@@ -443,13 +443,13 @@ For more examples, have a look [here](addon_event_deployment.md#yet-another-exam
     Based on the example above, if a Service is deleted, the NetworkPolicy is also removed automatically by Sveltos.
 
 ```bash
-kubectl get services -A --selector=sveltos=fv   
+$ kubectl get services -A --selector=sveltos=fv   
 NAMESPACE   NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP    54m
 ```
 
 ```bash
-kubectl get networkpolicy -A
+$ kubectl get networkpolicy -A
 NAMESPACE   NAME                    POD-SELECTOR                          AGE
 default     front-my-service        app.kubernetes.io/name=MyApp          10m40s
 ```

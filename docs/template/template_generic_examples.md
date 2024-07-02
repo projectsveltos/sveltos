@@ -23,7 +23,6 @@ Imagine we want to set up Calico CNI on several CAPI powered clusters, automatic
 In the example below, we use the Sveltos cluster label `env=fv` to identify all clusters that should use Calico as their CNI.
 
 ```yaml
----
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

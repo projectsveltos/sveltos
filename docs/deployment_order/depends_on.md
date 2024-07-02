@@ -125,7 +125,8 @@ spec:
 !!! note
     Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
 
-[^1]: To create the ConfigMaps with Kyverno policies used in this example
+
+
 ```
 $ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
 
@@ -135,3 +136,4 @@ $ wget https://raw.githubusercontent.com/kyverno/policies/main/other/res/restric
 
 $ kubectl create configmap restrict-wildcard-verbs --from-file restrict-wildcard-verbs.yaml
 ```
+[^1]: To create the ConfigMaps with Kyverno policies used in this example

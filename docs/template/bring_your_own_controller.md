@@ -69,96 +69,99 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
 
 2. The content of the ConfigMap `uploader` in the `default` namespace is deployed by Sveltos on the managed cluster (`deploymentType: Remote`). The contents of this ConfigMap is a Pod instance expressed as a template. Sveltos instantiates the template using information from the bucket instance created in the previous step. This Pod then uploads a file to the newly created bucket on Google Cloud Storage.
 
-## 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-resources
-spec:
-  clusterSelector: env=production
-  templateResourceRefs:
-  - resource:
-      apiVersion: demo.projectsveltos.io/v1alpha1
-      kind: Bucket
-      name: sveltos-demo-bucket
-    identifier: Bucket
-  policyRefs:
-  - deploymentType: Local
-    kind: ConfigMap
-    name: bucket
-    namespace: default
-  - deploymentType: Remote
-    kind: ConfigMap
-    name: uploader
-    namespace: default
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bucket
-  namespace: default
-  annotations:
-    projectsveltos.io/template: "true"
-data:
-  bucket.yaml: |
-    apiVersion: demo.projectsveltos.io/v1alpha1
-    kind: Bucket
+##
+!!! example
+    ```yaml
+    cat > bucket.yaml <<EOF
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
     metadata:
-      name: sveltos-demo-bucket
-      namespace: {{ .Cluster.metadata.namespace }}
+      name: deploy-resources
     spec:
-      bucketName: "sveltos-demo-{{ .Cluster.metadata.name }}"
-      location: us-central1
-      serviceAccount: serviceAccount:uploader@sveltos.iam.gserviceaccount.com
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: uploader
-  namespace: default
-  annotations:
-    projectsveltos.io/template: "true"
-data:
-  secret.yaml: |
+      clusterSelector: env=production
+      templateResourceRefs:
+      - resource:
+          apiVersion: demo.projectsveltos.io/v1alpha1
+          kind: Bucket
+          name: sveltos-demo-bucket
+        identifier: Bucket
+      policyRefs:
+      - deploymentType: Local
+        kind: ConfigMap
+        name: bucket
+        namespace: default
+      - deploymentType: Remote
+        kind: ConfigMap
+        name: uploader
+        namespace: default
+    ---
     apiVersion: v1
-    kind: Secret
+    kind: ConfigMap
     metadata:
-      name: gcs-credentials
+      name: bucket
       namespace: default
       annotations:
-        bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
-    type: Opaque
+        projectsveltos.io/template: "true"
     data:
-      service-account.json: {{ (index .MgtmResources "Bucket").status.serviceAccountCredentials }}
-  pod.yaml: |
+      bucket.yaml: |
+        apiVersion: demo.projectsveltos.io/v1alpha1
+        kind: Bucket
+        metadata:
+          name: sveltos-demo-bucket
+          namespace: {{ .Cluster.metadata.namespace }}
+        spec:
+          bucketName: "sveltos-demo-{{ .Cluster.metadata.name }}"
+          location: us-central1
+          serviceAccount: serviceAccount:uploader@sveltos.iam.gserviceaccount.com
+    ---
     apiVersion: v1
-    kind: Pod
+    kind: ConfigMap
     metadata:
-      name: create-and-upload-to-gcs
+      name: uploader
       namespace: default
       annotations:
-        bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
-    spec:
-      containers:
-      - name: uploader
-        image: google/cloud-sdk:slim
-        command: ["bash"]
-        args:
-          - "-c"
-          - |
-            echo "Hello world" > /tmp/hello.txt
-            gcloud auth activate-service-account --key-file=/var/run/secrets/cloud.google.com/service-account.json
-            gsutil cp /tmp/hello.txt gs://{{ (index .MgtmResources "Bucket").spec.bucketName }}
-        volumeMounts:
-          - name: gcp-sa
-            mountPath: /var/run/secrets/cloud.google.com/
-            readOnly: true
-      volumes:
-        - name: gcp-sa
-          secret:
-            secretName: gcs-credentials
-```
+        projectsveltos.io/template: "true"
+    data:
+      secret.yaml: |
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: gcs-credentials
+          namespace: default
+          annotations:
+            bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
+        type: Opaque
+        data:
+          service-account.json: {{ (index .MgtmResources "Bucket").status.serviceAccountCredentials }}
+      pod.yaml: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: create-and-upload-to-gcs
+          namespace: default
+          annotations:
+            bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
+        spec:
+          containers:
+          - name: uploader
+            image: google/cloud-sdk:slim
+            command: ["bash"]
+            args:
+              - "-c"
+              - |
+                echo "Hello world" > /tmp/hello.txt
+                gcloud auth activate-service-account --key-file=/var/run/secrets/cloud.google.com/service-account.json
+                gsutil cp /tmp/hello.txt gs://{{ (index .MgtmResources "Bucket").spec.bucketName }}
+            volumeMounts:
+              - name: gcp-sa
+                mountPath: /var/run/secrets/cloud.google.com/
+                readOnly: true
+          volumes:
+            - name: gcp-sa
+              secret:
+                secretName: gcs-credentials
+    EOF
+    ```
 
 After posting it a Bucket instance is created in the management cluster by Sveltos. 
 

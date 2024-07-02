@@ -37,6 +37,7 @@ The commands will download the calico.yaml manifest file and afterwards create a
 The YAML definition below exemplifies a ConfigMap that holds multiple resources[^2]. When a ClusterProfile instance references the ConfigMap, a `Namespace` and a `Deployment` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
 
 ```yaml
+cat > nginx_cm.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -69,11 +70,13 @@ data:
             image: nginx:latest # public image from Docker Hub
             ports:
             - containerPort: 80
+EOF
 ```
 
 Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the ConfigMap and the Secret created above.
 
 ```yaml
+cat > clusterprofile_deploy_nginx.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -87,10 +90,11 @@ spec:
   - name: calico
     namespace: default
     kind: Secret
+EOF
 ```
 
 !!! note
-  The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
+    The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
 
 When a ClusterProfile references a ConfigMap or a Secret, the **kind** and **name** fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.
 

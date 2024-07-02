@@ -195,11 +195,11 @@ $ kubectl get clustersummary,clusterprofile -A
 Even if the Kubernetes add-ons are not deployed, both resources will be available to the management cluster.
 
 ```bash
-$ k get clusterprofile <clusterprofile name> -n <clusterprofile namespace> -o jsonpath='{.status}'
+$ kubectl get clusterprofile <clusterprofile name> -n <clusterprofile namespace> -o jsonpath='{.status}'
 ```
 
 ```bash
-$ k get clustersummary <clustersummary name> -n <clustersummary namespace> -o jsonpath='{.status}'
+$ kubectl get clustersummary <clustersummary name> -n <clustersummary namespace> -o jsonpath='{.status}'
 ```
 
 We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click [here](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) to join us.
