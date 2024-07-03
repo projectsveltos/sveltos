@@ -10,7 +10,7 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-## sveltosctl
+## Introduction to sveltosctl
 
 The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is the command-line interface (CLI) for Sveltos. It is an available option to query Sveltos resources but not a mandatory option.
 

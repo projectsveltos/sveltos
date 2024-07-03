@@ -29,6 +29,7 @@ Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
 !!! example
     ```yaml
     cat > crossplane_google_bucket.yaml <<EOF
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:

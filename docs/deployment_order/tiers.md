@@ -38,57 +38,61 @@ Let's consider a scenario with managed clusters labeled by environment (`env:pro
 
 An initial ClusterProfile named `validation-and-monitoring` deploys Kyverno (v3.1.1), Prometheus (23.4.0), and Grafana (6.58.9) across all clusters (`env:prod`).
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: validation-and-monitoring
-spec:
-  clusterSelector: env=prod
-  continueOnConflict: true
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.1.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-  - repositoryURL:    https://prometheus-community.github.io/helm-charts
-    repositoryName:   prometheus-community
-    chartName:        prometheus-community/prometheus
-    chartVersion:     23.4.0
-    releaseName:      prometheus
-    releaseNamespace: prometheus
-    helmChartAction:  Install
-  - repositoryURL:    https://grafana.github.io/helm-charts
-    repositoryName:   grafana
-    chartName:        grafana/grafana
-    chartVersion:     6.58.9
-    releaseName:      grafana
-    releaseNamespace: grafana
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: validation-and-monitoring
+    spec:
+      clusterSelector: env=prod
+      continueOnConflict: true
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.1.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+      - repositoryURL:    https://prometheus-community.github.io/helm-charts
+        repositoryName:   prometheus-community
+        chartName:        prometheus-community/prometheus
+        chartVersion:     23.4.0
+        releaseName:      prometheus
+        releaseNamespace: prometheus
+        helmChartAction:  Install
+      - repositoryURL:    https://grafana.github.io/helm-charts
+        repositoryName:   grafana
+        chartName:        grafana/grafana
+        chartVersion:     6.58.9
+        releaseName:      grafana
+        releaseNamespace: grafana
+        helmChartAction:  Install
+    ```
 
 Now, imagine you want to upgrade Kyverno to version 3.1.4 only in clusters within the `region:west` area. 
 Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would result in a conflict because both profiles manage Kyverno. By default, the first one wins (validation-and-monitoring), and the upgrade wouldn't occur.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
- name: kyverno
-spec:
- clusterSelector: region=west
- helmCharts:
- - repositoryURL:    https://kyverno.github.io/kyverno/
-   repositoryName:   kyverno
-   chartName:        kyverno/kyverno
-   chartVersion:     v3.1.4
-   releaseName:      kyverno-latest
-   releaseNamespace: kyverno
-   helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+    name: kyverno
+    spec:
+    clusterSelector: region=west
+    helmCharts:
+    - repositoryURL:    https://kyverno.github.io/kyverno/
+      repositoryName:   kyverno
+      chartName:        kyverno/kyverno
+      chartVersion:     v3.1.4
+      releaseName:      kyverno-latest
+      releaseNamespace: kyverno
+      helmChartAction:  Install
+    ```
 
 ### Resolving the Conflict with Tiers
 
@@ -96,23 +100,25 @@ spec:
 
 We can leverage tiers to prioritize the upgrade for west regions. Here's a revised ClusterProfile targeting `region:west` for Kyverno with a `tier` value of 50 (lower than the default 100):
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  tier: 50
-  clusterSelector: region=west
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.1.4
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      tier: 50
+      clusterSelector: region=west
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.1.4
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
 
 With this configuration, the `kyverno` ClusterProfile (tier:50) overrides the default `validation-and-monitoring` profile (tier:100) for Kyverno deployment in west clusters. This ensures Kyverno gets upgraded to version 3.1.4 only in the desired region.
 

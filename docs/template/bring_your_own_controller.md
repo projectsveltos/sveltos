@@ -73,6 +73,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
 !!! example
     ```yaml
     cat > bucket.yaml <<EOF
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:

@@ -35,79 +35,87 @@ Suppose you are managing several Kubernetes clusters with different versions and
 
 #### ClusterProfiles
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-gatekeeper-3-10
-spec:
-  clusterSelector: gatekeeper=v3-10
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
-    repositoryName: gatekeeper
-    chartName: gatekeeper/gatekeeper
-    chartVersion:  3.10.0
-    releaseName: gatekeeper
-    releaseNamespace: gatekeeper
-    helmChartAction: Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-gatekeeper-3-10
+    spec:
+      clusterSelector: gatekeeper=v3-10
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
+        repositoryName: gatekeeper
+        chartName: gatekeeper/gatekeeper
+        chartVersion:  3.10.0
+        releaseName: gatekeeper
+        releaseNamespace: gatekeeper
+        helmChartAction: Install
+    ```
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-gatekeeper-3-9
-spec:
-  clusterSelector: gatekeeper=v3-9
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
-    repositoryName: gatekeeper
-    chartName: gatekeeper/gatekeeper
-    chartVersion:  3.9.0
-    releaseName: gatekeeper
-    releaseNamespace: gatekeeper
-    helmChartAction: Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-gatekeeper-3-9
+    spec:
+      clusterSelector: gatekeeper=v3-9
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL: https://open-policy-agent.github.io/gatekeeper/charts
+        repositoryName: gatekeeper
+        chartName: gatekeeper/gatekeeper
+        chartVersion:  3.9.0
+        releaseName: gatekeeper
+        releaseNamespace: gatekeeper
+        helmChartAction: Install
+    ```
 
 #### Classifiers
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: Classifier
-metadata:
-  name: deploy-gatekeeper-3-10
-spec:
-  classifierLabels:
-  - key: gatekeeper
-    value: v3-10
-  kubernetesVersionConstraints:
-  - comparison: GreaterThanOrEqualTo
-    version: 1.25.0
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: Classifier
+    metadata:
+      name: deploy-gatekeeper-3-10
+    spec:
+      classifierLabels:
+      - key: gatekeeper
+        value: v3-10
+      kubernetesVersionConstraints:
+      - comparison: GreaterThanOrEqualTo
+        version: 1.25.0
+    ```
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: Classifier
-metadata:
-  name: deploy-gatekeeper-3-9
-spec:
-  classifierLabels:
-  - key: gatekeeper
-    value: v3-9
-  kubernetesVersionConstraints:
-  - comparison: GreaterThanOrEqualTo
-    version: 1.24.0
-  - comparison: LessThan
-    version: 1.25.0
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: Classifier
+    metadata:
+      name: deploy-gatekeeper-3-9
+    spec:
+      classifierLabels:
+      - key: gatekeeper
+        value: v3-9
+      kubernetesVersionConstraints:
+      - comparison: GreaterThanOrEqualTo
+        version: 1.24.0
+      - comparison: LessThan
+        version: 1.25.0
+    ```
 
 Based on the above configuration, we achieved the below.
 
 1. Any cluster with a Kubernetes version v1.24.x will get the label _gatekeeper:v3.9_ added and then the Gatekeeper v3.9.0 helm chart will be deployed;
-2. Any cluster with a Kubernetes version v1.25.x will get the label _gatekeeper:v3.10_ added and then the Gatekeeper v3.10.0 helm chart will be deployed;
-3. As soon as a cluster is upgraded from Kubernetes v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
+1. Any cluster with a Kubernetes version v1.25.x will get the label _gatekeeper:v3.10_ added and then the Gatekeeper v3.10.0 helm chart will be deployed;
+1. As soon as a cluster is upgraded from Kubernetes v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
 
 ### More Resources
 
@@ -116,8 +124,8 @@ To read more about the classifier configuration, with examles using the resource
 ### More Examples
 
 1. Classify clusters based on their Kubernetes version [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/kubernetes_version.yaml)
-2. Classify clusters based on the number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
-3. Classify clusters based on their Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
+1. Classify clusters based on the number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
+1. Classify clusters based on their Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
 
 
 ### Classifier CRD - Deep dive
@@ -135,55 +143,59 @@ The field *deployedResourceConstraints* can be used to classify a cluster based 
 
 Following classifier, matches any cluster with a Service with label __sveltos:fv__.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: Classifier
-metadata:
-  name: sveltos-service
-spec:
-  classifierLabels:
-  - key: sveltos-service
-    value: present
-  deployedResourceConstraint:
-    resourceSelectors:
-    - group: ""
-      version: v1
-      kind: Service
-      labelFilters:
-      - key: sveltos
-        operation: Equal
-        value: fv
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: Classifier
+    metadata:
+      name: sveltos-service
+    spec:
+      classifierLabels:
+      - key: sveltos-service
+        value: present
+      deployedResourceConstraint:
+        resourceSelectors:
+        - group: ""
+          version: v1
+          kind: Service
+          labelFilters:
+          - key: sveltos
+            operation: Equal
+            value: fv
+    ```
 
 Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_ 
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: Classifier
-metadata:
-  name: acme-staging-v02
-spec:
-  classifierLabels:
-  - key: issuer
-    value: acme-staging-v02
-  deployedResourceConstraints:
-    resourceSelectors:
-    - group: "cert-manager.io"
-      version: v1
-      kind: ClusterIssuer
-      evaluate: |
-        function evaluate()
-          hs = {}
-          hs.matching = false
-          hs.message = ""
-          if obj.spec.acme ~= nil then
-            if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
-              hs.matching = true
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: Classifier
+    metadata:
+      name: acme-staging-v02
+    spec:
+      classifierLabels:
+      - key: issuer
+        value: acme-staging-v02
+      deployedResourceConstraints:
+        resourceSelectors:
+        - group: "cert-manager.io"
+          version: v1
+          kind: ClusterIssuer
+          evaluate: |
+            function evaluate()
+              hs = {}
+              hs.matching = false
+              hs.message = ""
+              if obj.spec.acme ~= nil then
+                if string.find(obj.spec.acme.server, "acme-staging-v02.api.letsencrypt.org", 1, true) then
+                  hs.matching = true
+                end
+              end
+              return hs
             end
-          end
-          return hs
-        end
-```
+    ```
 
 A Classifier can also look at the resources of different kinds all together.
 
@@ -198,6 +210,6 @@ The Lua function must return a struct with:
 ### Classifier controller configuration
 
 1. *concurrent-reconciles*: By default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
-2. *worker-number*: Number of workers performing long running task. By default this is set to 20. If number of Classifier instances is in the hundreds, please consider increasing this;
-3. *report-mode*: By default Classifier controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each Classifier Agent send back ClassifierReport to management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are update of ClassifierReports.
-4. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable frm each managed cluster.
+1. *worker-number*: Number of workers performing long running task. By default this is set to 20. If number of Classifier instances is in the hundreds, please consider increasing this;
+1. *report-mode*: By default Classifier controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each Classifier Agent send back ClassifierReport to management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are update of ClassifierReports.
+1. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable frm each managed cluster.

@@ -61,6 +61,7 @@ Imagine a SveltosCluster named __mgmt__ residing in the __mgmt__ namespace, with
 If these conditions are met, Sveltos will generate a __ClusterSummary__ within the mgmt namespace. This ClusterSummary will resemble the following:
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterSummary
 metadata:

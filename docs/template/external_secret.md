@@ -76,82 +76,86 @@ $ kubectl create secret generic gcpsm-secret --from-file=secret-access-credentia
 
 Now configure External Secret Operator to fetch secrets from Google Cloud Secret Manager and creates a secret in the Kubernetes management cluster.
 
-```yaml
->cat <<EOF | kubectl apply -f -
-apiVersion: external-secrets.io/v1beta1
-kind: SecretStore
-metadata:
-  name: gcp-backend
-spec:
-  provider:
-      gcpsm:
-        auth:
-          secretRef:
-            secretAccessKeySecretRef:
-              name: gcpsm-secret
-              key: secret-access-credentials
-        projectID: $yourproject
----
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: gcp-external-secret
-spec:
-  secretStoreRef:
+!!! example
+    ```yaml
+    cat > secretstore.yaml <<EOF
+    ---
+    apiVersion: external-secrets.io/v1beta1
     kind: SecretStore
-    name: gcp-backend
-  target:
-    name: imported-secret
-  data:
-  - secretKey: content
-    remoteRef:
-      key: yoursecret
-EOF
-```
+    metadata:
+      name: gcp-backend
+    spec:
+      provider:
+          gcpsm:
+            auth:
+              secretRef:
+                secretAccessKeySecretRef:
+                  name: gcpsm-secret
+                  key: secret-access-credentials
+            projectID: $yourproject
+    ---
+    apiVersion: external-secrets.io/v1beta1
+    kind: ExternalSecret
+    metadata:
+      name: gcp-external-secret
+    spec:
+      secretStoreRef:
+        kind: SecretStore
+        name: gcp-backend
+      target:
+        name: imported-secret
+      data:
+      - secretKey: content
+        remoteRef:
+          key: yoursecret
+    EOF
+    ```
 
 The secret __default/imported-secret__ has been created by External Secret Operator in the management cluster.
 
 Now we can configure Sveltos to distribute such content to all managed clusters matching Kubernetes label selector __env=fv__
 
-```yaml
->cat <<EOF | kubectl apply -f -
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-resources
-spec:
-  clusterSelector: env=fv
-  templateResourceRefs:
-  - resource:
-      apiVersion: v1
-      kind: Secret
-      name: imported-secret
-      namespace: default
-    identifier: ExternalSecret
-  policyRefs:
-  - kind: ConfigMap
-    name: info
-    namespace: default
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: info
-  namespace: default
-  annotations:
-    projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
-data:
-  secret.yaml: |
-    # ExternalSecret now references the Secret created by External Secret Operator
-    apiVersion: v1
-    kind: Secret
+!!! example
+    ```yaml
+    cat > clusterprofile_extsecret.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
     metadata:
-      name: eso
-      namespace: {{ (index .MgmtResources "ExternalSecret").metadata.namespace }}
+      name: deploy-resources
+    spec:
+      clusterSelector: env=fv
+      templateResourceRefs:
+      - resource:
+          apiVersion: v1
+          kind: Secret
+          name: imported-secret
+          namespace: default
+        identifier: ExternalSecret
+      policyRefs:
+      - kind: ConfigMap
+        name: info
+        namespace: default
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: info
+      namespace: default
+      annotations:
+        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
     data:
-      content: {{ (index .MgmtResources "ExternalSecret").data.content }}
-EOF
-```
+      secret.yaml: |
+        # ExternalSecret now references the Secret created by External Secret Operator
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: eso
+          namespace: {{ (index .MgmtResources "ExternalSecret").metadata.namespace }}
+        data:
+          content: {{ (index .MgmtResources "ExternalSecret").data.content }}
+    EOF
+    ```
 
 Using sveltos CLI, it is possible to verify Sveltos has propagated the information to all managed clusters.
 

@@ -107,24 +107,26 @@ The *stopMatchingBehavior* field specifies the behavior when a cluster no longer
 
 For instance 
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: Profile
-metadata:
-  name: kyverno
-  namespace: eng
-spec:
-  stopMatchingBehavior: WithdrawPolicies
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example "Example - Profile Kyverno Deployment"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: Profile
+    metadata:
+      name: kyverno
+      namespace: eng
+    spec:
+      stopMatchingBehavior: WithdrawPolicies
+      clusterSelector: env=prod
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
 
 When a cluster matches the Profile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the Profile, the Kyverno Helm chart will be uninstalled. However, if the *stopMatchingBehavior* property is set to *LeavePolicies*, Sveltos will retain the Kyverno Helm chart in the cluster.
 
@@ -159,44 +161,46 @@ Consider a scenario where a new cluster with the label env:prod is created. The 
 - Validate Deployment Health: Perform health checks on each deployment within the kyverno namespace. Verify that the number of active replicas matches the requested replicas;
 - Successful Deployment: Once the health checks are successfully completed, Sveltos considers the Profile as successfully deployed.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: Profile
-metadata:
-  name: kyverno
-  namespace: eng
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-    validateHealths:
-    - name: deployment-health
-      featureID: Helm
-      group: "apps"
-      version: "v1"
-      kind: "Deployment"
-      namespace: kyverno
-      script: |
-        function evaluate()
-          hs = {}
-          hs.healthy = false
-          hs.message = "available replicas not matching requested replicas"
-          if obj.status ~= nil then
-            if obj.status.availableReplicas ~= nil then
-              if obj.status.availableReplicas == obj.spec.replicas then
-                hs.healthy = true
+!!! example "Example - Profile Kyverno and Lua"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: Profile
+    metadata:
+      name: kyverno
+      namespace: eng
+    spec:
+      clusterSelector: env=prod
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+        validateHealths:
+        - name: deployment-health
+          featureID: Helm
+          group: "apps"
+          version: "v1"
+          kind: "Deployment"
+          namespace: kyverno
+          script: |
+            function evaluate()
+              hs = {}
+              hs.healthy = false
+              hs.message = "available replicas not matching requested replicas"
+              if obj.status ~= nil then
+                if obj.status.availableReplicas ~= nil then
+                  if obj.status.availableReplicas == obj.spec.replicas then
+                    hs.healthy = true
+                  end
+                end
               end
+              return hs
             end
-          end
-          return hs
-        end
-```
+    ```
 
 ### Spec.TemplateResourceRefs
 
@@ -210,6 +214,7 @@ The *dependsOn* property specifies a list of other Profiles that this instance r
 For example, profile-a can depend on another *profile-b*. This implies that any Helm charts or raw YAML files associated with CProfile A will not be deployed until all add-ons and applications specified in Profile B have been successfully provisioned.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: Profile
 metadata:

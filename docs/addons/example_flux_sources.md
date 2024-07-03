@@ -30,6 +30,7 @@ Install and run Flux in the management cluster and configure it to synchronise t
 Use a __GitRepository__ resource similar to the below.
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -49,21 +50,23 @@ spec:
 
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
 
-```yaml
-cat > clusterprofile_nginx_ingress.yaml <<EOF
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-nginx-ingress
-spec:
-  clusterSelector: env=fv
-  policyRefs:
-  - kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-    path: nginx-ingress
-EOF
-```
+!!! example "Example - ClusterProfile Nginx Ingress Definition"
+    ```yaml
+    cat > clusterprofile_nginx_ingress.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-nginx-ingress
+    spec:
+      clusterSelector: env=fv
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: nginx-ingress
+    EOF
+    ```
 
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
 
@@ -94,6 +97,7 @@ Install and run Flux in your management cluster and configure it to synchronise 
 Use a __GitRepository__ resource similar to the below.
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -113,47 +117,51 @@ spec:
 
 Define a ClusterProfile to deploy the Kyverno helm chart.
 
-```yaml
-cat > clusterprofile_kyverno.yaml <<EOF
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-kyverno
-spec:
-  clusterSelector: env=fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.1.4
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-EOF
-```
+!!! example "Example - ClusterProfile Kyverno"
+    ```yaml
+    cat > clusterprofile_kyverno.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+    spec:
+      clusterSelector: env=fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.1.4
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    EOF
+    ```
 
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _kyverno__ directory as the source of the deployment.
 
 This directory contains a list of Kyverno ClusterPolicies.
 
-```yaml
-cat > clusterprofile_kyverno_policies.yaml <<EOF
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-kyverno-policies
-spec:
-  clusterSelector: env=fv
-  policyRefs:
-  - kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-    path: kyverno
-  dependsOn: 
-  - deploy-kyverno
-EOF
-```
+!!! example "Example - ClusterProfile Kyverno Policies"
+    ```yaml
+    cat > clusterprofile_kyverno_policies.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno-policies
+    spec:
+      clusterSelector: env=fv
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: kyverno
+      dependsOn: 
+      - deploy-kyverno
+    EOF
+    ```
 
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.
 
@@ -186,25 +194,31 @@ Let's try it out! The content in the "template" directory of this [repository](h
 
 ### Template Definition
 
-``` yaml
-# Sveltos will instantiate this template before deploying to matching managed cluster
-# Sveltos will get the ClusterAPI Cluster instance representing the cluster in the
-# managed cluster, and use that resource data to instintiate this ConfigMap before
-# deploying it
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Cluster.metadata.name }}
-  namespace: default
-data:
-  controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
-```
+!!! example "Example - ConfigMap Definition"
+    ```yaml
+    cat > cm.yaml <<EOF
+    # Sveltos will instantiate this template before deploying to matching managed cluster
+    # Sveltos will get the ClusterAPI Cluster instance representing the cluster in the
+    # managed cluster, and use that resource data to instintiate this ConfigMap before
+    # deploying it
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ .Cluster.metadata.name }}
+      namespace: default
+    data:
+      controlPlaneEndpoint: "{{ .Cluster.spec.controlPlaneEndpoint.host }}:{{ .Cluster.spec.controlPlaneEndpoint.port }}"
+    EOF
+    ```
 
 ### GitRepository Definition
 
-Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
+!!! note
+    Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -224,25 +238,30 @@ spec:
 
 ### ClusterProfile Definition
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: flux-template-example
-spec:
-  clusterSelector: env=fv
-  policyRefs:
-  - kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-    path: template
-```
+!!! example "Example - ClusterProfile Flux Definition"
+    ```yaml
+    cat > clusterprofile_flux.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: flux-template-example
+    spec:
+      clusterSelector: env=fv
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: template
+    EOF
+    ```
 
 The ClusterProfile will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.
 
 An example of a deployed __ConfigMap__ in the managed cluster can be found below.
 
 ```yaml
+---
 apiVersion: v1
 data:
   controlPlaneEndpoint: 172.18.0.4:6443
@@ -258,20 +277,24 @@ metadata:
 
 The __path__ field within a policyRefs object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: flux-system
-spec:
-  clusterSelector: region=west
-  syncMode: Continuous
-  policyRefs:
-  - kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-    path: '{{ index .Cluster.metadata.annotations "environment" }}/helloWorld'
-```
+!!! example "Example - ClusterProfile Flux Region West"
+    ```yaml
+    cat > clusterprofile_flux_region_west.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: flux-system
+    spec:
+      clusterSelector: region=west
+      syncMode: Continuous
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: '{{ index .Cluster.metadata.annotations "environment" }}/helloWorld'
+    EOF
+    ```
 
 Sveltos uses the cluster instance in the management cluster to populate the template in the path field.
 The template expression ```{{ index .Cluster.metadata.annotations "environment" }}``` retrieves the value of the annotation named __environment__ from the cluster's metadata.
@@ -287,6 +310,7 @@ Remember to adapt the provided resources to your specific repository structure, 
 
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

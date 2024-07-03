@@ -62,48 +62,50 @@ $ sveltosctl show addons
 
 With the ConfigMap __postgresql-job__ containing a Job that creates a table Todo in the database[^2], the below YAML definition instruct Sveltos to wait for the PostgreSQL Deployment to be healthy and only then deply the Job.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: postgresql-deployment-health
-spec:
- collectResources: false
- resourceSelectors:
- - group: "apps"
-   version: "v1"
-   kind: "Deployment"
-   namespace: todo
-   evaluate: |
-    function evaluate()
-      hs = {}
-      hs.matching = false
-      hs.message = ""
-      if obj.metadata.name == "postgresql" then
-        if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nil then
-            if obj.status.availableReplicas == obj.spec.replicas then
-              hs.matching = true
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: postgresql-deployment-health
+    spec:
+    collectResources: false
+    resourceSelectors:
+    - group: "apps"
+      version: "v1"
+      kind: "Deployment"
+      namespace: todo
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          hs.message = ""
+          if obj.metadata.name == "postgresql" then
+            if obj.status ~= nil then
+              if obj.status.availableReplicas ~= nil then
+                if obj.status.availableReplicas == obj.spec.replicas then
+                  hs.matching = true
+                end
+              end
             end
           end
+          return hs
         end
-      end
-      return hs
-    end
----
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: deploy-insert-table-job
-spec:
- sourceClusterSelector: env=fv
- eventSourceName: postgresql-deployment-health
- stopMatchingBehavior: LeavePolicies
- policyRefs:
- - name: postgresql-job
-   namespace: default
-   kind: ConfigMap
-```
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
+    metadata:
+    name: deploy-insert-table-job
+    spec:
+    sourceClusterSelector: env=fv
+    eventSourceName: postgresql-deployment-health
+    stopMatchingBehavior: LeavePolicies
+    policyRefs:
+    - name: postgresql-job
+      namespace: default
+      kind: ConfigMap
+    ```
 
 As soon as the PostgreSQL Deployment is `healthy`, Sveltos will deploy the Job. The Job will create table __Todo__.
 
@@ -122,46 +124,48 @@ $ sveltosctl show addons
 
 With the ConfigMap __todo-app__ containing the todo app (ServiceAccount, Deployment, Service)[^3], the below YAML defintion instructs Sveltos to deploy the `todo` app only after previous Job is complete.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: postgresql-job-completed
-spec:
- collectResources: false
- resourceSelectors:
- - group: "batch"
-   version: "v1"
-   kind: "Job"
-   namespace: todo
-   evaluate: |
-    function evaluate()
-      hs = {}
-      hs.matching = false
-      hs.message = ""
-      if obj.metadata.name == "todo-table" then
-        if obj.status ~= nil then
-          if obj.status.succeeded == 1 then
-            hs.matching = true
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: postgresql-job-completed
+    spec:
+    collectResources: false
+    resourceSelectors:
+    - group: "batch"
+      version: "v1"
+      kind: "Job"
+      namespace: todo
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          hs.message = ""
+          if obj.metadata.name == "todo-table" then
+            if obj.status ~= nil then
+              if obj.status.succeeded == 1 then
+                hs.matching = true
+              end
+            end
           end
+          return hs
         end
-      end
-      return hs
-    end
----
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: deploy-todo-app
-spec:
- sourceClusterSelector: env=fv
- eventSourceName: postgresql-job-completed
- stopMatchingBehavior: LeavePolicies
- policyRefs:
- - name: todo-app
-   namespace: default
-   kind: ConfigMap
-```
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
+    metadata:
+    name: deploy-todo-app
+    spec:
+    sourceClusterSelector: env=fv
+    eventSourceName: postgresql-job-completed
+    stopMatchingBehavior: LeavePolicies
+    policyRefs:
+    - name: todo-app
+      namespace: default
+      kind: ConfigMap
+    ```
 
 ```bash
 $ sveltosctl show addons
@@ -182,48 +186,50 @@ $ sveltosctl show addons
 
 With the ConfigMap __todo-insert-data__ containing a Job which will add an entry to databse[^4], the below YAML definition instructs Sveltos to deploy a Job only after the `todo` app is `healthy`.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: todo-app-health
-spec:
- collectResources: false
- resourceSelectors:
- - group: "apps"
-   version: "v1"
-   kind: "Deployment"
-   namespace: todo
-   evaluate: |
-    function evaluate()
-      hs = {}
-      hs.matching = false
-      hs.message = ""
-      if obj.metadata.name == "todo-gitops" then
-        if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nil then
-            if obj.status.availableReplicas == obj.spec.replicas then
-              hs.matching = true
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: todo-app-health
+    spec:
+    collectResources: false
+    resourceSelectors:
+    - group: "apps"
+      version: "v1"
+      kind: "Deployment"
+      namespace: todo
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          hs.message = ""
+          if obj.metadata.name == "todo-gitops" then
+            if obj.status ~= nil then
+              if obj.status.availableReplicas ~= nil then
+                if obj.status.availableReplicas == obj.spec.replicas then
+                  hs.matching = true
+                end
+              end
             end
           end
+          return hs
         end
-      end
-      return hs
-    end
----
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: insert-data
-spec:
- sourceClusterSelector: env=fv
- eventSourceName: todo-app-health
- stopMatchingBehavior: LeavePolicies
- policyRefs:
- - name: todo-insert-data
-   namespace: default
-   kind: ConfigMap
-```
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
+    metadata:
+    name: insert-data
+    spec:
+    sourceClusterSelector: env=fv
+    eventSourceName: todo-app-health
+    stopMatchingBehavior: LeavePolicies
+    policyRefs:
+    - name: todo-insert-data
+      namespace: default
+      kind: ConfigMap
+    ```
 
 ## Scenario Resources
 

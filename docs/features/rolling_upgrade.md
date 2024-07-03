@@ -20,22 +20,24 @@ ConfigMaps and Secrets are Kubernetes resources designed to decouple configurati
 
 Sveltos has the capability to **monitor** changes within ConfigMap and Secret resources and facilitate rolling upgrades for Deployments, StatefulSets, and DaemonSets. This functionality can be activated by setting the __reloader__ field to `true` in the ClusterProfile, as demonstrated in the below YAML configuration.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: nginx
-spec:
-  clusterSelector: env=fv
-  reloader: true
-  policyRefs:
-  - name: nginx-data
-    namespace: default
-    kind: ConfigMap
-  - name: nginx
-    namespace: default
-    kind: ConfigMap
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: nginx
+    spec:
+      clusterSelector: env=fv
+      reloader: true
+      policyRefs:
+      - name: nginx-data
+        namespace: default
+        kind: ConfigMap
+      - name: nginx
+        namespace: default
+        kind: ConfigMap
+    ```
 
 The __nginx__ ConfigMap contains a Deployment mounting a ConfigMap[^1].
 
@@ -63,6 +65,7 @@ By setting the __reloader__ field to `true`, you enable **automated rolling upgr
 
 [^1]:__nginx-data__ ConfigMap
 ```yaml
+---
 apiVersion: v1
 data:
   configmap.yaml: "# nginx-config.yaml\napiVersion: v1\nkind: ConfigMap\nmetadata:\n
@@ -76,6 +79,7 @@ metadata:
 ```
 and the __nginx__ ConfigMap
 ```yaml
+---
 apiVersion: v1
 data:
   deployment.yaml: |

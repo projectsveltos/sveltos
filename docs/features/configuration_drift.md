@@ -19,6 +19,7 @@ _Configuration drift_ is a commonly used term to describe a change that takes pl
 Sveltos allows users to set the `sync` mode within a ClusterProfile to *ContinuousWithDriftDetection*. It enables Sveltos to monitor the state of managed clusters and detect configuration drift for any of the resources deployed by a ClusterProfile.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

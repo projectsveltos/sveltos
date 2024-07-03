@@ -11,7 +11,7 @@ authors:
     - Gianluca Mardente
 ---
 
-## Introduction to Sveltoctl Visibility
+## Sveltoctl Visibility
 
 **sveltosctl** nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.
 

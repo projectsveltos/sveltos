@@ -76,12 +76,25 @@ cluster12   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
 cluster13   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
 ```
 
+!!! tip
+    Starting v0.29.0, `sveltosctl` supports label assignment directly with the Sveltos cluster registration process. More details [here](../register/register-cluster.md).
+
+    !!! example "Sveltos Registration"
+        ```bash
+        $ sveltosctl register cluster \
+            --namespace=<namespace> \
+            --cluster=<cluster name> \
+            --fleet-cluster-context=<context name> \
+            --labels=key1=value1,key2=value2 
+        ```
+
 ### Step 3: Create the ClusterProfile
 
 The third step is to create a ClusterProfile Kubernetes resource and apply it to the **management** cluster.
 
 ```yaml
 cat > clusterprofile_kyverno.yaml <<EOF
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

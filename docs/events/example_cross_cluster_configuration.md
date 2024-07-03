@@ -29,88 +29,95 @@ To understand the concept mentioned above, let's have a look at a cross-cluster 
 Two clusters with the description below are defined.
 
 1. GKE cluster (labels env: production) registered with sveltos;
-2. A cluster-api cluster (label dep: eng) provisioned by docker.
+1. A cluster-api cluster (label dep: eng) provisioned by docker.
  
 #### Management Cluster
 
 1. An EventSource instance that matches any Service with a load balancer IP
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: load-balancer-service
-spec:
- collectResources: true
- resourceSelectors:
- - group: ""
-   version: "v1"
-   kind: "Service"
-   evaluate: |
-    function evaluate()
-      hs = {}
-      hs.matching = false
-      hs.message = ""
-      if obj.status.loadBalancer.ingress ~= nil then
-        hs.matching = true
-      end
-      return hs
-    end
-```
-2. An EventTrigger instance that references the EventSource defined above. It deploys the selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_.
-
-
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: service-policy
-spec:
- sourceClusterSelector: env=production
- destinationClusterSelector: dep=eng
- eventSourceName: load-balancer-service
- oneForEvent: true
- policyRefs:
- - name: service-policy
-   namespace: default
-   kind: ConfigMap
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: service-policy
-  namespace: default
-  annotations:
-    projectsveltos.io/template: ok
-data:
-  service.yaml: |
-    kind: Service
-    apiVersion: v1
+!!! example "Example - EventSource Definition"
+    ```yaml
+    cat > eventsource.yaml <<EOF
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
     metadata:
-      name: external-{{ .Resource.metadata.name }}
-      namespace: external
+    name: load-balancer-service
     spec:
-      selector: {}
-      ports:
-        {{ range $port := .Resource.spec.ports }}
-        - port: {{ $port.port }}
-          protocol: {{ $port.protocol }}
-          targetPort: {{ $port.targetPort }}
-        {{ end }}
-  endpoint.yaml: |
-    kind: Endpoints
-    apiVersion: v1
+    collectResources: true
+    resourceSelectors:
+    - group: ""
+      version: "v1"
+      kind: "Service"
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          hs.message = ""
+          if obj.status.loadBalancer.ingress ~= nil then
+            hs.matching = true
+          end
+          return hs
+        end
+    EOF
+    ```
+1. An EventTrigger instance that references the EventSource defined above. It deploys the selector-less Service and corresponding Endpoints in any cluster matching _destinationClusterSelector_.
+
+!!! example "Example - EventTrigger Definition"
+    ```yaml
+    cat > eventtrigger.yaml <<EOF
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
     metadata:
-       name: external-{{ .Resource.metadata.name }}
-       namespace: external
-    subsets:
-    - addresses:
-      - ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}
-      ports:
-        {{ range $port := .Resource.spec.ports }}
-        - port: {{ $port.port }}
-        {{ end }}
-```
+    name: service-policy
+    spec:
+    sourceClusterSelector: env=production
+    destinationClusterSelector: dep=eng
+    eventSourceName: load-balancer-service
+    oneForEvent: true
+    policyRefs:
+    - name: service-policy
+      namespace: default
+      kind: ConfigMap
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: service-policy
+      namespace: default
+      annotations:
+        projectsveltos.io/template: ok
+    data:
+      service.yaml: |
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: external-{{ .Resource.metadata.name }}
+          namespace: external
+        spec:
+          selector: {}
+          ports:
+            {{ range $port := .Resource.spec.ports }}
+            - port: {{ $port.port }}
+              protocol: {{ $port.protocol }}
+              targetPort: {{ $port.targetPort }}
+            {{ end }}
+      endpoint.yaml: |
+        kind: Endpoints
+        apiVersion: v1
+        metadata:
+          name: external-{{ .Resource.metadata.name }}
+          namespace: external
+        subsets:
+        - addresses:
+          - ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}
+          ports:
+            {{ range $port := .Resource.spec.ports }}
+            - port: {{ $port.port }}
+            {{ end }}
+    EOF
+    ```
 
 As mentioned above, we pass Sveltos a selector-less Service and we then specify our own Endpoints.
 
@@ -120,46 +127,46 @@ The Service and Endpoints are defined as templates and will be instantiated by S
 
 In the GKE cluster we create a deployment and a service of type *LoadBalancer*. 
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-deployment-50001
-spec:
-  selector:
-    matchLabels:
-      app: products
-      department: sales
-  replicas: 3
-  template:
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      labels:
+      name: my-deployment-50001
+    spec:
+      selector:
+        matchLabels:
+          app: products
+          department: sales
+      replicas: 3
+      template:
+        metadata:
+          labels:
+            app: products
+            department: sales
+        spec:
+          containers:
+          - name: hello
+            image: "us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0"
+            env:
+            - name: "PORT"
+              value: "50001"
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: my-lb-service
+    spec:
+      type: LoadBalancer
+      selector:
         app: products
         department: sales
-    spec:
-      containers:
-      - name: hello
-        image: "us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0"
-        env:
-        - name: "PORT"
-          value: "50001"
-```
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-lb-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: products
-    department: sales
-  ports:
-  - protocol: TCP
-    port: 60000
-    targetPort: 50001
-```
+      ports:
+      - protocol: TCP
+        port: 60000
+        targetPort: 50001
+    ```
 
 The Service will be assigned to an IP address.
 
@@ -218,26 +225,28 @@ So at this point now a pod in the cluster-api provisioned cluster can reach the 
 
 Let us create a namespace policy-demo and a busybox pod in the cluster-api provisioned cluster:
 
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    app: busybox
-  name: busybox
-  namespace: policy-demo
-spec:
-  containers:
-  - args:
-    - /bin/sh
-    - -c
-    - sleep 360000
-    image: busybox:1.28
-    imagePullPolicy: Always
-    name: busybox
-  nodeSelector:
-    kubernetes.io/os: linux
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      labels:
+        app: busybox
+      name: busybox
+      namespace: policy-demo
+    spec:
+      containers:
+      - args:
+        - /bin/sh
+        - -c
+        - sleep 360000
+        image: busybox:1.28
+        imagePullPolicy: Always
+        name: busybox
+      nodeSelector:
+        kubernetes.io/os: linux
+    ```
 
 Then reach the service in the GKE cluster from the busybox pod in the cluster-api provisioned cluster"
 

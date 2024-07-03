@@ -74,48 +74,50 @@ To use the rolling update strategy, simply set the `MaxUpdate` field in the Clus
 
 The following ClusterProfile Spec would update a maximum of 30% of matching clusters concurrently, and would check that the number of active replicas for all deployments in the kyverno namespace matche the requested replicas before declaring the update successful.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  clusterSelector: env=fv
-  syncMode: Continuous
-  maxUpdate: 30%
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-    values: |
-      admissionController:
-        replicas: 1
-  validateHealths:
-  - name: deployment-health
-    featureID: Helm
-    group: "apps"
-    version: "v1"
-    kind: "Deployment"
-    namespace: kyverno
-    script: |
-      function evaluate()
-        hs = {}
-        hs.healthy = false
-        hs.message = "available replicas not matching requested replicas"
-        if obj.status ~= nil then
-          if obj.status.availableReplicas ~= nil then
-            if obj.status.availableReplicas == obj.spec.replicas then
-              hs.healthy = true
+!!! example "Example ClusterProfile - Kyverno - Lua"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      clusterSelector: env=fv
+      syncMode: Continuous
+      maxUpdate: 30%
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+        values: |
+          admissionController:
+            replicas: 1
+      validateHealths:
+      - name: deployment-health
+        featureID: Helm
+        group: "apps"
+        version: "v1"
+        kind: "Deployment"
+        namespace: kyverno
+        script: |
+          function evaluate()
+            hs = {}
+            hs.healthy = false
+            hs.message = "available replicas not matching requested replicas"
+            if obj.status ~= nil then
+              if obj.status.availableReplicas ~= nil then
+                if obj.status.availableReplicas == obj.spec.replicas then
+                  hs.healthy = true
+                end
+              end
             end
+            return hs
           end
-        end
-        return hs
-      end
-```
+    ```
 
 ### Manual Verification Lua Script
 

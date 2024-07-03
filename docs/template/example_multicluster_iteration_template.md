@@ -22,36 +22,38 @@ The use case can be easily achieved by Sveltos with the use of the [templating](
 
 Sveltos `Event Framework` will be used to dynamically detect all **managed** clusters (of type SveltosCluster) that are different from the management cluster. The management cluster has the Sveltos cluster label set to `type:mgmt`.
 
-```yaml
-cat > eventsource_eventtrigger.yaml <<EOF
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: detect-clusters
-spec:
- collectResources: false
- resourceSelectors:
- - group: "lib.projectsveltos.io"
-   version: "v1alpha1"
-   kind: "SveltosCluster"
-   labelFilters:
-   - key: sveltos-agent
-     operation: Equal
-     value: present
-   - key: type
-     operation: Different
-     value: mgmt
----
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: detect-cluster
-spec:
- sourceClusterSelector: type=mgmt
- eventSourceName: detect-clusters
- oneForEvent: false
-EOF
-```
+!!! example "Example - EventSource and EventTrigger Definition"
+    ```yaml
+    cat > eventsource_eventtrigger.yaml <<EOF
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: detect-clusters
+    spec:
+    collectResources: false
+    resourceSelectors:
+    - group: "lib.projectsveltos.io"
+      version: "v1alpha1"
+      kind: "SveltosCluster"
+      labelFilters:
+      - key: sveltos-agent
+        operation: Equal
+        value: present
+      - key: type
+        operation: Different
+        value: mgmt
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
+    metadata:
+    name: detect-cluster
+    spec:
+    sourceClusterSelector: type=mgmt
+    eventSourceName: detect-clusters
+    oneForEvent: false
+    EOF
+    ```
 
 Once the above YAML definition file is applied to the **management** cluster, an `EventReport` resource named `detect-clusters` will be created within the `projectsveltos` namespace.
 
@@ -82,58 +84,62 @@ Lets assume the clusters where the service should get deployed has the cluster l
 
 ### ClusterProfile
 
-```yaml
-cat > clusterprofile_nats.yaml <<EOF
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-resources
-spec:
-  clusterSelector: type=nats
-  templateResourceRefs:
-  - resource:
-      apiVersion: lib.projectsveltos.io/v1alpha1
-      kind: EventReport
-      name: detect-clusters
-      namespace: projectsveltos
-    identifier: ClusterData
-  policyRefs:
-  - kind: ConfigMap
-    name: nats-services
-    namespace: default
-EOF
-```
+!!! example "Example - ClusterProfile Definition"
+    ```yaml
+    cat > clusterprofile_nats.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-resources
+    spec:
+      clusterSelector: type=nats
+      templateResourceRefs:
+      - resource:
+          apiVersion: lib.projectsveltos.io/v1alpha1
+          kind: EventReport
+          name: detect-clusters
+          namespace: projectsveltos
+        identifier: ClusterData
+      policyRefs:
+      - kind: ConfigMap
+        name: nats-services
+        namespace: default
+    EOF
+    ```
 
 ### ConfigMap
 
-```yaml
-cat > cm_nats_services.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nats-services
-  namespace: default
-  annotations:
-      projectsveltos.io/template: "true"
-data:
-  services.yaml: |
-    {{ range $cluster := (index .MgmtResources "ClusterData").spec.matchingResources }}
-      apiVersion: v1
-      kind: Service
-      metadata:
-        labels:
-          app: nats
-          tailscale.com/proxy-class: default
-        annotations:
-          tailscale.com/tailnet-fqdn: nats-{{ $cluster.name }}
-        name: nats-{{ $cluster.name }}
-      spec:
-        externalName: placeholder
-        type: ExternalName
+!!! example "Example - ConfigMap Definition"
+    ```yaml
+    cat > cm_nats_services.yaml <<EOF
     ---
-    {{ end }}
-EOF
-```
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nats-services
+      namespace: default
+      annotations:
+          projectsveltos.io/template: "true"
+    data:
+      services.yaml: |
+        {{ range $cluster := (index .MgmtResources "ClusterData").spec.matchingResources }}
+          apiVersion: v1
+          kind: Service
+          metadata:
+            labels:
+              app: nats
+              tailscale.com/proxy-class: default
+            annotations:
+              tailscale.com/tailnet-fqdn: nats-{{ $cluster.name }}
+            name: nats-{{ $cluster.name }}
+          spec:
+            externalName: placeholder
+            type: ExternalName
+        ---
+        {{ end }}
+    EOF
+    ```
 
 !!!note
     The ConfigMap resource will create the `nats-{{ $cluster.name }}` services in the `default` namespace on every cluster with the cluster label set to `type:nats`.

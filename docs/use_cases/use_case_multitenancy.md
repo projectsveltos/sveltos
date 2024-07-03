@@ -44,8 +44,9 @@ Similar to ClusterProfiles, Profiles utilize a cluster selector and list of add-
 
 Sveltos allows platform administrators to utilise the CRD with the name `RoleRequest` that will effectively grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy-sharing-cluster.md).
 
-!!! example "Example RoleRequest"
+!!! example "Example - RoleRequest"
     ```yaml
+    ---
     apiVersion: lib.projectsveltos.io/v1alpha1
     kind: RoleRequest
     metadata:
@@ -68,8 +69,9 @@ Based on the above YAML definition, we defined the below fields:
 
 The configMap in the example above can be something similar to be below YAML definition.
 
-!!! example "Example ConfigMap"
+!!! example "Example - ConfigMap"
     ```yaml
+    ---
     apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -96,8 +98,9 @@ Once the `RoleRequest` instance has been created, the defined tenant admin can u
 !!! note
     The service account name defined should be a Kubernetes `ServiceAccount` on the **management cluster**.
 
-!!! example "Example ClusterProfile"
+!!! example "Example - ClusterProfile"
     ```yaml
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:

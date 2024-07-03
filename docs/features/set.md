@@ -53,92 +53,100 @@ civo    cluster2  true  v1.28.7+k3s1  env=prod
 
 A ClusterSet named __prod__ is created with `clusterSelector: env=prod` to match all prod clusters and `maxReplicas: 1` to ensure only one cluster is active at a time.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterSet
-metadata:
-  name: prod
-spec:
-  clusterSelector: env=prod
-  maxReplicas: 1
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterSet
+    metadata:
+      name: prod
+    spec:
+      clusterSelector: env=prod
+      maxReplicas: 1
+    ```
 
 #### Sveltos Detects Matching Clusters
 Sveltos identifies both clusters as matches (`status.matchingClusterRefs`) and selects one (e.g., cluster2) as the active cluster (`status.selectedClusterRefs`).
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterSet
-metadata:
-  name: prod
-spec:
-  clusterSelector: env=prod
-  maxReplicas: 1
-status:
-  matchingClusterRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster1
-    namespace: civo
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster2
-    namespace: civo
-   namespace: civo
-  selectedClusterRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster2
-    namespace: civo
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterSet
+    metadata:
+      name: prod
+    spec:
+      clusterSelector: env=prod
+      maxReplicas: 1
+    status:
+      matchingClusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster1
+        namespace: civo
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster2
+        namespace: civo
+      namespace: civo
+      selectedClusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster2
+        namespace: civo
+    ```
 
 #### Deploy a ClusterProfile
 A ClusterProfile named kyverno is deployed referencing the prod ClusterSet.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  helmCharts:
-  - chartName: kyverno/kyverno
-    chartVersion: v3.0.1
-    helmChartAction: Install
-    releaseName: kyverno-latest
-    releaseNamespace: kyverno
-    repositoryName: kyverno
-    repositoryURL: https://kyverno.github.io/kyverno/
-  setRefs:
-  - prod # name of the ClusterSet
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      helmCharts:
+      - chartName: kyverno/kyverno
+        chartVersion: v3.0.1
+        helmChartAction: Install
+        releaseName: kyverno-latest
+        releaseNamespace: kyverno
+        repositoryName: kyverno
+        repositoryURL: https://kyverno.github.io/kyverno/
+      setRefs:
+      - prod # name of the ClusterSet
+    ```
 
 #### Sveltos Deploys Kyverno
 Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the cluster selected by the ClusterSet (e.g., civo/cluster3).
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  helmCharts:
-  - chartName: kyverno/kyverno
-    chartVersion: v3.0.1
-    helmChartAction: Install
-    releaseName: kyverno-latest
-    releaseNamespace: kyverno
-    repositoryName: kyverno
-    repositoryURL: https://kyverno.github.io/kyverno/
-  setRefs:
-  - prod
-status:
-  matchingClusters:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster2
-    namespace: civo
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      helmCharts:
+      - chartName: kyverno/kyverno
+        chartVersion: v3.0.1
+        helmChartAction: Install
+        releaseName: kyverno-latest
+        releaseNamespace: kyverno
+        repositoryName: kyverno
+        repositoryURL: https://kyverno.github.io/kyverno/
+      setRefs:
+      - prod
+    status:
+      matchingClusters:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster2
+        namespace: civo
+    ```
 
 ```
 $ sveltosctl show addons  
@@ -168,54 +176,58 @@ civo    cluster2       v1.28.7+k3s1
 
 The ClusterSet automatically picks another healthy cluster from the matching ones (e.g., __cluster1__) as the new active cluster.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterSet
-metadata:
-  name: prod
-spec:
-  clusterSelector: env=prod
-  maxReplicas: 1
-status:
-  matchingClusterRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster1
-    namespace: civo
-  selectedClusterRefs:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster1
-    namespace: civo
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterSet
+    metadata:
+      name: prod
+    spec:
+      clusterSelector: env=prod
+      maxReplicas: 1
+    status:
+      matchingClusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster1
+        namespace: civo
+      selectedClusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster1
+        namespace: civo
+    ```
 
 #### ClusterProfile Re-deploys Add-ons
 
 The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in this case) to the newly selected cluster (civo/cluster1).
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  helmCharts:
-  - chartName: kyverno/kyverno
-    chartVersion: v3.0.1
-    helmChartAction: Install
-    releaseName: kyverno-latest
-    releaseNamespace: kyverno
-    repositoryName: kyverno
-    repositoryURL: https://kyverno.github.io/kyverno/
-  setRefs:
-  - prod
-status:
-  matchingClusters:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
-    kind: SveltosCluster
-    name: cluster1
-    namespace: civo
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      helmCharts:
+      - chartName: kyverno/kyverno
+        chartVersion: v3.0.1
+        helmChartAction: Install
+        releaseName: kyverno-latest
+        releaseNamespace: kyverno
+        repositoryName: kyverno
+        repositoryURL: https://kyverno.github.io/kyverno/
+      setRefs:
+      - prod
+    status:
+      matchingClusters:
+      - apiVersion: lib.projectsveltos.io/v1alpha1
+        kind: SveltosCluster
+        name: cluster1
+        namespace: civo
+    ```
 
 ```
 $ sveltosctl show addons  

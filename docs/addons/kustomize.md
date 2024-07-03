@@ -18,6 +18,7 @@ authors:
 The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1]. The git repository, located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every managed cluster matching the Sveltos *clusterSelector*.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -34,6 +35,7 @@ spec:
 ```
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -70,6 +72,7 @@ The Kustomize build process can generate parameterized YAML manifests. Sveltos c
 Consider a Kustomize build output that includes a template for a deployment manifest:
 
 ```yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,6 +88,7 @@ spec:
 Now, imagine Sveltos receives a ClusterProfile containing the following key-value pairs:
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -111,6 +115,7 @@ During deployment, Sveltos injects these values into the template, replacing the
 This process transforms the template into the following concrete deployment manifest:
 
 ```yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -162,6 +167,7 @@ This is a fully working example:
 5. resources are finally deployed to managed cluster
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -186,6 +192,7 @@ spec:
 with GitRepository
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -215,6 +222,7 @@ sveltosctl show addons
 The __path__ field within a kustomizationRef object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -257,6 +265,7 @@ $ kubectl create configmap kustomize --from-file=kustomize.tar.gz
 The below ClusterProfile will use the Kustomize SDK to get all the resources needed for deployment. Then will deploy these in the `production` namespace of the managed clusters with the Sveltos clusterSelector set to *env=fv*.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -285,6 +294,7 @@ $ sveltosctl show addons
 
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

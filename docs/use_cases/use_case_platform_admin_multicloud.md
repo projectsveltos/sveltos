@@ -51,8 +51,9 @@ Sveltos allows platform administrators to utilise the CRD with the name `Cluster
 2. Where should they get deployed?
 3. List the add-ons deployed
 
-!!! example
+!!! example "Example - ClusterProfile"
     ```yaml
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
