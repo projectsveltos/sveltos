@@ -82,73 +82,77 @@ In this example, we want to identify if the ConfigMap is an OPA policy or anothe
 
 At the end, we return the `hs` object to Sveltos.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
-  name: opa-configmaps
-spec:
-  resourceSelectors:
-  - group: ""
-    version: v1
-    kind: ConfigMap
-  evaluateHealth: |
-    function evaluate()
-      statuses = {}
+!!! example "Example - HealthCheck Definition"
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
+      name: opa-configmaps
+    spec:
+      resourceSelectors:
+      - group: ""
+        version: v1
+        kind: ConfigMap
+      evaluateHealth: |
+        function evaluate()
+          statuses = {}
 
-      status = "Healthy"
-      message = ""
+          status = "Healthy"
+          message = ""
 
-      local opa_annotation = "openpolicyagent.org/policy-status"
-     
-      for _,resource in ipairs(resources) do
-        if resource.metadata.annotations ~= nil then
-          if resource.metadata.annotations[opa_annotation] ~= nil then
-            if obj.metadata.annotations[opa_annotation] == '{"status":"ok"}' then
-              status = "Healthy"
-              message = "Policy loaded successfully"
-            else
-              status = "Degraded"
-              message = obj.metadata.annotations[opa_annotation]
+          local opa_annotation = "openpolicyagent.org/policy-status"
+        
+          for _,resource in ipairs(resources) do
+            if resource.metadata.annotations ~= nil then
+              if resource.metadata.annotations[opa_annotation] ~= nil then
+                if obj.metadata.annotations[opa_annotation] == '{"status":"ok"}' then
+                  status = "Healthy"
+                  message = "Policy loaded successfully"
+                else
+                  status = "Degraded"
+                  message = obj.metadata.annotations[opa_annotation]
+                end
+                table.insert(statuses, {resource=resource, status = status, message = message})  
+              end
             end
-            table.insert(statuses, {resource=resource, status = status, message = message})  
+          end  
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses 
           end
+          return hs
         end
-      end  
-      local hs = {}
-      if #statuses > 0 then
-        hs.resources = statuses 
-      end
-      return hs
-    end
-```
+    ```
 
 The below `ClusterHealthCheck` resources, will send a Webex message as notification if a ConfigMap
 with an incorrect OPA policy is detected.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterHealthCheck
-metadata:
- name: hc
-spec:
- clusterSelector: env=fv
- livenessChecks:
- - name: deployment
-   type: HealthCheck
-   livenessSourceRef:
-     kind: HealthCheck
-     apiVersion: lib.projectsveltos.io/v1alpha1
-     name: opa-configmaps
- notifications:
- - name: webex
-   type: Webex
-   notificationRef:
-     apiVersion: v1
-     kind: Secret
-     name: webex
-     namespace: default
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterHealthCheck
+    metadata:
+    name: hc
+    spec:
+    clusterSelector: env=fv
+    livenessChecks:
+    - name: deployment
+      type: HealthCheck
+      livenessSourceRef:
+        kind: HealthCheck
+        apiVersion: lib.projectsveltos.io/v1alpha1
+        name: opa-configmaps
+    notifications:
+    - name: webex
+      type: Webex
+      notificationRef:
+        apiVersion: v1
+        kind: Secret
+        name: webex
+        namespace: default
+    ```
 
 !!! tip
 
@@ -182,35 +186,37 @@ Sveltos will ensure the tenant admin can define notifications only by looking at
 
 Sveltos suggests using the below Kyverno ClusterPolicy, which takes care of adding proper labels to each HealthCheck at creation time.
 
-```yaml
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: add-labels
-  annotations:
-    policies.kyverno.io/title: Add Labels
-    policies.kyverno.io/description: >-
-      Adds projectsveltos.io/admin-name label on each HealthCheck
-      created by tenant admin. It assumes each tenant admin is
-      represented in the management cluster by a ServiceAccount.
-spec:
-  background: false
-  rules:
-  - exclude:
-      any:
-      - clusterRoles:
-        - cluster-admin
-    match:
-      all:
-      - resources:
-          kinds:
-          - HealthCheck
-    mutate:
-      patchStrategicMerge:
-        metadata:
-          labels:
-            +(projectsveltos.io/serviceaccount-name): '{{serviceAccountName}}'
-            +(projectsveltos.io/serviceaccount-namespace): '{{serviceAccountNamespace}}'
-    name: add-labels
-  validationFailureAction: enforce
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: kyverno.io/v1
+    kind: ClusterPolicy
+    metadata:
+      name: add-labels
+      annotations:
+        policies.kyverno.io/title: Add Labels
+        policies.kyverno.io/description: >-
+          Adds projectsveltos.io/admin-name label on each HealthCheck
+          created by tenant admin. It assumes each tenant admin is
+          represented in the management cluster by a ServiceAccount.
+    spec:
+      background: false
+      rules:
+      - exclude:
+          any:
+          - clusterRoles:
+            - cluster-admin
+        match:
+          all:
+          - resources:
+              kinds:
+              - HealthCheck
+        mutate:
+          patchStrategicMerge:
+            metadata:
+              labels:
+                +(projectsveltos.io/serviceaccount-name): '{{serviceAccountName}}'
+                +(projectsveltos.io/serviceaccount-namespace): '{{serviceAccountNamespace}}'
+        name: add-labels
+      validationFailureAction: enforce
+    ```

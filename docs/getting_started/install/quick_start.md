@@ -11,7 +11,11 @@ authors:
     - Gianluca Mardente
 ---
 
-# Deploy Kubernetes Add-ons
+## What is Sveltos?
+
+Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, it can manage add-ons and applications to multiple clusters.
+
+## Deploy Kubernetes Add-ons
 
 The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action.
 
@@ -35,6 +39,7 @@ To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_
 !!! example "Example - Helm Chart"
     ```yaml
     cat > clusterprofile_kyverno.yaml <<EOF
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
@@ -82,6 +87,7 @@ To deploy all these resources in any cluster with labels *env: fv*, create a Clu
 !!! example "Example - Raw Yaml/Json"
     ```yaml
     cat > clusterprofile_gateway.yaml <<EOF
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:
@@ -103,6 +109,7 @@ Sveltos can work along with Flux to deploy content of Kustomize directories.
 !!! example "Example - Kustomize"
     ```yaml
     cat > clusterprofile_flux.yaml <<EOF
+    ---
     apiVersion: config.projectsveltos.io/v1alpha1
     kind: ClusterProfile
     metadata:

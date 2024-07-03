@@ -38,6 +38,7 @@ We can store all the required Kubernetes resources in a Git repository and let F
 Install and run Flux in the management cluster. Configure it to synchronise the Git repository which contains the `HelloWorld` manifests. Use a GitRepository resource similar to the below YAML definitions. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
 
 ```yaml
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -69,8 +70,9 @@ The above definition will look for updates of the main branch of the specified r
 Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository` resource and define the HelloWorld directory as the deployment source. In the below YAML definition, an application will get deployed on the managed cluster with the label selector set to *env=fv*.
 
 
-```bash
+```yaml
 cat > cluster_profile_flux.yaml <<EOF
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

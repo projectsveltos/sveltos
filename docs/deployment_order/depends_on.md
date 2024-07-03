@@ -18,114 +18,122 @@ ClusterProfile instances can leverage other ClusterProfiles to establish a deplo
 
 The below examaple displays a ClusterProfile which encapsulates all Kyverno policies for a cluster and declares a ClusterProfile dependency named `kyverno`, which is responsible for installing the Kyverno Helm chart.
 
-```yaml
-  apiVersion: config.projectsveltos.io/v1alpha1
-  kind: ClusterProfile
-  metadata:
-    name: kyverno-policies
-  spec:
-    clusterSelector: env=fv
-    dependsOn:
-    - kyverno
-    policyRefs:
-    - deploymentType: Remote
-      kind: ConfigMap
-      name: disallow-latest-tag
-      namespace: default
-      kind: ConfigMap
-      name: restrict-wildcard-verbs
-      namespace: default
-```
+!!! example ""
+    ```yaml
+    ---
+      apiVersion: config.projectsveltos.io/v1alpha1
+      kind: ClusterProfile
+      metadata:
+        name: kyverno-policies
+      spec:
+        clusterSelector: env=fv
+        dependsOn:
+        - kyverno
+        policyRefs:
+        - deploymentType: Remote
+          kind: ConfigMap
+          name: disallow-latest-tag
+          namespace: default
+          kind: ConfigMap
+          name: restrict-wildcard-verbs
+          namespace: default
+    ```
 [^1]
 
-```yaml
-  apiVersion: config.projectsveltos.io/v1alpha1
-  kind: ClusterProfile
-  metadata:
-    name: kyverno
-  spec:
-    clusterSelector: env=fv
-    helmCharts:
-    - chartName: kyverno/kyverno
-      chartVersion: v3.0.1
-      helmChartAction: Install
-      releaseName: kyverno-latest
-      releaseNamespace: kyverno
-      repositoryName: kyverno
-      repositoryURL: https://kyverno.github.io/kyverno/
-```
+!!! example ""
+    ```yaml
+      ---
+      apiVersion: config.projectsveltos.io/v1alpha1
+      kind: ClusterProfile
+      metadata:
+        name: kyverno
+      spec:
+        clusterSelector: env=fv
+        helmCharts:
+        - chartName: kyverno/kyverno
+          chartVersion: v3.0.1
+          helmChartAction: Install
+          releaseName: kyverno-latest
+          releaseNamespace: kyverno
+          repositoryName: kyverno
+          repositoryURL: https://kyverno.github.io/kyverno/
+    ```
 
 ### Example: Kyverno and Kubevela ClusterProfile
 
 In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies on the ClusterProfile instance *cp-kyverno*. That means that the *cp-kyverno* ClusterProfile add-ons will get deployed to clusters matching the label set to `env=prod` and afterwards, the ClusterProfile `cp-kubevela` will take place.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile 
-metadata: 
-  name: cp-kubevela
-spec:
-  dependsOn:
-  - cp-kyverno
-  clusterSelector: env=production
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL: https://kubevela.github.io/charts
-    repositoryName: kubevela
-    chartName: kubevela/vela-core
-    chartVersion: 1.9.6
-    releaseName: kubevela-core-latest
-    releaseNamespace: vela-system
-    helmChartAction: Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile 
+    metadata: 
+      name: cp-kubevela
+    spec:
+      dependsOn:
+      - cp-kyverno
+      clusterSelector: env=production
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL: https://kubevela.github.io/charts
+        repositoryName: kubevela
+        chartName: kubevela/vela-core
+        chartVersion: 1.9.6
+        releaseName: kubevela-core-latest
+        releaseNamespace: vela-system
+        helmChartAction: Install
+    ```
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: cp-kyverno
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: cp-kyverno
+    spec:
+      clusterSelector: env=prod
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
 
 The above example is equivalent of creating a single ClusterProfile. 
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: cp-kyverno
-spec:
-  clusterSelector: env=prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-  - repositoryURL: https://kubevela.github.io/charts
-    repositoryName: kubevela
-    chartName: kubevela/vela-core
-    chartVersion: 1.9.6
-    releaseName: kubevela-core-latest
-    releaseNamespace: vela-system
-    helmChartAction: Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: cp-kyverno
+    spec:
+      clusterSelector: env=prod
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+      - repositoryURL: https://kubevela.github.io/charts
+        repositoryName: kubevela
+        chartName: kubevela/vela-core
+        chartVersion: 1.9.6
+        releaseName: kubevela-core-latest
+        releaseNamespace: vela-system
+        helmChartAction: Install
+    ```
 
 !!! note
     Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
-
-
 
 ```
 $ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml

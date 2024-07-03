@@ -20,72 +20,77 @@ authors:
 The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to instruct Sveltos to:
 
 1. Detect pods in a crashloopbackoff state for every cluster that matched the labels __env=fv```
-2. Send a Slack notification when an event is detected
+1. Send a Slack notification when an event is detected
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
-  name: crashing-pod
-spec:
-  resourceSelectors:
-  - group: ""
-    version: v1
-    kind: Pod
-  evaluateHealth: |
-    function evaluate()
-      local statuses = {}
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
+      name: crashing-pod
+    spec:
+      resourceSelectors:
+      - group: ""
+        version: v1
+        kind: Pod
+      evaluateHealth: |
+        function evaluate()
+          local statuses = {}
 
-      for _,resource in ipairs(resources) do
-        ignore = true
-        if resource.status.containerStatuses then
-          local containerStatuses = resource.status.containerStatuses
-          for _, containerStatus in ipairs(containerStatuses) do
-            if containerStatus.state.waiting and containerStatus.state.waiting.reason == "CrashLoopBackOff" then
-              ignore = false
-              status = "Degraded"
-              message = resource.metadata.namespace .. "/" .. resource.metadata.name .. ":" .. containerStatus.state.waiting.message
-              if containerStatus.lastState.terminated and containerStatus.lastState.terminated.reason then
-                message = message .. "\nreason:" .. containerStatus.lastState.terminated.reason
+          for _,resource in ipairs(resources) do
+            ignore = true
+            if resource.status.containerStatuses then
+              local containerStatuses = resource.status.containerStatuses
+              for _, containerStatus in ipairs(containerStatuses) do
+                if containerStatus.state.waiting and containerStatus.state.waiting.reason == "CrashLoopBackOff" then
+                  ignore = false
+                  status = "Degraded"
+                  message = resource.metadata.namespace .. "/" .. resource.metadata.name .. ":" .. containerStatus.state.waiting.message
+                  if containerStatus.lastState.terminated and containerStatus.lastState.terminated.reason then
+                    message = message .. "\nreason:" .. containerStatus.lastState.terminated.reason
+                  end
+                end
+              end
+              if not ignore then
+                table.insert(statuses, {resource=resource, status = status, message = message})
               end
             end
           end
-          if not ignore then
-            table.insert(statuses, {resource=resource, status = status, message = message})
+          
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses 
           end
-        end
-      end
-      
-      local hs = {}
-      if #statuses > 0 then
-        hs.resources = statuses 
-      end
-      return hs
-    end        
-```
+          return hs
+        end        
+    ```
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterHealthCheck
-metadata:
- name: crashing-pod
-spec:
- clusterSelector: env=fv
- livenessChecks:
- - name: crashing-pod
-   type: HealthCheck
-   livenessSourceRef:
-     kind: HealthCheck
-     apiVersion: lib.projectsveltos.io/v1alpha1
-     name: crashing-pod
- notifications:
- - name: slack
-   type: Slack
-   notificationRef:
-     apiVersion: v1
-     kind: Secret
-     name: slack
-     namespace: default
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterHealthCheck
+    metadata:
+    name: crashing-pod
+    spec:
+    clusterSelector: env=fv
+    livenessChecks:
+    - name: crashing-pod
+      type: HealthCheck
+      livenessSourceRef:
+        kind: HealthCheck
+        apiVersion: lib.projectsveltos.io/v1alpha1
+        name: crashing-pod
+    notifications:
+    - name: slack
+      type: Slack
+      notificationRef:
+        apiVersion: v1
+        kind: Secret
+        name: slack
+        namespace: default
+    ```
 
-The YAML defintions can be found [here](https://github.com/projectsveltos/demos/tree/main/observability).
+!!! tip
+    The YAML defintions can be found [here](https://github.com/projectsveltos/demos/tree/main/observability).

@@ -26,30 +26,33 @@ Download the Kyverno policy and create a ConfigMap containing the policy within 
 
 ```
 $ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
+
 $ kubectl create configmap disallow-latest-tag --from-file disallow-latest-tag.yaml
 ```
 
 To deploy Kyverno and a ClusterPolicy across all managed clusters matching the Sveltos label selector *env=fv*, utilize the below ClusterProfile."
 
-```yaml
-  apiVersion: config.projectsveltos.io/v1alpha1
-  kind: ClusterProfile
-  metadata:
-    name: kyverno
-  spec:
-    clusterSelector: env=fv
-    helmCharts:
-    - chartName: kyverno/kyverno
-      chartVersion: v3.0.1
-      helmChartAction: Install
-      releaseName: kyverno-latest
-      releaseNamespace: kyverno
-      repositoryName: kyverno
-      repositoryURL: https://kyverno.github.io/kyverno/
-    policyRefs:
-    - kind: ConfigMap
-      name: disallow-latest-tag
-      namespace: default
-```
+!!! example "Example - ClusterProfile Kyverno Deployment"
+    ```yaml
+      ---
+      apiVersion: config.projectsveltos.io/v1alpha1
+      kind: ClusterProfile
+      metadata:
+        name: kyverno
+      spec:
+        clusterSelector: env=fv
+        helmCharts:
+        - chartName: kyverno/kyverno
+          chartVersion: v3.0.1
+          helmChartAction: Install
+          releaseName: kyverno-latest
+          releaseNamespace: kyverno
+          repositoryName: kyverno
+          repositoryURL: https://kyverno.github.io/kyverno/
+        policyRefs:
+        - kind: ConfigMap
+          name: disallow-latest-tag
+          namespace: default
+    ```
 
-[^1]: The ':latest' tag is mutable and can lead to unexpected errors if the image changes. A best practice is to use an immutable tag that maps to a specific version of an application Pod. 
+[^1]: The **':latest'** tag is mutable and can lead to unexpected errors if the image changes. A best practice is to use an immutable tag that maps to a specific version of an application Pod. 

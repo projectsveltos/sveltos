@@ -31,6 +31,7 @@ Techsupport CRD is used to configure Sveltos to periodically collect tech suppor
 !!! example "Example 1"
     ```yaml
     cat > techsupport.yaml <<EOF
+    ---
     apiVersion: utils.projectsveltos.io/v1alpha1
     kind: Techsupport
     metadata:
@@ -63,6 +64,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
 !!! example "Example 2"
     ```yaml
     cat > techsupport_advanced.yaml <<EOF
+    ---
     apiVersion: utils.projectsveltos.io/v1alpha1
     kind: Techsupport
     metadata:

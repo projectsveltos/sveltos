@@ -27,30 +27,32 @@ Sveltos can assist solving this problem by allowing users to specify the order i
 
 - The below ClusterProfile definition will first deploy the Prometheus Helm chart and then the Grafana Helm chart.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: prometheus-grafana
-spec:
-  clusterSelector: env=fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://prometheus-community.github.io/helm-charts
-    repositoryName:   prometheus-community
-    chartName:        prometheus-community/prometheus
-    chartVersion:     23.4.0
-    releaseName:      prometheus
-    releaseNamespace: prometheus
-    helmChartAction:  Install
-  - repositoryURL:    https://grafana.github.io/helm-charts
-    repositoryName:   grafana
-    chartName:        grafana/grafana
-    chartVersion:     6.58.9
-    releaseName:      grafana
-    releaseNamespace: grafana
-    helmChartAction:  Install
-```
+!!! example "Example - ClusterProfile Monitoring"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: prometheus-grafana
+    spec:
+      clusterSelector: env=fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://prometheus-community.github.io/helm-charts
+        repositoryName:   prometheus-community
+        chartName:        prometheus-community/prometheus
+        chartVersion:     23.4.0
+        releaseName:      prometheus
+        releaseNamespace: prometheus
+        helmChartAction:  Install
+      - repositoryURL:    https://grafana.github.io/helm-charts
+        repositoryName:   grafana
+        chartName:        grafana/grafana
+        chartVersion:     6.58.9
+        releaseName:      grafana
+        releaseNamespace: grafana
+        helmChartAction:  Install
+    ```
 
 ![Sveltos Helm Chart Order](../assets/helm_chart_order.gif)
 
@@ -58,18 +60,20 @@ spec:
 
 - The below ClusterProfile will first deploy the ConfigMap resource named `postgresql-deployment` and then the ConfigMap resource named `postgresql-service`.
 
-```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: postgresql
-spec:
-  clusterSelector: env=fv
-  policyRefs:
-  - name: postgresql-deployment
-    namespace: default
-    kind: ConfigMap
-  - name: postgresql-service
-    namespace: default
-    kind: ConfigMap
-```
+!!! Example "Example - ClusterProfile Database"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: postgresql
+    spec:
+      clusterSelector: env=fv
+      policyRefs:
+      - name: postgresql-deployment
+        namespace: default
+        kind: ConfigMap
+      - name: postgresql-service
+        namespace: default
+        kind: ConfigMap
+    ```

@@ -19,32 +19,36 @@ In this example, we want to create an Ingress in the namespace `eng` as soon as 
 
 The below EventSource instance will match any Service in namespace *eng* exposing either port 443 or port 8443.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventSource
-metadata:
- name: https-service
-spec:
- collectResources: true
- resourceSelectors:
- - group: ""
-   version: "v1"
-   kind: "Service"
-   namespace: eng
-   evaluate: |
-     function evaluate()
-       hs = {}
-       hs.matching = false
-       if obj.spec.ports ~= nil then
-         for _,p in pairs(obj.spec.ports) do
-           if p.port == 443 or p.port == 8443 then
-             hs.matching = true
-           end
-         end
-       end
-       return hs
-     end
-```
+!!! example "EventSource Definition"
+    ```yaml
+    cat > eventsource.yaml <<EOF
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventSource
+    metadata:
+    name: https-service
+    spec:
+    collectResources: true
+    resourceSelectors:
+    - group: ""
+      version: "v1"
+      kind: "Service"
+      namespace: eng
+      evaluate: |
+        function evaluate()
+          hs = {}
+          hs.matching = false
+          if obj.spec.ports ~= nil then
+            for _,p in pairs(obj.spec.ports) do
+              if p.port == 443 or p.port == 8443 then
+                hs.matching = true
+              end
+            end
+          end
+          return hs
+        end
+    EOF
+    ```
 
 The below EventTrigger instance is referencing the EventSource instance defined above, and it is referencing a ConfigMap containing a template for an Ingress resource.
 
@@ -53,56 +57,60 @@ The below EventTrigger instance is referencing the EventSource instance defined 
 
 When *oneForEvent* is set to `false`, when instantiating the Ingress template, *Resources* is an array containing all Services in the managed cluster matching the EventSource. Any field can be accessed.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: EventTrigger
-metadata:
- name: ingress-configuration
- namespace: default
-spec:
- sourceClusterSelector: env=fv
- eventSourceName: https-service
- oneForEvent: false
- policyRefs:
- - name: ingress
-   namespace: default
-   kind: ConfigMap
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ingress
-  namespace: default
-  annotations:
-    projectsveltos.io/template: ok
-data:
-  ingress.yaml: |
-    apiVersion: networking.k8s.io/v1
-    kind: Ingress
+!!! example "EventTrigger Definition"
+    ```yaml
+    cat > eventtrigger.yaml <<EOF
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: EventTrigger
+    metadata:
+    name: ingress-configuration
+    namespace: default
+    spec:
+    sourceClusterSelector: env=fv
+    eventSourceName: https-service
+    oneForEvent: false
+    policyRefs:
+    - name: ingress
+      namespace: default
+      kind: ConfigMap
+    ---
+    apiVersion: v1
+    kind: ConfigMap
     metadata:
       name: ingress
       namespace: default
       annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
-    spec:
-      ingressClassName: http-ingress
-      rules:
-        - http:
-            paths:
-            {{ range $resource := .Resources }}
-            - path: /{{ .metadata.name }}
-              pathType: Prefix
-              backend:
-                service:
-                  name: {{ .metadata.name }}
-                  port:
-                    {{ range .spec.ports }}
-                    {{ if or (eq .port 443 ) (eq .port 8443 ) }}
-                    number: {{ .port }}
-                    {{ end }}
-                    {{ end }}
-            {{ end }}
-```
+        projectsveltos.io/template: ok
+    data:
+      ingress.yaml: |
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: ingress
+          namespace: default
+          annotations:
+            nginx.ingress.kubernetes.io/rewrite-target: /
+        spec:
+          ingressClassName: http-ingress
+          rules:
+            - http:
+                paths:
+                {{ range $resource := .Resources }}
+                - path: /{{ .metadata.name }}
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: {{ .metadata.name }}
+                      port:
+                        {{ range .spec.ports }}
+                        {{ if or (eq .port 443 ) (eq .port 8443 ) }}
+                        number: {{ .port }}
+                        {{ end }}
+                        {{ end }}
+                {{ end }}
+    EOF    
+    ```
 
 If we have two Service instance in the managed cluster in the namespace `eng`
 

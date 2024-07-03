@@ -36,62 +36,66 @@ The commands will download the calico.yaml manifest file and afterwards create a
 
 The YAML definition below exemplifies a ConfigMap that holds multiple resources[^2]. When a ClusterProfile instance references the ConfigMap, a `Namespace` and a `Deployment` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
 
-```yaml
-cat > nginx_cm.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx
-  namespace: default
-data:
-  namespace.yaml: |
-    kind: Namespace
+!!! example "Example - Resources Definition"
+    ```yaml
+    cat > nginx_cm.yaml <<EOF
+    ---
     apiVersion: v1
+    kind: ConfigMap
     metadata:
       name: nginx
-  deployment.yaml: |
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: nginx-deployment
-      namespace: nginx  
-    spec:
-      replicas: 2 # number of pods to run
-      selector:
-        matchLabels:
-          app: nginx
-      template:
+      namespace: default
+    data:
+      namespace.yaml: |
+        kind: Namespace
+        apiVersion: v1
         metadata:
-          labels:
-            app: nginx
+          name: nginx
+      deployment.yaml: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx-deployment
+          namespace: nginx  
         spec:
-          containers:
-          - name: nginx
-            image: nginx:latest # public image from Docker Hub
-            ports:
-            - containerPort: 80
-EOF
-```
+          replicas: 2 # number of pods to run
+          selector:
+            matchLabels:
+              app: nginx
+          template:
+            metadata:
+              labels:
+                app: nginx
+            spec:
+              containers:
+              - name: nginx
+                image: nginx:latest # public image from Docker Hub
+                ports:
+                - containerPort: 80
+    EOF
+    ```
 
 Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the ConfigMap and the Secret created above.
 
-```yaml
-cat > clusterprofile_deploy_nginx.yaml <<EOF
-apiVersion: config.projectsveltos.io/v1alpha1
-kind: ClusterProfile
-metadata:
-  name: deploy-resources
-spec:
-  clusterSelector: env=fv
-  policyRefs:
-  - name: nginx
-    namespace: default
-    kind: ConfigMap
-  - name: calico
-    namespace: default
-    kind: Secret
-EOF
-```
+!!! example "Example - ClusterProfile Definition with Reference"
+    ```yaml
+    cat > clusterprofile_deploy_nginx.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1alpha1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-resources
+    spec:
+      clusterSelector: env=fv
+      policyRefs:
+      - name: nginx
+        namespace: default
+        kind: ConfigMap
+      - name: calico
+        namespace: default
+        kind: Secret
+    EOF
+    ```
 
 !!! note
     The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
@@ -103,6 +107,7 @@ If you leave the namespace field empty, Sveltos will search for the ConfigMap or
 ### Example: Understand Namespace Definition
   
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

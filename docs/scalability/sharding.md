@@ -25,5 +25,5 @@ To update the sharding policy, add the annotation ```sharding.projectsveltos.io/
 The benefits of using a sharding strategy include:
 
 1. __Improved performance__: By distributing the load across multiple instances of Sveltos controllers, sharding can improve the performance of Sveltos.
-2. __Increased scalability__: Sharding allows Sveltos to manage a larger number of managed clusters and applications.
-3. __Reduced risk__: If one instance of a Sveltos controller fails, the other instances can continue to manage the applications in their respective cluster shards.
+1. __Increased scalability__: Sharding allows Sveltos to manage a larger number of managed clusters and applications.
+1. __Reduced risk__: If one instance of a Sveltos controller fails, the other instances can continue to manage the applications in their respective cluster shards.

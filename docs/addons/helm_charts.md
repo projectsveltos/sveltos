@@ -23,6 +23,7 @@ The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get dep
 ### Example: Single Helm chart
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -44,6 +45,7 @@ In the above YAML definition, we install Kyverno on a managed cluster with the l
 ### Example: Multiple Helm charts
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -72,6 +74,7 @@ In the above YAML definition, we first install the Prometheus community Helm cha
 ### Example: Update Helm Chart Values
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -144,6 +147,7 @@ Within your Sveltos ClusterProfile YAML, define the helmCharts section. Here, yo
 This injects the probe configurations from the ConfigMaps into the Helm chart values during deployment.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -177,6 +181,7 @@ Both the __values__ section and the content stored in referenced ConfigMaps and 
 Sveltos will instantiate these templates using resources in the management cluster. Finally Sveltos deploy the Helm chart with the final, resolved values.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -202,6 +207,7 @@ spec:
 ```
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -238,6 +244,7 @@ spec:
     For OCI charts, the chartName needs to have whole URL.
 
 ```yaml
+---
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:

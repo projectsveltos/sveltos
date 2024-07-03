@@ -18,8 +18,8 @@ authors:
 Managing multiple clusters effectively requires a centralized location for viewing a summary of all the deployed resources. Below are some of the key reasons why it is important.
 
 1. **Centralized Visibility:** A central location provides a unified view of resource summaries. It allows monitoring and visualisation of the health of every cluster in one place. It simplifies issue detection, trend identification, and problem troubleshooting across multiple clusters.
-2. **Efficient Troubleshooting and Issue Resolution:** With a centralized resource view, we can swiftly identify the affected clusters when an issue arises, compare it with others, and narrow down potential causes. This comprehensive overview of resource states and dependencies enables efficient troubleshooting and quicker problem resolution.
-3. **Enhanced Security and Compliance:** Centralized resource visibility strengthens **security** and **compliance** monitoring. It enables monitoring of the cluster configurations, identify security vulnerabilities, and ensures consistent adherence to compliance standards across all clusters. We can easily track and manage access controls, network policies, and other security-related aspects from a single location.
+1. **Efficient Troubleshooting and Issue Resolution:** With a centralized resource view, we can swiftly identify the affected clusters when an issue arises, compare it with others, and narrow down potential causes. This comprehensive overview of resource states and dependencies enables efficient troubleshooting and quicker problem resolution.
+1. **Enhanced Security and Compliance:** Centralized resource visibility strengthens **security** and **compliance** monitoring. It enables monitoring of the cluster configurations, identify security vulnerabilities, and ensures consistent adherence to compliance standards across all clusters. We can easily track and manage access controls, network policies, and other security-related aspects from a single location.
 
 Using Projectsveltos can facilitate the display of information about all the resources resources in the managed clusters.
 
@@ -33,76 +33,80 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
 
 1. Create a `HealthCheck` instance that contains a Lua script responsible for examining all the deployments in the managed clusters. In the example below, deployments with a difference between the number of available replicas and requested replicas are identified as `degraded`.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
-  name: deployment-replicas
-spec:
-  collectResources: true
-  resourceSelectors:
-  - group: "apps"
-    version: v1
-    kind: Deployment
-  evaluateHealth: |
-    function evaluate()
-      local statuses = {}
-      
-      status = "Progressing"
-      message = ""
-     
-      for _,resource in ipairs(resources) do
-        if resource.spec.replicas == 0 then
-          continue
-        end
-        
-        if resource.status ~= nil then
-          if resource.status.availableReplicas ~= nil then
-            if resource.status.availableReplicas == resource.spec.replicas then
-              status = "Healthy"
-              message = "All replicas " .. resource.spec.replicas .. " are healthy"
-            else
-              status = "Progressing"
-              message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
-            end
-          end
-          if resource.status.unavailableReplicas ~= nil then
-            status = "Degraded"
-            message = "deployments have unavailable replicas"
-          end
-        end
-        table.insert(statuses, {resource=resource, status = status, message = message})
-      end
-
-      local hs = {}
-      if #statuses > 0 then
-        hs.resources = statuses 
-      end
-      return hs
-    end
-```
- 
- 2. Use the `ClusterHealthCheck` and set the `clusterSelector` field to filter the managed cluster deployments that should be examined. In the below example, all managed clusters that match the cluster label selector `env=fv` are considered.
-
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterHealthCheck
-metadata:
-  name: production
-spec:
-  clusterSelector: env=fv
-  livenessChecks:
-  - name: deployment
-    type: HealthCheck
-    livenessSourceRef:
-      kind: HealthCheck
-      apiVersion: lib.projectsveltos.io/v1alpha1
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
       name: deployment-replicas
-  notifications:
-  - name: event
-    type: KubernetesEvent
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: "apps"
+        version: v1
+        kind: Deployment
+      evaluateHealth: |
+        function evaluate()
+          local statuses = {}
+          
+          status = "Progressing"
+          message = ""
+        
+          for _,resource in ipairs(resources) do
+            if resource.spec.replicas == 0 then
+              continue
+            end
+            
+            if resource.status ~= nil then
+              if resource.status.availableReplicas ~= nil then
+                if resource.status.availableReplicas == resource.spec.replicas then
+                  status = "Healthy"
+                  message = "All replicas " .. resource.spec.replicas .. " are healthy"
+                else
+                  status = "Progressing"
+                  message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
+                end
+              end
+              if resource.status.unavailableReplicas ~= nil then
+                status = "Degraded"
+                message = "deployments have unavailable replicas"
+              end
+            end
+            table.insert(statuses, {resource=resource, status = status, message = message})
+          end
 
-```
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses 
+          end
+          return hs
+        end
+    ```
+ 
+ 1. Use the `ClusterHealthCheck` and set the `clusterSelector` field to filter the managed cluster deployments that should be examined. In the below example, all managed clusters that match the cluster label selector `env=fv` are considered.
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterHealthCheck
+    metadata:
+      name: production
+    spec:
+      clusterSelector: env=fv
+      livenessChecks:
+      - name: deployment
+        type: HealthCheck
+        livenessSourceRef:
+          kind: HealthCheck
+          apiVersion: lib.projectsveltos.io/v1alpha1
+          name: deployment-replicas
+      notifications:
+      - name: event
+        type: KubernetesEvent
+
+    ```
 
 The approach describe above enables us to display information about all the deployments across specific managed clusters effectively.
 
@@ -184,41 +188,43 @@ Object:  object:
 
 The below __HealthCheck__ instance will instruct Sveltos to collect and display the deployment images from every managed cluster.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
- name: deployment-replicas
-spec:
- collectResources: true
- group: "apps"
- version: v1
- kind: Deployment
- namespace: nginx
- script: |
-   function evaluate()
-     hs = {}
-     hs.status = "Progressing"
-     hs.message = ""
-     if obj.status ~= nil then
-       if obj.status.availableReplicas ~= nil then
-         if obj.status.availableReplicas == obj.spec.replicas then
-           hs.status = "Healthy"
-         else
-           hs.status = "Progressing"
-         end
-       end
-       if obj.status.unavailableReplicas ~= nil then
-          hs.status = "Degraded"
-       end
-     end
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
+    name: deployment-replicas
+    spec:
+    collectResources: true
+    group: "apps"
+    version: v1
+    kind: Deployment
+    namespace: nginx
+    script: |
+      function evaluate()
+        hs = {}
+        hs.status = "Progressing"
+        hs.message = ""
+        if obj.status ~= nil then
+          if obj.status.availableReplicas ~= nil then
+            if obj.status.availableReplicas == obj.spec.replicas then
+              hs.status = "Healthy"
+            else
+              hs.status = "Progressing"
+            end
+          end
+          if obj.status.unavailableReplicas ~= nil then
+              hs.status = "Degraded"
+          end
+        end
 
-     for i, container in ipairs(obj.spec.template.spec.containers) do
-       hs.message = "Image: " .. container.image
-     end
-     return hs
-   end
-```
+        for i, container in ipairs(obj.spec.template.spec.containers) do
+          hs.message = "Image: " .. container.image
+        end
+        return hs
+      end
+    ```
 
 ```bash
 $ sveltosctl show resources  
@@ -235,37 +241,39 @@ $ sveltosctl show resources
 
 The below __HealthCheck__ instance will instruct Sveltos to collect and display the pod names based on a specified Deployment name.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
- name: pod-in-deployment
-spec:
- collectResources: true
- group: ""
- version: v1
- kind: Pod
- script: |
-   function setContains(set, key)
-    return set[key] ~= nil
-   end
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
+    name: pod-in-deployment
+    spec:
+    collectResources: true
+    group: ""
+    version: v1
+    kind: Pod
+    script: |
+      function setContains(set, key)
+        return set[key] ~= nil
+      end
 
-   function evaluate()
-     hs = {}
-     hs.status = "Healthy"
-     hs.message = ""
-     hs.ignore = true
-     if obj.metadata.labels ~= nil then
-       if setContains(obj.metadata.labels, "app") then
-         if obj.status.phase == "Running" then
-           hs.ignore = false
-           hs.message = "Deployment: " .. obj.metadata.labels["app"]
-         end
-       end
-     end
-     return hs
-   end
-```
+      function evaluate()
+        hs = {}
+        hs.status = "Healthy"
+        hs.message = ""
+        hs.ignore = true
+        if obj.metadata.labels ~= nil then
+          if setContains(obj.metadata.labels, "app") then
+            if obj.status.phase == "Running" then
+              hs.ignore = false
+              hs.message = "Deployment: " .. obj.metadata.labels["app"]
+            end
+          end
+        end
+        return hs
+      end
+    ```
 
 ```bash
 $ sveltosctl show resources --kind=pod --namespace=nginx
@@ -287,69 +295,73 @@ $ sveltosctl show resources --kind=pod --namespace=nginx
 In this example we will define an `HealthCheck` instance with a Lua script that will:
 
 1. Examine all the Kyverno PolicyReports;
-2. Will report all the resources in violation of the policy and the rules defined
+1. Will report all the resources in violation of the policy and the rules defined
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: HealthCheck
-metadata:
-  name: deployment-replicas
-spec:
-  collectResources: true
-  resourceSelectors:
-  - group: wgpolicyk8s.io
-    version: v1alpha2
-    kind: PolicyReport
-  evaluateHealth: |
-    function evaluate()
-      local statuses  = {}
-      status = "Healthy"
-      message = ""
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: HealthCheck
+    metadata:
+      name: deployment-replicas
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: wgpolicyk8s.io
+        version: v1alpha2
+        kind: PolicyReport
+      evaluateHealth: |
+        function evaluate()
+          local statuses  = {}
+          status = "Healthy"
+          message = ""
 
-      for _,resource in ipairs(resources) do
-        for i, result in ipairs(resource.results) do
-          if result.result == "fail" then
-            status = "Degraded"
-            for j, r in ipairs(result.resources) do
-              message = message .. " " .. r.namespace .. "/" .. r.name
+          for _,resource in ipairs(resources) do
+            for i, result in ipairs(resource.results) do
+              if result.result == "fail" then
+                status = "Degraded"
+                for j, r in ipairs(result.resources) do
+                  message = message .. " " .. r.namespace .. "/" .. r.name
+                end
+              end
+            end
+
+            if status ~= "Healthy" then
+              table.insert(statuses, {resource=resource, status = status, message = message})
             end
           end
+          
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses 
+          end
+          
+          return hs
         end
-
-        if status ~= "Healthy" then
-          table.insert(statuses, {resource=resource, status = status, message = message})
-        end
-      end
-      
-      local hs = {}
-      if #statuses > 0 then
-        hs.resources = statuses 
-      end
-      
-      return hs
-    end
-```
+    ```
 
 As before, we need to have a `ClusterHealthCheck` instance to instruct Sveltos which clusters to watch for.
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
-kind: ClusterHealthCheck
-metadata:
-  name: production
-spec:
-  clusterSelector: env=fv
-  livenessChecks:
-  - name: kyverno-policy-reports
-    type: HealthCheck
-    livenessSourceRef:
-      kind: HealthCheck
-      apiVersion: lib.projectsveltos.io/v1alpha1
-      name: kyverno-policy-reports
-  notifications:
-  - name: event
-    type: KubernetesEvent
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1alpha1
+    kind: ClusterHealthCheck
+    metadata:
+      name: production
+    spec:
+      clusterSelector: env=fv
+      livenessChecks:
+      - name: kyverno-policy-reports
+        type: HealthCheck
+        livenessSourceRef:
+          kind: HealthCheck
+          apiVersion: lib.projectsveltos.io/v1alpha1
+          name: kyverno-policy-reports
+      notifications:
+      - name: event
+        type: KubernetesEvent
+    ```
 
 We assume we have deployed an nginx deployment using the __latest__ image in the managed cluster[^1]
 
@@ -369,6 +381,7 @@ $ sveltosctl show resources
 To deploy Kyverno and a ClusterPolicy in each managed cluster matching the label selector __env=fv__ we can use the below `ClusterProfile` definition.
 
 ```yaml
+  ---
   apiVersion: config.projectsveltos.io/v1alpha1
   kind: ClusterProfile
   metadata:
@@ -392,7 +405,7 @@ To deploy Kyverno and a ClusterPolicy in each managed cluster matching the label
 - The ConfigMap contains [this](https://kyverno.io/policies/best-practices/disallow-latest-tag/disallow-latest-tag/) Kyverno ClusterPolicy.
 
   ```bash
-  wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
+  $ wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
   
-  kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
+  $ kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
   ```
