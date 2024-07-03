@@ -50,6 +50,7 @@ spec:
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
 
 ```yaml
+cat > clusterprofile_nginx_ingress.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -61,6 +62,7 @@ spec:
     name: flux-system
     namespace: flux-system
     path: nginx-ingress
+EOF
 ```
 
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
@@ -112,6 +114,7 @@ spec:
 Define a ClusterProfile to deploy the Kyverno helm chart.
 
 ```yaml
+cat > clusterprofile_kyverno.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -127,6 +130,7 @@ spec:
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
+EOF
 ```
 
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _kyverno__ directory as the source of the deployment.
@@ -134,6 +138,7 @@ Define a Sveltos ClusterProfile referencing the flux-system GitRepository and de
 This directory contains a list of Kyverno ClusterPolicies.
 
 ```yaml
+cat > clusterprofile_kyverno_policies.yaml <<EOF
 apiVersion: config.projectsveltos.io/v1alpha1
 kind: ClusterProfile
 metadata:
@@ -147,6 +152,7 @@ spec:
     path: kyverno
   dependsOn: 
   - deploy-kyverno
+EOF
 ```
 
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.

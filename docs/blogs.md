@@ -62,13 +62,11 @@ authors:
 
 ## Support us
 
-{==
+!!! tip ""
+    If you like the project, please <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank">give us a</a> <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank" class="heart">:octicons-star-fill-24:</a> if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
-If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Kubernetes add-on controller")  [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Kubernetes add-on controller") if you haven't done so yet. This will help other people find it and learn more about it.
 
-==}
-
-[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Kubernetes add-on controller"){ .md-button .md-button--primary }
+[:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){:target="_blank" .md-button}
 
 [![Stargazers repo roster for @projectsveltos/addon-controller](http://reporoster.com/stars/projectsveltos/addon-controller)](https://github.com/projectsveltos/addon-controller/stargazers)
 

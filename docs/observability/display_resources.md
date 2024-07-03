@@ -392,6 +392,7 @@ To deploy Kyverno and a ClusterPolicy in each managed cluster matching the label
 - The ConfigMap contains [this](https://kyverno.io/policies/best-practices/disallow-latest-tag/disallow-latest-tag/) Kyverno ClusterPolicy.
 
   ```bash
-  $ wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
-  $ kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
+  wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
+  
+  kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
   ```
