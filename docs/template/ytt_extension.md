@@ -32,7 +32,7 @@ We can leverage the GitRepository as a source for the ytt controller[^1]. For ex
 
 ```yaml
 ---
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   name: yttsource-flux
@@ -45,21 +45,23 @@ spec:
 
 The `path` field specifies the location within the Git repository where the ytt files are stored. Once Flux detects changes in the repository and syncs it, the ytt-controller will automatically invoke the ytt module and store the output in the Status section of the YttSource instance.
 
-At this point, you can use the Sveltos' [template](template.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
+At this point, you can use the Sveltos' [template](template_generic_examples.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
 
 ### ClusterProfile
 !!! example "Example - ClusterProfile and Resources Definition"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-ytt-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
-          apiVersion: extension.projectsveltos.io/v1alpha1
+          apiVersion: extension.projectsveltos.io/v1beta1
           kind: YttSource
           name: yttsource-flux
           namespace: default
@@ -114,7 +116,7 @@ $ kubectl create configmap ytt --from-file=ytt.tar.gz=ytt.tar.gz
 
 ```yaml
 ---
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   name: yttsource-sample
@@ -129,12 +131,12 @@ Outcome will be same as seen above with Flux GitRepository:
 
 ```yaml
 ---
-apiVersion: extension.projectsveltos.io/v1alpha1
+apiVersion: extension.projectsveltos.io/v1beta1
 kind: YttSource
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"extension.projectsveltos.io/v1alpha1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-sample","namespace":"default"},"spec":{"kind":"ConfigMap","name":"ytt","namespace":"default","path":"./"}}
+      {"apiVersion":"extension.projectsveltos.io/v1beta1","kind":"YttSource","metadata":{"annotations":{},"name":"yttsource-sample","namespace":"default"},"spec":{"kind":"ConfigMap","name":"ytt","namespace":"default","path":"./"}}
   creationTimestamp: "2023-05-22T06:27:31Z"
   generation: 1
   name: yttsource-sample

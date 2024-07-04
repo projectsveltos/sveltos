@@ -40,12 +40,14 @@ To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_
     ```yaml
     cat > clusterprofile_kyverno.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -88,12 +90,14 @@ To deploy all these resources in any cluster with labels *env: fv*, create a Clu
     ```yaml
     cat > clusterprofile_gateway.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
     name: gateway-configuration
     spec:
-    clusterSelector: env=fv
+    clusterSelector:
+      matchLabels:
+        env: fv
     syncMode: Continuous
     policyRefs:
     - name: contour-gateway-provisioner-secret
@@ -110,12 +114,14 @@ Sveltos can work along with Flux to deploy content of Kustomize directories.
     ```yaml
     cat > clusterprofile_flux.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: flux-system
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       kustomizationRefs:
       - namespace: flux-system

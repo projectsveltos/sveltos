@@ -77,12 +77,14 @@ The following ClusterProfile Spec would update a maximum of 30% of matching clus
 !!! example "Example ClusterProfile - Kyverno - Lua"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       maxUpdate: 30%
       helmCharts:

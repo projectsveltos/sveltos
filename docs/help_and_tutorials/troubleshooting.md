@@ -46,7 +46,7 @@ status:
     kind: Cluster
     name: clusterapi-workload
     namespace: default
-  - apiVersion: lib.projectsveltos.io/v1alpha1
+  - apiVersion: lib.projectsveltos.io/v1beta1
     kind: SveltosCluster
     name: mgmt
     namespace: mgmt
@@ -62,7 +62,7 @@ If these conditions are met, Sveltos will generate a __ClusterSummary__ within t
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterSummary
 metadata:
   name: deploy-kyverno-sveltos-mgmt
@@ -72,7 +72,9 @@ spec:
   clusterNamespace: mgmt
   clusterType: Sveltos
   clusterProfileSpec:
-    clusterSelector: env=fv
+    clusterSelector:
+      matchLabels:
+        env: fv
     helmCharts:
     - chartName: kyverno/kyverno
       chartVersion: v3.1.4

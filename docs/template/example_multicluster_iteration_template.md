@@ -16,7 +16,7 @@ authors:
 
 There are a number of cases where platform administrators or operators want to discover and iterate through multiple clustes to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.
 
-The use case can be easily achieved by Sveltos with the use of the [templating](../template/template.md) functionality and [Sveltos Event Franmework](../events/addon_event_deployment.md).
+The use case can be easily achieved by Sveltos with the use of the [templating](../template/template_generic_examples.md) functionality and [Sveltos Event Franmework](../events/addon_event_deployment.md).
 
 ## Identify Sveltos Managed Clusters
 
@@ -26,7 +26,7 @@ Sveltos `Event Framework` will be used to dynamically detect all **managed** clu
     ```yaml
     cat > eventsource_eventtrigger.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: detect-clusters
@@ -44,14 +44,16 @@ Sveltos `Event Framework` will be used to dynamically detect all **managed** clu
         operation: Different
         value: mgmt
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
-    name: detect-cluster
+      name: detect-cluster
     spec:
-    sourceClusterSelector: type=mgmt
-    eventSourceName: detect-clusters
-    oneForEvent: false
+      sourceClusterSelector:
+        matchLabels:
+          type: mgmt
+      eventSourceName: detect-clusters
+      oneForEvent: false
     EOF
     ```
 
@@ -62,17 +64,17 @@ The report stores the information about all discovered managed clusters. Sveltos
 ### EventReport Output
 
 ```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
+apiVersion: lib.projectsveltos.io/v1beta1
 kind: EventReport
 ...
 spec:
   eventSourceName: detect-clusters
   matchingResources:
-  - apiVersion: lib.projectsveltos.io/v1alpha1
+  - apiVersion: lib.projectsveltos.io/v1beta1
     kind: SveltosCluster
     name: cluster-1
     namespace: civo
-  - apiVersion: lib.projectsveltos.io/v1alpha1
+  - apiVersion: lib.projectsveltos.io/v1beta1
     kind: SveltosCluster
     name: cluster-2
     namespace: civo
@@ -88,15 +90,17 @@ Lets assume the clusters where the service should get deployed has the cluster l
     ```yaml
     cat > clusterprofile_nats.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: type=nats
+      clusterSelector:
+        matchLabels:
+          type: nats
       templateResourceRefs:
       - resource:
-          apiVersion: lib.projectsveltos.io/v1alpha1
+          apiVersion: lib.projectsveltos.io/v1beta1
           kind: EventReport
           name: detect-clusters
           namespace: projectsveltos

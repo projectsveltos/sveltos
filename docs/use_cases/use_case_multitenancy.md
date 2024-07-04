@@ -47,14 +47,16 @@ Sveltos allows platform administrators to utilise the CRD with the name `RoleReq
 !!! example "Example - RoleRequest"
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: RoleRequest
     metadata:
       name: full-access
     spec:
       serviceAccountName: "eng"
       serviceAccountNamespace: "default"
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       roleRefs:
       - name: full-access
         namespace: default
@@ -101,7 +103,7 @@ Once the `RoleRequest` instance has been created, the defined tenant admin can u
 !!! example "Example - ClusterProfile"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
@@ -109,7 +111,9 @@ Once the `RoleRequest` instance has been created, the defined tenant admin can u
         projectsveltos.io/serviceaccount-name: eng
         projectsveltos.io/serviceaccount-namespace: default
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/

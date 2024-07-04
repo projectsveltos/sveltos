@@ -19,12 +19,14 @@ The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: hello-world
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   syncMode: Continuous
   kustomizationRefs:
   - namespace: flux2
@@ -89,12 +91,14 @@ Now, imagine Sveltos receives a ClusterProfile containing the following key-valu
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: hello-world-with-values
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   kustomizationRefs:
   - deploymentType: Remote
     kind: GitRepository
@@ -126,6 +130,66 @@ metadata:
 spec:
   ...
   image: nginx:v1.2.0 # Replaced value
+```
+
+### Template-based Referencing for ValuesFrom
+
+In the ValuesFrom section, we can express ConfigMap and Secret names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+
+Available cluster information :
+
+- cluster namespace: use `.Cluster.metadata.namespace`
+- cluster name: `.Cluster.metadata.name` 
+- cluster type: `.Cluster.kind` 
+
+Consider two SveltosCluster instances in the _civo_ namespace:
+
+```bash
+kubectl get sveltoscluster -n civo --show-labels
+NAME             READY   VERSION        LABELS
+pre-production   true    v1.29.2+k3s1   env=civo,projectsveltos.io/k8s-version=v1.29.2
+production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v1.28.7
+```
+
+Additionally, there are two ConfigMaps within the civo namespace. Those ConfigMaps Data sections contain same keys but different values
+
+
+```bash
+kubectl get configmap -n civo                                                   
+NAME                                  DATA   AGE
+hello-world-pre-production            2      9m40s
+hello-world-production                2      9m45s
+```
+
+The only difference between these ConfigMaps is .
+
+Following ClusterProfile:
+
+1. *Matches both SveltosClusters*
+2. *Dynamic ConfigMap Selection*:
+    - For the `pre-production` cluster, the profile should use the `hello-world-pre-production` ConfigMap.
+    - For the `production` cluster, the profile should use the `hello-world-production` ConfigMaps.
+
+```yaml  hl_lines="16-19"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: hello-world-with-values
+spec:
+  clusterSelector:
+    matchLabels:
+      env: civo
+  kustomizationRefs:
+  - deploymentType: Remote
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+    path: ./template/helloWorld/
+    targetNamespace: eng
+    valuesFrom:
+    - kind: ConfigMap
+      name: hello-world-{{ .Cluster.metadata.name }}
+      namespace: civo
 ```
 
 ### Dynamic Values with Nested Templates
@@ -168,12 +232,14 @@ This is a fully working example:
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: hello-world-with-template
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   kustomizationRefs:
   - deploymentType: Remote
     kind: GitRepository
@@ -223,12 +289,14 @@ The __path__ field within a kustomizationRef object in Sveltos can be defined us
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: flux-system
 spec:
-  clusterSelector: region=west
+  clusterSelector:
+    matchLabels:
+      region: west
   syncMode: Continuous
   kustomizationRefs:
   - namespace: flux2
@@ -266,12 +334,14 @@ The below ClusterProfile will use the Kustomize SDK to get all the resources nee
 
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: kustomize-with-configmap 
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   syncMode: Continuous
   kustomizationRefs:
   - namespace: default
@@ -295,12 +365,14 @@ $ sveltosctl show addons
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: flux
 spec:
-  clusterSelector: cluster=mgmt
+  clusterSelector:
+    matchLabels:
+      cluster: mgmt
   helmCharts:
   - chartName: flux2/flux2
     chartVersion: 2.12.4

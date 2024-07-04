@@ -73,12 +73,14 @@ Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository`
 ```yaml
 cat > cluster_profile_flux.yaml <<EOF
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: deploy-helloworld-resources
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   policyRefs:
   - kind: GitRepository
     name: flux-system

@@ -54,12 +54,14 @@ Define a Sveltos ClusterProfile referencing the flux-system GitRepository and sp
     ```yaml
     cat > clusterprofile_nginx_ingress.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-nginx-ingress
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       policyRefs:
       - kind: GitRepository
         name: flux-system
@@ -121,12 +123,14 @@ Define a ClusterProfile to deploy the Kyverno helm chart.
     ```yaml
     cat > clusterprofile_kyverno.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -147,12 +151,14 @@ This directory contains a list of Kyverno ClusterPolicies.
     ```yaml
     cat > clusterprofile_kyverno_policies.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-kyverno-policies
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       policyRefs:
       - kind: GitRepository
         name: flux-system
@@ -172,7 +178,7 @@ $ sveltosctl show addons
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
 |           CLUSTER           |      RESOURCE TYPE       | NAMESPACE |           NAME            | VERSION |             TIME              |                PROFILES                |
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
-| default/clusterapi-workload | helm chart               | kyverno   | kyverno-latest            | 3.1.4   | 2024-03-23 11:39:30 +0100 CET | ClusterProfile/deploy-kyverno          |
+| default/clusterapi-workload | helm chart               | kyverno   | kyverno-latest            | 3.2.5   | 2024-03-23 11:39:30 +0100 CET | ClusterProfile/deploy-kyverno          |
 | default/clusterapi-workload | kyverno.io:ClusterPolicy |           | restrict-image-registries | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
 | default/clusterapi-workload | kyverno.io:ClusterPolicy |           | disallow-latest-tag       | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
 | default/clusterapi-workload | kyverno.io:ClusterPolicy |           | require-ro-rootfs         | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
@@ -242,12 +248,14 @@ spec:
     ```yaml
     cat > clusterprofile_flux.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: flux-template-example
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       policyRefs:
       - kind: GitRepository
         name: flux-system
@@ -281,12 +289,14 @@ The __path__ field within a policyRefs object in Sveltos can be defined using a 
     ```yaml
     cat > clusterprofile_flux_region_west.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: flux-system
     spec:
-      clusterSelector: region=west
+      clusterSelector:
+        matchLabels:
+          region: west
       syncMode: Continuous
       policyRefs:
       - kind: GitRepository
@@ -310,13 +320,14 @@ Remember to adapt the provided resources to your specific repository structure, 
 
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
----
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: flux
 spec:
-  clusterSelector: cluster=mgmt
+  clusterSelector:
+    matchLabels:
+      cluster: mgmt
   helmCharts:
   - chartName: flux2/flux2
     chartVersion: 2.12.4
@@ -327,4 +338,4 @@ spec:
     repositoryURL: https://fluxcd-community.github.io/helm-charts
 ```
 [^2]: The YAML was obtained by running ```helm template nginx-stable nginx-stable/nginx-ingress```.
-[^3]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template.md).
+[^3]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template_generic_examples.md).

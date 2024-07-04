@@ -14,14 +14,16 @@ authors:
 ---
 ## ClusterProfiles
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters. 
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters. 
 
 ### Spec.ClusterSelector 
 
 *clusterSelector* field selects a set of managed clusters where listed add-ons and applications will be deployed.
 
 ```yaml
-clusterSelector: env=prod
+clusterSelector:
+    matchLabels:
+      env: prod
 ```
 
 ### Spec.HelmCharts
@@ -33,7 +35,7 @@ clusterSelector: env=prod
   - repositoryURL:    https://kyverno.github.io/kyverno/
     repositoryName:   kyverno
     chartName:        kyverno/kyverno
-    chartVersion:     v3.0.1
+    chartVersion:     v3.2.5
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
@@ -106,18 +108,20 @@ For instance
 !!! example "Example - ClusterProfile Kyverno Deployment"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
     spec:
       stopMatchingBehavior: WithdrawPolicies
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.0.1
+        chartVersion:     v3.2.5
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
@@ -159,17 +163,19 @@ Consider a scenario where a new cluster with the label env:prod is created. The 
 !!! example "Example - ClusterProfile Kyverno and Lua"
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: kyverno
     spec:
-      clusterSelector: env=prod
+      clusterSelector:
+        matchLabels:
+          env: prod
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.0.1
+        chartVersion:     v3.2.5
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
@@ -199,7 +205,7 @@ Consider a scenario where a new cluster with the label env:prod is created. The 
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
-Refer to [template](../template/template.md) section for more info and examples.
+Refer to [template](../template/template_generic_examples.md) section for more info and examples.
 
 ### Spec.DependsOn
 
@@ -207,9 +213,9 @@ The *dependsOn* property specifies a list of other ClusterProfiles that this ins
 
 For example, clusterprofile-a can depend on another *clusterprofile-b*. This implies that any Helm charts or raw YAML files associated with ClusterProfile A will not be deployed until all add-ons and applications specified in ClusterProfile B have been successfully provisioned.
 
-```yaml
+```yaml hl_lines="7-8"
 ---
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: clusterprofile-a

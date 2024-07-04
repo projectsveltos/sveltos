@@ -21,7 +21,7 @@ rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/libsveltos.git
 cd libsveltos
 git checkout ${branch}
-for f in config/crd/bases/*.yaml
+for f in manifests/*.yaml
 do 
     echo "Processing $f file..."
     cp $f ../../kustomize/components/crds/.
@@ -236,6 +236,23 @@ for f in manifest/*.yaml
 do 
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/register-mgmt-cluster.yaml
+done
+cd ../../; rm -rf tmp
+
+echo ""
+
+# conversion-webhook
+echo ""
+echo "processing conversion-webhook"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/conversion-webhook.git
+cd conversion-webhook
+git checkout ${branch}
+touch ../../kustomize/base/conversion-webhook.yaml
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../kustomize/base/conversion-webhook.yaml
 done
 cd ../../; rm -rf tmp
 

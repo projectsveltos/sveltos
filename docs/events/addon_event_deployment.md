@@ -32,14 +32,14 @@ For more information, take a peek at [this](#cross-clusters) link.
 ## Sveltos Event Definition
 
 An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the
-[EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1alpha1/eventsource_type.go) CRD.
+[EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go) CRD.
 
 ### Example: Create/Delete Service Event
 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: sveltos-service
@@ -64,7 +64,7 @@ Sveltos supports custom events written in the [Lua](https://www.lua.org/) langua
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: sveltos-service
@@ -125,7 +125,7 @@ Inside the newly created directory or subdirectory, create the below.
 
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: sveltos-service
@@ -226,7 +226,7 @@ Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure addi
 
 ## Events and Add-on Deployment
 
-[EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1alpha1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
+[EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
 Each EventBasedAddon instance: 
 
@@ -240,18 +240,20 @@ It referenced a ConfigMap that contains a *NetworkPolicy* expressed as a templat
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
-    name: service-network-policy
+      name: service-network-policy
     spec:
-    sourceClusterSelector: env=fv
-    eventSourceName: sveltos-service
-    oneForEvent: true
-    policyRefs:
-    - name: network-policy
-      namespace: default
-      kind: ConfigMap
+      sourceClusterSelector:
+        matchLabels:
+          env: fv
+      eventSourceName: sveltos-service
+      oneForEvent: true
+      policyRefs:
+      - name: network-policy
+        namespace: default
+        kind: ConfigMap
     ---
     apiVersion: v1
     kind: ConfigMap
@@ -327,7 +329,7 @@ A NetworkPolicy instance is instantiated from the ConfigMap content, using the i
       name: front-my-service
       namespace: default
       ownerReferences:
-      - apiVersion: config.projectsveltos.io/v1alpha1
+      - apiVersion: config.projectsveltos.io/v1beta1
         kind: ClusterProfile
         name: sveltos-8ric1wghsf04cu8i1387
         uid: ca908a7b-e9a7-457b-a077-81400b59902f
@@ -375,30 +377,30 @@ Based on the example above, the below EventReport instance can be found in the m
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
-      kind: EventReport
-      metadata:
-        creationTimestamp: "2023-03-14T15:55:23Z"
-        generation: 2
-        labels:
-          eventreport.projectsveltos.io/cluster-name: sveltos-management-workload
-          eventreport.projectsveltos.io/cluster-type: capi
-          projectsveltos.io/eventsource-name: sveltos-service
-        name: capi--sveltos-service--sveltos-management-workload
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: EventReport
+    metadata:
+      creationTimestamp: "2023-03-14T15:55:23Z"
+      generation: 2
+      labels:
+        eventreport.projectsveltos.io/cluster-name: sveltos-management-workload
+        eventreport.projectsveltos.io/cluster-type: capi
+        projectsveltos.io/eventsource-name: sveltos-service
+      name: capi--sveltos-service--sveltos-management-workload
+      namespace: default
+      resourceVersion: "7151"
+      uid: 0b71c54c-7c0e-4478-b48e-0081e2432c58
+    spec:
+      clusterName: sveltos-management-workload
+      clusterNamespace: default
+      clusterType: Capi
+      eventSourceName: sveltos-service
+      matchingResources:
+      - apiVersion: v1
+        kind: Service
+        name: my-service
         namespace: default
-        resourceVersion: "7151"
-        uid: 0b71c54c-7c0e-4478-b48e-0081e2432c58
-      spec:
-        clusterName: sveltos-management-workload
-        clusterNamespace: default
-        clusterType: Capi
-        eventSourceName: sveltos-service
-        matchingResources:
-        - apiVersion: v1
-          kind: Service
-          name: my-service
-          namespace: default
-        resources: eyJhcGlWZXJzaW9uIjoidjEiLCJraW5kIjoiU2VydmljZSIsIm1ldGFkYXRhIjp7ImFubm90YXRpb25zIjp7Imt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6IntcImFwaVZlcnNpb25cIjpcInYxXCIsXCJraW5kXCI6XCJTZXJ2aWNlXCIsXCJtZXRhZGF0YVwiOntcImFubm90YXRpb25zXCI6e30sXCJsYWJlbHNcIjp7XCJzdmVsdG9zXCI6XCJmdlwifSxcIm5hbWVcIjpcIm15LXNlcnZpY2VcIixcIm5hbWVzcGFjZVwiOlwiZGVmYXVsdFwifSxcInNwZWNcIjp7XCJwb3J0c1wiOlt7XCJwb3J0XCI6ODAsXCJwcm90b2NvbFwiOlwiVENQXCIsXCJ0YXJnZXRQb3J0XCI6OTM3Nn1dLFwic2VsZWN0b3JcIjp7XCJhcHAua3ViZXJuZXRlcy5pby9uYW1lXCI6XCJNeUFwcFwifX19XG4ifSwiY3JlYXRpb25UaW1lc3RhbXAiOiIyMDIzLTAzLTE0VDE2OjAxOjE0WiIsImxhYmVscyI6eyJzdmVsdG9zIjoiZnYifSwibWFuYWdlZEZpZWxkcyI6W3siYXBpVmVyc2lvbiI6InYxIiwiZmllbGRzVHlwZSI6IkZpZWxkc1YxIiwiZmllbGRzVjEiOnsiZjptZXRhZGF0YSI6eyJmOmFubm90YXRpb25zIjp7Ii4iOnt9LCJmOmt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6e319LCJmOmxhYmVscyI6eyIuIjp7fSwiZjpzdmVsdG9zIjp7fX19LCJmOnNwZWMiOnsiZjppbnRlcm5hbFRyYWZmaWNQb2xpY3kiOnt9LCJmOnBvcnRzIjp7Ii4iOnt9LCJrOntcInBvcnRcIjo4MCxcInByb3RvY29sXCI6XCJUQ1BcIn0iOnsiLiI6e30sImY6cG9ydCI6e30sImY6cHJvdG9jb2wiOnt9LCJmOnRhcmdldFBvcnQiOnt9fX0sImY6c2VsZWN0b3IiOnt9LCJmOnNlc3Npb25BZmZpbml0eSI6e30sImY6dHlwZSI6e319fSwibWFuYWdlciI6Imt1YmVjdGwtY2xpZW50LXNpZGUtYXBwbHkiLCJvcGVyYXRpb24iOiJVcGRhdGUiLCJ0aW1lIjoiMjAyMy0wMy0xNFQxNjowMToxNFoifV0sIm5hbWUiOiJteS1zZXJ2aWNlIiwibmFtZXNwYWNlIjoiZGVmYXVsdCIsInJlc291cmNlVmVyc2lvbiI6IjIyNTIiLCJ1aWQiOiIzNDg2ODE1Yi1kZjk1LTRhMzAtYjBjMi01MGFlOGEyNmI4ZWIifSwic3BlYyI6eyJjbHVzdGVySVAiOiIxMC4yMjUuMTY2LjExMyIsImNsdXN0ZXJJUHMiOlsiMTAuMjI1LjE2Ni4xMTMiXSwiaW50ZXJuYWxUcmFmZmljUG9saWN5IjoiQ2x1c3RlciIsImlwRmFtaWxpZXMiOlsiSVB2NCJdLCJpcEZhbWlseVBvbGljeSI6IlNpbmdsZVN0YWNrIiwicG9ydHMiOlt7InBvcnQiOjgwLCJwcm90b2NvbCI6IlRDUCIsInRhcmdldFBvcnQiOjkzNzZ9XSwic2VsZWN0b3IiOnsiYXBwLmt1YmVybmV0ZXMuaW8vbmFtZSI6Ik15QXBwIn0sInNlc3Npb25BZmZpbml0eSI6Ik5vbmUiLCJ0eXBlIjoiQ2x1c3RlcklQIn0sInN0YXR1cyI6eyJsb2FkQmFsYW5jZXIiOnt9fX0KLS0t
+      resources: eyJhcGlWZXJzaW9uIjoidjEiLCJraW5kIjoiU2VydmljZSIsIm1ldGFkYXRhIjp7ImFubm90YXRpb25zIjp7Imt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6IntcImFwaVZlcnNpb25cIjpcInYxXCIsXCJraW5kXCI6XCJTZXJ2aWNlXCIsXCJtZXRhZGF0YVwiOntcImFubm90YXRpb25zXCI6e30sXCJsYWJlbHNcIjp7XCJzdmVsdG9zXCI6XCJmdlwifSxcIm5hbWVcIjpcIm15LXNlcnZpY2VcIixcIm5hbWVzcGFjZVwiOlwiZGVmYXVsdFwifSxcInNwZWNcIjp7XCJwb3J0c1wiOlt7XCJwb3J0XCI6ODAsXCJwcm90b2NvbFwiOlwiVENQXCIsXCJ0YXJnZXRQb3J0XCI6OTM3Nn1dLFwic2VsZWN0b3JcIjp7XCJhcHAua3ViZXJuZXRlcy5pby9uYW1lXCI6XCJNeUFwcFwifX19XG4ifSwiY3JlYXRpb25UaW1lc3RhbXAiOiIyMDIzLTAzLTE0VDE2OjAxOjE0WiIsImxhYmVscyI6eyJzdmVsdG9zIjoiZnYifSwibWFuYWdlZEZpZWxkcyI6W3siYXBpVmVyc2lvbiI6InYxIiwiZmllbGRzVHlwZSI6IkZpZWxkc1YxIiwiZmllbGRzVjEiOnsiZjptZXRhZGF0YSI6eyJmOmFubm90YXRpb25zIjp7Ii4iOnt9LCJmOmt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6e319LCJmOmxhYmVscyI6eyIuIjp7fSwiZjpzdmVsdG9zIjp7fX19LCJmOnNwZWMiOnsiZjppbnRlcm5hbFRyYWZmaWNQb2xpY3kiOnt9LCJmOnBvcnRzIjp7Ii4iOnt9LCJrOntcInBvcnRcIjo4MCxcInByb3RvY29sXCI6XCJUQ1BcIn0iOnsiLiI6e30sImY6cG9ydCI6e30sImY6cHJvdG9jb2wiOnt9LCJmOnRhcmdldFBvcnQiOnt9fX0sImY6c2VsZWN0b3IiOnt9LCJmOnNlc3Npb25BZmZpbml0eSI6e30sImY6dHlwZSI6e319fSwibWFuYWdlciI6Imt1YmVjdGwtY2xpZW50LXNpZGUtYXBwbHkiLCJvcGVyYXRpb24iOiJVcGRhdGUiLCJ0aW1lIjoiMjAyMy0wMy0xNFQxNjowMToxNFoifV0sIm5hbWUiOiJteS1zZXJ2aWNlIiwibmFtZXNwYWNlIjoiZGVmYXVsdCIsInJlc291cmNlVmVyc2lvbiI6IjIyNTIiLCJ1aWQiOiIzNDg2ODE1Yi1kZjk1LTRhMzAtYjBjMi01MGFlOGEyNmI4ZWIifSwic3BlYyI6eyJjbHVzdGVySVAiOiIxMC4yMjUuMTY2LjExMyIsImNsdXN0ZXJJUHMiOlsiMTAuMjI1LjE2Ni4xMTMiXSwiaW50ZXJuYWxUcmFmZmljUG9saWN5IjoiQ2x1c3RlciIsImlwRmFtaWxpZXMiOlsiSVB2NCJdLCJpcEZhbWlseVBvbGljeSI6IlNpbmdsZVN0YWNrIiwicG9ydHMiOlt7InBvcnQiOjgwLCJwcm90b2NvbCI6IlRDUCIsInRhcmdldFBvcnQiOjkzNzZ9XSwic2VsZWN0b3IiOnsiYXBwLmt1YmVybmV0ZXMuaW8vbmFtZSI6Ik15QXBwIn0sInNlc3Npb25BZmZpbml0eSI6Ik5vbmUiLCJ0eXBlIjoiQ2x1c3RlcklQIn0sInN0YXR1cyI6eyJsb2FkQmFsYW5jZXIiOnt9fX0KLS0t
     ```
 
 The resources is a base64 encoded representation of the Service.
@@ -430,12 +432,14 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
     name: service-network-policy
     spec:
-    sourceClusterSelector: env=fv
+    sourceClusterSelector:
+      matchLabels:
+        env: fv
     eventSourceName: <your eventSource name>
     oneForEvent: false
     helmCharts:

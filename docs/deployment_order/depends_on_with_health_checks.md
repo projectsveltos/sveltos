@@ -19,12 +19,14 @@ To guarantee that cert-manager is not only deployed but also functional, employ 
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: cert-manager
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels: 
+          env: fv
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://charts.jetstack.io
@@ -60,12 +62,14 @@ In the below example, the ClusterPofile to deploy the __nginx ingress__ depends 
 !!! example ""
     ```yaml
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: ingress-nginx
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       syncMode: Continuous
       helmCharts:
       - repositoryURL:    https://kubernetes.github.io/ingress-nginx
@@ -78,3 +82,4 @@ In the below example, the ClusterPofile to deploy the __nginx ingress__ depends 
       dependsOn:
       - cert-manager
     ```
+

@@ -119,12 +119,14 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
     ```yaml
     cat > clusterprofile_extsecret.yaml <<EOF
     ---
-    apiVersion: config.projectsveltos.io/v1alpha1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       templateResourceRefs:
       - resource:
           apiVersion: v1
