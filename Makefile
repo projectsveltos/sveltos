@@ -7,6 +7,7 @@ generate-manifest:
 generate-kustomize:
 	scripts/generate_kustomize.sh ${TAG}
 	cd scripts/kustomize_cleanup; go build kustomize_cleanup.go;./kustomize_cleanup;cd ..
+	scripts/generate_crds.sh ${TAG}
 
 upload-docker-images:
 	scripts/upload_docker_images.sh ${TAG}
