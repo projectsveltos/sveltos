@@ -17,7 +17,7 @@ rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/libsveltos.git
 cd libsveltos
 git checkout ${branch}
-for f in config/crd/bases/*.yaml
+for f in manifests/*.yaml
 do 
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
@@ -234,6 +234,22 @@ echo "processing register-mgmt-cluster"
 rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/register-mgmt-cluster.git
 cd register-mgmt-cluster
+git checkout ${branch}
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml
+    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
+# conversion-webhook
+echo "processing conversion-webhook"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/conversion-webhook.git
+cd conversion-webhook
 git checkout ${branch}
 for f in manifest/*.yaml
 do 

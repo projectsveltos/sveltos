@@ -35,15 +35,17 @@ To deploy Kyverno and a ClusterPolicy across all managed clusters matching the S
 !!! example "Example - ClusterProfile Kyverno Deployment"
     ```yaml
       ---
-      apiVersion: config.projectsveltos.io/v1alpha1
+      apiVersion: config.projectsveltos.io/v1beta1
       kind: ClusterProfile
       metadata:
         name: kyverno
       spec:
-        clusterSelector: env=fv
+        clusterSelector:
+          matchLabels:
+            env: fv
         helmCharts:
         - chartName: kyverno/kyverno
-          chartVersion: v3.0.1
+          chartVersion: v3.2.5
           helmChartAction: Install
           releaseName: kyverno-latest
           releaseNamespace: kyverno

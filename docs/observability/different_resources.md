@@ -23,7 +23,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
     # It identifies and reports any pods that are accessing Secrets that have been modified
     # since the pod's creation.
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
         name: list-pods-with-outdated-secret-data
@@ -195,7 +195,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
 Following is a report generated for above HealthCheck
 
 ```yaml
-apiVersion: lib.projectsveltos.io/v1alpha1
+apiVersion: lib.projectsveltos.io/v1beta1
 kind: HealthCheckReport
 metadata:
   labels:

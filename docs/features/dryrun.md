@@ -25,8 +25,7 @@ By deploying a ClusterProfile with the `syncMode` set to `DryRun`, we can launch
 ### Configuraton Example
 
 ```yaml
----
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: deploy-kyverno

@@ -23,7 +23,7 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 ## How it works?
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1alpha1/profile_types.go "Profile to manage Kubernetes add-ons") are the CustomerResourceDefinitions used to instruct Sveltos which add-ons to deploy on a set of clusters.
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") are the CustomerResourceDefinitions used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
 - __ClusterProfile__: It iss a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
 
@@ -94,19 +94,20 @@ The third step is to create a ClusterProfile Kubernetes resource and apply it to
 
 ```yaml
 cat > clusterprofile_kyverno.yaml <<EOF
----
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: kyverno
 spec:
-  clusterSelector: env=prod
+  clusterSelector:
+    matchLabels:
+      env: prod
   syncMode: Continuous
   helmCharts:
   - repositoryURL:    https://kyverno.github.io/kyverno/
     repositoryName:   kyverno
     chartName:        kyverno/kyverno
-    chartVersion:     v3.1.1
+    chartVersion:     v3.2.5
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
@@ -121,8 +122,8 @@ $ sveltosctl show addons
 +--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 |         CLUSTER          | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
 +--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
-| projectsveltos/cluster12 | helm chart    | kyverno   | kyverno-latest | 3.1.1   | 2023-12-16 00:14:17 -0800 PST | kyverno          |
-| projectsveltos/cluster13 | helm chart    | kyverno   | kyverno-latest | 3.1.1   | 2023-12-16 00:14:17 -0800 PST | kyverno          |
+| projectsveltos/cluster12 | helm chart    | kyverno   | kyverno-latest | 3.2.5   | 2023-12-16 00:14:17 -0800 PST | kyverno          |
+| projectsveltos/cluster13 | helm chart    | kyverno   | kyverno-latest | 3.2.5   | 2023-12-16 00:14:17 -0800 PST | kyverno          |
 +--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 ```
 

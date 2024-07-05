@@ -73,12 +73,16 @@ When using `templateResourceRefs` to find resources in the management cluster, t
 
 The name field in `templateResourceRefs` can also be a template. This allows users to dynamically generate names based on information available during deployment.
 
-We can use special keywords like _.ClusterNamespace_ and _.ClusterName_ within the name template to reference the namespace and name of the cluster where the resource is about to be deployed.
+Available cluster information :
+
+- cluster namespace: use `.Cluster.metadata.namespace`
+- cluster name: `.Cluster.metadata.name` 
+- cluster type: `.Cluster.kind` 
 
 For example, the below template will create a name by combining the cluster's namespace and name:
 
 ```yaml
-name: "{{ .ClusterNamespace }}-{{ .ClusterName }}"
+name: "{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}"
 ```
 
 ## Continue Reading

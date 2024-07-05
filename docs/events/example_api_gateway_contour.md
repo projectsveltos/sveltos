@@ -26,50 +26,52 @@ With the event driven framework, we are taking a step forward: programmatically 
     ```yaml
     cat > eventsource.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: eng-http-service
+      name: eng-http-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: ""
-      version: "v1"
-      kind: "Service"
-      namespace: eng
-      evaluate: |
-        function evaluate()
-          hs = {}
-          hs.matching = false
-          if obj.spec.ports ~= nil then
-            for _,p in pairs(obj.spec.ports) do
-              if p.port == 80 then
-                hs.matching = true
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        namespace: eng
+        evaluate: |
+          function evaluate()
+            hs = {}
+            hs.matching = false
+            if obj.spec.ports ~= nil then
+              for _,p in pairs(obj.spec.ports) do
+                if p.port == 80 then
+                  hs.matching = true
+                end
               end
             end
+            return hs
           end
-          return hs
-        end
-    EOF
-    ```
+      EOF
+      ```
 
 !!! example "Example - EventTrigger Definition"
     ```yaml
     cat > eventtrigger.yaml <<EOF
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
-    name: service-network-policy
+      name: service-network-policy
     spec:
-    sourceClusterSelector: env=fv
-    eventSourceName: eng-http-service
-    oneForEvent: true
-    policyRefs:
-    ...
-    - name: http-routes
-      namespace: default
-      kind: ConfigMap
+      sourceClusterSelector:
+        matchLabels:
+          env: fv
+      eventSourceName: eng-http-service
+      oneForEvent: true
+      policyRefs:
+      ...
+      - name: http-routes
+        namespace: default
+        kind: ConfigMap
     ---
     apiVersion: v1
     kind: ConfigMap

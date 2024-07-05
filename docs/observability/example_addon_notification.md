@@ -24,12 +24,14 @@ Once the defined conditions are met, a notification will be generated and send o
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: addons
         type: Addons
@@ -42,6 +44,7 @@ Once the defined conditions are met, a notification will be generated and send o
           name: slack
           namespace: default
     ```
+
 The above `slack` secret contains the Slack channel and the token.
 
   ```bash
@@ -56,12 +59,14 @@ The above `slack` secret contains the Slack channel and the token.
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: addons
         type: Addons
@@ -89,12 +94,14 @@ The above `Webex` secret contains the Webex room id and the token.
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: addons
         type: Addons
@@ -121,12 +128,14 @@ The above `Teams` secret contains the Teams webhook URL.
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: addons
         type: Addons
@@ -153,12 +162,14 @@ The above `discord` secret contains the Discord channel id and the token.
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
       name: production
     spec:
-      clusterSelector: env=fv
+      clusterSelector:
+        matchLabels:
+          env: fv
       livenessChecks:
       - name: addons
         type: Addons

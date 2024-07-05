@@ -32,12 +32,14 @@ By using events, you can ensure that your application is rolled out in a control
 will instruct Sveltos to create a PostgreSQL Deployment and Service in all clusters matching the label __env: fv__.
 
 ```yaml
-apiVersion: config.projectsveltos.io/v1alpha1
+apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
   name: postgresql
 spec:
-  clusterSelector: env=fv
+  clusterSelector:
+    matchLabels:
+      env: fv
   policyRefs:
   - name: postgresql-deployment
     namespace: default
@@ -65,7 +67,7 @@ With the ConfigMap __postgresql-job__ containing a Job that creates a table Todo
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: postgresql-deployment-health
@@ -93,12 +95,14 @@ With the ConfigMap __postgresql-job__ containing a Job that creates a table Todo
           return hs
         end
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
     name: deploy-insert-table-job
     spec:
-    sourceClusterSelector: env=fv
+    sourceClusterSelector:
+      matchLabels:
+        env: fv
     eventSourceName: postgresql-deployment-health
     stopMatchingBehavior: LeavePolicies
     policyRefs:
@@ -127,7 +131,7 @@ With the ConfigMap __todo-app__ containing the todo app (ServiceAccount, Deploym
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: postgresql-job-completed
@@ -153,12 +157,14 @@ With the ConfigMap __todo-app__ containing the todo app (ServiceAccount, Deploym
           return hs
         end
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
     name: deploy-todo-app
     spec:
-    sourceClusterSelector: env=fv
+    sourceClusterSelector:
+      matchLabels:
+        env: fv
     eventSourceName: postgresql-job-completed
     stopMatchingBehavior: LeavePolicies
     policyRefs:
@@ -189,7 +195,7 @@ With the ConfigMap __todo-insert-data__ containing a Job which will add an entry
 !!! example ""
     ```yaml
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
     name: todo-app-health
@@ -217,12 +223,14 @@ With the ConfigMap __todo-insert-data__ containing a Job which will add an entry
           return hs
         end
     ---
-    apiVersion: lib.projectsveltos.io/v1alpha1
+    apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
     name: insert-data
     spec:
-    sourceClusterSelector: env=fv
+    sourceClusterSelector:
+      matchLabels:
+        env: fv
     eventSourceName: todo-app-health
     stopMatchingBehavior: LeavePolicies
     policyRefs:
