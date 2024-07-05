@@ -70,6 +70,12 @@ $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --
 $ helm list -n projectsveltos
 ```
 
+!!! note
+     When deploying Sveltos with Helm, the `helm upgrade` command won't automatically update Sveltos's Custom Resource Definitions (CRDs). To ensure CRDs are updated, run this command before upgrading Sveltos.
+     ```bash
+     kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.33.0/manifest/crds/sveltos_crds.yaml
+     ```
+
 ### Kustomize Installation
 
 #### Mode 1: Local Agent Mode
