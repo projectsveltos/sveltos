@@ -48,3 +48,42 @@ spec:
         path: /metadata/labels/environment
         value: production
 ```
+
+This is yet another example
+
+```yaml hl_lines="17-34"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: nginx
+spec:
+  clusterSelector:
+    matchLabels:
+      env: fv
+  helmCharts:
+  - chartName: nginx-stable/nginx-ingress
+    chartVersion: 1.1.3
+    helmChartAction: Install
+    releaseName: nginx-latest
+    releaseNamespace: nginx
+    repositoryName: nginx-stable
+    repositoryURL: https://helm.nginx.com/stable/
+  patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name:  nginx-latest-nginx-ingress-controller
+      spec:
+        template:
+          spec:
+            containers:
+            - name: nginx-ingress
+              imagePullPolicy: Always
+              securityContext:
+                readOnlyRootFilesystem: true
+    target:
+      group: apps
+      kind: Deployment
+      version: v1
+```
