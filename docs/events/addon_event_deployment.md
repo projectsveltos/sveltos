@@ -42,17 +42,17 @@ An _Event_ is a specific operation in the context of Kubernetes objects. To defi
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: sveltos-service
+      name: sveltos-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: ""
-      version: "v1"
-      kind: "Service"
-      labelFilters:
-      - key: sveltos
-        operation: Equal
-        value: fv
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        labelFilters:
+        - key: sveltos
+          operation: Equal
+          value: fv
     ```
 
 In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv*.
@@ -67,29 +67,29 @@ Sveltos supports custom events written in the [Lua](https://www.lua.org/) langua
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: sveltos-service
+      name: sveltos-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: ""
-      version: "v1"
-      kind: "Service"
-      evaluate: |
-        function evaluate()
-          hs = {}
-          hs.matching = false
-          hs.message = ""
-          if obj.metadata.labels ~= nil then
-            for key, value in pairs(obj.metadata.labels) do
-              if key == "sveltos" then
-                if value == "fv" then
-                  hs.matching = true
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        evaluate: |
+          function evaluate()
+            hs = {}
+            hs.matching = false
+            hs.message = ""
+            if obj.metadata.labels ~= nil then
+              for key, value in pairs(obj.metadata.labels) do
+                if key == "sveltos" then
+                  if value == "fv" then
+                    hs.matching = true
+                  end
                 end
               end
             end
+            return hs
           end
-          return hs
-        end
     ```
 
 In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv* but with a Lua script.
@@ -128,17 +128,17 @@ Inside the newly created directory or subdirectory, create the below.
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventSource
     metadata:
-    name: sveltos-service
+      name: sveltos-service
     spec:
-    collectResources: true
-    resourceSelectors:
-    - group: "apps"
-      version: "v1"
-      kind: "Deployment"
-    - kind: HorizontalPodAutoscaler
-      group: "autoscaling"
-      version: v2
-    aggregatedSelection: |
+      collectResources: true
+      resourceSelectors:
+      - group: "apps"
+        version: "v1"
+        kind: "Deployment"
+      - kind: HorizontalPodAutoscaler
+        group: "autoscaling"
+        version: v2
+      aggregatedSelection: |
           function getKey(namespace, name)
             return namespace .. ":" .. name
           end
