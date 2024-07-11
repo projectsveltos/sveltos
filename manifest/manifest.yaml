@@ -6019,6 +6019,13 @@ spec:
                                   description: Group of the resource deployed in the
                                     Cluster.
                                   type: string
+                                ignoreForConfigurationDrift:
+                                  default: false
+                                  description: |-
+                                    IgnoreForConfigurationDrift indicates to not track resource
+                                    for configuration drift detection.
+                                    This field has a meaning only when mode is ContinuousWithDriftDetection
+                                  type: boolean
                                 kind:
                                   description: Kind of the resource deployed in the
                                     Cluster.
@@ -6184,6 +6191,13 @@ spec:
                                   description: Group of the resource deployed in the
                                     Cluster.
                                   type: string
+                                ignoreForConfigurationDrift:
+                                  default: false
+                                  description: |-
+                                    IgnoreForConfigurationDrift indicates to not track resource
+                                    for configuration drift detection.
+                                    This field has a meaning only when mode is ContinuousWithDriftDetection
+                                  type: boolean
                                 kind:
                                   description: Kind of the resource deployed in the
                                     Cluster.
@@ -6383,6 +6397,7 @@ spec:
                                     Cluster.
                                   type: string
                                 ignoreForConfigurationDrift:
+                                  default: false
                                   description: |-
                                     IgnoreForConfigurationDrift indicates to not track resource
                                     for configuration drift detection.
@@ -6460,7 +6475,6 @@ spec:
                                   type: string
                               required:
                               - group
-                              - ignoreForConfigurationDrift
                               - kind
                               - name
                               - owner
@@ -6555,6 +6569,7 @@ spec:
                                     Cluster.
                                   type: string
                                 ignoreForConfigurationDrift:
+                                  default: false
                                   description: |-
                                     IgnoreForConfigurationDrift indicates to not track resource
                                     for configuration drift detection.
@@ -6632,7 +6647,6 @@ spec:
                                   type: string
                               required:
                               - group
-                              - ignoreForConfigurationDrift
                               - kind
                               - name
                               - owner
@@ -8873,6 +8887,13 @@ spec:
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
+                        ignoreForConfigurationDrift:
+                          default: false
+                          description: |-
+                            IgnoreForConfigurationDrift indicates to not track resource
+                            for configuration drift detection.
+                            This field has a meaning only when mode is ContinuousWithDriftDetection
+                          type: boolean
                         kind:
                           description: Kind of the resource deployed in the Cluster.
                           minLength: 1
@@ -9019,6 +9040,13 @@ spec:
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
+                        ignoreForConfigurationDrift:
+                          default: false
+                          description: |-
+                            IgnoreForConfigurationDrift indicates to not track resource
+                            for configuration drift detection.
+                            This field has a meaning only when mode is ContinuousWithDriftDetection
+                          type: boolean
                         kind:
                           description: Kind of the resource deployed in the Cluster.
                           minLength: 1
@@ -9174,6 +9202,7 @@ spec:
                           description: Group of the resource deployed in the Cluster.
                           type: string
                         ignoreForConfigurationDrift:
+                          default: false
                           description: |-
                             IgnoreForConfigurationDrift indicates to not track resource
                             for configuration drift detection.
@@ -9248,7 +9277,6 @@ spec:
                           type: string
                       required:
                       - group
-                      - ignoreForConfigurationDrift
                       - kind
                       - name
                       - owner
@@ -9327,6 +9355,7 @@ spec:
                           description: Group of the resource deployed in the Cluster.
                           type: string
                         ignoreForConfigurationDrift:
+                          default: false
                           description: |-
                             IgnoreForConfigurationDrift indicates to not track resource
                             for configuration drift detection.
@@ -9401,7 +9430,6 @@ spec:
                           type: string
                       required:
                       - group
-                      - ignoreForConfigurationDrift
                       - kind
                       - name
                       - owner
@@ -14258,10 +14286,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.34.0
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: projectsveltos/addon-controller:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14592,7 +14620,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager:main
+        image: projectsveltos/access-manager:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14734,7 +14762,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: projectsveltos/sveltoscluster-manager:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14996,7 +15024,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager:main
+        image: projectsveltos/healthcheck-manager:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16079,6 +16107,11 @@ spec:
                   Resources contained in the referenced ConfigMaps/Secrets and HelmCharts
                   will be customized using information from resources matching the EventSource
                   in the managed cluster.
+                  Name can be expressed as a template and instantiate using:
+                  - cluster namespace: .Cluster.metadata.namespace
+                  - cluster name: .Cluster.metadata.name
+                  - cluster type: .Cluster.kind
+                minLength: 1
                 type: string
               extraAnnotations:
                 additionalProperties:
@@ -17280,7 +17313,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager:main
+        image: projectsveltos/event-manager:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17333,6 +17366,14 @@ kind: ClusterRole
 metadata:
   name: classifier-manager-role
 rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
 - apiGroups:
   - ""
   resources:
@@ -17507,10 +17548,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.34.0
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: projectsveltos/classifier:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17700,7 +17741,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller:main
+        image: projectsveltos/shard-controller:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17826,7 +17867,7 @@ spec:
       containers:
       - command:
         - /conversion-webhook
-        image: projectsveltos/webhook-conversion:main
+        image: projectsveltos/webhook-conversion:v0.34.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
