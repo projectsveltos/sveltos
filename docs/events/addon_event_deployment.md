@@ -178,6 +178,16 @@ Inside the newly created directory or subdirectory, create the below.
           end
     ```
 
+### Template-based EventSourceName
+
+The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+
+Available cluster information :
+
+- cluster namespace: use `.Cluster.metadata.namespace`
+- cluster name: `.Cluster.metadata.name` 
+- cluster type: `.Cluster.kind` 
+
 ## Events and Multi-tenancy
 
 If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
