@@ -51,6 +51,9 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 !!! warning
     Both deployments will perform the Sveltos installation in the `projectsveltos` namespace.
 
+!!! tip 
+    For production environments, using a release tag instead of the 'main' branch is recommended to ensure a smooth upgrade process for Sveltos applications.
+    
 ## Deployment Options
 
 Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
