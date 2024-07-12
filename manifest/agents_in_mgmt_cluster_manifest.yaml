@@ -6052,6 +6052,13 @@ spec:
                                   description: Group of the resource deployed in the
                                     Cluster.
                                   type: string
+                                ignoreForConfigurationDrift:
+                                  default: false
+                                  description: |-
+                                    IgnoreForConfigurationDrift indicates to not track resource
+                                    for configuration drift detection.
+                                    This field has a meaning only when mode is ContinuousWithDriftDetection
+                                  type: boolean
                                 kind:
                                   description: Kind of the resource deployed in the
                                     Cluster.
@@ -6217,6 +6224,13 @@ spec:
                                   description: Group of the resource deployed in the
                                     Cluster.
                                   type: string
+                                ignoreForConfigurationDrift:
+                                  default: false
+                                  description: |-
+                                    IgnoreForConfigurationDrift indicates to not track resource
+                                    for configuration drift detection.
+                                    This field has a meaning only when mode is ContinuousWithDriftDetection
+                                  type: boolean
                                 kind:
                                   description: Kind of the resource deployed in the
                                     Cluster.
@@ -6416,6 +6430,7 @@ spec:
                                     Cluster.
                                   type: string
                                 ignoreForConfigurationDrift:
+                                  default: false
                                   description: |-
                                     IgnoreForConfigurationDrift indicates to not track resource
                                     for configuration drift detection.
@@ -6493,7 +6508,6 @@ spec:
                                   type: string
                               required:
                               - group
-                              - ignoreForConfigurationDrift
                               - kind
                               - name
                               - owner
@@ -6588,6 +6602,7 @@ spec:
                                     Cluster.
                                   type: string
                                 ignoreForConfigurationDrift:
+                                  default: false
                                   description: |-
                                     IgnoreForConfigurationDrift indicates to not track resource
                                     for configuration drift detection.
@@ -6665,7 +6680,6 @@ spec:
                                   type: string
                               required:
                               - group
-                              - ignoreForConfigurationDrift
                               - kind
                               - name
                               - owner
@@ -8906,6 +8920,13 @@ spec:
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
+                        ignoreForConfigurationDrift:
+                          default: false
+                          description: |-
+                            IgnoreForConfigurationDrift indicates to not track resource
+                            for configuration drift detection.
+                            This field has a meaning only when mode is ContinuousWithDriftDetection
+                          type: boolean
                         kind:
                           description: Kind of the resource deployed in the Cluster.
                           minLength: 1
@@ -9052,6 +9073,13 @@ spec:
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
+                        ignoreForConfigurationDrift:
+                          default: false
+                          description: |-
+                            IgnoreForConfigurationDrift indicates to not track resource
+                            for configuration drift detection.
+                            This field has a meaning only when mode is ContinuousWithDriftDetection
+                          type: boolean
                         kind:
                           description: Kind of the resource deployed in the Cluster.
                           minLength: 1
@@ -9207,6 +9235,7 @@ spec:
                           description: Group of the resource deployed in the Cluster.
                           type: string
                         ignoreForConfigurationDrift:
+                          default: false
                           description: |-
                             IgnoreForConfigurationDrift indicates to not track resource
                             for configuration drift detection.
@@ -9281,7 +9310,6 @@ spec:
                           type: string
                       required:
                       - group
-                      - ignoreForConfigurationDrift
                       - kind
                       - name
                       - owner
@@ -9360,6 +9388,7 @@ spec:
                           description: Group of the resource deployed in the Cluster.
                           type: string
                         ignoreForConfigurationDrift:
+                          default: false
                           description: |-
                             IgnoreForConfigurationDrift indicates to not track resource
                             for configuration drift detection.
@@ -9434,7 +9463,6 @@ spec:
                           type: string
                       required:
                       - group
-                      - ignoreForConfigurationDrift
                       - kind
                       - name
                       - owner
@@ -16113,6 +16141,11 @@ spec:
                   Resources contained in the referenced ConfigMaps/Secrets and HelmCharts
                   will be customized using information from resources matching the EventSource
                   in the managed cluster.
+                  Name can be expressed as a template and instantiate using:
+                  - cluster namespace: .Cluster.metadata.namespace
+                  - cluster name: .Cluster.metadata.name
+                  - cluster type: .Cluster.kind
+                minLength: 1
                 type: string
               extraAnnotations:
                 additionalProperties:
@@ -16122,6 +16155,7 @@ spec:
                   deployed in a managed cluster based on this ClusterProfile/Profile instance.
                   **Important:** If a resource deployed by Sveltos already has a annotation with a key present in
                   `ExtraAnnotations`, the value from `ExtraAnnotations` will override the existing value.
+                  (Deprecated use Patches instead)
                 type: object
               extraLabels:
                 additionalProperties:
@@ -16131,6 +16165,7 @@ spec:
                   a managed cluster based on this ClusterProfile/Profile instance.
                   **Important:** If a resource deployed by Sveltos already has a label with a key present in
                   `ExtraLabels`, the value from `ExtraLabels` will override the existing value.
+                  (Deprecated use Patches instead)
                 type: object
               helmCharts:
                 description: Helm charts to be deployed in the matching clusters based
@@ -16528,6 +16563,67 @@ spec:
                   resource (OneForEvent = false) or one per resource (OneForEvent = true)
                   needs to be creted.
                 type: boolean
+              patches:
+                description: |-
+                  Define additional Kustomize inline Patches applied for all resources on this profile
+                  Within the Patch Spec you can use templating
+                items:
+                  description: |-
+                    Patch contains an inline StrategicMerge or JSON6902 patch, and the target the patch should
+                    be applied to.
+                  properties:
+                    patch:
+                      description: |-
+                        Patch contains an inline StrategicMerge patch or an inline JSON6902 patch with
+                        an array of operation objects.
+                        These values can be static or leverage Go templates for dynamic customization.
+                        When expressed as templates, the values are filled in using information from
+                        resources within the management cluster before deployment (Cluster and TemplateResourceRefs)
+                      type: string
+                    target:
+                      description: Target points to the resources that the patch document
+                        should be applied to.
+                      properties:
+                        annotationSelector:
+                          description: |-
+                            AnnotationSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource annotations.
+                          type: string
+                        group:
+                          description: |-
+                            Group is the API group to select resources from.
+                            Together with Version and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        kind:
+                          description: |-
+                            Kind of the API Group to select resources from.
+                            Together with Group and Version it is capable of unambiguously
+                            identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        labelSelector:
+                          description: |-
+                            LabelSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource labels.
+                          type: string
+                        name:
+                          description: Name to match resources with.
+                          type: string
+                        namespace:
+                          description: Namespace to select resources from.
+                          type: string
+                        version:
+                          description: |-
+                            Version of the API Group to select resources from.
+                            Together with Group and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                      type: object
+                  type: object
+                type: array
               policyRefs:
                 description: |-
                   PolicyRefs references all the ConfigMaps/Secrets containing kubernetes resources
@@ -17367,6 +17463,14 @@ kind: ClusterRole
 metadata:
   name: classifier-manager-role
 rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
 - apiGroups:
   - ""
   resources:

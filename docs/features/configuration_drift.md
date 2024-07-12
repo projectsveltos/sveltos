@@ -81,3 +81,50 @@ This means any changes made to resources deployed by the Helm chart itself will 
             value: "ok"
 ```
 
+## Customize drift-detection-manager configuration
+
+In some cases, you might want to tailor the deployment of the drift-detection-manager[^1]. To achieve this, the `addon-controller` pod now accepts a new argument named `drift-detection-config`.
+
+This argument points to a ConfigMap within the projectsveltos namespace. The ConfigMap holds patches that will be applied to the drift-detection-manager before its deployment in the managed cluster.
+
+Here's an example:
+
+```yaml
+apiVersion: v1
+data:
+  patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: drift-detection-manager
+    spec:
+      template:
+        spec:
+          containers:
+          - name: manager
+            image: projectsveltos/drift-detection-manager:dev
+            resources:
+              requests:
+                memory: 256Mi
+            securityContext:
+              readOnlyRootFilesystem: true
+kind: ConfigMap
+metadata:
+  name: drift-detection
+  namespace: projectsveltos
+```
+
+Along with creating the ConfigMap, you'll also need to configure the addon-controller deployment to use it. To do this, add the following argument to the deployment:
+
+```yaml
+- args:
+  ...
+  - --drift-detection-config=drift-detection
+```
+
+With this configuration, the drift-detection-manager will be deployed in each managed cluster with the following settings:
+
+- Request memory: 256Mi
+- Image: projectsveltos/drift-detection-manager:dev
+
+[^1]: Same is valid for `sveltos-agent`. classifier pod now accepts a new argument named `sveltos-agent-config`. It points to a ConfigMap in the projectsveltos namespace. The ConfigMap holds patches that will be applied to the sveltos-agent before its deployment in the managed cluster.
