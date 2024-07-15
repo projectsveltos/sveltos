@@ -153,9 +153,9 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
         kind: Secret
         metadata:
           name: eso
-          namespace: {{ (index .MgmtResources "ExternalSecret").metadata.namespace }}
+          namespace: {{ (getResource "ExternalSecret").metadata.namespace }}
         data:
-          content: {{ (index .MgmtResources "ExternalSecret").data.content }}
+          content: {{ (getResource "ExternalSecret").data.content }}
     EOF
     ```
 

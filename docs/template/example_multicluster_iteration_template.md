@@ -127,7 +127,7 @@ Lets assume the clusters where the service should get deployed has the cluster l
           projectsveltos.io/template: "true"
     data:
       services.yaml: |
-        {{ range $cluster := (index .MgmtResources "ClusterData").spec.matchingResources }}
+        {{ range $cluster := (getResource "ClusterData").spec.matchingResources }}
           apiVersion: v1
           kind: Service
           metadata:

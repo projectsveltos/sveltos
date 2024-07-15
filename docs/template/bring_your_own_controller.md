@@ -131,10 +131,10 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
           name: gcs-credentials
           namespace: default
           annotations:
-            bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
+            bucket: {{ (getResource "Bucket").status.bucketURL }}
         type: Opaque
         data:
-          service-account.json: {{ (index .MgtmResources "Bucket").status.serviceAccountCredentials }}
+          service-account.json: {{ (getResource "Bucket").status.serviceAccountCredentials }}
       pod.yaml: |
         apiVersion: v1
         kind: Pod
@@ -142,7 +142,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
           name: create-and-upload-to-gcs
           namespace: default
           annotations:
-            bucket: {{ (index .MgtmResources "Bucket").status.bucketURL }}
+            bucket: {{ (getResource "Bucket").status.bucketURL }}
         spec:
           containers:
           - name: uploader
@@ -153,7 +153,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
               - |
                 echo "Hello world" > /tmp/hello.txt
                 gcloud auth activate-service-account --key-file=/var/run/secrets/cloud.google.com/service-account.json
-                gsutil cp /tmp/hello.txt gs://{{ (index .MgtmResources "Bucket").spec.bucketName }}
+                gsutil cp /tmp/hello.txt gs://{{ (getResource "Bucket").spec.bucketName }}
             volumeMounts:
               - name: gcp-sa
                 mountPath: /var/run/secrets/cloud.google.com/

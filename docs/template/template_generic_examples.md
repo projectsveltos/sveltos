@@ -145,7 +145,7 @@ Following ClusterProfile
         releaseNamespace: kyverno
         helmChartAction:  Install
         values: |
-          {{ (index .MgmtResources "ConfigData").data.values }}
+          {{ (getResource "ConfigData").data.values }}
     ```
 
 will deploy Kyverno with _3_ replicas on cluster1
@@ -221,10 +221,10 @@ Find the template below.
         kind: Secret
         metadata:
           name: autoscaler
-          namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
+          namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
         data:
-          token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
-          ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+          token: {{ (getResource "AutoscalerSecret").data.token }}
+          ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
     ```
 
 Sveltos will use the content of the _AutoscalerSecret_ to fill in the placeholders when deploying the resources to your managed clusters.
@@ -235,7 +235,7 @@ Sveltos will use the content of the _AutoscalerSecret_ to fill in the placeholde
 To use any resource that Sveltos has found based on the defintion, simply use the syntax below in the YAML template:
 
 ```yaml
-(index .MgmtResources "<Identifier>")
+(getResource "<Identifier>")
 ```
 
 Replace `<Identifier>` with the name you gave that resource in your ClusterProfile definition (like _AutoscalerSecret_).
@@ -285,10 +285,10 @@ Firstly, we create a ConfigMap named _replicate-external-secret-operator-secret_
         apiVersion: v1
         kind: Secret
         metadata:
-          name: {{ (index .MgmtResources "ESOSecret").metadata.name }}
-          namespace: {{ (index .MgmtResources "ESOSecret").metadata.namespace }}
+          name: {{ (getResource "ESOSecret").metadata.name }}
+          namespace: {{ (getResource "ESOSecret").metadata.namespace }}
         data:
-          {{ range $key, $value := (index .MgmtResources "ESOSecret").data }}
+          {{ range $key, $value := (getResource "ESOSecret").data }}
             {{$key}}: {{ $value }}
           {{ end }}
     ```
@@ -420,10 +420,10 @@ The content of this ConfigMap is a template that uses the information contained 
         kind: Secret
         metadata:
           name: autoscaler
-          namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
+          namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
         data:
-          token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
-          ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+          token: {{ (getResource "AutoscalerSecret").data.token }}
+          ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
     ```
 
 ### Autoscaler All-in-One - YAML Definition
@@ -503,8 +503,8 @@ The content of this ConfigMap is a template that uses the information contained 
         kind: Secret
         metadata:
           name: autoscaler
-          namespace: {{ (index .MgmtResources "AutoscalerSecret").metadata.namespace }}
+          namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
         data:
-          token: {{ (index .MgmtResources "AutoscalerSecret").data.token }}
-          ca.crt: {{ $data:=(index .MgmtResources "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+          token: {{ (getResource "AutoscalerSecret").data.token }}
+          ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
     ```
