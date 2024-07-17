@@ -238,7 +238,7 @@ Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure addi
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
-Each EventBasedAddon instance: 
+Each EvenTrigger instance: 
 
 1. References an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
@@ -296,7 +296,9 @@ It referenced a ConfigMap that contains a *NetworkPolicy* expressed as a templat
                 {{ end }}
     ```
 
-Based on the above ConfigMap YAML definition, the __Resource__ is the Kubernetes resource in the managed cluster matching the EventSource (Service instance with the label set to `sveltos:fv`).
+The __Resource__ in the above ConfigMap YAML definition refers to the specific Kubernetes resource within the managed cluster that generated the event (identified by the Service instance with the label `sveltos:fv`).
+
+Additionally, the template can access information about the cluster where the event originated. To utilize the name of the managed cluster, for example, you can use `{{ .Cluster.metadata.name }}` in your template.
 
 Anytime a *Service* with the label set to *sveltos:fv* is created in a managed cluster matching the sourceClusterSelector, a *NetworkPolicy* is with an ingress definition is created.
 
@@ -376,11 +378,10 @@ To achive the above, the below flow is executed.
 
 ### EventSource CollectResources setting
 
-EventSource *collectResources* field (false by default) indicates whether any resource matching the EventSource should be collected and send to the management cluster (where it will be used to instantiate add-on templates).
+The `collectResources` field in an EventSource (__default: false__) determines whether Kubernetes resources matching the EventSource should be collected and transmitted to the management cluster for template instantiation.
 
-- If the `collectResources` is set to `true`, the add-on templates can refer to the __Resource__ which represents a Kubernetes resource in the managed cluster matching the EventSource (Service instance with labels sveltos: fv).
-
-- If the `collectResources` is set to `false`, the add-on templates can refer to the __MatchingResources__ which is a corev1.ObjectReference representing resource in the managed cluster matching EventSource (Service instance with labels sveltos: fv).
+- When collectResources is true: templates can directly reference the Resource, which is a full representation of the matched Kubernetes resource (e.g., a Service with the label sveltos:fv) from the managed cluster.
+- When collectResources is false: templates can access the MatchingResources, a corev1.ObjectReference providing essential metadata information about the matched resource (e.g., Service with the label sveltos:fv) without the complete resource details.
 
 Based on the example above, the below EventReport instance can be found in the management cluster.
 
