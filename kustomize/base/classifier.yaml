@@ -191,10 +191,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.34.2
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: projectsveltos/classifier:v0.34.2
         livenessProbe:
           failureThreshold: 3
           httpGet:
