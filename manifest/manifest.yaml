@@ -14289,7 +14289,7 @@ spec:
         - --version=main
         command:
         - /manager
-        image: projectsveltos/addon-controller:main
+        image: docker.io/projectsveltos/addon-controller:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14620,7 +14620,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/access-manager:main
+        image: docker.io/projectsveltos/access-manager:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14762,7 +14762,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/sveltoscluster-manager:main
+        image: docker.io/projectsveltos/sveltoscluster-manager:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -15024,7 +15024,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/healthcheck-manager:main
+        image: docker.io/projectsveltos/healthcheck-manager:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17376,7 +17376,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: projectsveltos/event-manager:main
+        image: docker.io/projectsveltos/event-manager:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17614,7 +17614,7 @@ spec:
         - --version=main
         command:
         - /manager
-        image: projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17804,7 +17804,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: projectsveltos/shard-controller:main
+        image: docker.io/projectsveltos/shard-controller:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17877,7 +17877,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: projectsveltos/register-mgmt-cluster:main
+        image: docker.io/projectsveltos/register-mgmt-cluster:main
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -17930,7 +17930,7 @@ spec:
       containers:
       - command:
         - /conversion-webhook
-        image: projectsveltos/webhook-conversion:main
+        image: docker.io/projectsveltos/webhook-conversion:main
         livenessProbe:
           failureThreshold: 3
           httpGet:
