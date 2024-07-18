@@ -102,7 +102,7 @@ data:
         spec:
           containers:
           - name: manager
-            image: projectsveltos/drift-detection-manager:dev
+            image: docker.io/projectsveltos/drift-detection-manager:dev
             resources:
               requests:
                 memory: 256Mi
