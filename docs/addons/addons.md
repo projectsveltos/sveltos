@@ -25,7 +25,7 @@ Sveltos comes with support to automatically discover [ClusterAPI](https://github
 
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") are the CustomerResourceDefinitions used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
-- __ClusterProfile__: It iss a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
+- __ClusterProfile__: It is a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
 
 - __Profile__: It is a namespace-scoped resource that is specific to a single namespace. It can only match clusters and reference resources within its own namespace.
 
