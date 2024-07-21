@@ -16,7 +16,13 @@ authors:
 Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, it can manage add-ons and applications to multiple clusters.
 
 !!! note
-    `cert-manager` is required in the management cluster.
+    `cert-manager` is required in the management cluster. If cert-manager is not available in the cluster, Sveltos will not wotk as expected.
+
+    - [cert-manager manifest deployment](https://cert-manager.io/docs/installation/kubectl/)
+    - [cert-manager Helm chart deployment](https://cert-manager.io/docs/installation/helm/)
+
+    General information about cert-manager, have a look [here](https://cert-manager.io/docs/).
+
 
 ## Installation Modes
 
