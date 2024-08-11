@@ -128,3 +128,6 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/demos/main/man
 
 By directing kubectl to the pre-production cluster, we can confirm the Job's creation and successful completion. This indicates that the table has been successfully established within the Postgres database on the managed services cluster.
 
+## Yet another example
+
+Learn [how to expose](https://medium.com/p/d26b87cbd5a4) your managed services with Gateway API.
