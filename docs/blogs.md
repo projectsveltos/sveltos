@@ -18,6 +18,7 @@ authors:
 1. [Deploy Kubernetes add-ons](https://medium.com/@gianluca.mardente/sveltos-a-solution-to-deploy-kubernetes-add-ons-in-clusterapi-powered-clusters-b9d4b48fc819)
 1. [Centralised Resource Display for Multiple Kubernetes Clusters](https://dev.to/gianlucam76/centralized-resource-display-for-multiple-kubernetes-clusters-4ngi)
 1. [Sveltos and Kustomize](https://dev.to/gianlucam76/kubernetes-add-ons-management-introducing-kustomize-integration-with-sveltos-2cpn)
+1. [Gateway API: Exposing managed services with Kong and Sveltos](https://medium.com/p/d26b87cbd5a4)
 1. [Sveltos, Carvel ytt and Flux](https://medium.com/@gianluca.mardente/simplify-kubernetes-resource-management-with-sveltos-carvel-ytt-and-flux-da960298c321)
 1. [Kubernetes Cluster Management and Cloud Automation with ClusterAPI, Crossplane and Projectsveltos](https://medium.com/p/a20594be51b5)
 1. [Event driven add-on deployment](https://medium.com/p/43366ba9894d)
