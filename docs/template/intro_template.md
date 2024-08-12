@@ -85,6 +85,54 @@ For example, the below template will create a name by combining the cluster's na
 name: "{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}"
 ```
 
+## Embedding Go Templates in Sveltos
+ 
+When incorporating Go template logic into Sveltos templates, utilize the escape syntax.
+
+```yaml hl_lines="29"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meilisearch-proxy-secrets
+  namespace: default
+  annotations:
+    projectsveltos.io/template: "true"
+data:
+  secrets.yaml: |
+    {{ $cluster := .Cluster.metadata.name }}
+    {{- range $env := (list "production" "staging") }}
+    ---
+    apiVersion: external-secrets.io/v1beta1
+    kind: ExternalSecret
+    metadata:
+      name: meilisearch-proxy
+      namespace: {{ $env }}
+    spec:
+      refreshInterval: 1h
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: vault-backend
+      target:
+        name: meilisearch-proxy
+        template:
+          engineVersion: v2
+          data:
+            MEILISEARCH_HOST: https://meilisearch.{{ $cluster }}
+            MEILISEARCH_MASTER_KEY: '{{`{{ .master_key }}`}}'
+            PROXY_MASTER_KEY_OVERRIDE: "false"
+            CACHE_ENGINE: "redis"
+            CACHE_TTL: "300"
+            CACHE_URL: "redis://meilisearch-proxy-redis:6379"
+            PORT: "80"
+            LOG_LEVEL: "info"
+      data:
+        - secretKey: 'master_key'
+          remoteRef:
+            key: 'search'
+            property: '{{ $env }}.master_key'
+    {{- end }}
+```
+
 ## Continue Reading
 
 1. **Helm Chart and Resources as Templates - Examples**: Checkout the template examples [here](../template/template_generic_examples.md)
