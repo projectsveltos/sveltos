@@ -52,29 +52,8 @@ rules:
   - cluster.x-k8s.io
   resources:
   - clusters
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines/status
   verbs:
   - get
@@ -84,13 +63,6 @@ rules:
   - config.projectsveltos.io
   resources:
   - clustersummaries
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - config.projectsveltos.io
-  resources:
   - clustersummaries/status
   verbs:
   - get
@@ -100,6 +72,7 @@ rules:
   - lib.projectsveltos.io
   resources:
   - clusterhealthchecks
+  - reloaderreports
   verbs:
   - create
   - delete
@@ -126,6 +99,8 @@ rules:
   - lib.projectsveltos.io
   resources:
   - debuggingconfigurations
+  - healthchecks
+  - sveltosclusters/status
   verbs:
   - get
   - list
@@ -144,39 +119,11 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - healthchecks
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - reloaderreports
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - sveltosclusters
   verbs:
   - get
   - list
   - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1

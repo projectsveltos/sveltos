@@ -57,11 +57,6 @@ rules:
   - ""
   resources:
   - configmaps
-  verbs:
-  - '*'
-- apiGroups:
-  - ""
-  resources:
   - secrets
   verbs:
   - '*'
@@ -89,29 +84,8 @@ rules:
   - cluster.x-k8s.io
   resources:
   - clusters
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines/status
   verbs:
   - get
@@ -132,22 +106,10 @@ rules:
   - lib.projectsveltos.io
   resources:
   - clustersets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - clustersets/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - debuggingconfigurations
+  - eventsources
+  - sveltosclusters/status
   verbs:
   - get
   - list
@@ -162,14 +124,6 @@ rules:
   - get
   - list
   - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - eventsources
-  verbs:
-  - get
-  - list
   - watch
 - apiGroups:
   - lib.projectsveltos.io
@@ -205,14 +159,6 @@ rules:
   - get
   - list
   - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
