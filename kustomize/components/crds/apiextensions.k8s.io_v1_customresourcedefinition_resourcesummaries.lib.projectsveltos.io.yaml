@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: resourcesummaries.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -137,6 +137,69 @@ spec:
                   - kind
                   - name
                   - version
+                  type: object
+                type: array
+              patches:
+                description: |-
+                  Defines additional inline patches specifically designed to exclude certain fields from
+                  configuration drift evaluation.
+                items:
+                  description: |-
+                    Patch contains an inline StrategicMerge or JSON6902 patch, and the target the patch should
+                    be applied to.
+                  properties:
+                    patch:
+                      description: |-
+                        Patch contains an inline StrategicMerge patch or an inline JSON6902 patch with
+                        an array of operation objects.
+                        These values can be static or leverage Go templates for dynamic customization.
+                        When expressed as templates, the values are filled in using information from
+                        resources within the management cluster before deployment (Cluster and TemplateResourceRefs)
+                      type: string
+                    target:
+                      description: Target points to the resources that the patch document
+                        should be applied to.
+                      properties:
+                        annotationSelector:
+                          description: |-
+                            AnnotationSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource annotations.
+                          type: string
+                        group:
+                          description: |-
+                            Group is the API group to select resources from.
+                            Together with Version and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        kind:
+                          description: |-
+                            Kind of the API Group to select resources from.
+                            Together with Group and Version it is capable of unambiguously
+                            identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        labelSelector:
+                          description: |-
+                            LabelSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource labels.
+                          type: string
+                        name:
+                          description: Name to match resources with.
+                          type: string
+                        namespace:
+                          description: Namespace to select resources from.
+                          type: string
+                        version:
+                          description: |-
+                            Version of the API Group to select resources from.
+                            Together with Group and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                      type: object
+                  required:
+                  - patch
                   type: object
                 type: array
               resources:
@@ -441,6 +504,69 @@ spec:
                   - kind
                   - name
                   - version
+                  type: object
+                type: array
+              patches:
+                description: |-
+                  Defines additional inline patches specifically designed to exclude certain fields from
+                  configuration drift evaluation.
+                items:
+                  description: |-
+                    Patch contains an inline StrategicMerge or JSON6902 patch, and the target the patch should
+                    be applied to.
+                  properties:
+                    patch:
+                      description: |-
+                        Patch contains an inline StrategicMerge patch or an inline JSON6902 patch with
+                        an array of operation objects.
+                        These values can be static or leverage Go templates for dynamic customization.
+                        When expressed as templates, the values are filled in using information from
+                        resources within the management cluster before deployment (Cluster and TemplateResourceRefs)
+                      type: string
+                    target:
+                      description: Target points to the resources that the patch document
+                        should be applied to.
+                      properties:
+                        annotationSelector:
+                          description: |-
+                            AnnotationSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource annotations.
+                          type: string
+                        group:
+                          description: |-
+                            Group is the API group to select resources from.
+                            Together with Version and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        kind:
+                          description: |-
+                            Kind of the API Group to select resources from.
+                            Together with Group and Version it is capable of unambiguously
+                            identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                        labelSelector:
+                          description: |-
+                            LabelSelector is a string that follows the label selection expression
+                            https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                            It matches with the resource labels.
+                          type: string
+                        name:
+                          description: Name to match resources with.
+                          type: string
+                        namespace:
+                          description: Namespace to select resources from.
+                          type: string
+                        version:
+                          description: |-
+                            Version of the API Group to select resources from.
+                            Together with Group and Kind it is capable of unambiguously identifying and/or selecting resources.
+                            https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                          type: string
+                      type: object
+                  required:
+                  - patch
                   type: object
                 type: array
               resources:

@@ -67,13 +67,6 @@ rules:
   - lib.projectsveltos.io
   resources:
   - debuggingconfigurations
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - sveltosclusters
   verbs:
   - get
@@ -146,7 +139,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: docker.io/projectsveltos/shard-controller:main
+        image: docker.io/projectsveltos/shard-controller:v0.36.0
         livenessProbe:
           failureThreshold: 3
           httpGet:

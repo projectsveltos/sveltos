@@ -13,13 +13,6 @@ rules:
   - ""
   resources:
   - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - secrets
   verbs:
   - get
@@ -58,21 +51,7 @@ rules:
   - cluster.x-k8s.io
   resources:
   - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines/status
   verbs:
   - get
@@ -82,6 +61,7 @@ rules:
   - lib.projectsveltos.io
   resources:
   - accessrequests
+  - classifiers
   verbs:
   - create
   - delete
@@ -104,18 +84,6 @@ rules:
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - classifiers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
   - classifiers/finalizers
   verbs:
   - update
@@ -131,6 +99,7 @@ rules:
   - lib.projectsveltos.io
   resources:
   - debuggingconfigurations
+  - sveltosclusters/status
   verbs:
   - get
   - list
@@ -143,14 +112,6 @@ rules:
   - get
   - list
   - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -191,10 +152,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.36.0
         command:
         - /manager
-        image: docker.io/projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:v0.36.0
         livenessProbe:
           failureThreshold: 3
           httpGet:

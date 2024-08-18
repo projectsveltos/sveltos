@@ -21,27 +21,7 @@ rules:
   - ""
   resources:
   - secrets
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - serviceaccounts
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - serviceaccounts/token
   verbs:
   - create
@@ -74,29 +54,8 @@ rules:
   - cluster.x-k8s.io
   resources:
   - clusters
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
   - machines/status
   verbs:
   - get
@@ -115,12 +74,14 @@ rules:
   - lib.projectsveltos.io
   resources:
   - accessrequests/finalizers
+  - rolerequests/finalizers
   verbs:
   - update
 - apiGroups:
   - lib.projectsveltos.io
   resources:
   - accessrequests/status
+  - rolerequests/status
   verbs:
   - get
   - patch
@@ -129,6 +90,8 @@ rules:
   - lib.projectsveltos.io
   resources:
   - classifierreports
+  - eventreports
+  - healthcheckreports
   verbs:
   - create
   - get
@@ -139,29 +102,11 @@ rules:
   - lib.projectsveltos.io
   resources:
   - debuggingconfigurations
+  - sveltosclusters
+  - sveltosclusters/status
   verbs:
   - get
   - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - eventreports
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - healthcheckreports
-  verbs:
-  - create
-  - get
-  - list
-  - update
   - watch
 - apiGroups:
   - lib.projectsveltos.io
@@ -176,49 +121,9 @@ rules:
   - update
   - watch
 - apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - rolerequests/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - rolerequests/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - rbac.authorization.k8s.io
   resources:
   - rolebindings
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
   - roles
   verbs:
   - create
@@ -266,7 +171,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/access-manager:main
+        image: docker.io/projectsveltos/access-manager:v0.36.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
