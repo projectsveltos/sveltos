@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.16.1
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -47,6 +47,34 @@ spec:
           spec:
             description: SveltosClusterSpec defines the desired state of SveltosCluster
             properties:
+              activeWindow:
+                description: |-
+                  ActiveWindow is an optional field for automatically pausing and unpausing
+                  the cluster.
+                  If not specified, the cluster will not be paused or unpaused automatically.
+                properties:
+                  from:
+                    description: |-
+                      From in Cron format, see https://en.wikipedia.org/wiki/Cron.
+                      Indicates when to un-pause the cluster (cluster in paused state receives no update from sveltos).
+                    minLength: 1
+                    type: string
+                  to:
+                    description: |-
+                      To in Cron format, see https://en.wikipedia.org/Cron.
+                      Indicates when to pause the cluster (cluster in paused state receives no update from sveltos).
+                    minLength: 1
+                    type: string
+                required:
+                - from
+                - to
+                type: object
+              consecutiveFailureThreshold:
+                default: 3
+                description: |-
+                  ConsecutiveFailureThreshold is the maximum number of consecutive connection
+                  failures before setting the problem status in Status.ConnectionStatus
+                type: integer
               data:
                 additionalProperties:
                   type: string
@@ -56,7 +84,6 @@ spec:
                 description: |-
                   KubeconfigName allows overriding the default Sveltos convention which expected a valid kubeconfig
                   to be hosted in a secret with the pattern ${sveltosClusterName}-sveltos-kubeconfig.
-
 
                   When a value is specified, the referenced Kubernetes Secret object must exist,
                   and will be used to connect to the Kubernetes cluster.
@@ -81,6 +108,19 @@ spec:
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
             properties:
+              connectionFailures:
+                description: |-
+                  connectionFailures is the number of consecutive failed attempts to connect
+                  to the remote cluster.
+                type: integer
+              connectionStatus:
+                description: |-
+                  ConnectionStatus indicates whether connection from the management cluster
+                  to the managed cluster is healthy
+                enum:
+                - Healthy
+                - Down
+                type: string
               failureMessage:
                 description: |-
                   FailureMessage is a human consumable message explaining the
@@ -90,6 +130,14 @@ spec:
                 description: |-
                   LastReconciledTokenRequestAt is the last time the TokenRequest
                   was renewed.
+                type: string
+              nextPause:
+                description: Information when next pause cluster is scheduled
+                format: date-time
+                type: string
+              nextUnpause:
+                description: Information when next unpause cluster is scheduled
+                format: date-time
                 type: string
               ready:
                 description: Ready is the state of the cluster.
@@ -137,6 +185,34 @@ spec:
           spec:
             description: SveltosClusterSpec defines the desired state of SveltosCluster
             properties:
+              activeWindow:
+                description: |-
+                  ActiveWindow is an optional field for automatically pausing and unpausing
+                  the cluster.
+                  If not specified, the cluster will not be paused or unpaused automatically.
+                properties:
+                  from:
+                    description: |-
+                      From in Cron format, see https://en.wikipedia.org/wiki/Cron.
+                      Indicates when to un-pause the cluster (cluster in paused state receives no update from sveltos).
+                    minLength: 1
+                    type: string
+                  to:
+                    description: |-
+                      To in Cron format, see https://en.wikipedia.org/Cron.
+                      Indicates when to pause the cluster (cluster in paused state receives no update from sveltos).
+                    minLength: 1
+                    type: string
+                required:
+                - from
+                - to
+                type: object
+              consecutiveFailureThreshold:
+                default: 3
+                description: |-
+                  ConsecutiveFailureThreshold is the maximum number of consecutive connection
+                  failures before setting the problem status in Status.ConnectionStatus
+                type: integer
               data:
                 additionalProperties:
                   type: string
@@ -146,7 +222,6 @@ spec:
                 description: |-
                   KubeconfigName allows overriding the default Sveltos convention which expected a valid kubeconfig
                   to be hosted in a secret with the pattern ${sveltosClusterName}-sveltos-kubeconfig.
-
 
                   When a value is specified, the referenced Kubernetes Secret object must exist,
                   and will be used to connect to the Kubernetes cluster.
@@ -171,6 +246,19 @@ spec:
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
             properties:
+              connectionFailures:
+                description: |-
+                  connectionFailures is the number of consecutive failed attempts to connect
+                  to the remote cluster.
+                type: integer
+              connectionStatus:
+                description: |-
+                  ConnectionStatus indicates whether connection from the management cluster
+                  to the managed cluster is healthy
+                enum:
+                - Healthy
+                - Down
+                type: string
               failureMessage:
                 description: |-
                   FailureMessage is a human consumable message explaining the
@@ -180,6 +268,14 @@ spec:
                 description: |-
                   LastReconciledTokenRequestAt is the last time the TokenRequest
                   was renewed.
+                type: string
+              nextPause:
+                description: Information when next pause cluster is scheduled
+                format: date-time
+                type: string
+              nextUnpause:
+                description: Information when next unpause cluster is scheduled
+                format: date-time
                 type: string
               ready:
                 description: Ready is the state of the cluster.
