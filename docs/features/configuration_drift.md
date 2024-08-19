@@ -51,7 +51,7 @@ You can stop certain resources from being tracked for configuration drift. This 
 For instance, following ClusterProfile will deploy Kyverno helm chart. Patches are used to apply annotation to the Kyverno `kyverno-admission-controller` deployment. 
 This means any changes made to resources deployed by the Helm chart itself will be flagged as a configuration drift. However, any modifications directly to the kyverno-admission-controller deployment won't be detected as drift.
 
-```yaml
+```yaml hl_lines="18-27"
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
@@ -79,6 +79,37 @@ This means any changes made to resources deployed by the Helm chart itself will 
           - op: add
             path: /metadata/annotations/projectsveltos.io~1driftDetectionIgnore
             value: "ok"
+```
+
+## Ignore Fields
+
+You can optionally specify fields to be excluded from drift detection using JSON Pointers.
+
+Here's an example configuration in YAML format:
+
+```yaml hl_lines="18-22"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: nginx
+spec:
+  clusterSelector:
+    matchLabels:
+      env: prod
+  syncMode: ContinuousWithDriftDetection
+  helmCharts:
+  - repositoryURL:    https://helm.nginx.com/stable/
+    repositoryName:   nginx-stable
+    chartName:        nginx-stable/nginx-ingress
+    chartVersion:     1.3.1
+    releaseName:      nginx-latest
+    releaseNamespace: nginx
+    helmChartAction:  Install
+  driftExclusions:
+  - paths:
+    - "/spec/replicas"
+    target:
+      kind: Deployment
 ```
 
 ## Customize drift-detection-manager configuration

@@ -192,3 +192,42 @@ Remember to adapt the provided resources to your specific repository structure, 
 ```bash
 $ kubectl create configmap nginx --from-file=namespace.yaml --from-file=deployment.yaml
 ```
+
+## Subresources
+
+Sveltos can be configured to update specific subresources of a resource. This is achieved by leveraging the `projectsveltos.io/subresources` annotation.
+When this annotation is present on a resource referenced in the `PolicyRefs` section, Sveltos will update the designated subresources alongside the main resource.
+
+Subresources are specified as a comma-separated list within the annotation value.
+
+For example, to instruct Sveltos to update the status subresource of a Service, you can create a ConfigMap with the following structure and reference this ConfigMap from a ClusterProfile/Profile:
+
+```yaml hl_lines="24-25"
+apiVersion: v1
+data:
+  service.yaml: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: sveltos-subresource
+      namespace: default
+    spec:
+      selector:
+        app: foo
+      ports:
+      - name: my-port
+        port: 443
+        protocol: TCP
+        targetPort: 1032
+      type: LoadBalancer
+    status:
+      loadBalancer:
+        ingress:
+        - ip: 1.1.1.1
+kind: ConfigMap
+metadata:
+  annotations:
+    projectsveltos.io/subresources: status
+  name: load-balancer-service
+  namespace: default
+```
