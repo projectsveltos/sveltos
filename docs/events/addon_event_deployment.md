@@ -27,7 +27,7 @@ However, Sveltos also supports cross-clusters:
 1. If an event happens in the cluster __foo__
 1. Deploy the add-ons in the cluster __bar__
 
-For more information, take a peek at [this](#cross-clusters) link.
+For more information, take a peek at [this](example_cross_cluster_configuration.md) link.
 
 ## Sveltos Event Definition
 
@@ -188,53 +188,7 @@ Available cluster information :
 - cluster name: `.Cluster.metadata.name` 
 - cluster type: `.Cluster.kind` 
 
-## Events and Multi-tenancy
-
-If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
-
-```
-projectsveltos.io/admin-name: <admin>
-```
-
-Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure adding the label defined to each EventSource during creation time.
-
-!!! example ""
-    ```yaml
-    ---
-    apiVersion: kyverno.io/v1
-    kind: ClusterPolicy
-    metadata:
-      name: add-labels
-      annotations:
-        policies.kyverno.io/title: Add Labels
-        policies.kyverno.io/description: >-
-          Adds projectsveltos.io/admin-name label on each EventSource
-          created by tenant admin. It assumes each tenant admin is
-          represented in the management cluster by a ServiceAccount.
-    spec:
-      background: false
-      rules:
-      - exclude:
-          any:
-          - clusterRoles:
-            - cluster-admin
-        match:
-          all:
-          - resources:
-              kinds:
-              - EventSource
-              - EventTrigger
-        mutate:
-          patchStrategicMerge:
-            metadata:
-              labels:
-                +(projectsveltos.io/serviceaccount-name): '{{serviceAccountName}}'
-                +(projectsveltos.io/serviceaccount-namespace): '{{serviceAccountNamespace}}'
-        name: add-labels
-      validationFailureAction: enforce
-    ```
-
-## Events and Add-on Deployment
+## EventTrigger
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
@@ -242,10 +196,10 @@ Each EvenTrigger instance:
 
 1. References an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
-1. Contains a list of add-ons to deploy (either referencing ConfigMaps/Secrets or Helm charts)
+1. Contains a list of add-ons to deploy
 
 For example, the below EventTrigger references the eventSource *sveltos-service* defined above.
-It referenced a ConfigMap that contains a *NetworkPolicy* expressed as a template.
+It references a ConfigMap that contains a *NetworkPolicy* expressed as a template.
 
 !!! example ""
     ```yaml
@@ -271,7 +225,7 @@ It referenced a ConfigMap that contains a *NetworkPolicy* expressed as a templat
       name: network-policy
       namespace: default
       annotations:
-        projectsveltos.io/template: ok
+        projectsveltos.io/instantiate: ok # this annotation is what tells Sveltos to instantiate this ConfigMap
     data:
       networkpolicy.yaml: |
         kind: NetworkPolicy
@@ -300,7 +254,7 @@ The __Resource__ in the above ConfigMap YAML definition refers to the specific K
 
 Additionally, the template can access information about the cluster where the event originated. To utilize the name of the managed cluster, for example, you can use `{{ .Cluster.metadata.name }}` in your template.
 
-Anytime a *Service* with the label set to *sveltos:fv* is created in a managed cluster matching the sourceClusterSelector, a *NetworkPolicy* is with an ingress definition is created.
+Anytime a *Service* with the label set to *sveltos:fv* is created in a managed cluster matching the sourceClusterSelector, a *NetworkPolicy* with an ingress definition is created.
 
 For example, if the below *Service* is created in a managed cluster:
 
@@ -465,8 +419,6 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
 
 __Currently, it is not possible to change this field once set.__
 
-For more examples, have a look [here](addon_event_deployment.md#yet-another-example).
-
 ### Cleanup 
 
 !!! note
@@ -483,5 +435,53 @@ $ kubectl get networkpolicy -A
 NAMESPACE   NAME                    POD-SELECTOR                          AGE
 default     front-my-service        app.kubernetes.io/name=MyApp          10m40s
 ```
+
+## Events and Multi-tenancy
+
+If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
+
+```
+projectsveltos.io/admin-name: <admin>
+```
+
+Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure adding the label defined to each EventSource during creation time.
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: kyverno.io/v1
+    kind: ClusterPolicy
+    metadata:
+      name: add-labels
+      annotations:
+        policies.kyverno.io/title: Add Labels
+        policies.kyverno.io/description: >-
+          Adds projectsveltos.io/admin-name label on each EventSource
+          created by tenant admin. It assumes each tenant admin is
+          represented in the management cluster by a ServiceAccount.
+    spec:
+      background: false
+      rules:
+      - exclude:
+          any:
+          - clusterRoles:
+            - cluster-admin
+        match:
+          all:
+          - resources:
+              kinds:
+              - EventSource
+              - EventTrigger
+        mutate:
+          patchStrategicMerge:
+            metadata:
+              labels:
+                +(projectsveltos.io/serviceaccount-name): '{{serviceAccountName}}'
+                +(projectsveltos.io/serviceaccount-namespace): '{{serviceAccountNamespace}}'
+        name: add-labels
+      validationFailureAction: enforce
+    ```
+
+
 
 [^1]: EventTrigger can also reference a [_ClusterSet_](../features/set.md) to select one or more managed clusters.
