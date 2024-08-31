@@ -534,6 +534,9 @@ spec:
                             - value
                             type: object
                           type: array
+                        name:
+                          description: Name of the resource deployed in the  Cluster.
+                          type: string
                         namespace:
                           description: |-
                             Namespace of the resource deployed in the  Cluster.
@@ -851,6 +854,9 @@ spec:
                             - value
                             type: object
                           type: array
+                        name:
+                          description: Name of the resource deployed in the  Cluster.
+                          type: string
                         namespace:
                           description: |-
                             Namespace of the resource deployed in the  Cluster.
@@ -2838,6 +2844,9 @@ spec:
                         - value
                         type: object
                       type: array
+                    name:
+                      description: Name of the resource deployed in the  Cluster.
+                      type: string
                     namespace:
                       description: |-
                         Namespace of the resource deployed in the  Cluster.
@@ -2948,6 +2957,9 @@ spec:
                         - value
                         type: object
                       type: array
+                    name:
+                      description: Name of the resource deployed in the  Cluster.
+                      type: string
                     namespace:
                       description: |-
                         Namespace of the resource deployed in the  Cluster.
@@ -3359,6 +3371,9 @@ spec:
                         - value
                         type: object
                       type: array
+                    name:
+                      description: Name of the resource deployed in the  Cluster.
+                      type: string
                     namespace:
                       description: |-
                         Namespace of the resource deployed in the  Cluster.
@@ -3467,6 +3482,9 @@ spec:
                         - value
                         type: object
                       type: array
+                    name:
+                      description: Name of the resource deployed in the  Cluster.
+                      type: string
                     namespace:
                       description: |-
                         Namespace of the resource deployed in the  Cluster.
@@ -5859,7 +5877,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: clusterconfigurations.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -6626,7 +6644,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: clusterprofiles.config.projectsveltos.io
 spec:
   conversion:
@@ -8686,7 +8704,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: clusterreports.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -9327,7 +9345,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: clustersummaries.config.projectsveltos.io
 spec:
   conversion:
@@ -11384,7 +11402,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: profiles.config.projectsveltos.io
 spec:
   conversion:
@@ -13962,10 +13980,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.37.0
         command:
         - /manager
-        image: docker.io/projectsveltos/addon-controller:main
+        image: docker.io/projectsveltos/addon-controller:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14201,7 +14219,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/access-manager:main
+        image: docker.io/projectsveltos/access-manager:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14343,7 +14361,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/sveltoscluster-manager:main
+        image: docker.io/projectsveltos/sveltoscluster-manager:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14552,7 +14570,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/healthcheck-manager:main
+        image: docker.io/projectsveltos/healthcheck-manager:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14599,7 +14617,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.1
+    controller-gen.kubebuilder.io/version: v0.16.2
   name: eventtriggers.lib.projectsveltos.io
 spec:
   conversion:
@@ -15535,6 +15553,42 @@ spec:
                 items:
                   type: string
                 type: array
+              configMapGenerator:
+                description: |-
+                  The ConfigMapGenerator field references ConfigMaps containing templates.
+                  These referenced ConfigMaps will be dynamically instantiated in the management cluster
+                  based on event data.
+                items:
+                  properties:
+                    name:
+                      description: |-
+                        Name of the referenced resource.
+                        Name can be expressed as a template and instantiate using
+                        - `.Cluster.metadata.namespace`: namespace of the managed cluster
+                        - `.Cluster.metadata.name`: name of the managed cluster
+                        - `.Cluster.kind`: kind of the managed cluster object
+                      minLength: 1
+                      type: string
+                    nameFormat:
+                      description: |-
+                        InstantiatedResourceNameFormat defines a template used to generate the name
+                        of the resource created in the management cluster. The template can reference:
+                        - `.Cluster.metadata.namespace`: namespace of the managed cluster
+                        - `.Cluster.metadata.name`: name of the managed cluster
+                        - `.Cluster.kind`: kind of the managed cluster object
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the referenced resource.
+                        Nnamespace can be left empty. In such a case, namespace will
+                        be implicit set to cluster's namespace.
+                      type: string
+                  required:
+                  - name
+                  - nameFormat
+                  type: object
+                type: array
               continueOnConflict:
                 default: false
                 description: |-
@@ -15542,6 +15596,8 @@ spec:
                   encountering the first conflict (e.g., another ClusterProfile already deployed the resource).
                   If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
                   if conflicts are detected for previous resources.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 type: boolean
               destinationClusterSelector:
                 description: |-
@@ -15600,6 +15656,8 @@ spec:
                   DriftExclusions is a list of configuration drift exclusions to be applied when syncMode is
                   set to ContinuousWithDriftDetection. Each exclusion specifies JSON6902 paths to ignore
                   when evaluating drift, optionally targeting specific resources and features.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     paths:
@@ -15687,8 +15745,10 @@ spec:
                   (Deprecated use Patches instead)
                 type: object
               helmCharts:
-                description: Helm charts to be deployed in the matching clusters based
-                  on EventSource.
+                description: |-
+                  Helm charts to be deployed in the matching clusters based on EventSource.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     chartName:
@@ -15933,7 +15993,10 @@ spec:
                   type: object
                 type: array
               kustomizationRefs:
-                description: Kustomization refs
+                description: |-
+                  Kustomization refs
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     deploymentType:
@@ -16073,6 +16136,8 @@ spec:
                   Example: when this is set to 30%, when list of add-ons/applications in ClusterProfile
                   changes, only 30% of matching clusters will be updated in parallel. Only when updates
                   in those cluster succeed, other matching clusters are updated.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 pattern: ^((100|[0-9]{1,2})%|[0-9]+)$
                 x-kubernetes-int-or-string: true
               oneForEvent:
@@ -16086,6 +16151,8 @@ spec:
                 description: |-
                   Define additional Kustomize inline Patches applied for all resources on this profile
                   Within the Patch Spec you can use templating
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   description: |-
                     Patch contains an inline StrategicMerge or JSON6902 patch, and the target the patch should
@@ -16149,6 +16216,8 @@ spec:
                 description: |-
                   PolicyRefs references all the ConfigMaps/Secrets containing kubernetes resources
                   that need to be deployed in the matching clusters based on EventSource.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     deploymentType:
@@ -16207,7 +16276,45 @@ spec:
                   when a ConfigMap/Secret instance mounted as volume is modified.
                   When set to true, when any mounted ConfigMap/Secret is modified, Sveltos automatically
                   starts a rolling upgrade for Deployment/StatefulSet/DaemonSet instances mounting it.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 type: boolean
+              secretGenerator:
+                description: |-
+                  The SecretGenerator field references Secrets containing templates.
+                  These referenced Secret will be dynamically instantiated in the management cluster
+                  based on event data.
+                items:
+                  properties:
+                    name:
+                      description: |-
+                        Name of the referenced resource.
+                        Name can be expressed as a template and instantiate using
+                        - `.Cluster.metadata.namespace`: namespace of the managed cluster
+                        - `.Cluster.metadata.name`: name of the managed cluster
+                        - `.Cluster.kind`: kind of the managed cluster object
+                      minLength: 1
+                      type: string
+                    nameFormat:
+                      description: |-
+                        InstantiatedResourceNameFormat defines a template used to generate the name
+                        of the resource created in the management cluster. The template can reference:
+                        - `.Cluster.metadata.namespace`: namespace of the managed cluster
+                        - `.Cluster.metadata.name`: name of the managed cluster
+                        - `.Cluster.kind`: kind of the managed cluster object
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the referenced resource.
+                        Nnamespace can be left empty. In such a case, namespace will
+                        be implicit set to cluster's namespace.
+                      type: string
+                  required:
+                  - name
+                  - nameFormat
+                  type: object
+                type: array
               sourceClusterSelector:
                 description: |-
                   SourceClusterSelector identifies clusters to associate to.
@@ -16264,6 +16371,8 @@ spec:
                   the ClusterProfile. By default all deployed Helm charts and Kubernetes resources will
                   be withdrawn from Cluster. Setting StopMatchingBehavior to LeavePolicies will instead
                   leave ClusterProfile deployed policies in the Cluster.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 type: string
               syncMode:
                 default: Continuous
@@ -16278,6 +16387,8 @@ spec:
                   - DryRun means no change will be propagated to any matching cluster. A report
                   instead will be generated summarizing what would happen in any matching cluster
                   because of the changes made to ClusterProfile while in DryRun mode.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 enum:
                 - OneTime
                 - Continuous
@@ -16289,6 +16400,8 @@ spec:
                   TemplateResourceRefs is a list of resource to collect from the management cluster.
                   Those resources' values will be used to instantiate templates contained in referenced
                   PolicyRefs and Helm charts
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     identifier:
@@ -16364,6 +16477,8 @@ spec:
                   Higher Tier values represent lower priority. The default Tier value is 100.
                   Using Tiers provides finer control over resource deployment within your cluster, particularly useful
                   when multiple configurations manage the same resources.
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 format: int32
                 minimum: 1
                 type: integer
@@ -16372,6 +16487,8 @@ spec:
                   ValidateHealths is a slice of Lua functions to run against
                   the managed cluster to validate the state of those add-ons/applications
                   is healthy
+                  This field will be directly transferred to the ClusterProfile Spec
+                  generated in response to events.
                 items:
                   properties:
                     featureID:
@@ -16733,6 +16850,7 @@ rules:
   - delete
   - get
   - list
+  - patch
   - update
   - watch
 - apiGroups:
@@ -16833,7 +16951,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/event-manager:main
+        image: docker.io/projectsveltos/event-manager:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17030,10 +17148,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.37.0
         command:
         - /manager
-        image: docker.io/projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17409,7 +17527,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: docker.io/projectsveltos/shard-controller:main
+        image: docker.io/projectsveltos/shard-controller:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17482,7 +17600,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: docker.io/projectsveltos/register-mgmt-cluster:main
+        image: docker.io/projectsveltos/register-mgmt-cluster:v0.37.0
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -17535,7 +17653,7 @@ spec:
       containers:
       - command:
         - /conversion-webhook
-        image: docker.io/projectsveltos/webhook-conversion:main
+        image: docker.io/projectsveltos/webhook-conversion:v0.37.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
