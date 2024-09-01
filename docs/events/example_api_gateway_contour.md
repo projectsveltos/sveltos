@@ -50,8 +50,8 @@ With the event driven framework, we are taking a step forward: programmatically 
             end
             return hs
           end
-      EOF
-      ```
+    EOF
+    ```
 
 !!! example "Example - EventTrigger Definition"
     ```yaml
