@@ -199,10 +199,10 @@ spec:
         - --diagnostics-address=:8443
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.38.2
         command:
         - /manager
-        image: docker.io/projectsveltos/event-manager:main
+        image: docker.io/projectsveltos/event-manager:v0.38.2
         livenessProbe:
           failureThreshold: 3
           httpGet:
