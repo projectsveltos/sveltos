@@ -322,9 +322,6 @@ spec:
 
 ### Example: OCI Registry
 
-!!! tip
-    For OCI charts, the chartName needs to have whole URL.
-
 ```yaml
 ---
 apiVersion: config.projectsveltos.io/v1beta1
@@ -337,11 +334,97 @@ spec:
       env: fv
   syncMode: Continuous
   helmCharts:
-  - repositoryURL:    oci://registry-1.docker.io/bitnamicharts/vault
+  - repositoryURL:    oci://registry-1.docker.io/bitnamicharts
     repositoryName:   oci-vault
-    chartName:        oci://registry-1.docker.io/bitnamicharts/vault
+    chartName:        vault
     chartVersion:     0.7.2
     releaseName:      vault
     releaseNamespace: vault
     helmChartAction:  Install
 ```
+
+### Example: Private Registry
+
+Create a file named _secret_content.yaml_ with the following content, replacing the redacted values with your actual Docker Hub username and password/token:
+
+```
+{"auths":{"https://registry-1.docker.io/v1/":{"username":"REDACTED","password":"REDACTED","auth":"username:password base64 encoded"}}}
+```
+
+Use the kubectl command to create a Secret named _regcred_ in the _default_ namespace. This command references the _secret_content.yaml_ file and sets the type to _kubernetes.io/dockerconfigjson_:
+
+```
+kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson         
+```
+
+Now you can configure your ClusterProfile to use the newly created Secret for authentication with Docker Hub.
+
+Here's an example snippet from the ClusterProfile YAML file:
+
+```yaml hl_lines="18-21"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: projectsveltos
+spec:
+  clusterSelector:
+    matchLabels:
+      env: fv
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    oci://registry-1.docker.io/gianlucam76
+    repositoryName:   projectsveltos
+    chartName:        projectsveltos
+    chartVersion:     0.38.1
+    releaseName:      projectsveltos
+    releaseNamespace: projectsveltos
+    helmChartAction:  Install
+    registryCredentialsConfig:
+      credentials:
+        name: regcred
+        namespace: default
+```
+
+In this example, the `registryCredentialsConfig` section references the regcred Secret stored in the default namespace. This ensures that the Helm chart can access the private registry during deployment.
+
+Another example using Harbor (on Civo cluster) as registry. Create a file named _secret_harbor_content.yaml_ with the following content, replacing the base64 encoded string with your Harbor credentials:
+
+```
+{"auths":{"https://harbor.XXXX.k8s.civo.com":{"auth":"YWRtaW46SGFyYm9yMTIzNDU="}}}
+```
+
+Create a Secret named _credentials_ in the default namespace using the secret_harbor_content.yaml file:
+
+```
+kubectl create secret generic credentials --from-file=config.json=secret_harbor_content.yaml
+```
+
+Update your ClusterProfile YAML to reference the credentials Secret:
+
+```yaml hl_lines="18-22"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: projectsveltos
+spec:
+  clusterSelector:
+    matchLabels:
+      env: fv
+  syncMode: Continuous
+  helmCharts:
+  - repositoryURL:    oci://harbor.4fc01642-cfc0-4c55-a139-d593c92b232f.k8s.civo.com/library
+    repositoryName:   projectsveltos
+    chartName:        projectsveltos
+    chartVersion:     0.38.1
+    releaseName:      projectsveltos
+    releaseNamespace: projectsveltos
+    helmChartAction:  Install
+    registryCredentialsConfig:
+      insecureSkipTLSVerify: true
+      credentials:
+        name: credentials
+        namespace: default
+```
+
+!!! note
+The `insecureSkipTLSVerify` option should only be used if your private registry does not support TLS verification. It's generally recommended to use a secure TLS connection and set the `CASecretRef` field in the `registryCredentialsConfig`
