@@ -256,6 +256,13 @@ spec:
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
                               type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+                              type: boolean
                           type: object
                         wait:
                           default: false
@@ -1290,6 +1297,13 @@ spec:
                               default: false
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
+                              type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                               type: boolean
                           type: object
                         wait:
