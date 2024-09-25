@@ -5839,7 +5839,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clusterconfigurations.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -6606,7 +6606,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clusterprofiles.config.projectsveltos.io
 spec:
   conversion:
@@ -6894,6 +6894,13 @@ spec:
                               default: false
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
+                              type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                               type: boolean
                           type: object
                         wait:
@@ -7918,6 +7925,13 @@ spec:
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
                               type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+                              type: boolean
                           type: object
                         wait:
                           default: false
@@ -8718,7 +8732,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clusterreports.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -9359,7 +9373,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clustersummaries.config.projectsveltos.io
 spec:
   conversion:
@@ -9665,6 +9679,13 @@ spec:
                                   default: false
                                   description: SubNotes determines whether sub-notes
                                     are rendered in the chart.
+                                  type: boolean
+                                upgradeCRDs:
+                                  default: false
+                                  description: |-
+                                    UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                    By default, CRDs are not applied during Helm upgrade action by Helm
+                                    https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                                   type: boolean
                               type: object
                             wait:
@@ -10695,6 +10716,13 @@ spec:
                                   description: SubNotes determines whether sub-notes
                                     are rendered in the chart.
                                   type: boolean
+                                upgradeCRDs:
+                                  default: false
+                                  description: |-
+                                    UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                    By default, CRDs are not applied during Helm upgrade action by Helm
+                                    https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+                                  type: boolean
                               type: object
                             wait:
                               default: false
@@ -11720,6 +11748,13 @@ spec:
                               default: false
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
+                              type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                               type: boolean
                           type: object
                         wait:
@@ -12756,6 +12791,13 @@ spec:
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
                               type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+                              type: boolean
                           type: object
                         wait:
                           default: false
@@ -13656,7 +13698,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: profiles.config.projectsveltos.io
 spec:
   conversion:
@@ -13944,6 +13986,13 @@ spec:
                               default: false
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
+                              type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                               type: boolean
                           type: object
                         wait:
@@ -14967,6 +15016,13 @@ spec:
                               default: false
                               description: SubNotes determines whether sub-notes are
                                 rendered in the chart.
+                              type: boolean
+                            upgradeCRDs:
+                              default: false
+                              description: |-
+                                UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+                                By default, CRDs are not applied during Helm upgrade action by Helm
+                                https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
                               type: boolean
                           type: object
                         wait:
