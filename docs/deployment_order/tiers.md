@@ -11,26 +11,29 @@ authors:
     - Gianluca Mardente
 ---
 
-This section explains ClusterProfiles and Profiles in Sveltos, focusing on how __tiers__ enable prioritized deployments for resources targeted by multiple configurations.
+## Introduction to Sveltos Tiers
+The section explains [ClusterProfile](https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/clusterprofile_types.go)/[Profile](https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/profile_types.go) in Sveltos, focusing on how __tiers__ enable **prioritized deployments** for resources targeted by multiple configurations.
 
-## Efficient Cluster Management with ClusterProfiles and Profiles
+## Efficient Cluster Management with ClusterProfiles/Profiles
 
-Sveltos streamlines application and add-on deployments across your Kubernetes clusters using ClusterProfiles and Profiles. These profiles target a set of managed clusters, simplifying configuration for large groups.
+Sveltos streamlines application and add-on deployments across different Kubernetes clusters using **ClusterProfiles** and **Profiles**. They target a set of managed clusters, simplifying the configuration for large groups.
 
 ## Addressing the Challenge of Subset Modifications
 
-Imagine you need to adjust deployments for a specific subset of clusters within a previously defined group. Traditionally, creating a new profile targeting this subset and including resources already managed by another profile would lead to conflicts. 
-Sveltos wouldn't allow deployment for those overlapping resources.
+Imagine we have the need to **adjust deployments** for a **subset** of **clusters** within a previously defined group. Traditionally, creating a new Profile targeting the subset and including resources already managed by another profile would lead to conflicts. 
+Sveltos will **not** allow deployment for the overlapping resources.
 
 ## Introducing Tiers for Conflict Resolution and Priority
 
 Sveltos tiers provide a solution for managing deployment priority when resources are targeted by multiple configurations.
 
-- **Tier Property**: Each ClusterProfile/Profile now has a new property called "tier."
-- **Deployment Order Control**: The tier value dictates the deployment order for resources targeting the same element within a cluster (e.g., a Helm chart or Kubernetes object).
-- **Default Behavior**: By default, the first configuration to reach the cluster successfully deploys the resource.
-- **Tier Overrides**: Tiers override this default behavior. In case of conflicts, the configuration with the lowest tier value takes precedence and deploys the resource. Lower tier values represent higher priority deployments.
-Default Tier Value: The default tier value is 100.
+- **Tier Property**: Each ClusterProfile/Profile now has a new property called `tier`
+- **Deployment Order Control**: The tier value dictates the deployment order for resources targeting the same element within a cluster (e.g., a Helm chart or Kubernetes object)
+- **Default Behavior**: By default, the first configuration to reach the cluster successfully deploys the resource
+- **Tier Overrides**: `tier` overrides the default behavior. In case of conflicts, the configuration with the **lowest** tier value **takes precedence** and deploys the resource 
+
+!!!note
+    Lower tier values represent **higher priority deployments**. The `default` tier value is set to **100**.
 
 ## Example
 
@@ -74,8 +77,9 @@ An initial ClusterProfile named `validation-and-monitoring` deploys Kyverno (v3.
         helmChartAction:  Install
     ```
 
-Now, imagine you want to upgrade Kyverno to version 3.1.4 only in clusters within the `region:west` area. 
-Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would result in a conflict because both profiles manage Kyverno. By default, the first one wins (validation-and-monitoring), and the upgrade wouldn't occur.
+Imagine we want to **upgrade Kyverno** to version **3.1.4** and only in the clusters within the `region:west` area.
+
+Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would result in a conflict because both profiles manage Kyverno. By default, the first one wins (validation-and-monitoring), and the upgrade will not occur.
 
 !!! example ""
     ```yaml
@@ -98,11 +102,11 @@ Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would
       helmChartAction:  Install
     ```
 
-### Resolving the Conflict with Tiers
+### Resolving Conflicts with Tiers
 
 ![Sveltos tiers in action](../assets/sveltos_tiers.gif)
 
-We can leverage tiers to prioritize the upgrade for west regions. Here's a revised ClusterProfile targeting `region:west` for Kyverno with a `tier` value of 50 (lower than the default 100):
+We can leverage `tiers` to prioritize the upgrade for **west** regions. Check the YAML definition below for more details. The revised ClusterProfile targets the `region:west` and set the`tier` to the value of **50** (lower than the default 100).
 
 !!! example ""
     ```yaml
@@ -126,9 +130,9 @@ We can leverage tiers to prioritize the upgrade for west regions. Here's a revis
         helmChartAction:  Install
     ```
 
-With this configuration, the `kyverno` ClusterProfile (tier:50) overrides the default `validation-and-monitoring` profile (tier:100) for Kyverno deployment in west clusters. This ensures Kyverno gets upgraded to version 3.1.4 only in the desired region.
+The `kyverno` ClusterProfile (tier:50) overrides the default `validation-and-monitoring` profile (tier:100) for the Kyverno deployment in west clusters. This ensures Kyverno gets upgraded to version 3.1.4 only in the desired region.
 
-The table below shows a sample cluster state after applying both ClusterProfiles:
+The snippet below shows a sample cluster state after applying both ClusterProfiles.
 
 ```
 +-----------------------------+---------------+------------+----------------+---------+--------------------------------+------------------------------------------+
