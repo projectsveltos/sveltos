@@ -23,6 +23,12 @@ cd libsveltos
 git checkout ${branch}
 for f in manifests/*.yaml
 do 
+    # this file contains the ResourceSummary CRD which is installed by
+    # addon-controller
+    if [[ "$f" == *"resourcesummaries.lib.projectsveltos.io.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cp $f ../../kustomize/components/crds/.
 done
