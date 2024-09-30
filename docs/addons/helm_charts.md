@@ -428,3 +428,35 @@ spec:
 
 !!! note
 The `insecureSkipTLSVerify` option should only be used if your private registry does not support TLS verification. It's generally recommended to use a secure TLS connection and set the `CASecretRef` field in the `registryCredentialsConfig`
+
+### Upgrade CRDs
+
+Helm doesn't currently offer built-in support for [upgrading CRDs](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). 
+This was a deliberate decision to avoid potential data loss. There's also ongoing discussion within the Helm community about the ideal way to manage CRD lifecycles. Future Helm versions might address this.
+
+For custom Helm charts, you can work around this limitation by:
+
+- Placing CRDs in templates: Instead of the crds/ directory, include your CRDs within the chart's templates folder. This allows them to be upgraded during the chart update process.
+- Separate Helm chart: As suggested by the official Helm documentation, consider creating a separate Helm chart specifically for your CRDs. This allows independent management of those resources.
+
+However, using third-party Helm charts can be problematic as upgrading their CRDs might not be possible by default. Here's where Sveltos comes in.
+Sveltos allows you to control CRD upgrades for third-party charts through the `upgradeCRDs` field within your ClusterProfile configuration.
+When `upgradeCRDs` is set to true, Sveltos will initially patch all Custom Resource Definition (CRD) instances located in the Helm chart's _crds/_ directory. 
+Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
+
+```yaml hl_lines="12-14"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+...
+  helmCharts:
+  - repositoryURL:    <REPO URL>
+    repositoryName:   <REPO NAME>
+    chartName:        <CHART NAME>
+    chartVersion:     <CHART VERSION>
+    releaseName:      <...>
+    releaseNamespace: <...>
+    options:
+      upgradeOptions:
+        upgradeCRDs: true
+```
