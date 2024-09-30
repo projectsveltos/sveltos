@@ -41,6 +41,9 @@ clusterSelector:
     helmChartAction:  Install
 ```
 
+Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries. 
+For a complete list of features, refer to the [Helm chart section](helm_charts.md).
+
 ### Spec.PolicyRefs
 
 *policyRefs* field references a list of ConfigMaps/Secrets, each containing Kubernetes resources to be deployed in the clusters matching clusterSelector.
@@ -79,6 +82,8 @@ This field is a slice of *KustomizationRef* structs. Each KustomizationRef has t
 - *Path*: The path to the directory containing the kustomization.yaml file, or the set of plain YAMLs for which a kustomization.yaml should be generated. This field is optional and defaults to None, which means the root path of the SourceRef.
 - *TargetNamespace*: The target namespace for the Kustomization deployment. This field is optional and can be used to override the namespace specified in the kustomization.yaml file.
 - *DeploymentType*: The deployment type of the referenced resource. This field indicates whether the Kustomization deployment should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.
+
+For a complete list of features, refer to the [Kustomize section](kustomize.md).
 
 ### Spec.SyncMode
 

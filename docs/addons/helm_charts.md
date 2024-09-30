@@ -460,3 +460,25 @@ metadata:
       upgradeOptions:
         upgradeCRDs: true
 ```
+
+### Options
+
+Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the [CRD](https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184).
+
+```yaml hl_lines="14-15"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: XXXX
+spec:
+  ...
+  helmCharts:
+   - repositoryURL:    <REPO URL>
+     repositoryName:   <REPO NAME>
+     chartName:        <CHART NAME>
+     chartVersion:     <CHART VERSION>
+     releaseName:      <...>
+     releaseNamespace: <...>
+     options:
+       disableHooks: true
+```
