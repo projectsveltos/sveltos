@@ -25,6 +25,7 @@ func main() {
 
 	manifestDir := filepath.Join(filepath.Dir(filepath.Dir(cwd)), "manifest")
 	updateFile(manifestDir, "manifest.yaml")
+	updateFile(manifestDir, "dashboard-manifest.yaml")
 	updateFile(manifestDir, "agents_in_mgmt_cluster_manifest.yaml")
 }
 

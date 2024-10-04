@@ -11,3 +11,7 @@ generate-kustomize:
 
 upload-docker-images:
 	scripts/upload_docker_images.sh ${TAG}
+
+generate-ui-manifest:
+	scripts/generate_ui_manifest.sh ${TAG}
+	cd scripts/remove_duplicates; go build remove_duplicate.go;./remove_duplicate;cd ..
