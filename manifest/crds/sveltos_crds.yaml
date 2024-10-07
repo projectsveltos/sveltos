@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: accessrequests.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -258,7 +258,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: classifierreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -414,7 +414,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: classifiers.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1071,7 +1071,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clusterhealthchecks.lib.projectsveltos.io
 spec:
   conversion:
@@ -1895,7 +1895,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: clustersets.lib.projectsveltos.io
 spec:
   conversion:
@@ -2339,7 +2339,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2487,7 +2487,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: eventreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2743,7 +2743,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: eventsources.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2985,7 +2985,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: healthcheckreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3273,7 +3273,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: healthchecks.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3511,7 +3511,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: reloaderreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3713,7 +3713,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: reloaders.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3848,7 +3848,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: rolerequests.lib.projectsveltos.io
 spec:
   conversion:
@@ -4353,7 +4353,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: sets.lib.projectsveltos.io
 spec:
   conversion:
@@ -4797,7 +4797,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -4895,6 +4895,18 @@ spec:
                   renewTokenRequestInterval:
                     description: RenewTokenRequestInterval is the interval at which
                       to renew the TokenRequest
+                    type: string
+                  saName:
+                    description: |-
+                      SAName is name of the ServiceAccount to renew the token for.
+                      If specified, ServiceAccount must exist in the managed cluster.
+                      If not specified, sveltos will try to deduce it from current kubeconfig
+                    type: string
+                  saNamespace:
+                    description: |-
+                      SANamespace is the namespace of the ServiceAccount to renew the token for.
+                      If specified, ServiceAccount must exist in the managed cluster.
+                      If not specified, sveltos will try to deduce it from current kubeconfig
                     type: string
                 required:
                 - renewTokenRequestInterval
@@ -5033,6 +5045,18 @@ spec:
                   renewTokenRequestInterval:
                     description: RenewTokenRequestInterval is the interval at which
                       to renew the TokenRequest
+                    type: string
+                  saName:
+                    description: |-
+                      SAName is name of the ServiceAccount to renew the token for.
+                      If specified, ServiceAccount must exist in the managed cluster.
+                      If not specified, sveltos will try to deduce it from current kubeconfig
+                    type: string
+                  saNamespace:
+                    description: |-
+                      SANamespace is the namespace of the ServiceAccount to renew the token for.
+                      If specified, ServiceAccount must exist in the managed cluster.
+                      If not specified, sveltos will try to deduce it from current kubeconfig
                     type: string
                 required:
                 - renewTokenRequestInterval
@@ -6071,6 +6095,11 @@ spec:
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
                           type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
+                          type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
                             operation (like Jobs for hooks) (default 5m0s)
@@ -7100,6 +7129,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
@@ -8855,6 +8889,11 @@ spec:
                                 SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                                 By default, CRDs are installed if not already present.
                               type: boolean
+                            skipSchemaValidation:
+                              default: false
+                              description: SkipSchemaValidation determines if JSON
+                                schema validation is disabled.
+                              type: boolean
                             timeout:
                               description: time to wait for any individual Kubernetes
                                 operation (like Jobs for hooks) (default 5m0s)
@@ -9891,6 +9930,11 @@ spec:
                                 SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                                 By default, CRDs are installed if not already present.
                               type: boolean
+                            skipSchemaValidation:
+                              default: false
+                              description: SkipSchemaValidation determines if JSON
+                                schema validation is disabled.
+                              type: boolean
                             timeout:
                               description: time to wait for any individual Kubernetes
                                 operation (like Jobs for hooks) (default 5m0s)
@@ -10746,7 +10790,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: eventtriggers.lib.projectsveltos.io
 spec:
   conversion:
@@ -10924,6 +10968,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
@@ -11966,6 +12015,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
@@ -13163,6 +13217,11 @@ spec:
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
                           type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
+                          type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
                             operation (like Jobs for hooks) (default 5m0s)
@@ -14192,6 +14251,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes

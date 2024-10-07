@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.16.3
   name: eventtriggers.lib.projectsveltos.io
 spec:
   conversion:
@@ -181,6 +181,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes
@@ -1223,6 +1228,11 @@ spec:
                           description: |-
                             SkipCRDs controls whether CRDs should be installed during install/upgrade operation.
                             By default, CRDs are installed if not already present.
+                          type: boolean
+                        skipSchemaValidation:
+                          default: false
+                          description: SkipSchemaValidation determines if JSON schema
+                            validation is disabled.
                           type: boolean
                         timeout:
                           description: time to wait for any individual Kubernetes

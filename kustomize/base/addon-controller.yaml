@@ -519,10 +519,19 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.39.0
         command:
         - /manager
-        image: docker.io/projectsveltos/addon-controller:main
+        env:
+        - name: GOMEMLIMIT
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        image: docker.io/projectsveltos/addon-controller:v0.39.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -555,6 +564,8 @@ spec:
           capabilities:
             drop:
             - ALL
+          seccompProfile:
+            type: RuntimeDefault
         volumeMounts:
         - mountPath: /tmp
           name: tmp
