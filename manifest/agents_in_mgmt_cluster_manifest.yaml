@@ -13482,7 +13482,7 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.40.0
         command:
         - /manager
         env:
@@ -13494,7 +13494,7 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        image: docker.io/projectsveltos/addon-controller:main
+        image: docker.io/projectsveltos/addon-controller:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -13732,7 +13732,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/access-manager:main
+        image: docker.io/projectsveltos/access-manager:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -13874,7 +13874,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/sveltoscluster-manager:main
+        image: docker.io/projectsveltos/sveltoscluster-manager:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14081,10 +14081,10 @@ spec:
         - --diagnostics-address=:8443
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.40.0
         command:
         - /manager
-        image: docker.io/projectsveltos/healthcheck-manager:main
+        image: docker.io/projectsveltos/healthcheck-manager:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16539,10 +16539,10 @@ spec:
         - --diagnostics-address=:8443
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.40.0
         command:
         - /manager
-        image: docker.io/projectsveltos/event-manager:main
+        image: docker.io/projectsveltos/event-manager:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16739,10 +16739,10 @@ spec:
         - --agent-in-mgmt-cluster
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.40.0
         command:
         - /manager
-        image: docker.io/projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17118,7 +17118,7 @@ spec:
         - --agent-in-mgmt-cluster
         command:
         - /manager
-        image: docker.io/projectsveltos/shard-controller:main
+        image: docker.io/projectsveltos/shard-controller:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -17191,7 +17191,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: docker.io/projectsveltos/register-mgmt-cluster:main
+        image: docker.io/projectsveltos/register-mgmt-cluster:v0.40.0
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -17244,7 +17244,7 @@ spec:
       containers:
       - command:
         - /conversion-webhook
-        image: docker.io/projectsveltos/webhook-conversion:main
+        image: docker.io/projectsveltos/webhook-conversion:v0.40.0
         livenessProbe:
           failureThreshold: 3
           httpGet:
