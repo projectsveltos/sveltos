@@ -155,7 +155,7 @@ If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy,
 
 To programmatically register clusters with Sveltos, create the following resources in the desired namespace:
 
-- **Secret**: Store the kubeconfig of the managed cluster in the data section under the key "kubeconfig."
+- **Secret**: Store the kubeconfig of the managed cluster in the data section under the key `kubeconfig`.
 - **SveltosCluster**: Represent your cluster as an SveltosCluster instance.
 
 By default, Sveltos searches for a Secret named `<cluster-name>-sveltos-kubeconfig` in the same namespace as the SveltosCluster.
