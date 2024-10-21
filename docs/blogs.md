@@ -34,6 +34,7 @@ authors:
 1. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
 1. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 1. [Sveltos Templating: Cilium Cluster Mesh in One Run](https://egrosdou01.github.io/personal-blog/blog/sveltos-templating-cilium-cluster-mesh)
+1. [Sveltos Tiers: Efficient Day-2 Operations and Targeted Updates](https://egrosdou01.github.io/personal-blog/blog/sveltos-introduction-to-tiers)
 
 ## Sveltos Video List
 
@@ -52,6 +53,7 @@ authors:
 1. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
 1. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
 1. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
+1. [OSSummit Europe 2024](https://www.youtube.com/watch?v=IffrzanQRRc)
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
