@@ -16,7 +16,7 @@ Other clusters (on-prem, Cloud) can be registered with Sveltos easily. Sveltos c
 
 ## Register Cluster
 
-The instructions below will walk readers through registering an existing Kubernetes cluster with Sveltos for management. It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to register a cluster.
+The instructions below will walk readers through registering an existing Kubernetes cluster with Sveltos for management. It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to register a cluster. To programmatically register clusters with Sveltos, consult the [section](#configuring-sveltos-clusters-programmatically).
 
 If the kubeconfig in place has multiple contexts, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster you want to register.
 
@@ -150,6 +150,62 @@ If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy,
         --kubeconfig=~/demo/vcluster/multi-tenant/kubeconfig/vcluster-dev.yaml \
         --labels=env=dev
     ```
+
+## Configuring Sveltos Clusters Programmatically
+
+To programmatically register clusters with Sveltos, create the following resources in the desired namespace:
+
+- **Secret**: Store the kubeconfig of the managed cluster in the data section under the key "kubeconfig."
+- **SveltosCluster**: Represent your cluster as an SveltosCluster instance.
+
+By default, Sveltos searches for a Secret named `<cluster-name>-sveltos-kubeconfig` in the same namespace as the SveltosCluster.
+To use a different Secret name, set the __SveltosCluster.Spec.KubeconfigName__ field to the desired name.
+
+For instance, the `mgmt-sveltos-kubeconfig` Secret within the `mgmt` namespace stores the kubeconfig for the managed SveltosCluster named `mgmt`.
+
+```
+ kubectl get secret -n mgmt mgmt-sveltos-kubeconfig
+NAME                      TYPE     DATA   AGE
+mgmt-sveltos-kubeconfig   Opaque   1      2m1s
+```
+
+```yaml
+apiVersion: v1
+data:
+  kubeconfig: YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnCmNsdXN0ZXJzOgotIG5hbWU6IGxvY2FsCiAgY2x1c3RlcjoKICAgIHNlcnZlcjogaHR0cHM6Ly8xMC4xMTUuMC4xOjQ0MwogICAgY2VydGlmaWNhdGUtYXV0aG9yaXR5LWRhdGE6ICJMUzB0TFMxQ1JVZEpUaUJEUlZKVVNVWkpRMEZVUlMwdExTMHRDazFKU1VSQ1ZFTkRRV1V5WjBGM1NVSkJaMGxKVGswMWEyWkZjbkpOVTI5M1JGRlpTa3R2V2tsb2RtTk9RVkZGVEVKUlFYZEdWRVZVVFVKRlIwRXhWVVVLUVhoTlMyRXpWbWxhV0VwMVdsaFNiR042UVdWR2R6QjVUa1JGZDAxcVJYZE9la2w2VFVSb1lVWjNNSHBPUkVWM1RWUnJkMDU2U1RSTlJHaGhUVUpWZUFwRmVrRlNRbWRPVmtKQlRWUkRiWFF4V1cxV2VXSnRWakJhV0UxM1oyZEZhVTFCTUVkRFUzRkhVMGxpTTBSUlJVSkJVVlZCUVRSSlFrUjNRWGRuWjBWTENrRnZTVUpCVVVONGNuZHBaVTh4ZGxoMU1HWlpPV3BxUVVWMGIwUjFZMWhDYVdadU55OHhUUzlDUWpCelJYVnBZVFJGWTFBd2FIcGhWa1JsYTNoS1ZGRUtjMjg1UVhkb0t6QkhXRkpIUm1ocE1VWndObmxPZFRkdWFXWTNjbGhuUm1WS01FRmtWV05YZFc5VWJsZE1Ta1ppT0N0dU1HMVhUVGRMWkVkUVJFY3ZaZ3BvYjBORk1EWXhWV2xTU21kbmRFOVlSMm95VGtreGVrZFlaMUl5VlRJd01VeFZXRVlyUTNKQ0swVlZlbHBCVldGNlZUQnZhemt2TnpJNE1VbFdTbUpJQ2tzMk1VTjBkSEE1SzFOaldtVmhVSEpuWldsUlJsWk1PV1pDUzJ4d1JtaHJVbEIxZEVWUGRtUlZRaTkxVVcxd04zTllha3BrUldoNmFDdHBla3hDVlRnS1kxZHNlRWhTY1hsQlUzQnpOR1kzV0ZZNE9YVjJUbWx6T1VOUE9HeGhkMVptZFV0Q09HZFhOV1Y1VUdacWJHMU5XRWM0TjFkeVpGTm1XSEJHWVZaT01RcERjbVZxUlZORlRFNW1aalV3WkRoUVJYTjJURGxEUldobVptWlNRV2ROUWtGQlIycFhWRUpZVFVFMFIwRXhWV1JFZDBWQ0wzZFJSVUYzU1VOd1JFRlFDa0puVGxaSVVrMUNRV1k0UlVKVVFVUkJVVWd2VFVJd1IwRXhWV1JFWjFGWFFrSlVZbTltVG5CdWEyTlRUVTFRV1d4U1IyOHpVbmxJVUhKVlRGZHFRVllLUW1kT1ZraFNSVVZFYWtGTloyZHdjbVJYU214amJUVnNaRWRXZWsxQk1FZERVM0ZIVTBsaU0wUlJSVUpEZDFWQlFUUkpRa0ZSUWtaU2RHaHdUVEI2V0FwUVkxTnZkMkZ0Y25GSGVEYzNRbkZ0TUZoR0syMHlOVzFhU1d0SFRrbHNNRzVCUWxSUmFVSklNMEZpY0hSRVNHRXdMMlUwUnpWcEwyczVMMU5NY1VkaENteFplRzlRTW10TlpEUTBiVzgzTkdSYWNVcFVNMWRqT1RGd1FuTkdjR3BtZUM5TFJ6TlBRMnBOYVUxV1JrdFNTWG93WTJrNVVUTldVRWgxT0VkV1oza0tSMnM0ZVdSeU1uQTBSbmRhYVVWV2JYQTNUMHRtTldnMk5HcHpkR2cxVkhwbGJVSmpVRGh2WWxoVFJHcHJabE54ZEdablQzbG9UMGwwVlVWaWEzZzBVZ3B6U21kaGNYQkVkMUppY0dsQk5sQkdTRGRrV0hKVU5VRXJiMDlhU2taMEwxVlpMMHQzVTBaU1dWQkZUMlIwUWpGdWVVNWhTMnh4Y1c5eE9FZFNlVTgzQ2s5TU1HRkVRM1F4Vms1cFFteE5WblowZURWVGJFbDNaM3AxV0hSNlVUVXpLM3BQWkU1emNtODRZV2xGWWxaemJHd3hhMjk2Tm1rMU1HMVpNekZVTjBFS1VEUnNkMHB0VDFJelZtRkdDaTB0TFMwdFJVNUVJRU5GVWxSSlJrbERRVlJGTFMwdExTMEsiCnVzZXJzOgotIG5hbWU6IHByb2plY3RzdmVsdG9zCiAgdXNlcjoKICAgIHRva2VuOiBleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWpoMGJWTk5VRkZsWm5CT1FWTjBSSFk1ZEdZNGVuZEtRak01ZEZSR2JHWnJUVXhxVlhOdFJqSldaMVVpZlEuZXlKaGRXUWlPbHNpYUhSMGNITTZMeTlyZFdKbGNtNWxkR1Z6TG1SbFptRjFiSFF1YzNaakxtTnNkWE4wWlhJdWJHOWpZV3dpWFN3aVpYaHdJam94TnpJNU5EazVOVEl4TENKcFlYUWlPakUzTWprME9UVTVNakVzSW1semN5STZJbWgwZEhCek9pOHZhM1ZpWlhKdVpYUmxjeTVrWldaaGRXeDBMbk4yWXk1amJIVnpkR1Z5TG14dlkyRnNJaXdpYW5ScElqb2lObUptTWpNeE1qWXRZbVUxTVMwMFlUYzRMV0l3Wm1RdE5EQTBZbVEyWWpaaE5ETTFJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5STZleUp1WVcxbGMzQmhZMlVpT2lKd2NtOXFaV04wYzNabGJIUnZjeUlzSW5ObGNuWnBZMlZoWTJOdmRXNTBJanA3SW01aGJXVWlPaUp3Y205cVpXTjBjM1psYkhSdmN5SXNJblZwWkNJNkltUTFabVZqTkdRNUxURTVPVEV0TkRKbU1TMDVNemhtTFROaE16SmxaalV4WkdKbU15SjlmU3dpYm1KbUlqb3hOekk1TkRrMU9USXhMQ0p6ZFdJaU9pSnplWE4wWlcwNmMyVnlkbWxqWldGalkyOTFiblE2Y0hKdmFtVmpkSE4yWld4MGIzTTZjSEp2YW1WamRITjJaV3gwYjNNaWZRLmp3YnRVOThVWWZTVmhTblBndEVoUXhrY0NvSTNoeXV6a25YS3VxSFM5aGJBdElaamx5VlFKMFBJS20zdWRVVHJJRnVGRHRYS2V1ZDE2VlFGUW42NUxzQ3o0QVpwcEtqMEd0UjFmSGktMWlBdjZsbzFHV2JOcUZfaG1nNDFlNk5HUm9TczIwVGJfdDBZTUs5OEYybGdNZEtpbDdYRW02Zy1uTlU0Y2NPQWc4ZWJTc2V5Y0llR2lPMmhTdzdMWEdOTUdwSjJ1NXB4aThSbFdzaExXdXVkV1JQLWJOYTl1alpXNWFfV2pjaDVLdGhkaHR3dGk1WnhmcnItcnRBcjQ0Q2VVUkV4WFpUT1daM0JCeXIyMDMtN3RmVHRDcmpjYTkzTnVXUVo4TEVlOEdyRHAxVGt0UlAySlRlUW5MQlVndGV4VG42LUJtMUMyUmZILWE2OC0zelFpZwpjb250ZXh0czoKLSBuYW1lOiBzdmVsdG9zLWNvbnRleHQKICBjb250ZXh0OgogICAgY2x1c3RlcjogbG9jYWwKICAgIG5hbWVzcGFjZTogcHJvamVjdHN2ZWx0b3MKICAgIHVzZXI6IHByb2plY3RzdmVsdG9zCmN1cnJlbnQtY29udGV4dDogc3ZlbHRvcy1jb250ZXh0
+kind: Secret
+metadata:
+  creationTimestamp: "2024-10-21T07:32:01Z"
+  name: mgmt-sveltos-kubeconfig
+  namespace: mgmt
+  resourceVersion: "2484"
+  uid: 6c128e0b-fe75-4984-9a50-46644bf52dee
+type: Opaque
+```
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  creationTimestamp: "2024-10-21T07:32:01Z"
+  generation: 1
+  labels:
+    projectsveltos.io/k8s-version: v1.31.0
+    sveltos-agent: present
+  name: mgmt
+  namespace: mgmt
+  resourceVersion: "2614"
+  uid: 70290cbe-515a-4093-807f-84d3ad0faa41
+spec:
+  consecutiveFailureThreshold: 3
+  tokenRequestRenewalOption:
+    renewTokenRequestInterval: 1h0m0s
+status:
+  connectionStatus: Healthy
+  ready: true
+  version: v1.31.0
+```
+
 
 [^1]: !!!note
         As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
