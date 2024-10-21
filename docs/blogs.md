@@ -33,6 +33,7 @@ authors:
 1. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
 1. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
 1. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
+1. [CIS Benchmark Compliance Across Multiple Kubernetes Clusters](https://itnext.io/ensurincis-benchmark-compliance-across-multiple-kubernetes-clusters-dd544682e786)
 1. [Sveltos Templating: Cilium Cluster Mesh in One Run](https://egrosdou01.github.io/personal-blog/blog/sveltos-templating-cilium-cluster-mesh)
 1. [Sveltos Tiers: Efficient Day-2 Operations and Targeted Updates](https://egrosdou01.github.io/personal-blog/blog/sveltos-introduction-to-tiers)
 
