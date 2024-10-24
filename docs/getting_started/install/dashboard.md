@@ -67,5 +67,5 @@ $ kubectl create token platform-admin --duration=24h
 
 Copy the token generated, login to the Sveltos Dashboard and submit it.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/njKPLa-qTCM?si=SjBEc4ctkMyKG1N0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Pz6iIrjpo2Q?si=-6O7HSXvjlH3DcyB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
