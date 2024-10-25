@@ -1,0 +1,105 @@
+## Fetch postgres credentials from the cluster where services are deployed.
+## Create a Secret in the management cluster that contains the credentials
+## Secret is named <cluster-name>-credentials and it is created in the same namespace of the managed cluster
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: detect-credentials-secret
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Secret"
+    labelFilters:
+    - key: cnpg.io/reload
+      operation: Equal
+      value: "true"
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: credentials-secret
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      type: services
+  destinationClusterSelector:
+    matchLabels:
+      type: mgmt
+  eventSourceName: detect-credentials-secret
+  oneForEvent: true
+  policyRefs:
+  - name: credentials
+    namespace: default
+    kind: ConfigMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: credentials
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  credentials: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ .Cluster.metadata.name }}-credentials
+      namespace: {{ .Resource.metadata.namespace }} 
+    data:
+      "password": "{{ get .Resource.data `password` }}"
+      "user": "{{ get .Resource.data `username` }}"
+---
+## Fetch postgres loadbalancer external-ip:port from the cluster where services are deployed.
+## Create a ConfigMap in the management cluster that contains those info
+## ConfigMap is named <cluster-name>-loadbalancer-data and it is created in the same namespace of the managed cluster
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: detect-loadbalancer
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Service"
+    labelFilters:
+    - key: cnpg.io/isManaged 
+      operation: Equal
+      value: "true"
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: cnpg-loadbalancer-data
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      type: services
+  destinationClusterSelector:
+    matchLabels:
+      type: mgmt
+  eventSourceName: detect-loadbalancer
+  oneForEvent: true
+  policyRefs:
+  - name: loadbalancer-data
+    namespace: default
+    kind: ConfigMap
+---
+apiVersion: v1 
+kind: ConfigMap 
+metadata: 
+  name: loadbalancer-data
+  annotations: 
+    projectsveltos.io/instantiate: ok 
+data: 
+  credentials: | 
+    apiVersion: v1 
+    kind: ConfigMap
+    metadata: 
+      name: {{ .Cluster.metadata.name }}-loadbalancer-data
+      namespace: {{ .Resource.metadata.namespace }}
+    data: 
+      external-ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}
+      port: "{{ (index .Resource.spec.ports 0).targetPort }}"
