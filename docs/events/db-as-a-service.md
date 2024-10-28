@@ -10,8 +10,6 @@ authors:
     - Gianluca Mardente
 ---
 
-## DB as a Service with Sveltos
-
 This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand. 
 
 By simply labeling a managed cluster with  `postgres=required`, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.
@@ -100,7 +98,7 @@ sveltosctl show addons
 ![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-cloudnative-pg.png)
 
 
-### Step 4: Instruct Sveltos to automatically deploy Postgres DB 
+## Step 4: Instruct Sveltos to automatically deploy Postgres DB 
 
 Following configuration will instruct Sveltos to watch for managed cluster with labels `postgres=required`. Anytime such a cluster is detect, Sveltos will:
 
@@ -113,7 +111,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/d
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
 ```
 
-### Step 5: Onboard a new managed cluster
+## Step 5: Onboard a new managed cluster
 
 Whenever a new managed cluster is registered with Sveltos and labeled with 'postgres=required', Sveltos will initiate the deployment of a new Postgres database on the 'type=services' cluster. 
 Once deployed, Sveltos will gather the essential connection information, including credentials, external IP address, and port number, for this newly created Postgres instance.
@@ -156,7 +154,7 @@ data:
   port: "5432"
 ```
 
-### Step 6: Deploy an application that access the Postgres DB
+## Step 6: Deploy an application that access the Postgres DB
 
 Sveltos can now be used to deploy a Job in the `coke` cluster. This Job will access the Postgres DB in the `services` cluster.
 
@@ -171,7 +169,7 @@ kubectl label sveltoscluster -n coke cluster type=app
 ```
 
 
-### Step 7: Add another managed cluster
+## Step 7: Add another managed cluster
 
 Here we created yet another Civo cluster and registered with Sveltos[^1]. As result:
 
