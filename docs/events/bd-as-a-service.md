@@ -110,6 +110,7 @@ Following configuration will instruct Sveltos to watch for managed cluster with 
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/auto-deploy-postgres-cluster.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
 ```
 
 ### Step 5: Onboard a new managed cluster
