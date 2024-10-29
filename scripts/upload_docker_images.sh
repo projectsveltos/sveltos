@@ -113,3 +113,21 @@ cd conversion-webhook
 git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
+
+# dashboard
+echo "processing dashboard"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/dashboard.git
+cd dashboard
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
+
+# ui-backend
+echo "processing ui-backend"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/ui-backend.git
+cd ui-backend
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
