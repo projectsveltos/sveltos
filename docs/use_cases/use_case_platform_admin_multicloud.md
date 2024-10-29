@@ -43,7 +43,7 @@ What are the benefits of a central Kubernetes management cluster to manage other
 
 - **Increased Automation:** It can be integrated with a continuous integration/continuous deployment (CI/CD) pipeline, making it easier to automate the deployment of new clusters and add-ons, and reducing the time and effort involved in managing the infrastructure.
 
-### Sveltos add-on Managament Solution
+### Sveltos add-on Management Solution
 
 Sveltos allows platform administrators to utilise the CRD with the name `ClusterProfile` to perform Kubernetes [add-on](../addons/addons.md) deployment. Within a Sveltos ClusterProfile, we define the below points.
 

@@ -43,7 +43,7 @@ Postgres DB will be deployed using [Cloudnative-pg](https://github.com/cloudnati
 
 ![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-db-as-a-service.gif)
 
-## Step 1: Install Sveltos on Managament Cluster
+## Step 1: Install Sveltos on Management Cluster
 
 For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../getting_started/install/install.md).
 

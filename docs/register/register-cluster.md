@@ -82,7 +82,7 @@ Once an EKS cluster is created, perform the below steps.
 1. Register EKS with Sveltos
 
     ```bash
-    $ export KUBECONFIG=<Sveltos managament cluster>
+    $ export KUBECONFIG=<Sveltos management cluster>
     $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
         --kubeconfig=<path to Sveltos file with Kubeconfig> \
         --labels=env=test
