@@ -152,10 +152,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.41.1
         command:
         - /manager
-        image: docker.io/projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:

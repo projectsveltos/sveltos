@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: accessrequests.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -258,7 +258,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: classifierreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -414,7 +414,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: classifiers.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1071,7 +1071,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clusterhealthchecks.lib.projectsveltos.io
 spec:
   conversion:
@@ -1895,7 +1895,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clustersets.lib.projectsveltos.io
 spec:
   conversion:
@@ -2339,7 +2339,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2487,7 +2487,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: eventreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2743,7 +2743,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: eventsources.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2985,7 +2985,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: healthcheckreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3273,7 +3273,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: healthchecks.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3511,7 +3511,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: reloaderreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3713,7 +3713,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: reloaders.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3848,7 +3848,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: rolerequests.lib.projectsveltos.io
 spec:
   conversion:
@@ -4353,7 +4353,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: sets.lib.projectsveltos.io
 spec:
   conversion:
@@ -4797,7 +4797,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -4875,6 +4875,11 @@ spec:
                   type: string
                 description: ArbitraryData allows for arbitrary nested structures
                 type: object
+              kubeconfigKeyName:
+                description: |-
+                  KubeconfigKeyName specifies the key within the Secret that holds the kubeconfig.
+                  If not specified, Sveltos will use first key in the Secret.
+                type: string
               kubeconfigName:
                 description: |-
                   KubeconfigName allows overriding the default Sveltos convention which expected a valid kubeconfig
@@ -5025,6 +5030,11 @@ spec:
                   type: string
                 description: ArbitraryData allows for arbitrary nested structures
                 type: object
+              kubeconfigKeyName:
+                description: |-
+                  KubeconfigKeyName specifies the key within the Secret that holds the kubeconfig.
+                  If not specified, Sveltos will use first key in the Secret.
+                type: string
               kubeconfigName:
                 description: |-
                   KubeconfigName allows overriding the default Sveltos convention which expected a valid kubeconfig
@@ -5118,7 +5128,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clusterconfigurations.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -5885,7 +5895,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clusterprofiles.config.projectsveltos.io
 spec:
   conversion:
@@ -7118,6 +7128,14 @@ spec:
                               description: Create the release namespace if not present.
                                 Defaults to true
                               type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on install
+                                Default to false
+                              type: boolean
                             replace:
                               default: true
                               description: Replaces if set indicates to replace an
@@ -7155,6 +7173,14 @@ spec:
                               - foreground
                               - background
                               type: string
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on uninstall
+                                Default to false
+                              type: boolean
                             keepHistory:
                               description: |-
                                 When uninstall a chart with this flag, Helm removes the resources associated with the chart,
@@ -7171,6 +7197,14 @@ spec:
                               description: CleanupOnFail will, if true, cause the
                                 upgrade to delete newly-created resources on a failed
                                 update.
+                              type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on upgrade
+                                Default to false
                               type: boolean
                             force:
                               default: false
@@ -8021,7 +8055,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clusterreports.config.projectsveltos.io
 spec:
   group: config.projectsveltos.io
@@ -8662,7 +8696,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: clustersummaries.config.projectsveltos.io
 spec:
   conversion:
@@ -9918,6 +9952,14 @@ spec:
                                   description: Create the release namespace if not
                                     present. Defaults to true
                                   type: boolean
+                                disableHooks:
+                                  default: false
+                                  description: |-
+                                    prevent hooks from running during install. If set to true, overrides
+                                    DisableHooks in HelmOptions. Use this one when you want to selective
+                                    disable hooks on install
+                                    Default to false
+                                  type: boolean
                                 replace:
                                   default: true
                                   description: Replaces if set indicates to replace
@@ -9955,6 +9997,14 @@ spec:
                                   - foreground
                                   - background
                                   type: string
+                                disableHooks:
+                                  default: false
+                                  description: |-
+                                    prevent hooks from running during install. If set to true, overrides
+                                    DisableHooks in HelmOptions. Use this one when you want to selective
+                                    disable hooks on uninstall
+                                    Default to false
+                                  type: boolean
                                 keepHistory:
                                   description: |-
                                     When uninstall a chart with this flag, Helm removes the resources associated with the chart,
@@ -9971,6 +10021,14 @@ spec:
                                   description: CleanupOnFail will, if true, cause
                                     the upgrade to delete newly-created resources
                                     on a failed update.
+                                  type: boolean
+                                disableHooks:
+                                  default: false
+                                  description: |-
+                                    prevent hooks from running during install. If set to true, overrides
+                                    DisableHooks in HelmOptions. Use this one when you want to selective
+                                    disable hooks on upgrade
+                                    Default to false
                                   type: boolean
                                 force:
                                   default: false
@@ -10795,7 +10853,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: profiles.config.projectsveltos.io
 spec:
   conversion:
@@ -12028,6 +12086,14 @@ spec:
                               description: Create the release namespace if not present.
                                 Defaults to true
                               type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on install
+                                Default to false
+                              type: boolean
                             replace:
                               default: true
                               description: Replaces if set indicates to replace an
@@ -12065,6 +12131,14 @@ spec:
                               - foreground
                               - background
                               type: string
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on uninstall
+                                Default to false
+                              type: boolean
                             keepHistory:
                               description: |-
                                 When uninstall a chart with this flag, Helm removes the resources associated with the chart,
@@ -12081,6 +12155,14 @@ spec:
                               description: CleanupOnFail will, if true, cause the
                                 upgrade to delete newly-created resources on a failed
                                 update.
+                              type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on upgrade
+                                Default to false
                               type: boolean
                             force:
                               default: false
@@ -13448,7 +13530,7 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.41.1
         command:
         - /manager
         env:
@@ -13460,7 +13542,7 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        image: docker.io/projectsveltos/addon-controller:main
+        image: docker.io/projectsveltos/addon-controller:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -13698,7 +13780,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/access-manager:main
+        image: docker.io/projectsveltos/access-manager:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -13840,7 +13922,7 @@ spec:
         - --v=5
         command:
         - /manager
-        image: docker.io/projectsveltos/sveltoscluster-manager:main
+        image: docker.io/projectsveltos/sveltoscluster-manager:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14047,10 +14129,10 @@ spec:
         - --diagnostics-address=:8443
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.41.1
         command:
         - /manager
-        image: docker.io/projectsveltos/healthcheck-manager:main
+        image: docker.io/projectsveltos/healthcheck-manager:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -14097,7 +14179,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.4
   name: eventtriggers.lib.projectsveltos.io
 spec:
   conversion:
@@ -15306,6 +15388,14 @@ spec:
                               description: Create the release namespace if not present.
                                 Defaults to true
                               type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on install
+                                Default to false
+                              type: boolean
                             replace:
                               default: true
                               description: Replaces if set indicates to replace an
@@ -15343,6 +15433,14 @@ spec:
                               - foreground
                               - background
                               type: string
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on uninstall
+                                Default to false
+                              type: boolean
                             keepHistory:
                               description: |-
                                 When uninstall a chart with this flag, Helm removes the resources associated with the chart,
@@ -15359,6 +15457,14 @@ spec:
                               description: CleanupOnFail will, if true, cause the
                                 upgrade to delete newly-created resources on a failed
                                 update.
+                              type: boolean
+                            disableHooks:
+                              default: false
+                              description: |-
+                                prevent hooks from running during install. If set to true, overrides
+                                DisableHooks in HelmOptions. Use this one when you want to selective
+                                disable hooks on upgrade
+                                Default to false
                               type: boolean
                             force:
                               default: false
@@ -16505,10 +16611,10 @@ spec:
         - --diagnostics-address=:8443
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.41.1
         command:
         - /manager
-        image: docker.io/projectsveltos/event-manager:main
+        image: docker.io/projectsveltos/event-manager:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16704,10 +16810,10 @@ spec:
         - --report-mode=0
         - --shard-key=
         - --v=5
-        - --version=main
+        - --version=v0.41.1
         command:
         - /manager
-        image: docker.io/projectsveltos/classifier:main
+        image: docker.io/projectsveltos/classifier:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16890,7 +16996,7 @@ spec:
         - --report-mode=0
         command:
         - /manager
-        image: docker.io/projectsveltos/shard-controller:main
+        image: docker.io/projectsveltos/shard-controller:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -16963,7 +17069,7 @@ spec:
       containers:
       - args:
         - --labels=
-        image: docker.io/projectsveltos/register-mgmt-cluster:main
+        image: docker.io/projectsveltos/register-mgmt-cluster:v0.41.1
         imagePullPolicy: IfNotPresent
         name: register-mgmt-cluster
         resources:
@@ -17016,7 +17122,7 @@ spec:
       containers:
       - command:
         - /conversion-webhook
-        image: docker.io/projectsveltos/webhook-conversion:main
+        image: docker.io/projectsveltos/webhook-conversion:v0.41.1
         livenessProbe:
           failureThreshold: 3
           httpGet:
