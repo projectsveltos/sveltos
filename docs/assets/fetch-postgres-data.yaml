@@ -38,6 +38,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: credentials
+  namespace: default
   annotations:
     projectsveltos.io/instantiate: ok
 data:
@@ -91,6 +92,7 @@ apiVersion: v1
 kind: ConfigMap 
 metadata: 
   name: loadbalancer-data
+  namespace: default
   annotations: 
     projectsveltos.io/instantiate: ok 
 data: 
