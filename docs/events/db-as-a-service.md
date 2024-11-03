@@ -13,26 +13,8 @@ authors:
 This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand. 
 
 By simply labeling a managed cluster with  `postgres=required`, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.
-
-## Granting Extra RBAC
-
-For this demo, Sveltos needs to be granted extra permission.
-
-```
-kubectl edit clusterroles  addon-controller-role-extra
-```
-
-and add following permissions
-
-```yaml
-- apiGroups:
-  - ""
-  resources:
-  - configmaps 
-  - secrets
-  verbs:
-  - "*"
-```
+!!! note
+    This tutorial assumes that each managed cluster is in a different namespace.
 
 ## Lab Setup
 
@@ -56,6 +38,29 @@ Add the label `type=mgmt` to the management cluster:
 
 ```
 kubectl label sveltoscluster -n mgmt mgmt type=mgmt
+```
+
+### Granting Extra RBAC
+
+For this demo, Sveltos needs to be granted extra permission:
+
+```
+kubectl patch clusterrole addon-controller-role-extra -p '{
+  "rules": [
+    {               
+      "apiGroups": [
+        ""
+      ],            
+      "resources": [ 
+        "configmaps",
+        "secrets"
+      ],        
+      "verbs": [
+        "*"
+      ]
+    }
+  ]
+}'
 ```
 
 ## Step 2: Register Clusters with Sveltos
@@ -120,7 +125,7 @@ Here we created a new Civo cluster and registered with Sveltos:
 
 ```
 kubectl create ns coke
-sveltosctl register cluster --namespace=coke --cluster=cluster --kubeconfig=<managed cluster kubeconfig> --labels=postgres=required
+sveltosctl register cluster --namespace=coke --cluster=my-app --kubeconfig=<managed cluster kubeconfig> --labels=postgres=required
 ```
 
 Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect:
@@ -128,7 +133,7 @@ Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to c
 ```
 kubectl get secret -n coke
 NAME                         TYPE     DATA   AGE
-cluster-credentials          Opaque   2      0s
+pg-credentials          Opaque   2      0s
 ```
 
 The Secret Data section contains:
@@ -143,7 +148,7 @@ data:
 kubectl get configmap -n coke                         
 NAME                        DATA   AGE
 ...
-cluster-loadbalancer-data   2      58s
+pg-loadbalancer-data   2      58s
 ```
 
 The ConfigMap Data section contains:
@@ -165,7 +170,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/d
 ```
 
 ```
-kubectl label sveltoscluster -n coke cluster type=app
+kubectl label sveltoscluster -n coke my-app type=app
 ```
 
 
@@ -176,6 +181,12 @@ Here we created yet another Civo cluster and registered with Sveltos[^1]. As res
 1. Sveltos deployed a new Postgres DB in the `services` cluster;
 2. Fetched the credentials and external-ip:port info to access the cluster;
 3. Deployed a Job in the `pepsi` cluster that creates a table in the DB.
+
+
+## Multi-tenancy scenario
+
+For multi-tenant clusters with a database per tenant, see this [tutorial](db-as-a-service-multiple-db-per-cluster.md).
+
 
 [^1]:
     ```

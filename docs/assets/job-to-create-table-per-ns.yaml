@@ -1,22 +1,39 @@
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: detect-tenant-requiring-postgres
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Namespace"
+    labelFilters:
+    - key: postgres
+      operation: Equal
+      value: required
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
 metadata:
   name: deploy-job
 spec:
-  clusterSelector:
-    matchLabels:      
-      type: app 
+  sourceClusterSelector:
+    matchLabels:
+      type: app
+  eventSourceName: detect-tenant-requiring-postgres
+  oneForEvent: true
   templateResourceRefs:
   - resource:
       apiVersion: v1
       kind: Secret
-      name: "pg-credentials"
+      name: "{{ .Resource.metadata.name }}-app-credentials"
     identifier:  Credentials
   - resource:
       apiVersion: v1
       kind: ConfigMap
-      name: "pg-loadbalancer-data"
-    identifier:  LoadBalancer 
+      name: "{{ .Resource.metadata.name }}-lb-data"
+    identifier:  LoadBalancer   
   policyRefs:
   - name: job-to-create-table
     namespace: default
@@ -28,8 +45,8 @@ data:
     apiVersion: batch/v1
     kind: Job
     metadata:
-      name: todo-table
-      namespace: todo
+      name: {{ (getResource "Credentials").metadata.name }}-table
+      namespace: {{ get (getResource "Credentials").data `namespace` |b64dec }}
     spec:
       ttlSecondsAfterFinished: 1000
       template:
