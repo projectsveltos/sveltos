@@ -46,11 +46,12 @@ data:
     apiVersion: v1
     kind: Secret
     metadata:
-      name: pg-credentials
-      namespace: {{ .Resource.metadata.namespace }} 
+      name: {{ .Resource.metadata.name }}-credentials
+      namespace: {{ .Resource.metadata.namespace }}
     data:
       "password": "{{ get .Resource.data `password` }}"
       "user": "{{ get .Resource.data `username` }}"
+      "namespace": "{{ get .Resource.metadata.labels `cnpg.io/cluster` |b64enc }}"
 ---
 ## Fetch postgres loadbalancer external-ip:port from the cluster where services are deployed.
 ## Create a ConfigMap in the management cluster that contains those info
@@ -100,7 +101,7 @@ data:
     apiVersion: v1 
     kind: ConfigMap
     metadata: 
-      name: pg-loadbalancer-data
+      name: {{ .Resource.metadata.name }}-lb-data
       namespace: {{ .Resource.metadata.namespace }}
     data: 
       external-ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}

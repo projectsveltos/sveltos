@@ -10,11 +10,10 @@ authors:
     - Gianluca Mardente
 ---
 
-This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand. 
+In this scenario, a managed cluster is shared among different tenants. Each tenant is assigned a namespace.
+By simply labeling a namespace with `postgres=required`, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting tenants.
 
-By simply labeling a managed cluster with  `postgres=required`, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.
-!!! note
-    This tutorial assumes that each managed cluster is in a different namespace.
+![Sveltos: Deploy Cloudnative-pg](../assets/db-per-ns.png)
 
 ## Lab Setup
 
@@ -22,8 +21,6 @@ A Civo cluster serves as the management cluster.
 Another Civo cluster, labeled `type=services`, is dedicated to automatic Postgres DB deployment by Sveltos.
 
 Postgres DB will be deployed using [Cloudnative-pg](https://github.com/cloudnative-pg/cloudnative-pg).
-
-![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-db-as-a-service.gif)
 
 ## Step 1: Install Sveltos on Management Cluster
 
@@ -69,7 +66,7 @@ Using Civo UI, download the Kubeconfigs, then:
 
 ```
 kubectl create ns managed-services
-sveltosctl register cluster --namespace=managed-services --cluster=cluster --kubeconfig=<managed cluster kubeconfig> --labels=type=services
+sveltosctl register cluster --namespace=managed-services --cluster=services --kubeconfig=<managed cluster kubeconfig> --labels=type=services
 ```
 
 Verify clusters were successfully registered:
@@ -78,7 +75,7 @@ Verify clusters were successfully registered:
 kubectl get sveltoscluster -A --show-labels
 NAMESPACE          NAME      READY   VERSION        LABELS
 mgmt               mgmt      true    v1.29.2+k3s1   projectsveltos.io/k8s-version=v1.29.2,sveltos-agent=present,type=mgmt
-managed-services   cluster   true    v1.29.8+k3s1   projectsveltos.io/k8s-version=v1.29.8,sveltos-agent=present,type=services
+managed-services   services  true    v1.29.8+k3s1   projectsveltos.io/k8s-version=v1.29.8,sveltos-agent=present,type=services
 ```
 
 ## Step 3: Deploy cloudnative-pg
@@ -96,7 +93,7 @@ sveltosctl show addons
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 |         CLUSTER          | RESOURCE TYPE |  NAMESPACE  | NAME | VERSION |              TIME              |          PROFILES          |
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
-| managed-services/cluster | helm chart    | cnpg-system | cnpg | 0.22.1  | 2024-10-25 15:47:54 +0200 CEST | ClusterProfile/deploy-cnpg |
+| managed-services/services| helm chart    | cnpg-system | cnpg | 0.22.1  | 2024-10-25 15:47:54 +0200 CEST | ClusterProfile/deploy-cnpg |
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 ```
 
@@ -105,35 +102,44 @@ sveltosctl show addons
 
 ## Step 4: Instruct Sveltos to automatically deploy Postgres DB 
 
-Following configuration will instruct Sveltos to watch for managed cluster with labels `postgres=required`. Anytime such a cluster is detect, Sveltos will:
+With the following configuration, Sveltos will actively monitor any managed cluster tagged with the label `type=app`. Specifically, it will look for namespaces within these clusters that are labeled with `postgres=required`. Upon identifying such a namespace, Sveltos will:
 
 1. Create a Postgres Cluster instance in the managed cluster with label `type:services`. DB will be exposed via a LoadBalancer service.
 2. Fetch credentials to access the DB.
 3. fetch the LoadBalancer service external ip: port
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/auto-deploy-postgres-cluster.yaml
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/auto-deploy-postgres-cluster-per-ns.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data-per-ns.yaml
 ```
 
 ## Step 5: Onboard a new managed cluster
 
-Whenever a new managed cluster is registered with Sveltos and labeled with 'postgres=required', Sveltos will initiate the deployment of a new Postgres database on the 'type=services' cluster. 
-Once deployed, Sveltos will gather the essential connection information, including credentials, external IP address, and port number, for this newly created Postgres instance.
-
-Here we created a new Civo cluster and registered with Sveltos:
+Here we created a new Civo cluster and registered with Sveltos. This cluster will be shared by different tenants.
 
 ```
-kubectl create ns coke
-sveltosctl register cluster --namespace=coke --cluster=my-app --kubeconfig=<managed cluster kubeconfig> --labels=postgres=required
+kubectl create ns apps
+sveltosctl register cluster --namespace=apps --cluster=shared --kubeconfig=<managed cluster kubeconfig> --labels=type=app
+```
+
+Whenever a new namespace in created in this cluster and assigned the `postgres=required` label, Sveltos will initiate the following actions:
+
+1. *Deploy a new Postgres database*: Sveltos will deploy a new Postgres database instance to the `type=services` cluster.
+2. *Gather connection information*: Once the deployment is complete, Sveltos will collect crucial connection details for the newly created Postgres instance, including its credentials, external IP address, and port number.
+
+To request a new database, simply create a namespace in your _shared_ cluster and apply the `postgres=required` label to it.
+
+```
+KUBECONFIG=<kubeconfig of your shared cluster> kubectl create namespace coke
+KUBECONFIG=<kubeconfig of your shared cluster> kubectl label namespace coke postgres=required
 ```
 
 Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect:
 
 ```
-kubectl get secret -n coke
+kubectl get secret -n apps
 NAME                         TYPE     DATA   AGE
-pg-credentials          Opaque   2      0s
+coke-app-credentials          Opaque   2      0s
 ```
 
 The Secret Data section contains:
@@ -145,10 +151,10 @@ data:
 ```
 
 ```
-kubectl get configmap -n coke                         
+kubectl get configmap -n apps                         
 NAME                        DATA   AGE
 ...
-pg-loadbalancer-data   2      58s
+coke-lb-data   2      58s
 ```
 
 The ConfigMap Data section contains:
@@ -161,29 +167,37 @@ data:
 
 ## Step 6: Deploy an application that access the Postgres DB
 
-Sveltos can now be used to deploy a Job in the `coke` cluster. This Job will access the Postgres DB in the `services` cluster.
-
-This Job is expressed as a template and will be deployed by Sveltos in any cluster with label `type=app`.
+Sveltos can now be used to deploy a Job in the `coke` namespace. This Job will access the Postgres DB in the `services` cluster.
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/job-to-create-table.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/job-to-create-table-per-ns.yaml
 ```
 
 ```
-kubectl label sveltoscluster -n coke my-app type=app
+watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A 
+NAMESPACE   NAME                          COMPLETIONS   DURATION   AGE
+coke        coke-app-credentials-table    1/1           14s        2m10s
 ```
 
+## Step 7: Add another namespace
 
-## Step 7: Add another managed cluster
-
-Here we created yet another Civo cluster and registered with Sveltos[^1]. As result:
+Here we created yet another namespace in the __shared_cluster__ and label it with `postgres=required`. As result:
 
 1. Sveltos deployed a new Postgres DB in the `services` cluster;
 2. Fetched the credentials and external-ip:port info to access the cluster;
 3. Deployed a Job in the `pepsi` cluster that creates a table in the DB.
 
+```
+watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A 
+NAMESPACE   NAME                          COMPLETIONS   DURATION   AGE
+coke        coke-app-credentials-table    1/1           14s        5m10s
+pepsi       pepsi-app-credentials-table   1/1           87s        113s
+```
+!!! note
+    This might take 30 seconds or so, till Cloudnative-pg Cluster comes up and a LoadBalancer IP is assigned.
+
 [^1]:
     ```
-    kubectl create ns pepsi
-    sveltosctl register cluster --namespace=pepsi --cluster=cluster --kubeconfig=<managed cluster kubeconfig> --labels=postgres=required,type=app
+    KUBECONFIG=<kubeconfig of your shared cluster> kubectl create namespace pepsi 
+    KUBECONFIG=<kubeconfig of your shared cluster> kubectl label namespace pepsi postgres=required
     ```
