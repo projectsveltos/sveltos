@@ -32,6 +32,11 @@ $ make quickstart
 The above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos, 
 create a workload cluster powered by clusterAPI using Docker as infrastructure provider.
 
+!!! note
+    The Sveltos Dashboard is an optional component of Sveltos. To include it in the deployment, follow the instructions found in the [dashboard](#dashboard) section.
+
+    **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
+
 ## Deploy Helm Charts
 
 To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_ create this ClusterProfile instance in the management cluster:

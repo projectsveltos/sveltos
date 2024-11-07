@@ -16,17 +16,16 @@ authors:
 The Sveltos Dashboard is not part of the generic Sveltos installation. It is a manifest file that will get deployed on top. If you have not installed Sveltos, check out the documentation [here](install.md).
 
 To deploy the Sveltos Dashboard, run the below command using the `kubectl` utility.
-!!! note
-    The Sveltos dashboard is compatible with Kubernetes versions 1.28.0 and above.
 
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/dashboard-manifest.yaml
+
 ```
 
-To access the dashboard, expose the `dashboard` service in the `projectsveltos` namespace. The deployment, by default, is configured as a _ClusterIP_ service. To expose the service externally, we can edit it to either a _LoadBalancer_ service or use an Ingress/Gateway API.
+!!! warning
+    **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
-!!! note
-    _v0.38.4_ is the first Sveltos release that includes a dashboard.
+To access the dashboard, expose the `dashboard` service in the `projectsveltos` namespace. The deployment, by default, is configured as a _ClusterIP_ service. To expose the service externally, we can edit it to either a _LoadBalancer_ service or use an Ingress/Gateway API.
 
 ## Authentication
 

@@ -32,8 +32,6 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 
 - **Mode 2:** Sveltos agents will be created, per managed cluster, in the management cluster[^2]. The agents, while centrally located, will still monitor their designated managed cluster’s API server.
 
-Dashboard is an optional component of Sveltos. To include it in your deployment, follow the instructions in the [dashboard](#dashboard) section.
-
 ### Mode 1: Local Agent Mode
 
 To install Sveltos in mode 1, run the commands below.
@@ -87,7 +85,6 @@ $ helm list -n projectsveltos
     kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/crds/sveltos_crds.yaml
     ```
 
-
 ### Kustomize Installation
 
 #### Mode 1: Local Agent Mode
@@ -119,17 +116,12 @@ projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
-### Dashboard
+## Sveltos Dashboard
 
-```
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/dashboard-manifest.yaml
-```
-
-To access the dashboard, you'll need to expose the `dashboard` service in the `projectsveltos` namespace. 
-Currently, it's configured as a _ClusterIP_ service, which limits access to within the cluster. To expose it externally, you can either change the service type to LoadBalancer or utilize an Ingress/Gateway API.
+The Sveltos Dashboard is an optional component of Sveltos. To include it in the deployment, follow the instructions found in the [dashboard](#dashboard) section.
 
 !!! note
-    _v0.38.4_ is the first Sveltos release that includes dashboard.
+    **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
 
 ## Next Steps
