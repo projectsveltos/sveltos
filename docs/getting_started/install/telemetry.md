@@ -1,5 +1,5 @@
 ---
-title: How to install Sveltos
+title: Telemetry
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs. Learn here how to install Sveltos.
 tags:
     - Kubernetes
@@ -40,7 +40,7 @@ We collect minimal, anonymized data about Sveltos usage:
 
 If you prefer not to share telemetry data, you can easily opt out:
 
-## Helm-Based Deployments:
+### Helm-Based Deployments:
 
 ```
 helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set telemetry.disabled=true
