@@ -1,142 +1,142 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sc-manager
-  namespace: projectsveltos
+    name: sc-manager
+    namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sc-manager-role
+    name: sc-manager-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - debuggingconfigurations
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters/status
-  verbs:
-  - get
-  - patch
-  - update
+    - apiGroups:
+        - ""
+      resources:
+        - secrets
+      verbs:
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - authentication.k8s.io
+      resources:
+        - tokenreviews
+      verbs:
+        - create
+    - apiGroups:
+        - authorization.k8s.io
+      resources:
+        - subjectaccessreviews
+      verbs:
+        - create
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - debuggingconfigurations
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - sveltosclusters
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - sveltosclusters/status
+      verbs:
+        - get
+        - patch
+        - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sc-manager-rolebinding
+    name: sc-manager-rolebinding
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: sc-manager-role
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: sc-manager-role
 subjects:
-- kind: ServiceAccount
-  name: sc-manager
-  namespace: projectsveltos
+    - kind: ServiceAccount
+      name: sc-manager
+      namespace: projectsveltos
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    control-plane: sc-manager
-  name: sc-manager
-  namespace: projectsveltos
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      control-plane: sc-manager
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
+    labels:
         control-plane: sc-manager
-    spec:
-      containers:
-      - args:
-        - --diagnostics-address=:8443
-        - --shard-key=
-        - --v=5
-        command:
-        - /manager
-        image: docker.io/projectsveltos/sveltoscluster-manager:main
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /healthz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        ports:
-        - containerPort: 8443
-          name: metrics
-          protocol: TCP
-        - containerPort: 9440
-          name: healthz
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /readyz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 256Mi
-          requests:
-            cpu: 10m
-            memory: 128Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: sc-manager
-      terminationGracePeriodSeconds: 10
+    name: sc-manager
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            control-plane: sc-manager
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: manager
+            labels:
+                control-plane: sc-manager
+        spec:
+            containers:
+                - args:
+                    - --diagnostics-address=:8443
+                    - --shard-key=
+                    - --v=5
+                  command:
+                    - /manager
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.42.0
+                  livenessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /healthz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: manager
+                  ports:
+                    - containerPort: 8443
+                      name: metrics
+                      protocol: TCP
+                    - containerPort: 9440
+                      name: healthz
+                      protocol: TCP
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /readyz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    limits:
+                        cpu: 500m
+                        memory: 256Mi
+                    requests:
+                        cpu: 10m
+                        memory: 128Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+            securityContext:
+                runAsNonRoot: true
+            serviceAccountName: sc-manager
+            terminationGracePeriodSeconds: 10
 ---
