@@ -1,140 +1,140 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app.kubernetes.io/name: sveltos-webhook
-  name: webhook-service
-  namespace: projectsveltos
+    labels:
+        app.kubernetes.io/name: sveltos-webhook
+    name: webhook-service
+    namespace: projectsveltos
 spec:
-  ports:
-  - port: 443
-    protocol: TCP
-    targetPort: 9443
-  selector:
-    app: sveltos-webhook
+    ports:
+        - port: 443
+          protocol: TCP
+          targetPort: 9443
+    selector:
+        app: sveltos-webhook
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: sveltos-webhook
-    app.kubernetes.io/name: project
-  name: conversion-webhook
-  namespace: projectsveltos
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: sveltos-webhook
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: sveltos-webhook
-      labels:
+    labels:
         app: sveltos-webhook
-    spec:
-      containers:
-      - command:
-        - /conversion-webhook
-        image: docker.io/projectsveltos/webhook-conversion:main
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /healthz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: sveltos-webhook
-        ports:
-        - containerPort: 9443
-          name: webhook-server
-          protocol: TCP
-        - containerPort: 9440
-          name: healthz
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /readyz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 10m
-            memory: 64Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        volumeMounts:
-        - mountPath: /tmp/k8s-webhook-server/serving-certs
-          name: cert
-          readOnly: true
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: default
-      terminationGracePeriodSeconds: 10
-      volumes:
-      - name: cert
-        secret:
-          defaultMode: 420
-          secretName: webhook-server-cert
+        app.kubernetes.io/name: project
+    name: conversion-webhook
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: sveltos-webhook
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: sveltos-webhook
+            labels:
+                app: sveltos-webhook
+        spec:
+            containers:
+                - command:
+                    - /conversion-webhook
+                  image: docker.io/projectsveltos/webhook-conversion:main
+                  livenessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /healthz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: sveltos-webhook
+                  ports:
+                    - containerPort: 9443
+                      name: webhook-server
+                      protocol: TCP
+                    - containerPort: 9440
+                      name: healthz
+                      protocol: TCP
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /readyz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    limits:
+                        cpu: 500m
+                        memory: 128Mi
+                    requests:
+                        cpu: 10m
+                        memory: 64Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+                  volumeMounts:
+                    - mountPath: /tmp/k8s-webhook-server/serving-certs
+                      name: cert
+                      readOnly: true
+            securityContext:
+                runAsNonRoot: true
+            serviceAccountName: default
+            terminationGracePeriodSeconds: 10
+            volumes:
+                - name: cert
+                  secret:
+                    defaultMode: 420
+                    secretName: webhook-server-cert
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  labels:
-    app.kubernetes.io/component: certificate
-    app.kubernetes.io/created-by: project
-    app.kubernetes.io/instance: serving-cert
-    app.kubernetes.io/name: certificate
-    app.kubernetes.io/part-of: project
-  name: projectsveltos-serving-cert
-  namespace: projectsveltos
+    labels:
+        app.kubernetes.io/component: certificate
+        app.kubernetes.io/created-by: project
+        app.kubernetes.io/instance: serving-cert
+        app.kubernetes.io/name: certificate
+        app.kubernetes.io/part-of: project
+    name: projectsveltos-serving-cert
+    namespace: projectsveltos
 spec:
-  dnsNames:
-  - webhook-service.projectsveltos.svc
-  - webhook-service.projectsveltos.svc.cluster.local
-  issuerRef:
-    kind: Issuer
-    name: project-selfsigned-issuer
-  secretName: webhook-server-cert
+    dnsNames:
+        - webhook-service.projectsveltos.svc
+        - webhook-service.projectsveltos.svc.cluster.local
+    issuerRef:
+        kind: Issuer
+        name: project-selfsigned-issuer
+    secretName: webhook-server-cert
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  labels:
-    app.kubernetes.io/name: sveltos-webhook
-  name: project-selfsigned-issuer
-  namespace: projectsveltos
+    labels:
+        app.kubernetes.io/name: sveltos-webhook
+    name: project-selfsigned-issuer
+    namespace: projectsveltos
 spec:
-  selfSigned: {}
+    selfSigned: {}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  annotations:
-    cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-  labels:
-    app.kubernetes.io/name: sveltos-webhook
-  name: projectsveltos-mutating-webhook-configuration
+    annotations:
+        cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
+    labels:
+        app.kubernetes.io/name: sveltos-webhook
+    name: projectsveltos-mutating-webhook-configuration
 webhooks:
-- admissionReviewVersions:
-  - v1beta1
-  - v1alpha1
-  clientConfig:
-    service:
-      name: webhook-service
-      namespace: projectsveltos
-      path: /mutate-projectsveltos-v1beta1-clusterprofile
-  failurePolicy: Fail
-  name: mclusterprofile.projectsveltos.io
-  sideEffects: None
+    - admissionReviewVersions:
+        - v1beta1
+        - v1alpha1
+      clientConfig:
+        service:
+            name: webhook-service
+            namespace: projectsveltos
+            path: /mutate-projectsveltos-v1beta1-clusterprofile
+      failurePolicy: Fail
+      name: mclusterprofile.projectsveltos.io
+      sideEffects: None
 ---
