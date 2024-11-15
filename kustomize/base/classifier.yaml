@@ -1,199 +1,199 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: classifier-manager
-  namespace: projectsveltos
+    name: classifier-manager
+    namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: classifier-manager-role
+    name: classifier-manager-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - secrets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - apiextensions.k8s.io
-  resources:
-  - customresourcedefinitions
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - clusters
-  verbs:
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - clusters/status
-  - machines
-  - machines/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - accessrequests
-  - classifiers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifierreports
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - debuggingconfigurations
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - sveltosclusters
-  verbs:
-  - get
-  - list
-  - update
-  - watch
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - apiextensions.k8s.io
+      resources:
+        - customresourcedefinitions
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - authentication.k8s.io
+      resources:
+        - tokenreviews
+      verbs:
+        - create
+    - apiGroups:
+        - authorization.k8s.io
+      resources:
+        - subjectaccessreviews
+      verbs:
+        - create
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters
+      verbs:
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters/status
+        - machines
+        - machines/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - accessrequests
+        - classifiers
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifierreports
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers/finalizers
+      verbs:
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers/status
+      verbs:
+        - get
+        - patch
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - debuggingconfigurations
+        - sveltosclusters/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - sveltosclusters
+      verbs:
+        - get
+        - list
+        - update
+        - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: classifier-manager-rolebinding
+    name: classifier-manager-rolebinding
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: classifier-manager-role
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: classifier-manager-role
 subjects:
-- kind: ServiceAccount
-  name: classifier-manager
-  namespace: projectsveltos
+    - kind: ServiceAccount
+      name: classifier-manager
+      namespace: projectsveltos
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    control-plane: classifier
-  name: classifier-manager
-  namespace: projectsveltos
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      control-plane: classifier
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
+    labels:
         control-plane: classifier
-    spec:
-      containers:
-      - args:
-        - --diagnostics-address=:8443
-        - --report-mode=0
-        - --shard-key=
-        - --v=5
-        - --version=main
-        command:
-        - /manager
-        image: docker.io/projectsveltos/classifier:main
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /healthz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        ports:
-        - containerPort: 8443
-          name: metrics
-          protocol: TCP
-        - containerPort: 9440
-          name: healthz
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /readyz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: classifier-manager
-      terminationGracePeriodSeconds: 10
+    name: classifier-manager
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            control-plane: classifier
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: manager
+            labels:
+                control-plane: classifier
+        spec:
+            containers:
+                - args:
+                    - --diagnostics-address=:8443
+                    - --report-mode=0
+                    - --shard-key=
+                    - --v=5
+                    - --version=main
+                  command:
+                    - /manager
+                  image: docker.io/projectsveltos/classifier:main
+                  livenessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /healthz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: manager
+                  ports:
+                    - containerPort: 8443
+                      name: metrics
+                      protocol: TCP
+                    - containerPort: 9440
+                      name: healthz
+                      protocol: TCP
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /readyz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    limits:
+                        cpu: 500m
+                        memory: 256Mi
+                    requests:
+                        cpu: 100m
+                        memory: 128Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+            securityContext:
+                runAsNonRoot: true
+            serviceAccountName: classifier-manager
+            terminationGracePeriodSeconds: 10
 ---

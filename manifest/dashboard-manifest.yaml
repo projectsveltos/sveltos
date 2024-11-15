@@ -1,215 +1,219 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: projectsveltos
+    name: projectsveltos
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  labels:
-    app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: ui-backend
-    app.kubernetes.io/instance: ui-backend-sa
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: serviceaccount
-    app.kubernetes.io/part-of: ui-backend
-  name: ui-backend-manager
-  namespace: projectsveltos
+    labels:
+        app.kubernetes.io/component: rbac
+        app.kubernetes.io/created-by: ui-backend
+        app.kubernetes.io/instance: ui-backend-sa
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: serviceaccount
+        app.kubernetes.io/part-of: ui-backend
+    name: ui-backend-manager
+    namespace: projectsveltos
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: ui-backend-controller-role
+    name: ui-backend-controller-role
 rules:
-- apiGroups:
-  - apiextensions.k8s.io
-  resources:
-  - customresourcedefinitions
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - authentication.k8s.io
-  resources:
-  - tokenreviews
-  verbs:
-  - create
-- apiGroups:
-  - authorization.k8s.io
-  resources:
-  - subjectaccessreviews
-  verbs:
-  - create
-- apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - clusters
-  - clusters/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - config.projectsveltos.io
-  resources:
-  - clusterconfigurations
-  - clustersummaries
-  - clustersummaries/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - debuggingconfigurations
-  - sveltosclusters
-  - sveltosclusters/status
-  verbs:
-  - get
-  - list
-  - watch
+    - apiGroups:
+        - apiextensions.k8s.io
+      resources:
+        - customresourcedefinitions
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - authentication.k8s.io
+      resources:
+        - tokenreviews
+      verbs:
+        - create
+    - apiGroups:
+        - authorization.k8s.io
+      resources:
+        - subjectaccessreviews
+      verbs:
+        - create
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters
+        - clusters/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - config.projectsveltos.io
+      resources:
+        - clusterconfigurations
+        - clusterprofiles
+        - clusterprofiles/status
+        - clustersummaries
+        - clustersummaries/status
+        - profiles
+        - profiles/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - debuggingconfigurations
+        - sveltosclusters
+        - sveltosclusters/status
+      verbs:
+        - get
+        - list
+        - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  labels:
-    app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: ui-backend
-    app.kubernetes.io/instance: manager-rolebinding
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: clusterrolebinding
-    app.kubernetes.io/part-of: ui-backend
-  name: ui-backend-manager-rolebinding
+    labels:
+        app.kubernetes.io/component: rbac
+        app.kubernetes.io/created-by: ui-backend
+        app.kubernetes.io/instance: manager-rolebinding
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: clusterrolebinding
+        app.kubernetes.io/part-of: ui-backend
+    name: ui-backend-manager-rolebinding
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: ui-backend-controller-role
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: ui-backend-controller-role
 subjects:
-- kind: ServiceAccount
-  name: ui-backend-manager
-  namespace: projectsveltos
+    - kind: ServiceAccount
+      name: ui-backend-manager
+      namespace: projectsveltos
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ui-backend-manager
-  namespace: projectsveltos
+    name: ui-backend-manager
+    namespace: projectsveltos
 spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    control-plane: ui-backend
-  type: ClusterIP
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/component: manager
-    app.kubernetes.io/created-by: ui-backend
-    app.kubernetes.io/instance: ui-backend
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: deployment
-    app.kubernetes.io/part-of: ui-backend
-    control-plane: ui-backend
-  name: ui-backend-manager
-  namespace: projectsveltos
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      control-plane: ui-backend
-  template:
-    metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container: manager
-      labels:
+    ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 8080
+    selector:
         control-plane: ui-backend
-    spec:
-      containers:
-      - args:
-        - --diagnostics-address=:8443
-        - --v=5
-        command:
-        - /manager
-        image: projectsveltos/ui-backend:main
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /healthz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        ports:
-        - containerPort: 8443
-          name: metrics
-          protocol: TCP
-        - containerPort: 9440
-          name: healthz
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /readyz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 10m
-            memory: 64Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      securityContext:
-        runAsNonRoot: true
-      serviceAccountName: ui-backend-manager
-      terminationGracePeriodSeconds: 10
+    type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dashboard
-  namespace: projectsveltos
+    labels:
+        app.kubernetes.io/component: manager
+        app.kubernetes.io/created-by: ui-backend
+        app.kubernetes.io/instance: ui-backend
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: deployment
+        app.kubernetes.io/part-of: ui-backend
+        control-plane: ui-backend
+    name: ui-backend-manager
+    namespace: projectsveltos
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: dashboard
-  template:
-    metadata:
-      labels:
-        app: dashboard
-    spec:
-      containers:
-      - image: docker.io/projectsveltos/dashboard:main
-        name: dashboard
-        ports:
-        - containerPort: 5173
+    replicas: 1
+    selector:
+        matchLabels:
+            control-plane: ui-backend
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: manager
+            labels:
+                control-plane: ui-backend
+        spec:
+            containers:
+                - args:
+                    - --diagnostics-address=:8443
+                    - --v=5
+                  command:
+                    - /manager
+                  image: projectsveltos/ui-backend:main
+                  livenessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /healthz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: manager
+                  ports:
+                    - containerPort: 8443
+                      name: metrics
+                      protocol: TCP
+                    - containerPort: 9440
+                      name: healthz
+                      protocol: TCP
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /readyz
+                        port: healthz
+                        scheme: HTTP
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    limits:
+                        cpu: 500m
+                        memory: 128Mi
+                    requests:
+                        cpu: 10m
+                        memory: 64Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+            securityContext:
+                runAsNonRoot: true
+            serviceAccountName: ui-backend-manager
+            terminationGracePeriodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: dashboard
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: dashboard
+    template:
+        metadata:
+            labels:
+                app: dashboard
+        spec:
+            containers:
+                - image: docker.io/projectsveltos/dashboard:main
+                  name: dashboard
+                  ports:
+                    - containerPort: 5173
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dashboard
-  namespace: projectsveltos
+    name: dashboard
+    namespace: projectsveltos
 spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 5173
-  selector:
-    app: dashboard
-  type: ClusterIP
+    ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 5173
+    selector:
+        app: dashboard
+    type: ClusterIP
 ---
