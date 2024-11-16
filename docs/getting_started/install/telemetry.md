@@ -51,3 +51,8 @@ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --cr
 Set the `--disable-telemetry=true` flag in the Sveltos addon-controller configuration.
 
 By choosing to participate in telemetry, you contribute to the ongoing improvement of Sveltos and help ensure it meets the needs of the community.
+
+
+### Requesting Data Erasure
+
+You have the right to request the erasure of your data under certain circumstances. To initiate a data erasure request, please contact us at support@projectsveltos.io.
