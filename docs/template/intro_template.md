@@ -36,9 +36,9 @@ Sveltos supports the template functions included from the [Sprig](https://master
 
 ## Extra Template Functions
 
-1. **toToml**: It an interface, marshals it to **toml**, and returns a string. It will always return a string, even on marshal error (empty string)
-1. **toYaml**: It takesn an interface, marshals it to **yaml**, and returns a string. It will always return a string, even on marshal error (empty string)
-1. **toJson**: It an interface, marshals it to **json**, and returns a string. It will always return a string, even on marshal error (empty string)
+1. **toToml**: It takes an interface, marshals it to **toml**, and returns a string. It will always return a string, even on marshal error (empty string)
+1. **toYaml**: It takes an interface, marshals it to **yaml**, and returns a string. It will always return a string, even on marshal error (empty string)
+1. **toJson**: It takes an interface, marshals it to **json**, and returns a string. It will always return a string, even on marshal error (empty string)
 1. **fromToml**: It converts a **TOML** document into a map[string]interface{}
 1. **fromYaml**: It converts a **YAML** document into a map[string]interface{}
 1. **fromYamlArray**: It converts a **YAML array** into a []interface{}
