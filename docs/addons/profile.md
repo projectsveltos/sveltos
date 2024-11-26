@@ -20,13 +20,22 @@ Profile is a namespace-scoped resource.  It can only match clusters and referenc
 
 ### Spec.ClusterSelector 
 
-*clusterSelector* field selects a set of managed clusters where listed add-ons and applications will be deployed.
-Only cluster in the same namespace can be a match.
+*clusterSelector* field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.
+
+This field employs a Kubernetes label selector, allowing you to target clusters based on specific labels.
 
 ```yaml
-  clusterSelector:
+clusterSelector:
     matchLabels:
       env: prod
+```
+
+By leveraging __matchExpressions__, you can create more complex and flexible cluster selection criteria.
+
+```yaml
+clusterSelector:
+  matchExpressions:
+  - {key: env, operator: In, values: [staging, production]}
 ```
 
 ### Spec.HelmCharts
