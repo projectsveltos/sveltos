@@ -108,6 +108,42 @@ $ sveltosctl register cluster \
     --kubeconfig=<path to file with Kubeconfig>
 ```
 
+## Register Kamaji Cluster
+If you use the **Hosted Control Plane** solution [Kamaji](https://kamaji.clastix.io/), follow steps below below to perform a tenant cluster registration with Sveltos.
+
+1. Point the kubeconfig to the Kamaji Management Cluster
+    ```bash
+    $ export KUBECONFIG=~/demo/kamaji/kubeconfig/kamaji-admin.kubeconfig
+    ```
+2. Check the secrets in the namespace the tenant cluster was created
+    ```bash
+    $ kubectl get secrets -n {your namespace}
+    ```
+3. Look for the secret with the following name format `<tenant_name>-admin-kubeconfig`
+4. Get and decode the secret to a file of your preference
+    ```bash
+    $ kubectl get secrets -n {your namespace} <tenant_name>-admin-kubeconfig -o json \
+      | jq -r '.data["admin.conf"]' \
+      | base64 --decode \
+      > <path to file with kubeconfig>/<tenant_name>-admin.kubeconfig
+    ```
+5. Perform a Sveltos registration
+    ```bash
+    $ sveltosctl register cluster \
+        --namespace=<namespace> \
+        --cluster=<cluster name> \
+        --kubeconfig=<path to file with kubeconfig> \
+        --labels=key1=value1,key2=value2
+    ```
+    Example
+    ```bash
+    $ sveltosctl register cluster \
+        --namespace=projectsveltos \
+        --cluster=tenant-00 \
+        --kubeconfig=~/demo/kamaji/kubeconfig/tenant-00-admin.kubeconfig \
+        --labels=tcp=tenant-00
+    ```
+
 ## Register RKE2 Cluster
 If you use Rancher's next-generation Kubernetes distribution [RKE2](https://docs.rke2.io/), you will only need to download the kubeconfig either from the Rancher UI under the Cluster Management section or via SSH into the RKE2 Cluster and under the */etc/rancher/rke2/rke2.yaml* directory. Run the below command.
 
