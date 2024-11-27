@@ -29,6 +29,8 @@ However, Sveltos also supports cross-clusters:
 
 For more information, take a peek at [this](example_cross_cluster_configuration.md) link.
 
+![Event Framework](../assets/events.png)
+
 ## Sveltos Event Definition
 
 An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the
@@ -178,16 +180,6 @@ Inside the newly created directory or subdirectory, create the below.
           end
     ```
 
-### Template-based EventSourceName
-
-The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
-
-Available cluster information :
-
-- cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name` 
-- cluster type: `.Cluster.kind` 
-
 ## EventTrigger
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
@@ -329,6 +321,16 @@ To achive the above, the below flow is executed.
       - creates a new ConfigMap in the *projectsveltos* namespace, whose content is derived from ConfigMap the EventTrigger instance references, and instantiated using information coming the resource in the managed cluster (Service instance with label sveltos:fv);
 
       - creates a ClusterProfile.
+
+### Template-based EventSourceName
+
+The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+
+Available cluster information :
+
+- cluster namespace: use `.Cluster.metadata.namespace`
+- cluster name: `.Cluster.metadata.name` 
+- cluster type: `.Cluster.kind` 
 
 ### EventSource CollectResources setting
 
