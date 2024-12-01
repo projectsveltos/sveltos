@@ -400,21 +400,21 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     metadata:
-    name: service-network-policy
+      name: service-network-policy
     spec:
-    sourceClusterSelector:
-      matchLabels:
-        env: fv
-    eventSourceName: <your eventSource name>
-    oneForEvent: false
-    helmCharts:
-    - repositoryURL:    https://kyverno.github.io/kyverno/
-      repositoryName:   kyverno
-      chartName:        kyverno/kyverno
-      chartVersion:     v3.0.1
-      releaseName:      kyverno-latest
-      releaseNamespace: kyverno
-      helmChartAction:  Install 
+      sourceClusterSelector:
+        matchLabels:
+          env: fv
+      eventSourceName: <your eventSource name>
+      oneForEvent: false
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.0.1
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install 
     ```
 
 __Currently, it is not possible to change this field once set.__
