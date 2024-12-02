@@ -54,8 +54,43 @@ $ sveltosctl show dryrun
 |                                     |                          |           |                |           | since last deployment.         |                  |
 | default/sveltos-management-workload | kyverno.io:ClusterPolicy |           | no-gateway     | Create    |                                | dryrun           |
 +-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
+```
+
+To view detailed line-by-line changes for each resource, use the `--raw-diff` option with `sveltosctl show dryrun`.
 
 ```
+sveltosctl show dryrun --raw-diff   
+Cluster: default/clusterapi-workload
+--- deployed: ClusterPolicy disallow-latest-tag
++++ proposed: ClusterPolicy disallow-latest-tag
+@@ -49,10 +49,10 @@
+               name: validate-image-tag
+               skipBackgroundRequests: true
+               validate:
+-                message: Using a mutable image tag e.g. 'latest' is not allowed.
++                message: Using a mutable image tag e.g. 'latest' is not allowed in this cluster.
+                 pattern:
+                     spec:
+                         containers:
+                             - image: '!*:latest'
+-        validationFailureAction: audit
++        validationFailureAction: Enforce
+     status: ""
+
+Cluster: default/clusterapi-workload
+--- deployed: Deployment nginx-deployment
++++ proposed: Deployment nginx-deployment
+@@ -22,7 +22,7 @@
+         uid: 9ba8bbc1-02fa-4cbb-9073-fe657482277d
+     spec:
+         progressDeadlineSeconds: 600
+-        replicas: 3
++        replicas: 1
+         revisionHistoryLimit: 10
+         selector:
+             matchLabels:
+```
+
 
 ## More Resources
 
