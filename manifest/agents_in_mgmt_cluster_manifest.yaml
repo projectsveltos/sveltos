@@ -9394,6 +9394,10 @@ spec:
           subresources:
             status: {}
         - additionalPrinterColumns:
+            - description: Time duration since creation of ClusterSummary
+              jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
             - description: Indicates whether HelmCharts are all provisioned
               jsonPath: .status.featureSummaries[?(@.featureID=="Helm")].status
               name: HelmCharts
@@ -13191,7 +13195,7 @@ spec:
                     - --agent-in-mgmt-cluster
                     - --shard-key=
                     - --v=5
-                    - --version=main
+                    - --version=v0.43.0
                   command:
                     - /manager
                   env:
@@ -13203,7 +13207,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13442,7 +13446,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13558,6 +13562,23 @@ subjects:
       name: sc-manager
       namespace: projectsveltos
 ---
+apiVersion: v1
+kind: Service
+metadata:
+    labels:
+        control-plane: sc-manager
+    name: sc-manager
+    namespace: projectsveltos
+spec:
+    ports:
+        - name: metrics
+          port: 80
+          protocol: TCP
+          targetPort: 8443
+    selector:
+        control-plane: sc-manager
+    type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13584,7 +13605,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13625,6 +13646,28 @@ spec:
                 runAsNonRoot: true
             serviceAccountName: sc-manager
             terminationGracePeriodSeconds: 10
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+    labels:
+        release: prometheus-operator
+    name: sc-manager
+    namespace: projectsveltos
+spec:
+    endpoints:
+        - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+          path: /metrics
+          port: metrics
+          scheme: https
+          tlsConfig:
+            insecureSkipVerify: true
+    namespaceSelector:
+        matchNames:
+            - projectsveltos
+    selector:
+        matchLabels:
+            control-plane: sc-manager
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -13791,10 +13834,10 @@ spec:
                     - --diagnostics-address=:8443
                     - --shard-key=
                     - --v=5
-                    - --version=main
+                    - --version=v0.43.0
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -14789,7 +14832,7 @@ spec:
                                         namespace:
                                             description: |-
                                                 Namespace of the referenced resource.
-                                                Nnamespace can be left empty. In such a case, namespace will
+                                                Namespace can be left empty. In such a case, namespace will
                                                 be implicit set to cluster's namespace.
                                             type: string
                                     required:
@@ -15573,7 +15616,7 @@ spec:
                                         namespace:
                                             description: |-
                                                 Namespace of the referenced resource.
-                                                Nnamespace can be left empty. In such a case, namespace will
+                                                Namespace can be left empty. In such a case, namespace will
                                                 be implicit set to cluster's namespace.
                                             type: string
                                     required:
@@ -16207,10 +16250,10 @@ spec:
                     - --diagnostics-address=:8443
                     - --shard-key=
                     - --v=5
-                    - --version=main
+                    - --version=v0.43.0
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -16407,10 +16450,10 @@ spec:
                     - --agent-in-mgmt-cluster
                     - --shard-key=
                     - --v=5
-                    - --version=main
+                    - --version=v0.43.0
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -16786,7 +16829,7 @@ spec:
                     - --agent-in-mgmt-cluster
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -16859,7 +16902,7 @@ spec:
             containers:
                 - args:
                     - --labels=
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.43.0
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
@@ -16912,7 +16955,7 @@ spec:
             containers:
                 - command:
                     - /conversion-webhook
-                  image: docker.io/projectsveltos/webhook-conversion:main
+                  image: docker.io/projectsveltos/webhook-conversion:v0.43.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

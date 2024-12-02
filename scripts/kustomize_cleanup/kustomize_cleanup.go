@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
-	libsveltosutils "github.com/projectsveltos/libsveltos/lib/utils"
+	"github.com/projectsveltos/libsveltos/lib/k8s_utils"
 )
 
 const (
@@ -273,7 +273,7 @@ func getResources(dirName, fileName string) []*unstructured.Unstructured {
 			continue
 		}
 
-		u, err := libsveltosutils.GetUnstructured([]byte(section))
+		u, err := k8s_utils.GetUnstructured([]byte(section))
 		if err != nil {
 			fmt.Printf("failed to get unstructured. Section %s, err %v", section, err)
 			panic(1)
