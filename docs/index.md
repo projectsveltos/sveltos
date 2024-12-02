@@ -27,9 +27,15 @@ authors:
 
 [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller that simplifies the deployment and management of Kubernetes add-ons and applications across **multiple** clusters whether on-prem, in the cloud or a multitenant environment.
 
-Sveltos runs in a **management cluster**. It assists users in programmatically deploying and managing Kubernetes add-ons and applications to **any** cluster in the fleet, including the management cluster.
+!!! note
+    Sveltos is not a replacement for GitOps. It's designed to be an extension for GitOps workflows when managing multiple clusters.
 
-Sveltos supports a variety of add-on formats, including **Helm charts**, raw **YAML/JSON**, **Kustomize**, **Carvel ytt**, and **Jsonnet**.
+Here's how it works:
+
+- **Sveltos runs in a management cluster**. It assists users in programmatically deploying and managing Kubernetes add-ons and applications to any cluster in the fleet, including the management cluster itself.
+- **GitOps principles**. You can still use GitOps tools to push your configuration to the management cluster. Then, Sveltos takes over, distributing the desired state to your managed clusters.
+- **Sveltos supports a variety of add-on formats**. This includes Helm charts, raw YAML/JSON, Kustomize, Carvel ytt, and Jsonnet. This flexibility allows you to manage your add-ons using the format that best suits your needs.
+- **Sveltos provides a powerful template and event framework**. This framework empowers you to better manage your fleet of clusters by customizing deployments and reacting to cluster events.
 
 ![Sveltos in the management cluster](assets/multi-clusters.png)
 

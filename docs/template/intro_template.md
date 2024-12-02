@@ -16,6 +16,10 @@ authors:
 
 Sveltos lets you define add-ons and applications using templates. Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
 
+![Sveltos Templates](../assets/templates.png)
+
+In this example, Sveltos retrieves the Secret __imported-secret__ from the __default__ namespace. This Secret is assigned the alias __ExternalSecret__. The template can subsequently refer to this Secret by employing the alias __ExternalSecret__.
+
 ## Template Functions
 
 Sveltos supports the template functions included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over **70 template functions** for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.
@@ -34,6 +38,26 @@ Sveltos supports the template functions included from the [Sprig](https://master
 1. **Path and Filepath Functions**: base, dir, ext, clean, isAbs, osBase, osDir, osExt, osClean, osIsAbs
 1. **Flow Control Functions**: fail
 
+## Resource Manipulation Functions
+
+Sveltos provides a set of functions specifically designed for manipulating resources within your templates.
+
+1. **getResource**: Takes the identifier of a resource and returns a map[string]interface{} allowing to access any field of the resource.
+1. **copy**: Takes the identifier of a resource and returns a copy of that resource.
+1. **setField**: Takes the identifier of a resource, the field name, and a new value. Returns a modified copy of the resource with the specified field updated.
+1. **removeField**: Takes the identifier of a resource and the field name. Returns a modified copy of the resource with the specified field removed.
+1. **getField**: Takes the identifier of a resource and the field name. Returns the field value
+1. **chainSetField**: This function acts as an extension of setField. It allows for chaining multiple field updates.
+1. **chainRemoveField**: Similar to chainSetField, this function allows for chaining multiple field removals.
+
+!!! note
+    These functions operate on copies of the original resource, ensuring the original data remains untouched.
+
+See [this section](examples.md) for some examples.
+
+
+Consider combining those methods with [post render patches](../features/post-renderer-patches.md).
+
 ## Extra Template Functions
 
 1. **toToml**: It takes an interface, marshals it to **toml**, and returns a string. It will always return a string, even on marshal error (empty string)
@@ -49,10 +73,10 @@ Sveltos supports the template functions included from the [Sprig](https://master
 
 By default, the templates have access to the below managment cluster resources.
 
-1. CAPI Cluster instance. The keyword is `Cluster`
-2. CAPI Cluster infrastructure provider. The keyword is `InfrastructureProvider`
-3. CAPI Cluster kubeadm provider. The keyword is `KubeadmControlPlane` 
-4. For cluster registered with Sveltos, the SveltosCluster instance. The keyword is `Cluster` 
+1. CAPI Cluster instance. The identifier is `Cluster`
+2. CAPI Cluster infrastructure provider. The identifier is `InfrastructureProvider`
+3. CAPI Cluster kubeadm provider. The identifier is `KubeadmControlPlane` 
+4. For cluster registered with Sveltos, the SveltosCluster instance. The identifier is `Cluster` 
 
 Sveltos can fetch any resource from the management cluster. We just need to include the **templateResourceRefs** in the ClusterProfile/Profile Spec section.
 
