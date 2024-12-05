@@ -16,6 +16,8 @@ Sveltos provides powerful templating capabilities that extend beyond simply depl
 This section dives into Sveltos' templating capabilities for generating Sveltos configurations themselves. 
 This allows you to create reusable templates that adapt and generate child configurations based on defined variables.
 
+![Generate Sveltos Configuration](../assets/generating-sveltos-conf.png)
+
 1. The `deploy-clusterprofiles` ClusterProfile acts as the trigger. It selects the management cluster (identified by the label __type: mgmt__) 
 and references a ConfigMap named `test`.
 
