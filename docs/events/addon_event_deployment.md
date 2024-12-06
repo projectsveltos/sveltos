@@ -413,7 +413,7 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.0.1
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install 

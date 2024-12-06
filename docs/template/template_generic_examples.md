@@ -51,6 +51,39 @@ In the example below, we use the Sveltos cluster label `env=fv` to identify all 
               {{ end }}
     ```
 
+The entire __helmCharts__ section can be defined as a template
+
+!!! example "Example - HelmCharts Section Defined as a Template"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      templateResourceRefs:
+      - resource:
+          apiVersion: cluster.x-k8s.io/v1beta1
+          kind: Cluster
+          name: "{{ .Cluster.metadata.name }}"
+        identifier: Cluster
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     |-
+          {{$version := index .Cluster.metadata.labels "k8s-version" }}{{if eq $version "v1.29.0"}}v3.2.5
+          {{else}}v3.2.6
+          {{end}}
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
+ 
 Likewise, we can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
 ## Example - Deploy Kyverno with different replicas
@@ -140,7 +173,7 @@ Following ClusterProfile
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.1.4
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
@@ -281,16 +314,7 @@ Firstly, we create a ConfigMap named _replicate-external-secret-operator-secret_
         projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
-        # This template references the Secret fetched by Sveltos (ESOSecret)
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: {{ (getResource "ESOSecret").metadata.name }}
-          namespace: {{ (getResource "ESOSecret").metadata.namespace }}
-        data:
-          {{ range $key, $value := (getResource "ESOSecret").data }}
-            {{$key}}: {{ $value }}
-          {{ end }}
+        {{ copy "ESOSecret" }}
     ```
 
 - The `projectsveltos.io/template: "true"` annotation tells Sveltos this is a template

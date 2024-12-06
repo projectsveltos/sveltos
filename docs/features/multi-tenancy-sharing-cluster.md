@@ -213,7 +213,7 @@ As soon as the service account `foo` posts the below ClusterProfile, Sveltos wil
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v2.6.0
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
@@ -242,7 +242,7 @@ For instance, if the `ClusterProfile.Spec.ClusterSelector` is set to ***org=bar.
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v2.6.0
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
