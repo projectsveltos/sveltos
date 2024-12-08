@@ -586,6 +586,9 @@ spec:
                                             the ClusterProfile. By default all deployed Helm charts and Kubernetes resources will
                                             be withdrawn from Cluster. Setting StopMatchingBehavior to LeavePolicies will instead
                                             leave ClusterProfile deployed policies in the Cluster.
+                                        enum:
+                                            - WithdrawPolicies
+                                            - LeavePolicies
                                         type: string
                                     syncMode:
                                         default: Continuous
@@ -910,6 +913,10 @@ spec:
           subresources:
             status: {}
         - additionalPrinterColumns:
+            - description: Time duration since creation of ClusterSummary
+              jsonPath: .metadata.creationTimestamp
+              name: Age
+              type: date
             - description: Indicates whether HelmCharts are all provisioned
               jsonPath: .status.featureSummaries[?(@.featureID=="Helm")].status
               name: HelmCharts
@@ -1743,6 +1750,9 @@ spec:
                                             the ClusterProfile. By default all deployed Helm charts and Kubernetes resources will
                                             be withdrawn from Cluster. Setting StopMatchingBehavior to LeavePolicies will instead
                                             leave ClusterProfile deployed policies in the Cluster.
+                                        enum:
+                                            - WithdrawPolicies
+                                            - LeavePolicies
                                         type: string
                                     syncMode:
                                         default: Continuous
@@ -1780,7 +1790,7 @@ spec:
                                                         cluster to fetch and use during template instantiation.
                                                         For ClusterProfile namespace can be left empty. In such a case, namespace will
                                                         be implicit set to cluster's namespace.
-                                                        Name can be expressed as a template and instantiate using
+                                                        Name and namespace can be expressed as a template and instantiate using
                                                         - cluster namespace: .Cluster.metadata.namespace
                                                         - cluster name: .Cluster.metadata.name
                                                         - cluster type: .Cluster.kind

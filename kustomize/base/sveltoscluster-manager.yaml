@@ -72,6 +72,23 @@ subjects:
       name: sc-manager
       namespace: projectsveltos
 ---
+apiVersion: v1
+kind: Service
+metadata:
+    labels:
+        control-plane: sc-manager
+    name: sc-manager
+    namespace: projectsveltos
+spec:
+    ports:
+        - name: metrics
+          port: 80
+          protocol: TCP
+          targetPort: 8443
+    selector:
+        control-plane: sc-manager
+    type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -98,7 +115,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.44.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
