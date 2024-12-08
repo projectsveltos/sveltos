@@ -1,5 +1,5 @@
 ---
-title: Templates
+title: Resource Manipulating Functions - Examples
 description: Examples using copy, setField, removeField, getField and chain methods
 tags:
     - Kubernetes
@@ -12,13 +12,15 @@ authors:
     - Gianluca Mardente
 ---
 
-# Introduction to Template Examples with copy, setField, removeField and chain methods
+# Template Examples with copy, setField, removeField and chain methods
+
+This section is designed to help users get started with the Sveltos template feature. It provides simple to follow template examples based on defined resource manipulation functions.
 
 ## Copy Example
 
-This example demonstrates how to copy a Secret from the management cluster to matching managed clusters using Sveltos.
+The example demonstrates how to copy a Secret from the **management** cluster to **matching managed** clusters using Sveltos.
 
-Create a Secret named __imported-secret__ in the __default__ namespace of your management cluster. This Secret should contain Docker registry credentials encoded in base64 format. 
+Create a Secret named __imported-secret__ in the __default__ namespace of your management cluster. The Secret should contain Docker registry credentials encoded in base64 format. 
 
 ```
 kubectl apply -f - <<EOF
@@ -33,7 +35,7 @@ type: kubernetes.io/dockerconfigjson
 EOF
 ```
 
-and a ClusterProfile fetching this resource
+The `ClusterProfile` to fetch the above resource looks like the below YAML definition.
 
 ```yaml hl_lines="9-15"
 apiVersion: config.projectsveltos.io/v1beta1
@@ -57,7 +59,7 @@ spec:
     namespace: default
 ```
 
-To simply copy the Secret grabbed from the management cluster to any matching managed cluster
+To simply copy the Secret grabbed from the management cluster to any matching managed cluster, use the YAML definition below.
 
 ```yaml hl_lines="10"
     apiVersion: v1
@@ -73,16 +75,16 @@ To simply copy the Secret grabbed from the management cluster to any matching ma
 ```
 
 !!! note
-     we can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
+     We can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
 This template simply references the ExternalSecret identifier (defined in the ClusterProfile) using the copy function. 
 Consequently, the Secret from the management cluster will be copied to any matching managed clusters.
 
 ## SetField/RemoveField Example
 
-This section demonstrates how to leverage Sveltos's __setField__ and __removeField__ functions within templates to manipulate deployments across managed clusters.
+The section demonstrates how to leverage Sveltos's __setField__ and __removeField__ functions within templates to manipulate deployments across managed clusters.
 
-Let's create a Deployment in the management cluster
+Let's create a Deployment in the management cluster.
 
 ```
 kubectl apply -f - <<EOF
@@ -111,7 +113,7 @@ spec:
 EOF
 ```
 
-and a ClusterProfile fetching this resource
+The `ClusterProfile` to fetch the above resource looks like the below YAML definition.
 
 ```yaml hl_lines="9-15"
 apiVersion: config.projectsveltos.io/v1beta1
@@ -148,11 +150,11 @@ spec:
         {{ setField "NginxDeployment" "spec.replicas" (int64 5) }}
 ```
 
-This template will:
+The template will:
 
 1. Copy the NginxDeployment (referencing the original deployment).
-2. Update the spec.replicas field to 5.
-3. Deploy the modified deployment to matching managed clusters.
+1. Update the spec.replicas field to 5.
+1. Deploy the modified deployment to matching managed clusters.
 
 Consequently, each managed cluster will have the deployment running with 5 replicas.
 
@@ -169,7 +171,7 @@ Consequently, each managed cluster will have the deployment running with 5 repli
         {{ removeField "NginxDeployment" "spec.replicas" }}
 ```
 
-Here, the template:
+The template above:
 
 1. Copies the NginxDeployment.
 2. Removes the spec.replicas field.
@@ -207,9 +209,9 @@ Building upon the previous example, this section explores how to manipulate vari
   - spec.paused: Sets the deployment to be paused (not running).
 3. Convert to YAML: Finally, __{{ toYaml $depl }}__ converts the modified deployment object back into YAML format for deployment on the managed cluster.
 
-## Combing all together
+## All-in-One Example
 
-This example demonstrates a more complex scenario where the template modifies the image tag within the copied deployment.
+The example demonstrates a more complex scenario where the template modifies the image tag within the copied deployment.
 
 ```yaml hl_lines="10-15"
     apiVersion: v1

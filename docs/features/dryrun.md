@@ -56,10 +56,10 @@ $ sveltosctl show dryrun
 +-------------------------------------+--------------------------+-----------+----------------+-----------+--------------------------------+------------------+
 ```
 
-To view detailed line-by-line changes for each resource, use the `--raw-diff` option with `sveltosctl show dryrun`.
+To view **detailed** line-by-line changes for each resource, use the `--raw-diff` option with the `sveltosctl show dryrun` command.
 
 ```
-sveltosctl show dryrun --raw-diff   
+$ sveltosctl show dryrun --raw-diff   
 Cluster: default/clusterapi-workload
 --- deployed: ClusterPolicy disallow-latest-tag
 +++ proposed: ClusterPolicy disallow-latest-tag

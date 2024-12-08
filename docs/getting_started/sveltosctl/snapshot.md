@@ -11,9 +11,9 @@ authors:
     - Gianluca Mardente
 ---
 
-## Introduction to Snapshot
+## What is a Snapshot?
 
-Snapshot is a Configuration Snapshot and Rollback tool for Sveltos. Specifically, the tool allows an administrator to perform the below tasks:
+Snapshot is a **Configuration Snapshot** and **Rollback** tool for Sveltos. Specifically, the tool allows an administrator to perform the tasks like:
 
 - Live snapshots of the running Sveltos configuration;
 - Recurring snapshots;

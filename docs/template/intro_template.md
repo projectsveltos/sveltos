@@ -53,8 +53,7 @@ Sveltos provides a set of functions specifically designed for manipulating resou
 !!! note
     These functions operate on copies of the original resource, ensuring the original data remains untouched.
 
-See [this section](examples.md) for some examples.
-
+For practical examples, take a look at [this section](examples.md).
 
 Consider combining those methods with [post render patches](../features/post-renderer-patches.md).
 
