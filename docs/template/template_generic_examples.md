@@ -12,13 +12,13 @@ authors:
     - Gianluca Mardente
 ---
 
-## Introduction to Template Examples
+## Template Generic Examples
 
-The section includes simple to follow templates examples to get started!
+This section is designed to help users get started with the Sveltos template feature. It provides simple, easy-to-follow examples. Let's dive in!
 
 ## Example - Calico CNI Deployment
 
-Imagine we want to set up Calico CNI on several CAPI powered clusters, automatically fetching Pod CIDRs from each cluster. Sveltos `ClusterProfile` definition lets you create a configuration with these details, and it will automatically deploy Calico to all matching clusters.
+Imagine we want to set up Calico CNI on several CAPI powered clusters, **automatically** fetching **Pod CIDRs** from each cluster. Sveltos `ClusterProfile` definition lets you create a configuration with these details, and it will **automatically** deploy Calico to all **matching** clusters.
 
 In the example below, we use the Sveltos cluster label `env=fv` to identify all clusters that should use Calico as their CNI.
 
@@ -55,7 +55,7 @@ Likewise, we can define any resource contained in a referenced ConfigMap/Secret 
 
 ## Example - Deploy Kyverno with different replicas
 
-In this example we have two Civo clusters registered to be managed by Sveltos:
+For this example, we have two Civo clusters already registered with Sveltos. The clusters are the **Sveltos managed clusters**.
 
 ```
 $ kubectl get sveltoscluster -n civo --show-labels
@@ -64,7 +64,7 @@ cluster1   true    v1.29.2+k3s1   env=demo,projectsveltos.io/k8s-version=v1.29.2
 cluster2   true    v1.29.2+k3s1   env=demo,projectsveltos.io/k8s-version=v1.29.2
 ```
 
-and two ConfigMaps
+We also have two `ConfigMap` resources.
 
 ```
 $ kubectl get configmap -n civo                   
@@ -73,7 +73,7 @@ cluster1           1      43m
 cluster2           1      43m
 ```
 
-The content of ConfigMap `civo/cluster1` is
+The content of the ConfigMap with the name `civo/cluster1` can be found below.
 
 !!! example "Example - ConfigMap cluster1 Definition"
     ```yaml
@@ -95,7 +95,7 @@ The content of ConfigMap `civo/cluster1` is
           replicas: 3
     ```
 
-while the content of ConfigMap `civo/cluster2` is
+The content of the ConfigMap with the `civo/cluster2` can be found below.
 
 !!! example "Example - ConfigMap cluster2 Definition"
     ```yaml
@@ -117,7 +117,7 @@ while the content of ConfigMap `civo/cluster2` is
           replicas: 1
     ```
 
-Following ClusterProfile
+Once we are happy with the configuration, we can proceed further with the Sveltos `ClusterProfile` resources. Have a look at the YAML definitions below.
 
 !!! example "Example - ClusterProfile Kyverno"
     ```yaml
@@ -148,7 +148,7 @@ Following ClusterProfile
           {{ (getResource "ConfigData").data.values }}
     ```
 
-will deploy Kyverno with _3_ replicas on cluster1
+The `ClusterProfile` above will deploy **Kyverno** with **_3_** replicas on `cluster1`.
 
 ```
 $ KUBECONFIG=civo-cluster1-kubeconfig kubectl get deployments -n kyverno
@@ -159,7 +159,7 @@ kyverno-cleanup-controller      3/3     3            3           15m
 kyverno-admission-controller    3/3     3            3           15m
 ```
 
-and Kyverno with _1_ replica on cluster2
+The `ClusterProfile` for `cluster02` will deploy **Kyverno** with **_1_** replicas.
 
 ```
 $ KUBECONFIG=civo-cluster2-kubeconfig kubectl get deployments -n kyverno
@@ -174,7 +174,7 @@ kyverno-admission-controller    1/1     1            1           17m
 
 ### ClusterProfile
 
-This YAML definition instruct Sveltos to find a Secret named _autoscaler_ in the _default_ namespace. Sveltos makes the Secret available to the template using the keyword _AutoscalerSecret_.
+The below YAML definition instruct Sveltos to find a Secret named _autoscaler_ in the _default_ namespace. Sveltos makes the Secret available to the template using the keyword _AutoscalerSecret_.
 
 !!! example "Example - ClusterProfile Resource Definition"
     ```yaml
@@ -200,9 +200,7 @@ This YAML definition instruct Sveltos to find a Secret named _autoscaler_ in the
         namespace: default
     ```
 
-By adding the special annotation (`projectsveltos.io/template: "true"`) to a ConfigMap named _info_ (also in the _default_ namespace), we can define a template within it.
-
-Find the template below.
+By adding the special annotation (`projectsveltos.io/template: "true"`) to a ConfigMap named _info_ (also in the _default_ namespace), we can define a template within it. Find the example template below.
 
 !!! example "Example - ConfigMap Definition"
     ```yaml
@@ -230,7 +228,7 @@ Find the template below.
 Sveltos will use the content of the _AutoscalerSecret_ to fill in the placeholders when deploying the resources to your managed clusters.
 
 !!! tip
-    Sveltos stores information about fetched resources internally using a __map__ data structure. You do not need to worry about the technical details.
+    Sveltos stores information about fetched resources internally using a __map__ data structure. For more technical details, feel free to get in touch via [Slack](https://projectsveltos.slack.com/join/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q#/shared-invite/email).
 
 To use any resource that Sveltos has found based on the defintion, simply use the syntax below in the YAML template:
 
@@ -267,7 +265,7 @@ Suppose the following YAML code represents a Secret **within** the **management 
 
 We want to replicate across all our `production` clusters. Sveltos can automate this process. Here's a step-by-step approach.
 
-Firstly, we create a ConfigMap named _replicate-external-secret-operator-secret_ in the _default_ namespace. The data section of this ConfigMap will act as a template for deploying the secret.
+Firstly, we create a `ConfigMap` named _replicate-external-secret-operator-secret_ in the _default_ namespace. The data section of this ConfigMap will act as a template for deploying the secret.
 
 !!! example "Example - ConfigMap Definition"
     ```yaml
