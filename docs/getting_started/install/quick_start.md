@@ -58,7 +58,7 @@ To deploy the Kyverno Helm chart in any Kubernetes cluster with labels _env: fv_
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.1.0
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install

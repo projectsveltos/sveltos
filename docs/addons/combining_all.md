@@ -45,7 +45,7 @@ To deploy Kyverno and a ClusterPolicy across all managed clusters matching the S
             env: fv
         helmCharts:
         - chartName: kyverno/kyverno
-          chartVersion: v3.2.5
+          chartVersion: v3.3.3
           helmChartAction: Install
           releaseName: kyverno-latest
           releaseNamespace: kyverno

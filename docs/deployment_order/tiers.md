@@ -57,21 +57,21 @@ An initial ClusterProfile named `validation-and-monitoring` deploys Kyverno (v3.
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.1.1
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
       - repositoryURL:    https://prometheus-community.github.io/helm-charts
         repositoryName:   prometheus-community
         chartName:        prometheus-community/prometheus
-        chartVersion:     23.4.0
+        chartVersion:     26.0.0
         releaseName:      prometheus
         releaseNamespace: prometheus
         helmChartAction:  Install
       - repositoryURL:    https://grafana.github.io/helm-charts
         repositoryName:   grafana
         chartName:        grafana/grafana
-        chartVersion:     6.58.9
+        chartVersion:     8.6.4
         releaseName:      grafana
         releaseNamespace: grafana
         helmChartAction:  Install
@@ -96,7 +96,7 @@ Creating a new ClusterProfile targeting `region:west` for Kyverno (v3.1.4) would
     - repositoryURL:    https://kyverno.github.io/kyverno/
       repositoryName:   kyverno
       chartName:        kyverno/kyverno
-      chartVersion:     v3.1.4
+      chartVersion:     v3.3.3
       releaseName:      kyverno-latest
       releaseNamespace: kyverno
       helmChartAction:  Install
@@ -124,7 +124,7 @@ We can leverage `tiers` to prioritize the upgrade for **west** regions. Check th
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.1.4
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install

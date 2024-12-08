@@ -77,7 +77,7 @@ spec:
         env: fv
     helmCharts:
     - chartName: kyverno/kyverno
-      chartVersion: v3.1.4
+      chartVersion: v3.3.3
       helmChartAction: Install
       releaseName: kyverno-latest
       releaseNamespace: kyverno
