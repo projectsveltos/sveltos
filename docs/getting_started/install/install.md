@@ -123,7 +123,10 @@ The Sveltos Dashboard is an optional component of Sveltos. To include it in the 
 !!! note
     **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
-Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [Sveltos-Grafana Dashboard](#GrafanaDashboard) section.
+Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [sveltos-grafana dashboard](#grafanadashboard) section.
+
+![dashboard](../../assets/dashboard.png)
+
 
 ## Next Steps
 

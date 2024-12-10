@@ -10,19 +10,22 @@ tags:
     - Grafana
     - Dashboard
 authors:
-    - Gianluca Mardente
+    - Medha Kumar
 ---
 
 # Introduction to the Sveltos Grafana Dashboard
 
 The Sveltos Dashboard is designed to help users monitor key operational metrics, and the status of their sveltosclusters in real time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions. 
 
+![dashboard](../../assets/dashboard.png)
+
+
 ## Getting Started
 
-Once Prometheus and Grafana have been deployed on your sveltosclusters, and the Prometheus data source has been added to Grafana, import the configured Grafana dashboard from :
+Once Prometheus and Grafana have been deployed on your management cluster, and the Prometheus data source has been added to Grafana, import the configured Grafana dashboard from :
 
 ```
-https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/SveltosGrafanaDashboard.json.
+https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json.
 ```
 
 Confirm that all metrics are linked to their corresponding panels. The dashboard should automatically detect data connections from Prometheus.
@@ -38,20 +41,25 @@ Detailed descriptions of the panels available on the dashboard, and the tracked 
 
 Sveltos lets users track and visualize a number of key operational metrics, which include:
 
-* ``projectsveltos_cluster_connectivity_status``: Set to `0` for a connected cluster and `1` for a disconnected cluster.
+* ``projectsveltos_cluster_connectivity_status``: Gauge indicating the connectivity status of each cluster, where `0` means healthy and `1` means disconnected.
 
-* ``projectsveltos_kubernetes_version_info:`` Stores Kubernetes version deployed on sveltosclusters.
+* ``projectsveltos_kubernetes_version_info:`` Gauge providing the Kubernetes version (major.minor.patch) of each cluster.
 
-* ``projectsveltos_program_charts_time_seconds_count:`` Stores the number of Helm charts deployed.
+* ``projectsveltos_program_charts_time_seconds_count:`` Counter of the total number of Helm charts deployed.
 
-* ``projectsveltos_program_charts_time_seconds_bucket:`` Stores the number of Helm charts deployed within buckets(s)
+* ``projectsveltos_program_charts_time_seconds_bucket:`` Histogram of the durations taken to deploy Helm charts on workload clusters.
  <!-- [0.3, 0.6, 0.9, 1.2, 1.5, 2, 3, 5, 10, 30, 60] -->
-* ``projectsveltos_program_resources_time_seconds_count:`` Stores the number of resources deployed.
+* ``projectsveltos_program_resources_time_seconds_count:`` Counter of the total number of resources deployed.
 
-* ``projectsveltos_program_resources_time_seconds_bucket:`` Stores the number of resources deployed within buckets(s)
-* ``projectsveltos_reconcile_operations_total:`` Stores the total number of reconciliations that occur.
+* ``projectsveltos_program_resources_time_seconds_bucket:`` Histogram of the durations taken to deploy resources on workload clusters
 
-* ``projectsveltos_total_drifts:`` Stores the total number of drifts that occur.
+* ``projectsveltos_reconcile_operations_total:`` Counter of the total number of reconcile operations performed for Helm charts, Resources, and Kustomizations across clusters.
+
+* ``projectsveltos_total_drifts:`` Counter of the total number of configuration drifts detected in clusters, categorized by cluster and feature.
+
+* Per-Cluster `program_resources_time_seconds` Histograms: Histograms (per cluster) of durations taken to deploy resources, indexed by cluster information.
+
+* Per-Cluster `program_charts_time_seconds` Histograms: Histograms (per cluster) of durations taken to deploy Helm charts, indexed by cluster information.
 
 ## Dashboard Panels
 
