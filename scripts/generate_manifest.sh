@@ -10,6 +10,8 @@ rm -rf  manifest/manifest.yaml
 touch  manifest/manifest.yaml
 rm -rf  manifest/agents_in_mgmt_cluster_manifest.yaml
 touch  manifest/agents_in_mgmt_cluster_manifest.yaml
+rm -rf  manifest/conversion_webhook.yaml
+touch  manifest/conversion_webhook.yaml
 
 # libsveltos
 echo "processing libsveltos"
@@ -260,10 +262,7 @@ git checkout ${branch}
 for f in manifest/*.yaml
 do 
     echo "Processing $f file..."
-    cat $f >> ../../manifest/manifest.yaml
-    echo "---"  >> ../../manifest/manifest.yaml
-    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    cat $f >> ../../manifest/conversion_webhook.yaml
 done
 cd ../../; rm -rf tmp
 
