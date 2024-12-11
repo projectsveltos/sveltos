@@ -55,7 +55,7 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
             env: fv
         helmCharts:
         - chartName: kyverno/kyverno
-          chartVersion: v3.0.1
+          chartVersion: v3.3.3
           helmChartAction: Install
           releaseName: kyverno-latest
           releaseNamespace: kyverno
@@ -106,7 +106,7 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.0.1
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
@@ -129,7 +129,7 @@ The above example is equivalent of creating a single ClusterProfile.
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.0.1
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install

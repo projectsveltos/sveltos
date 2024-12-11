@@ -30,7 +30,7 @@ spec:
   - repositoryURL:    https://kyverno.github.io/kyverno/
     repositoryName:   kyverno
     chartName:        kyverno/kyverno
-    chartVersion:     v3.1.4
+    chartVersion:     v3.3.3
     releaseName:      kyverno-latest
     releaseNamespace: kyverno
     helmChartAction:  Install
@@ -65,7 +65,7 @@ This means any changes made to resources deployed by the Helm chart itself will 
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
         chartName:        kyverno/kyverno
-        chartVersion:     v3.1.4
+        chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install

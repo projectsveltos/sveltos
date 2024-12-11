@@ -91,6 +91,38 @@ Cluster: default/clusterapi-workload
              matchLabels:
 ```
 
+Sveltos can also detect changes to deployed Helm charts:
+
+```
+sveltosctl show dryrun           
++-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
+|           CLUSTER           | RESOURCE TYPE | NAMESPACE  |      NAME      |    ACTION     |            MESSAGE             |              PROFILE              |
++-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
+| default/clusterapi-workload | helm release  | kyverno    | kyverno-latest | Update Values | use --raw-diff to see full     | ClusterProfile/deploy-kyverno     |
+|                             |               |            |                |               | diff for helm values           |                                   |
+| default/clusterapi-workload | helm release  | prometheus | prometheus     | Upgrade       | Current version: "23.4.0".     | ClusterProfile/prometheus-grafana |
+|                             |               |            |                |               | Would move to version:         |                                   |
+|                             |               |            |                |               | "26.0.0"                       |                                   |
+| default/clusterapi-workload | helm release  | grafana    | grafana        | Upgrade       | Current version: "6.58.9".     | ClusterProfile/prometheus-grafana |
+|                             |               |            |                |               | Would move to version: "8.6.4" |                                   |
++-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
+```
+
+```
+sveltosctl show dryrun --raw-diff
+Profile: ClusterProfile:deploy-kyverno Cluster: default/clusterapi-workload
+--- deployed values
++++ proposed values
+@@ -1,6 +1,6 @@
+ admissionController:
+     replicas: 3
+ backgroundController:
+-    replicas: 1
++    replicas: 3
+ reportsController:
+-    replicas: 1
++    replicas: 3
+```
 
 ## More Resources
 

@@ -113,7 +113,7 @@ A ClusterProfile named kyverno is deployed referencing the prod ClusterSet.
     spec:
       helmCharts:
       - chartName: kyverno/kyverno
-        chartVersion: v3.0.1
+        chartVersion: v3.3.3
         helmChartAction: Install
         releaseName: kyverno-latest
         releaseNamespace: kyverno
@@ -136,7 +136,7 @@ Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the clus
     spec:
       helmCharts:
       - chartName: kyverno/kyverno
-        chartVersion: v3.0.1
+        chartVersion: v3.3.3
         helmChartAction: Install
         releaseName: kyverno-latest
         releaseNamespace: kyverno
@@ -219,7 +219,7 @@ The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in t
     spec:
       helmCharts:
       - chartName: kyverno/kyverno
-        chartVersion: v3.0.1
+        chartVersion: v3.3.3
         helmChartAction: Install
         releaseName: kyverno-latest
         releaseNamespace: kyverno

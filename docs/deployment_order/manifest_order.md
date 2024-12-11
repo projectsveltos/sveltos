@@ -43,14 +43,14 @@ Sveltos can assist solving this problem by allowing users to specify the order i
       - repositoryURL:    https://prometheus-community.github.io/helm-charts
         repositoryName:   prometheus-community
         chartName:        prometheus-community/prometheus
-        chartVersion:     23.4.0
+        chartVersion:     26.0.0
         releaseName:      prometheus
         releaseNamespace: prometheus
         helmChartAction:  Install
       - repositoryURL:    https://grafana.github.io/helm-charts
         repositoryName:   grafana
         chartName:        grafana/grafana
-        chartVersion:     6.58.9
+        chartVersion:     8.6.4
         releaseName:      grafana
         releaseNamespace: grafana
         helmChartAction:  Install
