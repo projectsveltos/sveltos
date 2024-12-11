@@ -15,15 +15,6 @@ authors:
 
 Sveltos is a set of Kubernetes controllers deployed in the management cluster. From the management cluster, it can manage add-ons and applications to multiple clusters.
 
-!!! note
-    `cert-manager` is required in the management cluster. If cert-manager is not available in the cluster, Sveltos will not wotk as expected.
-
-    - [cert-manager manifest deployment](https://cert-manager.io/docs/installation/kubectl/)
-    - [cert-manager Helm chart deployment](https://cert-manager.io/docs/installation/helm/)
-
-    General information about cert-manager, have a look [here](https://cert-manager.io/docs/).
-
-
 ## Installation Modes
 
 Sveltos supports two modes: **Mode 1** and **Mode 2**.
@@ -122,6 +113,24 @@ The Sveltos Dashboard is an optional component of Sveltos. To include it in the 
 
 !!! note
     **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
+
+## v1alpha1 CRDs
+
+The current version of Sveltos CRD is **v1beta1**. If you're still using **v1alpha1**, you'll need to deploy Sveltos conversion webhook. 
+This webhook requires `cert-manager` to be installed and running in your management cluster. Without cert-manager, Sveltos may not function correctly.
+
+To install Sveltos conversion webhook, run the commands below.
+
+```
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/conversion_webhook.yaml
+```
+
+To install `cert-manager`:
+
+- [cert-manager manifest deployment](https://cert-manager.io/docs/installation/kubectl/)
+- [cert-manager Helm chart deployment](https://cert-manager.io/docs/installation/helm/)
+
+General information about cert-manager, have a look [here](https://cert-manager.io/docs/).
 
 
 ## Next Steps
