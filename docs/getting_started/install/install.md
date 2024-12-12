@@ -114,6 +114,11 @@ The Sveltos Dashboard is an optional component of Sveltos. To include it in the 
 !!! note
     **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
+## Grafana Dashboard
+Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [sveltos-grafana dashboard](#grafanadashboard) section.
+
+![dashboard](../../assets/dashboard.png)
+
 ## v1alpha1 CRDs
 
 The current version of Sveltos CRD is **v1beta1**. If you're still using **v1alpha1**, you'll need to deploy Sveltos conversion webhook. 
@@ -131,7 +136,6 @@ To install `cert-manager`:
 - [cert-manager Helm chart deployment](https://cert-manager.io/docs/installation/helm/)
 
 General information about cert-manager, have a look [here](https://cert-manager.io/docs/).
-
 
 ## Next Steps
 
