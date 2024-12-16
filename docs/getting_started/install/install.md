@@ -109,13 +109,13 @@ projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 
 ## Sveltos Dashboard
 
-The Sveltos Dashboard is an optional component of Sveltos. To include it in the deployment, follow the instructions found in the [dashboard](#dashboard) section.
+The Sveltos Dashboard is an optional component of Sveltos. To include it in the deployment, follow the instructions found in the [dashboard](./dashboard.md) section.
 
 !!! note
     **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
 ## Grafana Dashboard
-Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [sveltos-grafana dashboard](#grafanadashboard) section.
+Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [sveltos-grafana dashboard](./grafanadashboard.md) section.
 
 ![dashboard](../../assets/dashboard.png)
 
