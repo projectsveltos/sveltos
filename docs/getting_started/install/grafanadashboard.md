@@ -25,7 +25,7 @@ The Sveltos Dashboard is designed to help users monitor key operational metrics,
 Once Prometheus and Grafana have been deployed on your management cluster, and the Prometheus data source has been added to Grafana, import the configured Grafana dashboard from :
 
 ```
-https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json.
+https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
 ```
 
 Confirm that all metrics are linked to their corresponding panels. The dashboard should automatically detect data connections from Prometheus.
