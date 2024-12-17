@@ -283,7 +283,7 @@ metadata:
 
 ### Express Path as Template
 
-The __path__ field within a policyRefs object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
+The __path__ field within a policyRefs object in Sveltos can be defined using a template. This allows to dynamically set the path based on information from the cluster itself.
 
 !!! example "Example - ClusterProfile Flux Region West"
     ```yaml
@@ -317,6 +317,40 @@ For instance:
 This approach allows for flexible configuration based on individual cluster environments.
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
+
+A more complex example can be when we want to express the __path__ field as a template using __if__ statements.
+
+!!! example "Example - ClusterProfile Flux Template __path__"
+    ```yaml
+    cat > clusterprofile_flux_template_path.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: flux-system
+    spec:
+      clusterSelector:
+        matchLabels:
+          region: west
+      templateResourceRefs:
+      - resource:
+          apiVersion: lib.projectsveltos.io/v1beta1
+          kind: SveltosCluster
+          name: "{{ .Cluster.metadata.name }}"
+        identifier: Cluster
+      syncMode: Continuous
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: |-
+          {{$path := index .Cluster.metadata.labels "projectsveltos.io/k8s-version" }}{{- if eq $path "v1.29.8"}}system/prod
+          {{- else}}system/test
+          {{- end}}
+    EOF
+    ```
+
+Effectively, by defining the `templateResourceRefs` at the beginning of the ClusterProfile we can retrieve the **Sveltos managed clusters** Kubernetes version. The information is used at the `policyRefs` definition when we set the __path__ as a template with __if__ statements.
 
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
