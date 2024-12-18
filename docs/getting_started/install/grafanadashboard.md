@@ -15,18 +15,36 @@ authors:
 
 # Introduction to the Sveltos Grafana Dashboard
 
-The Sveltos Dashboard is designed to help users monitor key operational metrics, and the status of their sveltosclusters in real time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions. 
+The Sveltos Dashboard is designed to help users monitor key operational metrics and the status of their sveltosclusters in real-time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions. 
 
 ![dashboard](../../assets/dashboard.png)
 
 
 ## Getting Started
 
-Once Prometheus and Grafana have been deployed on your management cluster, and the Prometheus data source has been added to Grafana, import the configured Grafana dashboard from :
+With the latest Sveltos release, users can take full advantage of the Sveltos Grafana dashboard. Before we start using the capabilities, ensure [Grafana](https://artifacthub.io/packages/helm/grafana/grafana) and [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus) are deployed on the **Sveltos management** cluster.
 
+To allow Prometheus to collect metrics from the **Sveltos management** cluster, perform the below if Sveltos was installed using the Helm chart.
+
+### Helm Chart
+
+```bash
+$ helm upgrade <your release name> projectsveltos/projectsveltos -n projectsveltos --set prometheus.enabled=true
 ```
+
+Once Grafana and Prometheus are available, proceed by adding the [Prometheus data source](https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/) to Grafana and then **import** the below Grafana dashboard.
+
+```bash
 https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
 ```
+
+!!! note
+    Depending on the Grafana/Prometheus installation, identify the `serviceMonitorSelector` label of the **Prometheus** instance and import it to the Sveltos `servicemonitor` resources as a label. Check out the example below.
+
+    ```bash
+    $ kubectl get servicemonitor -n projectsveltos
+    $ kubectl patch servicemonitor addon-controller -n projectsveltos -p '{"metadata":{"labels":{"prometheus":"example-label"}}}' --type=merge
+    ```
 
 Confirm that all metrics are linked to their corresponding panels. The dashboard should automatically detect data connections from Prometheus.
 
