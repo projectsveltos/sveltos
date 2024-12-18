@@ -204,8 +204,6 @@ With this setup, the sveltos-agent will be deployed in the management cluster wi
 - Custom image from private registry: registry.company.io/projectsveltos/sveltos-agent:dev
 - Private registry credentials: my-registry-secret (the secret must be present in the projectsveltos namespace)
 - Proxy settings: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
-- Request and limit memory settings applied.
-- Additional security context configurations.
 
 !!! tip ""
     To create a Secret, provide your credentials directly on the command line using the following command:
