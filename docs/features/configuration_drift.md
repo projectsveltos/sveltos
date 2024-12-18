@@ -137,8 +137,6 @@ data:
             resources:
               requests:
                 memory: 256Mi
-            securityContext:
-              readOnlyRootFilesystem: true
 kind: ConfigMap
 metadata:
   name: drift-detection
@@ -158,9 +156,10 @@ With this configuration, the drift-detection-manager will be deployed in each ma
 - Request memory: 256Mi
 - Image: projectsveltos/drift-detection-manager:dev
 
-## Customize sveltos-agent Configuration
+## Pulling Sveltos Agent Images from a Private Registry
 
- You might need to customize the deployment of the `sveltos-agent`. This can be achieved by creating a ConfigMap named `sveltos-agent-config` within the `projectsveltos` namespace. The ConfigMap holds patches that will be applied to the `sveltos-agent` deployment.
+Same is valid for `sveltos-agent`. classifier pod now accepts an argument named `sveltos-agent-config`. It points to a ConfigMap in the projectsveltos namespace. 
+The ConfigMap holds patches that will be applied to the sveltos-agent before its deployment in the managed cluster.
 
 This is particularly useful for scenarios like:
 
@@ -186,20 +185,6 @@ data:
           containers:
           - name: manager
             image: registry.company.io/projectsveltos/sveltos-agent:dev
-            env:
-            - name: HTTP_PROXY
-              value: "http://proxy.example.com:80"
-            - name: HTTPS_PROXY
-              value: "https://proxy.example.com:80"
-            - name: NO_PROXY
-              value: "localhost,127.0.0.1,.example.com"
-            resources:
-              requests:
-                memory: 512Mi
-              limits:
-                memory: 1Gi
-            securityContext:
-              readOnlyRootFilesystem: true
 kind: ConfigMap
 metadata:
   name: sveltos-agent-config
@@ -221,3 +206,53 @@ With this setup, the sveltos-agent will be deployed in the management cluster wi
 - Proxy settings: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
 - Request and limit memory settings applied.
 - Additional security context configurations.
+
+!!! tip ""
+    To create a Secret, provide your credentials directly on the command line using the following command:
+    ```
+    kubectl create secret docker-registry my-registry-secret -n projectsveltos --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+    ```
+
+!!! tip ""
+    If you are deploying Sveltos using the Helm chart and need to patch sveltos-agent and drift-detection before deployment, include the necessary values in your values.yaml file and use the following command
+    
+    helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos -f values.yaml
+
+    ```yaml
+    addonController:
+      controller:
+        args:
+        - --diagnostics-address=:8443
+        - --report-mode=0
+        - --shard-key=
+        - --v=5
+        - --version=v0.44.0
+        argsAgentMgmtCluster:
+        - --diagnostics-address=:8443
+        - --report-mode=0
+        - --agent-in-mgmt-cluster
+        - --shard-key=
+        - --v=5
+        - --version=v0.44.0
+        - --drift-detection-config=drift-detection-config
+    
+    classifierManager:
+      manager:
+        args:
+        - --diagnostics-address=:8443
+        - --report-mode=0
+        - --shard-key=
+        - --v=5
+        - --version=v0.44.0
+        argsAgentMgmtCluster:
+        - --diagnostics-address=:8443
+        - --report-mode=0
+        - --agent-in-mgmt-cluster
+        - --shard-key=
+        - --v=5
+        - --version=v0.44.0    
+        - --sveltos-agent-config=sveltos-agent-config
+    
+    agent:
+      managementCluster: true 
+    ```
