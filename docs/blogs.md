@@ -39,8 +39,9 @@ authors:
 
 ## Sveltos Video List
 
+1. [What is Project Sveltos?](https://www.youtube.com/watch?v=bsWEo79w09c)
 1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
-2. [OpenSourceSummit 24: How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud](https://youtu.be/IffrzanQRRc?si=lZMBBPrX0_P2SB6N)
+1. [OpenSourceSummit 24: How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud](https://youtu.be/IffrzanQRRc?si=lZMBBPrX0_P2SB6N)
 1. [KubeVela Commmunity Meeting:Sveltos intro](https://www.youtube.com/watch?v=A5Y0XTnoS7k)
 1. [Collabnix, Docker and DevOps Show-n-Tell](https://www.youtube.com/live/Kiv2SVhI8qg?si=a6vr7PQrhxwOCn5G&t=2h5m55s)
 1. [Simplify Add-On Management in K8s with Sveltos | Kubesimplify Webinar](https://www.youtube.com/watch?v=yifrTO7gDPM)
