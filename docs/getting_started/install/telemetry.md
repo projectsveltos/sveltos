@@ -54,4 +54,4 @@ Set the `--disable-telemetry=true` flag in the Sveltos addon-controller configur
 
 ### Requesting Data Erasure
 
-You have the right to request the erasure of your data under certain circumstances. To initiate a data erasure request, please contact us at [support@projectsveltos.io](support@projectsveltos.io).
+You have the right to request the erasure of your data under certain circumstances. To initiate a data erasure request, please contact us at [support@projectsveltos.io](mailto:support@projectsveltos.io).
