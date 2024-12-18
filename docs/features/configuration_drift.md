@@ -158,4 +158,66 @@ With this configuration, the drift-detection-manager will be deployed in each ma
 - Request memory: 256Mi
 - Image: projectsveltos/drift-detection-manager:dev
 
-[^1]: Same is valid for `sveltos-agent`. classifier pod now accepts a new argument named `sveltos-agent-config`. It points to a ConfigMap in the projectsveltos namespace. The ConfigMap holds patches that will be applied to the sveltos-agent before its deployment in the managed cluster.
+## Customize sveltos-agent Configuration
+
+ You might need to customize the deployment of the `sveltos-agent`. This can be achieved by creating a ConfigMap named `sveltos-agent-config` within the `projectsveltos` namespace. The ConfigMap holds patches that will be applied to the `sveltos-agent` deployment.
+
+This is particularly useful for scenarios like:
+
+- **Using private image registries**: Override the default image repository and tag.
+- **Adding proxy settings**: Include `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables.
+- **Any other deployment-level customizations**.
+
+Here is an example ConfigMap for customizing the `sveltos-agent`:
+
+```yaml
+apiVersion: v1
+data:
+  patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: sveltos-agent-manager
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: my-registry-secret       
+          containers:
+          - name: manager
+            image: registry.company.io/projectsveltos/sveltos-agent:dev
+            env:
+            - name: HTTP_PROXY
+              value: "http://proxy.example.com:80"
+            - name: HTTPS_PROXY
+              value: "https://proxy.example.com:80"
+            - name: NO_PROXY
+              value: "localhost,127.0.0.1,.example.com"
+            resources:
+              requests:
+                memory: 512Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              readOnlyRootFilesystem: true
+kind: ConfigMap
+metadata:
+  name: sveltos-agent-config
+  namespace: projectsveltos
+```
+
+Along with creating the ConfigMap, you'll also need to configure the `classifer-manager` deployment to use it. To do this, add the following argument to the deployment:
+
+```yaml
+- args:
+  ...
+  - - --sveltos-agent-config=sveltos-agent-config
+```
+
+With this setup, the sveltos-agent will be deployed in the management cluster with the following settings:
+
+- Custom image from private registry: registry.company.io/projectsveltos/sveltos-agent:dev
+- Private registry credentials: my-registry-secret (the secret must be present in the projectsveltos namespace)
+- Proxy settings: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
+- Request and limit memory settings applied.
+- Additional security context configurations.
