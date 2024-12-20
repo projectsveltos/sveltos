@@ -19,8 +19,6 @@ Sveltos is a set of Kubernetes controllers deployed in the management cluster. F
 
 The main goal of Sveltos is to deploy add-ons in managed Kubernetes clusters. So let's see that in action.
 
-Before you begin, please ensure you already have a management cluster with projectsveltos installed. If this is not the case, go through the [install](install.md) section to deploy projectsveltos.
-
 If you want to try the projectsveltos with a **test cluster**, follow the steps below:
 
 ``` bash
