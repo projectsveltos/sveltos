@@ -46,7 +46,7 @@ Checkout Youtube for a [Sveltos introduction to Snapshots](https://www.youtube.c
       storage: /collection # (2)
     ```
 
-    1. Specifies when a snapshot needs to be collected. It is [Cron format](https://en.wikipedia.org/wiki/Cron).
+    1. Specifies when a snapshot needs to be collected. It is in [Cron format](https://en.wikipedia.org/wiki/Cron).
 
     2. Represents a directory where snapshots will be stored. It must be an existing directory (on a PersistentVolume mounted by sveltosctl)
 

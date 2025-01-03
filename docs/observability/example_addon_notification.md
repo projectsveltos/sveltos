@@ -150,11 +150,87 @@ The above `Teams` secret contains the Teams webhook URL.
     ```
 
 The above `discord` secret contains the Discord channel id and the token.
+
   ```bash
   $ kubectl create secret generic discord \
     --from-literal=DISCORD_CHANNEL_ID=<your channel id> \
     --from-literal=DISCORD_TOKEN=<your token> \
     --type=addons.projectsveltos.io/cluster-profile
+  ```
+
+## Telegram
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: ClusterHealthCheck
+    metadata:
+      name: production
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      livenessChecks:
+      - name: addons
+        type: Addons
+      notifications:
+      - name: telegram
+        type: Telegram
+        notificationRef:
+          apiVersion: v1
+          kind: Secret
+          name: telegram
+          namespace: default
+    ```
+
+The above `telegram` secret contains the Telegram chat id and the token.
+
+  ```bash
+  $ kubectl create secret generic telegram \                                               
+    --from-literal=TELEGRAM_CHAT_ID=<your int64 chat id> \
+    --from-literal=TELEGRAM_TOKEN=<your token> \
+    --type=addons.projectsveltos.io/cluster-profile
+  ```
+
+## SMTP
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: ClusterHealthCheck
+    metadata:
+      name: production
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      livenessChecks:
+      - name: addons
+        type: Addons
+      notifications:
+      - name: smtp
+        type: SMTP
+        notificationRef:
+          apiVersion: v1
+          kind: Secret
+          name: smtp
+          namespace: default
+    ```
+
+The above `smtp` secret contains the SMTP info.
+
+  ```bash
+  $ kubectl create secret generic smtp \
+    --from-literal=SMTP_RECIPIENTS=<to email addresses> \
+    --from-literal=SMTP_BCC=<optional, cc email addresses> \
+    --from-literal=SMTP_BCC=<optional, bcc email addresses> \
+    --from-literal=SMTP_SENDER=<send email address> \
+    --from-literal=SMTP_PASSWORD=<sender app passowrd> \
+    --from-literal=SMTP_HOST=<host> \
+    --from-literal=SMTP_PORT=<OPTIONAL, SMTP SERVER PORT, DEFAULTS TO "587">
+    --type=addons.projectsveltos.io/cluster-profile \
   ```
 
 ## Kubernetes event

@@ -94,7 +94,7 @@ Cluster: default/clusterapi-workload
 Sveltos can also detect changes to deployed Helm charts:
 
 ```
-$ sveltosctl show dryrun           
+sveltosctl show dryrun           
 +-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
 |           CLUSTER           | RESOURCE TYPE | NAMESPACE  |      NAME      |    ACTION     |            MESSAGE             |              PROFILE              |
 +-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
@@ -109,7 +109,7 @@ $ sveltosctl show dryrun
 ```
 
 ```
-$ sveltosctl show dryrun --raw-diff
+sveltosctl show dryrun --raw-diff
 Profile: ClusterProfile:deploy-kyverno Cluster: default/clusterapi-workload
 --- deployed values
 +++ proposed values
