@@ -72,26 +72,26 @@ The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
-    name: crashing-pod
+      name: crashing-pod
     spec:
-    clusterSelector:
-      matchLabels:
-        env: fv
-    livenessChecks:
-    - name: crashing-pod
-      type: HealthCheck
-      livenessSourceRef:
-        kind: HealthCheck
-        apiVersion: lib.projectsveltos.io/v1beta1
-        name: crashing-pod
-    notifications:
-    - name: slack
-      type: Slack
-      notificationRef:
-        apiVersion: v1
-        kind: Secret
-        name: slack
-        namespace: default
+      clusterSelector:
+        matchLabels:
+          env: fv
+      livenessChecks:
+      - name: crashing-pod
+        type: HealthCheck
+        livenessSourceRef:
+          kind: HealthCheck
+          apiVersion: lib.projectsveltos.io/v1beta1
+          name: crashing-pod
+      notifications:
+      - name: slack
+        type: Slack
+        notificationRef:
+          apiVersion: v1
+          kind: Secret
+          name: slack
+          namespace: default
     ```
 
 !!! tip
