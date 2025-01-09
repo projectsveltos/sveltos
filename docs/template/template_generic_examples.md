@@ -351,6 +351,113 @@ Next, we will define a `ClusterProfile` named _replicate-external-secret-operato
 
 By following the steps above, Sveltos will automatically deploy the secrets managed by the External Secret Operator to all your production clusters. This ensures consistent and secure access to these secrets across your production environment.
 
+## Example - Replicate CloudConfig with Sveltos
+
+In this scenario, the management cluster manages multiple clusters in a cloud provider. Let's assume the cloud provider for this specific example is Azure. In some setups, there would be a need to put a `cloud-config` Secret with dynamic content inside the managed clusters. We can leverage Sveltos templates for that.
+
+Firstly we need to ensure that ClusterProfile (or Profile) has additional elements in `templateResourceRefs`, and `policies` defined:
+
+!!! example "Example - ClusterProfile Resource Definition"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-resources
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      templateResourceRefs:
+      - resource:
+          apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+          kind: AzureClusterIdentity
+          name: azure-cluster-identity
+        identifier: InfrastructureProviderIdentity
+      - resource:
+          apiVersion: v1
+          kind: Secret
+          name: azure-cluster-identity-secret
+        identifier: InfrastructureProviderIdentitySecret
+      policyRefs:
+      - kind: ConfigMap
+        name: azure-cloud-provider
+        namespace: default
+    ```
+
+We expose additional `InfrastructureProviderIdentity` and `InfrastructureProviderIdentitySecret` for templating purposes, and the `azure-cloud-provider` ConfigMap defined in policyRefs will be our template for pushing the `cloud-config` Secret to the managed clusters.
+
+!!! example "Example - CloudConfig template"
+    ```yaml
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: azure-cloud-provider
+      namespace: default
+      annotations:
+        projectsveltos.io/template: "true"
+    data:
+      configmap.yaml: |
+        {{- $cluster := .InfrastructureProvider -}}
+        {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+        {{- $secret := (getResource "InfrastructureProviderIdentitySecret") -}}
+        {{- $subnetName := "" -}}
+        {{- $securityGroupName := "" -}}
+        {{- $routeTableName := "" -}}
+        {{- range $cluster.spec.networkSpec.subnets -}}
+          {{- if eq .role "node" -}}
+            {{- $subnetName = .name -}}
+            {{- $securityGroupName = .securityGroup.name -}}
+            {{- $routeTableName = .routeTable.name -}}
+            {{- break -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $cloudConfig := dict
+          "aadClientId" $identity.spec.clientID
+          "aadClientSecret" (index $secret.data "clientSecret" | b64dec)
+          "cloud" $cluster.spec.azureEnvironment
+          "loadBalancerName" ""
+          "loadBalancerSku" "Standard"
+          "location" $cluster.spec.location
+          "maximumLoadBalancerRuleCount" 250
+          "resourceGroup" $cluster.spec.resourceGroup
+          "routeTableName" $routeTableName
+          "securityGroupName" $securityGroupName
+          "securityGroupResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+          "subnetName" $subnetName
+          "subscriptionId" $cluster.spec.subscriptionID
+          "tenantId" $identity.spec.tenantID
+          "useInstanceMetadata" true
+          "useManagedIdentityExtension" false
+          "vmType" "vmss"
+          "vnetName" $cluster.spec.networkSpec.vnet.name
+          "vnetResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+        -}}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: azure-cloud-provider
+          namespace: kube-system
+        type: Opaque
+        data:
+          cloud-config: {{ $cloudConfig | toJson | b64enc }}
+        ---
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: dump-cluster-sveltos-object
+          namespace: default
+        data:
+          object: |
+            {{ .Cluster | toYaml | nindent 4 }}
+    ```
+
+Note that we have 2 objects that are going to be created inside managed clusters via templating. `azure-cloud-provider` is the actual `cloud-config` that we need, and `dump-cluster-sveltos-object` is referenced here for illustrative purposes and can be used for debugging the template itself (seeing what values the reference object contains).
+
+It's worth mentioning also that template rendering status can be seen in the related `ClusterSummary` object status, this helps a lot in developing template script.
+
 ## Example - Autoscaler Dynamic Resource Creation
 
 When deploying add-ons in a managed cluster, there may be a need to first dynamically create resources in the management cluster and then use their values to instantiate add-ons in the managed cluster.
