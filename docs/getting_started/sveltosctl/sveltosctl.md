@@ -18,7 +18,7 @@ The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is 
 
 It offers a convenient CLI experience. The Binaries for each release are available on the [releases page](https://github.com/projectsveltos/sveltosctl/releases).
 
-The Binaries are sufficient to register worker clusters with Sveltos, query resources etc. However, if you want more capabilities like the [Techsupport](../sveltosctl/techsupport.md) and the [Snapshot](../sveltosctl/snapshot.md), use "Option 2: Run sveltosctl as a pod".
+The Binaries are sufficient to register worker clusters with Sveltos, query resources etc. However, if you want more capabilities like the [Snapshot](../sveltosctl/snapshot.md), use "Option 2: Run sveltosctl as a pod".
 
 ### Option 2: Run sveltosctl as Pod
 
