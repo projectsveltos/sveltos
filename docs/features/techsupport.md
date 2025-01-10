@@ -292,7 +292,7 @@ This guide demonstrates how to create Kubernetes `Secrets` for each supported pl
     secretRef:
       name: sftp
       namespace: default
-    ```
+  ```
 
 ## Output Format
 
