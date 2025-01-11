@@ -348,4 +348,5 @@ managed-clusters/Cluster/default/clusterapi-workload/logs/projectsveltos/
 ```
 
 
-For more information, refer to the [CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/refs/heads/main/api/v1beta1/techsupport.go).
+For more information, refer to the [CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/refs/heads/main/config/crd/bases/lib.projectsveltos.io_techsupports.yaml).
+
