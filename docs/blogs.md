@@ -39,15 +39,21 @@ authors:
 
 ## Sveltos Video List
 
-1. [What is Project Sveltos?](https://www.youtube.com/watch?v=bsWEo79w09c)
-1. [Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
-1. [OpenSourceSummit 24: How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud](https://youtu.be/IffrzanQRRc?si=lZMBBPrX0_P2SB6N)
-1. [KubeVela Commmunity Meeting:Sveltos intro](https://www.youtube.com/watch?v=A5Y0XTnoS7k)
-1. [Collabnix, Docker and DevOps Show-n-Tell](https://www.youtube.com/live/Kiv2SVhI8qg?si=a6vr7PQrhxwOCn5G&t=2h5m55s)
-1. [Simplify Add-On Management in K8s with Sveltos | Kubesimplify Webinar](https://www.youtube.com/watch?v=yifrTO7gDPM)
-1. [Civo Navigate North America 2024](https://www.youtube.com/watch?v=tAVu190WnKo)
-1. [Conf42 DevOps 24](https://www.youtube.com/watch?v=n2lFfxPP6jE)
-1. [Conf42 2023](https://youtu.be/Xi2HvRfaNYI)
+1. [![Sveltos introduction](https://img.youtube.com/vi/bsWEo79w09c/0.jpg)](https://www.youtube.com/watch?v=bsWEo79w09c)
+1. [![Sveltos event framework](https://img.youtube.com/vi/4mOWuOF0gWY/0.jpg)](https://www.youtube.com/watch?v=4mOWuOF0gWY)
+1. [![Sveltos event framework](https://img.youtube.com/vi/GQM7Qn9rWVU/0.jpg)](https://www.youtube.com/watch?v=GQM7Qn9rWVU)
+1. [![OpenSourceSummit 24: How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud](https://img.youtube.com/vi/IffrzanQRRc/0.jpg)](https://www.youtube.com/watch?v=IffrzanQRRc)
+1. [![Civo Navigate North America 2024](https://img.youtube.com/vi/tAVu190WnKo/0.jpg)](https://www.youtube.com/watch?v=tAVu190WnKo)
+1. [![Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://img.youtube.com/vi/FRYYHAWr0MQ/0.jpg)](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
+1. [![KubeVela Commmunity Meeting:Sveltos intro](https://img.youtube.com/vi/A5Y0XTnoS7k/0.jpg)](https://www.youtube.com/watch?v=A5Y0XTnoS7k)
+1. [![Collabnix, Docker and DevOps Show-n-Tell](https://img.youtube.com/vi/Kiv2SVhI8qg/0.jpg)](https://www.youtube.com/watch?v=Kiv2SVhI8qg)
+1. [![Simplify Add-On Management in K8s with Sveltos | Kubesimplify Webinar](https://img.youtube.com/vi/yifrTO7gDPM/0.jpg)](https://www.youtube.com/watch?v=yifrTO7gDPM)
+1. [![Conf42 DevOps 24](https://img.youtube.com/vi/n2lFfxPP6jE/0.jpg)](https://www.youtube.com/watch?v=n2lFfxPP6jE)
+1. [![Conf42 2023](https://img.youtube.com/vi/Xi2HvRfaNYI/0.jpg)](https://www.youtube.com/watch?v=Xi2HvRfaNYI)
+
+More videos can be found here:
+
+
 1. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
 1. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
 1. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
@@ -55,7 +61,6 @@ authors:
 1. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
 1. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
 1. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
-1. [OSSummit Europe 2024](https://www.youtube.com/watch?v=IffrzanQRRc)
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
