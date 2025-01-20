@@ -25,7 +25,47 @@ tokenRequestRenewalOption:
   saNamespace: projectsveltos
 ```
 
-Ensure that the specified ServiceAccount has the necessary permissions.
+<details>
+  <summary>Supplementary Notes on Token Rotation</summary>
+
+Note that:
+• The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount. So, ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:
+
+```yaml
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/token
+  verbs:
+    - create
+```
+
+• The token is renewed based on the interval set in `renewTokenRequestInterval`. However, the token’s overall validity has an additional buffer (for instance, 30 minutes longer) to ensure that Sveltoscluster-manager has enough time to perform the rotation before it expires.
+
+• If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token. Consequently, reconciliations for that cluster stop, and you must manually update the Secret for that cluster to restore functionality.
+
+• The `saName` and `saNamespace` fields refer to a ServiceAccount in the remote (managed) cluster. This ServiceAccount must have the appropriate privileges to allow Sveltos to deploy add-ons and manage workloads in the cluster.
+
+• If `saName` and `saNamespace` are not specified in the `tokenRequestRenewalOption`, Sveltos relies on whatever context is currently set in the Kubeconfig’s (for example, the fields under `contexts[0].context.user` and `contexts[0].context.namespace`).
+
+Token Renewal Flow with sveltoscluster-manager:
+
+```mermaid:register/token-renewal.md
+%% sveltoscluster-manager uses the token from the Secret to request a new token from the remote cluster (via the ServiceAccount).
+%% It then updates the Secret with the newly generated token, and finally writes
+%% the last renewal timestamp to the SveltosCluster status (lastReconciledTokenRequestAt).
+flowchart LR
+    A((SveltosCluster CR)) --> B[Check every 10 seconds if Renew Interval has passed]
+    B -->|Needs Renewal| C[Read existing Token from Secret]
+    C --> D[Use existing Token to request new Token from remote ServiceAccount]
+    D --> E[Remote cluster issues new Token]
+    E --> F[Update Secret with new Token in Kubeconfig]
+    F --> G[Write last token renewal time to SveltosCluster status]
+```
+
+</details>
+
+Below is an example showing how to configure token renewal for a GKE cluster.
 
 ## Example: GKE
 
