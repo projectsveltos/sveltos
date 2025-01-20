@@ -131,7 +131,7 @@ Once the `RoleRequest` instance has been created, the defined tenant admin can u
 
     1. Reference a ConfigMap that contains a Kyverno ClusterPolicy
 
-In the ClusterProfile definition above we allow the service account *eng* found in the *default* namespace to deploy Kyverno v3.0.1 to the cluster it has access to. This is the cluster with the label selector set to `env=prod`.
+In the ClusterProfile definition above we allow the service account *eng* found in the *default* namespace to deploy Kyverno v3.3.3 to the cluster it has access to. This is the cluster with the label selector set to `env=prod`.
 
 If the service account tries to deploy the same ClusterProfile definition to a cluster with a clusterSelector set to *env=test*, the deployment should fail it does not have permissions in clusters with the mentioned clusterSelector.
 
