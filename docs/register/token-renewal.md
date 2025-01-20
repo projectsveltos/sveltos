@@ -26,11 +26,13 @@ tokenRequestRenewalOption:
 ```
 
 <details>
-  <summary>Supplementary Notes on Token Rotation</summary>
+   <summary>Supplementary Notes on Token Rotation</summary>
 
 Note that:
-
-* The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount. So, ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:
+<ul>
+<li>The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount. 
+So, ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:</li>
+</ul>
 
 ```yaml
 - apiGroups:
@@ -41,17 +43,23 @@ Note that:
     - create
 ```
 
-* The token is renewed based on the interval set in `renewTokenRequestInterval`. However, the token’s overall validity has an additional buffer (for instance, 30 minutes longer) to ensure that Sveltoscluster-manager has enough time to perform the rotation before it expires.
+<ul>
+<li>The token is renewed based on the interval set in `renewTokenRequestInterval`. However, the token’s overall validity has an additional buffer 
+(for instance, 30 minutes longer) to ensure that Sveltoscluster-manager has enough time to perform the rotation before it expires.</li>
 
-* If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token. Consequently, reconciliations for that cluster stop, and you must manually update the Secret for that cluster to restore functionality.
+<li>If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token. 
+Consequently, reconciliations for that cluster stop, and you must manually update the Secret for that cluster to restore functionality.</li>
 
-* The `saName` and `saNamespace` fields refer to a ServiceAccount in the remote (managed) cluster. This ServiceAccount must have the appropriate privileges to allow Sveltos to deploy add-ons and manage workloads in the cluster.
+<li>The `saName` and `saNamespace` fields refer to a ServiceAccount in the remote (managed) cluster. This ServiceAccount must have the appropriate 
+privileges to allow Sveltos to deploy add-ons and manage workloads in the cluster.</li>
 
-* If `saName` and `saNamespace` are not specified in the `tokenRequestRenewalOption`, Sveltos relies on whatever context is currently set in the Kubeconfig’s (for example, the fields under `contexts[0].context.user` and `contexts[0].context.namespace`).
+<li>If `saName` and `saNamespace` are not specified in the `tokenRequestRenewalOption`, Sveltos relies on whatever context is currently set in the
+Kubeconfig’s (for example, the fields under `contexts[0].context.user` and `contexts[0].context.namespace`).</li>
+</ul>
 
 Token Renewal Flow with sveltoscluster-manager:
 
-```mermaid:register/token-renewal.md
+```mermaid
 %% sveltoscluster-manager uses the token from the Secret to request a new token from the remote cluster (via the ServiceAccount).
 %% It then updates the Secret with the newly generated token, and finally writes
 %% the last renewal timestamp to the SveltosCluster status (lastReconciledTokenRequestAt).
