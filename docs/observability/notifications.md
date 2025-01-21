@@ -136,26 +136,26 @@ with an incorrect OPA policy is detected.
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: ClusterHealthCheck
     metadata:
-    name: hc
+      name: hc
     spec:
-    clusterSelector:
-      matchLabels:
-        env: fv
-    livenessChecks:
-    - name: deployment
-      type: HealthCheck
-      livenessSourceRef:
-        kind: HealthCheck
-        apiVersion: lib.projectsveltos.io/v1beta1
-        name: opa-configmaps
-    notifications:
-    - name: webex
-      type: Webex
-      notificationRef:
-        apiVersion: v1
-        kind: Secret
-        name: webex
-        namespace: default
+      clusterSelector:
+        matchLabels:
+          env: fv
+      livenessChecks:
+      - name: deployment
+        type: HealthCheck
+        livenessSourceRef:
+          kind: HealthCheck
+          apiVersion: lib.projectsveltos.io/v1beta1
+          name: opa-configmaps
+      notifications:
+      - name: webex
+        type: Webex
+        notificationRef:
+          apiVersion: v1
+          kind: Secret
+          name: webex
+          namespace: default
     ```
 
 !!! tip

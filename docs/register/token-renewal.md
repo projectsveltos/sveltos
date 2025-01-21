@@ -13,7 +13,7 @@ authors:
 
 # Automatically Token Renewal
 
-To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl. 
+To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl.
 However, due to potential expiration limits imposed by cloud providers, this can disrupt Sveltos' management of the cluster.
 
 To prevent this, configure automatic renewal: edit the SveltosCluster resource. Add or modify the tokenRequestRenewalOption section to include:
@@ -30,7 +30,7 @@ tokenRequestRenewalOption:
 
 Note that:
 <ul>
-<li>The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount. 
+<li>The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount.
 So, ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:</li>
 </ul>
 
@@ -44,17 +44,17 @@ So, ensure that the token used in the Secret has the ability to create new token
 ```
 
 <ul>
-<li>The token is renewed based on the interval set in `renewTokenRequestInterval`. However, the token’s overall validity has an additional buffer 
+<li>The token is renewed based on the interval set in <strong>renewTokenRequestInterval</strong>. However, the token’s overall validity has an additional buffer
 (for instance, 30 minutes longer) to ensure that Sveltoscluster-manager has enough time to perform the rotation before it expires.</li>
 
-<li>If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token. 
+<li>If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token.
 Consequently, reconciliations for that cluster stop, and you must manually update the Secret for that cluster to restore functionality.</li>
 
-<li>The `saName` and `saNamespace` fields refer to a ServiceAccount in the remote (managed) cluster. This ServiceAccount must have the appropriate 
+<li>The <strong>saName</strong> and <strong>saNamespace</strong> fields refer to a ServiceAccount in the remote (managed) cluster. This ServiceAccount must have the appropriate
 privileges to allow Sveltos to deploy add-ons and manage workloads in the cluster.</li>
 
-<li>If `saName` and `saNamespace` are not specified in the `tokenRequestRenewalOption`, Sveltos relies on whatever context is currently set in the
-Kubeconfig’s (for example, the fields under `contexts[0].context.user` and `contexts[0].context.namespace`).</li>
+<li>If <strong>saName</strong> and <strong>saNamespace</strong> are not specified in the <strong>tokenRequestRenewalOption</strong>, Sveltos relies on whatever context is currently set in the
+Kubeconfig’s (for example, the fields under <strong>contexts[0].context.user</strong> and <strong>contexts[0].context.namespace</strong>).</li>
 </ul>
 
 Token Renewal Flow with sveltoscluster-manager:
@@ -92,7 +92,7 @@ Next, point sveltosctl to your Sveltos management cluster and register the GKE c
 sveltosctl register cluster --namespace=gke --cluster=cluster --kubeconfig=/tmp/GKE/kubeconfig --labels=env=production
 ```
 
-If we leave as it is, in 48 hours the Kubeconfig will expire. 
+If we leave as it is, in 48 hours the Kubeconfig will expire.
 To prevent the Kubeconfig from expiring and disrupting Sveltos' management of the GKE cluster, you can configure Sveltos to automatically renew the Kubeconfig.
 
 Edit the SveltosCluster __cluster__ in the __gke__ namespace:
