@@ -114,14 +114,18 @@ spec:
 
 ## Customize drift-detection-manager configuration
 
-In some cases, you might want to tailor the deployment of the drift-detection-manager[^1]. To achieve this, the `addon-controller` pod now accepts a new argument named `drift-detection-config`.
+In some cases, we might want to tailor the deployment of the `drift-detection-manager`. To achieve this, the `addon-controller` pod accepts a new argument named `drift-detection-config`.
 
-This argument points to a ConfigMap within the projectsveltos namespace. The ConfigMap holds patches that will be applied to the drift-detection-manager before its deployment in the managed cluster.
+The `drift-detection-config` argument points to a `ConfigMap` within the **projectsveltos** namespace. The `ConfigMap` holds patches that will be applied to the `drift-detection-manager` before its deployment in the managed cluster.
 
-Here's an example:
+#### ConfigMap Example
 
 ```yaml
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drift-detection
+  namespace: projectsveltos
 data:
   patch: |-
     apiVersion: apps/v1
@@ -132,18 +136,14 @@ data:
       template:
         spec:
           containers:
-          - name: manager
-            image: docker.io/projectsveltos/drift-detection-manager:dev
-            resources:
-              requests:
-                memory: 256Mi
-kind: ConfigMap
-metadata:
-  name: drift-detection
-  namespace: projectsveltos
+            - name: manager
+              image: registry.company.io/projectsveltos/drift-detection-manager:dev
+              resources:
+                requests:
+                  memory: 256Mi
 ```
 
-Along with creating the ConfigMap, you'll also need to configure the addon-controller deployment to use it. To do this, add the following argument to the deployment:
+Along with creating the `ConfigMap`, we also need to configure the **addon-controller** deployment to use it. To do this, add the below argument to the deployment.
 
 ```yaml
 - args:
@@ -151,70 +151,15 @@ Along with creating the ConfigMap, you'll also need to configure the addon-contr
   - --drift-detection-config=drift-detection
 ```
 
-With this configuration, the drift-detection-manager will be deployed in each managed cluster with the following settings:
+With the defined configuration, the `drift-detection-manager` will get deployed in each **managed cluster** with the below settings.
 
-- Request memory: 256Mi
-- Image: projectsveltos/drift-detection-manager:dev
+- **Request memory**: 256Mi
+- **Image**: projectsveltos/drift-detection-manager:dev
 
-## Pulling Sveltos Agent Images from a Private Registry
+!!! tip
+    If you are deploying Sveltos using the official Helm chart and need to patch the `drift-detection-manager` before deployment, include the necessary values in your `values.yaml` file.
 
-Same is valid for `sveltos-agent`. classifier pod now accepts an argument named `sveltos-agent-config`. It points to a ConfigMap in the projectsveltos namespace. 
-The ConfigMap holds patches that will be applied to the sveltos-agent before its deployment in the managed cluster.
-
-This is particularly useful for scenarios like:
-
-- **Using private image registries**: Override the default image repository and tag.
-- **Adding proxy settings**: Include `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables.
-- **Any other deployment-level customizations**.
-
-Here is an example ConfigMap for customizing the `sveltos-agent`:
-
-```yaml
-apiVersion: v1
-data:
-  patch: |-
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: sveltos-agent-manager
-    spec:
-      template:
-        spec:
-          imagePullSecrets:
-          - name: my-registry-secret       
-          containers:
-          - name: manager
-            image: registry.company.io/projectsveltos/sveltos-agent:dev
-kind: ConfigMap
-metadata:
-  name: sveltos-agent-config
-  namespace: projectsveltos
-```
-
-Along with creating the ConfigMap, you'll also need to configure the `classifer-manager` deployment to use it. To do this, add the following argument to the deployment:
-
-```yaml
-- args:
-  ...
-  - - --sveltos-agent-config=sveltos-agent-config
-```
-
-With this setup, the sveltos-agent will be deployed in the management cluster with the following settings:
-
-- Custom image from private registry: registry.company.io/projectsveltos/sveltos-agent:dev
-- Private registry credentials: my-registry-secret (the secret must be present in the projectsveltos namespace)
-- Proxy settings: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
-
-!!! tip ""
-    To create a Secret, provide your credentials directly on the command line using the following command:
-    ```
-    kubectl create secret docker-registry my-registry-secret -n projectsveltos --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
-    ```
-
-!!! tip ""
-    If you are deploying Sveltos using the Helm chart and need to patch sveltos-agent and drift-detection before deployment, include the necessary values in your values.yaml file and use the following command
-    
-    helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos -f values.yaml
+    $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos -f values.yaml
 
     ```yaml
     addonController:
@@ -233,24 +178,6 @@ With this setup, the sveltos-agent will be deployed in the management cluster wi
         - --v=5
         - --version=v0.44.0
         - --drift-detection-config=drift-detection-config
-    
-    classifierManager:
-      manager:
-        args:
-        - --diagnostics-address=:8443
-        - --report-mode=0
-        - --shard-key=
-        - --v=5
-        - --version=v0.44.0
-        argsAgentMgmtCluster:
-        - --diagnostics-address=:8443
-        - --report-mode=0
-        - --agent-in-mgmt-cluster
-        - --shard-key=
-        - --v=5
-        - --version=v0.44.0    
-        - --sveltos-agent-config=sveltos-agent-config
-    
     agent:
       managementCluster: true 
     ```

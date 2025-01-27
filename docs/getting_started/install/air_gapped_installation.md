@@ -55,7 +55,7 @@ The *drift-detection-manager* image is located [here](https://hubgw.docker.com/l
 
 Apart from deploying the `ConfigMap` resource in the **management** cluster, the argument `--drift-detection-config=drift-detection` needs to be included in the `addon-controller` of the ProjectSveltos `Helm chart`. The official `Helm chart` values are located [here](https://github.com/projectsveltos/helm-charts/blob/main/charts/projectsveltos/values.yaml).
 
-```yaml
+```yaml hl_lines="17"
 ...
 addonController:
   controller:
@@ -104,14 +104,22 @@ data:
               image: registry.company.io/projectsveltos/sveltos-agent:dev
 ```
 
-The *sveltos-agent* image is located [here](https://hubgw.docker.com/layers/projectsveltos/sveltos-agent/dev/images/sha256-d2c23f55e4585e9cfd103547bd238aef42f8cedb1d8ca23600bd393710669b37).
+The *sveltos-agent* **image** is located [here](https://hubgw.docker.com/layers/projectsveltos/sveltos-agent/dev/images/sha256-d2c23f55e4585e9cfd103547bd238aef42f8cedb1d8ca23600bd393710669b37).
+
+The *sveltos-agent* will be deployed in the **management** cluster with the bellow settings.
+
+- **Custom image from private registry**: registry.company.io/projectsveltos/sveltos-agent:dev
+- **Private registry credentials**: my-registry-secret (the secret must be present in the **projectsveltos** namespace)
+- **Proxy settings**: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
 
 !!! tip
     Replace the `image: registry.company.io/projectsveltos/sveltos-agent:dev` argument with your private registry details.
 
+    To create the `my-registry-secret` Secret, provide your credentials directly using the command: ```kubectl create secret docker-registry my-registry-secret -n projectsveltos --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>```
+
 Include the argument `--sveltos-agent-config=sveltos-agent-config` to the `classifer-manager` deployment within the Helm chart values.
 
-```yaml
+```yaml hl_lines="16"
 classifierManager:
   manager:
     args:
