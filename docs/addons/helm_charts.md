@@ -396,7 +396,7 @@ Another example using Harbor (on Civo cluster) as registry. Create a file named 
 Create a Secret named _credentials_ in the default namespace using the secret_harbor_content.yaml file:
 
 ```
-kubectl create secret generic credentials --from-file=config.json=secret_harbor_content.yaml
+kubectl create secret generic credentials --from-file=.dockerconfigjson=secret_harbor_content.yaml --type=kubernetes.io/dockerconfigjson
 ```
 
 Update your ClusterProfile YAML to reference the credentials Secret:
