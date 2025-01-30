@@ -29,7 +29,8 @@ spec:
             containers:
                 - args:
                     - --labels=
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                    - --service-account-token=false
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.46.0
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:

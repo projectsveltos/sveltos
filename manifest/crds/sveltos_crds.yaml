@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: accessrequests.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -258,7 +258,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: classifierreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -414,7 +414,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: classifiers.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -1072,7 +1072,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: clusterhealthchecks.lib.projectsveltos.io
 spec:
   conversion:
@@ -1898,7 +1898,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: clustersets.lib.projectsveltos.io
 spec:
   conversion:
@@ -2342,7 +2342,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: debuggingconfigurations.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2490,7 +2490,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: eventreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2645,6 +2645,13 @@ spec:
             type: object
           spec:
             properties:
+              cloudEvents:
+                description: CloudEvents contains a list of CloudEvents matching an
+                  EventSource
+                items:
+                  format: byte
+                  type: string
+                type: array
               clusterName:
                 description: |-
                   ClusterName is the name of the Cluster this EventReport
@@ -2667,7 +2674,7 @@ spec:
                 type: string
               matchingResources:
                 description: MatchingResources contains a list of resources matching
-                  an event
+                  an EventSource
                 items:
                   description: ObjectReference contains enough information to let
                     you inspect or modify the referred object.
@@ -2746,7 +2753,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: eventsources.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -2917,8 +2924,46 @@ spec:
                   CollectResources indicates whether matching resources need
                   to be collected and added to EventReport.
                 type: boolean
+              messagingMatchCriteria:
+                description: |-
+                  MessagingMatchCriteria defines a list of MessagingMatchCriteria. Each criteria specifies
+                  how to match CloudEvents received on specific NATS/JetStream subjects.
+                items:
+                  description: |-
+                    MessagingMatchCriteria defines criteria for matching CloudEvents received via NATS.
+                    Sveltos listens to NATS/JetStream subjects, and the messages delivered on those
+                    subjects are expected to be CloudEvents.
+                  properties:
+                    cloudEventSource:
+                      description: |-
+                        CloudEventSource filters CloudEvents based on their "source" attribute.
+                        If specified, only CloudEvents with a matching source will be considered.
+                        Regular expressions are supported.
+                      type: string
+                    cloudEventSubject:
+                      description: |-
+                        CloudEventSubject filters CloudEvents based on their "subject" attribute.
+                        If specified, only CloudEvents with a matching subject will be considered.
+                        Regular expressions are supported.
+                      type: string
+                    cloudEventType:
+                      description: |-
+                        CloudEventType filters CloudEvents based on their "type" attribute.
+                        If specified, only CloudEvents with a matching type will be considered.
+                        Regular expressions are supported.
+                      type: string
+                    subject:
+                      description: |-
+                        Subject is an optional NATS/JetStream subject filter. If specified, this criteria will
+                        only consider CloudEvents received on this specific subject. Leaving it empty
+                        means the criteria will match CloudEvents from any of the subjects Sveltos
+                        is subscribed to. Regular expressions are supported.
+                      type: string
+                  type: object
+                type: array
               resourceSelectors:
-                description: ResourceSelectors identifies what resources to select
+                description: ResourceSelectors identifies what Kubernetes resources
+                  to select
                 items:
                   description: ResourceSelector defines what resources are a match
                   properties:
@@ -2978,8 +3023,6 @@ spec:
                   - version
                   type: object
                 type: array
-            required:
-            - resourceSelectors
             type: object
         type: object
     served: true
@@ -2989,7 +3032,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: healthcheckreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3277,7 +3320,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: healthchecks.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3516,7 +3559,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: reloaderreports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3718,7 +3761,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: reloaders.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -3853,7 +3896,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: rolerequests.lib.projectsveltos.io
 spec:
   conversion:
@@ -4358,7 +4401,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: sets.lib.projectsveltos.io
 spec:
   conversion:
@@ -4802,7 +4845,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -5128,7 +5171,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: techsupports.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -5623,7 +5666,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.0
+        controller-gen.kubebuilder.io/version: v0.17.1
     name: clusterconfigurations.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -6326,7 +6369,7 @@ kind: CustomResourceDefinition
 metadata:
     annotations:
         cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-        controller-gen.kubebuilder.io/version: v0.17.0
+        controller-gen.kubebuilder.io/version: v0.17.1
     name: clusterprofiles.config.projectsveltos.io
 spec:
     conversion:
@@ -6906,9 +6949,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
@@ -7376,6 +7422,14 @@ spec:
                                     encountering the first conflict (e.g., another ClusterProfile already deployed the resource).
                                     If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
                                     if conflicts are detected for previous resources.
+                                type: boolean
+                            continueOnError:
+                                default: false
+                                description: |-
+                                    By default (when ContinueOnError is unset or set to false), Sveltos stops deployment after
+                                    encountering the first error.
+                                    If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
+                                    if errors are detected for previous resources.
                                 type: boolean
                             dependsOn:
                                 description: |-
@@ -8070,9 +8124,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
@@ -8429,7 +8486,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.0
+        controller-gen.kubebuilder.io/version: v0.17.1
     name: clusterreports.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -9049,7 +9106,7 @@ kind: CustomResourceDefinition
 metadata:
     annotations:
         cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-        controller-gen.kubebuilder.io/version: v0.17.0
+        controller-gen.kubebuilder.io/version: v0.17.1
     name: clustersummaries.config.projectsveltos.io
 spec:
     conversion:
@@ -9643,9 +9700,12 @@ spec:
                                             - OneTime means, first time a workload cluster matches the ClusterProfile,
                                             features will be deployed in such cluster. Any subsequent feature configuration
                                             change won't be applied into the matching workload clusters;
-                                            - Continuous means first time a workload cluster matches the ClusterProfile,
-                                            features will be deployed in such a cluster. Any subsequent feature configuration
-                                            change will be applied into the matching workload clusters.
+                                            - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                            the specified features are deployed. Subsequent changes to the feature configuration are also
+                                            automatically applied to all matching workload clusters.
+                                            _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                            matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                            triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                             - DryRun means no change will be propagated to any matching cluster. A report
                                             instead will be generated summarizing what would happen in any matching cluster
                                             because of the changes made to ClusterProfile while in DryRun mode.
@@ -10113,6 +10173,14 @@ spec:
                                             encountering the first conflict (e.g., another ClusterProfile already deployed the resource).
                                             If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
                                             if conflicts are detected for previous resources.
+                                        type: boolean
+                                    continueOnError:
+                                        default: false
+                                        description: |-
+                                            By default (when ContinueOnError is unset or set to false), Sveltos stops deployment after
+                                            encountering the first error.
+                                            If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
+                                            if errors are detected for previous resources.
                                         type: boolean
                                     dependsOn:
                                         description: |-
@@ -10807,9 +10875,12 @@ spec:
                                             - OneTime means, first time a workload cluster matches the ClusterProfile,
                                             features will be deployed in such cluster. Any subsequent feature configuration
                                             change won't be applied into the matching workload clusters;
-                                            - Continuous means first time a workload cluster matches the ClusterProfile,
-                                            features will be deployed in such a cluster. Any subsequent feature configuration
-                                            change will be applied into the matching workload clusters.
+                                            - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                            the specified features are deployed. Subsequent changes to the feature configuration are also
+                                            automatically applied to all matching workload clusters.
+                                            _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                            matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                            triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                             - DryRun means no change will be propagated to any matching cluster. A report
                                             instead will be generated summarizing what would happen in any matching cluster
                                             because of the changes made to ClusterProfile while in DryRun mode.
@@ -11680,9 +11751,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
@@ -12051,6 +12125,14 @@ spec:
                     spec:
                         description: EventTriggerSpec defines the desired state of EventTrigger
                         properties:
+                            cloudEventAction:
+                                default: Create
+                                description: |-
+                                    CloudEventAction determines the action to take based on the received CloudEvent.
+                                    CloudEvents with the same source and subject are considered related and represent
+                                    different states of the same entity. This field specifies whether to create or
+                                    delete the associated Kubernetes resources.
+                                type: string
                             clusterSetRefs:
                                 description: SetRefs identifies referenced ClusterSets. Name of the referenced ClusterSets.
                                 items:
@@ -12943,9 +13025,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
@@ -13309,7 +13394,7 @@ kind: CustomResourceDefinition
 metadata:
     annotations:
         cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
-        controller-gen.kubebuilder.io/version: v0.17.0
+        controller-gen.kubebuilder.io/version: v0.17.1
     name: profiles.config.projectsveltos.io
 spec:
     conversion:
@@ -13889,9 +13974,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
@@ -14359,6 +14447,14 @@ spec:
                                     encountering the first conflict (e.g., another ClusterProfile already deployed the resource).
                                     If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
                                     if conflicts are detected for previous resources.
+                                type: boolean
+                            continueOnError:
+                                default: false
+                                description: |-
+                                    By default (when ContinueOnError is unset or set to false), Sveltos stops deployment after
+                                    encountering the first error.
+                                    If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
+                                    if errors are detected for previous resources.
                                 type: boolean
                             dependsOn:
                                 description: |-
@@ -15053,9 +15149,12 @@ spec:
                                     - OneTime means, first time a workload cluster matches the ClusterProfile,
                                     features will be deployed in such cluster. Any subsequent feature configuration
                                     change won't be applied into the matching workload clusters;
-                                    - Continuous means first time a workload cluster matches the ClusterProfile,
-                                    features will be deployed in such a cluster. Any subsequent feature configuration
-                                    change will be applied into the matching workload clusters.
+                                    - Continuous mode ensures that the first time a workload cluster matches a ClusterProfile,
+                                    the specified features are deployed. Subsequent changes to the feature configuration are also
+                                    automatically applied to all matching workload clusters.
+                                    _ SyncModeContinuousWithDriftDetection operates similarly to Continuous mode, but also monitors
+                                    matching managed clusters for configuration drift. If drift is detected, a reconciliation is
+                                    triggered to ensure the managed cluster's configuration aligns with the ClusterProfile.
                                     - DryRun means no change will be propagated to any matching cluster. A report
                                     instead will be generated summarizing what would happen in any matching cluster
                                     because of the changes made to ClusterProfile while in DryRun mode.
