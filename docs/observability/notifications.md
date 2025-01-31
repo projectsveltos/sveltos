@@ -104,7 +104,7 @@ At the end, we return the `hs` object to Sveltos.
           message = ""
 
           local opa_annotation = "openpolicyagent.org/policy-status"
-        
+
           for _,resource in ipairs(resources) do
             if resource.metadata.annotations ~= nil then
               if resource.metadata.annotations[opa_annotation] ~= nil then
@@ -115,13 +115,13 @@ At the end, we return the `hs` object to Sveltos.
                   status = "Degraded"
                   message = obj.metadata.annotations[opa_annotation]
                 end
-                table.insert(statuses, {resource=resource, status = status, message = message})  
+                table.insert(statuses, {resource=resource, status = status, message = message})
               end
             end
-          end  
+          end
           local hs = {}
           if #statuses > 0 then
-            hs.resources = statuses 
+            hs.resources = statuses
           end
           return hs
         end
