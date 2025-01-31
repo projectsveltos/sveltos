@@ -238,3 +238,11 @@ spec:
   dependsOn:
   - clusterprofile_b
 ```
+
+### Spec.ContinueOnError
+
+*ContinueOnError* configures Sveltos' error handling. When true, errors are logged, but deployment continues. When false (default), Sveltos stops at the first error and retries the failing resource. For instance, if deploying three Helm charts, a failure during the second chart's deployment will halt the process, and Sveltos will retry the second chart. Only if ContinueOnError is true will Sveltos proceed to deploy the third chart *before retrying* the second chart.
+
+### Spec.ContinueOnConflict
+
+*ContinueOnConflict* configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another *profile* has already deployed the same resource.

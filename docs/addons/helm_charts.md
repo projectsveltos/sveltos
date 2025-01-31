@@ -375,7 +375,7 @@ spec:
   - repositoryURL:    oci://registry-1.docker.io/gianlucam76
     repositoryName:   projectsveltos
     chartName:        projectsveltos
-    chartVersion:     0.38.1
+    chartVersion:     0.46.0
     releaseName:      projectsveltos
     releaseNamespace: projectsveltos
     helmChartAction:  Install
