@@ -119,23 +119,11 @@ Sveltos also offers a Grafana dashboard to help users track and visualize a numb
 
 ![dashboard](../../assets/dashboard.png)
 
+
 ## v1alpha1 CRDs
 
-The current version of Sveltos CRD is **v1beta1**. If you're still using **v1alpha1**, you'll need to deploy Sveltos conversion webhook. 
-This webhook requires `cert-manager` to be installed and running in your management cluster. Without cert-manager, Sveltos may not function correctly.
+For the last couple of months, Sveltos CRDs have been using the **v1beta1** version. If the **v1alpha1** version is used, please upgrade to the latest release! The release pages can be found [here](https://github.com/projectsveltos/libsveltos/releases).
 
-To install Sveltos conversion webhook, run the commands below.
-
-```
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/conversion_webhook.yaml
-```
-
-To install `cert-manager`:
-
-- [cert-manager manifest deployment](https://cert-manager.io/docs/installation/kubectl/)
-- [cert-manager Helm chart deployment](https://cert-manager.io/docs/installation/helm/)
-
-General information about cert-manager, have a look [here](https://cert-manager.io/docs/).
 
 ## Next Steps
 
