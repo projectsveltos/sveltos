@@ -426,8 +426,31 @@ spec:
         namespace: default
 ```
 
+Harbor credentials can also be stored as __BasicAuth__ such as:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: creds
+  namespace: default
+data:
+  username: # base64 of user
+  password: # base64 of pass
+```
+
+and profile's HelmCharts section can reference this secret:
+
+```yaml
+   registryCredentialsConfig:
+    credentials:
+     name: creds
+     namespace: default
+    insecureSkipTLSVerify: true
+```
+
 !!! note
-The `insecureSkipTLSVerify` option should only be used if your private registry does not support TLS verification. It's generally recommended to use a secure TLS connection and set the `CASecretRef` field in the `registryCredentialsConfig`
+    The `insecureSkipTLSVerify` option should only be used if your private registry does not support TLS verification. It's generally recommended to use a secure TLS connection and set the `CASecretRef` field in the `registryCredentialsConfig`
 
 ### Upgrade CRDs
 
