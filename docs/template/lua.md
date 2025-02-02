@@ -19,7 +19,7 @@ Sveltos enables the execution of [Lua](https://www.lua.org/) code stored within 
 
 This will instruct Sveltos to fetch the Secret __imported-secret__ in the __default__ namespace and replicate it to any __env: prod__ cluster:
 
-```yaml hl_lines="4 26-27"
+```yaml hl_lines="4-5 10"
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -83,6 +83,8 @@ Sveltos provides several helper functions to simplify resource manipulation with
 - *base64Encode* and *base64Decode*: For base64 encoding and decoding.
 - *json.encode* and *json.decode*: For JSON encoding and decoding.
 - strings functions: Provides a range of string manipulation functions such as *Compare*, *Contains*, *HasPrefix*, *HasSuffix*, *Join*, *Replace*, *Split*, *ToLower*, and *ToUpper*. These functions are based on the this [library](https://github.com/chai2010/glua-strings). To use these methods, call them as strings.ToUpper("mystring").
+
+Some examples:
 
 ```lua
   local strings = require("strings")
