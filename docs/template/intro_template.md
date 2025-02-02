@@ -15,6 +15,7 @@ authors:
 ## Introduction to Templates
 
 Sveltos lets you define add-ons and applications using templates. Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
+[Lua](lua.md) can also be used.
 
 ![Sveltos Templates](../assets/templates.png)
 
