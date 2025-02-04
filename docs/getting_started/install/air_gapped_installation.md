@@ -55,8 +55,7 @@ The *drift-detection-manager* image is located [here](https://hubgw.docker.com/l
 
 Apart from deploying the `ConfigMap` resource in the **management** cluster, the argument `--drift-detection-config=drift-detection` needs to be included in the `addon-controller` of the ProjectSveltos `Helm chart`. The official `Helm chart` values are located [here](https://github.com/projectsveltos/helm-charts/blob/main/charts/projectsveltos/values.yaml).
 
-```yaml hl_lines="17"
-...
+```yaml hl_lines="9"
 addonController:
   controller:
     args:
@@ -64,14 +63,22 @@ addonController:
     - --report-mode=0
     - --shard-key=
     - --v=5
-    - --version=v0.45.0
+    - --version=v0.46.1
+    - --drift-detection-config=drift-detection
+```
+
+or, if running in agentless mode:
+
+```yaml hl_lines="10"
+addonController:
+  controller:
     argsAgentMgmtCluster:
     - --diagnostics-address=:8443
     - --report-mode=0
     - --agent-in-mgmt-cluster
     - --shard-key=
     - --v=5
-    - --version=v0.45.0
+    - --version=v0.46.1
     - --drift-detection-config=drift-detection
 ```
 
@@ -119,7 +126,7 @@ The *sveltos-agent* will be deployed in the **management** cluster with the bell
 
 Include the argument `--sveltos-agent-config=sveltos-agent-config` to the `classifer-manager` deployment within the Helm chart values.
 
-```yaml hl_lines="16"
+```yaml hl_lines="8"
 classifierManager:
   manager:
     args:
@@ -127,14 +134,21 @@ classifierManager:
     - --report-mode=0
     - --shard-key=
     - --v=5
-    - --version=v0.44.0
+    - --version=v0.46.1
+```
+
+or, if running in agentless mode:
+
+```yaml hl_lines="10"
+classifierManager:
+  manager:
     argsAgentMgmtCluster:
     - --diagnostics-address=:8443
     - --report-mode=0
     - --agent-in-mgmt-cluster
     - --shard-key=
     - --v=5
-    - --version=v0.44.0    
+    - --version=v0.46.1    
     - --sveltos-agent-config=sveltos-agent-config
 ```
 
