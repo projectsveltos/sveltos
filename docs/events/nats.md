@@ -310,7 +310,7 @@ KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box 
 
 Verify namespace is created:
 
-````
+```
 sveltosctl show addons                                                    
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
 |           CLUSTER           | RESOURCE TYPE |   NAMESPACE    |     NAME     | VERSION |             TIME              |                     PROFILES                     |
@@ -346,7 +346,7 @@ KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box 
 
 Verify the namespace has been deleted in response to the user logout CloudEvent:
 
-````
+```
 sveltosctl show addons                                                                                                                        
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
 |           CLUSTER           | RESOURCE TYPE |   NAMESPACE    |     NAME     | VERSION |             TIME              |                     PROFILES                     |
