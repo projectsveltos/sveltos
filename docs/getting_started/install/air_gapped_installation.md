@@ -40,12 +40,11 @@ data:
     spec:
       template:
         spec:
+          imagePullSecrets:
+            - name: my-registry-secret
           containers:
             - name: manager
               image: registry.company.io/projectsveltos/drift-detection-manager:dev
-              resources:
-                requests:
-                  memory: 256Mi
 ```
 
 The *drift-detection-manager* image is located [here](https://hubgw.docker.com/layers/projectsveltos/drift-detection-manager/dev/images/sha256-d31b3d57ee446ab216d7b925f35ef3da50de5161dff17ce2ef7c35f5bdd9c539).
@@ -116,7 +115,7 @@ The *sveltos-agent* **image** is located [here](https://hubgw.docker.com/layers/
 The *sveltos-agent* will be deployed in the **management** cluster with the bellow settings.
 
 - **Custom image from private registry**: registry.company.io/projectsveltos/sveltos-agent:dev
-- **Private registry credentials**: my-registry-secret (the secret must be present in the **projectsveltos** namespace)
+- **Private registry credentials**: my-registry-secret (the secret must be present in the **projectsveltos** namespace)[ˆ1]
 - **Proxy settings**: HTTP_PROXY, HTTPS_PROXY, and NO_PROXY defined.
 
 !!! tip
@@ -172,3 +171,38 @@ $ helm list -n projectsveltos
 ## Next Steps
 
 Continue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
+
+[ˆ1]: A Sveltos ClusterProfile can deploy your Secret to managed clusters. Assuming the Secret is named __image-pull-secret__ and resides in the __default__ namespace, it will be deployed to all clusters labeled __environment: air-gapped__
+```
+apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-resources
+    spec:
+      clusterSelector:
+        matchLabels:
+          environment: air-gapped
+      templateResourceRefs:
+      - resource:
+          apiVersion: v1
+          kind: Secret
+          name: image-pull-secret
+          namespace: default
+        identifier: ImagePullSecret
+      policyRefs:
+      - kind: ConfigMap
+        name: info
+        namespace: default
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: info
+      namespace: default
+      annotations:
+        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+    data:
+      secret.yaml: |
+        {{ copy "ImagePullSecret" }}
+```
+
