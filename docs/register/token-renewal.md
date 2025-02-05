@@ -21,7 +21,7 @@ To prevent this, configure automatic renewal: edit the SveltosCluster resource. 
 ```yaml
 tokenRequestRenewalOption:
   renewTokenRequestInterval: 1h0m0s
-  saName: cluster-admin
+  saName: projectsveltos
   saNamespace: projectsveltos
 ```
 
@@ -106,11 +106,11 @@ Add or modify the `tokenRequestRenewalOption` section to include:
 ```yaml
   tokenRequestRenewalOption:
     renewTokenRequestInterval: 1h0m0s
-    saName: cluster-admin
+    saName: projectsveltos
     saNamespace: projectsveltos
 ```
 
-This assumes that the ServiceAccount __cluster-admin__ exists in the __projectsveltos__ namespace  on the GKE cluster and has the necessary permissions for Sveltos to deploy applications and add-ons to the cluster.
+This assumes that the ServiceAccount __projectsveltos__ exists in the __projectsveltos__ namespace  on the GKE cluster and has the necessary permissions for Sveltos to deploy applications and add-ons to the cluster.
 
 With this configuration, Sveltos will generate a new token tied to the ServiceAccount and use it to create a new Kubeconfig every hour, ensuring continuous cluster management.
 
