@@ -291,7 +291,7 @@ Send now a CloudEvent representing user __mgianluc__ login:
 CLOUDEVENT_JSON=$(cat << EOF                                                                                     
 {
   "specversion": "1.0",
-  "type": "uth.example.com.login",
+  "type": "auth.example.com.login",
   "source": "auth.example.com",
   "id": "10001",
   "subject": "mgianluc",
@@ -305,7 +305,7 @@ EOF
 ```
 
 ```
-KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-login $CLOUDEVENT_JSON --user=admin --password=my-password 
+KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password 
 ```
 
 Verify namespace is created:
@@ -341,7 +341,7 @@ EOF
 ```
 
 ```
-KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-login $CLOUDEVENT_JSON --user=admin --password=my-password 
+KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password 
 ```
 
 Verify the namespace has been deleted in response to the user logout CloudEvent:
