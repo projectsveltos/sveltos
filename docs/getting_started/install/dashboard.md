@@ -70,4 +70,4 @@ Copy the token generated, login to the Sveltos Dashboard and submit it.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/njKPLa-qTCM?si=SjBEc4ctkMyKG1N0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-[ˆ1]:While the example uses __cluster-admin__ for simplicity, the dashboard only requires read access to Sveltos CRs and Cluster API cluster instances.
+[^1]: While the example uses __cluster-admin__ for simplicity, the dashboard only requires read access to Sveltos CRs and Cluster API cluster instances.
