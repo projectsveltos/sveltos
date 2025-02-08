@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
-	libsveltosutils "github.com/projectsveltos/libsveltos/lib/utils"
+	libsveltosutils "github.com/projectsveltos/libsveltos/lib/k8s_utils"
 )
 
 const (
