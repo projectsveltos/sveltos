@@ -12,6 +12,8 @@ rm -rf  manifest/agents_in_mgmt_cluster_manifest.yaml
 touch  manifest/agents_in_mgmt_cluster_manifest.yaml
 rm -rf  manifest/conversion_webhook.yaml
 touch  manifest/conversion_webhook.yaml
+rm -rf  manifest/default-instances.yaml
+touch  manifest/default-instances.yaml
 
 # libsveltos
 echo "processing libsveltos"
@@ -32,6 +34,15 @@ do
     echo "---"  >> ../../manifest/manifest.yaml
     cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
     echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+done
+
+for f in configuration/*.yaml
+# this directory contains default configuration (Classifier instance and
+# DebuggingConfiguration instance)
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/default-instances.yaml
+    echo "---"  >> ../../manifest/default-instances.yaml
 done
 cd ../../; rm -rf tmp
 
