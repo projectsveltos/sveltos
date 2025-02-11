@@ -22,6 +22,18 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 ```
 
+### Helm Installation
+
+```
+$ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
+
+$ helm repo update
+
+$ helm install sveltos-projectsveltos projectsveltos/sveltos-dashboard -n projectsveltos
+
+$ helm list -n projectsveltos
+```
+
 !!! warning
     **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
 
