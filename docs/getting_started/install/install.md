@@ -30,7 +30,7 @@ To install Sveltos in mode 1, run the commands below.
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
 ### Mode 2: Centralised Agent Mode
@@ -40,7 +40,7 @@ If you do not want to have any Sveltos agent in any **managed cluster**, run the
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
 Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
@@ -83,7 +83,7 @@ $ helm list -n projectsveltos
 ```
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=main |kubectl apply -f -
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
 #### Mode 2: Centralised Agent Mode
@@ -91,7 +91,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 ```
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=main |kubectl apply -f -
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-classifier.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
 ## Sveltos Verification
