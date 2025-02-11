@@ -9,6 +9,7 @@ tags:
     - multi-tenancy
 authors:
     - Gianluca Mardente
+    - Robin Afflerbach
 ---
 
 ## What is Sveltos?
@@ -27,7 +28,7 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 
 To install Sveltos in mode 1, run the commands below.
 
-```
+```sh
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
@@ -37,7 +38,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
-```
+```sh
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
@@ -60,27 +61,39 @@ Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1
 
 ### Helm Installation
 
-```
+!!! note
+    When deploying Sveltos with Helm, the `helm upgrade` command won't automatically update Sveltos's Custom Resource Definitions (CRDs). To ensure CRDs are updated, run this command before upgrading Sveltos.
+    ```sh
+    kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/crds/sveltos_crds.yaml
+    ```
+
+```sh
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
 
 $ helm repo update
+```
 
+#### Mode 1: Local Agent Mode
+
+```sh
 $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 
 $ helm list -n projectsveltos
 ```
 
-!!! note
-    When deploying Sveltos with Helm, the `helm upgrade` command won't automatically update Sveltos's Custom Resource Definitions (CRDs). To ensure CRDs are updated, run this command before upgrading Sveltos.
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/crds/sveltos_crds.yaml
-    ```
+#### Mode 2: Centralised Agent Mode
+
+```sh
+$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set agent.managementCluster=true
+
+$ helm list -n projectsveltos
+```
 
 ### Kustomize Installation
 
 #### Mode 1: Local Agent Mode
 
-```
+```sh
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=main |kubectl apply -f -
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
@@ -88,7 +101,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 #### Mode 2: Centralised Agent Mode
 
-```
+```sh
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=main |kubectl apply -f -
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
