@@ -51,7 +51,7 @@ Sveltos uses the git-flow branching model. The base branch is dev. If you are lo
 
 !!! tip 
     For production environments, using a release tag instead of the 'main' branch is recommended to ensure a smooth upgrade process for Sveltos applications.
-    
+
 ## Deployment Options
 
 Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
@@ -132,11 +132,9 @@ Sveltos also offers a Grafana dashboard to help users track and visualize a numb
 
 ![dashboard](../../assets/dashboard.png)
 
-
 ## v1alpha1 CRDs
 
 For the last couple of months, Sveltos CRDs have been using the **v1beta1** version. If the **v1alpha1** version is used, please upgrade to the latest release! The release pages can be found [here](https://github.com/projectsveltos/libsveltos/releases).
-
 
 ## Next Steps
 
