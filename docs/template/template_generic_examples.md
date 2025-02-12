@@ -167,7 +167,7 @@ Once we are happy with the configuration, we can proceed further with the Svelto
       - resource:
           apiVersion: v1
           kind: ConfigMap
-          name: "{{ .ClusterName }}"
+          name: "{{ .Cluster.metadata.name }}"
         identifier: ConfigData
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
