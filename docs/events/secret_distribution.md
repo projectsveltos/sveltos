@@ -88,18 +88,19 @@ spec:
   policyRefs:
   - name: deploy-imagepullsecret
     namespace: default
-    kind: ConfigMap
+    kind: Secret
 ---
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: deploy-imagepullsecret
   namespace: default
   annotations:
-    projectsveltos.io/template: "ok"
-data: 
+    projectsveltos.io/instantiate: ok
+type: addons.projectsveltos.io/cluster-profile
+stringData:
   content: |
-    {{ $namespaces := ( ( index (getResource "Namespaces").data "namespaces" ) | fromYaml ) }} 
+    {{ $namespaces := ( ( index (getResource "Namespaces").data "namespaces" ) | fromYaml ) }}
     {{- range $key, $value := $namespaces }}
         apiVersion: v1
         kind: Secret
@@ -114,4 +115,3 @@ data:
     ---
     {{- end }}
 ```
-

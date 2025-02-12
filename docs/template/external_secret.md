@@ -135,18 +135,19 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
           namespace: default
         identifier: ExternalSecret
       policyRefs:
-      - kind: ConfigMap
+      - kind: Secret
         name: info
         namespace: default
     ---
     apiVersion: v1
-    kind: ConfigMap
+    kind: Secret
     metadata:
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
-    data:
+        projectsveltos.io/instantiate: ok  # add annotation to indicate Sveltos content is a template
+    type: addons.projectsveltos.io/cluster-profile
+    stringData:
       secret.yaml: |
         # ExternalSecret now references the Secret created by External Secret Operator
         apiVersion: v1

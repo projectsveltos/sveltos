@@ -150,7 +150,7 @@ spec:
   policyRefs:
   - name: calico-remote-cluster-config
     namespace: default
-    kind: ConfigMap
+    kind: Secret
 ```
 
 Upon an event, Sveltos retrieves the ConfigMap referenced in the `ConfigMapGenerators` section. It then dynamically populates the ConfigMap content using both cluster metadata (like namespace and name) and event data. This newly generated ConfigMap is placed within the `projectsveltos` namespace.
@@ -166,13 +166,14 @@ By combining these steps, the ClusterProfile can generate and deploy customized 
 
 ```yaml
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: calico-remote-cluster-config
   namespace: default
   annotations:
-    projectsveltos.io/template: "ok"
-data:
+    projectsveltos.io/instantiate: ok
+type: addons.projectsveltos.io/cluster-profile
+stringData:
   secrets.yaml: |
     {{ $token := ((getResource "ConfigDataToken")).data.token }}
     {{ $certauthdata := ((getResource "ConfigData")).data.certauthdata }}

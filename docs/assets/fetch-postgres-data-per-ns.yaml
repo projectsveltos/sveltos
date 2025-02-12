@@ -32,16 +32,17 @@ spec:
   policyRefs:
   - name: credentials
     namespace: default
-    kind: ConfigMap
+    kind: Secret
 ---
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: credentials
   namespace: default
   annotations:
     projectsveltos.io/instantiate: ok
-data:
+type: addons.projectsveltos.io/cluster-profile
+stringData:
   credentials: |
     apiVersion: v1
     kind: Secret

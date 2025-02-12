@@ -32,22 +32,23 @@ spec:
   policyRefs:
   - name: credentials
     namespace: default
-    kind: ConfigMap
+    kind: Secret
 ---
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: credentials
   namespace: default
   annotations:
     projectsveltos.io/instantiate: ok
-data:
+type: addons.projectsveltos.io/cluster-profile
+stringData:
   credentials: |
     apiVersion: v1
     kind: Secret
     metadata:
       name: pg-credentials
-      namespace: {{ .Resource.metadata.namespace }} 
+      namespace: {{ .Resource.metadata.namespace }}
     data:
       "password": "{{ get .Resource.data `password` }}"
       "user": "{{ get .Resource.data `username` }}"
@@ -66,7 +67,7 @@ spec:
     version: "v1"
     kind: "Service"
     labelFilters:
-    - key: cnpg.io/isManaged 
+    - key: cnpg.io/isManaged
       operation: Equal
       value: "true"
 ---
