@@ -42,7 +42,7 @@ data:
           name = secret.metadata.name,
           namespace = secret.metadata.namespace,
         },
-        data = secret.data,  -- secret.data の各キーと値をそのまま使用
+        data = secret.data,
       }
 
       local hs = {}
@@ -90,7 +90,7 @@ Some examples:
   local strings = require("strings")
 
   function evaluate()
-    local secret = getResource(resources, "ExternalSecret") 
+    local secret = getResource(resources, "ExternalSecret")
     print(strings.ToUpper(secret.metadata.name))
     local splitTable = strings.Split(secret.metadata.name, "-") -- metadata.name in the example imported-secret
     for i, v in ipairs(splitTable) do
@@ -103,7 +103,7 @@ Some examples:
   local json = require("json")
 
   function evaluate()
-    local secret = getResource(resources, "ExternalSecret") 
+    local secret = getResource(resources, "ExternalSecret")
     local encoded = json.encode(secret)
     print(encoded)
 ```

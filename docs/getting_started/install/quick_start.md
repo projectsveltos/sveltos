@@ -27,7 +27,7 @@ $ git clone https://github.com/projectsveltos/addon-controller
 $ make quickstart
 ```
 
-The above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos, 
+The above will create a management cluster using [Kind](https://kind.sigs.k8s.io), deploy clusterAPI and projectsveltos,
 create a workload cluster powered by clusterAPI using Docker as infrastructure provider.
 
 !!! note

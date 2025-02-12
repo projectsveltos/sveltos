@@ -46,10 +46,10 @@ This YAML example demonstrates how to configure Techsupport collection:
       deliveryMethods:  # Defines how to delivery tech support
         - name: slack   # name must be unique within a TechSupport instance
           type: Slack   # Type can be Webex, Slack, Discord, Telegram, SMTP, SFTP
-          secretRef: 
+          secretRef:
             name: slack
             namespace: default
-    
+
       # Data collection from the management cluster
       fromManagement:
         resources:  # Specific resources to collect
@@ -67,7 +67,7 @@ This YAML example demonstrates how to configure Techsupport collection:
           - namespace: projectsveltos
           - namespace: kube-system
             type: Warning  # Only collect Warning events from kube-system
-    
+
       # Data collection from managed clusters
       fromManaged:
         clusterSelector:  # Filter managed clusters for collection
@@ -104,7 +104,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
     spec:
       schedulingConfig:
         schedule: "00 * * * *"
-      
+
       deliveryMethods:
       - name: discord
         type: Discord
@@ -217,7 +217,7 @@ This guide demonstrates how to create Kubernetes `Secrets` for each supported pl
     --from-literal=DISCORD_CHANNEL_ID=<your channel id> \
     --from-literal=DISCORD_TOKEN=<your token> \
     --type=addons.projectsveltos.io/cluster-profile
-  ```  
+  ```
 
   ```yaml
   deliveryMethods:
@@ -231,7 +231,7 @@ This guide demonstrates how to create Kubernetes `Secrets` for each supported pl
 #### Telegram
 
   ```bash
-  $ kubectl create secret generic telegram \                                               
+  $ kubectl create secret generic telegram \
     --from-literal=TELEGRAM_CHAT_ID=<your int64 chat id> \
     --from-literal=TELEGRAM_TOKEN=<your token> \
     --type=addons.projectsveltos.io/cluster-profile
@@ -244,9 +244,9 @@ This guide demonstrates how to create Kubernetes `Secrets` for each supported pl
     secretRef:
       name: telegram
       namespace: default
-  ```  
+  ```
 
-#### SMTP 
+#### SMTP
 
   ```bash
   $ kubectl create secret generic smtp \

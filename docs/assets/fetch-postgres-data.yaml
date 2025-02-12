@@ -89,20 +89,20 @@ spec:
     namespace: default
     kind: ConfigMap
 ---
-apiVersion: v1 
-kind: ConfigMap 
-metadata: 
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: loadbalancer-data
   namespace: default
-  annotations: 
-    projectsveltos.io/instantiate: ok 
-data: 
-  credentials: | 
-    apiVersion: v1 
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  credentials: |
+    apiVersion: v1
     kind: ConfigMap
-    metadata: 
+    metadata:
       name: pg-loadbalancer-data
       namespace: {{ .Resource.metadata.namespace }}
-    data: 
+    data:
       external-ip: {{ (index .Resource.status.loadBalancer.ingress 0).ip }}
       port: "{{ (index .Resource.spec.ports 0).targetPort }}"

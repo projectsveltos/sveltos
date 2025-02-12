@@ -62,12 +62,12 @@ Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
     ---
     apiVersion: v1
     kind: ConfigMap
-    metadata:   
+    metadata:
       name: bucket
       namespace: default
       annotations:
         projectsveltos.io/template: "true"
-    data:       
+    data:
       bucket.yaml: |
         apiVersion: storage.gcp.upbound.io/v1beta1
         kind: Bucket

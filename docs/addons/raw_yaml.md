@@ -56,7 +56,7 @@ The YAML definition below exemplifies a ConfigMap that holds multiple resources[
         kind: Deployment
         metadata:
           name: nginx-deployment
-          namespace: nginx  
+          namespace: nginx
         spec:
           replicas: 2 # number of pods to run
           selector:
@@ -87,7 +87,7 @@ Once the required Kubernetes resources are created/deployed, the below example r
       name: deploy-resources
     spec:
       clusterSelector:
-        matchLabels:      
+        matchLabels:
           env: fv
       policyRefs:
       - name: nginx
@@ -107,7 +107,7 @@ When a ClusterProfile references a ConfigMap or a Secret, the **kind** and **nam
 If you leave the namespace field empty, Sveltos will search for the ConfigMap or the Secret with the provided name within the namespace of each matching cluster.
 
 ### Example: Understand Namespace Definition
-  
+
 ```yaml
 ---
 apiVersion: config.projectsveltos.io/v1beta1
@@ -135,8 +135,8 @@ We can express ConfigMap and Secret names as templates and dynamically generate 
 Available cluster information :
 
 - cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name` 
-- cluster type: `.Cluster.kind` 
+- cluster name: `.Cluster.metadata.name`
+- cluster type: `.Cluster.kind`
 
 Consider two SveltosCluster instances in the _civo_ namespace:
 
@@ -150,7 +150,7 @@ production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v
 Additionally, there are two ConfigMaps named _nginx-pre-production_ and _nginx-production_ (both containing a _nginx_ deployment) within the civo namespace:
 
 ```bash
-kubectl get configmap -n civo                   
+kubectl get configmap -n civo
 NAME                   DATA   AGE
 nginx-pre-production   2      4m59s
 nginx-production       2      4m41s

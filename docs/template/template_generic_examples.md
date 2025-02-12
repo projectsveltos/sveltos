@@ -1,6 +1,6 @@
 ---
 title: Templates Generic Examples
-description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. 
+description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template.
 tags:
     - Kubernetes
     - add-ons
@@ -83,7 +83,7 @@ The entire __helmCharts__ section can be defined as a template
         releaseNamespace: kyverno
         helmChartAction:  Install
     ```
- 
+
 Likewise, we can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
 ## Example - Deploy Kyverno with different replicas
@@ -100,7 +100,7 @@ cluster2   true    v1.29.2+k3s1   env=demo,projectsveltos.io/k8s-version=v1.29.2
 We also have two `ConfigMap` resources.
 
 ```
-$ kubectl get configmap -n civo                   
+$ kubectl get configmap -n civo
 NAME               DATA   AGE
 cluster1           1      43m
 cluster2           1      43m
@@ -222,7 +222,7 @@ The below YAML definition instruct Sveltos to find a Secret named _autoscaler_ i
           env: fv
       templateResourceRefs:
       - resource:
-          apiVersion: v1 
+          apiVersion: v1
           kind: Secret
           name: autoscaler
           namespace: default
@@ -333,7 +333,7 @@ Next, we will define a `ClusterProfile` named _replicate-external-secret-operato
           env: production
       templateResourceRefs:
       - resource:
-          apiVersion: v1 
+          apiVersion: v1
           kind: Secret
           name: external-secret-operator
           namespace: default
@@ -415,7 +415,7 @@ We expose additional `InfrastructureProviderIdentity` and `InfrastructureProvide
         {{- end -}}
         {{- $cloudConfig := dict
           "aadClientId" $identity.spec.clientID
-          "aadClientSecret" (index $secret.data "clientSecret" | b64dec)
+          "aadClientSecret" (index $secret.data "clientSecret" |b64dec)
           "cloud" $cluster.spec.azureEnvironment
           "loadBalancerName" ""
           "loadBalancerSku" "Standard"
@@ -442,7 +442,7 @@ We expose additional `InfrastructureProviderIdentity` and `InfrastructureProvide
           namespace: kube-system
         type: Opaque
         data:
-          cloud-config: {{ $cloudConfig | toJson | b64enc }}
+          cloud-config: {{ $cloudConfig | toJson |b64enc }}
         ---
         apiVersion: v1
         kind: ConfigMap
@@ -486,11 +486,11 @@ When a new cluster matches the ClusterProfile's `clusterSelector`, we want Svelt
 
 ```yaml
   policyRefs:
-  - deploymentType: Local # Content of this ConfigMap will be deployed 
+  - deploymentType: Local # Content of this ConfigMap will be deployed
                           # in the management cluster
     kind: ConfigMap
-    name: serviceaccount-autoscaler # Contain a template that will be 
-                                    # instantiated and deployed in the 
+    name: serviceaccount-autoscaler # Contain a template that will be
+                                    # instantiated and deployed in the
                                     # management cluster
     namespace: default
 ```
@@ -521,11 +521,11 @@ To achieve this, the Secret Sveltos created in the management cluster needs to b
 Next, we need to instruct Sveltos to take the content of the ConfigMap secret-info in the default namespace and deploy it to the managed cluster (`deploymentType: Remote`).
 
 ```yaml
- - deploymentType: Remote # Content of this ConfigMap will be 
+ - deploymentType: Remote # Content of this ConfigMap will be
                           # deployed in the managed cluster
     kind: ConfigMap
-    name: secret-info # Contain a template that will be instantiated 
-                      # and deployed in the managed cluster 
+    name: secret-info # Contain a template that will be instantiated
+                      # and deployed in the managed cluster
     namespace: default
 ```
 
@@ -579,15 +579,15 @@ The content of this ConfigMap is a template that uses the information contained 
       - deploymentType: Local # Content of this ConfigMap will be deployed
                               # in the management cluster
         kind: ConfigMap
-        name: serviceaccount-autoscaler # Contain a template that will be 
-                                        # instantiated and deployed in the management 
+        name: serviceaccount-autoscaler # Contain a template that will be
+                                        # instantiated and deployed in the management
                                         # cluster
         namespace: default
-      - deploymentType: Remote # Content of this ConfigMap will be deployed in the 
+      - deploymentType: Remote # Content of this ConfigMap will be deployed in the
                               # managed cluster
         kind: ConfigMap
         name: secret-info # Contain a template that will be instantiated and deployed
-                          # in the managed cluster 
+                          # in the managed cluster
         namespace: default
     ---
     # This ConfigMap contains a ServiceAccount and a Secret for this ServiceAccount.
