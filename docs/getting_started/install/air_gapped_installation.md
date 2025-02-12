@@ -123,7 +123,7 @@ Continue with the **Sveltoctl** command-line interface (CLI) definition and inst
 
 [ˆ1]: A Sveltos ClusterProfile can deploy your Secret to managed clusters. Assuming the Secret is named __image-pull-secret__ and resides in the __default__ namespace, it will be deployed to all clusters labeled __environment: air-gapped__
 ```
-apiVersion: config.projectsveltos.io/v1beta1
+    apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
       name: deploy-resources
