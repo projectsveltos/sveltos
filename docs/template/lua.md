@@ -29,24 +29,24 @@ metadata:
   namespace: default
 data:
   lua.yaml: |-
+    local json = require("json")
+
     function evaluate()
       local secret = getResource(resources, "ExternalSecret")
       print(secret.metadata.name)
+
+      local secretObj = {
+        apiVersion = "v1",
+        kind = "Secret",
+        metadata = {
+          name = secret.metadata.name,
+          namespace = secret.metadata.namespace,
+        },
+        data = secret.data,  -- secret.data の各キーと値をそのまま使用
+      }
+
       local hs = {}
-      local result = [[
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ]] .. secret.metadata.name .. [[
-
-      namespace: ]] .. secret.metadata.namespace .. [[
-
-    data:
-    ]]
-      for k, v in pairs(secret.data) do
-        result = result .. "  " .. k .. ": " .. v .. "\n"
-      end
-      hs.resources = result
+      hs.resources = json.encode(secretObj)
       return hs
     end
 ```
