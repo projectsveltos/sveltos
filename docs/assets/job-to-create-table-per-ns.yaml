@@ -28,12 +28,12 @@ spec:
       apiVersion: v1
       kind: Secret
       name: "{{ .Resource.metadata.name }}-app-credentials"
-    identifier:  Credentials
+    identifier: Credentials
   - resource:
       apiVersion: v1
       kind: ConfigMap
       name: "{{ .Resource.metadata.name }}-lb-data"
-    identifier:  LoadBalancer   
+    identifier: LoadBalancer
   policyRefs:
   - name: job-to-create-table
     namespace: default

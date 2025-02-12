@@ -187,7 +187,7 @@ The above `discord` secret contains the Discord channel id and the token.
 The above `telegram` secret contains the Telegram chat id and the token.
 
   ```bash
-  $ kubectl create secret generic telegram \                                               
+  $ kubectl create secret generic telegram \
     --from-literal=TELEGRAM_CHAT_ID=<your int64 chat id> \
     --from-literal=TELEGRAM_TOKEN=<your token> \
     --type=addons.projectsveltos.io/cluster-profile

@@ -4,19 +4,19 @@ metadata:
   name: deploy-job
 spec:
   clusterSelector:
-    matchLabels:      
-      type: app 
+    matchLabels:
+      type: app
   templateResourceRefs:
   - resource:
       apiVersion: v1
       kind: Secret
       name: "pg-credentials"
-    identifier:  Credentials
+    identifier: Credentials
   - resource:
       apiVersion: v1
       kind: ConfigMap
       name: "pg-loadbalancer-data"
-    identifier:  LoadBalancer 
+    identifier: LoadBalancer
   policyRefs:
   - name: job-to-create-table
     namespace: default

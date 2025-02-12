@@ -29,24 +29,24 @@ metadata:
   namespace: default
 data:
   lua.yaml: |-
+    local json = require("json")
+
     function evaluate()
       local secret = getResource(resources, "ExternalSecret")
       print(secret.metadata.name)
+
+      local secretObj = {
+        apiVersion = "v1",
+        kind = "Secret",
+        metadata = {
+          name = secret.metadata.name,
+          namespace = secret.metadata.namespace,
+        },
+        data = secret.data,
+      }
+
       local hs = {}
-      local result = [[
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ]] .. secret.metadata.name .. [[
-
-      namespace: ]] .. secret.metadata.namespace .. [[
-
-    data:
-    ]]
-      for k, v in pairs(secret.data) do
-        result = result .. "  " .. k .. ": " .. v .. "\n"
-      end
-      hs.resources = result
+      hs.resources = json.encode(secretObj)
       return hs
     end
 ```
@@ -90,7 +90,7 @@ Some examples:
   local strings = require("strings")
 
   function evaluate()
-    local secret = getResource(resources, "ExternalSecret") 
+    local secret = getResource(resources, "ExternalSecret")
     print(strings.ToUpper(secret.metadata.name))
     local splitTable = strings.Split(secret.metadata.name, "-") -- metadata.name in the example imported-secret
     for i, v in ipairs(splitTable) do
@@ -103,7 +103,7 @@ Some examples:
   local json = require("json")
 
   function evaluate()
-    local secret = getResource(resources, "ExternalSecret") 
+    local secret = getResource(resources, "ExternalSecret")
     local encoded = json.encode(secret)
     print(encoded)
 ```

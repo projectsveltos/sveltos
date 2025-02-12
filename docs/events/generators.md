@@ -31,7 +31,7 @@ Sveltos offers a way to dynamically generate policy resources based on events us
 
 ![projectsveltos.io/instantiate annotation](../assets/instantiate_annotation.png)
 
-Consider a scenario where you want to automatically create a NetworkPolicy whenever a LoadBalancer Service is created in a managed cluster. 
+Consider a scenario where you want to automatically create a NetworkPolicy whenever a LoadBalancer Service is created in a managed cluster.
 The network-policy ConfigMap referenced by the EventTrigger in this case would have the `projectsveltos.io/instantiate` annotation and its content would be a template like the provided YAML snippet.
 This template utilizes placeholders to dynamically generate the NetworkPolicy name and pod selector based on the metadata of the newly created LoadBalancer Service.
 
@@ -114,7 +114,7 @@ spec:
     name: tigera-federation-remote-cluster
 ```
 
-Create an EventTrigger referencing above EventSource. 
+Create an EventTrigger referencing above EventSource.
 
 ```yaml hl_lines="14-24"
 apiVersion: lib.projectsveltos.io/v1beta1
@@ -150,7 +150,7 @@ spec:
   policyRefs:
   - name: calico-remote-cluster-config
     namespace: default
-    kind: ConfigMap
+    kind: Secret
 ```
 
 Upon an event, Sveltos retrieves the ConfigMap referenced in the `ConfigMapGenerators` section. It then dynamically populates the ConfigMap content using both cluster metadata (like namespace and name) and event data. This newly generated ConfigMap is placed within the `projectsveltos` namespace.
@@ -166,13 +166,14 @@ By combining these steps, the ClusterProfile can generate and deploy customized 
 
 ```yaml
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: calico-remote-cluster-config
   namespace: default
   annotations:
-    projectsveltos.io/template: "ok"
-data:
+    projectsveltos.io/instantiate: ok
+type: addons.projectsveltos.io/cluster-profile
+stringData:
   secrets.yaml: |
     {{ $token := ((getResource "ConfigDataToken")).data.token }}
     {{ $certauthdata := ((getResource "ConfigData")).data.certauthdata }}
@@ -198,8 +199,8 @@ data:
     ---
     apiVersion: v1
     data:
-      datastoreType: {{ "kubernetes" | b64enc }}
-      kubeconfig: {{ printf $config $token $certauthdata $server | b64enc }}
+      datastoreType: {{ "kubernetes" |b64enc }}
+      kubeconfig: {{ printf $config $token $certauthdata $server |b64enc }}
     kind: Secret
     metadata:
       name: remote-cluster-secret-name

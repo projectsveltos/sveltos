@@ -88,7 +88,7 @@ Following criteria can be used to narrow down the events that Sveltos will react
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
-Each EvenTrigger instance: 
+Each EvenTrigger instance:
 
 1. References an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
@@ -177,7 +177,7 @@ data:
     apiVersion: v1
     metadata:
       name: {{ .CloudEvent.subject }} # The CloudEvent is available and can be used to instantiate the template
-``` 
+```
 
 ### End to End Flow
 
@@ -224,7 +224,7 @@ spec:
   dependsOn:
   - nats
   clusterSelector:
-    matchLabels:      
+    matchLabels:
       env: production
   policyRefs:
   - name: deploy-sveltos-nats-secret
@@ -288,7 +288,7 @@ data:
 Send now a CloudEvent representing user __mgianluc__ login:
 
 ```
-CLOUDEVENT_JSON=$(cat << EOF                                                                                     
+CLOUDEVENT_JSON=$(cat << EOF
 {
   "specversion": "1.0",
   "type": "auth.example.com.login",
@@ -305,13 +305,13 @@ EOF
 ```
 
 ```
-KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password 
+KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password
 ```
 
 Verify namespace is created:
 
 ```
-sveltosctl show addons                                                    
+sveltosctl show addons
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
 |           CLUSTER           | RESOURCE TYPE |   NAMESPACE    |     NAME     | VERSION |             TIME              |                     PROFILES                     |
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
@@ -324,7 +324,7 @@ sveltosctl show addons
 We can now send a CloudEvent for the logout operation (note the CloudEvent type):
 
 ```
-CLOUDEVENT_JSON=$(cat << EOF                                                                                     
+CLOUDEVENT_JSON=$(cat << EOF
 {
   "specversion": "1.0",
   "type": "auth.example.com.logout",
@@ -341,13 +341,13 @@ EOF
 ```
 
 ```
-KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password 
+KUBECONFIG=<production cluster kubeconfig> kubectl exec -it deployment/nats-box -n nats -- nats pub user-operation $CLOUDEVENT_JSON --user=admin --password=my-password
 ```
 
 Verify the namespace has been deleted in response to the user logout CloudEvent:
 
 ```
-sveltosctl show addons                                                                                                                        
+sveltosctl show addons
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
 |           CLUSTER           | RESOURCE TYPE |   NAMESPACE    |     NAME     | VERSION |             TIME              |                     PROFILES                     |
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
