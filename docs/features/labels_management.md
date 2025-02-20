@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Cluster Classification - Project Sveltos 
+title: Kubernetes Cluster Classification - Project Sveltos
 description: A Kubernetes cluster is a set of nodes that run containerized applications. Discover Kubernetes cluster classification based on cluster run-time state.
 tags:
     - Kubernetes
@@ -12,7 +12,7 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-## Classifier - Automatically Manage Cluster Labels and Add-Ons 
+## Classifier - Automatically Manage Cluster Labels and Add-Ons
 
 Sveltos provides users with the power to decide which add-ons should get deployed to which clusters programmatically by the use of a ClusterSelector. Sometimes the versions of the required and needed add-ons depend on the cluster's runtime state. This is where the Sveltos Classifier comes into play.
 
@@ -143,7 +143,7 @@ The field *classifierLabels* contains all the labels (key/value pair) which will
 The field *kubernetesVersionConstraints* can be used to classify a cluster based on its current Kubernetes version.
 
 #### Resource constraints
-The field *deployedResourceConstraints* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
+The field *deployedResourceConstraint* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
 
 Following classifier, matches any cluster with a Service with label __sveltos:fv__.
 
@@ -169,7 +169,7 @@ Following classifier, matches any cluster with a Service with label __sveltos:fv
             value: fv
     ```
 
-Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_ 
+Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_
 
 !!! example ""
     ```yaml
@@ -182,7 +182,7 @@ Following classifier, matches any cluster with a ClusterIssuer using _acme-stagi
       classifierLabels:
       - key: issuer
         value: acme-staging-v02
-      deployedResourceConstraints:
+      deployedResourceConstraint:
         resourceSelectors:
         - group: "cert-manager.io"
           version: v1
