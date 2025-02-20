@@ -163,10 +163,10 @@ spec:
                     - --diagnostics-address=:8443
                     - --shard-key=
                     - --v=5
-                    - --version=main
+                    - --version=v0.48.1
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.48.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
