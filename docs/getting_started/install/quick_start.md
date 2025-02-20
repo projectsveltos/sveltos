@@ -96,16 +96,16 @@ To deploy all these resources in any cluster with labels *env: fv*, create a Clu
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     metadata:
-    name: gateway-configuration
+      name: gateway-configuration
     spec:
-    clusterSelector:
-      matchLabels:
-        env: fv
-    syncMode: Continuous
-    policyRefs:
-    - name: contour-gateway-provisioner-secret
-      namespace: default
-      kind: Secret
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      policyRefs:
+      - name: contour-gateway-provisioner-secret
+        namespace: default
+        kind: Secret
     EOF
     ```
 
