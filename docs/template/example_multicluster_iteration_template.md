@@ -34,7 +34,7 @@ Sveltos `Event Framework` will be used to dynamically detect all **managed** clu
     collectResources: false
     resourceSelectors:
     - group: "lib.projectsveltos.io"
-      version: "v1alpha1"
+      version: "v1beta1"
       kind: "SveltosCluster"
       labelFilters:
       - key: sveltos-agent

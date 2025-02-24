@@ -247,20 +247,4 @@ cd ../../; rm -rf tmp
 
 echo ""
 
-# conversion-webhook currently disabled
-# conversion-webhook
-#echo ""
-#echo "processing conversion-webhook"
-#rm -rf tmp; mkdir tmp; cd tmp
-#git clone git@github.com:projectsveltos/conversion-webhook.git
-#cd conversion-webhook
-#git checkout ${branch}
-#touch ../../kustomize/base/conversion-webhook.yaml
-#for f in manifest/*.yaml
-#do 
-#    echo "Processing $f file..."
-#    cat $f >> ../../kustomize/base/conversion-webhook.yaml
-#done
-#cd ../../; rm -rf tmp
-
 echo ""

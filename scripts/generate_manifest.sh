@@ -10,8 +10,6 @@ rm -rf  manifest/manifest.yaml
 touch  manifest/manifest.yaml
 rm -rf  manifest/agents_in_mgmt_cluster_manifest.yaml
 touch  manifest/agents_in_mgmt_cluster_manifest.yaml
-rm -rf  manifest/conversion_webhook.yaml
-touch  manifest/conversion_webhook.yaml
 rm -rf  manifest/default-instances.yaml
 touch  manifest/default-instances.yaml
 
@@ -261,19 +259,6 @@ do
     echo "---"  >> ../../manifest/manifest.yaml
     cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
     echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
-done
-cd ../../; rm -rf tmp
-
-# conversion-webhook
-echo "processing conversion-webhook"
-rm -rf tmp; mkdir tmp; cd tmp
-git clone git@github.com:projectsveltos/conversion-webhook.git
-cd conversion-webhook
-git checkout ${branch}
-for f in manifest/*.yaml
-do 
-    echo "Processing $f file..."
-    cat $f >> ../../manifest/conversion_webhook.yaml
 done
 cd ../../; rm -rf tmp
 
