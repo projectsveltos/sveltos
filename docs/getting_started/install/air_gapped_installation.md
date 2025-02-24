@@ -21,15 +21,12 @@ Sveltos is a set of Kubernetes controllers deployed in the management cluster. F
 !!! note
     This documentation assumes that Sveltos is installed using `Helm`.
 
-Sveltos can be installed in an **air-gapped** environment. An air-gapped environment is a **highly secure** environment completely **cut off** from the **Internet** and any other external networks. That implies, getting the required Sveltos images from the `Docker Hub` is not possible.
+Sveltos can be installed in an **air-gapped** environment. An air-gapped environment is a **highly secure** environment completely **cut off** from the **Internet** and any other external networks. That implies, getting the required Sveltos images from the `Docker Hub` is not possible. This method can also be useful if the cluster runs in an environment where access to certain image registries is restricted and a custom registry or registry cache needs to be used (e.g. in large enterprises).
 
-This method can also be useful if the cluster runs in an environment where access to certain image registries is restricted and a custom registry or registry cache needs to be used (e.g. in large enterprises).
-
-When installing Sveltos using the official `Helm chart`, the *drift-detection-manager* and the *sveltos-agent* will be deployed in each managed cluster or on the management cluster when `agent.managementCluster=true` is set. However, in restricted environments, additional values are required for the installation.
-
-The *drift-detection-manager* and the *sveltos-agent* deployments will be dynamically deployed instead of from the Sveltos installation directly. This means that the patches to these deployments are done during runtime instead of upfront.
+When installing Sveltos using the official `Helm chart`, the *drift-detection-manager* and the *sveltos-agent* will be deployed in each managed cluster or on the management cluster when `agent.managementCluster=true` is set. However, in restricted environments, additional values are required for the installation. The *drift-detection-manager* and the *sveltos-agent* deployments will be dynamically deployed instead of from the Sveltos installation directly. This means that the patches to these deployments are done during runtime instead of upfront.
 
 There are two types of patches that can be applied:
+
 - [Strategic Merge Patch](http://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/)
 - [JSON Patch (RFC6902)](https://datatracker.ietf.org/doc/html/rfc6902)
 
@@ -93,7 +90,7 @@ The *sveltos-agent* **image** is located [here](https://hubgw.docker.com/layers/
 The *sveltos-agent* will be deployed in the **management** cluster with the bellow settings.
 
 - **Custom image from private registry**: registry.company.io/projectsveltos/sveltos-agent:dev
-- **Private registry credentials**: my-registry-secret (the secret must be present in the **projectsveltos** namespace)[ˆ1]
+- **Private registry credentials**: my-registry-secret (the secret must be present in the **projectsveltos** namespace)[^1]
 
 !!! tip
     Replace the `image: registry.company.io/projectsveltos/sveltos-agent:dev` argument with your private registry details.
@@ -121,7 +118,7 @@ $ helm list -n projectsveltos
 
 Continue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
 
-[ˆ1]: A Sveltos ClusterProfile can deploy your Secret to managed clusters. Assuming the Secret is named __image-pull-secret__ and resides in the __default__ namespace, it will be deployed to all clusters labeled __environment: air-gapped__
+[^1]: A Sveltos ClusterProfile can deploy your Secret to managed clusters. Assuming the Secret is named __image-pull-secret__ and resides in the __default__ namespace, it will be deployed to all clusters labeled __environment: air-gapped__
 ```
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
