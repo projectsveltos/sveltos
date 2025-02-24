@@ -193,20 +193,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cert-manager.io/inject-ca-from: projectsveltos/projectsveltos-serving-cert
     controller-gen.kubebuilder.io/version: v0.17.2
   name: snapshots.utils.projectsveltos.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: webhook-service
-          namespace: projectsveltos
-          path: /convert
-      conversionReviewVersions:
-      - v1
   group: utils.projectsveltos.io
   names:
     kind: Snapshot
@@ -215,89 +204,6 @@ spec:
     singular: snapshot
   scope: Cluster
   versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: Snapshot is the Schema for the snapshot API
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: SnapshotSpec defines the desired state of Snapshot
-            properties:
-              schedule:
-                description: Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron.
-                type: string
-              startingDeadlineSeconds:
-                description: |-
-                  Optional deadline in seconds for starting the job if it misses scheduled
-                  time for any reason.  Missed jobs executions will be counted as failed ones.
-                format: int64
-                type: integer
-              storage:
-                description: |-
-                  Storage represents directory where snapshots will be stored.
-                  It must be an existing directory.
-                  Snapshots will be stored in this directory in a subdirectory named
-                  with Snapshot instance name.
-                type: string
-              successfulSnapshotLimit:
-                description: |-
-                  The number of successful finished snapshots to retains.
-                  If specified, only SuccessfulSnapshotLimit will be retained. Once such
-                  number is reached, for any new successful snapshots, the oldest one is
-                  deleted.
-                format: int32
-                type: integer
-            required:
-            - schedule
-            - storage
-            type: object
-          status:
-            description: SnapshotStatus defines the observed state of Snapshot
-            properties:
-              failureMessage:
-                description: |-
-                  FailureMessage provides more information about the error, if
-                  any occurred
-                type: string
-              lastRunStatus:
-                description: Status indicates what happened to last snapshot collection.
-                enum:
-                - Collected
-                - InProgress
-                - Failed
-                type: string
-              lastRunTime:
-                description: Information when was the last time a snapshot was successfully
-                  scheduled.
-                format: date-time
-                type: string
-              nextScheduleTime:
-                description: Information when next snapshot is scheduled
-                format: date-time
-                type: string
-            type: object
-        type: object
-    served: true
-    storage: false
-    subresources:
-      status: {}
   - name: v1beta1
     schema:
       openAPIV3Schema:
