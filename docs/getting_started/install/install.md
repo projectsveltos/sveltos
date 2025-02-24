@@ -135,10 +135,6 @@ Sveltos also offers a Grafana dashboard to help users track and visualize a numb
 
 ![dashboard](../../assets/dashboard.png)
 
-## v1alpha1 CRDs
-
-For the last couple of months, Sveltos CRDs have been using the **v1beta1** version. If the **v1alpha1** version is used, please upgrade to the latest release! The release pages can be found [here](https://github.com/projectsveltos/libsveltos/releases).
-
 ## Next Steps
 
 Continue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
