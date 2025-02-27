@@ -23,19 +23,19 @@ There are two clusters involved: a "MGMT Cluster" and a "Managed Cluster" (clust
 apiVersion: v1
 kind: Service
 metadata:
-    labels:
-        lb.buttah.cloud/class: internet
-    name: svc-a
-    namespace: test
+  labels:
+    lb.buttah.cloud/class: internet
+  name: svc-a
+  namespace: test
 spec:
-    type: LoadBalancer
-    ports:
-    - name: test
-        port: 1234
-        protocol: TCP
-        targetPort: test
-    selector:
-        app.kubernetes.io/name: test
+  type: LoadBalancer
+  ports:
+  - name: test
+    port: 1234
+    protocol: TCP
+    targetPort: test
+  selector:
+    app.kubernetes.io/name: test
 ```
 The "MGMT Cluster" runs a CNI that implements a load balancer for services of type LoadBalancer. This implementation supports the ```lb.buttah.cloud/class``` label with values ```intern``` or ```internet```.
 
@@ -47,23 +47,23 @@ To implement the load balancer solution, an ```EventSource``` is required to lis
 apiVersion: lib.projectsveltos.io/v1beta1
 kind: EventSource
 metadata:
- name: loadbalancer-class-handler
+  name: loadbalancer-class-handler
 spec:
- collectResources: true
- resourceSelectors:
- - group: ""
-   version: "v1"
-   kind: "Service"
-   evaluate: |
-     function evaluate()
-       hs = {}
-       hs.matching = false
-       if obj.metadata.labels["lb.buttah.cloud/class"] ~= nil  then
-         hs.matching = true
-         return hs
-       end
-       return hs
-     end
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Service"
+    evaluate: |
+      function evaluate()
+        hs = {}
+        hs.matching = false
+        if obj.metadata.labels["lb.buttah.cloud/class"] ~= nil then
+          hs.matching = true
+          return hs
+        end
+        return hs
+      end
 ```
 
 ## EventTriger
@@ -124,7 +124,7 @@ data:
           targetPort: {{ $port.nodePort }}
         {{- end }}
       selector:
-          cluster.x-k8s.io/cluster-name: "{{ .Cluster.metadata.name }}"
+        cluster.x-k8s.io/cluster-name: "{{ .Cluster.metadata.name }}"
       type: LoadBalancer
 ---
 apiVersion: v1
@@ -134,7 +134,7 @@ metadata:
   namespace: projectsveltos
   annotations:
     projectsveltos.io/instantiate: "true"
-data: 
+data:
   cp.yaml: |
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
@@ -142,7 +142,7 @@ data:
       name: "lbs-{{ cat .Resource.metadata.name .Resource.metadata.namespace .Cluster.metadata.name | sha1sum }}"
       annotations:
         lb.buttah.cloud/name: "{{ .Resource.metadata.name }}"
-        lb.buttah.cloud/namespace: "{{ .Resource.metadata.namespace }}"      
+        lb.buttah.cloud/namespace: "{{ .Resource.metadata.namespace }}"
     spec:
       clusterRefs:
       - apiVersion: lib.projectsveltos.io/v1beta1
@@ -260,47 +260,47 @@ After the addon-manager executes both ```ClusterProfiles```, the following resou
 apiVersion: v1
 kind: Service
 metadata:
-    labels:
-        lb.buttah.cloud/class: internet
-    name: lb-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672
-    namespace: cluster-a
+  labels:
+    lb.buttah.cloud/class: internet
+  name: lb-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672
+  namespace: cluster-a
 spec:
-    type: LoadBalancer
-    ports:
-    - name: test
-        port: 1234
-        protocol: TCP
-        targetPort: test
-    selector:
-        cluster.x-k8s.io/cluster-name: "cluster-a"
+  type: LoadBalancer
+  ports:
+  - name: test
+      port: 1234
+      protocol: TCP
+      targetPort: test
+  selector:
+      cluster.x-k8s.io/cluster-name: "cluster-a"
 status:
-    loadBalancer:
-        ingress:
-            - ip: 1.1.1.1
+  loadBalancer:
+    ingress:
+    - ip: 1.1.1.1
 ---
 # ClusterProfile deployed on MGMT CLuster from addon-manager
 apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
-    name: "lbs-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672"
-    annotations:
+  name: "lbs-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672"
+  annotations:
     lb.buttah.cloud/name: "svc-a"
     lb.buttah.cloud/namespace: "default"
 spec:
-    clusterRefs:
-    - apiVersion: lib.projectsveltos.io/v1beta1
+  clusterRefs:
+  - apiVersion: lib.projectsveltos.io/v1beta1
     kind: SveltosCluster
     name: "cluster-a"
     namespace: "cluster-a"
-    templateResourceRefs:
-    - identifier: UpstreamLB
+  templateResourceRefs:
+  - identifier: UpstreamLB
     resource:
-        apiVersion: v1
-        kind: Service
-        name: "lb-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672"
-        namespace: "cluster-a"
-    policyRefs:
-    - kind: ConfigMap
+      apiVersion: v1
+      kind: Service
+      name: "lb-894cbba1a1a9a95d0bdb13e08dbbeb6db3f2e672"
+      namespace: "cluster-a"
+  policyRefs:
+  - kind: ConfigMap
     name: loadbalancer-class-handler-status
     namespace: projectsveltos
     deploymentType: Remote
@@ -334,7 +334,7 @@ data:
 
 ![Data Path](../assets/event_loadbalancer-datapath.png)
 
-At the end the ```Service``` svc-a on the MGMT Cluster will announce the IP 1.1.1.1 to the outside world. Thus a Client can access it. The backend Service for svc-a on the MGMT Cluster is set to the nodes for cluster-a. Thus the traffic gets forwarded to these nodes using the node-port defined in the svc-a on cluster-a. 
+At the end the ```Service``` svc-a on the MGMT Cluster will announce the IP 1.1.1.1 to the outside world. Thus a Client can access it. The backend Service for svc-a on the MGMT Cluster is set to the nodes for cluster-a. Thus the traffic gets forwarded to these nodes using the node-port defined in the svc-a on cluster-a.
 
 ## Full Code to deploy
 
@@ -342,23 +342,23 @@ At the end the ```Service``` svc-a on the MGMT Cluster will announce the IP 1.1.
 apiVersion: lib.projectsveltos.io/v1beta1
 kind: EventSource
 metadata:
- name: loadbalancer-class-handler
+  name: loadbalancer-class-handler
 spec:
- collectResources: true
- resourceSelectors:
- - group: ""
-   version: "v1"
-   kind: "Service"
-   evaluate: |
-     function evaluate()
-       hs = {}
-       hs.matching = false
-       if obj.metadata.labels["lb.buttah.cloud/class"] ~= nil  then
-         hs.matching = true
-         return hs
-       end
-       return hs
-     end
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Service"
+    evaluate: |
+      function evaluate()
+        hs = {}
+        hs.matching = false
+        if obj.metadata.labels["lb.buttah.cloud/class"] ~= nil  then
+          hs.matching = true
+          return hs
+        end
+        return hs
+      end
 ---
 apiVersion: lib.projectsveltos.io/v1beta1
 kind: EventTrigger
@@ -409,7 +409,7 @@ data:
           targetPort: {{ $port.nodePort }}
         {{- end }}
       selector:
-          cluster.x-k8s.io/cluster-name: "{{ .Cluster.metadata.name }}"
+        cluster.x-k8s.io/cluster-name: "{{ .Cluster.metadata.name }}"
       type: LoadBalancer
 ---
 apiVersion: v1
@@ -419,7 +419,7 @@ metadata:
   namespace: projectsveltos
   annotations:
     projectsveltos.io/instantiate: "true"
-data: 
+data:
   cp.yaml: |
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
@@ -427,7 +427,7 @@ data:
       name: "lbs-{{ cat .Resource.metadata.name .Resource.metadata.namespace .Cluster.metadata.name | sha1sum }}"
       annotations:
         lb.buttah.cloud/name: "{{ .Resource.metadata.name }}"
-        lb.buttah.cloud/namespace: "{{ .Resource.metadata.namespace }}"      
+        lb.buttah.cloud/namespace: "{{ .Resource.metadata.namespace }}"
     spec:
       clusterRefs:
       - apiVersion: lib.projectsveltos.io/v1beta1
