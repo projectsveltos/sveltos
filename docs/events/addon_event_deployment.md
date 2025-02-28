@@ -190,6 +190,8 @@ Each EvenTrigger instance:
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 1. Contains a list of add-ons to deploy
 
+![EventTrigger and EventSource in action](../assets/event_flow.gif)
+
 For example, the below EventTrigger references the eventSource *sveltos-service* defined above.
 It references a ConfigMap that contains a *NetworkPolicy* expressed as a template.
 

@@ -58,6 +58,13 @@ nav:
   - ClusterProfile Example: 'addons/combining_all.md'
   - Deep dive into ClusterProfiles: 'addons/clusterprofile.md'
   - Deep dive into Profiles: 'addons/profile.md'
+- Resource Deployment Order:
+  - Profile Resource Deployment Order: 'deployment_order/manifest_order.md'
+  - Profile dependsOn field: 'deployment_order/depends_on.md'
+  - Profile dependsOn and validateHealths: 'deployment_order/depends_on_with_health_checks.md'
+  - Profile Tiers: 'deployment_order/tiers.md'
+  - Add-on rollout strategy: 'deployment_order/rolling_update_strategy.md'  
+  - Scenario 'Event Framework and Resource Deployment': 'deployment_order/order_with_events.md'  
 - Templating:
   - Introduction to Templates: 'template/intro_template.md'
   - Resource Manipulating Functions - Examples: 'template/examples.md'
@@ -70,13 +77,6 @@ nav:
   - Example Integration with Crossplane: 'template/crossplane.md'
   - Example Integration with External Secret Management: 'template/external_secret.md'
   - Example Integrate Sveltos with own controller: 'template/bring_your_own_controller.md'
-- Resource Deployment Order:
-  - Profile Resource Deployment Order: 'deployment_order/manifest_order.md'
-  - Profile dependsOn field: 'deployment_order/depends_on.md'
-  - Profile dependsOn and validateHealths: 'deployment_order/depends_on_with_health_checks.md'
-  - Profile Tiers: 'deployment_order/tiers.md'
-  - Add-on rollout strategy: 'deployment_order/rolling_update_strategy.md'  
-  - Scenario 'Event Framework and Resource Deployment': 'deployment_order/order_with_events.md'
 - Features:
   - Dependency Management: 'features/dependency-management.md'
   - DryRun: 'features/dryrun.md'
@@ -99,7 +99,6 @@ nav:
   - Example API Gateway with Contour: 'events/example_api_gateway_contour.md'
   - Example Cross-cluster Configuration: 'events/example_cross_cluster_configuration.md'
   - Example Loadbalancer: 'events/example_loadbalancer.md'
-  - Example Replicate Secret: 'events/secret_distribution.md'
 - Cluster Observability:
   - Notifications: 'observability/notifications.md'
   - Examples for Slack, Teams, Webex, Discord, Telegram, SMTP Notifications and k8s events: 'observability/example_addon_notification.md'

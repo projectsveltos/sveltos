@@ -66,7 +66,7 @@ spec:
       end
 ```
 
-## EventTriger
+## EventTrigger
 After deploying an ```EventSource```, an ```EventTrigger``` is needed. The ```EventTrigger``` listens to a specific ```EventSource``` and can produce new resources based on the event. This is achieved through ```EventTrigger.spec.policyRefs```.
 
 In this case, two new resources are created based on the content of two ```ConfigMaps```: ```loadbalancer-class-handler-svc``` and ```loadbalancer-class-handler-cp```. The ```ConfigMap``` ```loadbalancer-class-handler-svc``` will create a new ```Service``` by copying the ```Service.spec``` from the resource that triggered the ```EventTrigger``` (this example of svc-a from cluster-a). This can be done using the variable ```{{ .Resource }}```.
