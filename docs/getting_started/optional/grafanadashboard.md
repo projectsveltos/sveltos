@@ -19,7 +19,6 @@ The Sveltos Dashboard is designed to help users monitor key operational metrics 
 
 ![dashboard](../../assets/dashboard.png)
 
-
 ## Getting Started
 
 With the latest Sveltos release, users can take full advantage of the Sveltos Grafana dashboard. Before we start using the capabilities, ensure [Grafana](https://artifacthub.io/packages/helm/grafana/grafana) and [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus) are deployed on the **Sveltos management** cluster.

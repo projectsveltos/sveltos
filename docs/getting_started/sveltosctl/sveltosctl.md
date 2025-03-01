@@ -18,7 +18,7 @@ The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is 
 
 It offers a convenient CLI experience. The Binaries for each release are available on the [releases page](https://github.com/projectsveltos/sveltosctl/releases).
 
-The Binaries are sufficient to register worker clusters with Sveltos, query resources etc. However, if you want more capabilities like the [Snapshot](../sveltosctl/snapshot.md), use "Option 2: Run sveltosctl as a pod".
+The Binaries are sufficient to register worker clusters with Sveltos, query resources etc. However, if you want more capabilities like the [Snapshot](../sveltosctl/features/snapshot.md), use "Option 2: Run sveltosctl as a pod".
 
 ### Option 2: Run sveltosctl as Pod
 
@@ -55,3 +55,7 @@ You might also want to change the timezone of sveltosctl pod by using specific t
 
 !!! tip
     The Sveltos CLI pod cannot be used as a way to register a worker Kubernetes cluster. For that, use the Sveltos Binaries.
+
+## Next Steps
+
+Discover the `sveltoctl features` available [here](./features/dryrun.md) or continue with `Sveltos Cluster Registration` [section](../../register/register-cluster.md). 
