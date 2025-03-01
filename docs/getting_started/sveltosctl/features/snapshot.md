@@ -133,9 +133,9 @@ $ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets
 $ kubectl create configmap frontend --from-file frontend.yaml
 ```
 
-The [database.yaml](../../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, exposed via a service.
+The [database.yaml](../../../assets/snapshot_example/database.yaml) ConfigMap contains the definition of a single replica Redis Pod, exposed via a service.
 
-The [frontend.yaml](../../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write.
+The [frontend.yaml](../../../assets/snapshot_example/frontend.yaml) ConfigMap contains the definition of the guestbook application. The guestbook app uses a PHP frontend that is configured to communicate with either the Redis follower or leader Services, depending on whether the request is a read or a write.
 
 Once the ConfigMaps have been created, you can create a ClusterProfile instance:
 
@@ -161,7 +161,7 @@ $ sveltosctl show addons
 
 If you want guests to be able to access your guestbook, you must configure the frontend Service to be externally visible, so a client can request the Service from outside the Kubernetes cluster. However, a Kubernetes user can use ```kubectl port-forward``` to access the service even though it uses a ClusterIP.
 
-Cluster in this example, was created with [__make quickstart__](../install/quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
+Cluster in this example, was created with [__make quickstart__](../../install/quick_start.md) available in [addon-controller repo](https://github.com/projectsveltos/addon-controller)
 
 ```
 $ KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/frontend 8080:80
@@ -169,7 +169,7 @@ $ KUBECONFIG=test/fv/workload_kubeconfig kubectl port-forward -n test service/fr
 
 Load the page http://localhost:8080 in your browser to view your guestbook
 
-![Guestbook](../../assets/snapshot_example/guestbook.png)
+![Guestbook](../../../assets/snapshot_example/guestbook.png)
 
 The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes of the configuration over time, or for debugging purposes.
 

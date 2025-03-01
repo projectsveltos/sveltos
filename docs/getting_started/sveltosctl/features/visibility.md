@@ -55,7 +55,7 @@ Usage:
 
 Using Projectsveltos can facilitate the display of information about resources in managed clusters.
 
-Checkout the [observability section](../../observability/display_resources.md) for more details.
+Checkout the [observability section](../../../observability/display_resources.md) for more details.
 
 ```bash
 $ sveltosctl show resources --kind=pod --namespace=nginx
