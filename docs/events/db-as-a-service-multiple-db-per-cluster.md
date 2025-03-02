@@ -195,9 +195,3 @@ pepsi       pepsi-app-credentials-table   1/1           87s        113s
 ```
 !!! note
     This might take 30 seconds or so, till Cloudnative-pg Cluster comes up and a LoadBalancer IP is assigned.
-
-[^1]:
-    ```
-    KUBECONFIG=<kubeconfig of your shared cluster> kubectl create namespace pepsi 
-    KUBECONFIG=<kubeconfig of your shared cluster> kubectl label namespace pepsi postgres=required
-    ```

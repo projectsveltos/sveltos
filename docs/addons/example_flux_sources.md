@@ -187,7 +187,7 @@ $ sveltosctl show addons
 
 ## Example: Template with Git Repository/Bucket Content
 
-The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can be templates[^1].To enable templating, annotate the referenced `GitRepository` instance with __"projectsveltos.io/template: true"__.
+The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can be templates[^3].To enable templating, annotate the referenced `GitRepository` instance with __"projectsveltos.io/template: true"__.
 
 When Sveltos processes the template, it will perform the below.
 
