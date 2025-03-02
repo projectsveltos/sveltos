@@ -86,11 +86,11 @@ Following criteria can be used to narrow down the events that Sveltos will react
 
 ## Define what to do in response to an Event
 
-[EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/main/api/v1beta1/EventTrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
+[EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/refs/heads/main/api/v1beta1/eventtrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
 Each EvenTrigger instance:
 
-1. References an [EventSource](addon_event_deployment.md#event-definition) (which defines what the event is);
+1. References an [EventSource](addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 1. Contains a list of add-ons to deploy
 
