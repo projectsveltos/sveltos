@@ -24,9 +24,9 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 
 - **Mode 2:** Sveltos agents will be created, per managed cluster, in the management cluster[^2]. The agents, while centrally located, will still monitor their designated managed cluster’s API server.
 
-### Mode 1: Local Agent Mode
+### Mode 1: Local Agent Mode (Manifest)
 
-To install Sveltos in mode 1, run the commands below.
+Execute the below commands.
 
 ```sh
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
@@ -34,7 +34,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
-### Mode 2: Centralised Agent Mode
+### Mode 2: Centralised Agent Mode (Manifest)
 
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
@@ -44,31 +44,29 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/default-instances.yaml
 ```
 
-Sveltos uses the git-flow branching model. The base branch is dev. If you are looking for latest features, please use the dev branch. If you are looking for a stable version, please use the main branch or tags labeled as v0.x.x.
-
 !!! warning
-    Both deployments will perform the Sveltos installation in the `projectsveltos` namespace.
+    Both deployment methods install Sveltos in the `projectsveltos` namespace.
 
 !!! tip 
-    For production environments, using a release tag instead of the 'main' branch is recommended to ensure a smooth upgrade process for Sveltos applications.
+    To try out the latest developed features, use the `dev` branch. For **production** environments, using a release tag instead of the 'main' branch is recommended to ensure a smooth upgrade process for Sveltos applications.
 
 ## Deployment Options
 
-Sveltos can be installed as a Helm chart or with Kustomize. By default, **Mode 1** will get deployed unless otherwise specified.
+Sveltos can be installed as a `Helm Chart` or with `Kustomize`. By default, **Mode 1** will get deployed unless otherwise specified.
 
 !!! warning
-    Ensure Sveltos is deployed in the `projectsveltos` namespace. This is a requirement.
+    Ensure Sveltos is deployed in the `projectsveltos` namespace.
 
 ### Helm Installation
 
 !!! note
-    When deploying Sveltos with Helm, the `helm upgrade` command won't automatically update Sveltos's Custom Resource Definitions (CRDs) if they have changed in the new chart version. This is a standard Helm behavior to prevent accidental changes to CRDs that might disrupt existing resources.  Therefore, you must manually update the CRDs before upgrading Sveltos itself.
+    When deploying Sveltos with Helm, the `helm upgrade` command will not automatically update Sveltos's Custom Resource Definitions (CRDs) if they have changed in the new chart version. This is a standard Helm behavior to prevent accidental changes to CRDs that might disrupt existing resources. Manually update of the CRDs before upgrading Sveltos is required.
     ```sh
-    kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/crds/sveltos_crds.yaml
+    $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/crds/sveltos_crds.yaml
     ```
     Sveltos offers a dedicated Helm chart for managing its CRDs, which is the recommended and most reliable approach.
     ```sh
-    helm install projectsveltos/sveltos-crds  projectsveltos/sveltos-crds
+    $ helm install projectsveltos/sveltos-crds projectsveltos/sveltos-crds
     ``` 
 ```sh
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
@@ -112,7 +110,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 ## Sveltos Verification
 
-Get the Sveltos status and verify that all pods are Up and Running.
+Get the Sveltos status and verify that all pods are **Up** and **Running**.
 
 ```
 projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
@@ -123,21 +121,19 @@ projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
-## Sveltos Dashboard
+## Optional Components
 
-The Sveltos Dashboard is an optional component of Sveltos. To include it in the deployment, follow the instructions found in the [dashboard](./dashboard.md) section.
+### Sveltos Dashboard
 
-!!! note
-    **_v0.38.4_** is the first Sveltos release that includes the dashboard and it is compatible with Kubernetes **_v1.28.0_** and higher.
+To include the Sveltos Dashboard, follow the instructions found in the [dashboard](../optional/dashboard.md) section.
 
-## Grafana Dashboard
-Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. Instructions on setting up the Grafana dashboard can be found in the [sveltos-grafana dashboard](./grafanadashboard.md) section.
-
-![dashboard](../../assets/dashboard.png)
+### Grafana Dashboard
+Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. More can be found in the [Sveltos Grafana Dashboard](../optional/grafanadashboard.md) section.
 
 ## Next Steps
 
-Continue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
+Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
 
 [^1]: sveltos-agent will be deployed if there is at least one Classifier instance in the management cluster. Drift detection manager will be deployed if there is a ClusterProfile instance with SyncMode set to *ContinuousWithDriftDetection*.
 [^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
+[^3]: Sveltos collects **minimal**, **anonymised** data. That includes the `version information` alognside `cluster management data` (number of managed SveltosClusters, CAPI clusters, number of ClusterProdiles/Profiles and ClusterSummaries). To **opt-out**, for Helm-based installations use ```helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set telemetry.disabled=true``` and for manual deployment use the ```--disable-telemetry=true``` flag in the Sveltos `addon-controller` configuration.

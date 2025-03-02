@@ -21,9 +21,10 @@ This section is designed to help users get started with the Sveltos template fea
 Imagine we want to set up Calico CNI on several CAPI powered clusters, **automatically** fetching **Pod CIDRs** from each cluster. Sveltos `ClusterProfile` definition lets you create a configuration with these details, and it will **automatically** deploy Calico to all **matching** clusters.
 
 In the example below, we use the Sveltos cluster label `env=fv` to identify all clusters that should use Calico as their CNI.
+Because the values are expressed as a template, Sveltos will dynamically replace the `{{ range ... }}` with the **actual CIDRs** from each target cluster. Calico will get configured with the **correct Pod CIDRs** for every cluster. No manual intervention is required.
 
 !!! example "Example - ClusterProfile Calico Deployment"
-    ```yaml
+    ```yaml hl_lines="18-25"
     ---
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
@@ -54,7 +55,7 @@ In the example below, we use the Sveltos cluster label `env=fv` to identify all 
 The entire __helmCharts__ section can be defined as a template
 
 !!! example "Example - HelmCharts Section Defined as a Template"
-    ```yaml
+    ```yaml hl_lines="21-24"
     ---
     apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
@@ -65,7 +66,7 @@ The entire __helmCharts__ section can be defined as a template
         matchLabels:
           env: fv
       syncMode: Continuous
-      templateResourceRefs:
+      templateResourceRefs: # Instruct Sveltos to fetch the Cluster instance so it reacts to **any** Cluster change
       - resource:
           apiVersion: cluster.x-k8s.io/v1beta1
           kind: Cluster
@@ -84,9 +85,9 @@ The entire __helmCharts__ section can be defined as a template
         helmChartAction:  Install
     ```
 
-Likewise, we can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
-
 ## Example - Deploy Kyverno with different replicas
+
+We can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
 For this example, we have two Civo clusters already registered with Sveltos. The clusters are the **Sveltos managed clusters**.
 
@@ -202,6 +203,34 @@ kyverno-background-controller   1/1     1            1           17m
 kyverno-cleanup-controller      1/1     1            1           17m
 kyverno-admission-controller    1/1     1            1           17m
 ```
+
+## Using ValuesFrom
+
+The same outcome can be achieved by leveraging Sveltos's `valuesFrom` feature.
+
+!!! example "Example - ClusterProfile Kyverno"
+    ```yaml hl_lines="18-20"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-kyverno
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: demo
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.3.3
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+        valuesFrom:
+        - kind: ConfigMap
+          name: "{{ .Cluster.metadata.name }}"
+    ```
 
 ## Example - Autoscaler Definition
 
@@ -457,183 +486,3 @@ We expose additional `InfrastructureProviderIdentity` and `InfrastructureProvide
 Note that we have 2 objects that are going to be created inside managed clusters via templating. `azure-cloud-provider` is the actual `cloud-config` that we need, and `dump-cluster-sveltos-object` is referenced here for illustrative purposes and can be used for debugging the template itself (seeing what values the reference object contains).
 
 It's worth mentioning also that template rendering status can be seen in the related `ClusterSummary` object status, this helps a lot in developing template script.
-
-## Example - Autoscaler Dynamic Resource Creation
-
-When deploying add-ons in a managed cluster, there may be a need to first dynamically create resources in the management cluster and then use their values to instantiate add-ons in the managed cluster.
-
-For example, when deploying the `autoscaler` with [ClusterAPI](https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/autoscaling.html), one option is to deploy the autoscaler in the managed cluster and provide it with a Kubeconfig to access the management cluster so it can scale up/down the nodes in the managed cluster using the ClusterAPI resources.
-
-```
-Management cluster            Managed cluster
-+---------------+             +------------+
-| mgmt/workload |             |     ?      |
-|               |  kubeconfig | ---------- |
-|               |<------------+ autoscaler |
-+---------------+             +------------+
-```
-
-We want Sveltos to take care of everything. So we instruct Sveltos to perform the following tasks for each managed cluster:
-
-1. Create a ServiceAccount for the autoscaler instance in the management cluster
-1. Deploy the autoscaler in the managed cluster
-1. Pass the autoscaler instance a Kubeconfig associated with the ServiceAccount created in step 1
-
-
-### Step 1: Create SA Management Cluster
-
-When a new cluster matches the ClusterProfile's `clusterSelector`, we want Sveltos to automatically create a *ServiceAccount* and a *Secret* for that ServiceAccount in the management cluster. To achieve this, we can reference a ConfigMap containing the necessary resources and set `deploymentType: Local` to instruct Sveltos to deploy the resources in the management cluster.
-
-```yaml
-  policyRefs:
-  - deploymentType: Local # Content of this ConfigMap will be deployed
-                          # in the management cluster
-    kind: ConfigMap
-    name: serviceaccount-autoscaler # Contain a template that will be
-                                    # instantiated and deployed in the
-                                    # management cluster
-    namespace: default
-```
-
-In the above code block, the ConfigMap named `serviceaccount-autoscaler` contains the template for the ServiceAccount and the Secret, which will be deployed in the management cluster. The `deploymentType` is set to `Local` to indicate that the resources should be deployed in the management cluster.
-
-To below the resource above, please remember to [grant Sveltos](#extra-rbacs) permissions to do so.
-
-This ServiceAccount will be given permission to manage MachineDeployment for a specific clusterAPI powered cluster (we are leaving this part out).
-
-### Step 2: Deploy Autoscaler Managed Cluster
-
-When deploying autoscaler in the managed cluster, it is necessary to provide a Kubeconfig associated with the ServiceAccount that was created earlier. This enables the autoscaler running in the managed cluster to communicate with the management cluster and scale up/down the number of machines in the cluster.
-
-To achieve this, the Secret Sveltos created in the management cluster needs to be fetched. We can do this by the use of the below code:
-
-```yaml
-  templateResourceRefs:
-  - resource:
-      kind: Secret
-      name: autoscaler
-    identifier: AutoscalerSecret
-```
-
-!!! note
-    Since we are not specifying the namespace, Sveltos will automatically fetch this Secret from the cluster namespace.
-
-Next, we need to instruct Sveltos to take the content of the ConfigMap secret-info in the default namespace and deploy it to the managed cluster (`deploymentType: Remote`).
-
-```yaml
- - deploymentType: Remote # Content of this ConfigMap will be
-                          # deployed in the managed cluster
-    kind: ConfigMap
-    name: secret-info # Contain a template that will be instantiated
-                      # and deployed in the managed cluster
-    namespace: default
-```
-
-The content of this ConfigMap is a template that uses the information contained in the Secret above:
-
-!!! example "Example - ConfigMap Definition"
-    ```yaml
-    ---
-    # This ConfigMap contains a Secret whose data section will contain token and ca.crt
-    # taken from AutoscalerSecret
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: secret-info
-      namespace: default
-      annotations:
-        projectsveltos.io/template: "true" # indicate Sveltos content of this ConfigMap is a template
-    data:
-      secret.yaml: |
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: autoscaler
-          namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
-        data:
-          token: {{ (getResource "AutoscalerSecret").data.token }}
-          ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
-    ```
-
-### Autoscaler All-in-One - YAML Definition
-
-![Dynamically create resource in management cluster](../assets/autoscaler.gif)
-
-!!! example "Example - Autoscaler Deployment"
-    ```yaml
-    ---
-    apiVersion: config.projectsveltos.io/v1beta11
-    kind: ClusterProfile
-    metadata:
-      name: deploy-resources
-    spec:
-      clusterSelector:
-        matchLabels:
-          env: fv
-      templateResourceRefs:
-      - resource:
-          kind: Secret
-          name: autoscaler
-        identifier: AutoscalerSecret
-      policyRefs:
-      - deploymentType: Local # Content of this ConfigMap will be deployed
-                              # in the management cluster
-        kind: ConfigMap
-        name: serviceaccount-autoscaler # Contain a template that will be
-                                        # instantiated and deployed in the management
-                                        # cluster
-        namespace: default
-      - deploymentType: Remote # Content of this ConfigMap will be deployed in the
-                              # managed cluster
-        kind: ConfigMap
-        name: secret-info # Contain a template that will be instantiated and deployed
-                          # in the managed cluster
-        namespace: default
-    ---
-    # This ConfigMap contains a ServiceAccount and a Secret for this ServiceAccount.
-    # Both are expressed as template and use managed cluster namespace/name
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: serviceaccount-autoscaler
-      namespace: default
-      annotations:
-        projectsveltos.io/template: "true" # indicate Sveltos content of this ConfigMap is a template
-    data:
-      autoscaler.yaml: |
-        apiVersion: v1
-        kind: ServiceAccount
-        metadata:
-          name: "{{ .Cluster.metadata.name }}-autoscaler"
-          namespace: "{{ .Cluster.metadata.namespace }}"
-        ---
-        # Secret to get serviceAccount token
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: autoscaler
-          namespace: "{{ .Cluster.metadata.namespace }}"
-          annotations:
-            kubernetes.io/service-account.name: "{{ .Cluster.metadata.name }}-autoscaler"
-        type: kubernetes.io/service-account-token
-    ---
-    # This ConfigMap contains a Secret whose data section will contain token and ca.crt
-    # taken from AutoscalerSecret
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: secret-info
-      namespace: default
-      annotations:
-        projectsveltos.io/template: "true" # indicate Sveltos content of this ConfigMap is a template
-    data:
-      config.yaml: |
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: autoscaler
-          namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
-        data:
-          token: {{ (getResource "AutoscalerSecret").data.token }}
-          ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
-    ```

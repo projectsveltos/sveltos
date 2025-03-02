@@ -116,7 +116,7 @@ $ helm list -n projectsveltos
 
 ## Next Steps
 
-Continue with the **Sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
+Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
 
 [^1]: A Sveltos ClusterProfile can deploy your Secret to managed clusters. Assuming the Secret is named __image-pull-secret__ and resides in the __default__ namespace, it will be deployed to all clusters labeled __environment: air-gapped__
 ```

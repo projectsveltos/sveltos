@@ -149,14 +149,7 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
     type: addons.projectsveltos.io/cluster-profile
     stringData:
       secret.yaml: |
-        # ExternalSecret now references the Secret created by External Secret Operator
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: eso
-          namespace: {{ (getResource "ExternalSecret").metadata.namespace }}
-        data:
-          content: {{ (getResource "ExternalSecret").data.content }}
+        {{ copy "ExternalSecret" }}
     EOF
     ```
 

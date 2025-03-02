@@ -19,7 +19,7 @@ Sveltos lets you define add-ons and applications using templates. Before deployi
 
 ![Sveltos Templates](../assets/templates.png)
 
-In this example, Sveltos retrieves the Secret __imported-secret__ from the __default__ namespace. This Secret is assigned the alias __ExternalSecret__. The template can subsequently refer to this Secret by employing the alias __ExternalSecret__.
+In this example, Sveltos retrieves the Secret **imported-secret** from the **default** namespace. This Secret is assigned the alias **ExternalSecret**. The template can subsequently refer to this Secret by employing the alias **ExternalSecret**. It can also be used with [Helm Charts](template_generic_examples.md).
 
 ## Template Functions
 
