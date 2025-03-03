@@ -10743,6 +10743,33 @@ metadata:
     name: sveltos-agent-manager-role
 rules:
     - apiGroups:
+        - ""
+      resources:
+        - configmaps
+      verbs:
+        - create
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - impersonate
+        - list
+        - watch
+    - apiGroups:
+        - apiextensions.k8s.io
+      resources:
+        - customresourcedefinitions
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
         - authentication.k8s.io
       resources:
         - tokenreviews
@@ -10757,23 +10784,51 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - classifierreports
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifierreports/status
+        - eventreports/status
+        - healthcheckreports/status
+        - reloaderreports/status
+      verbs:
+        - get
+        - patch
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers
+        - eventsources
+        - healthchecks
+      verbs:
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers/finalizers
+        - eventreports/finalizers
+        - eventsources/finalizers
+        - healthcheckreports/finalizers
+        - healthchecks/finalizers
+      verbs:
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - debuggingconfigurations
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - ""
-      resources:
-        - secrets
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - cluster.x-k8s.io
-      resources:
-        - clusters
       verbs:
         - get
         - list
@@ -10781,11 +10836,33 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - sveltosclusters
+        - eventreports
+        - healthcheckreports
+        - reloaderreports
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - reloaders
       verbs:
         - get
         - list
+        - patch
         - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - reloaders/finalizers
+      verbs:
+        - patch
+        - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -10814,27 +10891,33 @@ rules:
     - apiGroups:
         - ""
       resources:
-        - secrets
+        - configmaps
+      verbs:
+        - create
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
       verbs:
         - get
         - list
         - watch
     - apiGroups:
-        - cluster.x-k8s.io
+        - authentication.k8s.io
       resources:
-        - clusters
+        - tokenreviews
       verbs:
-        - get
-        - list
-        - watch
+        - create
     - apiGroups:
-        - lib.projectsveltos.io
+        - authorization.k8s.io
       resources:
-        - sveltosclusters
+        - subjectaccessreviews
       verbs:
-        - get
-        - list
-        - watch
+        - create
     - apiGroups:
         - lib.projectsveltos.io
       resources:
@@ -10843,6 +10926,32 @@ rules:
         - get
         - list
         - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - resourcesummaries
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - resourcesummaries/finalizers
+      verbs:
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - resourcesummaries/status
+      verbs:
+        - get
+        - patch
+        - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
