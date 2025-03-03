@@ -219,7 +219,7 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
       name: YOUR-CLUSTER-NAME
       namespace: YOUR-CLUSTER-NAMESPACE
       labels:
-        test: foo
+        foo: bar
         sveltos-agent: present
     ```
 
