@@ -13,10 +13,9 @@ authors:
 
 # Automatically Token Renewal
 
-To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl.
-However, due to potential expiration limits imposed by cloud providers, this can disrupt Sveltos' management of the cluster.
+To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl. However, due to potential expiration limits imposed by cloud providers, this can disrupt Sveltos' management of the cluster.
 
-To prevent this, configure automatic renewal: edit the SveltosCluster resource. Add or modify the tokenRequestRenewalOption section to include:
+To prevent this, configure automatic renewal: edit the `SveltosCluster` resource. Add or modify the `tokenRequestRenewalOption` section to include:
 
 ```yaml
 tokenRequestRenewalOption:
@@ -30,8 +29,7 @@ tokenRequestRenewalOption:
 
 Note that:
 <ul>
-<li>The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount.
-So, ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:</li>
+<li>The token rotation privilege is required by the token in the Secret (the Kubeconfig) itself, not by the sveltoscluster-manager’s own ServiceAccount. Ensure that the token used in the Secret has the ability to create new tokens for the ServiceAccount. For example:</li>
 </ul>
 
 ```yaml
@@ -81,7 +79,7 @@ Below is an example showing how to configure token renewal for a GKE cluster.
 To connect a Google Kubernetes Engine (GKE) cluster to Sveltos, first use `sveltosctl` to create a temporary Kubeconfig file for the GKE cluster:
 
 ```
-sveltosctl  generate kubeconfig --create --expirationSeconds=86400 >  /tmp/GKE/kubeconfig
+$ sveltosctl  generate kubeconfig --create --expirationSeconds=86400 >  /tmp/GKE/kubeconfig
 ```
 
 Remember that GKE's maximum expiration time for Kubeconfig files is 48 hours (172800 seconds).
@@ -89,7 +87,7 @@ Remember that GKE's maximum expiration time for Kubeconfig files is 48 hours (17
 Next, point sveltosctl to your Sveltos management cluster and register the GKE cluster:
 
 ```
-sveltosctl register cluster --namespace=gke --cluster=cluster --kubeconfig=/tmp/GKE/kubeconfig --labels=env=production
+$ sveltosctl register cluster --namespace=gke --cluster=cluster --kubeconfig=/tmp/GKE/kubeconfig --labels=env=production
 ```
 
 If we leave as it is, in 48 hours the Kubeconfig will expire.
@@ -98,7 +96,7 @@ To prevent the Kubeconfig from expiring and disrupting Sveltos' management of th
 Edit the SveltosCluster __cluster__ in the __gke__ namespace:
 
 ```
-kubectl edit sveltoscluster -n gke cluster
+$ kubectl edit sveltoscluster -n gke cluster
 ```
 
 Add or modify the `tokenRequestRenewalOption` section to include:

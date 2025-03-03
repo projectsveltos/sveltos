@@ -10,15 +10,18 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-Sveltos supports automatic discovery of [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. If Sveltos is deployed in a management cluster with ClusterAPI (CAPI), no further action is required for Sveltos to manage add-ons. It will watch for *clusters.cluster.x-k8s.io* instances and program those accordingly.
 
-Other clusters (on-prem, Cloud) can be registered with Sveltos easily. Sveltos can [manage Kubernetes add-ons](../addons/addons.md) on all the clusters seamlessly.
+## Sveltos Cluster Registration
+
+Sveltos supports **automatic** discovery of [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. If Sveltos is deployed in a management cluster with ClusterAPI (CAPI), no further action is required for add-ons management. It will watch for *clusters.cluster.x-k8s.io* instances and program those accordingly.
+
+Other clusters (on-prem, Cloud) can be registered with Sveltos easily. Sveltos can [manage Kubernetes add-ons](../addons/addons.md) to any cluster seamlessly.
 
 ## Register Cluster
 
-The instructions below will walk readers through registering an existing Kubernetes cluster with Sveltos for management. It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to register a cluster. To programmatically register clusters with Sveltos, consult the [section](#configuring-sveltos-clusters-programmatically).
+To register Kubernetes clusters with Sveltos, it is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").
 
-If the kubeconfig in place has multiple contexts, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster you want to register.
+If the `kubeconfig` has multiple contexes, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster to be registered. The below example will generate a kubeconfig file and register the cluster with Sveltos.
 
 ```
 $ sveltosctl register cluster \
@@ -28,42 +31,40 @@ $ sveltosctl register cluster \
     --labels=key1=value1,key2=value2
 ```
 
-The above command will generate a kubeconfig file and register the cluster with Sveltos.
+To **programmatically** register clusters with Sveltos, consult the [section](#register-sveltos-cluster-programmatically).
 
-Alternatively, if a different kubeconfig is needed, users can utilise the `sveltosctl generate kubeconfig` command. It allows Sveltos to create the required ServiceAccount alongside the kubeconfig. To proceed with the registration process, follow the steps listed below.
+??? note "Alternative Sveltos Cluster Registration"
+    If a different `kubeconfig` is needed, users can utilise the `sveltosctl generate kubeconfig` command. It allows Sveltos to create the required `ServiceAccount` alongside the `kubeconfig`. To proceed with the registration process, follow the steps listed below.
 
-1. Generate the kubeconfig: Use the `sveltosctl generate kubeconfig` command while pointing it to the cluster you want Sveltos to manage. The command will create a ServiceAccount with `cluster-admin` permissions and generate the kubeconfig based on it. [^1]
-1. Register the Cluster: Use the `sveltosctl register cluster` pointing it to the Sveltos management cluster. Provide the following options:
-    - `--namespace=<namespace>`: Namespace in the management cluster where Sveltos will store information about the registered cluster.
-    - `--cluster=<cluster name>`: A chosen name to identify the registered cluster within Sveltos.
-    - `--kubeconfig=<path to file with Kubeconfig>`: Path to the kubeconfig file generated in step 1.
-    - `--labels=<key1=value1,key2=value2>` (Optional): Comma-separated key-value pairs to define labels for the registered cluster (e.g., --labels=environment=production,tier=backend).
+    1. Generate the kubeconfig: Use the `sveltosctl generate kubeconfig` command while pointing it to the cluster you want Sveltos to manage. The command will create a ServiceAccount with `cluster-admin` permissions and generate the kubeconfig based on it. [^1]
+    1. Register the Cluster: Use the `sveltosctl register cluster` pointing it to the Sveltos management cluster. Provide the following options:
+        - `--namespace=<namespace>`: Namespace in the management cluster where Sveltos will store information about the registered cluster.
+        - `--cluster=<cluster name>`: A chosen name to identify the registered cluster within Sveltos.
+        - `--kubeconfig=<path to file with Kubeconfig>`: Path to the kubeconfig file generated in step 1.
+        - `--labels=<key1=value1,key2=value2>` (Optional): Comma-separated key-value pairs to define labels for the registered cluster (e.g., --labels=environment=production,tier=backend).
 
 
-### Registration Example
+    ### Registration Example
 
-Pointing to the **managed** cluster (Generate kubeconfig with ServiceAccount creation):
+    Pointing to the **managed** cluster (Generate kubeconfig with ServiceAccount creation):
 
-```$ sveltosctl generate kubeconfig --create > ~/.kube/prod-cluster.config```
+    ```$ sveltosctl generate kubeconfig --create > ~/.kube/prod-cluster.config```
 
-Pointing to the **management** cluster (Register the cluster):
+    Pointing to the **management** cluster (Register the cluster):
 
-```
-$ sveltosctl register cluster \
-    --namespace=monitoring \
-    --cluster=prod-cluster \
-    --kubeconfig=~/.kube/prod-cluster.config \
-    --labels=environment=production,tier=backend
-```
+    ```
+    $ sveltosctl register cluster \
+        --namespace=monitoring \
+        --cluster=prod-cluster \
+        --kubeconfig=~/.kube/prod-cluster.config \
+        --labels=environment=production,tier=backend
+    ```
 
-The example will register a cluster (i.e, creates a SveltosCluster instance) named *prod-cluster* in the *monitoring* namespace with the labels set to "environment=production" and "tier=backend".
+    The example will register a cluster (i.e, creates a SveltosCluster instance) named *prod-cluster* in the *monitoring* namespace with the labels set to "environment=production" and "tier=backend".
 
-If later on you want to change the labels assigned to the cluster, use the kubectl command below.
+    If later on you want to change the labels assigned to the cluster, use the kubectl command below.
 
-```$ kubectl edit sveltoscluster prod-cluster -n monitoring``` 
-
-!!!note
-    The command assumes `kubectl` is configured to access the Sveltos **management** cluster.
+    ```$ kubectl edit sveltoscluster prod-cluster -n monitoring``` 
 
 ## Register EKS Cluster
 Once an EKS cluster is created, perform the below steps. 
@@ -97,6 +98,16 @@ Once an EKS cluster is created, perform the below steps.
 
 !!!note
     Step #1 gives Sveltos cluster-admin privileges (that is done because we do not know in advance which add-ons we want Sveltos to deploy). We might choose to give Sveltos fewer privileges. Just keep in mind it needs enough privileges to deploy the add-ons you request to deploy.
+
+## Register RKE2 Cluster
+If you use Rancher's next-generation Kubernetes distribution [RKE2](https://docs.rke2.io/), you will only need to download the kubeconfig either from the Rancher UI under the Cluster Management section or via SSH into the RKE2 Cluster and under the */etc/rancher/rke2/rke2.yaml* directory. Run the below command.
+
+```
+$ sveltosctl register cluster \
+    --namespace=<namespace> \
+    --cluster=<cluster name> \
+    --kubeconfig=<path to file with Kubeconfig>
+```
 
 ## Register Civo Cluster
 If you use [Civo Cloud](https://www.civo.com), simply download the cluster Kubeconfig and perform the below.
@@ -144,16 +155,6 @@ If you use the **Hosted Control Plane** solution [Kamaji](https://kamaji.clastix
         --labels=tcp=tenant-00
     ```
 
-## Register RKE2 Cluster
-If you use Rancher's next-generation Kubernetes distribution [RKE2](https://docs.rke2.io/), you will only need to download the kubeconfig either from the Rancher UI under the Cluster Management section or via SSH into the RKE2 Cluster and under the */etc/rancher/rke2/rke2.yaml* directory. Run the below command.
-
-```
-$ sveltosctl register cluster \
-    --namespace=<namespace> \
-    --cluster=<cluster name> \
-    --kubeconfig=<path to file with Kubeconfig>
-```
-
 ## Register vCluster
 If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy, follow the steps below to perform a cluster registration with Sveltos.
 
@@ -187,61 +188,45 @@ If you use [vCluster](https://www.vcluster.com/) with **Helm** for multitenancy,
         --labels=env=dev
     ```
 
-## Configuring Sveltos Clusters Programmatically
+## Register Sveltos Cluster Programmatically
 
-To programmatically register clusters with Sveltos, create the following resources in the desired namespace:
+To programmatically register clusters with Sveltos, create the below resources in the **management** cluster.
 
-- **Secret**: Store the kubeconfig of the managed cluster in the data section under the key `kubeconfig`.
-- **SveltosCluster**: Represent your cluster as an SveltosCluster instance.
+- **Secret**: Store the kubeconfig of the **managed** cluster in the data section under the key `kubeconfig`.
+- **SveltosCluster**: Represent your cluster as an `SveltosCluster` instance.
 
-By default, Sveltos searches for a Secret named `<cluster-name>-sveltos-kubeconfig` in the same namespace as the SveltosCluster.
-To use a different Secret name, set the __SveltosCluster.Spec.KubeconfigName__ field to the desired name.
+By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeconfig` in the **same namespace as the SveltosCluster**. To use a different Secret name, set the __SveltosCluster.Spec.KubeconfigName__ field to the desired name.
 
-For instance, the `mgmt-sveltos-kubeconfig` Secret within the `mgmt` namespace stores the kubeconfig for the managed SveltosCluster named `mgmt`.
+### Example
 
-```
- kubectl get secret -n mgmt mgmt-sveltos-kubeconfig
-NAME                      TYPE     DATA   AGE
-mgmt-sveltos-kubeconfig   Opaque   1      2m1s
-```
+!!! example "Secret Resource"
+    ```yaml hl_lines="4-5 7"
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: YOUR-CLUSTER-NAME-sveltos-kubeconfig
+        namespace: YOUR NAMESPACE
+    data: 
+        kubeconfig: BASE64 ENCODED kubeconfig
+    type: Opaque
+    ```
 
-```yaml
-apiVersion: v1
-data:
-  kubeconfig: YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnCmNsdXN0ZXJzOgotIG5hbWU6IGxvY2FsCiAgY2x1c3RlcjoKICAgIHNlcnZlcjogaHR0cHM6Ly8xMC4xMTUuMC4xOjQ0MwogICAgY2VydGlmaWNhdGUtYXV0aG9yaXR5LWRhdGE6ICJMUzB0TFMxQ1JVZEpUaUJEUlZKVVNVWkpRMEZVUlMwdExTMHRDazFKU1VSQ1ZFTkRRV1V5WjBGM1NVSkJaMGxKVGswMWEyWkZjbkpOVTI5M1JGRlpTa3R2V2tsb2RtTk9RVkZGVEVKUlFYZEdWRVZVVFVKRlIwRXhWVVVLUVhoTlMyRXpWbWxhV0VwMVdsaFNiR042UVdWR2R6QjVUa1JGZDAxcVJYZE9la2w2VFVSb1lVWjNNSHBPUkVWM1RWUnJkMDU2U1RSTlJHaGhUVUpWZUFwRmVrRlNRbWRPVmtKQlRWUkRiWFF4V1cxV2VXSnRWakJhV0UxM1oyZEZhVTFCTUVkRFUzRkhVMGxpTTBSUlJVSkJVVlZCUVRSSlFrUjNRWGRuWjBWTENrRnZTVUpCVVVONGNuZHBaVTh4ZGxoMU1HWlpPV3BxUVVWMGIwUjFZMWhDYVdadU55OHhUUzlDUWpCelJYVnBZVFJGWTFBd2FIcGhWa1JsYTNoS1ZGRUtjMjg1UVhkb0t6QkhXRkpIUm1ocE1VWndObmxPZFRkdWFXWTNjbGhuUm1WS01FRmtWV05YZFc5VWJsZE1Ta1ppT0N0dU1HMVhUVGRMWkVkUVJFY3ZaZ3BvYjBORk1EWXhWV2xTU21kbmRFOVlSMm95VGtreGVrZFlaMUl5VlRJd01VeFZXRVlyUTNKQ0swVlZlbHBCVldGNlZUQnZhemt2TnpJNE1VbFdTbUpJQ2tzMk1VTjBkSEE1SzFOaldtVmhVSEpuWldsUlJsWk1PV1pDUzJ4d1JtaHJVbEIxZEVWUGRtUlZRaTkxVVcxd04zTllha3BrUldoNmFDdHBla3hDVlRnS1kxZHNlRWhTY1hsQlUzQnpOR1kzV0ZZNE9YVjJUbWx6T1VOUE9HeGhkMVptZFV0Q09HZFhOV1Y1VUdacWJHMU5XRWM0TjFkeVpGTm1XSEJHWVZaT01RcERjbVZxUlZORlRFNW1aalV3WkRoUVJYTjJURGxEUldobVptWlNRV2ROUWtGQlIycFhWRUpZVFVFMFIwRXhWV1JFZDBWQ0wzZFJSVUYzU1VOd1JFRlFDa0puVGxaSVVrMUNRV1k0UlVKVVFVUkJVVWd2VFVJd1IwRXhWV1JFWjFGWFFrSlVZbTltVG5CdWEyTlRUVTFRV1d4U1IyOHpVbmxJVUhKVlRGZHFRVllLUW1kT1ZraFNSVVZFYWtGTloyZHdjbVJYU214amJUVnNaRWRXZWsxQk1FZERVM0ZIVTBsaU0wUlJSVUpEZDFWQlFUUkpRa0ZSUWtaU2RHaHdUVEI2V0FwUVkxTnZkMkZ0Y25GSGVEYzNRbkZ0TUZoR0syMHlOVzFhU1d0SFRrbHNNRzVCUWxSUmFVSklNMEZpY0hSRVNHRXdMMlUwUnpWcEwyczVMMU5NY1VkaENteFplRzlRTW10TlpEUTBiVzgzTkdSYWNVcFVNMWRqT1RGd1FuTkdjR3BtZUM5TFJ6TlBRMnBOYVUxV1JrdFNTWG93WTJrNVVUTldVRWgxT0VkV1oza0tSMnM0ZVdSeU1uQTBSbmRhYVVWV2JYQTNUMHRtTldnMk5HcHpkR2cxVkhwbGJVSmpVRGh2WWxoVFJHcHJabE54ZEdablQzbG9UMGwwVlVWaWEzZzBVZ3B6U21kaGNYQkVkMUppY0dsQk5sQkdTRGRrV0hKVU5VRXJiMDlhU2taMEwxVlpMMHQzVTBaU1dWQkZUMlIwUWpGdWVVNWhTMnh4Y1c5eE9FZFNlVTgzQ2s5TU1HRkVRM1F4Vms1cFFteE5WblowZURWVGJFbDNaM3AxV0hSNlVUVXpLM3BQWkU1emNtODRZV2xGWWxaemJHd3hhMjk2Tm1rMU1HMVpNekZVTjBFS1VEUnNkMHB0VDFJelZtRkdDaTB0TFMwdFJVNUVJRU5GVWxSSlJrbERRVlJGTFMwdExTMEsiCnVzZXJzOgotIG5hbWU6IHByb2plY3RzdmVsdG9zCiAgdXNlcjoKICAgIHRva2VuOiBleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWpoMGJWTk5VRkZsWm5CT1FWTjBSSFk1ZEdZNGVuZEtRak01ZEZSR2JHWnJUVXhxVlhOdFJqSldaMVVpZlEuZXlKaGRXUWlPbHNpYUhSMGNITTZMeTlyZFdKbGNtNWxkR1Z6TG1SbFptRjFiSFF1YzNaakxtTnNkWE4wWlhJdWJHOWpZV3dpWFN3aVpYaHdJam94TnpJNU5EazVOVEl4TENKcFlYUWlPakUzTWprME9UVTVNakVzSW1semN5STZJbWgwZEhCek9pOHZhM1ZpWlhKdVpYUmxjeTVrWldaaGRXeDBMbk4yWXk1amJIVnpkR1Z5TG14dlkyRnNJaXdpYW5ScElqb2lObUptTWpNeE1qWXRZbVUxTVMwMFlUYzRMV0l3Wm1RdE5EQTBZbVEyWWpaaE5ETTFJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5STZleUp1WVcxbGMzQmhZMlVpT2lKd2NtOXFaV04wYzNabGJIUnZjeUlzSW5ObGNuWnBZMlZoWTJOdmRXNTBJanA3SW01aGJXVWlPaUp3Y205cVpXTjBjM1psYkhSdmN5SXNJblZwWkNJNkltUTFabVZqTkdRNUxURTVPVEV0TkRKbU1TMDVNemhtTFROaE16SmxaalV4WkdKbU15SjlmU3dpYm1KbUlqb3hOekk1TkRrMU9USXhMQ0p6ZFdJaU9pSnplWE4wWlcwNmMyVnlkbWxqWldGalkyOTFiblE2Y0hKdmFtVmpkSE4yWld4MGIzTTZjSEp2YW1WamRITjJaV3gwYjNNaWZRLmp3YnRVOThVWWZTVmhTblBndEVoUXhrY0NvSTNoeXV6a25YS3VxSFM5aGJBdElaamx5VlFKMFBJS20zdWRVVHJJRnVGRHRYS2V1ZDE2VlFGUW42NUxzQ3o0QVpwcEtqMEd0UjFmSGktMWlBdjZsbzFHV2JOcUZfaG1nNDFlNk5HUm9TczIwVGJfdDBZTUs5OEYybGdNZEtpbDdYRW02Zy1uTlU0Y2NPQWc4ZWJTc2V5Y0llR2lPMmhTdzdMWEdOTUdwSjJ1NXB4aThSbFdzaExXdXVkV1JQLWJOYTl1alpXNWFfV2pjaDVLdGhkaHR3dGk1WnhmcnItcnRBcjQ0Q2VVUkV4WFpUT1daM0JCeXIyMDMtN3RmVHRDcmpjYTkzTnVXUVo4TEVlOEdyRHAxVGt0UlAySlRlUW5MQlVndGV4VG42LUJtMUMyUmZILWE2OC0zelFpZwpjb250ZXh0czoKLSBuYW1lOiBzdmVsdG9zLWNvbnRleHQKICBjb250ZXh0OgogICAgY2x1c3RlcjogbG9jYWwKICAgIG5hbWVzcGFjZTogcHJvamVjdHN2ZWx0b3MKICAgIHVzZXI6IHByb2plY3RzdmVsdG9zCmN1cnJlbnQtY29udGV4dDogc3ZlbHRvcy1jb250ZXh0
-kind: Secret
-metadata:
-  creationTimestamp: "2024-10-21T07:32:01Z"
-  name: mgmt-sveltos-kubeconfig
-  namespace: mgmt
-  resourceVersion: "2484"
-  uid: 6c128e0b-fe75-4984-9a50-46644bf52dee
-type: Opaque
-```
+!!! example "SveltosCluster Resource"
+    ```yaml hl_lines="2 4-5"
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: SveltosCluster
+    metadata:
+      name: YOUR-CLUSTER-NAME
+      namespace: YOUR-CLUSTER-NAMESPACE
+      labels:
+        foo: bar
+        sveltos-agent: present
+    ```
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1beta1
-kind: SveltosCluster
-metadata:
-  creationTimestamp: "2024-10-21T07:32:01Z"
-  generation: 1
-  labels:
-    projectsveltos.io/k8s-version: v1.31.0
-    sveltos-agent: present
-  name: mgmt
-  namespace: mgmt
-  resourceVersion: "2614"
-  uid: 70290cbe-515a-4093-807f-84d3ad0faa41
-spec:
-  consecutiveFailureThreshold: 3
-  tokenRequestRenewalOption:
-    renewTokenRequestInterval: 1h0m0s
-status:
-  connectionStatus: Healthy
-  ready: true
-  version: v1.31.0
-```
+!!!tip
+    To get an idea on how an already registered cluster looks like, check out the Sveltos `mgmt` cluster using the command ```kubectl get sveltoscluster mgmt -n mgmt -o yaml```.
 
 
-[^1]: !!!note
-        As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
+[^1]:
+    As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
+[^2]: To manage add-ons and deployments on the **management cluster**, by default, Sveltos automatically registers the cluster as `mgmt` in the `mgmt` namespace. Follow the standard Sveltos label concept to mark it for deployments.
