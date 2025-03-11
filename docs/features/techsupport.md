@@ -20,7 +20,7 @@ The Techsupport Custom Resource Definition (CRD) within Sveltos provides this ca
 !!! note
     This is a **premium** feature which is not available by default. Schools and non-profits can contact us for free access. Maintaining Sveltos has costs, in addition to the time we invest. Features like tech support help us cover these expenses.
 
-## Motiviation
+## Motivation
 
 Because software inevitably contains bugs, it's impossible to know in advance exactly what data will be needed for debugging. This diagnostic tool aims to gather a comprehensive initial dataset, reducing the need for repeated requests to users.
 

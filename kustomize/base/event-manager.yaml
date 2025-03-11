@@ -200,10 +200,10 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.50.0
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.50.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
