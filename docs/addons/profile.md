@@ -248,6 +248,9 @@ spec:
   - profile_b
 ```
 
+Sveltos automatically resolves and deploys the prerequisite profiles specified in the DependsOn field. Sveltos will analyze the dependency graph, identify
+the required prerequisite profiles, and ensure they are deployed to the same clusters.
+
 ### Spec.ContinueOnError
 
 *ContinueOnError* configures Sveltos' error handling. When true, errors are logged, but deployment continues. When false (default), Sveltos stops at the first error and retries the failing resource. For instance, if deploying three Helm charts, a failure during the second chart's deployment will halt the process, and Sveltos will retry the second chart. Only if ContinueOnError is true will Sveltos proceed to deploy the third chart *before retrying* the second chart.
