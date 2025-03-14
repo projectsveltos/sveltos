@@ -247,4 +247,21 @@ cd ../../; rm -rf tmp
 
 echo ""
 
+# techsupport
+echo ""
+echo "processing techsupport"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/techsupport.git
+cd techsupport
+git checkout ${branch}
+touch ../../kustomize/base/techsupport.yaml
+for f in manifest/*.yaml
+do 
+    echo "Processing $f file..."
+    cat $f >> ../../kustomize/base/techsupport.yaml
+done
+cd ../../; rm -rf tmp
+
+echo ""
+
 echo ""

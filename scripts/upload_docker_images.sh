@@ -105,6 +105,15 @@ git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
 
+# techsupport
+echo "processing techsupport"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/techsupport.git
+cd techsupport
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
+
 # dashboard
 echo "processing dashboard"
 rm -rf tmp; mkdir tmp; cd tmp
