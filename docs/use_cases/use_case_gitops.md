@@ -1,5 +1,5 @@
 ---
-title: Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Flux Integration
+title: Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | GitOps | Flux Integration
 description: Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.
 tags:
     - Kubernetes
