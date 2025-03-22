@@ -4000,6 +4000,7 @@ spec:
                                         - paths
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             extraAnnotations:
                                 additionalProperties:
                                     type: string
@@ -4025,12 +4026,17 @@ spec:
                                 items:
                                     properties:
                                         chartName:
-                                            description: ChartName is the chart name
-                                            minLength: 1
+                                            description: |-
+                                                ChartName is the chart name
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                Must be defined otherwise.
                                             type: string
                                         chartVersion:
-                                            description: ChartVersion is the chart version
-                                            minLength: 1
+                                            description: |-
+                                                ChartVersion is the chart version
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         helmChartAction:
                                             default: Install
@@ -4267,11 +4273,36 @@ spec:
                                             minLength: 1
                                             type: string
                                         repositoryName:
-                                            description: RepositoryName is the name helm chart repository
-                                            minLength: 1
+                                            description: |-
+                                                RepositoryName is the name helm chart repository
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         repositoryURL:
-                                            description: RepositoryURL is the URL helm chart repository
+                                            description: |-
+                                                RepositoryURL is the URL helm chart repository
+                                                It can point to a traditional HTTP-based repository or an OCI registry.
+                                                Examples:
+                                                  - HTTP Repository: https://charts.example.com/stable
+                                                  - OCI Registry: oci://registry.example.com/namespace/charts
+                                                  - GitHub Pages: https://<username>.github.io/<repository>/
+                                                  - Any other valid URL where Helm charts are hosted.
+
+                                                Alternatively, it can be a Flux source reference:
+                                                  <flux source kind>://<flux source namespace>/<flux source name>/<path>
+
+                                                Where:
+                                                  - <flux source kind> is the type of Flux source (gitrepository, ocirepository, bucket).
+                                                  - <flux source namespace> and <flux source name> are the namespace and name of the Flux Source in the management cluster.
+                                                  - <path> is the path within the source repository where the Helm charts are located.
+
+                                                For instance:
+                                                  gitrepository://flux-system/flux-system/charts/projectsveltos
+
+                                                Assuming there is a Flux GitRepository named 'flux-system' in the 'flux-system' namespace
+                                                syncing 'https://github.com/projectsveltos/helm-charts.git/', and the Helm charts are
+                                                located in the 'charts/projectsveltos' directory of that repository.
                                             minLength: 1
                                             type: string
                                         values:
@@ -4320,14 +4351,25 @@ spec:
                                                 type: object
                                             type: array
                                     required:
-                                        - chartName
-                                        - chartVersion
                                         - releaseName
                                         - releaseNamespace
-                                        - repositoryName
                                         - repositoryURL
                                     type: object
+                                    x-kubernetes-validations:
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.repositoryName) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.repositoryName) >= 1 : true'
                                 type: array
+                                x-kubernetes-list-type: atomic
                             kustomizationRefs:
                                 description: |-
                                     Kustomization refs is a list of kustomization paths. Kustomization will
@@ -4460,6 +4502,7 @@ spec:
                                         - namespace
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             maxConsecutiveFailures:
                                 description: |-
                                     The maximum number of consecutive deployment failures that Sveltos will permit.
@@ -4542,6 +4585,7 @@ spec:
                                         - patch
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             policyRefs:
                                 description: |-
                                     PolicyRefs references all the ConfigMaps/Secrets/Flux Sources containing kubernetes resources
@@ -4599,6 +4643,7 @@ spec:
                                         - name
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             reloader:
                                 default: false
                                 description: |-
@@ -4810,10 +4855,17 @@ spec:
                                         - version
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                         type: object
                     status:
                         description: Status defines the observed state of ClusterProfile/Profile
                         properties:
+                            dependenciesHash:
+                                description: |-
+                                    DependenciesHash is a hash representing the set of clusters where this ClusterProfile
+                                    must be deployed, based on the combined configuration of its dependencies.
+                                format: byte
+                                type: string
                             matchingClusters:
                                 description: |-
                                     MatchingClusterRefs reference all the clusters currently matching
@@ -5555,6 +5607,7 @@ spec:
                                                 - paths
                                             type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     extraAnnotations:
                                         additionalProperties:
                                             type: string
@@ -5580,12 +5633,17 @@ spec:
                                         items:
                                             properties:
                                                 chartName:
-                                                    description: ChartName is the chart name
-                                                    minLength: 1
+                                                    description: |-
+                                                        ChartName is the chart name
+                                                        This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                        Must be defined otherwise.
                                                     type: string
                                                 chartVersion:
-                                                    description: ChartVersion is the chart version
-                                                    minLength: 1
+                                                    description: |-
+                                                        ChartVersion is the chart version
+                                                        This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                        It is ignored if RepositoryURL references a Flux Source.
+                                                        Must be defined otherwise.
                                                     type: string
                                                 helmChartAction:
                                                     default: Install
@@ -5822,11 +5880,36 @@ spec:
                                                     minLength: 1
                                                     type: string
                                                 repositoryName:
-                                                    description: RepositoryName is the name helm chart repository
-                                                    minLength: 1
+                                                    description: |-
+                                                        RepositoryName is the name helm chart repository
+                                                        This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                        It is ignored if RepositoryURL references a Flux Source.
+                                                        Must be defined otherwise.
                                                     type: string
                                                 repositoryURL:
-                                                    description: RepositoryURL is the URL helm chart repository
+                                                    description: |-
+                                                        RepositoryURL is the URL helm chart repository
+                                                        It can point to a traditional HTTP-based repository or an OCI registry.
+                                                        Examples:
+                                                          - HTTP Repository: https://charts.example.com/stable
+                                                          - OCI Registry: oci://registry.example.com/namespace/charts
+                                                          - GitHub Pages: https://<username>.github.io/<repository>/
+                                                          - Any other valid URL where Helm charts are hosted.
+
+                                                        Alternatively, it can be a Flux source reference:
+                                                          <flux source kind>://<flux source namespace>/<flux source name>/<path>
+
+                                                        Where:
+                                                          - <flux source kind> is the type of Flux source (gitrepository, ocirepository, bucket).
+                                                          - <flux source namespace> and <flux source name> are the namespace and name of the Flux Source in the management cluster.
+                                                          - <path> is the path within the source repository where the Helm charts are located.
+
+                                                        For instance:
+                                                          gitrepository://flux-system/flux-system/charts/projectsveltos
+
+                                                        Assuming there is a Flux GitRepository named 'flux-system' in the 'flux-system' namespace
+                                                        syncing 'https://github.com/projectsveltos/helm-charts.git/', and the Helm charts are
+                                                        located in the 'charts/projectsveltos' directory of that repository.
                                                     minLength: 1
                                                     type: string
                                                 values:
@@ -5875,14 +5958,25 @@ spec:
                                                         type: object
                                                     type: array
                                             required:
-                                                - chartName
-                                                - chartVersion
                                                 - releaseName
                                                 - releaseNamespace
-                                                - repositoryName
                                                 - repositoryURL
                                             type: object
+                                            x-kubernetes-validations:
+                                                - message: ChartName must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartName) >= 1 : true'
+                                                - message: ChartName must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartName) >= 1 : true'
+                                                - message: ChartVersion must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartVersion) >= 1 : true'
+                                                - message: ChartVersion must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartVersion) >= 1 : true'
+                                                - message: RepositoryName must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''http'') ? size(self.repositoryName) >= 1 : true'
+                                                - message: RepositoryName must be defined
+                                                  rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.repositoryName) >= 1 : true'
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     kustomizationRefs:
                                         description: |-
                                             Kustomization refs is a list of kustomization paths. Kustomization will
@@ -6015,6 +6109,7 @@ spec:
                                                 - namespace
                                             type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     maxConsecutiveFailures:
                                         description: |-
                                             The maximum number of consecutive deployment failures that Sveltos will permit.
@@ -6097,6 +6192,7 @@ spec:
                                                 - patch
                                             type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     policyRefs:
                                         description: |-
                                             PolicyRefs references all the ConfigMaps/Secrets/Flux Sources containing kubernetes resources
@@ -6154,6 +6250,7 @@ spec:
                                                 - name
                                             type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     reloader:
                                         default: false
                                         description: |-
@@ -6365,6 +6462,7 @@ spec:
                                                 - version
                                             type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                 type: object
                             clusterType:
                                 description: ClusterType is the type of Cluster
@@ -6727,6 +6825,7 @@ spec:
                                         - paths
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             extraAnnotations:
                                 additionalProperties:
                                     type: string
@@ -6752,12 +6851,17 @@ spec:
                                 items:
                                     properties:
                                         chartName:
-                                            description: ChartName is the chart name
-                                            minLength: 1
+                                            description: |-
+                                                ChartName is the chart name
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                Must be defined otherwise.
                                             type: string
                                         chartVersion:
-                                            description: ChartVersion is the chart version
-                                            minLength: 1
+                                            description: |-
+                                                ChartVersion is the chart version
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         helmChartAction:
                                             default: Install
@@ -6994,11 +7098,36 @@ spec:
                                             minLength: 1
                                             type: string
                                         repositoryName:
-                                            description: RepositoryName is the name helm chart repository
-                                            minLength: 1
+                                            description: |-
+                                                RepositoryName is the name helm chart repository
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         repositoryURL:
-                                            description: RepositoryURL is the URL helm chart repository
+                                            description: |-
+                                                RepositoryURL is the URL helm chart repository
+                                                It can point to a traditional HTTP-based repository or an OCI registry.
+                                                Examples:
+                                                  - HTTP Repository: https://charts.example.com/stable
+                                                  - OCI Registry: oci://registry.example.com/namespace/charts
+                                                  - GitHub Pages: https://<username>.github.io/<repository>/
+                                                  - Any other valid URL where Helm charts are hosted.
+
+                                                Alternatively, it can be a Flux source reference:
+                                                  <flux source kind>://<flux source namespace>/<flux source name>/<path>
+
+                                                Where:
+                                                  - <flux source kind> is the type of Flux source (gitrepository, ocirepository, bucket).
+                                                  - <flux source namespace> and <flux source name> are the namespace and name of the Flux Source in the management cluster.
+                                                  - <path> is the path within the source repository where the Helm charts are located.
+
+                                                For instance:
+                                                  gitrepository://flux-system/flux-system/charts/projectsveltos
+
+                                                Assuming there is a Flux GitRepository named 'flux-system' in the 'flux-system' namespace
+                                                syncing 'https://github.com/projectsveltos/helm-charts.git/', and the Helm charts are
+                                                located in the 'charts/projectsveltos' directory of that repository.
                                             minLength: 1
                                             type: string
                                         values:
@@ -7047,14 +7176,25 @@ spec:
                                                 type: object
                                             type: array
                                     required:
-                                        - chartName
-                                        - chartVersion
                                         - releaseName
                                         - releaseNamespace
-                                        - repositoryName
                                         - repositoryURL
                                     type: object
+                                    x-kubernetes-validations:
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.repositoryName) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.repositoryName) >= 1 : true'
                                 type: array
+                                x-kubernetes-list-type: atomic
                             kustomizationRefs:
                                 description: |-
                                     Kustomization refs is a list of kustomization paths. Kustomization will
@@ -7187,6 +7327,7 @@ spec:
                                         - namespace
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             maxConsecutiveFailures:
                                 description: |-
                                     The maximum number of consecutive deployment failures that Sveltos will permit.
@@ -7269,6 +7410,7 @@ spec:
                                         - patch
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             policyRefs:
                                 description: |-
                                     PolicyRefs references all the ConfigMaps/Secrets/Flux Sources containing kubernetes resources
@@ -7326,6 +7468,7 @@ spec:
                                         - name
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             reloader:
                                 default: false
                                 description: |-
@@ -7537,10 +7680,17 @@ spec:
                                         - version
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                         type: object
                     status:
                         description: Status defines the observed state of ClusterProfile/Profile
                         properties:
+                            dependenciesHash:
+                                description: |-
+                                    DependenciesHash is a hash representing the set of clusters where this ClusterProfile
+                                    must be deployed, based on the combined configuration of its dependencies.
+                                format: byte
+                                type: string
                             matchingClusters:
                                 description: |-
                                     MatchingClusterRefs reference all the clusters currently matching
@@ -8218,6 +8368,8 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
+    labels:
+        control-plane: addon-controller
     name: addon-controller
     namespace: projectsveltos
 spec:
@@ -8257,7 +8409,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.51.1
                   command:
                     - /manager
                   env:
@@ -8269,7 +8421,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8329,8 +8481,10 @@ spec:
           port: metrics
           scheme: https
           tlsConfig:
-            caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
             insecureSkipVerify: true
+    namespaceSelector:
+        matchNames:
+            - projectsveltos
     selector:
         matchLabels:
             control-plane: addon-controller
@@ -8508,7 +8662,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8667,7 +8821,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8897,10 +9051,10 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.51.1
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9042,6 +9196,15 @@ spec:
                                     This field will be directly transferred to the ClusterProfile Spec
                                     generated in response to events.
                                 type: boolean
+                            dependsOn:
+                                description: |-
+                                    DependsOn specifies a list of other ClusterProfiles that this instance depends on.
+                                    In any managed cluster that matches this ClusterProfile, the add-ons and applications
+                                    defined in this instance will not be deployed until all add-ons and applications in the
+                                    ClusterProfiles listed as dependencies are deployed.
+                                items:
+                                    type: string
+                                type: array
                             destinationClusterSelector:
                                 description: |-
                                     DestinationClusterSelector identifies the cluster where add-ons will be deployed.
@@ -9191,12 +9354,17 @@ spec:
                                 items:
                                     properties:
                                         chartName:
-                                            description: ChartName is the chart name
-                                            minLength: 1
+                                            description: |-
+                                                ChartName is the chart name
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                Must be defined otherwise.
                                             type: string
                                         chartVersion:
-                                            description: ChartVersion is the chart version
-                                            minLength: 1
+                                            description: |-
+                                                ChartVersion is the chart version
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         helmChartAction:
                                             default: Install
@@ -9433,11 +9601,36 @@ spec:
                                             minLength: 1
                                             type: string
                                         repositoryName:
-                                            description: RepositoryName is the name helm chart repository
-                                            minLength: 1
+                                            description: |-
+                                                RepositoryName is the name helm chart repository
+                                                This field is used only when RepositoryURL points to a traditional HTTP or OCI repository.
+                                                It is ignored if RepositoryURL references a Flux Source.
+                                                Must be defined otherwise.
                                             type: string
                                         repositoryURL:
-                                            description: RepositoryURL is the URL helm chart repository
+                                            description: |-
+                                                RepositoryURL is the URL helm chart repository
+                                                It can point to a traditional HTTP-based repository or an OCI registry.
+                                                Examples:
+                                                  - HTTP Repository: https://charts.example.com/stable
+                                                  - OCI Registry: oci://registry.example.com/namespace/charts
+                                                  - GitHub Pages: https://<username>.github.io/<repository>/
+                                                  - Any other valid URL where Helm charts are hosted.
+
+                                                Alternatively, it can be a Flux source reference:
+                                                  <flux source kind>://<flux source namespace>/<flux source name>/<path>
+
+                                                Where:
+                                                  - <flux source kind> is the type of Flux source (gitrepository, ocirepository, bucket).
+                                                  - <flux source namespace> and <flux source name> are the namespace and name of the Flux Source in the management cluster.
+                                                  - <path> is the path within the source repository where the Helm charts are located.
+
+                                                For instance:
+                                                  gitrepository://flux-system/flux-system/charts/projectsveltos
+
+                                                Assuming there is a Flux GitRepository named 'flux-system' in the 'flux-system' namespace
+                                                syncing 'https://github.com/projectsveltos/helm-charts.git/', and the Helm charts are
+                                                located in the 'charts/projectsveltos' directory of that repository.
                                             minLength: 1
                                             type: string
                                         values:
@@ -9486,13 +9679,23 @@ spec:
                                                 type: object
                                             type: array
                                     required:
-                                        - chartName
-                                        - chartVersion
                                         - releaseName
                                         - releaseNamespace
-                                        - repositoryName
                                         - repositoryURL
                                     type: object
+                                    x-kubernetes-validations:
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartName) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: ChartVersion must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.chartVersion) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''http'') ? size(self.repositoryName) >= 1 : true'
+                                        - message: RepositoryName must be defined
+                                          rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.repositoryName) >= 1 : true'
                                 type: array
                             kustomizationRefs:
                                 description: |-
@@ -10452,10 +10655,10 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.51.1
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -10653,10 +10856,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.51.1
+                    - --registry=
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11149,7 +11353,7 @@ spec:
                     - --agent-in-mgmt-cluster
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.51.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11223,7 +11427,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.51.1
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
