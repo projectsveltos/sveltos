@@ -497,6 +497,8 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
+    labels:
+        control-plane: addon-controller
     name: addon-controller
     namespace: projectsveltos
 spec:

@@ -24,19 +24,18 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
       apiVersion: config.projectsveltos.io/v1beta1
       kind: ClusterProfile
       metadata:
-        name: kyverno-policies
+        name: kyverno-admission-policies
       spec:
         clusterSelector:
           matchLabels:
-            env: fv
+            env: production
         dependsOn:
         - kyverno
         policyRefs:
-        - deploymentType: Remote
-          kind: ConfigMap
+        - kind: ConfigMap
           name: disallow-latest-tag
           namespace: default
-          kind: ConfigMap
+        - kind: ConfigMap
           name: restrict-wildcard-verbs
           namespace: default
     ```
@@ -50,9 +49,6 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
       metadata:
         name: kyverno
       spec:
-        clusterSelector:
-          matchLabels:
-            env: fv
         helmCharts:
         - chartName: kyverno/kyverno
           chartVersion: v3.3.3
@@ -62,6 +58,10 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
           repositoryName: kyverno
           repositoryURL: https://kyverno.github.io/kyverno/
     ```
+
+Notice that the `kyverno` ClusterProfile lacks a **clusterSelector**, so it won't be deployed on its own. The `kyverno-admission-policies` ClusterProfile, however, has a **clusterSelector** targeting production clusters and a **dependsOn** field referencing kyverno. When this profile is created, Sveltos resolves its dependency. Any time a cluster matches the `kyverno-admission-policies` selector, Sveltos will first deploy the Kyverno Helm chart and then apply the admission policies.
+
+![Dependencies](../assets/kyverno-dependencies.png)
 
 ### Example: Kyverno and Kubevela ClusterProfile
 
@@ -101,7 +101,7 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
     spec:
       clusterSelector:
         matchLabels:
-          env: prod
+          env: production
       helmCharts:
       - repositoryURL:    https://kyverno.github.io/kyverno/
         repositoryName:   kyverno
@@ -133,18 +133,37 @@ The above example is equivalent of creating a single ClusterProfile.
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
-      - repositoryURL: https://kubevela.github.io/charts
-        repositoryName: kubevela
-        chartName: kubevela/vela-core
-        chartVersion: 1.9.6
-        releaseName: kubevela-core-latest
+      - repositoryURL:    https://kubevela.github.io/charts
+        repositoryName:   kubevela
+        chartName:        kubevela/vela-core
+        chartVersion:     1.9.6
+        releaseName:      kubevela-core-latest
         releaseNamespace: vela-system
-        helmChartAction: Install
+        helmChartAction:  Install
     ```
 
 !!! note
     Separate ClusterProfiles promote better organization and maintainability, especially when different teams or individuals manage different ClusterProfiles.
 
+
+## Recursive Resolution
+
+One of the key strengths of Sveltos is its ability to handle complex dependency chains. Imagine an application `whoami` that relies on `Traefik`, which itself depends on `cert-manager`. With Sveltos, you only need to define the deployment of `whoami`. Sveltos will automatically resolve the entire dependency tree, ensuring `cert-manager` and `Traefik` are deployed in the correct order before `whoami` is deployed. This simplifies complex deployments by automating the resolution of multi-level dependencies.
+
+![Recursive Resolution](../assets/dependency-chain.png)
+
+## Dependency Deduplication
+
+Sveltos efficiently manages shared dependencies by ensuring they are deployed only once per cluster, even when multiple profiles rely on them. This optimizes resource utilization and prevents redundant deployments. Crucially, Sveltos maintains a dependency as long as any profile requiring it is active on the cluster.
+
+![Dependency Deduplication](../assets/dependency-deduplication.png)
+
+When `frontend-app-1` is deployed, Sveltos first deploys `postgresql` and then `backend-service-1`, resolving the dependency chain. Subsequently, when `frontend-app-2` is deployed to the same cluster, Sveltos recognizes that `postgresql` is already present and avoids redeploying it. If `frontend-app-1` is then removed, `backend-service-1` is also removed. However, `postgresql` persists because it remains a dependency of `frontend-app-2`. Finally, only when `frontend-app-2` is removed will Sveltos remove `backend-service-2` and `postgresql`, as they are no longer required by any active profile on the cluster.
+
+👉 [Read more here:](https://github.com/gianlucam76/devops-tutorial/tree/main/application-dependencies)
+
+
+[^1]: To create the ConfigMaps with Kyverno policies used in this example
 ```
 $ wget https://raw.githubusercontent.com/kyverno/policies/main/best-practices/disallow-latest-tag/disallow-latest-tag.yaml
 
@@ -154,4 +173,3 @@ $ wget https://raw.githubusercontent.com/kyverno/policies/main/other/res/restric
 
 $ kubectl create configmap restrict-wildcard-verbs --from-file restrict-wildcard-verbs.yaml
 ```
-[^1]: To create the ConfigMaps with Kyverno policies used in this example

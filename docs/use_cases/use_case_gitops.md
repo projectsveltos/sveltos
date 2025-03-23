@@ -15,7 +15,7 @@ authors:
 
 ## Sveltos and GitOps
 
-With the latest release of Sveltos [v0.23.0](https://github.com/orgs/projectsveltos/discussions/454), the existing integration with [Flux](https://fluxcd.io/) was enhanced. Flux is a CNCF graduate project that offers users a set of continuous and progressive delivery solutions for Kubernetes which are open and extensible.
+Flux is a CNCF graduate project that offers users a set of continuous and progressive delivery solutions for Kubernetes which are open and extensible.
 
 By integrating Flux with Sveltos, we can automate the synchronisation of any desired Kubernetes add-ons, removing any manual steps and ensuring consistent deployment across different clusters.
 

@@ -15,7 +15,7 @@ authors:
 
 ## Flux Sources
 
-Sveltos can seamlessly integrate with __Flux__[^1] to automatically deploy YAML manifests stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
+Sveltos can seamlessly integrate with __Flux__[^1] to automatically deploy YAML manifests or Helm charts stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
 
 ## Example: Deploy Nginx Ingress with Flux and Sveltos
 
@@ -143,7 +143,7 @@ Define a ClusterProfile to deploy the Kyverno helm chart.
     EOF
     ```
 
-Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the _kyverno__ directory as the source of the deployment.
+Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the __kyverno__ directory as the source of the deployment.
 
 This directory contains a list of Kyverno ClusterPolicies.
 
@@ -183,6 +183,39 @@ $ sveltosctl show addons
 | default/clusterapi-workload | kyverno.io:ClusterPolicy |           | disallow-latest-tag       | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
 | default/clusterapi-workload | kyverno.io:ClusterPolicy |           | require-ro-rootfs         | N/A     | 2024-03-23 11:40:11 +0100 CET | ClusterProfile/deploy-kyverno-policies |
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
+```
+
+## Example: Referencing Helm Charts from Flux Sources
+
+Sveltos allows you to deploy Helm charts from various sources, including traditional HTTP repositories, OCI registries, and **Flux sources**. This section focuses on using Flux sources as your Helm chart repository.
+
+**Using a Flux GitRepository as a Helm Chart Source**
+
+To deploy Helm charts from a Flux GitRepository, specify the `repositoryURL` in your `ClusterProfile` using the following format:
+
+```
+<flux source kind>://<flux source namespace>/<flux source name>/<path>
+```
+
+Where:
+
+* `<flux source kind>`: The type of Flux source. For Git repositories, this is `gitrepository` (other options are `ocirepository`and `bucket`).
+* `<flux source namespace>`: The Kubernetes namespace where the Flux GitRepository is located.
+* `<flux source name>`: The name of the Flux GitRepository.
+* `<path>`: The relative path within the Git repository to the directory containing the Helm charts.
+
+**Example Scenario**
+
+Let's assume you have a Flux GitRepository named `flux-system` in the `flux-system` namespace. This GitRepository is configured to synchronize the `https://github.com/projectsveltos/helm-charts.git/` repository. The Helm charts you want to deploy are located in the `charts/projectsveltos` directory within this Git repository.
+
+To deploy the `projectsveltos` chart using Sveltos, you would create a `ClusterProfile` with the following `helmCharts` section:
+
+```yaml
+helmCharts:
+  - repositoryURL:    gitrepository://flux-system/flux-system/charts/projectsveltos
+    releaseName:      projectsveltos
+    releaseNamespace: projectsveltos
+    helmChartAction:  Install
 ```
 
 ## Example: Template with Git Repository/Bucket Content
