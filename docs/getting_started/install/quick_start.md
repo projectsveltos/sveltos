@@ -13,11 +13,7 @@ authors:
 
 ## What is Sveltos?
 
-Sveltos is a **set of Kubernetes controllers** deployed in a **management** cluster. According to the [ClusterAPI documentation](https://cluster-api.sigs.k8s.io/user/concepts):
-
-> "A management cluster is a Kubernetes cluster that manages the lifecycle of Workload Clusters. A Management Cluster is also where one or more providers run, and where resources such as Machines are stored."
-
-From the **management** cluster, Sveltos can manage **add-ons** and **applications** to a fleet of clusters (on-prem, Cloud).
+Sveltos is a **set of Kubernetes controllers** deployed in a **management** cluster. A management cluster is the centralised Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.
 
 ## Before you Begin
 
@@ -226,7 +222,7 @@ service/nginx-service   ClusterIP   10.225.11.22   <none>        80/TCP    46s
 
 ✅ Success! As expected, Sveltos deployed all the referenced resources on your managed cluster! 🚀
 
-For **advanced** examples, check out the [Kong Gateway API](https://github.com/projectsveltos/demos/tree/main/kong-apigateway) example deployment.
+For **advanced** examples, check out the [Kong Gateway API](https://github.com/projectsveltos/demos/tree/main/kong-apigateway) deployment.
 
 ## Deploy Kustomize using GitOps
 
