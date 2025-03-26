@@ -11,9 +11,11 @@ authors:
     - Gianluca Mardente
 ---
 
-# Introduction to Sveltos Dashboard
+## Introduction to Sveltos Dashboard
 
 The Sveltos Dashboard is not part of the generic Sveltos installation. It is a manifest file that will get deployed on top. If you have not installed Sveltos, check out the documentation [here](../install/install.md).
+
+### kubectl Installation
 
 To deploy the Sveltos Dashboard, run the below command using the `kubectl` utility.
 
