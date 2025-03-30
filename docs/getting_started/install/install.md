@@ -129,6 +129,8 @@ projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 
 To include the Sveltos Dashboard, follow the instructions found in the [dashboard](../optional/dashboard.md) section.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/FjFtvrG8LWQ?si=mS8Yt2pleGsl33fK" title="Sveltos Dashboard" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ### Grafana Dashboard
 Sveltos also offers a Grafana dashboard to help users track and visualize a number of operational metrics. More can be found in the [Sveltos Grafana Dashboard](../optional/grafanadashboard.md) section.
 
