@@ -230,4 +230,5 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
 
 [^1]:
     As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
-[^2]: To manage add-ons and deployments on the **management cluster**, by default, Sveltos automatically registers the cluster as `mgmt` in the `mgmt` namespace. Follow the standard Sveltos label concept to mark it for deployments.
+[^2]: 
+    To manage add-ons and deployments on the **management cluster**, by default, Sveltos automatically registers the cluster as `mgmt` in the `mgmt` namespace. Follow the standard Sveltos label concept to mark it for deployments.
