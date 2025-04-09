@@ -32,7 +32,7 @@ Because the values are expressed as a template, Sveltos will dynamically replace
       name: deploy-calico
     spec:
       clusterSelector:
-        matchSelector:
+        matchLabels:
           env: fv
       helmCharts:
       - repositoryURL:    https://projectcalico.docs.tigera.io/charts
