@@ -103,9 +103,7 @@ spec:
 
 ### Example: Update Helm Chart Values From Referenced ConfigMap/Secret
 
-Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets. 
-
-For instance, we can create a file __cleanup-controller.yaml__ with following content
+Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets. For example, we can create a file named __cleanup-controller.yaml__ with below content.
 
 ```yaml
 cleanupController:
@@ -121,13 +119,13 @@ cleanupController:
     successThreshold: 1
 ```
 
-then create a ConfigMap with it:
+Create a `ConfigMap` using the above context.
 
 ```
-kubectl create configmap cleanup-controller --from-file=cleanup-controller.yaml
+$ kubectl create configmap cleanup-controller --from-file=cleanup-controller.yaml
 ```
 
-We can then create another file __admission_controller.yaml__ with following content:
+Then, create another file named __admission_controller.yaml__ with the below content.
 
 ```yaml
 admissionController:
@@ -143,13 +141,13 @@ admissionController:
     successThreshold: 1
 ```
 
-then create a ConfigMap with it:
+Create a `ConfigMap` using the above context.
 
 ```
-kubectl create configmap admission-controller --from-file=admission-controller.yaml
+$ kubectl create configmap admission-controller --from-file=admission-controller.yaml
 ```
 
-Within your Sveltos ClusterProfile YAML, define the helmCharts section. Here, you specify the Helm chart details and leverage valuesFrom to reference the ConfigMaps. 
+Within the Sveltos `ClusterProfile` YAML, define the helmCharts section. We can specify the Helm chart details and leverage the _valuesFrom_ to reference the `ConfigMaps`. 
 This injects the probe configurations from the ConfigMaps into the Helm chart values during deployment.
 
 ```yaml
@@ -183,29 +181,29 @@ spec:
       namespace: default
 ```
 
-### Template-based Referencing for ValuesFrom
+### Example: Template-based Referencing for ValuesFrom
 
-In the ValuesFrom section, we can express ConfigMap and Secret names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+In the _ValuesFrom_ section, we can express `ConfigMap` and `Secret` **names** as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.
 
-Available cluster information :
+#### Available cluster information
 
-- cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name` 
-- cluster type: `.Cluster.kind` 
+- **cluster namespace**: `.Cluster.metadata.namespace`
+- **cluster name**: `.Cluster.metadata.name`
+- **cluster type**: `.Cluster.kind`
 
-Consider two SveltosCluster instances in the _civo_ namespace:
+Consider two SveltosCluster instances in the _civo_ namespace.
 
 ```bash
-kubectl get sveltoscluster -n civo --show-labels
+$ kubectl get sveltoscluster -n civo --show-labels
 NAME             READY   VERSION        LABELS
 pre-production   true    v1.29.2+k3s1   env=civo,projectsveltos.io/k8s-version=v1.29.2
 production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v1.28.7
 ```
 
-Additionally, there are four ConfigMaps within the civo namespace:
+Four `ConfigMaps` are available within the same namespace.
 
 ```bash
-kubectl get configmap -n civo                                                   
+$ kubectl get configmap -n civo                                                   
 NAME                                  DATA   AGE
 admission-controller-pre-production   1      8m31s
 admission-controller-production       1      7m49s
@@ -213,12 +211,24 @@ cleanup-controller-pre-production     1      8m48s
 cleanup-controller-production         1      8m1s
 ```
 
-The only difference between these ConfigMaps is the admissionController and cleanupController __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
+```yaml
+apiVersion: v1
+data:
+  cleanup-values: |
+    cleanupController:
+      replicas: 1
+kind: ConfigMap
+metadata:
+  name: cleanup-controller-pre-production
+  namespace: civo
+```
 
-Following ClusterProfile:
+The only difference between the `ConfigMaps` is the `admissionController` and `cleanupController` __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
+
+The below points are included in the `ClusterProfile`.
 
 1. *Matches both SveltosClusters*
-2. *Dynamic ConfigMap Selection*:
+1. *Dynamic ConfigMap Selection*:
     - For the `pre-production` cluster, the profile should use the `admission-controller-pre-production` and `cleanup-controller-pre-production` ConfigMaps.
     - For the `production` cluster, the profile should use the `admission-controller-production` and `cleanup-controller-production` ConfigMaps.
 
@@ -354,7 +364,7 @@ Create a file named _secret_content.yaml_ with the following content, replacing 
 Use the kubectl command to create a Secret named _regcred_ in the _default_ namespace. This command references the _secret_content.yaml_ file and sets the type to _kubernetes.io/dockerconfigjson_:
 
 ```
-kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson         
+$ kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson         
 ```
 
 Now you can configure your ClusterProfile to use the newly created Secret for authentication with Docker Hub.
@@ -396,7 +406,7 @@ Another example using Harbor (on Civo cluster) as registry. Create a file named 
 Create a Secret named _credentials_ in the default namespace using the secret_harbor_content.yaml file:
 
 ```
-kubectl create secret generic credentials --from-file=.dockerconfigjson=secret_harbor_content.yaml --type=kubernetes.io/dockerconfigjson
+$ kubectl create secret generic credentials --from-file=.dockerconfigjson=secret_harbor_content.yaml --type=kubernetes.io/dockerconfigjson
 ```
 
 Update your ClusterProfile YAML to reference the credentials Secret:

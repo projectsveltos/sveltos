@@ -128,40 +128,40 @@ Consider the provided ClusterProfile, when we have two workload clusters matchin
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
 
 
-### Template-based Referencing for ConfigMaps and Secrets
+### Example: Template-based Referencing for ConfigMaps and Secrets
 
-We can express ConfigMap and Secret names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+We can express `ConfigMap` and `Secret` **names** as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.
 
-Available cluster information :
+#### Available cluster information
 
-- cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name`
-- cluster type: `.Cluster.kind`
+- **cluster namespace**: `.Cluster.metadata.namespace`
+- **cluster name**: `.Cluster.metadata.name`
+- **cluster type**: `.Cluster.kind`
 
-Consider two SveltosCluster instances in the _civo_ namespace:
+Consider two SveltosCluster instances in the _civo_ namespace.
 
 ```bash
-kubectl get sveltoscluster -n civo --show-labels
+$ kubectl get sveltoscluster -n civo --show-labels
 NAME             READY   VERSION        LABELS
 pre-production   true    v1.29.2+k3s1   env=civo,projectsveltos.io/k8s-version=v1.29.2
 production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v1.28.7
 ```
 
-Additionally, there are two ConfigMaps named _nginx-pre-production_ and _nginx-production_ (both containing a _nginx_ deployment) within the civo namespace:
+Two `ConfigMaps` named _nginx-pre-production_ and _nginx-production_ exist in the same namespace.
 
 ```bash
-kubectl get configmap -n civo
+$ kubectl get configmap -n civo
 NAME                   DATA   AGE
 nginx-pre-production   2      4m59s
 nginx-production       2      4m41s
 ```
 
-The only difference between these ConfigMaps is the __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
+The only difference between the `ConfigMaps` is the __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
 
-Following ClusterProfile:
+The below points are included in the `ClusterProfile`.
 
 1. *Matches both SveltosClusters*
-2. *Dynamic ConfigMap Selection*:
+1. *Dynamic ConfigMap Selection*:
     - For the `pre-production` cluster, the profile should use the `nginx-pre-production` ConfigMap.
     - For the `production` cluster, the profile should use the `nginx-production` ConfigMap.
 
@@ -178,7 +178,7 @@ spec:
   - name: nginx-{{ .Cluster.metadata.name }}
     kind: ConfigMap
 ```
-This approach provides a flexible and centralized way to reference ConfigMaps and Secrets based on cluster information.
+The demonstrated approach provides a **flexible** and **centralized** way to reference `ConfigMaps` and `Secrets` based on the availanle cluster information.
 
 ## Template
 
