@@ -137,9 +137,10 @@ spec:
                     - --diagnostics-address=:8443
                     - --v=5
                     - --report-mode=0
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

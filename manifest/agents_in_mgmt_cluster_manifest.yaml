@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: accessrequests.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -137,7 +137,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: classifierreports.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -223,7 +223,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: classifiers.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -554,7 +554,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clusterhealthchecks.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -981,7 +981,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clustersets.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1222,7 +1222,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: debuggingconfigurations.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1302,7 +1302,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: eventreports.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1442,7 +1442,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: eventsources.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1606,7 +1606,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: healthcheckreports.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1757,7 +1757,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: healthchecks.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1883,7 +1883,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: reloaderreports.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -1991,7 +1991,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: reloaders.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -2065,7 +2065,384 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
+    name: resourcesummaries.lib.projectsveltos.io
+spec:
+    group: lib.projectsveltos.io
+    names:
+        kind: ResourceSummary
+        listKind: ResourceSummaryList
+        plural: resourcesummaries
+        singular: resourcesummary
+    scope: Namespaced
+    versions:
+        - name: v1beta1
+          schema:
+            openAPIV3Schema:
+                description: ResourceSummary is the Schema for the ResourceSummary API
+                properties:
+                    apiVersion:
+                        description: |-
+                            APIVersion defines the versioned schema of this representation of an object.
+                            Servers should convert recognized schemas to the latest internal value, and
+                            may reject unrecognized values.
+                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                        type: string
+                    kind:
+                        description: |-
+                            Kind is a string value representing the REST resource this object represents.
+                            Servers may infer this from the endpoint the client submits requests to.
+                            Cannot be updated.
+                            In CamelCase.
+                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                        type: string
+                    metadata:
+                        type: object
+                    spec:
+                        description: ResourceSummarySpec defines the desired state of ResourceSummary
+                        properties:
+                            chartResources:
+                                description: Resources deployed by ClusterSummary because of referenced Helm charts
+                                items:
+                                    properties:
+                                        chartName:
+                                            description: ChartName is the chart name
+                                            minLength: 1
+                                            type: string
+                                        group:
+                                            description: Resources deployed by ClusterSummary because of helm charts
+                                            items:
+                                                properties:
+                                                    group:
+                                                        description: Group of the resource deployed in the Cluster.
+                                                        type: string
+                                                    ignoreForConfigurationDrift:
+                                                        default: false
+                                                        description: |-
+                                                            IgnoreForConfigurationDrift indicates to not track resource
+                                                            for configuration drift detection.
+                                                        type: boolean
+                                                    kind:
+                                                        description: Kind of the resource deployed in the Cluster.
+                                                        minLength: 1
+                                                        type: string
+                                                    name:
+                                                        description: Name of the resource deployed in the Cluster.
+                                                        minLength: 1
+                                                        type: string
+                                                    namespace:
+                                                        description: |-
+                                                            Namespace of the resource deployed in the Cluster.
+                                                            Empty for resources scoped at cluster level.
+                                                        type: string
+                                                    version:
+                                                        description: Version of the resource deployed in the Cluster.
+                                                        type: string
+                                                required:
+                                                    - group
+                                                    - ignoreForConfigurationDrift
+                                                    - kind
+                                                    - name
+                                                    - version
+                                                type: object
+                                            type: array
+                                        releaseName:
+                                            description: ReleaseName is the chart release
+                                            minLength: 1
+                                            type: string
+                                        releaseNamespace:
+                                            description: ReleaseNamespace is the namespace release will be installed
+                                            minLength: 1
+                                            type: string
+                                    required:
+                                        - chartName
+                                        - releaseName
+                                        - releaseNamespace
+                                    type: object
+                                type: array
+                            kustomizeResources:
+                                description: |-
+                                    KustomizeResources deployed by ClusterSummary because of referenced
+                                    KustomizationRef
+                                items:
+                                    properties:
+                                        group:
+                                            description: Group of the resource deployed in the Cluster.
+                                            type: string
+                                        ignoreForConfigurationDrift:
+                                            default: false
+                                            description: |-
+                                                IgnoreForConfigurationDrift indicates to not track resource
+                                                for configuration drift detection.
+                                            type: boolean
+                                        kind:
+                                            description: Kind of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        name:
+                                            description: Name of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        namespace:
+                                            description: |-
+                                                Namespace of the resource deployed in the Cluster.
+                                                Empty for resources scoped at cluster level.
+                                            type: string
+                                        version:
+                                            description: Version of the resource deployed in the Cluster.
+                                            type: string
+                                    required:
+                                        - group
+                                        - ignoreForConfigurationDrift
+                                        - kind
+                                        - name
+                                        - version
+                                    type: object
+                                type: array
+                            patches:
+                                description: |-
+                                    Defines additional inline patches specifically designed to exclude certain fields from
+                                    configuration drift evaluation.
+                                items:
+                                    description: |-
+                                        Patch contains an inline StrategicMerge or JSON6902 patch, and the target the patch should
+                                        be applied to.
+                                    properties:
+                                        patch:
+                                            description: |-
+                                                Patch contains an inline StrategicMerge patch or an inline JSON6902 patch with
+                                                an array of operation objects.
+                                                These values can be static or leverage Go templates for dynamic customization.
+                                                When expressed as templates, the values are filled in using information from
+                                                resources within the management cluster before deployment (Cluster and TemplateResourceRefs)
+                                            type: string
+                                        target:
+                                            description: Target points to the resources that the patch document should be applied to.
+                                            properties:
+                                                annotationSelector:
+                                                    description: |-
+                                                        AnnotationSelector is a string that follows the label selection expression
+                                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                                                        It matches with the resource annotations.
+                                                    type: string
+                                                group:
+                                                    description: |-
+                                                        Group is the API group to select resources from.
+                                                        Together with Version and Kind it is capable of unambiguously identifying and/or selecting resources.
+                                                        https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                                                    type: string
+                                                kind:
+                                                    description: |-
+                                                        Kind of the API Group to select resources from.
+                                                        Together with Group and Version it is capable of unambiguously
+                                                        identifying and/or selecting resources.
+                                                        https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                                                    type: string
+                                                labelSelector:
+                                                    description: |-
+                                                        LabelSelector is a string that follows the label selection expression
+                                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#api
+                                                        It matches with the resource labels.
+                                                    type: string
+                                                name:
+                                                    description: Name to match resources with.
+                                                    type: string
+                                                namespace:
+                                                    description: Namespace to select resources from.
+                                                    type: string
+                                                version:
+                                                    description: |-
+                                                        Version of the API Group to select resources from.
+                                                        Together with Group and Kind it is capable of unambiguously identifying and/or selecting resources.
+                                                        https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
+                                                    type: string
+                                            type: object
+                                    required:
+                                        - patch
+                                    type: object
+                                type: array
+                            resources:
+                                description: Resources deployed by ClusterSummary because of referenced ConfigMaps/Secrets
+                                items:
+                                    properties:
+                                        group:
+                                            description: Group of the resource deployed in the Cluster.
+                                            type: string
+                                        ignoreForConfigurationDrift:
+                                            default: false
+                                            description: |-
+                                                IgnoreForConfigurationDrift indicates to not track resource
+                                                for configuration drift detection.
+                                            type: boolean
+                                        kind:
+                                            description: Kind of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        name:
+                                            description: Name of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        namespace:
+                                            description: |-
+                                                Namespace of the resource deployed in the Cluster.
+                                                Empty for resources scoped at cluster level.
+                                            type: string
+                                        version:
+                                            description: Version of the resource deployed in the Cluster.
+                                            type: string
+                                    required:
+                                        - group
+                                        - ignoreForConfigurationDrift
+                                        - kind
+                                        - name
+                                        - version
+                                    type: object
+                                type: array
+                        type: object
+                    status:
+                        description: ResourceSummaryStatus defines the status of ResourceSummary
+                        properties:
+                            helmResourceHashes:
+                                description: HelmResourceHashes specifies list of resource plus hash.
+                                items:
+                                    properties:
+                                        group:
+                                            description: Group of the resource deployed in the Cluster.
+                                            type: string
+                                        hash:
+                                            description: Hash is the hash of a resource's data.
+                                            type: string
+                                        ignoreForConfigurationDrift:
+                                            default: false
+                                            description: |-
+                                                IgnoreForConfigurationDrift indicates to not track resource
+                                                for configuration drift detection.
+                                            type: boolean
+                                        kind:
+                                            description: Kind of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        name:
+                                            description: Name of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        namespace:
+                                            description: |-
+                                                Namespace of the resource deployed in the Cluster.
+                                                Empty for resources scoped at cluster level.
+                                            type: string
+                                        version:
+                                            description: Version of the resource deployed in the Cluster.
+                                            type: string
+                                    required:
+                                        - group
+                                        - ignoreForConfigurationDrift
+                                        - kind
+                                        - name
+                                        - version
+                                    type: object
+                                type: array
+                            helmResourcesChanged:
+                                description: Helm Resources changed.
+                                type: boolean
+                            kustomizeResourceHashes:
+                                description: KustomizeResourceHashes specifies a list of resource plus hash
+                                items:
+                                    properties:
+                                        group:
+                                            description: Group of the resource deployed in the Cluster.
+                                            type: string
+                                        hash:
+                                            description: Hash is the hash of a resource's data.
+                                            type: string
+                                        ignoreForConfigurationDrift:
+                                            default: false
+                                            description: |-
+                                                IgnoreForConfigurationDrift indicates to not track resource
+                                                for configuration drift detection.
+                                            type: boolean
+                                        kind:
+                                            description: Kind of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        name:
+                                            description: Name of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        namespace:
+                                            description: |-
+                                                Namespace of the resource deployed in the Cluster.
+                                                Empty for resources scoped at cluster level.
+                                            type: string
+                                        version:
+                                            description: Version of the resource deployed in the Cluster.
+                                            type: string
+                                    required:
+                                        - group
+                                        - ignoreForConfigurationDrift
+                                        - kind
+                                        - name
+                                        - version
+                                    type: object
+                                type: array
+                            kustomizeResourcesChanged:
+                                description: KustomizeResources changed.
+                                type: boolean
+                            resourceHashes:
+                                description: ResourceHashes specifies a list of resource plus hash
+                                items:
+                                    properties:
+                                        group:
+                                            description: Group of the resource deployed in the Cluster.
+                                            type: string
+                                        hash:
+                                            description: Hash is the hash of a resource's data.
+                                            type: string
+                                        ignoreForConfigurationDrift:
+                                            default: false
+                                            description: |-
+                                                IgnoreForConfigurationDrift indicates to not track resource
+                                                for configuration drift detection.
+                                            type: boolean
+                                        kind:
+                                            description: Kind of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        name:
+                                            description: Name of the resource deployed in the Cluster.
+                                            minLength: 1
+                                            type: string
+                                        namespace:
+                                            description: |-
+                                                Namespace of the resource deployed in the Cluster.
+                                                Empty for resources scoped at cluster level.
+                                            type: string
+                                        version:
+                                            description: Version of the resource deployed in the Cluster.
+                                            type: string
+                                    required:
+                                        - group
+                                        - ignoreForConfigurationDrift
+                                        - kind
+                                        - name
+                                        - version
+                                    type: object
+                                type: array
+                            resourcesChanged:
+                                description: Resources changed.
+                                type: boolean
+                        type: object
+                type: object
+          served: true
+          storage: true
+          subresources:
+            status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+    annotations:
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: rolerequests.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -2333,7 +2710,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: sets.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -2574,7 +2951,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: sveltosclusters.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -2916,7 +3293,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: techsupports.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -3392,6 +3769,11 @@ spec:
           subresources:
             status: {}
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: projectsveltos
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -3425,16 +3807,11 @@ subjects:
       name: addon-controller
       namespace: projectsveltos
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: projectsveltos
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clusterconfigurations.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -3793,7 +4170,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clusterprofiles.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -5048,7 +5425,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clusterreports.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -5366,7 +5743,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: clustersummaries.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -6618,7 +6995,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: profiles.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -8213,6 +8590,8 @@ rules:
         - lib.projectsveltos.io
       resources:
         - clustersets
+        - reloaders
+        - resourcesummaries
         - sets
       verbs:
         - create
@@ -8248,6 +8627,14 @@ rules:
         - get
         - list
         - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - resourcesummaries/status
+      verbs:
+        - get
+        - list
+        - update
     - apiGroups:
         - source.toolkit.fluxcd.io
       resources:
@@ -8409,7 +8796,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.0
                   command:
                     - /manager
                   env:
@@ -8421,7 +8808,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8662,7 +9049,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8821,7 +9208,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -8896,6 +9283,17 @@ kind: ClusterRole
 metadata:
     name: hc-manager-role
 rules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - update
+        - watch
     - apiGroups:
         - ""
       resources:
@@ -9006,6 +9404,14 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - healthcheckreports/status
+      verbs:
+        - get
+        - list
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - sveltosclusters
       verbs:
         - get
@@ -9051,10 +9457,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.0
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9100,7 +9507,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.17.2
+        controller-gen.kubebuilder.io/version: v0.17.3
     name: eventtriggers.lib.projectsveltos.io
 spec:
     group: lib.projectsveltos.io
@@ -10584,6 +10991,14 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - eventreports/status
+      verbs:
+        - get
+        - list
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - eventtriggers
       verbs:
         - create
@@ -10655,10 +11070,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.0
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -10856,11 +11272,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.0
                     - --registry=
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -10950,28 +11366,12 @@ rules:
         - ""
       resources:
         - configmaps
+        - secrets
       verbs:
         - create
         - get
         - list
         - update
-        - watch
-    - apiGroups:
-        - '*'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - impersonate
-        - list
-        - watch
-    - apiGroups:
-        - apiextensions.k8s.io
-      resources:
-        - customresourcedefinitions
-      verbs:
-        - get
-        - list
         - watch
     - apiGroups:
         - authentication.k8s.io
@@ -10989,6 +11389,9 @@ rules:
         - lib.projectsveltos.io
       resources:
         - classifierreports
+        - eventreports
+        - healthcheckreports
+        - reloaderreports
       verbs:
         - create
         - delete
@@ -11013,22 +11416,13 @@ rules:
         - classifiers
         - eventsources
         - healthchecks
+        - reloaders
       verbs:
         - get
         - list
         - patch
         - update
         - watch
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
-        - classifiers/finalizers
-        - eventreports/finalizers
-        - eventsources/finalizers
-        - healthcheckreports/finalizers
-        - healthchecks/finalizers
-      verbs:
-        - update
     - apiGroups:
         - lib.projectsveltos.io
       resources:
@@ -11038,35 +11432,30 @@ rules:
         - list
         - watch
     - apiGroups:
-        - lib.projectsveltos.io
+        - '*'
       resources:
-        - eventreports
-        - healthcheckreports
-        - reloaderreports
+        - '*'
       verbs:
-        - create
-        - delete
         - get
         - list
-        - patch
-        - update
         - watch
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - reloaders
+        - sveltosclusters
+        - sveltosclusters/status
       verbs:
         - get
         - list
-        - patch
         - watch
     - apiGroups:
-        - lib.projectsveltos.io
+        - cluster.x-k8s.io
       resources:
-        - reloaders/finalizers
+        - clusters
       verbs:
-        - patch
-        - update
+        - get
+        - list
+        - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -11096,19 +11485,12 @@ rules:
         - ""
       resources:
         - configmaps
+        - secrets
       verbs:
         - create
         - get
         - list
         - update
-        - watch
-    - apiGroups:
-        - '*'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - list
         - watch
     - apiGroups:
         - authentication.k8s.io
@@ -11156,6 +11538,23 @@ rules:
         - get
         - patch
         - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - sveltosclusters
+        - sveltosclusters/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters
+      verbs:
+        - get
+        - list
+        - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -11351,9 +11750,10 @@ spec:
                     - --v=5
                     - --report-mode=0
                     - --agent-in-mgmt-cluster
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11427,7 +11827,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.52.0
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:

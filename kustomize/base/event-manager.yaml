@@ -129,6 +129,14 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - eventreports/status
+      verbs:
+        - get
+        - list
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - eventtriggers
       verbs:
         - create
@@ -200,10 +208,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.0
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.52.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
