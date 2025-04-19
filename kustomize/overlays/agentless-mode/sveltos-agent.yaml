@@ -18,28 +18,12 @@ rules:
   - ""
   resources:
   - configmaps
+  - secrets
   verbs:
   - create
   - get
   - list
   - update
-  - watch
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - get
-  - impersonate
-  - list
-  - watch
-- apiGroups:
-  - apiextensions.k8s.io
-  resources:
-  - customresourcedefinitions
-  verbs:
-  - get
-  - list
   - watch
 - apiGroups:
   - authentication.k8s.io
@@ -57,6 +41,9 @@ rules:
   - lib.projectsveltos.io
   resources:
   - classifierreports
+  - eventreports
+  - healthcheckreports
+  - reloaderreports
   verbs:
   - create
   - delete
@@ -81,22 +68,13 @@ rules:
   - classifiers
   - eventsources
   - healthchecks
+  - reloaders
   verbs:
   - get
   - list
   - patch
   - update
   - watch
-- apiGroups:
-  - lib.projectsveltos.io
-  resources:
-  - classifiers/finalizers
-  - eventreports/finalizers
-  - eventsources/finalizers
-  - healthcheckreports/finalizers
-  - healthchecks/finalizers
-  verbs:
-  - update
 - apiGroups:
   - lib.projectsveltos.io
   resources:
@@ -106,35 +84,30 @@ rules:
   - list
   - watch
 - apiGroups:
-  - lib.projectsveltos.io
+  - '*'
   resources:
-  - eventreports
-  - healthcheckreports
-  - reloaderreports
+  - '*'
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
 - apiGroups:
   - lib.projectsveltos.io
   resources:
-  - reloaders
+  - sveltosclusters
+  - sveltosclusters/status
   verbs:
   - get
   - list
-  - patch
   - watch
 - apiGroups:
-  - lib.projectsveltos.io
+  - cluster.x-k8s.io 
   resources:
-  - reloaders/finalizers
+  - clusters
   verbs:
-  - patch
-  - update
+  - get
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
