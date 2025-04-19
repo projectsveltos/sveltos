@@ -129,6 +129,14 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - eventreports/status
+      verbs:
+        - get
+        - list
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - eventtriggers
       verbs:
         - create
@@ -201,6 +209,7 @@ spec:
                     - --capi-onboard-annotation=
                     - --v=5
                     - --version=main
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
                   image: docker.io/projectsveltos/event-manager:main

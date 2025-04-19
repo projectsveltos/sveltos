@@ -12,6 +12,17 @@ rules:
     - apiGroups:
         - ""
       resources:
+        - configmaps
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - ""
+      resources:
         - events
       verbs:
         - create
@@ -119,6 +130,14 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - healthcheckreports/status
+      verbs:
+        - get
+        - list
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - sveltosclusters
       verbs:
         - get
@@ -165,6 +184,7 @@ spec:
                     - --capi-onboard-annotation=
                     - --v=5
                     - --version=main
+                    - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
                   image: docker.io/projectsveltos/healthcheck-manager:main
