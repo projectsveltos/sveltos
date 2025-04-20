@@ -145,7 +145,7 @@ func updateBaseDir(cwd string) {
 func updateBaseKustomizationFile(cwd string) {
 	content := `apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-  
+
 resources:`
 
 	baseDir := filepath.Join(filepath.Dir(filepath.Dir(cwd)), kustomizeDirName, baseDirName)
@@ -169,7 +169,7 @@ components:
 func updateComponentsCrdsKustomizationFile(cwd string) {
 	content := `apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
-  
+
 resources:`
 
 	crdsDir := filepath.Join(filepath.Dir(filepath.Dir(cwd)), kustomizeDirName, componentsDirName, crdDirName)
@@ -349,7 +349,7 @@ resources:
 `
 
 	// Those are patch files
-	patchFiles := []string{"addon-controller.yaml", "classifier.yaml", "shard-controller.yaml"}
+	patchFiles := []string{"addon-controller.yaml", "classifier.yaml", "event-manager.yaml", "healthcheck-manager.yaml", "shard-controller.yaml"}
 	overalaysDir := filepath.Join(filepath.Dir(filepath.Dir(cwd)), kustomizeDirName, "overlays", "agentless-mode")
 
 	files, err := os.ReadDir(overalaysDir)

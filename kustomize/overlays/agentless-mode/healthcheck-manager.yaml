@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: addon-controller
+  name: hc-manager
   namespace: projectsveltos
 spec:
   template:
@@ -9,9 +9,8 @@ spec:
       containers:
       - args:
         - --diagnostics-address=:8443
-        - --report-mode=0
-        - --agent-in-mgmt-cluster=true
         - --shard-key=
+        - --capi-onboard-annotation=
         - --v=5
-        - --version=dev
-        name: controller
+        - --version=main
+        - --agent-in-mgmt-cluster=true
