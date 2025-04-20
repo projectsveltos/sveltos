@@ -20,7 +20,7 @@ git clone git@github.com:projectsveltos/libsveltos.git
 cd libsveltos
 git checkout ${branch}
 for f in manifests/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -31,7 +31,7 @@ done
 for f in configuration/*.yaml
 # this directory contains default configuration (Classifier instance and
 # DebuggingConfiguration instance)
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/default-instances.yaml
     echo "---"  >> ../../manifest/default-instances.yaml
@@ -45,7 +45,7 @@ git clone git@github.com:projectsveltos/addon-controller.git
 cd addon-controller
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -78,7 +78,7 @@ git clone git@github.com:projectsveltos/access-manager.git
 cd access-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -138,7 +138,7 @@ git clone git@github.com:projectsveltos/event-manager.git
 cd event-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -160,7 +160,7 @@ git clone git@github.com:projectsveltos/classifier.git
 cd classifier
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -179,7 +179,7 @@ do
         echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
     else
         cat $f >> ../../manifest/manifest.yaml
-        echo "---"  >> ../../manifest/manifest.yaml 
+        echo "---"  >> ../../manifest/manifest.yaml
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
         echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
     fi
@@ -193,7 +193,7 @@ git clone git@github.com:projectsveltos/sveltos-agent.git
 cd sveltos-agent
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -212,7 +212,7 @@ git clone git@github.com:projectsveltos/drift-detection-manager.git
 cd drift-detection-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -231,7 +231,7 @@ git clone git@github.com:projectsveltos/shard-controller.git
 cd shard-controller
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -247,7 +247,7 @@ git clone git@github.com:projectsveltos/register-mgmt-cluster.git
 cd register-mgmt-cluster
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -263,7 +263,7 @@ git clone git@github.com:projectsveltos/techsupport.git
 cd techsupport
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -292,11 +292,10 @@ cd ../../; rm -rf tmp
 function add_agent_in_mgmt_cluster_option() {
     echo "Add agent-in-mgmt-cluster option to classifier and addon-controller and shard-controller"
 
-    old_value="report-mode=0"
+    old_value="agent-in-mgmt-cluster=false"
 
-    new_value="report-mode=0
-        - --agent-in-mgmt-cluster"
-    
+    new_value="agent-in-mgmt-cluster=true"
+
     file="manifest/agents_in_mgmt_cluster_manifest.yaml"
     perl -i -pe "s#$old_value#$new_value#g" "$file"
 }
