@@ -45,10 +45,11 @@ spec:
                                     kubeconfig.
                                 properties:
                                     host:
-                                        description: The hostname on which the API server is serving.
+                                        description: host is the hostname on which the API server is serving.
+                                        maxLength: 512
                                         type: string
                                     port:
-                                        description: The port on which the API server is serving.
+                                        description: port is the port on which the API server is serving.
                                         format: int32
                                         type: integer
                                 required:
@@ -8795,7 +8796,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.3
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
@@ -8808,7 +8809,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9049,7 +9050,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9208,7 +9209,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9457,11 +9458,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.3
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11070,11 +11071,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.3
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11271,12 +11272,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.52.3
                     - --registry=
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11752,7 +11753,7 @@ spec:
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.52.3
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11826,7 +11827,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.52.3
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
@@ -11840,4 +11841,131 @@ spec:
             restartPolicy: Never
             serviceAccountName: register-mgmt-cluster
     ttlSecondsAfterFinished: 240
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+    labels:
+        control-plane: techsupport
+    name: techsupport-controller
+    namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: techsupport-role
+rules:
+    - apiGroups:
+        - ""
+      resources:
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - debuggingconfigurations
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - techsupports
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - techsupports/finalizers
+      verbs:
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - techsupports/status
+      verbs:
+        - get
+        - patch
+        - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: techsupport-rolebinding
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: techsupport-role
+subjects:
+    - kind: ServiceAccount
+      name: techsupport-controller
+      namespace: projectsveltos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        control-plane: techsupport
+    name: techsupport-controller
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            control-plane: techsupport
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: controller
+            labels:
+                control-plane: techsupport
+        spec:
+            containers:
+                - args:
+                    - --v=5
+                  command:
+                    - /manager
+                  image: docker.io/projectsveltos/techsupport:v0.52.3
+                  livenessProbe:
+                    httpGet:
+                        path: /healthz
+                        port: 8081
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: controller
+                  readinessProbe:
+                    httpGet:
+                        path: /readyz
+                        port: 8081
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+            securityContext:
+                runAsNonRoot: true
+                seccompProfile:
+                    type: RuntimeDefault
+            serviceAccountName: techsupport-controller
+            terminationGracePeriodSeconds: 10
 ---
