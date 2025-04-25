@@ -267,6 +267,8 @@ do
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
+    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
 done
 cd ../../; rm -rf tmp
 
