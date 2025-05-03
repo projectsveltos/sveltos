@@ -149,9 +149,13 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
     type: addons.projectsveltos.io/cluster-profile
     stringData:
       secret.yaml: |
-        {{ copy "ExternalSecret" }}
+        {{ $secret := (getResource "ExternalSecret") }}
+        {{ $secret := (chainSetField $secret "metadata.ownerReferences" list) }}
+        {{ toYaml $secret }}
     EOF
     ```
+
+Note the ownerReferences field is reset. If a resource points to a non-existent owner, garbage collection might silently delete it. So resetting the field before asking Sveltos to copy it.
 
 Using sveltos CLI, it is possible to verify Sveltos has propagated the information to all managed clusters.
 
