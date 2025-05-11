@@ -184,7 +184,7 @@ Inside the newly created directory or subdirectory, create the below.
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/refs/heads/main/api/v1beta1/eventtrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
-Each EvenTrigger instance: 
+Each EvenTrigger instance:
 
 1. References an [EventSource](addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
@@ -328,11 +328,7 @@ To achive the above, the below flow is executed.
 
 The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
 
-Available cluster information :
-
-- cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name` 
-- cluster type: `.Cluster.kind` 
+Any cluster field can be used, for instance: `{{ .Cluster.metadata.name }}-{{ index .Cluster.metadata.labels "region" }}`
 
 ### EventSource CollectResources setting
 
@@ -381,7 +377,7 @@ The EventTrigger `OneForEvent` (false by default) field indicates whether to cre
 In the above example, if we create another Service in the managed cluster with the label set to *sveltos: fv*
 
 ```bash
-$ kubectl get services -A --selector=sveltos=fv   
+$ kubectl get services -A --selector=sveltos=fv
 NAMESPACE   NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 default     another-service   ClusterIP   10.225.134.41    <none>        443/TCP   24m
 default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP    52m
@@ -418,18 +414,18 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
         chartVersion:     v3.3.3
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
-        helmChartAction:  Install 
+        helmChartAction:  Install
     ```
 
 __Currently, it is not possible to change this field once set.__
 
-### Cleanup 
+### Cleanup
 
 !!! note
     Based on the example above, if a Service is deleted, the NetworkPolicy is also removed automatically by Sveltos.
 
 ```bash
-$ kubectl get services -A --selector=sveltos=fv   
+$ kubectl get services -A --selector=sveltos=fv
 NAMESPACE   NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 default     my-service        ClusterIP   10.225.166.113   <none>        80/TCP    54m
 ```

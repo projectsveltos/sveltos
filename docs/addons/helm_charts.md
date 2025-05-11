@@ -17,7 +17,7 @@ authors:
 
 The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get deployed to the managed clusters with a specific label selector.
 
-!!! note 
+!!! note
     Sveltos will deploy the Helm charts in the exact order they are defined (top-down approach).
 
 ### Example: Single Helm chart
@@ -103,7 +103,12 @@ spec:
 
 ### Example: Update Helm Chart Values From Referenced ConfigMap/Secret
 
-Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets. For example, we can create a file named __cleanup-controller.yaml__ with below content.
+Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets.
+
+!!! note
+    Referenced Secrets must be of type ***addons.projectsveltos.io/cluster-profile***
+
+For example, we can create a file named __cleanup-controller.yaml__ with below content.
 
 ```yaml
 cleanupController:
@@ -147,7 +152,7 @@ Create a `ConfigMap` using the above context.
 $ kubectl create configmap admission-controller --from-file=admission-controller.yaml
 ```
 
-Within the Sveltos `ClusterProfile` YAML, define the helmCharts section. We can specify the Helm chart details and leverage the _valuesFrom_ to reference the `ConfigMaps`. 
+Within the Sveltos `ClusterProfile` YAML, define the helmCharts section. We can specify the Helm chart details and leverage the _valuesFrom_ to reference the `ConfigMaps`.
 This injects the probe configurations from the ConfigMaps into the Helm chart values during deployment.
 
 ```yaml
@@ -203,7 +208,7 @@ production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v
 Four `ConfigMaps` are available within the same namespace.
 
 ```bash
-$ kubectl get configmap -n civo                                                   
+$ kubectl get configmap -n civo
 NAME                                  DATA   AGE
 admission-controller-pre-production   1      8m31s
 admission-controller-production       1      7m49s
@@ -264,7 +269,7 @@ spec:
 
 ### Example: Express Helm Values as Templates
 
-Both the __values__ section and the content stored in referenced ConfigMaps and Secrets can be written using templates. 
+Both the __values__ section and the content stored in referenced ConfigMaps and Secrets can be written using templates.
 Sveltos will instantiate these templates using resources in the management cluster. Finally Sveltos deploy the Helm chart with the final, resolved values.
 See the template section [template section](../template/template_generic_examples.md) for details.
 
@@ -364,7 +369,7 @@ Create a file named _secret_content.yaml_ with the following content, replacing 
 Use the kubectl command to create a Secret named _regcred_ in the _default_ namespace. This command references the _secret_content.yaml_ file and sets the type to _kubernetes.io/dockerconfigjson_:
 
 ```
-$ kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson         
+$ kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson
 ```
 
 Now you can configure your ClusterProfile to use the newly created Secret for authentication with Docker Hub.
@@ -464,7 +469,7 @@ and profile's HelmCharts section can reference this secret:
 
 ### Upgrade CRDs
 
-Helm doesn't currently offer built-in support for [upgrading CRDs](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). 
+Helm doesn't currently offer built-in support for [upgrading CRDs](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations).
 This was a deliberate decision to avoid potential data loss. There's also ongoing discussion within the Helm community about the ideal way to manage CRD lifecycles. Future Helm versions might address this.
 
 For custom Helm charts, you can work around this limitation by:
@@ -474,7 +479,7 @@ For custom Helm charts, you can work around this limitation by:
 
 However, using third-party Helm charts can be problematic as upgrading their CRDs might not be possible by default. Here's where Sveltos comes in.
 Sveltos allows you to control CRD upgrades for third-party charts through the `upgradeCRDs` field within your ClusterProfile configuration.
-When `upgradeCRDs` is set to true, Sveltos will initially patch all Custom Resource Definition (CRD) instances located in the Helm chart's _crds/_ directory. 
+When `upgradeCRDs` is set to true, Sveltos will initially patch all Custom Resource Definition (CRD) instances located in the Helm chart's _crds/_ directory.
 Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
 
 ```yaml hl_lines="12-14"
