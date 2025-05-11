@@ -29,9 +29,9 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 Execute the below commands.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/manifest.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/default-instances.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/default-instances.yaml
 ```
 
 ### Mode 2: Centralised Agent Mode (Manifest)
@@ -39,9 +39,9 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.5
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/agents_in_mgmt_cluster_manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/agents_in_mgmt_cluster_manifest.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/default-instances.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/default-instances.yaml
 ```
 
 !!! warning
@@ -59,7 +59,7 @@ Sveltos can be installed as a `Helm Chart` or with `Kustomize`. By default, **Mo
 ??? note "Helm Chart Upgrade Notes"
     When deploying Sveltos with Helm, the `helm upgrade` command will not automatically update Sveltos's Custom Resource Definitions (CRDs) if they have changed in the new chart version. This is a standard Helm behavior to prevent accidental changes to CRDs that might disrupt existing resources. Manually update of the CRDs before upgrading Sveltos is required.
     ```sh
-    $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/crds/sveltos_crds.yaml
+    $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/crds/sveltos_crds.yaml
     ```
     Sveltos offers a dedicated Helm chart for managing its CRDs, which is the recommended and most reliable approach.
     ```sh
@@ -94,17 +94,17 @@ $ helm list -n projectsveltos
 #### Mode 1: Local Agent Mode
 
 ```sh
-$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=v0.53.0 |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=v0.54.0 |kubectl apply -f -
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/default-instances.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/default-instances.yaml
 ```
 
 #### Mode 2: Centralised Agent Mode
 
 ```sh
-$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v0.53.0 |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v0.54.0 |kubectl apply -f -
 
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/default-instances.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/default-instances.yaml
 ```
 
 ## Sveltos Verification
@@ -136,5 +136,5 @@ Sveltos also offers a Grafana dashboard to help users track and visualize a numb
 Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
 
 [^1]: sveltos-agent will be deployed if there is at least one Classifier instance in the management cluster. Drift detection manager will be deployed if there is a ClusterProfile instance with SyncMode set to *ContinuousWithDriftDetection*.
-[^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v0.53.0/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
+[^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v0.54.0/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
 [^3]: Sveltos collects **minimal**, **anonymised** data. That includes the `version information` alognside `cluster management data` (number of managed SveltosClusters, CAPI clusters, number of ClusterProdiles/Profiles and ClusterSummaries). To **opt-out**, for Helm-based installations use ```helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set telemetry.disabled=true``` and for manual deployment use the ```--disable-telemetry=true``` flag in the Sveltos `addon-controller` configuration.
