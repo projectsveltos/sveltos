@@ -153,12 +153,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.54.0
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.54.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
