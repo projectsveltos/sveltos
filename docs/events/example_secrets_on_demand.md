@@ -23,7 +23,7 @@ The example demonstrates a dynamic replication of a Kubernetes `Secret` to any
 
 For a dynamic `Secret` replication, we will establish a system that reacts to newly created namespaces requiring credentials. Initially, an `EventSource` will monitor for namespaces labeled `secret: required` within the production Kubernetes clusters. Upon detection, the system will retrieve its **name** and create a corresponding **resource** in the Kubernetes **management** cluster, storing the information using a `ConfigMapGenerator`.
 
-The `EventTrigger` will then generate a Sveltos `ClusterProfile`. The ClusterProfile will **reference** the **newly created resource** containing the namespace information and the **login-credentials** Secret from the default namespace of the Kubernetes **management** cluster. Finally, the ClusterProfile will dynamically fetch the referenced resources, **extract** the necessary data, and **replicate** the **login-credentials** Secret into the identified namespace within the production clusters.
+The `EventTrigger` will then generate a Sveltos `ClusterProfile`. The ClusterProfile will **reference** the **newly created resource** containing the namespace information and the **login-credentials** Secret from the default namespace of the Kubernetes **management** cluster. Finally, the ClusterProfile will dynamically fetch the referenced resources, **extract** the necessary data, and **replicate** the **login-credentials** Secret into the identified namespaces within the production clusters.
 
 !!! Example "EventSource"
     ```yaml
