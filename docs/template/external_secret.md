@@ -145,7 +145,7 @@ Now we can configure Sveltos to distribute such content to all managed clusters 
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/instantiate: ok  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     type: addons.projectsveltos.io/cluster-profile
     stringData:
       secret.yaml: |
