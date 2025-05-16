@@ -27,7 +27,7 @@ However, Sveltos also supports cross-clusters:
 1. If an event happens in the cluster __foo__
 1. Deploy the add-ons in the cluster __bar__
 
-For more information, take a peek at [this](./examples/example_cross_cluster_configuration.md) link.
+For more information, take a peek at [this](./examples/cross_cluster_configuration.md) link.
 
 ![Event Framework](../assets/events.png)
 
