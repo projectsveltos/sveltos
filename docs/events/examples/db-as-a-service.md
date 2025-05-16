@@ -23,11 +23,11 @@ Another Civo cluster, labeled `type=services`, is dedicated to automatic Postgre
 
 Postgres DB will be deployed using [Cloudnative-pg](https://github.com/cloudnative-pg/cloudnative-pg).
 
-![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-db-as-a-service.gif)
+![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-db-as-a-service.gif)
 
 ## Step 1: Install Sveltos on Management Cluster
 
-For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../getting_started/install/install.md).
+For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../../getting_started/install/install.md).
 
 ```
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.16.1 --set crds.enabled=true
@@ -100,7 +100,7 @@ sveltosctl show addons
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 ```
 
-![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-cloudnative-pg.png)
+![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-cloudnative-pg.png)
 
 
 ## Step 4: Instruct Sveltos to automatically deploy Postgres DB 

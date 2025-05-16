@@ -16,7 +16,7 @@ This demo will showcase Sveltos' capabilities by:
 2. Retrieving instance details: Sveltos will extract Postgres credentials and LoadBalancer endpoint information;
 3. Creating database objects: Two separate Jobs will be deployed on distinct managed Kubernetes clusters (`pre-production` and `production`). These Jobs will connect to different Postgres instances and execute SQL commands to create tables.
 
-![Deploying managed services with Sveltos](../assets/sveltos-managed-services.gif)
+![Deploying managed services with Sveltos](../../assets/sveltos-managed-services.gif)
 
 ## Managed Clusters
 

@@ -13,7 +13,7 @@ authors:
 In this scenario, a managed cluster is shared among different tenants. Each tenant is assigned a namespace.
 By simply labeling a namespace with `postgres=required`, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting tenants.
 
-![Sveltos: Deploy Cloudnative-pg](../assets/db-per-ns.png)
+![Sveltos: Deploy Cloudnative-pg](../../assets/db-per-ns.png)
 
 ## Lab Setup
 
@@ -24,7 +24,7 @@ Postgres DB will be deployed using [Cloudnative-pg](https://github.com/cloudnati
 
 ## Step 1: Install Sveltos on Management Cluster
 
-For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../getting_started/install/install.md).
+For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../../getting_started/install/install.md).
 
 ```
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.16.1 --set crds.enabled=true
@@ -97,7 +97,7 @@ sveltosctl show addons
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 ```
 
-![Sveltos: Deploy Cloudnative-pg](../assets/sveltos-cloudnative-pg.png)
+![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-cloudnative-pg.png)
 
 
 ## Step 4: Instruct Sveltos to automatically deploy Postgres DB 

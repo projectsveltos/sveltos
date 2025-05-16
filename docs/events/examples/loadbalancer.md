@@ -17,7 +17,7 @@ This guide demonstrates how to automate load balancer configuration for Kubernet
 
 ## Architecutre Overview
 
-![Architecutre Overview](../assets/event_loadbalancer.png)
+![Architecutre Overview](../../assets/event_loadbalancer.png)
 There are two clusters involved: a "MGMT Cluster" and a "Managed Cluster" (cluster-a). Cluster-a hosts two services: ```svc-a``` and ```svc-b```.
 ```yaml
 apiVersion: v1
@@ -332,7 +332,7 @@ data:
 
 ## Data Path
 
-![Data Path](../assets/event_loadbalancer-datapath.png)
+![Data Path](../../assets/event_loadbalancer-datapath.png)
 
 At the end the ```Service``` svc-a on the MGMT Cluster will announce the IP 1.1.1.1 to the outside world. Thus a Client can access it. The backend Service for svc-a on the MGMT Cluster is set to the nodes for cluster-a. Thus the traffic gets forwarded to these nodes using the node-port defined in the svc-a on cluster-a.
 
