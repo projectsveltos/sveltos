@@ -89,4 +89,4 @@ Let's assume the EventTrigger detects an event, like the creation of a custom Ku
 
 ## Next Steps
 
-Continue with an [example](./example_secrets_on_demand.md) of how to create a Kubernetes `Secret` on demand.
+Continue with an [example](./examples/example_secrets_on_demand.md) of how to create a Kubernetes `Secret` on demand.

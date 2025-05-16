@@ -16,7 +16,7 @@ authors:
 
 ## Introduction to Event Driven Addon Distrubution
 
-Sveltos by default will deploy add-ons in the same way an [event](addon_event_deployment.md) is detected.
+Sveltos by default will deploy add-ons in the same way an [event](../addon_event_deployment.md) is detected.
 Sveltos can be configured for cross-cluster configuration. That means, it will watch for events in a cluster and deploy add-ons in a set of different clusters.
 
 EventTrigger CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
@@ -263,4 +263,4 @@ Version: 2.0.0
 Hostname: my-deployment-50001-6664b685bc-db728
 ```
 
-![Cross cluster configuration](../assets/event_based_cross_cluster.gif)
+![Cross cluster configuration](../../assets/event_based_cross_cluster.gif)

@@ -17,7 +17,7 @@ authors:
 
 ## Introduction
 
-The example demonstrates a dynamic replication of a Kubernetes `Secret` to any __production__ cluster in a defined namespace. If you are not familiar with the [EventTrigger](./templating.md) feature or the [Sveltos Generators](./generators.md), check out the mentioned guides before proceeding.
+The example demonstrates a dynamic replication of a Kubernetes `Secret` to any __production__ cluster in a defined namespace. If you are not familiar with the [EventTrigger](../templating.md) feature or the [Sveltos Generators](../generators.md), check out the mentioned guides before proceeding.
 
 ### Example: Replicate a Secret on Demand
 
@@ -119,7 +119,7 @@ The `EventTrigger` will then generate a Sveltos `ClusterProfile`. The ClusterPro
         {{- end }}
     ```
 
-![Sveltos: Distribute Secret](../assets/distribute_secret.gif)
+![Sveltos: Distribute Secret](../../assets/distribute_secret.gif)
 
 Imagine we have a production cluster named __workload__ residing in the __default__ namespace. Within this cluster, two namespaces, __eng__ and __hr__, are labeled __secret: required__.
 

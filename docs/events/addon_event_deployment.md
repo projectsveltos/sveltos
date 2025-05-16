@@ -27,7 +27,7 @@ However, Sveltos also supports cross-clusters:
 1. If an event happens in the cluster __foo__
 1. Deploy the add-ons in the cluster __bar__
 
-For more information, take a peek at [this](example_cross_cluster_configuration.md) link.
+For more information, take a peek at [this](./examples/example_cross_cluster_configuration.md) link.
 
 ![Event Framework](../assets/events.png)
 
@@ -186,7 +186,7 @@ Inside the newly created directory or subdirectory, create the below.
 
 Each EvenTrigger instance:
 
-1. References an [EventSource](addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
+1. References an [EventSource](./addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 1. Contains a list of add-ons to deploy
 
