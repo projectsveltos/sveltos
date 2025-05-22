@@ -28,7 +28,7 @@ Imagine an event like the creation of a **new service** or a **namespace** in a 
 
 This cross-cluster feature makes it easy to **automate** tasks across different clusters. For example, when a namespace with a specific label is created in a cluster, Sveltos can automatically set up a new database in a dedicated cluster reserved for databases.
 
-For easy to follow deployment examples, check out the [Event Framework Section](../events/db-as-a-service-multiple-db-per-cluster.md).
+For easy to follow deployment examples, check out the [Event Framework Section](../events/examples/db-as-a-service-multiple-db-per-cluster.md).
 
 
 ## Sveltos and NATS Integration
