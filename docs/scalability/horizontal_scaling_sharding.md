@@ -11,12 +11,13 @@ authors:
 
 ## Introduction to Sharding
 
-When Sveltos is managing hundreds of managed clusters and thousands of applications, it is advisable to adopt a sharding strategy to distribute the load across multiple Sveltos controllers instances.
+When Sveltos is managing **hundreds** of clusters and **thousands** of applications, it is recommended to adopt a sharding strategy to distribute the load across multiple Sveltos controller instances.
 
-Sveltos has a controller running in the management cluster, called the ```shard controller```, which watches for cluster annotations. When it detects a new cluster shard, the shard controller deploys automatically a new set of Projectsveltos controllers to manage that shard.
+Sveltos has a controller running in the **management** cluster called the `shard controller`. It watches for cluster annotations. When it detects a new cluster shard, the `shard controller` automatically deploys a new set of Sveltos controllers to manage the shard.
 
-To update the sharding policy, add the annotation ```sharding.projectsveltos.io/key``` to the managed clusters.
+How does Sveltos distribute the load? This is done by adding the special annotation `sharding.projectsveltos.io/key` to the **managed** clusters of interest. By default, all clusters are managed by the same Sveltos controller. When no more **managed** clusters have a special annotation set, Sveltos **automatically** brings down the extra Sveltos controllers.
 
+For more information, have a look at the `.gif` below.
 
 ![Event driven add-ons deployment in action](../assets/sharding.gif)
 
