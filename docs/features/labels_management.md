@@ -131,18 +131,58 @@ To read more about the classifier configuration, with examles using the resource
 1. Classify clusters based on the number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
 1. Classify clusters based on their Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
 
+## Use Case: Metrics-based Classifier
 
-### Classifier CRD - Deep dive
+There are cases when end-users want to deploy add-ons and applications in Kubernetes clusters that are not heavily loaded. That means, based on the CPU, memory or any other metric, control what will get deployed and where.
+
+The functionality can be achieved by allowing the _deployedResourceConstraint_ to reference resources that live in the management cluster. The available feature request is located [here](https://github.com/projectsveltos/classifier/issues/375).
+
+### Example
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: Classifier
+metadata:
+  name: low-load
+spec:
+  classifierLabels:
+  - key: load # Label applied to matching clusters
+    value: low
+  deployedResourceConstraint:
+    resourceSelectors:
+    - group: metrics.keptn.sh
+      version: v1alpha1 # Adjust based on the Keptn version
+      kind: KeptnMetric
+      namespace: sveltos-metrics # KeptnMetric runs in the mgmt cluster
+      name: keptnmetric-cpu-{{ .cluster }}
+      evaluate: | # Use Lua for conditional checks
+        function evaluate()
+          local hs = { matching = false, message = "" }
+          local v = tonumber(obj.status.value)
+          if v and v < 0.5 then
+            hs.matching = true          -- cluster is “low load”
+          else
+            hs.message = "CPU util " .. tostring(v)
+          end
+          return hs
+        end
+  # <--- new field proposed in #375
+  sourceClusterScope: Local
+```
+
+How does the proposed resource work? The _KeptnMetric.status.value_ already carries the live metric. The `Lua` code used will evaluate the block checks and the threshold directly. No additional controller is required. When the defined metric goes over the defined limit, the label is either added or removed, and any `ClusterProfile` will react automatically.
+
+## Classifier CRD - Deep dive
 
 [Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
 
-#### Classifier Labels
+### Classifier Labels
 The field *classifierLabels* contains all the labels (key/value pair) which will be added automatically to any cluster matching a Classifier instance.
 
-#### Kubernetes version constraints
+### Kubernetes version constraints
 The field *kubernetesVersionConstraints* can be used to classify a cluster based on its current Kubernetes version.
 
-#### Resource constraints
+### Resource constraints
 The field *deployedResourceConstraint* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
 
 Following classifier, matches any cluster with a Service with label __sveltos:fv__.
