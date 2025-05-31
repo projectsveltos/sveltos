@@ -13,30 +13,48 @@ authors:
 
 ## Sveltos Cluster Registration
 
-Sveltos supports **automatic** discovery of [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters. If Sveltos is deployed in a management cluster with **ClusterAPI (CAPI)**, no further action is required for add-ons management. It will watch for *clusters.cluster.x-k8s.io* instances and program those accordingly.
+Sveltos supports **automatic** discovery of clusters powered by [ClusterAPI (CAPI)](https://github.com/kubernetes-sigs/cluster-api). When Sveltos is deployed in a management cluster with **CAPI**, no further action is required for add-on management. It will watch for *clusters.cluster.x-k8s.io* instances and program those accordingly.
 
-Sveltos can [manage Kubernetes add-ons](../addons/addons.md) to any cluster seamlessly (on-prem, Cloud).
+For any other types of clusters, whether on-prem or in the cloud, Sveltos provides **seamless** [management of Kubernetes add-ons](../addons/addons.md). Check out the [examples section](#registration-examples).
 
 ## Register Cluster
 
 ### sveltosctl Registration
 
-To register Kubernetes clusters with Sveltos, it is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI"). Alternatively, to **programmatically** register clusters, consult the [section](#programmatic-registration).
+It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") for cluster registration. Alternatively, to **programmatically** register clusters, consult the [section](#programmatic-registration).
 
-If the `kubeconfig` has multiple contexes, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster to be registered. The below example will generate a kubeconfig file and register the cluster with Sveltos.
-
-```
+```bash
 $ sveltosctl register cluster \
-    --namespace=<namespace> \
-    --cluster=<cluster name> \
-    --fleet-cluster-context=<context name> \
-    --labels=key1=value1,key2=value2
+    --namespace=monitoring \
+    --cluster=prod-cluster \
+    --kubeconfig=~/.kube/prod-cluster.config \
+    --labels=environment=production,tier=backend
 ```
+
+| Parameter        |    Description                                                                                                   |
+|------------------|------------------------------------------------------------------------------------------------------------------|
+| `--namespace`    |    The namespace in the **management cluster** where Sveltos stores information about the registered cluster.    |
+| `--cluster`      |    The **name** to identify the registered cluster within Sveltos.                                               |
+| `--kubeconfig`   |    The path to the **kubeconfig** file for the registered cluster.                                               |
+| `--labels`       |    (Optional) Comma-separated key-value pairs to define labels for the registered cluster.                       |
+
+!!!note
+    If the `kubeconfig` has multiple contexes, and the default context points to the management cluster, use the __--fleet-cluster-context__ option. This option sets the name of the context that points to the cluster to be registered. The below example will generate a kubeconfig file and register the cluster with Sveltos.
+
+    ```bash
+    $ sveltosctl register cluster \
+        --namespace=<namespace> \
+        --cluster=<cluster name> \
+        --fleet-cluster-context=<context name> \
+        --labels=key1=value1,key2=value2
+    ```
 
 ??? tip "Alternative Sveltos Cluster Registration"
-    If a different `kubeconfig` is needed, users can utilise the `sveltosctl generate kubeconfig` command. It allows Sveltos to create the required `ServiceAccount` alongside the `kubeconfig`. To proceed with the registration process, follow the steps listed below.
+
+    If a different `kubeconfig` is required, users can utilise the `sveltosctl generate kubeconfig` command. It allows Sveltos to create the required `ServiceAccount` alongside the `kubeconfig`. To proceed with the registration process, follow the steps listed below.
 
     1. Generate the kubeconfig: Use the `sveltosctl generate kubeconfig` command while pointing it to the cluster you want Sveltos to manage. The command will create a ServiceAccount with `cluster-admin` permissions and generate the kubeconfig based on it. [^1]
+
     1. Register the Cluster: Use the `sveltosctl register cluster` pointing it to the Sveltos management cluster. Provide the following options:
         - `--namespace=<namespace>`: Namespace in the management cluster where Sveltos will store information about the registered cluster.
         - `--cluster=<cluster name>`: A chosen name to identify the registered cluster within Sveltos.
@@ -44,7 +62,7 @@ $ sveltosctl register cluster \
         - `--labels=<key1=value1,key2=value2>` (Optional): Comma-separated key-value pairs to define labels for the registered cluster (e.g., --labels=environment=production,tier=backend).
 
 
-    ### Registration Example
+    **Registration Example**
 
     Pointing to the **managed** cluster (Generate kubeconfig with ServiceAccount creation):
 
@@ -67,6 +85,7 @@ $ sveltosctl register cluster \
     ```$ kubectl edit sveltoscluster prod-cluster -n monitoring``` 
 
 #### Registration Examples
+
 ??? example "EKS"
     Once an EKS cluster is created, perform the below steps. 
 
