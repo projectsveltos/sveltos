@@ -180,6 +180,56 @@ Inside the newly created directory or subdirectory, create the below.
           end
     ```
 
+### Example: Create/Delete Service Event in CEL Language
+
+Sveltos supports custom events written in the [CEL](https://cel.dev) language.
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: EventSource
+    metadata:
+      name: sveltos-service
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        evaluateCEL:
+        - name: service_with_label_sveltos_fv
+          rule: has(resource.metadata.labels) && has(resource.metadata.labels.sveltos) && resource.metadata.labels.sveltos == "fv"
+    ```
+
+In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv* but with a Lua script.
+
+Multiple rules can be defined. A resource is a match if it matches at least one rule.
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: EventSource
+    metadata:
+      name: sveltos-service
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: "v1"
+        kind: "Service"
+        evaluateCEL:
+        - name: service_with_label_sveltos_fv # Rule 1: Service has label sveltos: fv
+          rule: has(resource.metadata.labels) && has(resource.metadata.labels.sveltos) && resource.metadata.labels.sveltos == "fv"
+        - name: default_namespace_service # Rule 2: Service is in the 'default' namespace
+          rule: resource.metadata.namespace == "default"
+        - name: service_with_port_8080 # Rule 3: Service exposes port 8080
+          rule: >
+            has(resource.spec.ports) &&
+            resource.spec.ports.exists(p, p.port == 8080)
+    ```
+
 ## EventTrigger
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/refs/heads/main/api/v1beta1/eventtrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
