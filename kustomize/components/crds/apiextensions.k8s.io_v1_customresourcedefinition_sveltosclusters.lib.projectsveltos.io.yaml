@@ -128,6 +128,33 @@ spec:
                               Must return struct with field "matching" representing whether
                               object is a match and an optional "message" field.
                             type: string
+                          evaluateCEL:
+                            description: |-
+                              EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                              Each rule will be evaluated in order against each object selected based on
+                              the criteria defined above. Each rule's expression must return a boolean value
+                              indicating whether the object is a match.
+
+                              Evaluation stops at the first rule that returns true; subsequent
+                              rules will not be evaluated.
+                            items:
+                              description: CELRule defines a named CEL rule used in
+                                EvaluateCEL.
+                              properties:
+                                name:
+                                  description: Name is a human-readable identifier
+                                    for the rule.
+                                  type: string
+                                rule:
+                                  description: |-
+                                    Rule is the CEL (Common Expression Language) expression to evaluate.
+                                    It must return a bool
+                                  type: string
+                              required:
+                              - name
+                              - rule
+                              type: object
+                            type: array
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
@@ -223,6 +250,33 @@ spec:
                               Must return struct with field "matching" representing whether
                               object is a match and an optional "message" field.
                             type: string
+                          evaluateCEL:
+                            description: |-
+                              EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                              Each rule will be evaluated in order against each object selected based on
+                              the criteria defined above. Each rule's expression must return a boolean value
+                              indicating whether the object is a match.
+
+                              Evaluation stops at the first rule that returns true; subsequent
+                              rules will not be evaluated.
+                            items:
+                              description: CELRule defines a named CEL rule used in
+                                EvaluateCEL.
+                              properties:
+                                name:
+                                  description: Name is a human-readable identifier
+                                    for the rule.
+                                  type: string
+                                rule:
+                                  description: |-
+                                    Rule is the CEL (Common Expression Language) expression to evaluate.
+                                    It must return a bool
+                                  type: string
+                              required:
+                              - name
+                              - rule
+                              type: object
+                            type: array
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
@@ -297,6 +351,16 @@ spec:
                       SANamespace is the namespace of the ServiceAccount to renew the token for.
                       If specified, ServiceAccount must exist in the managed cluster.
                       If not specified, sveltos will try to deduce it from current kubeconfig
+                    type: string
+                  tokenDuration:
+                    description: |-
+                      TokenDuration is the duration the requested token will be valid for.
+                      If not specified, the value of RenewTokenRequestInterval will be used.
+                      This allows the token to remain valid beyond the renewal interval,
+                      providing a buffer in case of connectivity loss.
+                      Example: renew every hour, token lasts 3 hours (buffer for disconnection)
+                        renewTokenRequestInterval: 1h
+                        tokenDuration: 3h
                     type: string
                 required:
                 - renewTokenRequestInterval
