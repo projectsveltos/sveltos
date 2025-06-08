@@ -315,6 +315,33 @@ spec:
                             Must return struct with field "matching" representing whether
                             object is a match and an optional "message" field.
                           type: string
+                        evaluateCEL:
+                          description: |-
+                            EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                            Each rule will be evaluated in order against each object selected based on
+                            the criteria defined above. Each rule's expression must return a boolean value
+                            indicating whether the object is a match.
+
+                            Evaluation stops at the first rule that returns true; subsequent
+                            rules will not be evaluated.
+                          items:
+                            description: CELRule defines a named CEL rule used in
+                              EvaluateCEL.
+                            properties:
+                              name:
+                                description: Name is a human-readable identifier for
+                                  the rule.
+                                type: string
+                              rule:
+                                description: |-
+                                  Rule is the CEL (Common Expression Language) expression to evaluate.
+                                  It must return a bool
+                                type: string
+                            required:
+                            - name
+                            - rule
+                            type: object
+                          type: array
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
@@ -1583,6 +1610,32 @@ spec:
                         Must return struct with field "matching" representing whether
                         object is a match and an optional "message" field.
                       type: string
+                    evaluateCEL:
+                      description: |-
+                        EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                        Each rule will be evaluated in order against each object selected based on
+                        the criteria defined above. Each rule's expression must return a boolean value
+                        indicating whether the object is a match.
+
+                        Evaluation stops at the first rule that returns true; subsequent
+                        rules will not be evaluated.
+                      items:
+                        description: CELRule defines a named CEL rule used in EvaluateCEL.
+                        properties:
+                          name:
+                            description: Name is a human-readable identifier for the
+                              rule.
+                            type: string
+                          rule:
+                            description: |-
+                              Rule is the CEL (Common Expression Language) expression to evaluate.
+                              It must return a bool
+                            type: string
+                        required:
+                        - name
+                        - rule
+                        type: object
+                      type: array
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
@@ -1861,6 +1914,32 @@ spec:
                         Must return struct with field "matching" representing whether
                         object is a match and an optional "message" field.
                       type: string
+                    evaluateCEL:
+                      description: |-
+                        EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                        Each rule will be evaluated in order against each object selected based on
+                        the criteria defined above. Each rule's expression must return a boolean value
+                        indicating whether the object is a match.
+
+                        Evaluation stops at the first rule that returns true; subsequent
+                        rules will not be evaluated.
+                      items:
+                        description: CELRule defines a named CEL rule used in EvaluateCEL.
+                        properties:
+                          name:
+                            description: Name is a human-readable identifier for the
+                              rule.
+                            type: string
+                          rule:
+                            description: |-
+                              Rule is the CEL (Common Expression Language) expression to evaluate.
+                              It must return a bool
+                            type: string
+                        required:
+                        - name
+                        - rule
+                        type: object
+                      type: array
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
@@ -3136,6 +3215,33 @@ spec:
                               Must return struct with field "matching" representing whether
                               object is a match and an optional "message" field.
                             type: string
+                          evaluateCEL:
+                            description: |-
+                              EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                              Each rule will be evaluated in order against each object selected based on
+                              the criteria defined above. Each rule's expression must return a boolean value
+                              indicating whether the object is a match.
+
+                              Evaluation stops at the first rule that returns true; subsequent
+                              rules will not be evaluated.
+                            items:
+                              description: CELRule defines a named CEL rule used in
+                                EvaluateCEL.
+                              properties:
+                                name:
+                                  description: Name is a human-readable identifier
+                                    for the rule.
+                                  type: string
+                                rule:
+                                  description: |-
+                                    Rule is the CEL (Common Expression Language) expression to evaluate.
+                                    It must return a bool
+                                  type: string
+                              required:
+                              - name
+                              - rule
+                              type: object
+                            type: array
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
@@ -3231,6 +3337,33 @@ spec:
                               Must return struct with field "matching" representing whether
                               object is a match and an optional "message" field.
                             type: string
+                          evaluateCEL:
+                            description: |-
+                              EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                              Each rule will be evaluated in order against each object selected based on
+                              the criteria defined above. Each rule's expression must return a boolean value
+                              indicating whether the object is a match.
+
+                              Evaluation stops at the first rule that returns true; subsequent
+                              rules will not be evaluated.
+                            items:
+                              description: CELRule defines a named CEL rule used in
+                                EvaluateCEL.
+                              properties:
+                                name:
+                                  description: Name is a human-readable identifier
+                                    for the rule.
+                                  type: string
+                                rule:
+                                  description: |-
+                                    Rule is the CEL (Common Expression Language) expression to evaluate.
+                                    It must return a bool
+                                  type: string
+                              required:
+                              - name
+                              - rule
+                              type: object
+                            type: array
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
@@ -3305,6 +3438,16 @@ spec:
                       SANamespace is the namespace of the ServiceAccount to renew the token for.
                       If specified, ServiceAccount must exist in the managed cluster.
                       If not specified, sveltos will try to deduce it from current kubeconfig
+                    type: string
+                  tokenDuration:
+                    description: |-
+                      TokenDuration is the duration the requested token will be valid for.
+                      If not specified, the value of RenewTokenRequestInterval will be used.
+                      This allows the token to remain valid beyond the renewal interval,
+                      providing a buffer in case of connectivity loss.
+                      Example: renew every hour, token lasts 3 hours (buffer for disconnection)
+                        renewTokenRequestInterval: 1h
+                        tokenDuration: 3h
                     type: string
                 required:
                 - renewTokenRequestInterval
@@ -3614,6 +3757,33 @@ spec:
                             Must return struct with field "matching" representing whether
                             object is a match and an optional "message" field.
                           type: string
+                        evaluateCEL:
+                          description: |-
+                            EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                            Each rule will be evaluated in order against each object selected based on
+                            the criteria defined above. Each rule's expression must return a boolean value
+                            indicating whether the object is a match.
+
+                            Evaluation stops at the first rule that returns true; subsequent
+                            rules will not be evaluated.
+                          items:
+                            description: CELRule defines a named CEL rule used in
+                              EvaluateCEL.
+                            properties:
+                              name:
+                                description: Name is a human-readable identifier for
+                                  the rule.
+                                type: string
+                              rule:
+                                description: |-
+                                  Rule is the CEL (Common Expression Language) expression to evaluate.
+                                  It must return a bool
+                                type: string
+                            required:
+                            - name
+                            - rule
+                            type: object
+                          type: array
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
@@ -3746,6 +3916,33 @@ spec:
                             Must return struct with field "matching" representing whether
                             object is a match and an optional "message" field.
                           type: string
+                        evaluateCEL:
+                          description: |-
+                            EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                            Each rule will be evaluated in order against each object selected based on
+                            the criteria defined above. Each rule's expression must return a boolean value
+                            indicating whether the object is a match.
+
+                            Evaluation stops at the first rule that returns true; subsequent
+                            rules will not be evaluated.
+                          items:
+                            description: CELRule defines a named CEL rule used in
+                              EvaluateCEL.
+                            properties:
+                              name:
+                                description: Name is a human-readable identifier for
+                                  the rule.
+                                type: string
+                              rule:
+                                description: |-
+                                  Rule is the CEL (Common Expression Language) expression to evaluate.
+                                  It must return a bool
+                                type: string
+                            required:
+                            - name
+                            - rule
+                            type: object
+                          type: array
                         group:
                           description: Group of the resource deployed in the Cluster.
                           type: string
@@ -7207,6 +7404,52 @@ spec:
                                 items:
                                     type: string
                                 type: array
+                            destinationCluster:
+                                description: |-
+                                    DestinationCluster identifies a specific cluster (by name) to deploy add-ons to.
+                                    This field is templatable, allowing dynamic values based on the event context.
+                                    Cannot be set if DestinationClusterSelector is set.
+                                properties:
+                                    apiVersion:
+                                        description: API version of the referent.
+                                        type: string
+                                    fieldPath:
+                                        description: |-
+                                            If referring to a piece of an object instead of an entire object, this string
+                                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                                            For example, if the object reference is to a container within a pod, this would take on a value like:
+                                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
+                                            the event) or if no container name is specified "spec.containers[2]" (container with
+                                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
+                                            referencing a part of an object.
+                                        type: string
+                                    kind:
+                                        description: |-
+                                            Kind of the referent.
+                                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                                        type: string
+                                    name:
+                                        description: |-
+                                            Name of the referent.
+                                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        type: string
+                                    namespace:
+                                        description: |-
+                                            Namespace of the referent.
+                                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+                                        type: string
+                                    resourceVersion:
+                                        description: |-
+                                            Specific resourceVersion to which this reference is made, if any.
+                                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+                                        type: string
+                                    uid:
+                                        description: |-
+                                            UID of the referent.
+                                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
+                                        type: string
+                                type: object
+                                x-kubernetes-map-type: atomic
                             destinationClusterSelector:
                                 description: |-
                                     DestinationClusterSelector identifies the cluster where add-ons will be deployed.
