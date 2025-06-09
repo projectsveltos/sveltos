@@ -20,6 +20,7 @@ To prevent this, configure automatic renewal: edit the `SveltosCluster` resource
 ```yaml
 tokenRequestRenewalOption:
   renewTokenRequestInterval: 1h0m0s
+  tokenDuration: 5h
   saName: projectsveltos
   saNamespace: projectsveltos
 ```
@@ -42,8 +43,8 @@ Note that:
 ```
 
 <ul>
-<li>The token is renewed based on the interval set in <strong>renewTokenRequestInterval</strong>. However, the token’s overall validity has an additional buffer
-(for instance, 30 minutes longer) to ensure that Sveltoscluster-manager has enough time to perform the rotation before it expires.</li>
+<li>The token is renewed based on the interval set in <strong>renewTokenRequestInterval</strong>.  The token total lifespan is determined  by <strong>tokenDuration</strong>. Ensure tokenDuration is longer than renewTokenRequestInterval to keep the token valid between renewals.
+</li>
 
 <li>If, for any reason, token rotation cannot happen before the current token expires, the sveltoscluster-manager can no longer update the token.
 Consequently, reconciliations for that cluster stop, and you must manually update the Secret for that cluster to restore functionality.</li>

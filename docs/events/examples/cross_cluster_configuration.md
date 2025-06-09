@@ -19,8 +19,52 @@ authors:
 Sveltos by default will deploy add-ons in the same way an [event](../addon_event_deployment.md) is detected.
 Sveltos can be configured for cross-cluster configuration. That means, it will watch for events in a cluster and deploy add-ons in a set of different clusters.
 
-EventTrigger CRD has a field called __destinationClusterSelector__, a Kubernetes label selector.
-This field is optional and **not** set by default. Sveltos default behaviour is to deploy add-ons in the same cluster where the event was detected. If this field is set, Sveltos behaviour will change and when an event is detected in a cluster, add-ons will get deployed in all the clusters matching the label selector __destinationClusterSelector__.
+Sveltos also provides two optional fields within the EventTrigger CRD to customize add-on deployment:
+
+1. **destinationClusterSelector**
+
+This field is a Kubernetes label selector (clusterSelector). If you set this field, Sveltos' behavior changes. When an event is detected in a cluster, add-ons will be deployed to all clusters that match the specified label selector, rather than just the source cluster.
+
+2. **destinationCluster**
+
+This field, a corev1.ObjectReference, allows you to specify a single, specific destination cluster for add-on deployment. This is particularly useful when an event in one cluster (e.g., a management cluster) needs to trigger resource deployment in a designated, different cluster.
+
+Templating can be used with destinationCluster to dynamically determine the target cluster based on event data. Sveltos will instantiate the template (using data from both the detected resource and the source cluster) and then set the ClusterProfile.Spec.ClusterRefs accordingly.
+
+Example:
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: service-network-policy
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      type: mgmt
+  destinationCluster:
+    name: "{{ .Resource.metadata.name }}"
+    namespace: "{{ .Resource.metadata.namespace }}"
+    kind: SveltosCluster
+    apiVersion: lib.projectsveltos.io/v1beta1
+```
+
+In this example, when an event occurs in a cluster matching __type: mgmt__, the add-ons will be deployed to a SveltosCluster whose name and namespace are dynamically derived from the detected resource. This would result in a ClusterProfile similar to this:
+
+```yaml
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  ...
+spec:
+  clusterRefs:
+  - apiVersion: lib.projectsveltos.io/v1beta1
+    kind: SveltosCluster
+    name: my-service # Dynamically set based on the resource name
+    namespace: default # Dynamically set based on the resource namespace
+```
+
+These new options provide greater flexibility in designing your Sveltos event-driven add-on deployments, allowing you to precisely target where resources are provisioned.
 
 ### Example: Cross Cluster Service Discovery
 
@@ -30,7 +74,7 @@ Two clusters with the description below are defined.
 
 1. GKE cluster (labels env: production) registered with sveltos;
 1. A cluster-api cluster (label dep: eng) provisioned by docker.
- 
+
 #### Management Cluster
 
 1. An EventSource instance that matches any Service with a load balancer IP
@@ -129,7 +173,7 @@ The Service and Endpoints are defined as templates and will be instantiated by S
 
 #### GKE Cluster
 
-In the GKE cluster we create a deployment and a service of type *LoadBalancer*. 
+In the GKE cluster we create a deployment and a service of type *LoadBalancer*.
 
 !!! example ""
     ```yaml
@@ -188,8 +232,8 @@ status:
     ingress:
     - ip: 34.172.32.172
 ```
- 
-Once this is done, it will match the EventSource. Sveltos will deploy the selector-less Service and the Endpoints in the other cluster, the cluster-api provisioned cluster. 
+
+Once this is done, it will match the EventSource. Sveltos will deploy the selector-less Service and the Endpoints in the other cluster, the cluster-api provisioned cluster.
 
 The Endpoints IP address is set to the one assigned to the loadBalancer Service in the GKE cluster.
 
@@ -210,7 +254,7 @@ status:
   loadBalancer: {}
 ```
 
-```yaml 
+```yaml
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -254,9 +298,9 @@ Let us create a namespace policy-demo and a busybox pod in the cluster-api provi
 
 Then reach the service in the GKE cluster from the busybox pod in the cluster-api provisioned cluster"
 
-```bash 
+```bash
 KUBECONFIG=<KIND CLUSTER> kubectl run --namespace=policy-demo access --rm -ti --image busybox /bin/sh
-/ # 
+/ #
 / # wget -q external-my-lb-service.external:60000 -O -
 Hello, world!
 Version: 2.0.0
