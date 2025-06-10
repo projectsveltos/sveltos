@@ -9039,7 +9039,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -9052,7 +9052,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9293,7 +9293,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9452,7 +9452,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -9701,11 +9701,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11399,11 +11399,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11600,12 +11600,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11789,7 +11789,7 @@ spec:
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11863,7 +11863,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v0.57.2
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
@@ -11979,7 +11979,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/techsupport:main
+                  image: docker.io/projectsveltos/techsupport:v0.57.2
                   livenessProbe:
                     httpGet:
                         path: /healthz
