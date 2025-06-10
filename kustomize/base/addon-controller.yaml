@@ -211,6 +211,13 @@ rules:
         - list
         - watch
     - apiGroups:
+        - ""
+      resources:
+        - events
+      verbs:
+        - create
+        - update
+    - apiGroups:
         - '*'
       resources:
         - '*'
@@ -547,7 +554,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -560,7 +567,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
