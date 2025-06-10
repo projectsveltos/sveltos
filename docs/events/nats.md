@@ -90,7 +90,7 @@ Following criteria can be used to narrow down the events that Sveltos will react
 
 Each EvenTrigger instance:
 
-1. References an [EventSource](addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
+1. References an [EventSource](addon_event_deployment.md#eventsource) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 1. Contains a list of add-ons to deploy
 

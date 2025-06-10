@@ -21,8 +21,7 @@ Sveltos supports an event-driven workflow:
 1. Select the clusters to watch for such events;
 1. Define the event trigger: which add-ons/applications to deploy when the events occur
 
-By default, add-ons/applications are deployed in the same cluster where the events are detected.
-However, Sveltos also supports cross-clusters:
+By default, add-ons/applications are deployed in the same cluster where the events are detected. However, Sveltos also supports cross-clusters:
 
 1. If an event happens in the cluster __foo__
 1. Deploy the add-ons in the cluster __bar__
@@ -31,10 +30,9 @@ For more information, take a peek at [this](./examples/cross_cluster_configurati
 
 ![Event Framework](../assets/events.png)
 
-## Sveltos Event Definition
+## EventSource
 
-An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the
-[EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go) CRD.
+An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the [EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go) custom resource definition (CRD).
 
 ### Example: Create/Delete Service Event
 
@@ -57,9 +55,9 @@ An _Event_ is a specific operation in the context of Kubernetes objects. To defi
           value: fv
     ```
 
-In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv*.
+In the above YAML definition, an `EventSource` instance defines an __event__ as a creation/deletion of a *Service* with the label set to *sveltos: fv*.
 
-### Example: Create/Delete Service Event in Lua Language
+### Example: Create/Delete Service Event using Lua
 
 Sveltos supports custom events written in the [Lua](https://www.lua.org/) language.
 
@@ -94,27 +92,25 @@ Sveltos supports custom events written in the [Lua](https://www.lua.org/) langua
           end
     ```
 
-In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv* but with a Lua script.
+In the above YAML definition, an `EventSource` instance defines an __event__ as a creation/deletion of a *Service* with the label set to *sveltos: fv* using a Lua script.
 
-When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expects the following format:
+When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expects the below format:
 
 1. It must contain a function ```function evaluate()```. This is the function that is directly invoked and passed a Kubernetes resource (inside the function ```obj``` represents the passed in Kubernetes resource). Any field of the obj can be accessed, for instance *obj.metadata.labels* to access labels;
 1. It must return a Lua table with the below fields:
-
       - ```matching```: it is a bool indicating whether the resource matches the EventSource instance;
       - ```message```: it is a string that can be set and Sveltos will print the value, if set.
 
-Before applying the Lua Event based definition, it is advisable to validate the script beforehand.
-To do so, clone the [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repo. Afterwards, in the *pkg/evaluation/events* directory, create a directory for your resource. If the directory already exists, create a subdirectory.
+Before applying the Lua Event based definition, it is advisable to validate the script beforehand. Simply clone the [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repository. Afterwards, in the *pkg/evaluation/events* directory, create a directory for your resource. If the directory already exists, create a subdirectory.
 
-Inside the newly created directory or subdirectory, create the below.
+In the newly created directory or subdirectory, create the below.
 
 1. A file named ```eventsource.yaml``` containing the EventSource instance with Lua script;
 1. A file named ```matching.yaml``` containing a Kubernetes resource supposed to be a match for the Lua script created in #1 (this is optional);
 1. A file named ```non-matching.yaml``` containing a Kubernetes resource supposed to not be a match for the Lua script created in #1 (this is optional);
 1. Run *make test*
 
-!!! tip
+??? tip "Lua and `AggregatedSelection` field"
 
     The above steps will load the Lua script, pass it the matching (if available) and non-matching (if available) resources and verify result (hs.matching set to true for matching resource, hs.matching set to false for the non matching resource).
 
@@ -180,7 +176,7 @@ Inside the newly created directory or subdirectory, create the below.
           end
     ```
 
-### Example: Create/Delete Service Event in CEL Language
+### Example: Create/Delete Service Event using CEL
 
 Sveltos supports custom events written in the [CEL](https://cel.dev) language.
 
@@ -202,7 +198,7 @@ Sveltos supports custom events written in the [CEL](https://cel.dev) language.
           rule: has(resource.metadata.labels) && has(resource.metadata.labels.sveltos) && resource.metadata.labels.sveltos == "fv"
     ```
 
-In the above YAML definition, an EventSource instance defines an __event__ as a creation/deletion of a Service with the label set to *sveltos: fv* but with a Lua script.
+In the above YAML definition, an `EventSource` instance defines an __event__ as a creation/deletion of a *Service* with the label set to *sveltos: fv* but with a CEL definition.
 
 Multiple rules can be defined. A resource is a match if it matches at least one rule.
 
@@ -234,16 +230,15 @@ Multiple rules can be defined. A resource is a match if it matches at least one 
 
 [EventTrigger](https://raw.githubusercontent.com/projectsveltos/event-manager/refs/heads/main/api/v1beta1/eventtrigger_types.go) is the CRD introduced to define what add-ons to deploy when an event happens.
 
-Each EvenTrigger instance:
+Each `EvenTrigger` instance:
 
-1. References an [EventSource](./addon_event_deployment.md#sveltos-event-definition) (which defines what the event is);
+1. References an [EventSource](./addon_event_deployment.md#eventsource) (which defines what the event is);
 1. Has a _sourceClusterSelector_ selecting one or more managed clusters; [^1]
 1. Contains a list of add-ons to deploy
 
 ![EventTrigger and EventSource in action](../assets/event_flow.gif)
 
-For example, the below EventTrigger references the eventSource *sveltos-service* defined above.
-It references a ConfigMap that contains a *NetworkPolicy* expressed as a template.
+The below `EventTrigger` references the `EventSource` *sveltos-service* defined previously. It references a `ConfigMap` that contains a *NetworkPolicy* expressed as a template.
 
 !!! example ""
     ```yaml
@@ -294,13 +289,13 @@ It references a ConfigMap that contains a *NetworkPolicy* expressed as a templat
                 {{ end }}
     ```
 
-The __Resource__ in the above ConfigMap YAML definition refers to the specific Kubernetes resource within the managed cluster that generated the event (identified by the Service instance with the label `sveltos:fv`).
+The __Resource__ in the above `ConfigMap` YAML definition refers to the specific Kubernetes resource within the **managed** cluster that generated the event (identified by the Service instance with the label `sveltos:fv`).
 
-Additionally, the template can access information about the cluster where the event originated. To utilize the name of the managed cluster, for example, you can use `{{ .Cluster.metadata.name }}` in your template.
+Additionally, the template can access information about the cluster where the event originated. To utilize the name of the managed cluster you can use `{{ .Cluster.metadata.name }}` in your template.
 
 Anytime a *Service* with the label set to *sveltos:fv* is created in a managed cluster matching the sourceClusterSelector, a *NetworkPolicy* with an ingress definition is created.
 
-For example, if the below *Service* is created in a managed cluster:
+For example, if the below *Service* is created in a **managed** cluster:
 
 !!! example ""
     ```yaml
@@ -320,7 +315,7 @@ For example, if the below *Service* is created in a managed cluster:
           targetPort: 9376
     ```
 
-A NetworkPolicy instance is instantiated from the ConfigMap content, using the information from Service (labels and ports) and it is created in the managed cluster.
+A *NetworkPolicy* instance is instantiated from the `ConfigMap` content, using the information from *Service* (labels and ports) and it is created in the managed cluster.
 
 !!! example ""
     ```yaml
@@ -364,25 +359,22 @@ A NetworkPolicy instance is instantiated from the ConfigMap content, using the i
 
 ![Event driven add-ons deployment in action](../assets/event_driven_framework.gif)
 
-To achive the above, the below flow is executed.
+In a nutshell, the below flow is executed.
 
-1. The sveltos-agent in the managed cluster consumes the EventSource instances and detects when an event happens;
-1. When an event happens, the event is reported to management cluster (along with resources, since EventSource *Spec.CollectResources* is set to true) in the form of __EventReport__;
-1. The event-manager pod running in the management cluster, consumes the EventReport and:
+1. The sveltos-agent in the **managed** cluster consumes the `EventSource` instances and detects when an event happens;
+1. When an event occurs, it is reported to **management** cluster (along with resources, since EventSource *Spec.CollectResources* is set to true) in the form of __EventReport__;
+1. The event-manager pod running in the **management** cluster, consumes the EventReport and:
 
-      - creates a new ConfigMap in the *projectsveltos* namespace, whose content is derived from ConfigMap the EventTrigger instance references, and instantiated using information coming the resource in the managed cluster (Service instance with label sveltos:fv);
+      - creates a new `ConfigMap` in the *projectsveltos* namespace, whose content is derived from `ConfigMap` the `EventTrigger` instance references, and instantiated using information coming the resource in the managed cluster (Service instance with label sveltos:fv);
 
-      - creates a ClusterProfile.
+      - creates a `ClusterProfile`.
 
-### Template-based EventSourceName
+!!! note
+    The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy. Any cluster field can be used, for instance: `{{ .Cluster.metadata.name }}-{{ index .Cluster.metadata.labels "region" }}`.
 
-The field `EventSourceName` can be expressed as template and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+### EventSource CollectResources Setting
 
-Any cluster field can be used, for instance: `{{ .Cluster.metadata.name }}-{{ index .Cluster.metadata.labels "region" }}`
-
-### EventSource CollectResources setting
-
-The `collectResources` field in an EventSource (__default: false__) determines whether Kubernetes resources matching the EventSource should be collected and transmitted to the management cluster for template instantiation.
+The collectResources field in an EventSource (__default: false__) determines whether Kubernetes resources matching the EventSource should be collected and transmitted to the management cluster for template instantiation.
 
 - When collectResources is true: templates can directly reference the Resource, which is a full representation of the matched Kubernetes resource (e.g., a Service with the label sveltos:fv) from the managed cluster.
 - When collectResources is false: templates can access the MatchingResources, a corev1.ObjectReference providing essential metadata information about the matched resource (e.g., Service with the label sveltos:fv) without the complete resource details.
@@ -418,7 +410,7 @@ Based on the example above, the below EventReport instance can be found in the m
       resources: eyJhcGlWZXJzaW9uIjoidjEiLCJraW5kIjoiU2VydmljZSIsIm1ldGFkYXRhIjp7ImFubm90YXRpb25zIjp7Imt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6IntcImFwaVZlcnNpb25cIjpcInYxXCIsXCJraW5kXCI6XCJTZXJ2aWNlXCIsXCJtZXRhZGF0YVwiOntcImFubm90YXRpb25zXCI6e30sXCJsYWJlbHNcIjp7XCJzdmVsdG9zXCI6XCJmdlwifSxcIm5hbWVcIjpcIm15LXNlcnZpY2VcIixcIm5hbWVzcGFjZVwiOlwiZGVmYXVsdFwifSxcInNwZWNcIjp7XCJwb3J0c1wiOlt7XCJwb3J0XCI6ODAsXCJwcm90b2NvbFwiOlwiVENQXCIsXCJ0YXJnZXRQb3J0XCI6OTM3Nn1dLFwic2VsZWN0b3JcIjp7XCJhcHAua3ViZXJuZXRlcy5pby9uYW1lXCI6XCJNeUFwcFwifX19XG4ifSwiY3JlYXRpb25UaW1lc3RhbXAiOiIyMDIzLTAzLTE0VDE2OjAxOjE0WiIsImxhYmVscyI6eyJzdmVsdG9zIjoiZnYifSwibWFuYWdlZEZpZWxkcyI6W3siYXBpVmVyc2lvbiI6InYxIiwiZmllbGRzVHlwZSI6IkZpZWxkc1YxIiwiZmllbGRzVjEiOnsiZjptZXRhZGF0YSI6eyJmOmFubm90YXRpb25zIjp7Ii4iOnt9LCJmOmt1YmVjdGwua3ViZXJuZXRlcy5pby9sYXN0LWFwcGxpZWQtY29uZmlndXJhdGlvbiI6e319LCJmOmxhYmVscyI6eyIuIjp7fSwiZjpzdmVsdG9zIjp7fX19LCJmOnNwZWMiOnsiZjppbnRlcm5hbFRyYWZmaWNQb2xpY3kiOnt9LCJmOnBvcnRzIjp7Ii4iOnt9LCJrOntcInBvcnRcIjo4MCxcInByb3RvY29sXCI6XCJUQ1BcIn0iOnsiLiI6e30sImY6cG9ydCI6e30sImY6cHJvdG9jb2wiOnt9LCJmOnRhcmdldFBvcnQiOnt9fX0sImY6c2VsZWN0b3IiOnt9LCJmOnNlc3Npb25BZmZpbml0eSI6e30sImY6dHlwZSI6e319fSwibWFuYWdlciI6Imt1YmVjdGwtY2xpZW50LXNpZGUtYXBwbHkiLCJvcGVyYXRpb24iOiJVcGRhdGUiLCJ0aW1lIjoiMjAyMy0wMy0xNFQxNjowMToxNFoifV0sIm5hbWUiOiJteS1zZXJ2aWNlIiwibmFtZXNwYWNlIjoiZGVmYXVsdCIsInJlc291cmNlVmVyc2lvbiI6IjIyNTIiLCJ1aWQiOiIzNDg2ODE1Yi1kZjk1LTRhMzAtYjBjMi01MGFlOGEyNmI4ZWIifSwic3BlYyI6eyJjbHVzdGVySVAiOiIxMC4yMjUuMTY2LjExMyIsImNsdXN0ZXJJUHMiOlsiMTAuMjI1LjE2Ni4xMTMiXSwiaW50ZXJuYWxUcmFmZmljUG9saWN5IjoiQ2x1c3RlciIsImlwRmFtaWxpZXMiOlsiSVB2NCJdLCJpcEZhbWlseVBvbGljeSI6IlNpbmdsZVN0YWNrIiwicG9ydHMiOlt7InBvcnQiOjgwLCJwcm90b2NvbCI6IlRDUCIsInRhcmdldFBvcnQiOjkzNzZ9XSwic2VsZWN0b3IiOnsiYXBwLmt1YmVybmV0ZXMuaW8vbmFtZSI6Ik15QXBwIn0sInNlc3Npb25BZmZpbml0eSI6Ik5vbmUiLCJ0eXBlIjoiQ2x1c3RlcklQIn0sInN0YXR1cyI6eyJsb2FkQmFsYW5jZXIiOnt9fX0KLS0t
     ```
 
-The resources is a base64 encoded representation of the Service.
+The resources is a **base64** encoded representation of the *Service*.
 
 ### EventTrigger OneForEvent setting
 
@@ -472,7 +464,7 @@ __Currently, it is not possible to change this field once set.__
 ### Cleanup
 
 !!! note
-    Based on the example above, if a Service is deleted, the NetworkPolicy is also removed automatically by Sveltos.
+    Based on the example above, if a *Service* is deleted, the *NetworkPolicy* is removed automatically by Sveltos.
 
 ```bash
 $ kubectl get services -A --selector=sveltos=fv
@@ -488,13 +480,13 @@ default     front-my-service        app.kubernetes.io/name=MyApp          10m40s
 
 ## Events and Multi-tenancy
 
-If the below label is set on the EventSource instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
+If the below label is set on the `EventSource` instance by the tenant admin, Sveltos will make sure tenant admin can define events only looking at resources it has been [authorized to by platform admin](../features/multi-tenancy-sharing-cluster.md).
 
 ```
 projectsveltos.io/admin-name: <admin>
 ```
 
-Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure adding the label defined to each EventSource during creation time.
+Sveltos recommends using the below Kyverno ClusterPolicy, which will ensure adding the label defined to each `EventSource` during creation time.
 
 !!! example ""
     ```yaml
