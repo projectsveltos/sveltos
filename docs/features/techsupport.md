@@ -13,7 +13,7 @@ authors:
 
 ## Introduction to Tech Support Feature
 
-To simplify debugging, we need a single, user-friendly command that users can execute to gather all necessary diagnostic data from both management and managed Kubernetes clusters.
+To simplify debugging, we need a single, user-friendly command users can execute to gather all necessary diagnostic data from both management and managed Kubernetes clusters.
 
 The Techsupport Custom Resource Definition (CRD) within Sveltos provides this capability, allowing for the collection of technical support information (tech support) from Kubernetes clusters, either on a scheduled basis or as needed.
 
@@ -27,9 +27,9 @@ Relying on external data collection products creates dependencies on different p
 
 ## Techsupport CRD
 
-This YAML example demonstrates how to configure Techsupport collection:
+The below YAML example demonstrates how to configure Techsupport collection:
 
-!!! example "Example 1"
+??? example "Example 1"
     ```yaml
     cat > techsupport.yaml <<EOF
     ---
@@ -90,7 +90,7 @@ This YAML example demonstrates how to configure Techsupport collection:
 
 The __Techsupport__ CRD allows filtering pods and resources using the label and the field selectors.
 
-!!! example "Example 2"
+??? example "Example 2"
     ```yaml
     cat > techsupport_advanced.yaml <<EOF
     ---
@@ -155,6 +155,9 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
     ```
 
 - *schedulingConfig.schedule* field specifies when a tech-support needs to be collected. It is in [Cron format](https://en.wikipedia.org/wiki/Cron).
+
+!!! note
+    The [CEL](https://cel.dev/) language can be used as a way to express logic.
 
 ## Delivery Options
 

@@ -32,7 +32,7 @@ For more information, take a peek at [this](./examples/cross_cluster_configurati
 
 ## EventSource
 
-An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the [EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go) custom resource definition (CRD).
+An _Event_ is a specific operation in the context of Kubernetes objects. To define an event, use the [EventSource](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go) Custom Resource Definition (CRD).
 
 ### Example: Create/Delete Service Event
 

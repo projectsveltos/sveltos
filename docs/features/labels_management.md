@@ -251,6 +251,9 @@ The Lua function must return a struct with:
 - "matching" field: boolean indicating whether cluster is a match;
 - "message" field: (optional) message.
 
+!!! note
+    Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic.
+
 ### Classifier controller configuration
 
 1. *concurrent-reconciles*: By default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;

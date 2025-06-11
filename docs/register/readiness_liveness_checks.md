@@ -11,7 +11,10 @@ authors:
     - Gianluca Mardente
 ---
 
-When a cluster is registered with Sveltos, Sveltos attempts to connect to its `API server`. A successful connection, results in the cluster's status being set to `Ready`. This status is a prerequisite for Sveltos to deploy add-ons and applications to clusters.
+When a cluster is registered with Sveltos, Sveltos attempts to connect to its `API server`. A successful connection results in the cluster's status being set to a `Ready` state. This status is a prerequisite for Sveltos to deploy add-ons and applications to clusters.
+
+!!! note
+    [Lua](https://www.lua.org/) and [CEL](https://cel.dev/) languages can be used as a way to express logic.
 
 ## SveltosCluster Readiness Checks
 
