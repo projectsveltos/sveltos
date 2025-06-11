@@ -41,6 +41,7 @@ The supported types are:
 2. __HealthCheck__: HealthCheck type allows to define a custom health check for any Kubernetes type.
 
 ### Notifications
+
 The notifications fields is a list of all __notifications__ to be sent when the liveness check state changes.
 
 The supported types are:
@@ -55,6 +56,7 @@ The supported types are:
 
 
 ### HealthCheck CRD
+
 To define a custom health check, simply create a [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) instance.
 
 The `HealthCheck` specification can can contain the below fields:
@@ -73,6 +75,9 @@ When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expect
    1. `status`: which can be set to either one of	__Healthy__/__Progressing__/__Degraded__/__Suspended__;
    2. `ignore`: is a boolean field indicating whether Sveltos should ignore the resource. If hs.ignore is set to `true`, Sveltos will ignore the resource causing that result;
    3. `message`: is a string that can be set and Sveltos will print a message if it is set
+
+!!! note
+    Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic.
 
 ## Example: ConfigMap HealthCheck
 
@@ -127,8 +132,7 @@ At the end, we return the `hs` object to Sveltos.
         end
     ```
 
-The below `ClusterHealthCheck` resources, will send a Webex message as notification if a ConfigMap
-with an incorrect OPA policy is detected.
+The below `ClusterHealthCheck` resources, will send a Webex message as notification if a ConfigMap with an incorrect OPA policy is detected.
 
 !!! example ""
     ```yaml
