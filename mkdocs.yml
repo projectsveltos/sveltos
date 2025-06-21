@@ -128,6 +128,7 @@ theme:
   - content.code.annotate
   name: material
   logo: assets/logo.png
+  custom_dir: overrides
   palette:
   - scheme: default
     primary: light blue
@@ -145,6 +146,11 @@ theme:
 repo_url: https://github.com/projectsveltos
 repo_name: projectsveltos
 extra:
+  version:
+    provider: mike
+    alias: true
+    default:
+      - latest
   social:
   - icon: fontawesome/solid/house
     link: https://sveltos.projectsveltos.io/
@@ -164,3 +170,4 @@ extra_css:
 - stylesheets/extra.css
 plugins:
 - search
+- mike

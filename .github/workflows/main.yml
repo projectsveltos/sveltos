@@ -1,0 +1,29 @@
+name: CI build main documentation
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          pip install mkdocs-material
+          pip install mike
+      - name: Setup Docs Deploy
+        run: |
+          git config --global user.name "Sveltos Docu Deploy"
+          git config --global user.email "docu@projectsveltos.io"
+      - name: Build Docs Website
+        run: |
+          mike deploy main --update-aliases
+          mike set-default main --push
