@@ -349,8 +349,6 @@ rules:
         - lib.projectsveltos.io
       resources:
         - clustersets
-        - configurationbundles
-        - configurationgroups
         - reloaders
         - resourcesummaries
         - sets
@@ -381,16 +379,6 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - configurationbundles/status
-      verbs:
-        - get
-        - list
-        - update
-        - watch
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
-        - configurationgroups/status
         - debuggingconfigurations
         - sveltosclusters
         - sveltosclusters/status
@@ -566,7 +554,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v0.57.2
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -579,7 +567,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v0.57.2
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

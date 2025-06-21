@@ -215,16 +215,6 @@ spec:
                   Paused can be used to prevent controllers from processing the
                   SveltosCluster and all its associated objects.
                 type: boolean
-              pullMode:
-                default: false
-                description: |-
-                  PullMode indicates whether the cluster is in pull mode.
-                  If true, the agent in the managed cluster will fetch the configuration.
-                  If false (default), the management cluster will push the configuration.
-                type: boolean
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
               readinessChecks:
                 description: |-
                   ReadinessChecks is an optional list of custom checks to verify cluster
