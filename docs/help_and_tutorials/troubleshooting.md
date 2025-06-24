@@ -206,3 +206,47 @@ $ kubectl get clustersummary <clustersummary name> -n <clustersummary namespace>
 ```
 
 We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click [here](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) to join us.
+
+
+## Debugging
+
+Sveltos provides a custom resource called DebuggingConfiguration that allows you to configure the log level for various system components.
+
+This is useful for troubleshooting specific issues by increasing verbosity
+
+The following example sets the log level of AddonManager to LogLevelDebug:
+
+```
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: DebuggingConfiguration
+metadata:
+  ...
+  ...
+spec:
+  configuration:
+  - component: AccessManager
+    logLevel: LogLevelInfo
+  - component: AddonManager
+    logLevel: LogLevelDebug
+  - component: Classifier
+    logLevel: LogLevelInfo
+  - component: DriftDetectionManager
+    logLevel: LogLevelInfo
+  - component: EventManager
+    logLevel: LogLevelInfo
+  - component: HealthCheckManager
+    logLevel: LogLevelInfo
+  - component: SveltosClusterManager
+    logLevel: LogLevelInfo
+  - component: UIBackend
+    logLevel: LogLevelInfo
+  - component: SveltosAgent
+    logLevel: LogLevelInfo
+  - component: ShardController
+    logLevel: LogLevelInfo
+  - component: ConversionWebhook
+    logLevel: LogLevelInfo
+  - component: Techsupport
+    logLevel: LogLevelInfo
+
+```
