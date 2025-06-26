@@ -25,5 +25,5 @@ jobs:
           git config --global user.email "docu@projectsveltos.io"
       - name: Build Docs Website
         run: |
-          mike deploy main --update-aliases
+          mike deploy --push main --update-aliases
           mike set-default main --push

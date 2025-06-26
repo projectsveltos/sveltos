@@ -210,13 +210,11 @@ We are here to help! Whether you have questions, or issues or need assistance, o
 
 ## Debugging
 
-Sveltos provides a custom resource called DebuggingConfiguration that allows you to configure the log level for various system components.
-
-This is useful for troubleshooting specific issues by increasing verbosity
+Sveltos provides a custom resource called `DebuggingConfiguration` that allows users to configure the log level for various system components. This is useful for troubleshooting specific issues by increasing verbosity.
 
 The following example sets the log level of AddonManager to LogLevelDebug:
 
-```
+```yaml
 apiVersion: lib.projectsveltos.io/v1beta1
 kind: DebuggingConfiguration
 metadata:
