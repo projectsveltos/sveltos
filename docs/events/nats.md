@@ -55,7 +55,7 @@ then create a Secret with it
 kubectl create secret generic -n projectsveltos sveltos-nats --from-file=sveltos-nats=nats-configuration
 ```
 
-The *sveltos-agent* automatically detects and reacts to changes in this Secret. Take a look at [this](https://github.com/projectsveltos/sveltos-agent/blob/7f95fd41902b0be25904234f38947eceb9178900/pkg/evaluation/nats_evaluation.go#L78) to see full NATS/JetStream configuration options.
+The *sveltos-agent* automatically detects and reacts to changes in this Secret. Full NATS/JetStream configuration options can be found at [the bottom of this page](#nats-and-jetstream-configuration-options).
 
 ## Define an Event
 
@@ -355,6 +355,170 @@ sveltosctl show addons
 | default/clusterapi-workload | :Secret       | projectsveltos | sveltos-nats | N/A     | 2025-02-04 14:06:36 +0100 CET | ClusterProfile/deploy-deploy-sveltos-nats-secret |
 +-----------------------------+---------------+----------------+--------------+---------+-------------------------------+--------------------------------------------------+
 ```
+
+## NATS and JetStream Configuration Options
+
+Sveltos expects a JSON configuration to connect to NATS and JetStream. This configuration is unmarshalled into a specific schema, and must exist in a Secret called `sveltos-nats` in the `projectsveltos` namespace. This Secret's data must contain a key also named `sveltos-nats` with the connection details.
+
+Three different authentication methods are supported:
+
+- **User/Password**: Specify a [username and password](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/username_password) for basic authentication.
+- **Token**: Use a [token](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens) for authentication.
+- **mTLS**: Use [mutual TLS](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tls_mutual_auth) for secure authentication. This requires a PEM-encoded client certificate and private key, along with an optional PEM-encoded root CA certificate.
+
+To connect to NATS or JetStream, Sveltos expects a JSON configuration that conforms to the following format, viewable here as Golang structs or as JSON Schema. 
+
+!!! Note
+    Fields listed in the Golang structs as `[]byte` will be automatically converted from strings in the JSON configuration.
+
+=== "Golang"
+
+    ``` go
+    type messagingUser struct {
+        User     string `json:"user"`
+        Password string `json:"password"`
+    }
+        
+    type clientCert struct {
+        CertPem []byte `json:"certPem"`
+        KeyPem  []byte `json:"keyPem"`
+    }
+        
+    type messagingAuthorization struct {
+        // select one of the following authentication methods
+        User       *messagingUser `json:"user,omitempty"`
+        Token      *string        `json:"token,omitempty"`
+        ClientCert *clientCert    `json:"clientCert,omitempty"`
+        RootCA     []byte         `json:"rootCA,omitempty"`
+    }
+        
+    type configuration struct {
+        URL           string                 `json:"url"`
+        Subjects      []string               `json:"subjects"`
+        Authorization messagingAuthorization `json:"authorization,omitempty"`
+    }
+        
+    type natsConfiguration struct {
+        Configuration configuration `json:"configuration"`
+    }
+        
+    type jetstreamConfiguration struct {
+        Configuration configuration `json:"configuration"`
+    }
+        
+    type messagingConfig struct {
+        Nats      *natsConfiguration      `json:"nats,omitempty"`
+        Jetstream *jetstreamConfiguration `json:"jetstream,omitempty"`
+    }
+    ```
+
+=== "JSON Schema"
+
+    ```json
+    {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Sveltos NATS and JetStream Messaging Configuration",
+        "type": "object",
+        "properties": {
+            "nats": {
+                "type": "object",
+                "properties": {
+                    "configuration": {
+                        "$ref": "#/$defs/configuration"
+                    }
+                },
+                "required": [
+                    "configuration"
+                ]
+            },
+            "jetstream": {
+              "type": "object",
+               "properties": {
+                   "configuration": {
+                       "$ref": "#/$defs/configuration"
+                   }
+               },
+               "required": [
+                  "configuration"
+              ]
+            }
+        },
+        "additionalProperties": false,
+        "$defs": {
+            "configuration": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "NATS server URL"
+                    },
+                    "subjects": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of NATS subjects to subscribe/publish to"
+                    },
+                    "authorization": {
+                        "type": "object",
+                        "description": "Optional authentication settings",
+                        "properties": {
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "user": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "user",
+                                    "password"
+                                ],
+                                "additionalProperties": false
+                            },
+                            "token": {
+                                "type": "string"
+                            },
+                            "clientCert": {
+                                "type": "object",
+                                "properties": {
+                                    "certPem": {
+                                        "type": "string",
+                                        "description": "PEM-encoded certificate"
+                                    },
+                                    "keyPem": {
+                                        "type": "string",
+                                        "description": "PEM-encoded private key"
+                                    }
+                                },
+                                "required": [
+                                    "certPem",
+                                    "keyPem"
+                                ],
+                                "additionalProperties": false
+                            },
+                            "rootCA": {
+                                "type": "string",
+                                "description": "PEM-encoded root certificate authority"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "required": [
+                    "url",
+                    "subjects"
+                ],
+                "additionalProperties": false
+            }
+        }
+    }
+    ```
+
 
 [^1]: EventTrigger can also reference a [_ClusterSet_](../features/set.md) to select one or more managed clusters.
 [^2]: Secret contains following configuration:
