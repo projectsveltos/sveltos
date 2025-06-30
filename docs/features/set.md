@@ -14,7 +14,7 @@ authors:
 
 ## ClusterSet and Set
 
-Sveltos offers two resources, `ClusterSet` and `Set`, to manage groups of clusters and dynamically select a subset of those clusters for deployments based on specific criteria. 
+Sveltos offers two resources, `ClusterSet` and `Set`, to manage groups of clusters and dynamically select a subset of those clusters for deployments based on specific criteria.
 This enables automated deployments and failover across healthy clusters in your environment.
 
 ### Key Capabilities
@@ -26,10 +26,10 @@ This enables automated deployments and failover across healthy clusters in your 
 ### Referencing ClusterSet/Set in a ClusterProfile/Profile
 A ClusterProfile or Profile can reference a ClusterSet or Set by specifying its name. The add-ons defined in the profile will only be deployed to the currently selected clusters within the referenced set.
 
-The add-ons defined in the ClusterProfile/Profile will be deployed only to the currently selected clusters within the referenced ClusterSet/Set. 
+The add-ons defined in the ClusterProfile/Profile will be deployed only to the currently selected clusters within the referenced ClusterSet/Set.
 This enables dynamic deployment management based on the available and healthy clusters in the set.
 
-This feature is particularly useful for scenarios where you want to implement active/passive failover: create a ClusterSet/Set with maxReplicas: 1 and have it match two clusters in the clusterSelector. 
+This feature is particularly useful for scenarios where you want to implement active/passive failover: create a ClusterSet/Set with maxReplicas: 1 and have it match two clusters in the clusterSelector.
 This ensures only one cluster is active at a time. If the active cluster goes down, the backup cluster will be automatically selected for deployments.
 
 ### Active/Passive Failover Example
@@ -38,7 +38,7 @@ This scenario demonstrates active/passive failover with a ClusterSet.
 
 ![Cluster Failover](../assets/clusterset.gif)
 
-#### Register Clusters: 
+#### Register Clusters:
 
 We have two Civo clusters registered with Sveltos, all labeled `env:prod`.
 
@@ -153,7 +153,7 @@ Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the clus
     ```
 
 ```
-$ sveltosctl show addons  
+$ sveltosctl show addons
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 |    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
@@ -236,7 +236,7 @@ The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in t
     ```
 
 ```
-$ sveltosctl show addons  
+$ sveltosctl show addons
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 |    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 +---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+

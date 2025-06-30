@@ -17,7 +17,7 @@ authors:
 
 We already covered [here](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c) how to deploy L4 and L7 routing on multiple Kubernetes clusters securely and programmatically with Sveltos.
 
-With the event driven framework, we are taking a step forward: programmatically generate/update HTTPRoutes: 
+With the event driven framework, we are taking a step forward: programmatically generate/update HTTPRoutes:
 
 1. Define a Sveltos Event as creation/deletion of specific Service instances (in our example, the Service instances we are interested in are in the namespace *eng* and are exposing port *80*);
 1. Define what add-ons to deploy in response to such events: an HTTPRoute instance defined as a template. Sveltos will instantiate this template using information from Services in the managed clusters that are part of the event defined in #1

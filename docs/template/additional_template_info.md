@@ -1,6 +1,6 @@
 ---
 title: Additional Templates Information
-description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. 
+description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template.
 tags:
     - Kubernetes
     - add-ons
@@ -36,7 +36,7 @@ If the `ClusterProfile` is created by a tenant administrator as part of a [multi
 
 ### templateResourceRefs: Namespace and Name
 
-When using the `templateResourceRefs` field to locate resources in the **management** cluster, the `namespace` field is **optional**. 
+When using the `templateResourceRefs` field to locate resources in the **management** cluster, the `namespace` field is **optional**.
 
 1. If a namespace is **provided** (like _default_), Sveltos will look for the resource in the specified namespace
 1. If the namespace field is **blank**, Sveltos will search for the resource in the same namespace as the management cluster
@@ -46,8 +46,8 @@ The `name` field in `templateResourceRefs` can be expressed as a template. It al
 Available cluster information:
 
 - **cluster namespace**: `.Cluster.metadata.namespace`
-- **cluster name**: `.Cluster.metadata.name` 
-- **cluster type**: `.Cluster.kind` 
+- **cluster name**: `.Cluster.metadata.name`
+- **cluster type**: `.Cluster.kind`
 
 For example, the below template creates a name by combining the cluster's `namespace` and `name`.
 
@@ -56,7 +56,7 @@ name: "{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}"
 ```
 
 ## Embedding Go Templates in Sveltos
- 
+
 When incorporating Go template logic into Sveltos templates, utilise the **escape syntax** ```'{{`<YOUR GO TEMPLATE>`}}'```. This ensures that the code is treated as a Go template rather than a Sveltos template.
 
 !!! example "Embedding Go Templates in Sveltos"

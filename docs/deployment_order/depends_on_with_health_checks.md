@@ -25,7 +25,7 @@ To guarantee that cert-manager is not only deployed but also functional, employ 
       name: cert-manager
     spec:
       clusterSelector:
-        matchLabels: 
+        matchLabels:
           env: fv
       syncMode: Continuous
       helmCharts:

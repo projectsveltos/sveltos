@@ -7,7 +7,7 @@ mkdir manifest/crds/
 touch manifest/crds/sveltos_crds.yaml
 
 for f in kustomize/components/crds/*.yaml
-do 
+do
     # ignore kustomization.yaml file
     if [[ "$f" == *"kustomization.yaml"* ]]; then
         continue

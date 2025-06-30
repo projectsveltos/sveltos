@@ -366,7 +366,7 @@ Three different authentication methods are supported:
 - **Token**: Use a [token](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens) for authentication.
 - **mTLS**: Use [mutual TLS](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tls_mutual_auth) for secure authentication. This requires a PEM-encoded client certificate and private key, along with an optional PEM-encoded root CA certificate.
 
-To connect to NATS or JetStream, Sveltos expects a JSON configuration that conforms to the following format, viewable here as Golang structs or as JSON Schema. 
+To connect to NATS or JetStream, Sveltos expects a JSON configuration that conforms to the following format, viewable here as Golang structs or as JSON Schema.
 
 !!! Note
     Fields listed in the Golang structs as `[]byte` will be automatically converted from strings in the JSON configuration.
@@ -378,12 +378,12 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
         User     string `json:"user"`
         Password string `json:"password"`
     }
-        
+
     type clientCert struct {
         CertPem []byte `json:"certPem"`
         KeyPem  []byte `json:"keyPem"`
     }
-        
+
     type messagingAuthorization struct {
         // select one of the following authentication methods
         User       *messagingUser `json:"user,omitempty"`
@@ -391,21 +391,21 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
         ClientCert *clientCert    `json:"clientCert,omitempty"`
         RootCA     []byte         `json:"rootCA,omitempty"`
     }
-        
+
     type configuration struct {
         URL           string                 `json:"url"`
         Subjects      []string               `json:"subjects"`
         Authorization messagingAuthorization `json:"authorization,omitempty"`
     }
-        
+
     type natsConfiguration struct {
         Configuration configuration `json:"configuration"`
     }
-        
+
     type jetstreamConfiguration struct {
         Configuration configuration `json:"configuration"`
     }
-        
+
     type messagingConfig struct {
         Nats      *natsConfiguration      `json:"nats,omitempty"`
         Jetstream *jetstreamConfiguration `json:"jetstream,omitempty"`

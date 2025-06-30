@@ -110,7 +110,7 @@ When *oneForEvent* is set to `false`, when instantiating the Ingress template, *
                         {{ end }}
                         {{ end }}
                 {{ end }}
-    EOF    
+    EOF
     ```
 
 If we have two Service instance in the managed cluster in the namespace `eng`

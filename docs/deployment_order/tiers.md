@@ -20,7 +20,7 @@ Sveltos streamlines application and add-on deployments across different Kubernet
 
 ## Addressing the Challenge of Subset Modifications
 
-Imagine we have the need to **adjust deployments** for a **subset** of **clusters** within a previously defined group. Traditionally, creating a new Profile targeting the subset and including resources already managed by another profile would lead to conflicts. 
+Imagine we have the need to **adjust deployments** for a **subset** of **clusters** within a previously defined group. Traditionally, creating a new Profile targeting the subset and including resources already managed by another profile would lead to conflicts.
 Sveltos will **not** allow deployment for the overlapping resources.
 
 ## Introducing Tiers for Conflict Resolution and Priority
@@ -30,7 +30,7 @@ Sveltos tiers provide a solution for managing deployment priority when resources
 - **Tier Property**: Each ClusterProfile/Profile now has a new property called `tier`
 - **Deployment Order Control**: The tier value dictates the deployment order for resources targeting the same element within a cluster (e.g., a Helm chart or Kubernetes object)
 - **Default Behavior**: By default, the first configuration to reach the cluster successfully deploys the resource
-- **Tier Overrides**: `tier` overrides the default behavior. In case of conflicts, the configuration with the **lowest** tier value **takes precedence** and deploys the resource 
+- **Tier Overrides**: `tier` overrides the default behavior. In case of conflicts, the configuration with the **lowest** tier value **takes precedence** and deploys the resource
 
 !!!note
     Lower tier values represent **higher priority deployments**. The `default` tier value is set to **100**.

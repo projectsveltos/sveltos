@@ -114,7 +114,7 @@ With the ConfigMap __postgresql-job__ containing a Job that creates a table Todo
 As soon as the PostgreSQL Deployment is `healthy`, Sveltos will deploy the Job. The Job will create table __Todo__.
 
 ```bash
-$ sveltosctl show addons                                       
+$ sveltosctl show addons
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |    NAME    | VERSION |             TIME              |       CLUSTER PROFILES       |
 +-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
@@ -247,9 +247,9 @@ $ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets
 
 $ wget https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_service.yaml
 
-$ kubectl create configmap postgresql-deployment --from-file postgresql_deployment.yaml 
+$ kubectl create configmap postgresql-deployment --from-file postgresql_deployment.yaml
 
-$ kubectl create configmap postgresql-service --from-file postgresql_service.yaml 
+$ kubectl create configmap postgresql-service --from-file postgresql_service.yaml
 ```
 
 [^2]: Get Job YAML

@@ -71,8 +71,8 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
-    kind: ClusterProfile 
-    metadata: 
+    kind: ClusterProfile
+    metadata:
       name: cp-kubevela
     spec:
       dependsOn:
@@ -112,7 +112,7 @@ In the below YAML definitions, the ClusterProfile instance *cp-kubevela* relies 
         helmChartAction:  Install
     ```
 
-The above example is equivalent of creating a single ClusterProfile. 
+The above example is equivalent of creating a single ClusterProfile.
 
 !!! example ""
     ```yaml

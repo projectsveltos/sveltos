@@ -16,7 +16,7 @@ git clone git@github.com:projectsveltos/ui-backend.git
 cd ui-backend
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/dashboard-manifest.yaml
     echo "---"  >> ../../manifest/dashboard-manifest.yaml
@@ -30,7 +30,7 @@ git clone git@github.com:projectsveltos/dashboard.git
 cd dashboard
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../manifest/dashboard-manifest.yaml
     echo "---"  >> ../../manifest/dashboard-manifest.yaml

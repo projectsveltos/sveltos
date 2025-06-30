@@ -78,7 +78,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
     metadata:
       name: deploy-resources
     spec:
-      clusterSelector: 
+      clusterSelector:
         matchLabels:
           env: production
       templateResourceRefs:
@@ -165,7 +165,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
     EOF
     ```
 
-After posting it a Bucket instance is created in the management cluster by Sveltos. 
+After posting it a Bucket instance is created in the management cluster by Sveltos.
 
 ```bash
 $ kubectl get bucket -A
@@ -178,7 +178,7 @@ The gcs-storage-controller processes this instance and creates a bucket on Googl
 
 ![Google Cloud Storage Bucket](../assets/google_cloud_storage_bucket.png)
 
-To verify the bucket has been created on Google Cloud Storage 
+To verify the bucket has been created on Google Cloud Storage
 
 ```
 $ gsutil iam get gs://<BUCKET NAME>
@@ -192,4 +192,4 @@ Sveltos has also deployed a Pod in the managed cluster and has passed this Pod w
 
 The example focused on demostating how easy is to extend Sveltos. We focused on using a new controller that allocates a storage bucket from Google Cloud and deploy a pod in the managed cluster to upload a file to that bucket, all using a single YAML configuration.
 
-Whenever you need to generate extra information and pass it along to the managed cluster, using the scheme mentioned above you can extend Sveltos by writing your own controller. 
+Whenever you need to generate extra information and pass it along to the managed cluster, using the scheme mentioned above you can extend Sveltos by writing your own controller.

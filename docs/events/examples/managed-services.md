@@ -42,7 +42,7 @@ and add following permissions
   - ""
   resources:
   - configmaps
-  - namespaces 
+  - namespaces
   - secrets
   verbs:
   - "*"
@@ -51,11 +51,11 @@ and add following permissions
 ## Deploy Postgres
 
 Sveltos will be used to deploy two Postgres instances on the `managed-services-cluster`
- 
+
 ```bash
-wget https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/production-postgres.yaml 
+wget https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/production-postgres.yaml
 kubectl create configmap production-postgres --from-file=production-postgres.yaml
-wget https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/pre-production-postgres.yaml 
+wget https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/pre-production-postgres.yaml
 kubectl create configmap pre-production-postgres --from-file=pre-production-postgres.yaml
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/deploy-postgres-clusterprofile.yaml
 ```
@@ -95,7 +95,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/demos/main/man
 Verify that information was successfully collected
 
 ```
-kubectl get configmap -n production-services postgres-host-port 
+kubectl get configmap -n production-services postgres-host-port
 kubectl get configmap -n pre-production-services postgres-host-port
 kubectl get secret -n production-services postgres-credentials
 kubectl get secret -n pre-production-services postgres-credentials
@@ -103,7 +103,7 @@ kubectl get secret -n pre-production-services postgres-credentials
 
 ## Deploy Job to the production cluster
 
-With the Postgres service operational on the managed-services-cluster, we can proceed with deploying a Job to the managed production cluster. 
+With the Postgres service operational on the managed-services-cluster, we can proceed with deploying a Job to the managed production cluster.
 This Job will create a table within the production Postgres database. To initiate this process, let's construct a ConfigMap containing a Job template.
 
 ```
@@ -120,7 +120,7 @@ By directing kubectl to the production cluster, we can confirm the Job's creatio
 
 ## Deploy Job to the pre-production cluster
 
-A similar Job can be deployed to the pre-production cluster to create a table within the corresponding pre-production Postgres database. 
+A similar Job can be deployed to the pre-production cluster to create a table within the corresponding pre-production Postgres database.
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectsveltos/demos/main/managed-services/deploy-job-to-pre-production.yaml

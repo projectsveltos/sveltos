@@ -24,7 +24,7 @@ $ kubectl get job register-mgmt-cluster-job -n projectsveltos -o=jsonpath='{.spe
 ```bash hl_lines="2-3"
 $ sveltosctl version
 I0428 09:05:01.496691 2181388 version.go:64] "Client Version:   v0.27.0-17-2fb25f7e7a15a3"
-I0428 09:05:01.496715 2181388 version.go:65] "Git commit:       2fb25f7e7a15a3adc351e569f79ec1f80ae1ac7e" 
+I0428 09:05:01.496715 2181388 version.go:65] "Git commit:       2fb25f7e7a15a3adc351e569f79ec1f80ae1ac7e"
 ```
 
 ## Common Issues
@@ -52,7 +52,7 @@ status:
     namespace: mgmt
 ```
 
-To confirm if a specific cluster is considered a match for a ClusterProfile or Profile, check the __matchingClusters__ list within the _Status_ section of the ClusterProfile/Profile instance. 
+To confirm if a specific cluster is considered a match for a ClusterProfile or Profile, check the __matchingClusters__ list within the _Status_ section of the ClusterProfile/Profile instance.
 If the cluster details are present in the list, then Sveltos considered it a matching cluster.
 
 Sveltos automatically creates a ClusterSummary resource whenever a cluster aligns with a configured ClusterProfile or Profile. This summary serves as a record of the cluster's configuration and deployment status.
@@ -107,7 +107,7 @@ $ kubectl describe pod <pod-name> -n projectsveltos
 $ kubectl logs <pod-name> -n projectsveltos -f
 ```
 
-### Fixing ‘Cannot Re-Use a Name That Is Still In Use’ 
+### Fixing ‘Cannot Re-Use a Name That Is Still In Use’
 
 Do you encounter the error "**cannot re-use a name that is still in use**" while deploying Helm charts with Sveltos? Don't worry, this is a common issue with a straightforward solution.
 
@@ -184,7 +184,7 @@ $ kubectl label sveltoscluster <cluster-name> -n <cluster namespace> env=dev --o
 ```
 - `env=dev` is the new label set to the cluster
 
-#### Validate 
+#### Validate
 ```bash
 $ sveltosctl show addons
 ```

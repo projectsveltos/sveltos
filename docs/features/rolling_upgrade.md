@@ -46,7 +46,7 @@ The __nginx__ ConfigMap contains a Deployment mounting a ConfigMap[^1].
 The above ClusterProfile is responsible for deploying both a ConfigMap instance and a Deployment instance, with the latter mounting a ConfigMap.
 
 ```bash
-$ sveltosctl show addons          
+$ sveltosctl show addons
 +-----------------------------+---------------------------------+-----------+---------------------+---------+-------------------------------+------------------------------+
 |           CLUSTER           |          RESOURCE TYPE          | NAMESPACE |        NAME         | VERSION |             TIME              |       CLUSTER PROFILES       |
 +-----------------------------+---------------------------------+-----------+---------------------+---------+-------------------------------+------------------------------+

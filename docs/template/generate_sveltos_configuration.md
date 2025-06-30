@@ -12,19 +12,19 @@ authors:
 
 # Generating Sveltos configurations with Sveltos
 
-Sveltos provides powerful templating capabilities that extend beyond simply deploying add-ons to clusters. 
-This section dives into Sveltos' templating capabilities for generating Sveltos configurations themselves. 
+Sveltos provides powerful templating capabilities that extend beyond simply deploying add-ons to clusters.
+This section dives into Sveltos' templating capabilities for generating Sveltos configurations themselves.
 This allows you to create reusable templates that adapt and generate child configurations based on defined variables.
 
 ![Generate Sveltos Configuration](../assets/generating-sveltos-conf.png)
 
-1. The `deploy-clusterprofiles` ClusterProfile acts as the trigger. It selects the management cluster (identified by the label __type: mgmt__) 
+1. The `deploy-clusterprofiles` ClusterProfile acts as the trigger. It selects the management cluster (identified by the label __type: mgmt__)
 and references a ConfigMap named `test`.
 
-2. The referenced ConfigMap holds a template defined in the data section. 
+2. The referenced ConfigMap holds a template defined in the data section.
 This template utilizes a loop to dynamically generate two additional ClusterProfile resources: `keydb-services-production` and `keydb-services-staging`.
 
-3. Each generated ClusterProfile targets managed clusters (identified by a label change to __purpose: edge__) and includes 
+3. Each generated ClusterProfile targets managed clusters (identified by a label change to __purpose: edge__) and includes
 specific environment configurations for production and staging deployments.
 
 !!!note
@@ -37,7 +37,7 @@ metadata:
   name: deploy-clusterprofiles
 spec:
   clusterSelector:
-    matchLabels:      
+    matchLabels:
       type: mgmt   # Select the management cluster
   policyRefs:
   - name: test
@@ -86,7 +86,7 @@ data:
 After applying this configuration, you'll end up with a total of three ClusterProfiles:
 
 ```
-kubectl get clusterprofile                                 
+kubectl get clusterprofile
 NAME                        AGE
 deploy-resources            18m
 keydb-services-production   18m
@@ -97,12 +97,12 @@ Note this variable definition
 
 ```
 {{ $cluster := print "{{ .Cluster.metadata.name }}" }}
-``` 
+```
 
 It's important to capture it as a string to prevent further templating within the `deploy-clusterprofiles` ClusterProfile itself.
 
 The generated ClusterProfiles (`keydb-services-production` and `keydb-services-staging`) define Helm chart deployments tailored for
-their respective environments. 
+their respective environments.
 For example, the production configuration utilizes the following Helm chart details:
 
 

@@ -85,7 +85,7 @@ cluster13   true    v1.26.9+rke2r1   env=prod,sveltos-agent=present
             --namespace=<namespace> \
             --cluster=<cluster name> \
             --fleet-cluster-context=<context name> \
-            --labels=key1=value1,key2=value2 
+            --labels=key1=value1,key2=value2
         ```
 
 ### Step 3: Create the ClusterProfile

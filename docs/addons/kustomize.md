@@ -139,8 +139,8 @@ In the ValuesFrom section, we can express ConfigMap and Secret names as template
 Available cluster information :
 
 - cluster namespace: use `.Cluster.metadata.namespace`
-- cluster name: `.Cluster.metadata.name` 
-- cluster type: `.Cluster.kind` 
+- cluster name: `.Cluster.metadata.name`
+- cluster type: `.Cluster.kind`
 
 Consider two SveltosCluster instances in the _civo_ namespace:
 
@@ -155,7 +155,7 @@ Additionally, there are two ConfigMaps within the civo namespace. Those ConfigMa
 
 
 ```bash
-kubectl get configmap -n civo                                                   
+kubectl get configmap -n civo
 NAME                                  DATA   AGE
 hello-world-pre-production            2      9m40s
 hello-world-production                2      9m45s
@@ -219,7 +219,7 @@ This summary outlines how Sveltos manages deployments using Kustomize and key-va
 
 3. **Optional: Nested Template Processing (Advanced Usage)**: For advanced scenarios, a key-value pair's value itself can be a template. Sveltos evaluates these nested templates using data available in the context, such as information from the management cluster. This allows dynamic value construction based on the management cluster's configuration.
 4. **Template Instantiation**: Finally, Sveltos uses the processed key-value pairs to substitute placeholder values within the Kustomize build output. These placeholders are typically denoted by _{{ .VariableName }}_.
-  
+
 This process ensures that deployments are customized with appropriate values based on the ClusterProfile configuration and, optionally, the management cluster's state.
 
 This is a fully working example:
@@ -273,7 +273,7 @@ spec:
 ```
 
 ```
-sveltosctl show addons 
+sveltosctl show addons
 +-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+----------------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |              TIME              |          PROFILES          |
 +-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+--------------------------------------+
@@ -323,7 +323,7 @@ If you have directories containing Kustomize resources, you can include them in 
 In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, and then we create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
 
 ```bash
-$ git clone git@github.com:gianlucam76/kustomize.git 
+$ git clone git@github.com:gianlucam76/kustomize.git
 
 $ tar -czf kustomize.tar.gz -C kustomize/helloWorldWithOverlays .
 
@@ -337,7 +337,7 @@ The below ClusterProfile will use the Kustomize SDK to get all the resources nee
 apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
-  name: kustomize-with-configmap 
+  name: kustomize-with-configmap
 spec:
   clusterSelector:
     matchLabels:

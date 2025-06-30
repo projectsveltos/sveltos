@@ -1,6 +1,6 @@
 ---
 title: Sveltos dry run
-description: Sveltos' DryRun mode, a powerful feature that lets you test important changes without any actual impact on your managed clusters. Learn how to configure your ClusterProfile with DryRun syncMode and run a safe simulation of planned operations. Receive detailed reports on potential changes, inspect them, and validate configurations before applying them. Experience peace of mind in managing your clusters with Sveltos' risk-free DryRun mode. 
+description: Sveltos' DryRun mode, a powerful feature that lets you test important changes without any actual impact on your managed clusters. Learn how to configure your ClusterProfile with DryRun syncMode and run a safe simulation of planned operations. Receive detailed reports on potential changes, inspect them, and validate configurations before applying them. Experience peace of mind in managing your clusters with Sveltos' risk-free DryRun mode.
 tags:
     - Kubernetes
     - Sveltos
@@ -59,7 +59,7 @@ $ sveltosctl show dryrun
 To view **detailed** line-by-line changes for each resource, use the `--raw-diff` option with the `sveltosctl show dryrun` command.
 
 ```
-$ sveltosctl show dryrun --raw-diff   
+$ sveltosctl show dryrun --raw-diff
 Cluster: default/clusterapi-workload
 --- deployed: ClusterPolicy disallow-latest-tag
 +++ proposed: ClusterPolicy disallow-latest-tag
@@ -94,7 +94,7 @@ Cluster: default/clusterapi-workload
 Sveltos can also detect changes to deployed Helm charts:
 
 ```
-$ sveltosctl show dryrun           
+$ sveltosctl show dryrun
 +-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
 |           CLUSTER           | RESOURCE TYPE | NAMESPACE  |      NAME      |    ACTION     |            MESSAGE             |              PROFILE              |
 +-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+

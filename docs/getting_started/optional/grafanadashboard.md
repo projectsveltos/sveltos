@@ -1,6 +1,6 @@
 ---
 title: How to install Sveltos Grafana dashboard
-description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs. 
+description: Sveltos is an application designed to manage hundreds of clusters by providing declarative cluster APIs.
 tags:
     - Kubernetes
     - add-ons
@@ -15,7 +15,7 @@ authors:
 
 # Introduction to the Sveltos Grafana Dashboard
 
-The Sveltos Dashboard is designed to help users monitor key operational metrics and the status of their sveltosclusters in real-time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions. 
+The Sveltos Dashboard is designed to help users monitor key operational metrics and the status of their sveltosclusters in real-time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions.
 
 ![dashboard](../../assets/dashboard.png)
 
@@ -49,7 +49,7 @@ Confirm that all metrics are linked to their corresponding panels. The dashboard
 
 Refresh to begin plotting tracked metrics. Customize the dashboard to maximize utility -- by updating thresholds, adding/removing/editing panels, and transforming metrics tracked.
 
-!!! note 
+!!! note
     Some metrics only appear on Grafana when their value is non-zero, e.g. ``projectsveltos_reconcile_operations_total``, and ``projectsveltos_total_drifts``. As long as Prometheus and Grafana have been configured correctly, this should not be a problem.
 
 Detailed descriptions of the panels available on the dashboard, and the tracked metrics, are listed below.
@@ -80,11 +80,11 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 
 ## Dashboard Panels
 
-### 1. Cluster Connectivity Status 
+### 1. Cluster Connectivity Status
 - **Type**: Gauge
 - **Purpose**: Displays the connectivity status of each Kubernetes cluster managed by Sveltos.
 - **Query Used**: ``projectsveltos_cluster_connectivity_status``
-- **Interpretation**: A “Healthy" cluster is one that is connected ( projectsveltos_cluster_connectivity_status: 0) and depicted in green. A "Disconnected" cluster (projectsveltos_cluster_connectivity_status: 1) is shown in red, to help users rapidly identify and address connectivity issues. 
+- **Interpretation**: A “Healthy" cluster is one that is connected ( projectsveltos_cluster_connectivity_status: 0) and depicted in green. A "Disconnected" cluster (projectsveltos_cluster_connectivity_status: 1) is shown in red, to help users rapidly identify and address connectivity issues.
 
 ### 2. Cluster Kubernetes Version
 - **Type**: Table
@@ -108,16 +108,16 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 ### 5. Time to Deploy Helm Charts in a Profile
 - **Type**: Bar Chart
 - **Purpose**: Depicts the time required for deploying Helm Charts, by visualizing the 50th and 90th percentile of deployment times.
-- **Queries Used**:  
-``histogram_quantile(0.90, projectsveltos_program_charts_time_seconds_bucket)`` 
+- **Queries Used**:
+``histogram_quantile(0.90, projectsveltos_program_charts_time_seconds_bucket)``
 ``histogram_quantile(0.50, projectsveltos_program_charts_time_seconds_bucket)``
 - **Interpretation**: Provides deeper insights into the deployment times required by Helm Charts. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.
 
 ### 6. Time to Deploy Resources in a Profile
 - **Type**: Bar Chart
 - **Purpose**: Depicts the time required for deploying Resources, by visualizing the 50th and 90th percentile of deployment times.
-- **Queries Used**:  
-``histogram_quantile(0.90, projectsveltos_program_resources_time_seconds_bucket)``  
+- **Queries Used**:
+``histogram_quantile(0.90, projectsveltos_program_resources_time_seconds_bucket)``
 ``histogram_quantile(0.50, projectsveltos_program_resources_time_seconds_bucket)``
 - **Interpretation**: Provides deeper insights into the resource deployment times. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.
 
@@ -136,8 +136,8 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 ### 9. Deploy Helm Charts in a Profile - Latency Heatmap
 - **Type**: Heatmap
 - **Purpose**: Provides a heatmap of Helm chart deployment latencies
-- **Query Used**: 
-``	  
+- **Query Used**:
+``
 	sum(rate(projectsveltos_program_charts_time_seconds_bucket[5m]))
 ``
 - **Interpretation**: Highlights the frequency and duration of Helm chart deployment latencies to help users identify patterns and optimize deployment management.
@@ -145,7 +145,7 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 ### 10. Deploy Resources in a Profile - Latency Heatmap
 - **Type**: Heatmap
 - **Purpose**: Provides a heatmap of Resource deployment latencies
-- **Query Used**: 
+- **Query Used**:
 ``
 sum(rate(projectsveltos_program_resources_time_seconds_bucket[5m]))
 ``

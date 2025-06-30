@@ -14,11 +14,11 @@ authors:
 ---
 ## Profiles
 
-[Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters. 
+[Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
 Profile is a namespace-scoped resource.  It can only match clusters and reference resources within its own namespace.
 
-### Spec.ClusterSelector 
+### Spec.ClusterSelector
 
 *clusterSelector* field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.
 
@@ -56,7 +56,7 @@ clusterSelector:
         replicas: 1
 ```
 
-Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries. 
+Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries.
 For a complete list of features, refer to the [Helm chart section](helm_charts.md).
 
 ### Spec.PolicyRefs
@@ -83,12 +83,12 @@ policyRefs:
 ```
 
 ### Spec.KustomizationRefs
-*kustomizationRefs* field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified. 
+*kustomizationRefs* field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified.
 
 This field is a slice of *KustomizationRef* structs. Each KustomizationRef has the following fields:
 
 - *Kind*: The kind of the referenced resource. The supported kinds are:
-    
+
     - flux GitRepository, OCIRepository, Bucket: These kinds represent resources that store Kustomization manifests.
     - ConfigMap, Secret: These kinds represent resources that contain Kustomization manifests or overlays.
 
@@ -117,14 +117,14 @@ Now, if you're looking for real-time deployment and updates, the *Continuous* sy
 When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster.
 To know more about configuration drift detection, refer to this [section](../features/configuration_drift.md).
 
-Imagine you're about to make some important changes to your Profile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the *DryRun* syncMode configuration comes in. By deploying your Profile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises. 
+Imagine you're about to make some important changes to your Profile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the *DryRun* syncMode configuration comes in. By deploying your Profile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
 To know more about dry run, refer to this [section](../features/dryrun.md).
 
 ### Spec.StopMatchingBehavior
 
 The *stopMatchingBehavior* field specifies the behavior when a cluster no longer matches a Profile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to *LeavePolicies*, any policies deployed by the Profile will remain in the cluster.
 
-For instance 
+For instance
 
 !!! example "Example - Profile Kyverno Deployment"
     ```yaml
@@ -173,7 +173,7 @@ The *validateHealths* property defines a set of Lua functions that Sveltos execu
 The ValidateHealths property accepts a slice of Lua functions, where each function encapsulates a specific validation check. These functions can access the managed cluster's state to perform comprehensive checks on the add-ons and applications. The results of the validation checks are aggregated and reported back to Sveltos, providing valuable insights into the health and status of the managed cluster's components.
 
 Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.
- 
+
 Please refer to this [section](../deployment_order/rolling_update_strategy.md) for more information.
 
 Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:

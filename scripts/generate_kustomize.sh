@@ -22,7 +22,7 @@ git clone git@github.com:projectsveltos/libsveltos.git
 cd libsveltos
 git checkout ${branch}
 for f in manifests/*.yaml
-do 
+do
     echo "Processing $f file..."
     cp $f ../../kustomize/components/crds/.
 done
@@ -37,7 +37,7 @@ cd addon-controller
 git checkout ${branch}
 touch ../../kustomize/base/addon-controller.yaml
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -72,7 +72,7 @@ cd access-manager
 git checkout ${branch}
 touch ../../kustomize/base/access-manager.yaml
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/access-manager.yaml
 done
@@ -129,7 +129,7 @@ cd event-manager
 git checkout ${branch}
 touch ../../kustomize/base/event-manager.yaml
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -150,7 +150,7 @@ cd classifier
 git checkout ${branch}
 touch ../../kustomize/base/classifier.yaml
 for f in manifest/*.yaml
-do 
+do
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -197,7 +197,7 @@ git clone git@github.com:projectsveltos/drift-detection-manager.git
 cd drift-detection-manager
 git checkout ${branch}
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cp $f ../../kustomize/overlays/agentless-mode/drift-detection-manager.yaml
@@ -216,7 +216,7 @@ cd shard-controller
 git checkout ${branch}
 touch ../../kustomize/base/shard-controller.yaml
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/shard-controller.yaml
 done
@@ -233,7 +233,7 @@ cd register-mgmt-cluster
 git checkout ${branch}
 touch ../../kustomize/base/register-mgmt-cluster.yaml
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/register-mgmt-cluster.yaml
 done
@@ -250,7 +250,7 @@ cd techsupport
 git checkout ${branch}
 touch ../../kustomize/base/techsupport.yaml
 for f in manifest/*.yaml
-do 
+do
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/techsupport.yaml
 done

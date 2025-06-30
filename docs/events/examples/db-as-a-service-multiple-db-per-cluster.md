@@ -44,14 +44,14 @@ For this demo, Sveltos needs to be granted extra permission:
 ```
 kubectl patch clusterrole addon-controller-role-extra -p '{
   "rules": [
-    {               
+    {
       "apiGroups": [
         ""
-      ],            
-      "resources": [ 
+      ],
+      "resources": [
         "configmaps",
         "secrets"
-      ],        
+      ],
       "verbs": [
         "*"
       ]
@@ -89,7 +89,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/d
 Verify resources were deployed
 
 ```
-sveltosctl show addons        
+sveltosctl show addons
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 |         CLUSTER          | RESOURCE TYPE |  NAMESPACE  | NAME | VERSION |              TIME              |          PROFILES          |
 +--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
@@ -100,7 +100,7 @@ sveltosctl show addons
 ![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-cloudnative-pg.png)
 
 
-## Step 4: Instruct Sveltos to automatically deploy Postgres DB 
+## Step 4: Instruct Sveltos to automatically deploy Postgres DB
 
 With the following configuration, Sveltos will actively monitor any managed cluster tagged with the label `type=app`. Specifically, it will look for namespaces within these clusters that are labeled with `postgres=required`. Upon identifying such a namespace, Sveltos will:
 
@@ -151,7 +151,7 @@ data:
 ```
 
 ```
-kubectl get configmap -n apps                         
+kubectl get configmap -n apps
 NAME                        DATA   AGE
 ...
 coke-lb-data   2      58s
@@ -174,7 +174,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/d
 ```
 
 ```
-watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A 
+watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A
 NAMESPACE   NAME                          COMPLETIONS   DURATION   AGE
 coke        coke-app-credentials-table    1/1           14s        2m10s
 ```
@@ -188,7 +188,7 @@ Here we created yet another namespace in the __shared_cluster__ and label it wit
 3. Deployed a Job in the `pepsi` cluster that creates a table in the DB.
 
 ```
-watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A 
+watch KUBECONFIG=<kubeconfig of your shared cluster> kubectl get jobs -A
 NAMESPACE   NAME                          COMPLETIONS   DURATION   AGE
 coke        coke-app-credentials-table    1/1           14s        5m10s
 pepsi       pepsi-app-credentials-table   1/1           87s        113s

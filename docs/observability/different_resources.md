@@ -102,7 +102,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
                       end
                     end
                   end
-                end  
+                end
 
                 if  container.envFrom ~= nil then
                   for _, envFrom in ipairs(container.envFrom) do
@@ -112,7 +112,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
                         return true, "secret " .. key .. " has been updated after pod creation"
                       end
                     end
-                  end  
+                  end
                 end
               end
             end
@@ -132,7 +132,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
               end
             end
 
-            if pod.spec.volumes ~= nil then  
+            if pod.spec.volumes ~= nil then
               for _, volume in ipairs(pod.spec.volumes) do
                 if volume.secret ~= nil then
                   key = getKey(pod.metadata.namespace, volume.secret.secretName)
@@ -153,9 +153,9 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
                 end
               end
             end
-            
+
             return false
-          end      
+          end
 
           function evaluate()
             local hs = {}
@@ -189,7 +189,7 @@ This HealthChech instance finds all Pods instances in all namespaces mounting Se
               hs.resources = podsWithOutdatedSecret
             end
             return hs
-          end  
+          end
     ```
 
 Following is a report generated for above HealthCheck

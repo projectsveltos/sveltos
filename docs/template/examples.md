@@ -20,7 +20,7 @@ This section is designed to help users get started with the Sveltos template fea
 
 The example demonstrates how to copy a Secret from the **management** cluster to **matching managed** clusters using Sveltos.
 
-Create a Secret named __imported-secret__ in the __default__ namespace of your management cluster. The Secret should contain Docker registry credentials encoded in base64 format. 
+Create a Secret named __imported-secret__ in the __default__ namespace of your management cluster. The Secret should contain Docker registry credentials encoded in base64 format.
 
 ```
 kubectl apply -f - <<EOF
@@ -77,7 +77,7 @@ To simply copy the Secret grabbed from the management cluster to any matching ma
 !!! note
      We can define any resource contained in a referenced ConfigMap/Secret as a template by adding the `projectsveltos.io/template` annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.
 
-This template simply references the ExternalSecret identifier (defined in the ClusterProfile) using the copy function. 
+This template simply references the ExternalSecret identifier (defined in the ClusterProfile) using the copy function.
 Consequently, the Secret from the management cluster will be copied to any matching managed clusters.
 
 ## SetField/RemoveField Example

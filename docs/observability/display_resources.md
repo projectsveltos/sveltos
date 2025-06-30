@@ -49,15 +49,15 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
       evaluateHealth: |
         function evaluate()
           local statuses = {}
-          
+
           status = "Progressing"
           message = ""
-        
+
           for _,resource in ipairs(resources) do
             if resource.spec.replicas == 0 then
               continue
             end
-            
+
             if resource.status ~= nil then
               if resource.status.availableReplicas ~= nil then
                 if resource.status.availableReplicas == resource.spec.replicas then
@@ -78,12 +78,12 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
 
           local hs = {}
           if #statuses > 0 then
-            hs.resources = statuses 
+            hs.resources = statuses
           end
           return hs
         end
     ```
- 
+
  1. Use the `ClusterHealthCheck` and set the `clusterSelector` field to filter the managed cluster deployments that should be examined. In the below example, all managed clusters that match the cluster label selector `env=fv` are considered.
 
 !!! example ""
@@ -115,7 +115,7 @@ The approach describe above enables us to display information about all the depl
 To obtain a consolidated view of resource information, the __sveltosctl show resources__ command can be used.
 
 ```bash
-$ sveltosctl show resources --kind=deployment 
+$ sveltosctl show resources --kind=deployment
 +-----------------------------+--------------------------+----------------+-----------------------------------------+----------------------------+
 |           CLUSTER           |           GVK            |   NAMESPACE    |                  NAME                   |          MESSAGE           |
 +-----------------------------+--------------------------+----------------+-----------------------------------------+----------------------------+
@@ -185,7 +185,7 @@ Object:  object:
       deployment.kubernetes.io/revision: "1"
     creationTimestamp: "2023-07-11T14:03:15Z"
     ...
-``` 
+```
 ## Example: Display Deployment Images Managed Clusters
 
 The below __HealthCheck__ instance will instruct Sveltos to collect and display the deployment images from every managed cluster.
@@ -230,7 +230,7 @@ The below __HealthCheck__ instance will instruct Sveltos to collect and display 
     ```
 
 ```bash
-$ sveltosctl show resources  
+$ sveltosctl show resources
 +-----------------------------+--------------------------+-----------+------------------+---------------------+
 |           CLUSTER           |           GVK            | NAMESPACE |       NAME       |       MESSAGE       |
 +-----------------------------+--------------------------+-----------+------------------+---------------------+
@@ -334,12 +334,12 @@ In this example we will define an `HealthCheck` instance with a Lua script that 
               table.insert(statuses, {resource=resource, status = status, message = message})
             end
           end
-          
+
           local hs = {}
           if #statuses > 0 then
-            hs.resources = statuses 
+            hs.resources = statuses
           end
-          
+
           return hs
         end
     ```
@@ -372,7 +372,7 @@ As before, we need to have a `ClusterHealthCheck` instance to instruct Sveltos w
 We assume we have deployed an nginx deployment using the __latest__ image in the managed cluster[^1]
 
 ```bash
-$ sveltosctl show resources  
+$ sveltosctl show resources
 +-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
 |               CLUSTER               |              GVK               | NAMESPACE |           NAME           |                 MESSAGE                 |
 +-------------------------------------+--------------------------------+-----------+--------------------------+-----------------------------------------+
@@ -414,6 +414,6 @@ To deploy Kyverno and a ClusterPolicy in each managed cluster matching the label
 
   ```bash
   $ wget https://github.com/kyverno/policies/raw/main//best-practices/disallow-latest-tag/disallow-latest-tag.yaml
-  
+
   $ kubectl create configmap kyverno-latest --from-file disallow-latest-tag.yaml
   ```

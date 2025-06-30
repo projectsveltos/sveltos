@@ -48,7 +48,7 @@ This way, Sveltos ensures that the systems are always consistent and predictable
 
 You can stop certain resources from being tracked for configuration drift. This is done by adding a special annotation `projectsveltos.io/driftDetectionIgnore` to those resources.
 
-For instance, following ClusterProfile will deploy Kyverno helm chart. Patches are used to apply annotation to the Kyverno `kyverno-admission-controller` deployment. 
+For instance, following ClusterProfile will deploy Kyverno helm chart. Patches are used to apply annotation to the Kyverno `kyverno-admission-controller` deployment.
 This means any changes made to resources deployed by the Helm chart itself will be flagged as a configuration drift. However, any modifications directly to the kyverno-admission-controller deployment won't be detected as drift.
 
 ```yaml hl_lines="18-27"
@@ -179,5 +179,5 @@ With the defined configuration, the `drift-detection-manager` will get deployed 
         - --version=v0.44.0
         - --drift-detection-config=drift-detection-config
     agent:
-      managementCluster: true 
+      managementCluster: true
     ```
