@@ -13,7 +13,7 @@ authors:
 
 ## What is Sveltos?
 
-Sveltos is a **set of Kubernetes controllers** deployed in a **management** cluster. A management cluster is the centralised Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.
+Sveltos is a **set of Kubernetes controllers** deployed in a **management** cluster. A management cluster is the Centralized Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.
 
 ## Before you Begin
 
