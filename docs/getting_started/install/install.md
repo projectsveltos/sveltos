@@ -34,7 +34,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.5
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
-### Mode 2: Centralised Agent Mode (Manifest)
+### Mode 2: Centralized Agent Mode (Manifest)
 
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
@@ -81,7 +81,7 @@ $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --
 $ helm list -n projectsveltos
 ```
 
-#### Mode 2: Centralised Agent Mode
+#### Mode 2: Centralized Agent Mode
 
 ```sh
 $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set agent.managementCluster=true
@@ -99,7 +99,7 @@ $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
-#### Mode 2: Centralised Agent Mode
+#### Mode 2: Centralized Agent Mode
 
 ```sh
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v0.57.2 |kubectl apply -f -
