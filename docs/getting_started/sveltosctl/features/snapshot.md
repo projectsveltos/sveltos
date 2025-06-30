@@ -55,7 +55,7 @@ Checkout Youtube for a [Sveltos introduction to Snapshots](https://www.youtube.c
 [sveltoctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") snapshot diff can be used to display all the configuration changes between two snapshots:
 
 ```
-$ sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
+$ sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 |               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION  |              MESSAGE               |
 +-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
@@ -146,7 +146,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 This will deploy all necessary resources in all managed cluster matching ClusterProfile cluster selector field.
 
 ```
-$ sveltosctl show addons 
+$ sveltosctl show addons
 +-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 |           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
 +-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -174,7 +174,7 @@ Load the page http://localhost:8080 in your browser to view your guestbook
 The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes of the configuration over time, or for debugging purposes.
 
 ```
-$ sveltosctl snapshot list 
+$ sveltosctl snapshot list
 +-----------------+---------------------+
 | SNAPSHOT POLICY |        DATE         |
 +-----------------+---------------------+
@@ -188,7 +188,7 @@ Let's assume, later on a change is made. For instance, the __redis-follower__ Se
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database_broken.yaml
 ```
 
-Entries in the database are not visible anymore. Of course we can debug this issue. 
+Entries in the database are not visible anymore. Of course we can debug this issue.
 But if we simply want to see what has changed we can take a new snapshot
 
 ```

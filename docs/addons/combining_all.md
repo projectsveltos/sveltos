@@ -57,4 +57,4 @@ To deploy Kyverno and a ClusterPolicy across all managed clusters matching the S
           namespace: default
     ```
 
-[^1]: The **':latest'** tag is mutable and can lead to unexpected errors if the image changes. A best practice is to use an immutable tag that maps to a specific version of an application Pod. 
+[^1]: The **':latest'** tag is mutable and can lead to unexpected errors if the image changes. A best practice is to use an immutable tag that maps to a specific version of an application Pod.

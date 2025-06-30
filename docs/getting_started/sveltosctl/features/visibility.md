@@ -16,7 +16,7 @@ authors:
 **sveltosctl** nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.
 
 ### show addons
-*show addons* can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos. 
+*show addons* can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos.
 
 The displayed information are:
 
@@ -82,7 +82,7 @@ $ sveltosctl show resources --kind=pod --namespace=nginx
 Such information is useful to see what clusters would be affected by a change before making such a change.
 
 ```
-$ sveltosctl show usage 
+$ sveltosctl show usage
 +----------------+--------------------+----------------------------+-------------------------------------+
 | RESOURCE KIND  | RESOURCE NAMESPACE |       RESOURCE NAME        |              CLUSTERS               |
 +----------------+--------------------+----------------------------+-------------------------------------+
@@ -99,7 +99,7 @@ If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both mat
 ```env=internal``` and we post [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/main/examples/shared_access.yaml), we get:
 
 ```
-$ sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 |                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+

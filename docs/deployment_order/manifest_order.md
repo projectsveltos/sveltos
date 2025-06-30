@@ -12,7 +12,7 @@ authors:
 
 ## Introduction to Deployment Resource Order
 
-When Kubernetes resources are deployed in a cluster, it is sometimes necessary to deploy them in a specific order. For example, a CustomResourceDefinition (CRD) 
+When Kubernetes resources are deployed in a cluster, it is sometimes necessary to deploy them in a specific order. For example, a CustomResourceDefinition (CRD)
 must exist before a custom resources of that type can be created.
 
 Sveltos can assist solving this problem by allowing users to specify the order in which Kubernetes resources are deployed.

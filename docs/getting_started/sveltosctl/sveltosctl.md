@@ -58,4 +58,4 @@ You might also want to change the timezone of sveltosctl pod by using specific t
 
 ## Next Steps
 
-Discover the `sveltoctl features` available [here](./features/dryrun.md) or continue with `Sveltos Cluster Registration` [section](../../register/register-cluster.md). 
+Discover the `sveltoctl features` available [here](./features/dryrun.md) or continue with `Sveltos Cluster Registration` [section](../../register/register-cluster.md).

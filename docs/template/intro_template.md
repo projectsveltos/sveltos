@@ -1,6 +1,6 @@
 ---
 title: Templates
-description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template. 
+description: Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template.
 tags:
     - Kubernetes
     - add-ons

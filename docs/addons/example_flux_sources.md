@@ -19,7 +19,7 @@ Sveltos can seamlessly integrate with __Flux__[^1] to automatically deploy YAML 
 
 ## Example: Deploy Nginx Ingress with Flux and Sveltos
 
-Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a _nginx-ingress_ directory with all the YAML needed to deploy Nginx[^2]. 
+Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a _nginx-ingress_ directory with all the YAML needed to deploy Nginx[^2].
 
 Below, we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.
 
@@ -73,7 +73,7 @@ Define a Sveltos ClusterProfile referencing the flux-system GitRepository and sp
 This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
 
 ```
-$ sveltosctl show addons                                     
+$ sveltosctl show addons
 +-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
 |           CLUSTER           |                RESOURCE TYPE                 | NAMESPACE |                 NAME                  | VERSION |             TIME              |              PROFILES               |
 +-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
@@ -164,7 +164,7 @@ This directory contains a list of Kyverno ClusterPolicies.
         name: flux-system
         namespace: flux-system
         path: kyverno
-      dependsOn: 
+      dependsOn:
       - deploy-kyverno
     EOF
     ```
@@ -174,7 +174,7 @@ This ClusterProfile targets clusters with the __env=fv__ label and fetches relev
 The Kyverno Helm chart and all the Kyverno policies contained in the Git repository under the _kyverno_ directory are deployed:
 
 ```
-$ sveltosctl show addons     
+$ sveltosctl show addons
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
 |           CLUSTER           |      RESOURCE TYPE       | NAMESPACE |           NAME            | VERSION |             TIME              |                PROFILES                |
 +-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+

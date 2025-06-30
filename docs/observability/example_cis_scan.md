@@ -12,7 +12,7 @@ Running security scans on managed Kubernetes clusters is crucial to ensure compl
 
 Sveltos can leverage [kube-bench](https://github.com/aquasecurity/kube-bench) to run a security scan on all managed clusters.
 
-Using the Sveltos event framework, we can centralized CIS Kubernetes Benchmark compliance results for a unified view. 
+Using the Sveltos event framework, we can centralized CIS Kubernetes Benchmark compliance results for a unified view.
 
 ![Deploy kube-bench to all production clusters](../assets/sveltos-deploy-kube-bench.png)
 
@@ -20,7 +20,7 @@ Using the Sveltos event framework, we can centralized CIS Kubernetes Benchmark c
 
 
 ```
-sveltosctl show resources --kind=configmap 
+sveltosctl show resources --kind=configmap
 +---------------+---------------------+------------+---------------------+--------------------------------+
 |    CLUSTER    |         GVK         | NAMESPACE  |        NAME         |            MESSAGE             |
 +---------------+---------------------+------------+---------------------+--------------------------------+

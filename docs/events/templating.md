@@ -84,7 +84,7 @@ Usage Example:
 
 EventTrigger can reference `ConfigMaps` and `Secrets` in the __policyRefs__ section.
 
-Users can express `ConfigMaps/Secret` resources as templates. These are dynamically evaluated using the data from the triggering cluster and event resource. 
+Users can express `ConfigMaps/Secret` resources as templates. These are dynamically evaluated using the data from the triggering cluster and event resource.
 
 !!! Example "Example: Dynamic policyRefs"
 
@@ -248,7 +248,7 @@ The templating capability makes Helm chart deployments **flexible** and **contex
 Additionally, each Helm chart defined in __EventTrigger.spec.helmCharts__ can use the **valuesFrom** field to reference external `ConfigMaps/Secrets` that contain Helm values. These references support templated namespace and name fields, just like in `policyRefs`.
 
 !!! Example "Example: Dynamic EventTrigger.spec.helmCharts.valuesFrom"
-    
+
     The `namespace` and `name` of the referenced `ConfigMap/Secret` in __valuesFrom__ are first instantiated using templates. These templates can access any field from the triggering cluster or resource.
 
     ```yaml
