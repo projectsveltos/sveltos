@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3200,7 +3200,7 @@
   <h1>Dynamic Cluster Management and Failover</h1>
 
 <h2 id="clusterset-and-set">ClusterSet and Set</h2>
-<p>Sveltos offers two resources, <code>ClusterSet</code> and <code>Set</code>, to manage groups of clusters and dynamically select a subset of those clusters for deployments based on specific criteria. 
+<p>Sveltos offers two resources, <code>ClusterSet</code> and <code>Set</code>, to manage groups of clusters and dynamically select a subset of those clusters for deployments based on specific criteria.
 This enables automated deployments and failover across healthy clusters in your environment.</p>
 <h3 id="key-capabilities">Key Capabilities</h3>
 <ol>
@@ -3210,9 +3210,9 @@ This enables automated deployments and failover across healthy clusters in your 
 </ol>
 <h3 id="referencing-clustersetset-in-a-clusterprofileprofile">Referencing ClusterSet/Set in a ClusterProfile/Profile</h3>
 <p>A ClusterProfile or Profile can reference a ClusterSet or Set by specifying its name. The add-ons defined in the profile will only be deployed to the currently selected clusters within the referenced set.</p>
-<p>The add-ons defined in the ClusterProfile/Profile will be deployed only to the currently selected clusters within the referenced ClusterSet/Set. 
+<p>The add-ons defined in the ClusterProfile/Profile will be deployed only to the currently selected clusters within the referenced ClusterSet/Set.
 This enables dynamic deployment management based on the available and healthy clusters in the set.</p>
-<p>This feature is particularly useful for scenarios where you want to implement active/passive failover: create a ClusterSet/Set with maxReplicas: 1 and have it match two clusters in the clusterSelector. 
+<p>This feature is particularly useful for scenarios where you want to implement active/passive failover: create a ClusterSet/Set with maxReplicas: 1 and have it match two clusters in the clusterSelector.
 This ensures only one cluster is active at a time. If the active cluster goes down, the backup cluster will be automatically selected for deployments.</p>
 <h3 id="activepassive-failover-example">Active/Passive Failover Example</h3>
 <p>This scenario demonstrates active/passive failover with a ClusterSet.</p>
@@ -3318,7 +3318,7 @@ This ensures only one cluster is active at a time. If the active cluster goes do
 </span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
 </span></code></pre></div>
 </div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ sveltosctl show addons  
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ sveltosctl show addons
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>|    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
@@ -3387,7 +3387,7 @@ This ensures only one cluster is active at a time. If the active cluster goes do
 </span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
 </span></code></pre></div>
 </div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$ sveltosctl show addons  
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$ sveltosctl show addons
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>|    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
@@ -3543,7 +3543,7 @@ This ensures only one cluster is active at a time. If the active cluster goes do
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

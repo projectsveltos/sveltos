@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3310,7 +3310,7 @@
 </span></code></pre></div>
 </div>
 <p>We can use of the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a> to check the permissions given to the service account <code>foo</code>. We expect the service account to have full access to the managed cluster with the label set to <code>env:production</code></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>admin-rbac<span class="w">       </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>admin-rbac
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">|</span><span class="w">            </span>CLUSTER<span class="w">            </span><span class="p">|</span><span class="w">    </span>ADMIN<span class="w">     </span><span class="p">|</span><span class="w"> </span>NAMESPACE<span class="w"> </span><span class="p">|</span><span class="w"> </span>API<span class="w"> </span>GROUPS<span class="w"> </span><span class="p">|</span><span class="w"> </span>RESOURCES<span class="w"> </span><span class="p">|</span><span class="w"> </span>RESOURCE<span class="w"> </span>NAMES<span class="w"> </span><span class="p">|</span><span class="w"> </span>VERBS<span class="w"> </span><span class="p">|</span>
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
@@ -3451,7 +3451,7 @@ are shared between two tenants:</p>
 </span><span id="__span-8-73"><a id="__codelineno-8-73" name="__codelineno-8-73" href="#__codelineno-8-73"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoleRequest</span>
 </span><span id="__span-8-74"><a id="__codelineno-8-74" name="__codelineno-8-74" href="#__codelineno-8-74"></a><span class="nt">metadata</span><span class="p">:</span>
 </span><span id="__span-8-75"><a id="__codelineno-8-75" name="__codelineno-8-75" href="#__codelineno-8-75"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar-access</span>
-</span><span id="__span-8-76"><a id="__codelineno-8-76" name="__codelineno-8-76" href="#__codelineno-8-76"></a><span class="nt">spec</span><span class="p">:</span><span class="w">                       </span>
+</span><span id="__span-8-76"><a id="__codelineno-8-76" name="__codelineno-8-76" href="#__codelineno-8-76"></a><span class="nt">spec</span><span class="p">:</span>
 </span><span id="__span-8-77"><a id="__codelineno-8-77" name="__codelineno-8-77" href="#__codelineno-8-77"></a><span class="w">  </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hr&quot;</span>
 </span><span id="__span-8-78"><a id="__codelineno-8-78" name="__codelineno-8-78" href="#__codelineno-8-78"></a><span class="w">  </span><span class="nt">serviceAccountNamespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
 </span><span id="__span-8-79"><a id="__codelineno-8-79" name="__codelineno-8-79" href="#__codelineno-8-79"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
@@ -3467,7 +3467,7 @@ are shared between two tenants:</p>
 <p>Sveltos heavily focuses on the visibility of the clusters. The <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">Sveltosctl</a> can be used to display permissions granted to each tenant admin in each managed cluster.</p>
 <p>If we have two clusters, a ClusterAPI powered and a SveltosCluster, both matching the label selector
 <code>env=internal</code> and we post the <a href="https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml">RoleRequests</a>, we get the below output.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>admin-rbac<span class="w">       </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>admin-rbac
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">|</span><span class="w">                   </span>CLUSTER<span class="w">                   </span><span class="p">|</span><span class="w"> </span>ADMIN<span class="w"> </span><span class="p">|</span><span class="w">   </span>NAMESPACE<span class="w">    </span><span class="p">|</span><span class="w"> </span>API<span class="w"> </span>GROUPS<span class="w"> </span><span class="p">|</span><span class="w"> </span>RESOURCES<span class="w"> </span><span class="p">|</span><span class="w"> </span>RESOURCE<span class="w"> </span>NAMES<span class="w"> </span><span class="p">|</span><span class="w"> </span>VERBS<span class="w"> </span><span class="p">|</span>
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
@@ -3626,7 +3626,7 @@ are shared between two tenants:</p>
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

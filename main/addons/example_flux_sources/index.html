@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3214,7 +3214,7 @@
 <h2 id="flux-sources">Flux Sources</h2>
 <p>Sveltos can seamlessly integrate with <strong>Flux</strong><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> to automatically deploy YAML manifests or Helm charts stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.</p>
 <h2 id="example-deploy-nginx-ingress-with-flux-and-sveltos">Example: Deploy Nginx Ingress with Flux and Sveltos</h2>
-<p>Imagine a repository like <a href="https://github.com/gianlucam76/yaml_flux.git">this</a> containing a <em>nginx-ingress</em> directory with all the YAML needed to deploy Nginx<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. </p>
+<p>Imagine a repository like <a href="https://github.com/gianlucam76/yaml_flux.git">this</a> containing a <em>nginx-ingress</em> directory with all the YAML needed to deploy Nginx<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
 <p>Below, we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.</p>
 <h3 id="step-1-configure-flux-in-the-management-cluster">Step 1: Configure Flux in the Management Cluster</h3>
 <p>Install and run Flux in the management cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found <a href="https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F">here</a>.</p>
@@ -3257,7 +3257,7 @@
 </span></code></pre></div>
 </div>
 <p>This ClusterProfile targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the <em>nginx-ingress</em> directory within the flux-system Git repository managed by Flux.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ sveltosctl show addons                                     
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ sveltosctl show addons
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>+-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>|           CLUSTER           |                RESOURCE TYPE                 | NAMESPACE |                 NAME                  | VERSION |             TIME              |              PROFILES               |
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>+-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
@@ -3337,14 +3337,14 @@
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
 </span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
 </span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span><span class="w"> </span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span>
 </span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-kyverno</span>
 </span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
 <p>This ClusterProfile targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.</p>
 <p>The Kyverno Helm chart and all the Kyverno policies contained in the Git repository under the <em>kyverno</em> directory are deployed:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show addons     
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show addons
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>|           CLUSTER           |      RESOURCE TYPE       | NAMESPACE |           NAME            | VERSION |             TIME              |                PROFILES                |
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>+-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
@@ -3702,7 +3702,7 @@ The template expression <code>{{ index .Cluster.metadata.annotations "environmen
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

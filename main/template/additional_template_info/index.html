@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3061,7 +3061,7 @@
 <p>Granting the necessary RBAC permissions to Sveltos is a simple process. The Sveltos <code>ServiceAccount</code> is tied to the <strong>addon-controller-role-extra</strong> ClusterRole. To grant Sveltos the necessary permissions, simply <strong>edit</strong> the role.</p>
 <p>If the <code>ClusterProfile</code> is created by a tenant administrator as part of a <a href="../../features/multi-tenancy-sharing-cluster/">multi-tenant setup</a>, Sveltos acts on behalf of (impersonate) the ServiceAccount that represents the tenant. This ensures the Kubernetes RBACs are enforced, which restricts the tenant's access to only authorised resources.</p>
 <h3 id="templateresourcerefs-namespace-and-name">templateResourceRefs: Namespace and Name</h3>
-<p>When using the <code>templateResourceRefs</code> field to locate resources in the <strong>management</strong> cluster, the <code>namespace</code> field is <strong>optional</strong>. </p>
+<p>When using the <code>templateResourceRefs</code> field to locate resources in the <strong>management</strong> cluster, the <code>namespace</code> field is <strong>optional</strong>.</p>
 <ol>
 <li>If a namespace is <strong>provided</strong> (like <em>default</em>), Sveltos will look for the resource in the specified namespace</li>
 <li>If the namespace field is <strong>blank</strong>, Sveltos will search for the resource in the same namespace as the management cluster</li>
@@ -3070,8 +3070,8 @@
 <p>Available cluster information:</p>
 <ul>
 <li><strong>cluster namespace</strong>: <code>.Cluster.metadata.namespace</code></li>
-<li><strong>cluster name</strong>: <code>.Cluster.metadata.name</code> </li>
-<li><strong>cluster type</strong>: <code>.Cluster.kind</code> </li>
+<li><strong>cluster name</strong>: <code>.Cluster.metadata.name</code></li>
+<li><strong>cluster type</strong>: <code>.Cluster.kind</code></li>
 </ul>
 <p>For example, the below template creates a name by combining the cluster's <code>namespace</code> and <code>name</code>.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.namespace</span><span class="nv"> </span><span class="s">}}-{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
@@ -3277,7 +3277,7 @@
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

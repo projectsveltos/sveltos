@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3135,7 +3135,7 @@
 
   <h1>Example DB as a Service</h1>
 
-<p>This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand. </p>
+<p>This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand.</p>
 <p>By simply labeling a managed cluster with  <code>postgres=required</code>, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -3158,14 +3158,14 @@ Another Civo cluster, labeled <code>type=services</code>, is dedicated to automa
 <p>For this demo, Sveltos needs to be granted extra permission:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl patch clusterrole addon-controller-role-extra -p &#39;{
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  &quot;rules&quot;: [
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    {               
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    {
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>      &quot;apiGroups&quot;: [
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        &quot;&quot;
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>      ],            
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>      &quot;resources&quot;: [ 
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>      ],
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>      &quot;resources&quot;: [
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        &quot;configmaps&quot;,
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        &quot;secrets&quot;
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>      ],        
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>      ],
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      &quot;verbs&quot;: [
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        &quot;*&quot;
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>      ]
@@ -3189,7 +3189,7 @@ Another Civo cluster, labeled <code>type=services</code>, is dedicated to automa
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/cloudnative-pg.yaml
 </span></code></pre></div>
 <p>Verify resources were deployed</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sveltosctl show addons        
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sveltosctl show addons
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>|         CLUSTER          | RESOURCE TYPE |  NAMESPACE  | NAME | VERSION |              TIME              |          PROFILES          |
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>+--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
@@ -3208,7 +3208,7 @@ Another Civo cluster, labeled <code>type=services</code>, is dedicated to automa
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
 </span></code></pre></div>
 <h2 id="step-5-onboard-a-new-managed-cluster">Step 5: Onboard a new managed cluster</h2>
-<p>Whenever a new managed cluster is registered with Sveltos and labeled with 'postgres=required', Sveltos will initiate the deployment of a new Postgres database on the 'type=services' cluster. 
+<p>Whenever a new managed cluster is registered with Sveltos and labeled with 'postgres=required', Sveltos will initiate the deployment of a new Postgres database on the 'type=services' cluster.
 Once deployed, Sveltos will gather the essential connection information, including credentials, external IP address, and port number, for this newly created Postgres instance.</p>
 <p>Here we created a new Civo cluster and registered with Sveltos:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl create ns coke
@@ -3224,7 +3224,7 @@ Once deployed, Sveltos will gather the essential connection information, includi
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  password: bTloaW9UYUFBdVE1cFBQY1QzWGN6RDF2R3JUYzF5d3NVRTcwUTJQQXVUaTNucEZhRVdEYXpsZ1pmcnAzYWZwdg==
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  user: dG9kbw==
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubectl get configmap -n coke                         
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubectl get configmap -n coke
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>NAME                        DATA   AGE
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>...
 </span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>pg-loadbalancer-data   2      58s
@@ -3407,7 +3407,7 @@ Once deployed, Sveltos will gather the essential connection information, includi
       <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

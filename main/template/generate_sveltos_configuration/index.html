@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -2906,21 +2906,21 @@
 
 
 <h1 id="generating-sveltos-configurations-with-sveltos">Generating Sveltos configurations with Sveltos</h1>
-<p>Sveltos provides powerful templating capabilities that extend beyond simply deploying add-ons to clusters. 
-This section dives into Sveltos' templating capabilities for generating Sveltos configurations themselves. 
+<p>Sveltos provides powerful templating capabilities that extend beyond simply deploying add-ons to clusters.
+This section dives into Sveltos' templating capabilities for generating Sveltos configurations themselves.
 This allows you to create reusable templates that adapt and generate child configurations based on defined variables.</p>
 <p><img alt="Generate Sveltos Configuration" src="../../assets/generating-sveltos-conf.png" /></p>
 <ol>
 <li>
-<p>The <code>deploy-clusterprofiles</code> ClusterProfile acts as the trigger. It selects the management cluster (identified by the label <strong>type: mgmt</strong>) 
+<p>The <code>deploy-clusterprofiles</code> ClusterProfile acts as the trigger. It selects the management cluster (identified by the label <strong>type: mgmt</strong>)
 and references a ConfigMap named <code>test</code>.</p>
 </li>
 <li>
-<p>The referenced ConfigMap holds a template defined in the data section. 
+<p>The referenced ConfigMap holds a template defined in the data section.
 This template utilizes a loop to dynamically generate two additional ClusterProfile resources: <code>keydb-services-production</code> and <code>keydb-services-staging</code>.</p>
 </li>
 <li>
-<p>Each generated ClusterProfile targets managed clusters (identified by a label change to <strong>purpose: edge</strong>) and includes 
+<p>Each generated ClusterProfile targets managed clusters (identified by a label change to <strong>purpose: edge</strong>) and includes
 specific environment configurations for production and staging deployments.</p>
 </li>
 </ol>
@@ -2934,7 +2934,7 @@ specific environment configurations for production and staging deployments.</p>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-clusterprofiles</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">      </span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span><span class="w">   </span><span class="c1"># Select the management cluster</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
@@ -2980,7 +2980,7 @@ specific environment configurations for production and staging deployments.</p>
 </span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="w">    </span><span class="no">{{- end }}</span>
 </span></code></pre></div>
 <p>After applying this configuration, you'll end up with a total of three ClusterProfiles:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl get clusterprofile                                 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl get clusterprofile
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>NAME                        AGE
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>deploy-resources            18m
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>keydb-services-production   18m
@@ -2991,7 +2991,7 @@ specific environment configurations for production and staging deployments.</p>
 </span></code></pre></div>
 <p>It's important to capture it as a string to prevent further templating within the <code>deploy-clusterprofiles</code> ClusterProfile itself.</p>
 <p>The generated ClusterProfiles (<code>keydb-services-production</code> and <code>keydb-services-staging</code>) define Helm chart deployments tailored for
-their respective environments. 
+their respective environments.
 For example, the production configuration utilizes the following Helm chart details:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finkinfridom/keydb</span>
@@ -3158,7 +3158,7 @@ For example, the production configuration utilizes the following Helm chart deta
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

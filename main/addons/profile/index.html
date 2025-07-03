@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3206,7 +3206,7 @@
   <h1>Deep Dive - Profiles</h1>
 
 <h2 id="profiles">Profiles</h2>
-<p><a href="https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go" title="Profile to manage Kubernetes add-ons">Profile</a> is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters. </p>
+<p><a href="https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go" title="Profile to manage Kubernetes add-ons">Profile</a> is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.</p>
 <p>Profile is a namespace-scoped resource.  It can only match clusters and reference resources within its own namespace.</p>
 <h3 id="specclusterselector">Spec.ClusterSelector</h3>
 <p><em>clusterSelector</em> field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.</p>
@@ -3234,7 +3234,7 @@
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="no">admissionController:</span>
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="no">replicas: 1</span>
 </span></code></pre></div>
-<p>Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries. 
+<p>Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries.
 For a complete list of features, refer to the <a href="../helm_charts/">Helm chart section</a>.</p>
 <h3 id="specpolicyrefs">Spec.PolicyRefs</h3>
 <p><em>policyRefs</em> field references a list of ConfigMaps/Secrets, each containing Kubernetes resources to be deployed in the clusters matching clusterSelector.</p>
@@ -3256,7 +3256,7 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 </span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">deploymentType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remote</span>
 </span></code></pre></div>
 <h3 id="speckustomizationrefs">Spec.KustomizationRefs</h3>
-<p><em>kustomizationRefs</em> field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified. </p>
+<p><em>kustomizationRefs</em> field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified.</p>
 <p>This field is a slice of <em>KustomizationRef</em> structs. Each KustomizationRef has the following fields:</p>
 <ul>
 <li>
@@ -3288,11 +3288,11 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 <p><em>ContinuousWithDriftDetection</em> instructs Sveltos to monitor the state of managed clusters and detect a configuration drift for any of the resources deployed because of that Profile.
 When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster.
 To know more about configuration drift detection, refer to this <a href="../../features/configuration_drift/">section</a>.</p>
-<p>Imagine you're about to make some important changes to your Profile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the <em>DryRun</em> syncMode configuration comes in. By deploying your Profile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises. 
+<p>Imagine you're about to make some important changes to your Profile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the <em>DryRun</em> syncMode configuration comes in. By deploying your Profile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
 To know more about dry run, refer to this <a href="../../features/dryrun/">section</a>.</p>
 <h3 id="specstopmatchingbehavior">Spec.StopMatchingBehavior</h3>
 <p>The <em>stopMatchingBehavior</em> field specifies the behavior when a cluster no longer matches a Profile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to <em>LeavePolicies</em>, any policies deployed by the Profile will remain in the cluster.</p>
-<p>For instance </p>
+<p>For instance</p>
 <div class="admonition example">
 <p class="admonition-title">Example - Profile Kyverno Deployment</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
@@ -3550,7 +3550,7 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3021,7 +3021,7 @@
 <p>This section is designed to help users get started with the Sveltos template feature. It provides simple to follow template examples based on defined resource manipulation functions.</p>
 <h2 id="copy-example">Copy Example</h2>
 <p>The example demonstrates how to copy a Secret from the <strong>management</strong> cluster to <strong>matching managed</strong> clusters using Sveltos.</p>
-<p>Create a Secret named <strong>imported-secret</strong> in the <strong>default</strong> namespace of your management cluster. The Secret should contain Docker registry credentials encoded in base64 format. </p>
+<p>Create a Secret named <strong>imported-secret</strong> in the <strong>default</strong> namespace of your management cluster. The Secret should contain Docker registry credentials encoded in base64 format.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl apply -f - &lt;&lt;EOF
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>apiVersion: v1
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>data:
@@ -3070,7 +3070,7 @@
 <p class="admonition-title">Note</p>
 <p>We can define any resource contained in a referenced ConfigMap/Secret as a template by adding the <code>projectsveltos.io/template</code> annotation. This ensures that the template is instantiated at the deployment time, making the deployments faster and more efficient.</p>
 </div>
-<p>This template simply references the ExternalSecret identifier (defined in the ClusterProfile) using the copy function. 
+<p>This template simply references the ExternalSecret identifier (defined in the ClusterProfile) using the copy function.
 Consequently, the Secret from the management cluster will be copied to any matching managed clusters.</p>
 <h2 id="setfieldremovefield-example">SetField/RemoveField Example</h2>
 <p>The section demonstrates how to leverage Sveltos's <strong>setField</strong> and <strong>removeField</strong> functions within templates to manipulate deployments across managed clusters.</p>
@@ -3349,7 +3349,7 @@ Consequently, the Secret from the management cluster will be copied to any match
       <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

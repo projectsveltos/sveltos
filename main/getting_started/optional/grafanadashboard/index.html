@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3260,7 +3260,7 @@
 
 
 <h1 id="introduction-to-the-sveltos-grafana-dashboard">Introduction to the Sveltos Grafana Dashboard</h1>
-<p>The Sveltos Dashboard is designed to help users monitor key operational metrics and the status of their sveltosclusters in real-time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions. </p>
+<p>The Sveltos Dashboard is designed to help users monitor key operational metrics and the status of their sveltosclusters in real-time. Grafana helps users visualize this data effectively, so they can make more efficient and informed operational decisions.</p>
 <p><img alt="dashboard" src="../../../assets/dashboard.png" /></p>
 <h2 id="getting-started">Getting Started</h2>
 <p>With the latest Sveltos release, users can take full advantage of the Sveltos Grafana dashboard. Before we start using the capabilities, ensure <a href="https://artifacthub.io/packages/helm/grafana/grafana">Grafana</a> and <a href="https://artifacthub.io/packages/helm/prometheus-community/prometheus">Prometheus</a> are deployed on the <strong>Sveltos management</strong> cluster.</p>
@@ -3326,7 +3326,7 @@
 <li><strong>Type</strong>: Gauge</li>
 <li><strong>Purpose</strong>: Displays the connectivity status of each Kubernetes cluster managed by Sveltos.</li>
 <li><strong>Query Used</strong>: <code>projectsveltos_cluster_connectivity_status</code></li>
-<li><strong>Interpretation</strong>: A “Healthy" cluster is one that is connected ( projectsveltos_cluster_connectivity_status: 0) and depicted in green. A "Disconnected" cluster (projectsveltos_cluster_connectivity_status: 1) is shown in red, to help users rapidly identify and address connectivity issues. </li>
+<li><strong>Interpretation</strong>: A “Healthy" cluster is one that is connected ( projectsveltos_cluster_connectivity_status: 0) and depicted in green. A "Disconnected" cluster (projectsveltos_cluster_connectivity_status: 1) is shown in red, to help users rapidly identify and address connectivity issues.</li>
 </ul>
 <h3 id="2-cluster-kubernetes-version">2. Cluster Kubernetes Version</h3>
 <ul>
@@ -3353,8 +3353,8 @@
 <ul>
 <li><strong>Type</strong>: Bar Chart</li>
 <li><strong>Purpose</strong>: Depicts the time required for deploying Helm Charts, by visualizing the 50th and 90th percentile of deployment times.</li>
-<li><strong>Queries Used</strong>:<br />
-<code>histogram_quantile(0.90, projectsveltos_program_charts_time_seconds_bucket)</code> 
+<li><strong>Queries Used</strong>:
+<code>histogram_quantile(0.90, projectsveltos_program_charts_time_seconds_bucket)</code>
 <code>histogram_quantile(0.50, projectsveltos_program_charts_time_seconds_bucket)</code></li>
 <li><strong>Interpretation</strong>: Provides deeper insights into the deployment times required by Helm Charts. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.</li>
 </ul>
@@ -3362,8 +3362,8 @@
 <ul>
 <li><strong>Type</strong>: Bar Chart</li>
 <li><strong>Purpose</strong>: Depicts the time required for deploying Resources, by visualizing the 50th and 90th percentile of deployment times.</li>
-<li><strong>Queries Used</strong>:<br />
-<code>histogram_quantile(0.90, projectsveltos_program_resources_time_seconds_bucket)</code><br />
+<li><strong>Queries Used</strong>:
+<code>histogram_quantile(0.90, projectsveltos_program_resources_time_seconds_bucket)</code>
 <code>histogram_quantile(0.50, projectsveltos_program_resources_time_seconds_bucket)</code></li>
 <li><strong>Interpretation</strong>: Provides deeper insights into the resource deployment times. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.</li>
 </ul>
@@ -3385,7 +3385,7 @@
 <ul>
 <li><strong>Type</strong>: Heatmap</li>
 <li><strong>Purpose</strong>: Provides a heatmap of Helm chart deployment latencies</li>
-<li><strong>Query Used</strong>: 
+<li><strong>Query Used</strong>:
 <code>sum(rate(projectsveltos_program_charts_time_seconds_bucket[5m]))</code></li>
 <li><strong>Interpretation</strong>: Highlights the frequency and duration of Helm chart deployment latencies to help users identify patterns and optimize deployment management.</li>
 </ul>
@@ -3393,7 +3393,7 @@
 <ul>
 <li><strong>Type</strong>: Heatmap</li>
 <li><strong>Purpose</strong>: Provides a heatmap of Resource deployment latencies</li>
-<li><strong>Query Used</strong>: 
+<li><strong>Query Used</strong>:
 <code>sum(rate(projectsveltos_program_resources_time_seconds_bucket[5m]))</code></li>
 <li><strong>Interpretation</strong>: Highlights the frequency and duration of resource deployment latencies to help users identify patterns and optimize deployment management.</li>
 </ul>
@@ -3558,7 +3558,7 @@
       <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3050,7 +3050,7 @@
 <h2 id="sveltoctl-visibility">Sveltoctl Visibility</h2>
 <p><strong>sveltosctl</strong> nicely displays the add-ons deployed in every Sveltos managed Kubernetes cluster.</p>
 <h3 id="show-addons">show addons</h3>
-<p><em>show addons</em> can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos. </p>
+<p><em>show addons</em> can be used to display a list of Kubernetes add-ons deployed in each clusters by Sveltos.</p>
 <p>The displayed information are:</p>
 <ul>
 <li>The CAPI/Sveltos Cluster in the form namespace/name;</li>
@@ -3102,7 +3102,7 @@
 <li>For ConfigMap/Secret list of clusters where their content is currently deployed.</li>
 </ul>
 <p>Such information is useful to see what clusters would be affected by a change before making such a change.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ sveltosctl show usage 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ sveltosctl show usage
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>+----------------+--------------------+----------------------------+-------------------------------------+
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>| RESOURCE KIND  | RESOURCE NAMESPACE |       RESOURCE NAME        |              CLUSTERS               |
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>+----------------+--------------------+----------------------------+-------------------------------------+
@@ -3114,7 +3114,7 @@
 <p><em>show admin-rbac</em> can be used to display permissions granted to tenant admins in each managed clusters by the platform admin.</p>
 <p>If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
 <code>env=internal</code> and we post <a href="https://raw.githubusercontent.com/projectsveltos/access-manager/main/examples/shared_access.yaml">RoleRequests</a>, we get:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ sveltosctl show admin-rbac       
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ sveltosctl show admin-rbac
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>|                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
@@ -3273,7 +3273,7 @@
       <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

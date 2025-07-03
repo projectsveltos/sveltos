@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -3103,7 +3103,7 @@
 </div>
 <h3 id="snapshot-diff">Snapshot diff</h3>
 <p><a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltoctl</a> snapshot diff can be used to display all the configuration changes between two snapshots:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ sveltosctl snapshot diff --snapshot=hourly  --from-sample=2022-10-10:22:00:00 --to-sample=2022-10-10:23:00:00
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>+-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>|               CLUSTER               |      RESOURCE TYPE       | NAMESPACE |      NAME      |  ACTION  |              MESSAGE               |
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>+-------------------------------------+--------------------------+-----------+----------------+----------+------------------------------------+
@@ -3173,7 +3173,7 @@
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/clusterprofile.yaml
 </span></code></pre></div>
 <p>This will deploy all necessary resources in all managed cluster matching ClusterProfile cluster selector field.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show addons 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show addons
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>|           CLUSTER           |  RESOURCE TYPE  | NAMESPACE |      NAME      | VERSION |             TIME              | CLUSTER PROFILES |
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>+-----------------------------+-----------------+-----------+----------------+---------+-------------------------------+------------------+
@@ -3192,7 +3192,7 @@
 <p>Load the page http://localhost:8080 in your browser to view your guestbook</p>
 <p><img alt="Guestbook" src="../../../../assets/snapshot_example/guestbook.png" /></p>
 <p>The Sveltos snapshot feature allows you to take snapshots of your Kubernetes configuration at regular intervals. This can be useful for tracking changes of the configuration over time, or for debugging purposes.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$ sveltosctl snapshot list 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$ sveltosctl snapshot list
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>+-----------------+---------------------+
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>| SNAPSHOT POLICY |        DATE         |
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>+-----------------+---------------------+
@@ -3202,7 +3202,7 @@
 <p>Let's assume, later on a change is made. For instance, the <strong>redis-follower</strong> Service label selector is inadvertently modified.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/snapshot_example/database_broken.yaml
 </span></code></pre></div>
-<p>Entries in the database are not visible anymore. Of course we can debug this issue. 
+<p>Entries in the database are not visible anymore. Of course we can debug this issue.
 But if we simply want to see what has changed we can take a new snapshot</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$ sveltosctl snapshot list
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>+-----------------+---------------------+
@@ -3383,7 +3383,7 @@ But if we simply want to see what has changed we can take a new snapshot</p>
       <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>
