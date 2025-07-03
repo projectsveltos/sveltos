@@ -1337,6 +1337,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example: Referencing Helm Charts from Flux Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-flux-gitrepository-as-a-helm-chart-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Flux GitRepository as a Helm Chart Source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Scenario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3137,6 +3161,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example: Referencing Helm Charts from Flux Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-flux-gitrepository-as-a-helm-chart-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Flux GitRepository as a Helm Chart Source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Scenario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3214,11 +3262,12 @@
 <h2 id="flux-sources">Flux Sources</h2>
 <p>Sveltos can seamlessly integrate with <strong>Flux</strong><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> to automatically deploy YAML manifests or Helm charts stored in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.</p>
 <h2 id="example-deploy-nginx-ingress-with-flux-and-sveltos">Example: Deploy Nginx Ingress with Flux and Sveltos</h2>
-<p>Imagine a repository like <a href="https://github.com/gianlucam76/yaml_flux.git">this</a> containing a <em>nginx-ingress</em> directory with all the YAML needed to deploy Nginx<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
-<p>Below, we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.</p>
+<p>Imagine a repository like <a href="https://github.com/gianlucam76/yaml_flux.git">this</a> containing an <em>nginx-ingress</em> directory with all the required YAML resources for deployment<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. In the steps below we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.</p>
 <h3 id="step-1-configure-flux-in-the-management-cluster">Step 1: Configure Flux in the Management Cluster</h3>
-<p>Install and run Flux in the management cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found <a href="https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F">here</a>.</p>
-<p>Use a <strong>GitRepository</strong> resource similar to the below.</p>
+<p>Install and run Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found <a href="https://fluxcd.io/flux/installation/#dev-install">here</a>.</p>
+<p>Deploy a <strong>GitRepository</strong> resource similar to the below.</p>
+<div class="admonition example">
+<p class="admonition-title">GitRepository Resource</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3234,10 +3283,11 @@
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60s</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gianlucam76/yaml_flux.git</span>
 </span></code></pre></div>
+</div>
 <h3 id="step-2-create-a-sveltos-clusterprofile">Step 2: Create a Sveltos ClusterProfile</h3>
 <p>Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the <em>nginx-ingress</em> directory as the source of the deployment.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Nginx Ingress Definition</p>
+<p class="admonition-title">Sveltos ClusterProfile Nginx Ingress</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_nginx_ingress.yaml &lt;&lt;EOF</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nn">---</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3256,7 +3306,7 @@
 </span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>This ClusterProfile targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the <em>nginx-ingress</em> directory within the flux-system Git repository managed by Flux.</p>
+<p>The <code>ClusterProfile</code> targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the <em>nginx-ingress</em> directory within the flux-system Git repository managed by Flux.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ sveltosctl show addons
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>+-----------------------------+----------------------------------------------+-----------+---------------------------------------+---------+-------------------------------+-------------------------------------+
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>|           CLUSTER           |                RESOURCE TYPE                 | NAMESPACE |                 NAME                  | VERSION |             TIME              |              PROFILES               |
@@ -3275,8 +3325,10 @@
 </span></code></pre></div>
 <h2 id="example-deploy-kyverno-policies-with-flux-and-sveltos">Example: Deploy Kyverno policies with Flux and Sveltos</h2>
 <h3 id="step-1-configure-flux-in-the-management-cluster_1">Step 1: Configure Flux in the Management Cluster</h3>
-<p>Install and run Flux in your management cluster and configure it to synchronise the Git repository containing the Kyverno manifests.</p>
-<p>Use a <strong>GitRepository</strong> resource similar to the below.</p>
+<p>Install and run Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Kyverno manifests.</p>
+<p>Deploy a <strong>GitRepository</strong> resource similar to the below.</p>
+<div class="admonition example">
+<p class="admonition-title">GitRepository Resource</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3292,10 +3344,11 @@
 </span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60s</span>
 </span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gianlucam76/yaml_flux.git</span>
 </span></code></pre></div>
+</div>
 <h3 id="step-2-create-a-sveltos-clusterprofile_1">Step 2: Create a Sveltos ClusterProfile</h3>
 <p>Define a ClusterProfile to deploy the Kyverno helm chart.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Kyverno</p>
+<p class="admonition-title">Sveltos ClusterProfile Kyverno</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_kyverno.yaml &lt;&lt;EOF</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nn">---</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3318,10 +3371,10 @@
 </span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the <strong>kyverno</strong> directory as the source of the deployment.</p>
-<p>This directory contains a list of Kyverno ClusterPolicies.</p>
+<p>Define a Sveltos <code>ClusterProfile</code> referencing the flux-system GitRepository and defining the <strong>kyverno</strong> directory as the source of the deployment.</p>
+<p>The mentioned directory contains a list of Kyverno ClusterPolicies.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Kyverno Policies</p>
+<p class="admonition-title">Sveltos ClusterProfile Kyverno Policies</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_kyverno_policies.yaml &lt;&lt;EOF</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nn">---</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3342,7 +3395,7 @@
 </span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>This ClusterProfile targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.</p>
+<p>The above <code>ClusterProfile</code> targets clusters with the <strong>env=fv</strong> label and fetches relevant deployment information from the <em>kyverno</em> directory within the flux-system Git repository managed by Flux.</p>
 <p>The Kyverno Helm chart and all the Kyverno policies contained in the Git repository under the <em>kyverno</em> directory are deployed:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show addons
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
@@ -3355,21 +3408,25 @@
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>+-----------------------------+--------------------------+-----------+---------------------------+---------+-------------------------------+----------------------------------------+
 </span></code></pre></div>
 <h2 id="example-referencing-helm-charts-from-flux-sources">Example: Referencing Helm Charts from Flux Sources</h2>
-<p>Sveltos allows you to deploy Helm charts from various sources, including traditional HTTP repositories, OCI registries, and <strong>Flux sources</strong>. This section focuses on using Flux sources as your Helm chart repository.</p>
-<p><strong>Using a Flux GitRepository as a Helm Chart Source</strong></p>
+<p>Sveltos allows us to deploy Helm charts from various sources, including traditional <strong>HTTP</strong> repositories, <strong>OCI</strong> registries, and <strong>Flux sources</strong>. This section focuses on using Flux sources as a Helm chart repository.</p>
+<h3 id="using-a-flux-gitrepository-as-a-helm-chart-source">Using a Flux GitRepository as a Helm Chart Source</h3>
 <p>To deploy Helm charts from a Flux GitRepository, specify the <code>repositoryURL</code> in your <code>ClusterProfile</code> using the following format:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>&lt;flux source kind&gt;://&lt;flux source namespace&gt;/&lt;flux source name&gt;/&lt;path&gt;
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>&lt;flux source kind&gt;://&lt;flux source namespace&gt;/&lt;flux source name&gt;/&lt;path&gt;
 </span></code></pre></div>
-<p>Where:</p>
+More information about the command arguments, have a look below.</p>
 <ul>
-<li><code>&lt;flux source kind&gt;</code>: The type of Flux source. For Git repositories, this is <code>gitrepository</code> (other options are <code>ocirepository</code>and <code>bucket</code>).</li>
-<li><code>&lt;flux source namespace&gt;</code>: The Kubernetes namespace where the Flux GitRepository is located.</li>
-<li><code>&lt;flux source name&gt;</code>: The name of the Flux GitRepository.</li>
-<li><code>&lt;path&gt;</code>: The relative path within the Git repository to the directory containing the Helm charts.</li>
+<li><code>&lt;flux source kind&gt;</code>: The type of Flux source. For Git repositories, this is <code>gitrepository</code> (available options: <code>ocirepository</code> and <code>bucket</code>)</li>
+<li><code>&lt;flux source namespace&gt;</code>: The Kubernetes namespace where the Flux GitRepository is located</li>
+<li><code>&lt;flux source name&gt;</code>: The name of the Flux GitRepository</li>
+<li><code>&lt;path&gt;</code>: The relative path within the Git repository to the directory containing the Helm charts</li>
 </ul>
-<p><strong>Example Scenario</strong></p>
-<p>Let's assume you have a Flux GitRepository named <code>flux-system</code> in the <code>flux-system</code> namespace. This GitRepository is configured to synchronize the <code>https://github.com/projectsveltos/helm-charts.git/</code> repository. The Helm charts you want to deploy are located in the <code>charts/projectsveltos</code> directory within this Git repository.</p>
-<p>To deploy the <code>projectsveltos</code> chart using Sveltos, you would create a <code>ClusterProfile</code> with the following <code>helmCharts</code> section:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use the <code>kubectl get gitrepository.source.toolkit.fluxcd.io -A</code> command to get a view of the existing syncronised repositories.</p>
+</div>
+<h3 id="example-scenario">Example Scenario</h3>
+<p>Let's assume we have a Flux GitRepository named <code>flux-system</code> in the <code>flux-system</code> namespace. The GitRepository is configured to synchronise the <code>https://github.com/projectsveltos/helm-charts.git/</code> repository. The Helm charts we want to deploy are located in the <code>charts/projectsveltos</code> directory within the mentioned Git repository.</p>
+<p>To deploy the <code>projectsveltos</code> chart using Sveltos, we would create a <code>ClusterProfile</code> with the below <code>helmCharts</code> options.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">helmCharts</span><span class="p">:</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">gitrepository://flux-system/flux-system/charts/projectsveltos</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
@@ -3377,17 +3434,17 @@
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
 </span></code></pre></div>
 <h2 id="example-template-with-git-repositorybucket-content">Example: Template with Git Repository/Bucket Content</h2>
-<p>The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can be templates<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>.To enable templating, annotate the referenced <code>GitRepository</code> instance with <strong>"projectsveltos.io/template: true"</strong>.</p>
+<p>The content within the Git repository or other sources referenced by a Sveltos <code>ClusterProfile</code> can be templates<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>.To enable templating, annotate the referenced <code>GitRepository</code> instance with <strong>"projectsveltos.io/template: true"</strong>.</p>
 <p>When Sveltos processes the template, it will perform the below.</p>
 <ul>
 <li>Read the content of all files inside the specified path</li>
 <li>Instantiate the templates ultilising the data from resources in the management cluster, similar to how it currently works with referenced Secrets and ConfigMaps</li>
 </ul>
 <p>This allows dynamic deployment customisation based on the specific characteristics of the clusters, further enhancing flexibility and automation.</p>
-<p>Let's try it out! The content in the "template" directory of this <a href="https://github.com/gianlucam76/yaml_flux.git">repository</a> serves as the perfect example.</p>
+<p>Let's try it out! The content in the "template" directory of the <a href="https://github.com/gianlucam76/yaml_flux.git">repository</a> serves as the perfect example.</p>
 <h3 id="template-definition">Template Definition</h3>
 <div class="admonition example">
-<p class="admonition-title">Example - ConfigMap Definition</p>
+<p class="admonition-title">ConfigMap Definition</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; cm.yaml &lt;&lt;EOF</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="l l-Scalar l-Scalar-Plain"># Sveltos will instantiate this template before deploying to matching managed cluster</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="l l-Scalar l-Scalar-Plain"># Sveltos will get the ClusterAPI Cluster instance representing the cluster in the</span>
@@ -3409,6 +3466,8 @@
 <p class="admonition-title">Note</p>
 <p>Add the <strong>projectsveltos.io/template: "true"</strong> annotation to the <strong>GitRepository</strong> resources created further above.</p>
 </div>
+<div class="admonition example">
+<p class="admonition-title">GitRepository Resource</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nn">---</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3426,9 +3485,10 @@
 </span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60s</span>
 </span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gianlucam76/yaml_flux.git</span>
 </span></code></pre></div>
+</div>
 <h3 id="clusterprofile-definition">ClusterProfile Definition</h3>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Flux Definition</p>
+<p class="admonition-title">Sveltos ClusterProfile Flux Definition</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_flux.yaml &lt;&lt;EOF</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nn">---</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3447,8 +3507,9 @@
 </span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>The ClusterProfile will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.</p>
+<p>The <code>ClusterProfile</code> will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.</p>
 <p>An example of a deployed <strong>ConfigMap</strong> in the managed cluster can be found below.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nn">---</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nt">data</span><span class="p">:</span>
@@ -3460,10 +3521,11 @@
 </span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 </span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </span></code></pre></div>
+</div>
 <h3 id="express-path-as-template">Express Path as Template</h3>
 <p>The <strong>path</strong> field within a policyRefs object in Sveltos can be defined using a template. This allows to dynamically set the path based on information from the cluster itself.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Flux Region West</p>
+<p class="admonition-title">Sveltos ClusterProfile Flux Region West</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_flux_region_west.yaml &lt;&lt;EOF</span>
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nn">---</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3483,18 +3545,16 @@
 </span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>Sveltos uses the cluster instance in the management cluster to populate the template in the path field.
-The template expression <code>{{ index .Cluster.metadata.annotations "environment" }}</code> retrieves the value of the annotation named <strong>environment</strong> from the cluster's metadata.</p>
-<p>For instance:</p>
+<p>Sveltos uses the cluster instance in the management cluster to populate the template in the path field. The template expression <code>{{ index .Cluster.metadata.annotations "environment" }}</code> retrieves the value of the annotation named <strong>environment</strong> from the cluster's metadata.</p>
+<p>For example:</p>
 <ol>
-<li>Cluster A: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.</li>
-<li>Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.</li>
+<li><strong>Cluster A</strong>: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.</li>
+<li><strong>Cluster B</strong>: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.</li>
 </ol>
-<p>This approach allows for flexible configuration based on individual cluster environments.</p>
-<p>Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.</p>
+<p>The mentioned approach allows for flexible configuration based on individual cluster environments. Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.</p>
 <p>A more complex example can be when we want to express the <strong>path</strong> field as a template using <strong>if</strong> statements.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Flux Template <strong>path</strong></p>
+<p class="admonition-title">Sveltos ClusterProfile Flux Template <strong>path</strong></p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_flux_template_path.yaml &lt;&lt;EOF</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nn">---</span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
