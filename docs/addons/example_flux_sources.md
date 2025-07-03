@@ -19,38 +19,37 @@ Sveltos can seamlessly integrate with __Flux__[^1] to automatically deploy YAML 
 
 ## Example: Deploy Nginx Ingress with Flux and Sveltos
 
-Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing a _nginx-ingress_ directory with all the YAML needed to deploy Nginx[^2].
-
-Below, we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.
+Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) containing an _nginx-ingress_ directory with all the required YAML resources for deployment[^2]. In the steps below we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Install and run Flux in the management cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
+Install and run Flux in the **management** cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found [here](https://fluxcd.io/flux/installation/#dev-install).
 
-Use a __GitRepository__ resource similar to the below.
+Deploy a __GitRepository__ resource similar to the below.
 
-```yaml
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: flux-system
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  secretRef:
-    name: flux-system
-  timeout: 60s
-  url: https://github.com/gianlucam76/yaml_flux.git
-```
+!!! example "GitRepository Resource"
+    ```yaml
+    ---
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: flux-system
+      namespace: flux-system
+    spec:
+      interval: 1m0s
+      ref:
+        branch: main
+      secretRef:
+        name: flux-system
+      timeout: 60s
+      url: https://github.com/gianlucam76/yaml_flux.git
+    ```
 
 ### Step 2: Create a Sveltos ClusterProfile
 
 Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
 
-!!! example "Example - ClusterProfile Nginx Ingress Definition"
+!!! example "Sveltos ClusterProfile Nginx Ingress"
     ```yaml
     cat > clusterprofile_nginx_ingress.yaml <<EOF
     ---
@@ -70,7 +69,7 @@ Define a Sveltos ClusterProfile referencing the flux-system GitRepository and sp
     EOF
     ```
 
-This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
+The `ClusterProfile` targets clusters with the __env=fv__ label and fetches relevant deployment information from the _nginx-ingress_ directory within the flux-system Git repository managed by Flux.
 
 ```
 $ sveltosctl show addons
@@ -94,32 +93,33 @@ $ sveltosctl show addons
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Install and run Flux in your management cluster and configure it to synchronise the Git repository containing the Kyverno manifests.
+Install and run Flux in the **management** cluster and configure it to synchronise the Git repository containing the Kyverno manifests.
 
-Use a __GitRepository__ resource similar to the below.
+Deploy a __GitRepository__ resource similar to the below.
 
-```yaml
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: flux-system
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  secretRef:
-    name: flux-system
-  timeout: 60s
-  url: https://github.com/gianlucam76/yaml_flux.git
-```
+!!! example "GitRepository Resource"
+    ```yaml
+    ---
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: flux-system
+      namespace: flux-system
+    spec:
+      interval: 1m0s
+      ref:
+        branch: main
+      secretRef:
+        name: flux-system
+      timeout: 60s
+      url: https://github.com/gianlucam76/yaml_flux.git
+    ```
 
 ### Step 2: Create a Sveltos ClusterProfile
 
 Define a ClusterProfile to deploy the Kyverno helm chart.
 
-!!! example "Example - ClusterProfile Kyverno"
+!!! example "Sveltos ClusterProfile Kyverno"
     ```yaml
     cat > clusterprofile_kyverno.yaml <<EOF
     ---
@@ -143,11 +143,11 @@ Define a ClusterProfile to deploy the Kyverno helm chart.
     EOF
     ```
 
-Define a Sveltos ClusterProfile referencing the flux-system GitRepository and defining the __kyverno__ directory as the source of the deployment.
+Define a Sveltos `ClusterProfile` referencing the flux-system GitRepository and defining the __kyverno__ directory as the source of the deployment.
 
-This directory contains a list of Kyverno ClusterPolicies.
+The mentioned directory contains a list of Kyverno ClusterPolicies.
 
-!!! example "Example - ClusterProfile Kyverno Policies"
+!!! example "Sveltos ClusterProfile Kyverno Policies"
     ```yaml
     cat > clusterprofile_kyverno_policies.yaml <<EOF
     ---
@@ -169,7 +169,7 @@ This directory contains a list of Kyverno ClusterPolicies.
     EOF
     ```
 
-This ClusterProfile targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno__ directory within the flux-system Git repository managed by Flux.
+The above `ClusterProfile` targets clusters with the __env=fv__ label and fetches relevant deployment information from the _kyverno_ directory within the flux-system Git repository managed by Flux.
 
 The Kyverno Helm chart and all the Kyverno policies contained in the Git repository under the _kyverno_ directory are deployed:
 
@@ -187,28 +187,30 @@ $ sveltosctl show addons
 
 ## Example: Referencing Helm Charts from Flux Sources
 
-Sveltos allows you to deploy Helm charts from various sources, including traditional HTTP repositories, OCI registries, and **Flux sources**. This section focuses on using Flux sources as your Helm chart repository.
+Sveltos allows us to deploy Helm charts from various sources, including traditional **HTTP** repositories, **OCI** registries, and **Flux sources**. This section focuses on using Flux sources as a Helm chart repository.
 
-**Using a Flux GitRepository as a Helm Chart Source**
+### Using a Flux GitRepository as a Helm Chart Source
 
 To deploy Helm charts from a Flux GitRepository, specify the `repositoryURL` in your `ClusterProfile` using the following format:
 
 ```
 <flux source kind>://<flux source namespace>/<flux source name>/<path>
 ```
+More information about the command arguments, have a look below.
 
-Where:
+- `<flux source kind>`: The type of Flux source. For Git repositories, this is `gitrepository` (available options: `ocirepository` and `bucket`)
+- `<flux source namespace>`: The Kubernetes namespace where the Flux GitRepository is located
+- `<flux source name>`: The name of the Flux GitRepository
+- `<path>`: The relative path within the Git repository to the directory containing the Helm charts
 
-* `<flux source kind>`: The type of Flux source. For Git repositories, this is `gitrepository` (other options are `ocirepository`and `bucket`).
-* `<flux source namespace>`: The Kubernetes namespace where the Flux GitRepository is located.
-* `<flux source name>`: The name of the Flux GitRepository.
-* `<path>`: The relative path within the Git repository to the directory containing the Helm charts.
+!!! note
+    Use the ```kubectl get gitrepository.source.toolkit.fluxcd.io -A``` command to get a view of the existing syncronised repositories.
 
-**Example Scenario**
+### Example Scenario
 
-Let's assume you have a Flux GitRepository named `flux-system` in the `flux-system` namespace. This GitRepository is configured to synchronize the `https://github.com/projectsveltos/helm-charts.git/` repository. The Helm charts you want to deploy are located in the `charts/projectsveltos` directory within this Git repository.
+Let's assume we have a Flux GitRepository named `flux-system` in the `flux-system` namespace. The GitRepository is configured to synchronise the `https://github.com/projectsveltos/helm-charts.git/` repository. The Helm charts we want to deploy are located in the `charts/projectsveltos` directory within the mentioned Git repository.
 
-To deploy the `projectsveltos` chart using Sveltos, you would create a `ClusterProfile` with the following `helmCharts` section:
+To deploy the `projectsveltos` chart using Sveltos, we would create a `ClusterProfile` with the below `helmCharts` options.
 
 ```yaml
 helmCharts:
@@ -220,7 +222,7 @@ helmCharts:
 
 ## Example: Template with Git Repository/Bucket Content
 
-The content within the Git repository or other sources referenced by a Sveltos ClusterProfile can be templates[^3].To enable templating, annotate the referenced `GitRepository` instance with __"projectsveltos.io/template: true"__.
+The content within the Git repository or other sources referenced by a Sveltos `ClusterProfile` can be templates[^3].To enable templating, annotate the referenced `GitRepository` instance with __"projectsveltos.io/template: true"__.
 
 When Sveltos processes the template, it will perform the below.
 
@@ -229,11 +231,11 @@ When Sveltos processes the template, it will perform the below.
 
 This allows dynamic deployment customisation based on the specific characteristics of the clusters, further enhancing flexibility and automation.
 
-Let's try it out! The content in the "template" directory of this [repository](https://github.com/gianlucam76/yaml_flux.git) serves as the perfect example.
+Let's try it out! The content in the "template" directory of the [repository](https://github.com/gianlucam76/yaml_flux.git) serves as the perfect example.
 
 ### Template Definition
 
-!!! example "Example - ConfigMap Definition"
+!!! example "ConfigMap Definition"
     ```yaml
     cat > cm.yaml <<EOF
     # Sveltos will instantiate this template before deploying to matching managed cluster
@@ -256,28 +258,29 @@ Let's try it out! The content in the "template" directory of this [repository](h
 !!! note
     Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
 
-```yaml
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: flux-system
-  namespace: flux-system
-  annotations:
-    projectsveltos.io/template: "true"
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  secretRef:
-    name: flux-system
-  timeout: 60s
-  url: https://github.com/gianlucam76/yaml_flux.git
-```
+!!! example "GitRepository Resource"
+    ```yaml
+    ---
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: flux-system
+      namespace: flux-system
+      annotations:
+        projectsveltos.io/template: "true"
+    spec:
+      interval: 1m0s
+      ref:
+        branch: main
+      secretRef:
+        name: flux-system
+      timeout: 60s
+      url: https://github.com/gianlucam76/yaml_flux.git
+    ```
 
 ### ClusterProfile Definition
 
-!!! example "Example - ClusterProfile Flux Definition"
+!!! example "Sveltos ClusterProfile Flux Definition"
     ```yaml
     cat > clusterprofile_flux.yaml <<EOF
     ---
@@ -297,28 +300,29 @@ spec:
     EOF
     ```
 
-The ClusterProfile will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.
+The `ClusterProfile` will use the information from the "Cluster" resource in the management cluster to populate the template and deploy it.
 
 An example of a deployed __ConfigMap__ in the managed cluster can be found below.
 
-```yaml
----
-apiVersion: v1
-data:
-  controlPlaneEndpoint: 172.18.0.4:6443
-kind: ConfigMap
-metadata:
-  ...
-  name: clusterapi-workload
-  namespace: default
-  ...
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: v1
+    data:
+      controlPlaneEndpoint: 172.18.0.4:6443
+    kind: ConfigMap
+    metadata:
+      ...
+      name: clusterapi-workload
+      namespace: default
+      ...
+    ```
 
 ### Express Path as Template
 
 The __path__ field within a policyRefs object in Sveltos can be defined using a template. This allows to dynamically set the path based on information from the cluster itself.
 
-!!! example "Example - ClusterProfile Flux Region West"
+!!! example "Sveltos ClusterProfile Flux Region West"
     ```yaml
     cat > clusterprofile_flux_region_west.yaml <<EOF
     ---
@@ -339,21 +343,18 @@ The __path__ field within a policyRefs object in Sveltos can be defined using a 
     EOF
     ```
 
-Sveltos uses the cluster instance in the management cluster to populate the template in the path field.
-The template expression ```{{ index .Cluster.metadata.annotations "environment" }}``` retrieves the value of the annotation named __environment__ from the cluster's metadata.
+Sveltos uses the cluster instance in the management cluster to populate the template in the path field. The template expression ```{{ index .Cluster.metadata.annotations "environment" }}``` retrieves the value of the annotation named __environment__ from the cluster's metadata.
 
-For instance:
+For example:
 
-1. Cluster A: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.
-2. Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.
+1. **Cluster A**: If cluster A has an annotation environment: production, the resulting path will be: production/helloWorld.
+1. **Cluster B**: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.
 
-This approach allows for flexible configuration based on individual cluster environments.
-
-Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
+The mentioned approach allows for flexible configuration based on individual cluster environments. Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
 A more complex example can be when we want to express the __path__ field as a template using __if__ statements.
 
-!!! example "Example - ClusterProfile Flux Template __path__"
+!!! example "Sveltos ClusterProfile Flux Template __path__"
     ```yaml
     cat > clusterprofile_flux_template_path.yaml <<EOF
     ---
