@@ -47,7 +47,7 @@ Deploy a __GitRepository__ resource similar to the below.
 
 ### Step 2: Create a Sveltos ClusterProfile
 
-Define a Sveltos Clus`terProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
+Define a Sveltos ClusterProfile referencing the flux-system GitRepository and specify the _nginx-ingress_ directory as the source of the deployment.
 
 !!! example "Sveltos ClusterProfile Nginx Ingress"
     ```yaml
