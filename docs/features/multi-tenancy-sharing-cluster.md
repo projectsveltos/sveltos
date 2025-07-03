@@ -184,7 +184,7 @@ In the example below, all clusters matching the Kubernetes label selector ***org
 We can use of the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") to check the permissions given to the service account `foo`. We expect the service account to have full access to the managed cluster with the label set to `env:production`
 
 ```bash
-$ sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
 |            CLUSTER            |    ADMIN     | NAMESPACE | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +-------------------------------+--------------+-----------+------------+-----------+----------------+-------+
@@ -333,7 +333,7 @@ are shared between two tenants:
     kind: RoleRequest
     metadata:
       name: bar-access
-    spec:                       
+    spec:
       serviceAccountName: "hr"
       serviceAccountNamespace: "default"
       clusterSelector:
@@ -353,7 +353,7 @@ If we have two clusters, a ClusterAPI powered and a SveltosCluster, both matchin
 ```env=internal``` and we post the [RoleRequests](https://raw.githubusercontent.com/projectsveltos/access-manager/v0.4.0/examples/shared_access.yaml), we get the below output.
 
 ```bash
-$ sveltosctl show admin-rbac       
+$ sveltosctl show admin-rbac
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 |                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+

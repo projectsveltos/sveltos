@@ -49,7 +49,7 @@ The below `HealthCheck` YAML definition will detect degrade Certificates.
 
           local hs = {}
           if #statuses > 0 then
-            hs.resources = statuses 
+            hs.resources = statuses
           end
           return hs
         end

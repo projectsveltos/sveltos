@@ -57,13 +57,13 @@ The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to
               end
             end
           end
-          
+
           local hs = {}
           if #statuses > 0 then
-            hs.resources = statuses 
+            hs.resources = statuses
           end
           return hs
-        end        
+        end
     ```
 
 !!! example ""

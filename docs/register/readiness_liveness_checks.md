@@ -45,7 +45,7 @@ spec:
 
         return hs
       end
-    
+
     resourceSelectors:
     - group: ""
       kind: Node
