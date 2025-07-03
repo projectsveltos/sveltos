@@ -29,13 +29,13 @@ Sveltos offers a **simple**, **unified** interface to easily review existing con
 
 ### Benefits of a Central Management Cluster
 
-- **Centralised Management:** Manage multiple clusters from one place, ensuring consistency and reducing configuration errors.
+- **Centralized Management:** Manage multiple clusters from one place, ensuring consistency and reducing configuration errors.
 
 - **Consistency:** Automate processes for uniform configurations and deployments, boosting reliability.
 
 - **Scalability:** Easily scale infrastructure by simplifying the creation and management of clusters.
 
-- **Cost Optimisation:** Centralised control maximizes resource use and lowers operational costs.
+- **Cost Optimisation:** Centralized control maximizes resource use and lowers operational costs.
 
 - **Better Security:** Security-related add-ons, such as network policies and secrets management, for secure cluster deployment.
 

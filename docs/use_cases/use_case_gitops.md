@@ -23,7 +23,7 @@ By integrating Flux with Sveltos, we can automate the synchronisation of any des
 
 ## What are the benefits?
 
-1. **Centralised Configuration:** Store `YAML/JSON` manifests in a central Git repository or Bucket.
+1. **Centralized Configuration:** Store `YAML/JSON` manifests in a central Git repository or Bucket.
 2. **Continuous Synchronisation:** **Flux** in the **management cluster** ensures continuous synchronisation of configurations.
 3. **Consistent Deployments:** Use Sveltos `ClusterProfiles`, `Profiles` to reliably deploy Kubernetes add-ons in matching clusters.
 
