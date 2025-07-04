@@ -1,6 +1,8 @@
 ---
 title: Sveltos Resources and Controller Map
 description: Mapping between Sveltos resources and the controllers that manage and create them
+authors:
+    - kahirokunn
 ---
 
 # Resource and Controller Mapping
