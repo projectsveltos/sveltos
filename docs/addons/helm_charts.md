@@ -22,169 +22,175 @@ The ClusterProfile *spec.helmCharts* can list a number of Helm charts to get dep
 
 ### Example: Single Helm chart
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  clusterSelector:
-    matchLabels:
-      env: prod
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.3.3
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.3.3
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+    ```
 
-In the above YAML definition, we install Kyverno on a managed cluster with the label selector set to *env=prod*.
+In the above YAML definition, we install Kyverno on a **managed** cluster with the label selector set to *env=prod*.
 
 ### Example: Multiple Helm charts
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: prometheus-grafana
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  helmCharts:
-  - repositoryURL:    https://prometheus-community.github.io/helm-charts
-    repositoryName:   prometheus-community
-    chartName:        prometheus-community/prometheus
-    chartVersion:     26.0.0
-    releaseName:      prometheus
-    releaseNamespace: prometheus
-    helmChartAction:  Install
-  - repositoryURL:    https://grafana.github.io/helm-charts
-    repositoryName:   grafana
-    chartName:        grafana/grafana
-    chartVersion:     8.6.4
-    releaseName:      grafana
-    releaseNamespace: grafana
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: prometheus-grafana
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      helmCharts:
+      - repositoryURL:    https://prometheus-community.github.io/helm-charts
+        repositoryName:   prometheus-community
+        chartName:        prometheus-community/prometheus
+        chartVersion:     26.0.0
+        releaseName:      prometheus
+        releaseNamespace: prometheus
+        helmChartAction:  Install
+      - repositoryURL:    https://grafana.github.io/helm-charts
+        repositoryName:   grafana
+        chartName:        grafana/grafana
+        chartVersion:     8.6.4
+        releaseName:      grafana
+        releaseNamespace: grafana
+        helmChartAction:  Install
+    ```
 
-In the above YAML definition, we first install the Prometheus community Helm chart and afterwards the Grafana Helm chart. The two defined Helm charts will get deployed on a managed cluster with the label selector set to *env=fv*.
+In the above YAML definition, we initially install the Prometheus community Helm chart and afterwards the Grafana Helm chart. The two defined Helm charts will get deployed on a **managed** cluster with the label selector set to *env=fv*.
 
 ### Example: Update Helm Chart Values
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.3.3
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-    values: |
-      admissionController:
-        replicas: 1
-```
+!!! example ""
+    ```yaml
+      ---
+      apiVersion: config.projectsveltos.io/v1beta1
+      kind: ClusterProfile
+      metadata:
+        name: kyverno
+      spec:
+        clusterSelector:
+          matchLabels:
+            env: fv
+        syncMode: Continuous
+        helmCharts:
+        - repositoryURL:    https://kyverno.github.io/kyverno/
+          repositoryName:   kyverno
+          chartName:        kyverno/kyverno
+          chartVersion:     v3.3.3
+          releaseName:      kyverno-latest
+          releaseNamespace: kyverno
+          helmChartAction:  Install
+          values: |
+            admissionController:
+              replicas: 1
+    ```
+
+The _values_ field is the way to update different Helm chart values.
 
 ### Example: Update Helm Chart Values From Referenced ConfigMap/Secret
 
-Sveltos allows you to manage Helm chart values using ConfigMaps/Secrets.
+Sveltos allows us to manage Helm chart values using ConfigMaps/Secrets.
 
 !!! note
     Referenced Secrets must be of type ***addons.projectsveltos.io/cluster-profile***
 
 For example, we can create a file named __cleanup-controller.yaml__ with below content.
+!!! example ""
+    ```yaml
+    cleanupController:
+      livenessProbe:
+        httpGet:
+          path: /health/liveness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 16
+        periodSeconds: 31
+        timeoutSeconds: 5
+        failureThreshold: 2
+        successThreshold: 1
+    ```
 
-```yaml
-cleanupController:
-  livenessProbe:
-    httpGet:
-      path: /health/liveness
-      port: 9443
-      scheme: HTTPS
-    initialDelaySeconds: 16
-    periodSeconds: 31
-    timeoutSeconds: 5
-    failureThreshold: 2
-    successThreshold: 1
-```
-
-Create a `ConfigMap` using the above context.
+Create the `ConfigMap` resource.
 
 ```
 $ kubectl create configmap cleanup-controller --from-file=cleanup-controller.yaml
 ```
 
 Then, create another file named __admission_controller.yaml__ with the below content.
+!!! example ""
+    ```yaml
+    admissionController:
+      readinessProbe:
+        httpGet:
+          path: /health/readiness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 6
+        periodSeconds: 11
+        timeoutSeconds: 5
+        failureThreshold: 6
+        successThreshold: 1
+    ```
 
-```yaml
-admissionController:
-  readinessProbe:
-    httpGet:
-      path: /health/readiness
-      port: 9443
-      scheme: HTTPS
-    initialDelaySeconds: 6
-    periodSeconds: 11
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-```
-
-Create a `ConfigMap` using the above context.
+Create a `ConfigMap` resource.
 
 ```
 $ kubectl create configmap admission-controller --from-file=admission-controller.yaml
 ```
 
-Within the Sveltos `ClusterProfile` YAML, define the helmCharts section. We can specify the Helm chart details and leverage the _valuesFrom_ to reference the `ConfigMaps`.
-This injects the probe configurations from the ConfigMaps into the Helm chart values during deployment.
+Within the Sveltos `ClusterProfile` resource, define the `helmCharts` section. We can specify the Helm chart details and leverage the _valuesFrom_ to reference the `ConfigMaps`.
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.3.3
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-    values: |
-      admissionController:
-        replicas: 1
-    valuesFrom:
-    - kind: ConfigMap
-      name: cleanup-controller
-      namespace: default
-    - kind: ConfigMap
-      name: admission-controller
-      namespace: default
-```
+This injects the probe configurations from the `ConfigMaps` into the Helm chart values during deployment.
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.3.3
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+        values: |
+          admissionController:
+            replicas: 1
+        valuesFrom:
+        - kind: ConfigMap
+          name: cleanup-controller
+          namespace: default
+        - kind: ConfigMap
+          name: admission-controller
+          namespace: default
+    ```
 
 ### Example: Template-based Referencing for ValuesFrom
 
@@ -216,17 +222,19 @@ cleanup-controller-pre-production     1      8m48s
 cleanup-controller-production         1      8m1s
 ```
 
-```yaml
-apiVersion: v1
-data:
-  cleanup-values: |
-    cleanupController:
-      replicas: 1
-kind: ConfigMap
-metadata:
-  name: cleanup-controller-pre-production
-  namespace: civo
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: v1
+    data:
+      cleanup-values: |
+        cleanupController:
+          replicas: 1
+    kind: ConfigMap
+    metadata:
+      name: cleanup-controller-pre-production
+      namespace: civo
+    ```
 
 The only difference between the `ConfigMaps` is the `admissionController` and `cleanupController` __replicas__ setting: 1 for _pre-production_ and 3 for _production_.
 
@@ -237,224 +245,234 @@ The below points are included in the `ClusterProfile`.
     - For the `pre-production` cluster, the profile should use the `admission-controller-pre-production` and `cleanup-controller-pre-production` ConfigMaps.
     - For the `production` cluster, the profile should use the `admission-controller-production` and `cleanup-controller-production` ConfigMaps.
 
-```yaml hl_lines="21-27"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: kyverno
-spec:
-  clusterSelector:
-    matchLabels:
-      env: civo
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.3.3
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-    values: |
-      backgroundController:
-        replicas: 3
-    valuesFrom:
-    - kind: ConfigMap
-      name: cleanup-controller-{{ .Cluster.metadata.name }}
-      namespace: civo
-    - kind: ConfigMap
-      name: admission-controller-{{ .Cluster.metadata.name }}
-      namespace: civo
-```
+!!! example ""
+    ```yaml hl_lines="21-27"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: civo
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://kyverno.github.io/kyverno/
+        repositoryName:   kyverno
+        chartName:        kyverno/kyverno
+        chartVersion:     v3.3.3
+        releaseName:      kyverno-latest
+        releaseNamespace: kyverno
+        helmChartAction:  Install
+        values: |
+          backgroundController:
+            replicas: 3
+        valuesFrom:
+        - kind: ConfigMap
+          name: cleanup-controller-{{ .Cluster.metadata.name }}
+          namespace: civo
+        - kind: ConfigMap
+          name: admission-controller-{{ .Cluster.metadata.name }}
+          namespace: civo
+    ```
 
 ### Example: Express Helm Values as Templates
 
-Both the __values__ section and the content stored in referenced ConfigMaps and Secrets can be written using templates.
-Sveltos will instantiate these templates using resources in the management cluster. Finally Sveltos deploy the Helm chart with the final, resolved values.
-See the template section [template section](../template/template_generic_examples.md) for details.
+Both the __values__ section and the content stored in referenced `ConfigMaps` and `Secrets` can be written using templates. Sveltos will instantiate the templates using resources in the **management** cluster.
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: deploy-calico
-spec:
-  clusterSelector:
-    matchLabels:
-      env: prod
-  helmCharts:
-  - repositoryURL:    https://projectcalico.docs.tigera.io/charts
-    repositoryName:   projectcalico
-    chartName:        projectcalico/tigera-operator
-    chartVersion:     v3.24.5
-    releaseName:      calico
-    releaseNamespace: tigera-operator
-    helmChartAction:  Install
-    values: |
-      installation:
-        calicoNetwork:
-          ipPools:
-          {{ range $cidr := .Cluster.spec.clusterNetwork.pods.cidrBlocks }}
-            - cidr: {{ $cidr }}
-              encapsulation: VXLAN
-          {{ end }}
-```
+Sveltos deploys the Helm chart with the final, resolved values. See the [template section](../template/template_generic_examples.md) for more details.
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: deploy-cilium-v1-26
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  helmCharts:
-  - chartName: cilium/cilium
-    chartVersion: 1.12.12
-    helmChartAction: Install
-    releaseName: cilium
-    releaseNamespace: kube-system
-    repositoryName: cilium
-    repositoryURL: https://helm.cilium.io/
-    values: |
-      k8sServiceHost: "{{ .Cluster.spec.controlPlaneEndpoint.host }}"
-      k8sServicePort: "{{ .Cluster.spec.controlPlaneEndpoint.port }}"
-      hubble:
-        enabled: false
-      nodePort:
-        enabled: true
-      kubeProxyReplacement: strict
-      operator:
-        replicas: 1
-        updateStrategy:
-          rollingUpdate:
-            maxSurge: 0
-            maxUnavailable: 1
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-calico
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://projectcalico.docs.tigera.io/charts
+        repositoryName:   projectcalico
+        chartName:        projectcalico/tigera-operator
+        chartVersion:     v3.24.5
+        releaseName:      calico
+        releaseNamespace: tigera-operator
+        helmChartAction:  Install
+        values: |
+          installation:
+            calicoNetwork:
+              ipPools:
+              {{ range $cidr := .Cluster.spec.clusterNetwork.pods.cidrBlocks }}
+                - cidr: {{ $cidr }}
+                  encapsulation: VXLAN
+              {{ end }}
+    ```
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-cilium-v1-26
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      helmCharts:
+      - chartName: cilium/cilium
+        chartVersion: 1.12.12
+        helmChartAction: Install
+        releaseName: cilium
+        releaseNamespace: kube-system
+        repositoryName: cilium
+        repositoryURL: https://helm.cilium.io/
+        values: |
+          k8sServiceHost: "{{ .Cluster.spec.controlPlaneEndpoint.host }}"
+          k8sServicePort: "{{ .Cluster.spec.controlPlaneEndpoint.port }}"
+          hubble:
+            enabled: false
+          nodePort:
+            enabled: true
+          kubeProxyReplacement: strict
+          operator:
+            replicas: 1
+            updateStrategy:
+              rollingUpdate:
+                maxSurge: 0
+                maxUnavailable: 1
+    ```
 
 ### Example: OCI Registry
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: vault
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    oci://registry-1.docker.io/bitnamicharts
-    repositoryName:   oci-vault
-    chartName:        vault
-    chartVersion:     0.7.2
-    releaseName:      vault
-    releaseNamespace: vault
-    helmChartAction:  Install
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: vault
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    oci://registry-1.docker.io/bitnamicharts
+        repositoryName:   oci-vault
+        chartName:        vault
+        chartVersion:     0.7.2
+        releaseName:      vault
+        releaseNamespace: vault
+        helmChartAction:  Install
+    ```
 
 ### Example: Private Registry
 
-Create a file named _secret_content.yaml_ with the following content, replacing the redacted values with your actual Docker Hub username and password/token:
+#### Docker Hub
+Create a file named _secret_content.yaml_ with the below content. Remember to replace the redacted values with the actual Docker Hub username and password/token.
 
-```
+```bash
 {"auths":{"https://registry-1.docker.io/v1/":{"username":"REDACTED","password":"REDACTED","auth":"username:password base64 encoded"}}}
 ```
 
-Use the kubectl command to create a Secret named _regcred_ in the _default_ namespace. This command references the _secret_content.yaml_ file and sets the type to _kubernetes.io/dockerconfigjson_:
+Use the kubectl command to create a Secret named _regcred_ in the _default_ namespace. The command references the _secret_content.yaml_ file and sets the type to _kubernetes.io/dockerconfigjson_.
 
-```
+```bash
 $ kubectl create secret generic regcred  --from-file=.dockerconfigjson=secret_content.yaml --type=kubernetes.io/dockerconfigjson
 ```
 
-Now you can configure your ClusterProfile to use the newly created Secret for authentication with Docker Hub.
+Then we can configure the `ClusterProfile` to use the newly created `Secret` for authentication with the Docker Hub.
 
-Here's an example snippet from the ClusterProfile YAML file:
+!!! example ""
+    ```yaml hl_lines="18-21"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: projectsveltos
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    oci://registry-1.docker.io/gianlucam76
+        repositoryName:   projectsveltos
+        chartName:        projectsveltos
+        chartVersion:     0.46.0
+        releaseName:      projectsveltos
+        releaseNamespace: projectsveltos
+        helmChartAction:  Install
+        registryCredentialsConfig:
+          credentials:
+            name: regcred
+            namespace: default
+    ```
 
-```yaml hl_lines="18-21"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: projectsveltos
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    oci://registry-1.docker.io/gianlucam76
-    repositoryName:   projectsveltos
-    chartName:        projectsveltos
-    chartVersion:     0.46.0
-    releaseName:      projectsveltos
-    releaseNamespace: projectsveltos
-    helmChartAction:  Install
-    registryCredentialsConfig:
-      credentials:
-        name: regcred
-        namespace: default
-```
+In this example, the `registryCredentialsConfig` section references the regcred Secret stored in the `default` namespace. This ensures the Helm chart can access the private registry during deployment.
 
-In this example, the `registryCredentialsConfig` section references the regcred Secret stored in the default namespace. This ensures that the Helm chart can access the private registry during deployment.
+#### Harbor
 
-Another example using Harbor (on Civo cluster) as registry. Create a file named _secret_harbor_content.yaml_ with the following content, replacing the base64 encoded string with your Harbor credentials:
+Another example using Harbor (on Civo cluster) as registry. Create a file named _secret_harbor_content.yaml_ with the below content. Remember to replace the base64 encoded string with the actual Harbor credentials.
 
-```
+```bash
 {"auths":{"https://harbor.XXXX.k8s.civo.com":{"auth":"YWRtaW46SGFyYm9yMTIzNDU="}}}
 ```
 
-Create a Secret named _credentials_ in the default namespace using the secret_harbor_content.yaml file:
+Create a Secret named _credentials_ in the `default` namespace using the secret_harbor_content.yaml file.
 
-```
+```bash
 $ kubectl create secret generic credentials --from-file=.dockerconfigjson=secret_harbor_content.yaml --type=kubernetes.io/dockerconfigjson
 ```
 
-Update your ClusterProfile YAML to reference the credentials Secret:
+!!! example ""
+    ```yaml hl_lines="18-22"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: projectsveltos
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    oci://harbor.4fc01642-cfc0-4c55-a139-d593c92b232f.k8s.civo.com/library
+        repositoryName:   projectsveltos
+        chartName:        projectsveltos
+        chartVersion:     0.38.1
+        releaseName:      projectsveltos
+        releaseNamespace: projectsveltos
+        helmChartAction:  Install
+        registryCredentialsConfig:
+          insecureSkipTLSVerify: true
+          credentials:
+            name: credentials
+            namespace: default
+    ```
 
-```yaml hl_lines="18-22"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: projectsveltos
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  syncMode: Continuous
-  helmCharts:
-  - repositoryURL:    oci://harbor.4fc01642-cfc0-4c55-a139-d593c92b232f.k8s.civo.com/library
-    repositoryName:   projectsveltos
-    chartName:        projectsveltos
-    chartVersion:     0.38.1
-    releaseName:      projectsveltos
-    releaseNamespace: projectsveltos
-    helmChartAction:  Install
-    registryCredentialsConfig:
-      insecureSkipTLSVerify: true
-      credentials:
-        name: credentials
-        namespace: default
-```
+The Harbor credentials can be also stored as __BasicAuth__. Like the example below.
 
-Harbor credentials can also be stored as __BasicAuth__ such as:
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: creds
+      namespace: default
+    data:
+      username: # base64 of user
+      password: # base64 of pass
+    ```
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: creds
-  namespace: default
-data:
-  username: # base64 of user
-  password: # base64 of pass
-```
-
-and profile's HelmCharts section can reference this secret:
+The profile's HelmCharts section can reference the secret like the snippet below.
 
 ```yaml
    registryCredentialsConfig:
@@ -482,41 +500,45 @@ Sveltos allows you to control CRD upgrades for third-party charts through the `u
 When `upgradeCRDs` is set to true, Sveltos will initially patch all Custom Resource Definition (CRD) instances located in the Helm chart's _crds/_ directory.
 Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
 
-```yaml hl_lines="12-14"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-...
-  helmCharts:
-  - repositoryURL:    <REPO URL>
-    repositoryName:   <REPO NAME>
-    chartName:        <CHART NAME>
-    chartVersion:     <CHART VERSION>
-    releaseName:      <...>
-    releaseNamespace: <...>
-    options:
-      upgradeOptions:
-        upgradeCRDs: true
-```
+!!! example ""
+    ```yaml hl_lines="12-14"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+    ...
+      helmCharts:
+      - repositoryURL:    <REPO URL>
+        repositoryName:   <REPO NAME>
+        chartName:        <CHART NAME>
+        chartVersion:     <CHART VERSION>
+        releaseName:      <...>
+        releaseNamespace: <...>
+        options:
+          upgradeOptions:
+            upgradeCRDs: true
+    ```
 
 ### Options
 
 Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the [CRD](https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184).
 
-```yaml hl_lines="14-15"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: XXXX
-spec:
-  ...
-  helmCharts:
-   - repositoryURL:    <REPO URL>
-     repositoryName:   <REPO NAME>
-     chartName:        <CHART NAME>
-     chartVersion:     <CHART VERSION>
-     releaseName:      <...>
-     releaseNamespace: <...>
-     options:
-       disableHooks: true
-```
+!!! example ""
+    ```yaml hl_lines="14-15"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: XXXX
+    spec:
+      ...
+      helmCharts:
+      - repositoryURL:    <REPO URL>
+        repositoryName:   <REPO NAME>
+        chartName:        <CHART NAME>
+        chartVersion:     <CHART VERSION>
+        releaseName:      <...>
+        releaseNamespace: <...>
+        options:
+          disableHooks: true
+    ```
