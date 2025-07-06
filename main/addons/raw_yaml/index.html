@@ -3123,7 +3123,7 @@
 <p>A ClusterProfile can only reference Secrets of type <strong><em>addons.projectsveltos.io/cluster-profile</em></strong></p>
 </div>
 <h3 id="example-create-a-configmap">Example: Create a ConfigMap</h3>
-<p>The YAML definition below exemplifies a ConfigMap that holds multiple resources<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. When a ClusterProfile instance references the ConfigMap, a <code>Namespace</code> and a <code>Deployment</code> instance are automatically deployed in any managed cluster that adheres to the ClusterProfile <em>clusterSelector</em>.</p>
+<p>The YAML definition below exemplifies a <code>ConfigMap</code> that holds multiple resources<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. When a ClusterProfile instance references the <code>ConfigMap</code>, a <code>Namespace</code> and a <code>Deployment</code> instance are automatically deployed in any managed cluster that adheres to the ClusterProfile <em>clusterSelector</em>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example - Resources Definition</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; nginx_cm.yaml &lt;&lt;EOF</span>
@@ -3163,7 +3163,7 @@
 </span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-<p>Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the ConfigMap and the Secret created above.</p>
+<p>Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the <code>ConfigMap</code> and the <code>Secret</code> created above.</p>
 <div class="admonition example">
 <p class="admonition-title">Example - ClusterProfile Definition with Reference</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_deploy_nginx.yaml &lt;&lt;EOF</span>
@@ -3188,11 +3188,12 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <code>namespace</code> definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the <code>default</code> namespace.</p>
+<p>The <code>namespace</code> definition refers to the namespace where the <code>ConfigMap</code>, and the Secret were created in the management cluster. In our example, both resources created in the <code>default</code> namespace.</p>
 </div>
-<p>When a ClusterProfile references a ConfigMap or a Secret, the <strong>kind</strong> and <strong>name</strong> fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.</p>
-<p>If you leave the namespace field empty, Sveltos will search for the ConfigMap or the Secret with the provided name within the namespace of each matching cluster.</p>
+<p>When a ClusterProfile references a <code>ConfigMap</code> or a <code>Secret</code>, the <strong>kind</strong> and <strong>name</strong> fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.</p>
+<p>If you leave the namespace field empty, Sveltos will search for the <code>ConfigMap</code> or the <code>Secret</code> with the provided name within the namespace of each matching cluster.</p>
 <h3 id="example-understand-namespace-definition">Example: Understand Namespace Definition</h3>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3206,7 +3207,8 @@
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span></code></pre></div>
-<p>Consider the provided ClusterProfile, when we have two workload clusters matching. One in the <em>foo</em> namespace and another in the <em>bar</em> namespace. Sveltos will search for the ConfigMap <em>nginx</em> in the <em>foo</em> namespace for the Cluster in the <em>foo</em> namespace and for a ConfigMap <em>ngix</em> in the <em>bar</em> namespace for the Cluster in the <em>bar</em> namespace.</p>
+</div>
+<p>Consider the provided ClusterProfile, when we have two workload clusters matching. One in the <em>foo</em> namespace and another in the <em>bar</em> namespace. Sveltos will search for the <code>ConfigMap</code> <em>nginx</em> in the <em>foo</em> namespace for the Cluster in the <em>foo</em> namespace and for a <code>ConfigMap</code> <em>ngix</em> in the <em>bar</em> namespace for the Cluster in the <em>bar</em> namespace.</p>
 <p>More ClusterProfile examples can be found <a href="https://github.com/projectsveltos/sveltos-manager/tree/main/examples" title="Manage Kubernetes add-ons: examples">here</a>.</p>
 <h3 id="example-template-based-referencing-for-configmaps-and-secrets">Example: Template-based Referencing for ConfigMaps and Secrets</h3>
 <p>We can express <code>ConfigMap</code> and <code>Secret</code> <strong>names</strong> as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.</p>
@@ -3238,56 +3240,59 @@
 </ul>
 </li>
 </ol>
-<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-nginx</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="hll"><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
-</span></span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="hll"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx-{{ .Cluster.metadata.name }}</span>
-</span></span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="hll"><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span></span></code></pre></div>
-The demonstrated approach provides a <strong>flexible</strong> and <strong>centralized</strong> way to reference <code>ConfigMaps</code> and <code>Secrets</code> based on the availanle cluster information.</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nn">---</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-nginx</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="hll"><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
+</span></span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="hll"><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
+</span></span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="hll"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx-{{ .Cluster.metadata.name }}</span>
+</span></span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span></code></pre></div>
+</div>
+<p>The demonstrated approach provides a <strong>flexible</strong> and <strong>centralized</strong> way to reference <code>ConfigMaps</code> and <code>Secrets</code> based on the availanle cluster information.</p>
 <h2 id="template">Template</h2>
-<p>Define the content for resources in your <code>PolicyRefs</code> using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster.
-See the template section <a href="../../template/template_generic_examples/">template section</a> for details.</p>
+<p>Define the content for resources in your <code>PolicyRefs</code> using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster. See the template section <a href="../../template/template_generic_examples/">template section</a> for details.</p>
 <p>Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.</p>
 <h2 id="subresources">Subresources</h2>
-<p>Sveltos can be configured to update specific subresources of a resource. This is achieved by leveraging the <code>projectsveltos.io/subresources</code> annotation.
-When this annotation is present on a resource referenced in the <code>PolicyRefs</code> section, Sveltos will update the designated subresources alongside the main resource.</p>
-<p>Subresources are specified as a comma-separated list within the annotation value.</p>
-<p>For example, to instruct Sveltos to update the status subresource of a Service, you can create a ConfigMap with the following structure and reference this ConfigMap from a ClusterProfile/Profile:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">service.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="no">apiVersion: v1</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="no">kind: Service</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="no">metadata:</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="no">name: sveltos-subresource</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="no">namespace: default</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="no">spec:</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">      </span><span class="no">selector:</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">        </span><span class="no">app: foo</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">      </span><span class="no">ports:</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">      </span><span class="no">- name: my-port</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">        </span><span class="no">port: 443</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">        </span><span class="no">protocol: TCP</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="no">targetPort: 1032</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">      </span><span class="no">type: LoadBalancer</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="no">status:</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">      </span><span class="no">loadBalancer:</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">        </span><span class="no">ingress:</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">        </span><span class="no">- ip: 1.1.1.1</span>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="hll"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span></span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="hll"><span class="w">    </span><span class="nt">projectsveltos.io/subresources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
-</span></span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load-balancer-service</span>
-</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<p>Sveltos can update specific subresources of a resource. This is achieved by leveraging the <code>projectsveltos.io/subresources</code> annotation. When the annotation is present on a resource referenced in the <code>PolicyRefs</code> section, Sveltos updates the designated subresources alongside the main resource. Subresources are specified as a comma-separated list within the annotation value.</p>
+<p>For example, to instruct Sveltos to update the status subresource of a Service, we can create a <code>ConfigMap</code> with the following structure and reference this <code>ConfigMap</code> from a ClusterProfile/Profile.</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nn">---</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">service.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="no">apiVersion: v1</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="no">kind: Service</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="no">name: sveltos-subresource</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">      </span><span class="no">namespace: default</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">      </span><span class="no">selector:</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">        </span><span class="no">app: foo</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">      </span><span class="no">ports:</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">      </span><span class="no">- name: my-port</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">        </span><span class="no">port: 443</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="no">protocol: TCP</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">        </span><span class="no">targetPort: 1032</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">      </span><span class="no">type: LoadBalancer</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="no">status:</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="no">loadBalancer:</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">        </span><span class="no">ingress:</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">        </span><span class="no">- ip: 1.1.1.1</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="hll"><span class="nt">metadata</span><span class="p">:</span>
+</span></span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="hll"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span></span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">    </span><span class="nt">projectsveltos.io/subresources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load-balancer-service</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 </span></code></pre></div>
+</div>
 <div class="footnote">
 <hr />
 <ol>

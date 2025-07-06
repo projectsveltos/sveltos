@@ -1159,37 +1159,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-kyverno-clusterprofile" class="md-nav__link">
+  <a href="#example-deploy-kyverno-using-a-clusterprofile" class="md-nav__link">
     <span class="md-ellipsis">
-      Example: Kyverno ClusterProfile
+      Example: Deploy Kyverno using a ClusterProfile
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Example: Kyverno ClusterProfile">
+    <nav class="md-nav" aria-label="Example: Deploy Kyverno using a ClusterProfile">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-register-clusters" class="md-nav__link">
+  <a href="#step-1-register-clusters-with-sveltos" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 1: Register Clusters
+      Step 1: Register Clusters with Sveltos
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-add-kubernetes-label" class="md-nav__link">
+  <a href="#step-2-create-the-clusterprofile" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2: Add Kubernetes Label
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-create-the-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3: Create the ClusterProfile
+      Step 2: Create the ClusterProfile
     </span>
   </a>
   
@@ -3008,37 +2999,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-kyverno-clusterprofile" class="md-nav__link">
+  <a href="#example-deploy-kyverno-using-a-clusterprofile" class="md-nav__link">
     <span class="md-ellipsis">
-      Example: Kyverno ClusterProfile
+      Example: Deploy Kyverno using a ClusterProfile
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Example: Kyverno ClusterProfile">
+    <nav class="md-nav" aria-label="Example: Deploy Kyverno using a ClusterProfile">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-register-clusters" class="md-nav__link">
+  <a href="#step-1-register-clusters-with-sveltos" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 1: Register Clusters
+      Step 1: Register Clusters with Sveltos
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-add-kubernetes-label" class="md-nav__link">
+  <a href="#step-2-create-the-clusterprofile" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2: Add Kubernetes Label
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-create-the-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3: Create the ClusterProfile
+      Step 2: Create the ClusterProfile
     </span>
   </a>
   
@@ -3093,7 +3075,7 @@
 <p><strong>Profile</strong>: It is a namespace-scoped resource that is specific to a single namespace. It can only match clusters and reference resources within its own namespace.</p>
 </li>
 </ul>
-<p>By creating a <strong>ClusterProfile</strong> instance, you can easily deploy the below across a set of Kubernetes clusters.</p>
+<p>By creating a <strong>ClusterProfile</strong>, <strong>Profile</strong> instances, we can easily deploy the following points across a set of Kubernetes clusters.</p>
 <ul>
 <li>Helm charts</li>
 <li>Resources assembled with Kustomize</li>
@@ -3102,14 +3084,13 @@
 <p>Define which Kubernetes add-ons to deploy and where:</p>
 <ol>
 <li>Select one or more clusters using a Kubernetes <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors" title="Kubernetes label selector">label selector</a>;</li>
-<li>List the Kubernetes add-ons that need to be deployed on selected clusters</li>
+<li>List the Kubernetes add-ons that need to be deployed on the selected clusters</li>
 </ol>
-<p>It is as simple as that!</p>
-<h2 id="example-kyverno-clusterprofile">Example: Kyverno ClusterProfile</h2>
-<p>The below example deploys a Kyverno helm chart in every cluster with the label selector set to <em>env=prod</em>.</p>
-<h3 id="step-1-register-clusters">Step 1: Register Clusters</h3>
-<p>The first step is to ensure the CAPI clusters are successfully registered with Sveltos. If you have not registered the clusters yet, follow the instructions mentioned <a href="../../register/register-cluster/">here</a>.</p>
-<p>If you have already registered the CAPI clusters, ensure they are listed and ready to receive add-ons.</p>
+<p>Simple as that!</p>
+<h2 id="example-deploy-kyverno-using-a-clusterprofile">Example: Deploy Kyverno using a ClusterProfile</h2>
+<p>The below example deploys a Kyverno Helm chart in every cluster with the label selector set to <code>env=prod</code>.</p>
+<h3 id="step-1-register-clusters-with-sveltos">Step 1: Register Clusters with Sveltos</h3>
+<p>The first step is to register clusters with Sveltos to receive the required addons and deployments. If the clusters are not registered yet, follow the instructions outlined <a href="../../register/register-cluster/">here</a>. This applies to non-CAPI clusters.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltosclusters<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--show-labels
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>NAME<span class="w">        </span>READY<span class="w">   </span>VERSION<span class="w">          </span>LABELS
@@ -3120,61 +3101,41 @@
 <p class="admonition-title">Note</p>
 <p>The CAPI clusters are registered in the <strong>projectsveltos</strong> namespace. If you register the clusters in a different namespace, update the command above.</p>
 </div>
-<h3 id="step-2-add-kubernetes-label">Step 2: Add Kubernetes Label</h3>
-<p>The second step is to assign a specific label to the Sveltos Clusters to receive specific add-ons. In this example, we will assign the label <em>env=prod</em>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltosclusters<span class="w"> </span>cluster12<span class="w"> </span><span class="nv">env</span><span class="o">=</span>prod<span class="w"> </span>-n<span class="w"> </span>projectsveltos
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltosclusters<span class="w"> </span>cluster13<span class="w"> </span><span class="nv">env</span><span class="o">=</span>prod<span class="w"> </span>-n<span class="w"> </span>projectsveltos
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltosclusters<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--show-labels
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>NAME<span class="w">        </span>READY<span class="w">   </span>VERSION<span class="w">          </span>LABELS
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>cluster12<span class="w">   </span><span class="nb">true</span><span class="w">    </span>v1.26.9+rke2r1<span class="w">   </span><span class="nv">env</span><span class="o">=</span>prod,sveltos-agent<span class="o">=</span>present
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>cluster13<span class="w">   </span><span class="nb">true</span><span class="w">    </span>v1.26.9+rke2r1<span class="w">   </span><span class="nv">env</span><span class="o">=</span>prod,sveltos-agent<span class="o">=</span>present
-</span></code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Starting v0.29.0, <code>sveltosctl</code> supports label assignment directly with the Sveltos cluster registration process. More details <a href="../../register/register-cluster/">here</a>.</p>
+<h3 id="step-2-create-the-clusterprofile">Step 2: Create the ClusterProfile</h3>
+<p>The second step is to create a <code>ClusterProfile</code> and apply it to the <strong>management</strong> cluster.</p>
 <div class="admonition example">
-<p class="admonition-title">Sveltos Registration</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>--namespace<span class="o">=</span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>--cluster<span class="o">=</span>&lt;cluster<span class="w"> </span>name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>--fleet-cluster-context<span class="o">=</span>&lt;context<span class="w"> </span>name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">key1</span><span class="o">=</span>value1,key2<span class="o">=</span>value2
+<p class="admonition-title">Sveltos ClusterProfile Kyverno</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_kyverno.yaml &lt;&lt;EOF</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">repositoryName</span><span class="p p-Indicator">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">chartName</span><span class="p p-Indicator">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">chartVersion</span><span class="p p-Indicator">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">releaseName</span><span class="p p-Indicator">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">releaseNamespace</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">helmChartAction</span><span class="p p-Indicator">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
 </div>
-</div>
-<h3 id="step-3-create-the-clusterprofile">Step 3: Create the ClusterProfile</h3>
-<p>The third step is to create a ClusterProfile Kubernetes resource and apply it to the <strong>management</strong> cluster.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_kyverno.yaml &lt;&lt;EOF</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;clusterprofile_kyverno.yaml&quot;</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>addons
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">|</span><span class="w">         </span>CLUSTER<span class="w">          </span><span class="p">|</span><span class="w"> </span>RESOURCE<span class="w"> </span>TYPE<span class="w"> </span><span class="p">|</span><span class="w"> </span>NAMESPACE<span class="w"> </span><span class="p">|</span><span class="w">      </span>NAME<span class="w">      </span><span class="p">|</span><span class="w"> </span>VERSION<span class="w"> </span><span class="p">|</span><span class="w">             </span>TIME<span class="w">              </span><span class="p">|</span><span class="w"> </span>CLUSTER<span class="w"> </span>PROFILES<span class="w"> </span><span class="p">|</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">|</span><span class="w"> </span>projectsveltos/cluster12<span class="w"> </span><span class="p">|</span><span class="w"> </span>helm<span class="w"> </span>chart<span class="w">    </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">   </span><span class="p">|</span><span class="w"> </span>kyverno-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">3</span>.2.5<span class="w">   </span><span class="p">|</span><span class="w"> </span><span class="m">2023</span>-12-16<span class="w"> </span><span class="m">00</span>:14:17<span class="w"> </span>-0800<span class="w"> </span>PST<span class="w"> </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">          </span><span class="p">|</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">|</span><span class="w"> </span>projectsveltos/cluster13<span class="w"> </span><span class="p">|</span><span class="w"> </span>helm<span class="w"> </span>chart<span class="w">    </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">   </span><span class="p">|</span><span class="w"> </span>kyverno-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">3</span>.2.5<span class="w">   </span><span class="p">|</span><span class="w"> </span><span class="m">2023</span>-12-16<span class="w"> </span><span class="m">00</span>:14:17<span class="w"> </span>-0800<span class="w"> </span>PST<span class="w"> </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">          </span><span class="p">|</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;clusterprofile_kyverno.yaml&quot;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>addons
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">|</span><span class="w">         </span>CLUSTER<span class="w">          </span><span class="p">|</span><span class="w"> </span>RESOURCE<span class="w"> </span>TYPE<span class="w"> </span><span class="p">|</span><span class="w"> </span>NAMESPACE<span class="w"> </span><span class="p">|</span><span class="w">      </span>NAME<span class="w">      </span><span class="p">|</span><span class="w"> </span>VERSION<span class="w"> </span><span class="p">|</span><span class="w">             </span>TIME<span class="w">              </span><span class="p">|</span><span class="w"> </span>CLUSTER<span class="w"> </span>PROFILES<span class="w"> </span><span class="p">|</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">|</span><span class="w"> </span>projectsveltos/cluster12<span class="w"> </span><span class="p">|</span><span class="w"> </span>helm<span class="w"> </span>chart<span class="w">    </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">   </span><span class="p">|</span><span class="w"> </span>kyverno-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">3</span>.2.5<span class="w">   </span><span class="p">|</span><span class="w"> </span><span class="m">2023</span>-12-16<span class="w"> </span><span class="m">00</span>:14:17<span class="w"> </span>-0800<span class="w"> </span>PST<span class="w"> </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">          </span><span class="p">|</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">|</span><span class="w"> </span>projectsveltos/cluster13<span class="w"> </span><span class="p">|</span><span class="w"> </span>helm<span class="w"> </span>chart<span class="w">    </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">   </span><span class="p">|</span><span class="w"> </span>kyverno-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">3</span>.2.5<span class="w">   </span><span class="p">|</span><span class="w"> </span><span class="m">2023</span>-12-16<span class="w"> </span><span class="m">00</span>:14:17<span class="w"> </span>-0800<span class="w"> </span>PST<span class="w"> </span><span class="p">|</span><span class="w"> </span>kyverno<span class="w">          </span><span class="p">|</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>+--------------------------+---------------+-----------+----------------+---------+-------------------------------+------------------+
 </span></code></pre></div>
 <p><img alt="Sveltos in action" src="../../assets/addons.png" /></p>
 <p><img alt="Sveltos in action" src="../../assets/addons_deployment.gif" /></p>
@@ -3183,7 +3144,7 @@
 <p>If you are not aware of the <code>sveltosctl</code> utility, have a look at the installation documentation found <a href="../../getting_started/sveltosctl/sveltosctl/">here</a>.</p>
 </div>
 <h2 id="more-resources">More Resources</h2>
-<p>For a quick add-ons example, watch the <a href="https://www.youtube.com/watch?v=Ai5Mr9haWKM" title="Sveltos introduction: Kubernetes add-ons management">Sveltos introduction</a> video on YouTube.</p>
+<p>The easiest way to try out Sveltos is by following the <a href="../../getting_started/install/quick_start/">Quick Start</a> guide. If you prefer a video demonstration, watch the <a href="https://www.youtube.com/watch?v=Ai5Mr9haWKM" title="Sveltos introduction: Kubernetes add-ons management">Sveltos introduction</a> video on YouTube.</p>
 
 
 
