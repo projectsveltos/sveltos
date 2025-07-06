@@ -34,7 +34,7 @@ The commands will download the calico.yaml manifest file and afterwards create a
 
 ### Example: Create a ConfigMap
 
-The YAML definition below exemplifies a ConfigMap that holds multiple resources[^2]. When a ClusterProfile instance references the ConfigMap, a `Namespace` and a `Deployment` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
+The YAML definition below exemplifies a `ConfigMap` that holds multiple resources[^2]. When a ClusterProfile instance references the `ConfigMap`, a `Namespace` and a `Deployment` instance are automatically deployed in any managed cluster that adheres to the ClusterProfile *clusterSelector*.
 
 !!! example "Example - Resources Definition"
     ```yaml
@@ -75,7 +75,7 @@ The YAML definition below exemplifies a ConfigMap that holds multiple resources[
     EOF
     ```
 
-Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the ConfigMap and the Secret created above.
+Once the required Kubernetes resources are created/deployed, the below example represents a ClusterProfile resource that references the `ConfigMap` and the `Secret` created above.
 
 !!! example "Example - ClusterProfile Definition with Reference"
     ```yaml
@@ -100,33 +100,33 @@ Once the required Kubernetes resources are created/deployed, the below example r
     ```
 
 !!! note
-    The `namespace` definition refers to the namespace where the ConfigMap, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
+    The `namespace` definition refers to the namespace where the `ConfigMap`, and the Secret were created in the management cluster. In our example, both resources created in the `default` namespace.
 
-When a ClusterProfile references a ConfigMap or a Secret, the **kind** and **name** fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.
+When a ClusterProfile references a `ConfigMap` or a `Secret`, the **kind** and **name** fields are required, while the namespace field is optional. Specifying a namespace uniquely identifies the resource using the tuple namespace, name, and kind, and that resource will be used for all matching clusters.
 
-If you leave the namespace field empty, Sveltos will search for the ConfigMap or the Secret with the provided name within the namespace of each matching cluster.
+If you leave the namespace field empty, Sveltos will search for the `ConfigMap` or the `Secret` with the provided name within the namespace of each matching cluster.
 
 ### Example: Understand Namespace Definition
 
-```yaml
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: deploy-resources
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  policyRefs:
-  - name: nginx
-    kind: ConfigMap
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-resources
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      policyRefs:
+      - name: nginx
+        kind: ConfigMap
+    ```
 
-Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the ConfigMap _nginx_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a ConfigMap _ngix_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
+Consider the provided ClusterProfile, when we have two workload clusters matching. One in the _foo_ namespace and another in the _bar_ namespace. Sveltos will search for the `ConfigMap` _nginx_ in the _foo_ namespace for the Cluster in the _foo_ namespace and for a `ConfigMap` _ngix_ in the _bar_ namespace for the Cluster in the _bar_ namespace.
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
-
 
 ### Example: Template-based Referencing for ConfigMaps and Secrets
 
@@ -165,25 +165,26 @@ The below points are included in the `ClusterProfile`.
     - For the `pre-production` cluster, the profile should use the `nginx-pre-production` ConfigMap.
     - For the `production` cluster, the profile should use the `nginx-production` ConfigMap.
 
-```yaml hl_lines="9-11"
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: deploy-nginx
-spec:
-  clusterSelector:
-    matchLabels:
-      env: civo
-  policyRefs:
-  - name: nginx-{{ .Cluster.metadata.name }}
-    kind: ConfigMap
-```
+!!! example ""
+    ```yaml hl_lines="9-11"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-nginx
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: civo
+      policyRefs:
+      - name: nginx-{{ .Cluster.metadata.name }}
+        kind: ConfigMap
+    ```
 The demonstrated approach provides a **flexible** and **centralized** way to reference `ConfigMaps` and `Secrets` based on the availanle cluster information.
 
 ## Template
 
-Define the content for resources in your `PolicyRefs` using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster.
-See the template section [template section](../template/template_generic_examples.md) for details.
+Define the content for resources in your `PolicyRefs` using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster. See the template section [template section](../template/template_generic_examples.md) for details.
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 
@@ -195,39 +196,38 @@ $ kubectl create configmap nginx --from-file=namespace.yaml --from-file=deployme
 
 ## Subresources
 
-Sveltos can be configured to update specific subresources of a resource. This is achieved by leveraging the `projectsveltos.io/subresources` annotation.
-When this annotation is present on a resource referenced in the `PolicyRefs` section, Sveltos will update the designated subresources alongside the main resource.
+Sveltos can update specific subresources of a resource. This is achieved by leveraging the `projectsveltos.io/subresources` annotation. When the annotation is present on a resource referenced in the `PolicyRefs` section, Sveltos updates the designated subresources alongside the main resource. Subresources are specified as a comma-separated list within the annotation value.
 
-Subresources are specified as a comma-separated list within the annotation value.
+For example, to instruct Sveltos to update the status subresource of a Service, we can create a `ConfigMap` with the following structure and reference this `ConfigMap` from a ClusterProfile/Profile.
 
-For example, to instruct Sveltos to update the status subresource of a Service, you can create a ConfigMap with the following structure and reference this ConfigMap from a ClusterProfile/Profile:
-
-```yaml hl_lines="24-25"
-apiVersion: v1
-data:
-  service.yaml: |
+!!! example ""
+    ```yaml hl_lines="24-25"
+    ---
     apiVersion: v1
-    kind: Service
+    data:
+      service.yaml: |
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: sveltos-subresource
+          namespace: default
+        spec:
+          selector:
+            app: foo
+          ports:
+          - name: my-port
+            port: 443
+            protocol: TCP
+            targetPort: 1032
+          type: LoadBalancer
+        status:
+          loadBalancer:
+            ingress:
+            - ip: 1.1.1.1
+    kind: ConfigMap
     metadata:
-      name: sveltos-subresource
+      annotations:
+        projectsveltos.io/subresources: status
+      name: load-balancer-service
       namespace: default
-    spec:
-      selector:
-        app: foo
-      ports:
-      - name: my-port
-        port: 443
-        protocol: TCP
-        targetPort: 1032
-      type: LoadBalancer
-    status:
-      loadBalancer:
-        ingress:
-        - ip: 1.1.1.1
-kind: ConfigMap
-metadata:
-  annotations:
-    projectsveltos.io/subresources: status
-  name: load-balancer-service
-  namespace: default
-```
+    ```
