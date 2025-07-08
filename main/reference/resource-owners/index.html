@@ -6,28 +6,30 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos is a Kubernetes add-on controller for a fleet of clusters.">
+        <meta name="description" content="Mapping between Sveltos resources and the controllers that manage and create them">
       
       
       
       
+        <link rel="prev" href="../../help_and_tutorials/troubleshooting/">
       
-        <link rel="next" href="use_cases/use_case_idp/">
+      
+        <link rel="next" href="../../blogs/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
-        <title>Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons - Projectsveltos Documentation</title>
+        <title>Sveltos Resources and Controller Map - Projectsveltos Documentation</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#what-is-sveltos" class="md-skip">
+        <a href="#resource-and-controller-mapping" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +96,7 @@
   </a>
 
             </div>
-            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
           </aside>
         
       </div>
@@ -106,9 +108,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -125,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons
+              Sveltos Resources and Controller Map
             
           </span>
         </div>
@@ -246,9 +248,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     Projectsveltos Documentation
@@ -272,30 +274,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Projectsveltos
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -306,78 +288,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-sveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      What is Sveltos?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-sveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      Why Sveltos?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#schedule-free-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Schedule Free Demo
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing-to-projectsveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      😻 Contributing to projectsveltos
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#support-us" class="md-nav__link">
-    <span class="md-ellipsis">
-      Support us
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -427,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="use_cases/use_case_idp/" class="md-nav__link">
+      <a href="../../use_cases/use_case_idp/" class="md-nav__link">
         
   
   
@@ -450,7 +360,7 @@
   
   
     <li class="md-nav__item">
-      <a href="use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -473,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="use_cases/use_case_multi-tenancy/" class="md-nav__link">
+      <a href="../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
         
   
   
@@ -496,7 +406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="use_cases/use_case_gitops/" class="md-nav__link">
+      <a href="../../use_cases/use_case_gitops/" class="md-nav__link">
         
   
   
@@ -602,7 +512,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/install/quick_start/" class="md-nav__link">
+      <a href="../../getting_started/install/quick_start/" class="md-nav__link">
         
   
   
@@ -625,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/install/install/" class="md-nav__link">
+      <a href="../../getting_started/install/install/" class="md-nav__link">
         
   
   
@@ -648,7 +558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/install/air_gapped_installation/" class="md-nav__link">
+      <a href="../../getting_started/install/air_gapped_installation/" class="md-nav__link">
         
   
   
@@ -717,7 +627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
+      <a href="../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
         
   
   
@@ -778,7 +688,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/sveltosctl/features/visibility/" class="md-nav__link">
+      <a href="../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
         
   
   
@@ -801,7 +711,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
+      <a href="../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
         
   
   
@@ -824,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/sveltosctl/features/snapshot/" class="md-nav__link">
+      <a href="../../getting_started/sveltosctl/features/snapshot/" class="md-nav__link">
         
   
   
@@ -901,7 +811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/optional/dashboard/" class="md-nav__link">
+      <a href="../../getting_started/optional/dashboard/" class="md-nav__link">
         
   
   
@@ -924,7 +834,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/optional/grafanadashboard/" class="md-nav__link">
+      <a href="../../getting_started/optional/grafanadashboard/" class="md-nav__link">
         
   
   
@@ -1000,7 +910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="register/register-cluster/" class="md-nav__link">
+      <a href="../../register/register-cluster/" class="md-nav__link">
         
   
   
@@ -1023,7 +933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="register/readiness_liveness_checks/" class="md-nav__link">
+      <a href="../../register/readiness_liveness_checks/" class="md-nav__link">
         
   
   
@@ -1046,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="register/token-renewal/" class="md-nav__link">
+      <a href="../../register/token-renewal/" class="md-nav__link">
         
   
   
@@ -1107,7 +1017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="register/features/cluster_maintenance_window/" class="md-nav__link">
+      <a href="../../register/features/cluster_maintenance_window/" class="md-nav__link">
         
   
   
@@ -1183,7 +1093,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/addons/" class="md-nav__link">
+      <a href="../../addons/addons/" class="md-nav__link">
         
   
   
@@ -1206,7 +1116,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/helm_charts/" class="md-nav__link">
+      <a href="../../addons/helm_charts/" class="md-nav__link">
         
   
   
@@ -1229,7 +1139,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/raw_yaml/" class="md-nav__link">
+      <a href="../../addons/raw_yaml/" class="md-nav__link">
         
   
   
@@ -1252,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/kustomize/" class="md-nav__link">
+      <a href="../../addons/kustomize/" class="md-nav__link">
         
   
   
@@ -1275,7 +1185,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/combining_all/" class="md-nav__link">
+      <a href="../../addons/combining_all/" class="md-nav__link">
         
   
   
@@ -1298,7 +1208,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/example_flux_sources/" class="md-nav__link">
+      <a href="../../addons/example_flux_sources/" class="md-nav__link">
         
   
   
@@ -1321,7 +1231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/clusterprofile/" class="md-nav__link">
+      <a href="../../addons/clusterprofile/" class="md-nav__link">
         
   
   
@@ -1344,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="addons/profile/" class="md-nav__link">
+      <a href="../../addons/profile/" class="md-nav__link">
         
   
   
@@ -1412,7 +1322,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
         
   
   
@@ -1435,7 +1345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/depends_on/" class="md-nav__link">
+      <a href="../../deployment_order/depends_on/" class="md-nav__link">
         
   
   
@@ -1458,7 +1368,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1481,7 +1391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/tiers/" class="md-nav__link">
+      <a href="../../deployment_order/tiers/" class="md-nav__link">
         
   
   
@@ -1504,7 +1414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1527,7 +1437,7 @@
   
   
     <li class="md-nav__item">
-      <a href="deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
         
   
   
@@ -1595,7 +1505,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/intro_template/" class="md-nav__link">
+      <a href="../../template/intro_template/" class="md-nav__link">
         
   
   
@@ -1618,7 +1528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/additional_template_info/" class="md-nav__link">
+      <a href="../../template/additional_template_info/" class="md-nav__link">
         
   
   
@@ -1641,7 +1551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/examples/" class="md-nav__link">
+      <a href="../../template/examples/" class="md-nav__link">
         
   
   
@@ -1664,7 +1574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/template_generic_examples/" class="md-nav__link">
+      <a href="../../template/template_generic_examples/" class="md-nav__link">
         
   
   
@@ -1687,7 +1597,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../template/generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -1710,7 +1620,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/lua/" class="md-nav__link">
+      <a href="../../template/lua/" class="md-nav__link">
         
   
   
@@ -1733,7 +1643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/crossplane/" class="md-nav__link">
+      <a href="../../template/crossplane/" class="md-nav__link">
         
   
   
@@ -1756,7 +1666,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/external_secret/" class="md-nav__link">
+      <a href="../../template/external_secret/" class="md-nav__link">
         
   
   
@@ -1779,7 +1689,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/bring_your_own_controller/" class="md-nav__link">
+      <a href="../../template/bring_your_own_controller/" class="md-nav__link">
         
   
   
@@ -1802,7 +1712,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/ytt_extension/" class="md-nav__link">
+      <a href="../../template/ytt_extension/" class="md-nav__link">
         
   
   
@@ -1825,7 +1735,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/jsonnet_extension/" class="md-nav__link">
+      <a href="../../template/jsonnet_extension/" class="md-nav__link">
         
   
   
@@ -1848,7 +1758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="template/example_multicluster_iteration_template/" class="md-nav__link">
+      <a href="../../template/example_multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -1916,7 +1826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/dependency-management/" class="md-nav__link">
+      <a href="../../features/dependency-management/" class="md-nav__link">
         
   
   
@@ -1939,7 +1849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/dryrun/" class="md-nav__link">
+      <a href="../../features/dryrun/" class="md-nav__link">
         
   
   
@@ -1962,7 +1872,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/configuration_drift/" class="md-nav__link">
+      <a href="../../features/configuration_drift/" class="md-nav__link">
         
   
   
@@ -1985,7 +1895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/post-renderer-patches/" class="md-nav__link">
+      <a href="../../features/post-renderer-patches/" class="md-nav__link">
         
   
   
@@ -2008,7 +1918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/set/" class="md-nav__link">
+      <a href="../../features/set/" class="md-nav__link">
         
   
   
@@ -2031,7 +1941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/rolling_upgrade/" class="md-nav__link">
+      <a href="../../features/rolling_upgrade/" class="md-nav__link">
         
   
   
@@ -2054,7 +1964,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/labels_management/" class="md-nav__link">
+      <a href="../../features/labels_management/" class="md-nav__link">
         
   
   
@@ -2115,7 +2025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/multi-tenancy-full-isolation/" class="md-nav__link">
+      <a href="../../features/multi-tenancy-full-isolation/" class="md-nav__link">
         
   
   
@@ -2138,7 +2048,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/multi-tenancy-sharing-cluster/" class="md-nav__link">
+      <a href="../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
         
   
   
@@ -2169,7 +2079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/techsupport/" class="md-nav__link">
+      <a href="../../features/techsupport/" class="md-nav__link">
         
   
   
@@ -2237,7 +2147,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/addon_event_deployment/" class="md-nav__link">
+      <a href="../../events/addon_event_deployment/" class="md-nav__link">
         
   
   
@@ -2260,7 +2170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/templating/" class="md-nav__link">
+      <a href="../../events/templating/" class="md-nav__link">
         
   
   
@@ -2283,7 +2193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/generators/" class="md-nav__link">
+      <a href="../../events/generators/" class="md-nav__link">
         
   
   
@@ -2306,7 +2216,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/nats/" class="md-nav__link">
+      <a href="../../events/nats/" class="md-nav__link">
         
   
   
@@ -2367,7 +2277,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/secrets_on_demand/" class="md-nav__link">
+      <a href="../../events/examples/secrets_on_demand/" class="md-nav__link">
         
   
   
@@ -2390,7 +2300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/db-as-a-service/" class="md-nav__link">
+      <a href="../../events/examples/db-as-a-service/" class="md-nav__link">
         
   
   
@@ -2413,7 +2323,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/managed-services/" class="md-nav__link">
+      <a href="../../events/examples/managed-services/" class="md-nav__link">
         
   
   
@@ -2436,7 +2346,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/service_event_trigger/" class="md-nav__link">
+      <a href="../../events/examples/service_event_trigger/" class="md-nav__link">
         
   
   
@@ -2459,7 +2369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/api_gateway_contour/" class="md-nav__link">
+      <a href="../../events/examples/api_gateway_contour/" class="md-nav__link">
         
   
   
@@ -2482,7 +2392,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/cross_cluster_configuration/" class="md-nav__link">
+      <a href="../../events/examples/cross_cluster_configuration/" class="md-nav__link">
         
   
   
@@ -2505,7 +2415,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/examples/loadbalancer/" class="md-nav__link">
+      <a href="../../events/examples/loadbalancer/" class="md-nav__link">
         
   
   
@@ -2581,7 +2491,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/notifications/" class="md-nav__link">
+      <a href="../../observability/notifications/" class="md-nav__link">
         
   
   
@@ -2604,7 +2514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/example_addon_notification/" class="md-nav__link">
+      <a href="../../observability/example_addon_notification/" class="md-nav__link">
         
   
   
@@ -2627,7 +2537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -2650,7 +2560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/example_deployment_health_notification/" class="md-nav__link">
+      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -2673,7 +2583,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -2696,7 +2606,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/example_cis_scan/" class="md-nav__link">
+      <a href="../../observability/example_cis_scan/" class="md-nav__link">
         
   
   
@@ -2719,7 +2629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/display_resources/" class="md-nav__link">
+      <a href="../../observability/display_resources/" class="md-nav__link">
         
   
   
@@ -2742,7 +2652,7 @@
   
   
     <li class="md-nav__item">
-      <a href="observability/different_resources/" class="md-nav__link">
+      <a href="../../observability/different_resources/" class="md-nav__link">
         
   
   
@@ -2810,7 +2720,7 @@
   
   
     <li class="md-nav__item">
-      <a href="scalability/vertical_scaling/" class="md-nav__link">
+      <a href="../../scalability/vertical_scaling/" class="md-nav__link">
         
   
   
@@ -2833,7 +2743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="scalability/horizontal_scaling_sharding/" class="md-nav__link">
+      <a href="../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
         
   
   
@@ -2901,7 +2811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="help_and_tutorials/troubleshooting/" class="md-nav__link">
+      <a href="../../help_and_tutorials/troubleshooting/" class="md-nav__link">
         
   
   
@@ -2928,18 +2838,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
         
           
           <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
@@ -2955,7 +2867,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -2966,10 +2878,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="reference/resource-owners/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Resource / Controller Matrix
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2980,6 +2914,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controller-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Controller Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Related Information
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2999,7 +2980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="blogs/" class="md-nav__link">
+      <a href="../../blogs/" class="md-nav__link">
         
   
   
@@ -3031,6 +3012,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -3039,54 +3022,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-sveltos" class="md-nav__link">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
-      What is Sveltos?
+      Notes
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#controller-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Controller Overview
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-sveltos" class="md-nav__link">
+  <a href="#related-information" class="md-nav__link">
     <span class="md-ellipsis">
-      Why Sveltos?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#schedule-free-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Schedule Free Demo
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing-to-projectsveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      😻 Contributing to projectsveltos
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#support-us" class="md-nav__link">
-    <span class="md-ellipsis">
-      Support us
+      Related Information
     </span>
   </a>
   
@@ -3111,60 +3067,240 @@
   
 
 
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<p><a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a></p>
-<p><a href="https://github.com/projectsveltos" title="Manage Kubernetes add-ons"><img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo"></a></p>
-<h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
-
-<h2 id="what-is-sveltos">What is Sveltos?</h2>
-<p><a href="https://github.com/projectsveltos" title="Manage Kubernetes add-ons">Sveltos</a> is a Kubernetes add-on controller that simplifies the deployment and management of Kubernetes add-ons and applications across <strong>multiple</strong> clusters whether on-prem, in the cloud or a multitenant environment.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Sveltos is not a replacement for GitOps. It's designed to be an extension for GitOps workflows when managing multiple clusters.</p>
-</div>
-<p>Here's how it works:</p>
+<h1 id="resource-and-controller-mapping">Resource and Controller Mapping</h1>
+<p>The following table maps Sveltos resources to their managing controllers and shows where resources are located in different deployment modes (Local vs Centralized Agent Mode). Use this as a reference for operational design, troubleshooting, and understanding controller responsibilities in your Sveltos deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Managing Controller</th>
+<th>Creating by</th>
+<th>Resource Location (Local Agent Mode)</th>
+<th>Resource Location (Centralized Agent Mode)</th>
+<th>Annotation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AccessRequests</td>
+<td>Access Manager</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClassifierReports</td>
+<td>Classifier Manager</td>
+<td>Sveltos Agent</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>Classifiers</td>
+<td>Classifier Manager</td>
+<td>User / Install script</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterConfigurations</td>
+<td>Unknown</td>
+<td>Unknown</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterHealthChecks</td>
+<td>HealthCheck Manager</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterProfiles / Profiles</td>
+<td>Add-on Controller</td>
+<td>Event Manager / User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterReports</td>
+<td>Unknown</td>
+<td>Unknown</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterSets / Sets</td>
+<td>Add-on Controller</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ClusterSummaries</td>
+<td>Add-on Controller</td>
+<td>Add-on Controller</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td>Useful when debugging ClusterProfiles</td>
+</tr>
+<tr>
+<td>ConfigMap/Secret for EventTriggers</td>
+<td>Event Manager</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>DebuggingConfigurations</td>
+<td>All Controllers</td>
+<td>User / Install script</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td>Useful for adjusting controller log level when filing bug reports</td>
+</tr>
+<tr>
+<td>EventReports</td>
+<td>Event Manager</td>
+<td>Sveltos Agent</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td>Useful when debugging EventSources</td>
+</tr>
+<tr>
+<td>EventSources</td>
+<td>Event Manager</td>
+<td>User</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td>Event Manager deploys EventSource instances to managed clusters</td>
+</tr>
+<tr>
+<td>EventTriggers</td>
+<td>Event Manager</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>HealthCheckReports</td>
+<td>HealthCheck Manager</td>
+<td>Sveltos Agent</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>HealthChecks</td>
+<td>HealthCheck Manager</td>
+<td>User</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td>HealthCheck Manager deploys HealthCheck instances to managed clusters</td>
+</tr>
+<tr>
+<td>ReloaderReports</td>
+<td>Add-on Controller</td>
+<td>Sveltos Agent</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>Reloaders</td>
+<td>Add-on Controller</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>ResourceSummaries</td>
+<td>Add-on Controller</td>
+<td>Add-on Controller</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>RoleRequests</td>
+<td>Access Manager</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td></td>
+</tr>
+<tr>
+<td>SveltosClusters</td>
+<td>SveltosCluster Controller</td>
+<td>User</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td>Periodically connects to cluster and runs readiness and liveness checks</td>
+</tr>
+<tr>
+<td>TechSupports</td>
+<td>TechSupport Controller</td>
+<td>TechSupport Controller</td>
+<td>Management Cluster</td>
+<td>Management Cluster</td>
+<td>Collects logs/events/resources from managed cluster and management cluster</td>
+</tr>
+<tr>
+<td>Sveltos Agent (Deployment)</td>
+<td>Not Applicable</td>
+<td>Classifier Manager</td>
+<td>Managed Cluster</td>
+<td>Management Cluster</td>
+<td>Ensure one agent per cluster. If no agent is present, EventReports are not generated; recreate the Classifier to redeploy the agent.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
 <ul>
-<li><strong>Sveltos runs in a management cluster</strong>. It assists users in programmatically deploying and managing Kubernetes add-ons and applications to any cluster in the fleet, including the management cluster itself.</li>
-<li><strong>GitOps principles</strong>. You can still use GitOps tools to push your configuration to the management cluster. Then, Sveltos takes over, distributing the desired state to your managed clusters.</li>
-<li><strong>Sveltos supports a variety of add-on formats</strong>. This includes Helm charts, raw YAML/JSON, Kustomize, Carvel ytt, and Jsonnet. This flexibility allows you to manage your add-ons using the format that best suits your needs.</li>
-<li><strong>Sveltos provides a powerful template and event framework</strong>. This framework empowers you to better manage your fleet of clusters by customizing deployments and reacting to cluster events.</li>
+<li><strong>Managing Controller</strong>: Controller that monitors the resource state and makes adjustments as needed</li>
+<li><strong>Creating Controller</strong>: Entity (controller or user) that initially creates the resource</li>
+<li><strong>Resource Location (Local Agent Mode)</strong>: Where the resource is located when using Local Agent Mode (Mode 1) - agents deployed in managed clusters</li>
+<li><strong>Resource Location (Centralized Agent Mode)</strong>: Where the resource is located when using Centralized Agent Mode (Mode 2) - agents centralized in management cluster</li>
+<li><strong>User</strong>: Resources created manually by users</li>
+<li><strong>Unknown</strong>: Items where a clear relationship has not yet been established</li>
+<li><strong>All Controllers</strong>: Resources managed collaboratively by all controllers</li>
 </ul>
-<p><img alt="Sveltos in the management cluster" src="assets/multi-clusters.png" /></p>
-<h2 id="features">Features</h2>
+<h2 id="controller-overview">Controller Overview</h2>
+<p>Based on the Sveltos architecture, here are the main controllers and their responsibilities:</p>
+<p><strong>Deployment Modes:</strong></p>
 <ul>
-<li><strong>Observability</strong>: Sveltos offers different endpoints for notifications. The notifications can be used by other tools to perform additional actions or trigger workflows. The supported types are Slack, Teams, Discord, WebEx, Telegram, SMTP and Kubernetes events.</li>
-<li><strong>Templating</strong>: Patching the rendered resources made easy! Sveltos allows Kubernetes add-ons and applications to be represented as templates. Before deploying to the <strong>managed</strong> clusters, Sveltos instantiates the templates with information gathered from either the <strong>management</strong> or the <strong>managed</strong> clusters. This allows consistent definition across multiple clusters with minimal adjustments and administration overhead.</li>
-<li><strong>Orchestrated Deployment Order</strong>: The Sveltos CDRs (Custom Resource Definition) are deployed in the exact order they appear in the definition file. That ensures a predictable and controlled deployment order.</li>
-<li><strong>Multitenancy</strong>: Sveltos was created with the multitenancy concept in mind. Sveltos <code>ClusterProfile</code> and <code>Profile</code> resources allow platform administrators to facilitate full isolation or tenants sharing a cluster.</li>
-<li><strong>Events</strong>: <code>Sveltos Event Framework</code> allows the deployment of add-ons and applications in response to specific events with the use of the <a href="https://www.lua.org/">Lua</a> language. That allows dynamic and adaptable deployments based on different needs and use cases.</li>
+<li><strong>Local Agent Mode (Mode 1)</strong>: Sveltos agents (sveltos-agent and drift-detection-manager) are deployed in each managed cluster</li>
+<li><strong>Centralized Agent Mode (Mode 2)</strong>: Sveltos agents are created per managed cluster in the management cluster, leaving no footprint on managed clusters</li>
 </ul>
-<h2 id="why-sveltos">Why Sveltos?</h2>
-<p>Sveltos was built to address the challenges posed by various CI/CD tools. Sveltos was designed to complement or even replace existing GitOps tools, and its integration with <strong>Flux CD</strong> significantly enhances the GitOps approach at scale.</p>
-<p>Key features of Sveltos include multitenancy, agent-based drift notification and synchronisation, and resource optimisation. These features ensure <strong>secure</strong>, <strong>reliable</strong>, and <strong>stable</strong> deployments of Kubernetes add-ons and applications, while reducing operational costs in both on-prem and cloud environments.</p>
-<h2 id="schedule-free-demo">Schedule Free Demo</h2>
-<p>Interested in learning more about Sveltos and how it can benefit you?  Schedule a free demo.</p>
-<div style="text-align: center;">
-  <a href="https://cal.com/gianluca-mardente-xqepwq/30min">
-    <img src="assets/schedule-free-demo.png" alt="Schedule a Free Demo" width="200">
-  </a>
-</div>
-
-<h2 id="contributing-to-projectsveltos">😻 Contributing to projectsveltos</h2>
-<p>We love to hear from you! We believe in the power of community and collaboration!</p>
-<p>Your ideas and feedback are important to us. Whether you want to report a bug, suggest a new feature, or stay updated with our latest news, we are here for you.</p>
-<ol>
-<li>Open a bug/feature enhancement on GitHub <a href="https://github.com/projectsveltos/sveltos-manager/issues" title="Contribute to Sveltos: open issues"><img alt="contributions welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" /></a></li>
-<li>Chat with us on the Slack in the #projectsveltos channel <a href="https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q"><img alt="Slack" src="https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen" /></a></li>
-<li>If you prefer to reach out directly, just shoot us an <a href="mailto:support@projectsveltos.io">email</a></li>
-</ol>
-<p>We are always thrilled to welcome new members to our community, and your contributions are always appreciated. Do not be shy - join us today and let's make Sveltos the best it can be! ❤️</p>
-<h2 id="support-us">Support us</h2>
-<div class="admonition tip">
-<p>If you like the project, please <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank">give us a</a> <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank" class="heart"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.672.668 3.059 6.197 6.838.993a.75.75 0 0 1 .416 1.28l-4.948 4.823 1.168 6.812a.75.75 0 0 1-1.088.79L12 18.347l-6.116 3.216a.75.75 0 0 1-1.088-.791l1.168-6.811-4.948-4.823a.749.749 0 0 1 .416-1.279l6.838-.994L11.327.668a.75.75 0 0 1 1.345 0"/></svg></span></a> if you haven't done so yet. Your support means a lot to us. <strong>Thank you <img alt="🙏" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f64f.svg" title=":pray:" />.</strong></p>
-</div>
-<p><a class="md-button" href="https://github.com/projectsveltos/sveltos-manager" target="_blank" title="Manage Kubernetes add-ons"><img alt="⭐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/2b50.svg" title=":star:" /> projectsveltos</a></p>
-<!-- If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.** -->
+<p><strong>Controllers:</strong></p>
+<ul>
+<li><strong>SveltosCluster Controller</strong>: Manages SveltosCluster instances, periodically connects to clusters and runs readiness/liveness checks</li>
+<li><strong>Add-on Controller</strong>: Manages ClusterProfile/Profile instances, creates ClusterSummary for matching clusters and deploys resources</li>
+<li><strong>Classifier Manager</strong>: Deploys Classifier instances to managed clusters and sveltos-agent deployment, processes ClassifierReports to update cluster labels</li>
+<li><strong>Event Manager</strong>: Manages EventTrigger instances, deploys EventSource instances to managed clusters and processes EventReports to create new ClusterProfiles</li>
+<li><strong>HealthCheck Manager</strong>: Manages ClusterHealthChecks, deploys HealthCheck instances to managed clusters and processes HealthReports for notifications</li>
+<li><strong>TechSupport Controller</strong>: Manages TechSupport instances, collects logs/events/resources from clusters and delivers tech support messages</li>
+<li><strong>Shard Controller</strong>: Manages deployment and undeployment of Sveltos instances when clusters are marked as belonging to different shards</li>
+</ul>
+<h2 id="related-information">Related Information</h2>
+<p>For more details on Sveltos architecture and each controller, please refer to the following documents:</p>
+<ul>
+<li><a href="../../getting_started/install/install/">Installing Sveltos</a></li>
+<li><a href="../../register/register-cluster/">Cluster Registration</a></li>
+<li><a href="../../addons/addons/">Add-on Distribution</a></li>
+</ul>
 
 
 
@@ -3196,15 +3332,31 @@
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
+          
+          <a href="../../help_and_tutorials/troubleshooting/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Troubleshooting">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Troubleshooting
+              </div>
+            </div>
+          </a>
+        
         
           
-          <a href="use_cases/use_case_idp/" class="md-footer__link md-footer__link--next" aria-label="Next: Build an Internal Developer Platform (IDP)">
+          <a href="../../blogs/" class="md-footer__link md-footer__link--next" aria-label="Next: Blogs and videos">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Build an Internal Developer Platform (IDP)
+                Blogs and videos
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3293,10 +3445,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="assets/javascripts/bundle.56ea9cef.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>
