@@ -43,7 +43,7 @@ Sveltos offers a **simple**, **unified** interface to easily review existing con
 
 ### Sveltos add-on Management Solution
 
-Sveltos allows platform administrators to utilise the `ClusterProfile` Custom Resource Defintion to perform Kubernetes [add-on](../addons/addons.md) deployments. Within a Sveltos `ClusterProfile`, we define the below points.
+Sveltos allows platform administrators to utilise the `ClusterProfile` Custom Resource Definition to perform Kubernetes [add-on](../addons/addons.md) deployments. Within a Sveltos `ClusterProfile`, we define the below points.
 
 1. What Kubernetes add-ons to get deployed (Helm charts, Kustomize, YAML/JSON manifests)?
 2. Where should they get deployed?
