@@ -15,9 +15,9 @@ authors:
 
 ## What is Sveltos?
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a **set of Kubernetes controllers** that run in a **management cluster** and manage **add-ons** and **applications** on a fleet of clusters.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a set of **Kubernetes controllers** that run in a **management** cluster and manage **add-ons** and **applications** on a fleet of clusters. Sveltos automatically supports the discovery of [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api)-powered clusters, but it does not stop there.
 
-Sveltos **automatically** supports the discovery of [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api)-powered clusters, but it does not stop there. [Registration](../register/register-cluster.md) of any other cluster (on-prem, Cloud) is possible and seamless.
+[Registration](../register/register-cluster.md) of any other cluster (on-prem, Cloud) is possible and seamless.
 
 ![Sveltos managing clusters](../assets/multi-clusters.png)
 

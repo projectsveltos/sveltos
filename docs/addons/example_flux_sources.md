@@ -23,7 +23,7 @@ Imagine a repository like [this](https://github.com/gianlucam76/yaml_flux.git) c
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Install and run Flux in the **management** cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found [here](https://fluxcd.io/flux/installation/#dev-install).
+Install Flux in the **management** cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found [here](https://fluxcd.io/flux/installation/).
 
 Deploy a __GitRepository__ resource similar to the below.
 
@@ -93,7 +93,7 @@ $ sveltosctl show addons
 
 ### Step 1: Configure Flux in the Management Cluster
 
-Install and run Flux in the **management** cluster and configure it to synchronise the Git repository containing the Kyverno manifests.
+Install Flux in the **management** cluster and configure it to synchronise the Git repository containing the Kyverno manifests.
 
 Deploy a __GitRepository__ resource similar to the below.
 
@@ -386,7 +386,7 @@ A more complex example can be when we want to express the __path__ field as a te
 
 Effectively, by defining the `templateResourceRefs` at the beginning of the ClusterProfile we can retrieve the **Sveltos managed clusters** Kubernetes version. The information is used at the `policyRefs` definition when we set the __path__ as a template with __if__ statements.
 
-[^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
+[^1]: The below __ClusterProfile__ allows us to install the Flux Controllers in the **management** cluster. However, before applying it, ensure the management cluster has labels that match the specified `clusterSelector`.
 ```yaml
 apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile

@@ -37,24 +37,25 @@ Store all required Kubernetes resources in a Git repository and let Flux handle 
 
 Install and run Flux in the management cluster. Configure it to synchronise the Git repository which contains the `HelloWorld` manifests. Use a GitRepository resource similar to the below YAML definitions. More information about the Flux installation can be found [here](https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F).
 
-```yaml
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: flux-system
-  namespace: flux-system
-  annotations:
-    projectsveltos.io/template: "true" # (1)
-spec:
-  interval: 1m0s # (2)
-  ref:
-    branch: main
-  secretRef:
-    name: flux-system
-  timeout: 60s
-  url: https://github.com/gianlucam76/kustomize.git # (3)
-```
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: flux-system
+      namespace: flux-system
+      annotations:
+        projectsveltos.io/template: "true" # (1)
+    spec:
+      interval: 1m0s # (2)
+      ref:
+        branch: main
+      secretRef:
+        name: flux-system
+      timeout: 60s
+      url: https://github.com/gianlucam76/kustomize.git # (3)
+    ```
 
 1. Enable Sveltos templating functionality. More information have a look [here](../template/intro_template.md).
 2. How often to sync with the reposiroty
@@ -63,32 +64,32 @@ spec:
 The above definition will look for updates of the main branch of the specified repository every minute.
 
 !!! Info
-    If you use the Flux CLI to bootstrap a Git repo, the `GitRepository` Kubernetes resource will be created from Flux automatically.
+    If you use the Flux CLI to bootstrap a Git repo, the `GitRepository` Kubernetes resource will get created by Flux automatically.
 
 ### Step 2: Create a Sveltos ClusterProfile
 
 Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository` resource and define the HelloWorld directory as the deployment source. In the below YAML definition, an application will get deployed on the managed cluster with the label selector set to *env=fv*.
 
-
-```yaml
-cat > cluster_profile_flux.yaml <<EOF
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: deploy-helloworld-resources
-spec:
-  clusterSelector:
-    matchLabels:
-      env: fv
-  policyRefs:
-  - kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-    path: ./helloWorld/
-    targetNamespace: eng
-EOF
-```
+!!! example ""
+    ```yaml
+    cat > cluster_profile_flux.yaml <<EOF
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: deploy-helloworld-resources
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      policyRefs:
+      - kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+        path: ./helloWorld/
+        targetNamespace: eng
+    EOF
+    ```
 
 Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector `env=fv` in the `eng` namespace.
 

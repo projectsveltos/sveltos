@@ -26,12 +26,14 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 
 ### Helm Installation
 
-```
+```bash
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
 
 $ helm repo update
+```
 
-$ helm install sveltos-projectsveltos projectsveltos/sveltos-dashboard -n projectsveltos
+```bash
+$ helm install sveltos-dashboard projectsveltos/sveltos-dashboard -n projectsveltos
 
 $ helm list -n projectsveltos
 ```

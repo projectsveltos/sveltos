@@ -13,7 +13,7 @@ authors:
 
 ## What is Sveltos?
 
-Sveltos is a **set of Kubernetes controllers** deployed in a **management** cluster. A management cluster is the Centralized Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.
+Sveltos is a set of **Kubernetes controllers** deployed in a **management** cluster. A management cluster is the Centralized Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.
 
 ## Before you Begin
 
@@ -133,56 +133,56 @@ Sveltos can deploy raw `yaml` and `json` resources. For this example, we will de
     ```
 
 1. Specify the Nginx deployment details (namespace, deployment, service)
-
-    ```yaml
-    cat > nginx_deploy.yaml <<EOF
-    apiVersion: v1
-    kind: Namespace
+```yaml
+cat > nginx_deploy.yaml <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
     metadata:
-      name: dev
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: nginx
-      namespace: dev
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: nginx
-      template:
-        metadata:
-          labels:
-            app: nginx
-        spec:
-          containers:
-            - name: nginx
-              image: nginx:latest
-              ports:
-                - containerPort: 80
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: nginx-service
-      namespace: dev
-    spec:
-      selector:
+      labels:
         app: nginx
-      ports:
-        - protocol: TCP
-          port: 80
-          targetPort: 80
-      type: ClusterIP
-    EOF
-    ```
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+EOF
+```
 
 1. Create a `ConfigMap` resource referencing the `.yaml` file
     ```bash
     $ kubectl create configmap nginx --from-file=nginx_deploy.yaml
     ```
 1.  Create and apply the `ClusterProfile` resource referencing the `ConfigMap`
+
     ```yaml
     cat > clusterprofile_nginx.yaml <<EOF
     ---
