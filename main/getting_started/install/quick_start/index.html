@@ -2599,6 +2599,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Dynamic Nginx Deployment based on Annotations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3264,7 +3287,7 @@
   <h1>Quick Start</h1>
 
 <h2 id="what-is-sveltos">What is Sveltos?</h2>
-<p>Sveltos is a <strong>set of Kubernetes controllers</strong> deployed in a <strong>management</strong> cluster. A management cluster is the Centralized Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.</p>
+<p>Sveltos is a set of <strong>Kubernetes controllers</strong> deployed in a <strong>management</strong> cluster. A management cluster is the Centralized Kubernetes cluster where Sveltos orchestrates and manages the deployments of Kubernetes resources to managed clusters.</p>
 <h2 id="before-you-begin">Before you Begin</h2>
 <p>To continue with the demo setup, ensure the below are satisfied.</p>
 <ul>
@@ -3361,7 +3384,7 @@
 </span></code></pre></div></p>
 </li>
 <li>
-<p>Specify the Nginx deployment details (namespace, deployment, service)</p>
+<p>Specify the Nginx deployment details (namespace, deployment, service)
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; nginx_deploy.yaml &lt;&lt;EOF</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Namespace</span>
@@ -3403,7 +3426,7 @@
 </span><span id="__span-7-39"><a id="__codelineno-7-39" name="__codelineno-7-39" href="#__codelineno-7-39"></a><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
 </span><span id="__span-7-40"><a id="__codelineno-7-40" name="__codelineno-7-40" href="#__codelineno-7-40"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
 </span><span id="__span-7-41"><a id="__codelineno-7-41" name="__codelineno-7-41" href="#__codelineno-7-41"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
+</span></code></pre></div></p>
 </li>
 <li>
 <p>Create a <code>ConfigMap</code> resource referencing the <code>.yaml</code> file
@@ -3411,8 +3434,8 @@
 </span></code></pre></div></p>
 </li>
 <li>
-<p>Create and apply the <code>ClusterProfile</code> resource referencing the <code>ConfigMap</code>
-    <div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_nginx.yaml &lt;&lt;EOF</span>
+<p>Create and apply the <code>ClusterProfile</code> resource referencing the <code>ConfigMap</code></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_nginx.yaml &lt;&lt;EOF</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nn">---</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3428,7 +3451,7 @@
 </span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 </span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div></p>
+</span></code></pre></div>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>clusterprofile_nginx.yaml
 </span></code></pre></div>
 </li>

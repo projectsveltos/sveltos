@@ -2530,6 +2530,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Dynamic Nginx Deployment based on Annotations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3132,13 +3155,13 @@
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/dashboard-manifest.yaml
 </span></code></pre></div>
 <h3 id="helm-installation">Helm Installation</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>projectsveltos<span class="w"> </span>https://projectsveltos.github.io/helm-charts
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>$ helm repo update
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>$ helm install sveltos-projectsveltos projectsveltos/sveltos-dashboard -n projectsveltos
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>$ helm list -n projectsveltos
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>$<span class="w"> </span>helm<span class="w"> </span>repo<span class="w"> </span>update
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>sveltos-dashboard<span class="w"> </span>projectsveltos/sveltos-dashboard<span class="w"> </span>-n<span class="w"> </span>projectsveltos
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>$<span class="w"> </span>helm<span class="w"> </span>list<span class="w"> </span>-n<span class="w"> </span>projectsveltos
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -3148,10 +3171,10 @@
 <h2 id="authentication">Authentication</h2>
 <p>To authenticate with the Sveltos Dashboard, we will utilise a <code>serviceAccount</code>, a <code>ClusterRoleBinding</code>/<code>RoleBinding</code> and a <code>token</code>.</p>
 <p>Let's create a <code>service account</code> in the desired namespace.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ kubectl create sa &lt;user&gt; -n &lt;namespace&gt;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ kubectl create sa &lt;user&gt; -n &lt;namespace&gt;
 </span></code></pre></div>
 <p>Let's provide the service account permissions to access the <strong>managed</strong> clusters in the <strong>management</strong> cluster.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ kubectl create clusterrolebinding &lt;binding_name&gt; --clusterrole &lt;role_name&gt; --serviceaccount &lt;namespace&gt;:&lt;service_account&gt;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ kubectl create clusterrolebinding &lt;binding_name&gt; --clusterrole &lt;role_name&gt; --serviceaccount &lt;namespace&gt;:&lt;service_account&gt;
 </span></code></pre></div>
 <p><strong>Command Details</strong>:</p>
 <ul>
@@ -3161,11 +3184,11 @@
 <li><strong>service_account</strong>: It is the service account that the permissions are being associated with.</li>
 </ul>
 <h3 id="platform-administrator-example">Platform Administrator Example</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ kubectl create sa platform-admin
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create sa platform-admin
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 </span></code></pre></div>
 <p>Create a login token for the service account with the name <code>platform-admin</code> in the <code>default</code> namespace.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create token platform-admin --duration=24h
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ kubectl create token platform-admin --duration=24h
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

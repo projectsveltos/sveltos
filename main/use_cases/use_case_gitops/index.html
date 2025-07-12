@@ -2531,6 +2531,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Dynamic Nginx Deployment based on Annotations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3144,6 +3167,7 @@
 <p>👉 <strong><a href="https://github.com/gianlucam76/kustomize/">Explore the Example Repository</a></strong></p>
 <h3 id="step-1-configure-flux-in-the-management-cluster">Step 1: Configure Flux in the Management Cluster</h3>
 <p>Install and run Flux in the management cluster. Configure it to synchronise the Git repository which contains the <code>HelloWorld</code> manifests. Use a GitRepository resource similar to the below YAML definitions. More information about the Flux installation can be found <a href="https://medium.com/r/?url=https%3A%2F%2Ffluxcd.io%2Fflux%2Finstallation%2F">here</a>.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3161,6 +3185,7 @@
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60s</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gianlucam76/kustomize.git</span><span class="w"> </span><span class="c1"># (3)</span>
 </span></code></pre></div>
+</div>
 <ol>
 <li>Enable Sveltos templating functionality. More information have a look <a href="../../template/intro_template/">here</a>.</li>
 <li>How often to sync with the reposiroty</li>
@@ -3169,10 +3194,11 @@
 <p>The above definition will look for updates of the main branch of the specified repository every minute.</p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>If you use the Flux CLI to bootstrap a Git repo, the <code>GitRepository</code> Kubernetes resource will be created from Flux automatically.</p>
+<p>If you use the Flux CLI to bootstrap a Git repo, the <code>GitRepository</code> Kubernetes resource will get created by Flux automatically.</p>
 </div>
 <h3 id="step-2-create-a-sveltos-clusterprofile">Step 2: Create a Sveltos ClusterProfile</h3>
 <p>Define a Sveltos ClusterProfile referencing to the <code>flux-system</code> <code>GitRepository</code> resource and define the HelloWorld directory as the deployment source. In the below YAML definition, an application will get deployed on the managed cluster with the label selector set to <em>env=fv</em>.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; cluster_profile_flux.yaml &lt;&lt;EOF</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nn">---</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3191,6 +3217,7 @@
 </span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">targetNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eng</span>
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
+</div>
 <p>Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector <code>env=fv</code> in the <code>eng</code> namespace.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

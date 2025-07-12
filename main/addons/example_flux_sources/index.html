@@ -2630,6 +2630,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Dynamic Nginx Deployment based on Annotations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3332,7 +3355,7 @@
 <h2 id="example-deploy-nginx-ingress-with-flux-and-sveltos">Example: Deploy Nginx Ingress with Flux and Sveltos</h2>
 <p>Imagine a repository like <a href="https://github.com/gianlucam76/yaml_flux.git">this</a> containing an <em>nginx-ingress</em> directory with all the required YAML resources for deployment<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>. In the steps below we demonstrate how to leverage Flux and Sveltos to automatically perform the deployment.</p>
 <h3 id="step-1-configure-flux-in-the-management-cluster">Step 1: Configure Flux in the Management Cluster</h3>
-<p>Install and run Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found <a href="https://fluxcd.io/flux/installation/#dev-install">here</a>.</p>
+<p>Install Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Nginx manifests. More information about the Flux installation can be found <a href="https://fluxcd.io/flux/installation/">here</a>.</p>
 <p>Deploy a <strong>GitRepository</strong> resource similar to the below.</p>
 <div class="admonition example">
 <p class="admonition-title">GitRepository Resource</p>
@@ -3393,7 +3416,7 @@
 </span></code></pre></div>
 <h2 id="example-deploy-kyverno-policies-with-flux-and-sveltos">Example: Deploy Kyverno policies with Flux and Sveltos</h2>
 <h3 id="step-1-configure-flux-in-the-management-cluster_1">Step 1: Configure Flux in the Management Cluster</h3>
-<p>Install and run Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Kyverno manifests.</p>
+<p>Install Flux in the <strong>management</strong> cluster and configure it to synchronise the Git repository containing the Kyverno manifests.</p>
 <p>Deploy a <strong>GitRepository</strong> resource similar to the below.</p>
 <div class="admonition example">
 <p class="admonition-title">GitRepository Resource</p>
@@ -3656,7 +3679,7 @@ More information about the command arguments, have a look below.</p>
 <hr />
 <ol>
 <li id="fn:1">
-<p>This <strong>ClusterProfile</strong> allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
+<p>The below <strong>ClusterProfile</strong> allows us to install the Flux Controllers in the <strong>management</strong> cluster. However, before applying it, ensure the management cluster has labels that match the specified <code>clusterSelector</code>.
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nt">metadata</span><span class="p">:</span>
