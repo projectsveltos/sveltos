@@ -378,34 +378,44 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
         User     string `json:"user"`
         Password string `json:"password"`
     }
-
+    
     type clientCert struct {
         CertPem []byte `json:"certPem"`
         KeyPem  []byte `json:"keyPem"`
     }
-
+    
     type messagingAuthorization struct {
-        // select one of the following authentication methods
         User       *messagingUser `json:"user,omitempty"`
         Token      *string        `json:"token,omitempty"`
         ClientCert *clientCert    `json:"clientCert,omitempty"`
         RootCA     []byte         `json:"rootCA,omitempty"`
     }
-
+    
     type configuration struct {
         URL           string                 `json:"url"`
         Subjects      []string               `json:"subjects"`
         Authorization messagingAuthorization `json:"authorization,omitempty"`
     }
-
+    
+    type stream struct {
+        Name     string   `json:"name"`
+        Subjects []string `json:"subjects"`
+    }
+    
+    type consumerConfiguration struct {
+        URL           string                 `json:"url"`
+        Streams       []stream               `json:"streams"`
+        Authorization messagingAuthorization `json:"authorization,omitempty"`
+    }
+    
     type natsConfiguration struct {
         Configuration configuration `json:"configuration"`
     }
-
+    
     type jetstreamConfiguration struct {
-        Configuration configuration `json:"configuration"`
+        ConsumerConfiguration consumerConfiguration `json:"configuration"`
     }
-
+    
     type messagingConfig struct {
         Nats      *natsConfiguration      `json:"nats,omitempty"`
         Jetstream *jetstreamConfiguration `json:"jetstream,omitempty"`
@@ -416,35 +426,36 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
 
     ```json
     {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$schema": "http://json-schema.org/draft-07/schema#",
         "title": "Sveltos NATS and JetStream Messaging Configuration",
         "type": "object",
         "properties": {
             "nats": {
+                "$ref": "#/definitions/natsConfiguration"
+            },
+            "jetstream": {
+                "$ref": "#/definitions/jetstreamConfiguration"
+            }
+        },
+        "definitions": {
+            "natsConfiguration": {
                 "type": "object",
                 "properties": {
                     "configuration": {
-                        "$ref": "#/$defs/configuration"
+                        "$ref": "#/definitions/configuration"
                     }
                 },
-                "required": [
-                    "configuration"
-                ]
+                "required": ["configuration"]
             },
-            "jetstream": {
-              "type": "object",
-               "properties": {
-                   "configuration": {
-                       "$ref": "#/$defs/configuration"
-                   }
-               },
-               "required": [
-                  "configuration"
-              ]
-            }
-        },
-        "additionalProperties": false,
-        "$defs": {
+            "jetstreamConfiguration": {
+                "type": "object",
+                "properties": {
+                    "configuration": {
+                        "$ref": "#/definitions/consumerConfiguration"
+                    }
+                },
+                "required": ["configuration"]
+            },
             "configuration": {
                 "type": "object",
                 "properties": {
@@ -461,59 +472,70 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
                         "description": "List of NATS subjects to subscribe/publish to"
                     },
                     "authorization": {
-                        "type": "object",
-                        "description": "Optional authentication settings",
-                        "properties": {
-                            "user": {
-                                "type": "object",
-                                "properties": {
-                                    "user": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "user",
-                                    "password"
-                                ],
-                                "additionalProperties": false
-                            },
-                            "token": {
-                                "type": "string"
-                            },
-                            "clientCert": {
-                                "type": "object",
-                                "properties": {
-                                    "certPem": {
-                                        "type": "string",
-                                        "description": "PEM-encoded certificate"
-                                    },
-                                    "keyPem": {
-                                        "type": "string",
-                                        "description": "PEM-encoded private key"
-                                    }
-                                },
-                                "required": [
-                                    "certPem",
-                                    "keyPem"
-                                ],
-                                "additionalProperties": false
-                            },
-                            "rootCA": {
-                                "type": "string",
-                                "description": "PEM-encoded root certificate authority"
-                            }
-                        },
-                        "additionalProperties": false
+                        "$ref": "#/definitions/messagingAuthorization"
                     }
                 },
-                "required": [
-                    "url",
-                    "subjects"
-                ],
-                "additionalProperties": false
+                "required": ["url", "subjects"]
+            },
+            "consumerConfiguration": {
+                "type": "object",
+                "properties": {
+                    "url": { "type": "string" },
+                    "streams": {
+                        "type": "array",
+                        "items": { "$ref": "#/definitions/stream" }
+                    },
+                    "authorization": {
+                        "$ref": "#/definitions/messagingAuthorization"
+                    }
+                },
+                "required": ["url", "streams"]
+            },
+            "stream": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "subjects": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    }
+                },
+                "required": ["name", "subjects"]
+            },
+            "messagingAuthorization": {
+                "type": "object",
+                "description": "Optional authentication settings",
+                "properties": {
+                    "user": { "$ref": "#/definitions/messagingUser" },
+                    "token": { "type": "string" },
+                    "clientCert": { "$ref": "#/definitions/clientCert" },
+                    "rootCA": {
+                        "type": "string",
+                        "description": "PEM-encoded root certificate authority"
+                    }
+                }
+            },
+            "messagingUser": {
+                "type": "object",
+                "properties": {
+                    "user": { "type": "string" },
+                    "password": { "type": "string" }
+                },
+                "required": ["user", "password"]
+            },
+            "clientCert": {
+                "type": "object",
+                "properties": {
+                    "certPem": {
+                        "type": "string",
+                        "description": "PEM-encoded certificate"
+                    },
+                    "keyPem": {
+                        "type": "string",
+                        "description": "PEM-encoded private key"
+                    }
+                },
+                "required": ["certPem", "keyPem"]
             }
         }
     }
@@ -522,7 +544,7 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
 
 [^1]: EventTrigger can also reference a [_ClusterSet_](../features/set.md) to select one or more managed clusters.
 [^2]: Secret contains following configuration:
-```
+```json
 {
   "nats":
    {
@@ -531,6 +553,32 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
             "url": "nats://nats.nats.svc.cluster.local:4222",
             "subjects": [
                 "user-operation"
+            ],
+            "authorization": {
+                "user": {
+                    "user": "admin",
+                    "password": "my-password"
+                }
+            }
+        }
+   }
+}
+```
+Or, for a JetStream connection: 
+```json
+{
+  "nats":
+   {
+     "configuration":
+        {
+            "url": "nats://nats.nats.svc.cluster.local:4222",
+            "streams": [
+              {
+                "name": "USERS",
+                "subjects": [
+                    "user-operation"
+                ]
+              }
             ],
             "authorization": {
                 "user": {
