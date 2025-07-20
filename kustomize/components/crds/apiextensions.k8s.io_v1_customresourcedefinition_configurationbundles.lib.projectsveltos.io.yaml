@@ -38,6 +38,46 @@ spec:
             type: object
           spec:
             properties:
+              helmChartVersion:
+                description: |-
+                  HelmChartVersion indicates the chart version of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmIcon:
+                description: |-
+                  HelmIcon indicates the URL of the icon of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseName:
+                description: |-
+                  HelmReleaseName indicates the name of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseNamespace:
+                description: |-
+                  HelmReleaseNamespace indicates the namespace of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseUninstall:
+                default: false
+                description: |-
+                  HelmReleaseUninstall, when true, indicates that these resources are
+                  part of a Helm release uninstallation process.
+                  This can be used to trigger specific cleanup or post-uninstall hooks.
+                type: boolean
+              helmRepoURL:
+                description: |-
+                  HelmRepoURL indicates the repo URL of the Helm release
+                  these resources belong to, if any
+                type: string
+              isLastHelmReleaseBundle:
+                default: false
+                description: |-
+                  IsLastHelmReleaseBundle, when true, indicates that this ConfigurationBundle
+                  is the final bundle in the sequence for the associated Helm release.
+                  This can be used to trigger finalization steps, such as marking the
+                  release as fully deployed or completely uninstalled in external tracking systems.
+                type: boolean
               notTracked:
                 description: |-
                   NotTracked, when true, signifies that the resources managed by the
@@ -54,6 +94,10 @@ spec:
                   type: string
                 type: array
                 x-kubernetes-list-type: atomic
+              timeout:
+                description: time to wait for Kubernetes operation (like Jobs for
+                  hooks)
+                type: string
             type: object
           status:
             properties:

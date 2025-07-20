@@ -1309,6 +1309,46 @@ spec:
             type: object
           spec:
             properties:
+              helmChartVersion:
+                description: |-
+                  HelmChartVersion indicates the chart version of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmIcon:
+                description: |-
+                  HelmIcon indicates the URL of the icon of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseName:
+                description: |-
+                  HelmReleaseName indicates the name of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseNamespace:
+                description: |-
+                  HelmReleaseNamespace indicates the namespace of the Helm release
+                  these resources belong to, if any
+                type: string
+              helmReleaseUninstall:
+                default: false
+                description: |-
+                  HelmReleaseUninstall, when true, indicates that these resources are
+                  part of a Helm release uninstallation process.
+                  This can be used to trigger specific cleanup or post-uninstall hooks.
+                type: boolean
+              helmRepoURL:
+                description: |-
+                  HelmRepoURL indicates the repo URL of the Helm release
+                  these resources belong to, if any
+                type: string
+              isLastHelmReleaseBundle:
+                default: false
+                description: |-
+                  IsLastHelmReleaseBundle, when true, indicates that this ConfigurationBundle
+                  is the final bundle in the sequence for the associated Helm release.
+                  This can be used to trigger finalization steps, such as marking the
+                  release as fully deployed or completely uninstalled in external tracking systems.
+                type: boolean
               notTracked:
                 description: |-
                   NotTracked, when true, signifies that the resources managed by the
@@ -1325,6 +1365,10 @@ spec:
                   type: string
                 type: array
                 x-kubernetes-list-type: atomic
+              timeout:
+                description: time to wait for Kubernetes operation (like Jobs for
+                  hooks)
+                type: string
             type: object
           status:
             properties:
@@ -1387,8 +1431,9 @@ spec:
                 - Remove
                 type: string
               configurationItem:
-                description: ConfigurationItems represents a list of configurations
-                  to deploy
+                description: |-
+                  ConfigurationItems represents a list of configurations to deploy
+                  The order of items in this list determines deployment sequence
                 items:
                   properties:
                     contentRef:
@@ -1444,6 +1489,7 @@ spec:
                       type: string
                   type: object
                 type: array
+                x-kubernetes-list-type: atomic
               continueOnConflict:
                 default: false
                 description: |-
@@ -1564,6 +1610,27 @@ spec:
                   When set to true, when any mounted ConfigMap/Secret is modified, Sveltos automatically
                   starts a rolling upgrade for Deployment/StatefulSet/DaemonSet instances mounting it.
                 type: boolean
+              requestorHash:
+                description: |-
+                  RequestorHash represents a hash of the state of the requestor that created this ConfigurationGroup.
+                  This field is optional and can be used to determine when the creating resource's state has
+                  changed and the ConfigurationGroup needs to be updated accordingly.
+                format: byte
+                type: string
+              serviceAccountName:
+                description: |-
+                  ServiceAccountName is the name of the ServiceAccount to impersonate when applying
+                  the configuration. If empty, the default ServiceAccount for the Sveltos-applier
+                  will be used.
+                  The ServiceAccount must exist in the managed cluster.
+                type: string
+              serviceAccountNamespace:
+                description: |-
+                  ServiceAccountNamespace is the namespace of the ServiceAccount to impersonate when applying
+                  the configuration. If empty, the default namespace for the Sveltos-applier
+                  will be used (typically the same namespace where the Sveltos-applier is deployed).
+                  The ServiceAccount must exist in the managed cluster.
+                type: string
               sourceRef:
                 description: |-
                   SourceRef is the user facing Sveltos resource that caused this ConfigurationGroup to be
@@ -1625,6 +1692,18 @@ spec:
                 format: int32
                 minimum: 1
                 type: integer
+              updatePhase:
+                default: Ready
+                description: |-
+                  UpdatePhase indicates the current phase of configuration updates. When set to "Preparing",
+                  it signals that a new version of this ConfigurationGroup is being prepared, forcing
+                  metadata.generation to advance. This allows detection of differences between
+                  status.observedGeneration and metadata.generation when agents process an older version,
+                  enabling tracking of update propagation across managed clusters.
+                enum:
+                - Ready
+                - Preparing
+                type: string
               validateHealths:
                 description: |-
                   ValidateHealths is a slice of Lua functions to run against
@@ -1723,6 +1802,22 @@ spec:
                 description: LastAppliedTime is the time feature was last reconciled
                 format: date-time
                 type: string
+              observedGeneration:
+                description: |-
+                  ObservedGeneration reflects the generation of the most recently observed ConfigurationGroup.
+                  When this value matches the ConfigurationGroup's metadata.generation, it indicates that the
+                  status reflects the latest desired specification. If observedGeneration is less than generation,
+                  it means the controller has not yet processed the latest changes to the specification.
+                format: int64
+                type: integer
+              observedRequestorHash:
+                description: |-
+                  ObservedRequestorHash reflects the requestor hash that was last processed by the controller.
+                  When this value matches the spec.requestorHash, it indicates that the controller has
+                  processed the latest state of the creating resource. If observedRequestorHash differs
+                  from spec.requestorHash, it means the requestor has changed and reconciliation is needed.
+                format: byte
+                type: string
               status:
                 description: Status represents the state of the feature in the workload
                   cluster
@@ -1733,6 +1828,7 @@ spec:
                 - FailedNonRetriable
                 - Removing
                 - Removed
+                - AgentRemoving
                 type: string
             type: object
         type: object
@@ -2789,50 +2885,6 @@ spec:
                         Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
-                    owner:
-                      description: Owner is the list of ConfigMap/Secret containing
-                        this resource.
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: |-
-                            If referring to a piece of an object instead of an entire object, this string
-                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container within a pod, this would take on a value like:
-                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                            the event) or if no container name is specified "spec.containers[2]" (container with
-                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                            referencing a part of an object.
-                          type: string
-                        kind:
-                          description: |-
-                            Kind of the referent.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                          type: string
-                        name:
-                          description: |-
-                            Name of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          type: string
-                        namespace:
-                          description: |-
-                            Namespace of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                          type: string
-                        resourceVersion:
-                          description: |-
-                            Specific resourceVersion to which this reference is made, if any.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                          type: string
-                        uid:
-                          description: |-
-                            UID of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       minLength: 1
@@ -2841,7 +2893,6 @@ spec:
                   - group
                   - kind
                   - name
-                  - owner
                   - version
                   type: object
                 type: array
@@ -2941,50 +2992,6 @@ spec:
                         Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
-                    owner:
-                      description: Owner is the list of ConfigMap/Secret containing
-                        this resource.
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: |-
-                            If referring to a piece of an object instead of an entire object, this string
-                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container within a pod, this would take on a value like:
-                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                            the event) or if no container name is specified "spec.containers[2]" (container with
-                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                            referencing a part of an object.
-                          type: string
-                        kind:
-                          description: |-
-                            Kind of the referent.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                          type: string
-                        name:
-                          description: |-
-                            Name of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          type: string
-                        namespace:
-                          description: |-
-                            Namespace of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                          type: string
-                        resourceVersion:
-                          description: |-
-                            Specific resourceVersion to which this reference is made, if any.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                          type: string
-                        uid:
-                          description: |-
-                            UID of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       minLength: 1
@@ -2993,7 +3000,6 @@ spec:
                   - group
                   - kind
                   - name
-                  - owner
                   - version
                   type: object
                 type: array
@@ -3036,50 +3042,6 @@ spec:
                         Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
-                    owner:
-                      description: Owner is the list of ConfigMap/Secret containing
-                        this resource.
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: |-
-                            If referring to a piece of an object instead of an entire object, this string
-                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container within a pod, this would take on a value like:
-                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                            the event) or if no container name is specified "spec.containers[2]" (container with
-                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                            referencing a part of an object.
-                          type: string
-                        kind:
-                          description: |-
-                            Kind of the referent.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                          type: string
-                        name:
-                          description: |-
-                            Name of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          type: string
-                        namespace:
-                          description: |-
-                            Namespace of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                          type: string
-                        resourceVersion:
-                          description: |-
-                            Specific resourceVersion to which this reference is made, if any.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                          type: string
-                        uid:
-                          description: |-
-                            UID of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       minLength: 1
@@ -3088,7 +3050,6 @@ spec:
                   - group
                   - kind
                   - name
-                  - owner
                   - version
                   type: object
                 type: array
@@ -3131,50 +3092,6 @@ spec:
                         Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
-                    owner:
-                      description: Owner is the list of ConfigMap/Secret containing
-                        this resource.
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: |-
-                            If referring to a piece of an object instead of an entire object, this string
-                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container within a pod, this would take on a value like:
-                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                            the event) or if no container name is specified "spec.containers[2]" (container with
-                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                            referencing a part of an object.
-                          type: string
-                        kind:
-                          description: |-
-                            Kind of the referent.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                          type: string
-                        name:
-                          description: |-
-                            Name of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          type: string
-                        namespace:
-                          description: |-
-                            Namespace of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                          type: string
-                        resourceVersion:
-                          description: |-
-                            Specific resourceVersion to which this reference is made, if any.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                          type: string
-                        uid:
-                          description: |-
-                            UID of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       minLength: 1
@@ -3183,7 +3100,6 @@ spec:
                   - group
                   - kind
                   - name
-                  - owner
                   - version
                   type: object
                 type: array
@@ -3225,50 +3141,6 @@ spec:
                         Namespace of the resource deployed in the Cluster.
                         Empty for resources scoped at cluster level.
                       type: string
-                    owner:
-                      description: Owner is the list of ConfigMap/Secret containing
-                        this resource.
-                      properties:
-                        apiVersion:
-                          description: API version of the referent.
-                          type: string
-                        fieldPath:
-                          description: |-
-                            If referring to a piece of an object instead of an entire object, this string
-                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                            For example, if the object reference is to a container within a pod, this would take on a value like:
-                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                            the event) or if no container name is specified "spec.containers[2]" (container with
-                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                            referencing a part of an object.
-                          type: string
-                        kind:
-                          description: |-
-                            Kind of the referent.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                          type: string
-                        name:
-                          description: |-
-                            Name of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          type: string
-                        namespace:
-                          description: |-
-                            Namespace of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                          type: string
-                        resourceVersion:
-                          description: |-
-                            Specific resourceVersion to which this reference is made, if any.
-                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                          type: string
-                        uid:
-                          description: |-
-                            UID of the referent.
-                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       minLength: 1
@@ -3277,7 +3149,6 @@ spec:
                   - group
                   - kind
                   - name
-                  - owner
                   - version
                   type: object
                 type: array
@@ -3836,6 +3707,10 @@ spec:
       jsonPath: .status.version
       name: Version
       type: string
+    - description: Time duration since creation of SveltosCluster
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -4193,6 +4068,14 @@ spec:
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
             properties:
+              agentLastReportTime:
+                description: |-
+                  AgentLastReportTime indicates the last time the Sveltos agent in the managed cluster
+                  successfully reported its status to the management cluster's API server.
+                  This field is updated exclusively when Sveltos operates in pull mode,
+                  serving as a heartbeat from the agent's perspective.
+                format: date-time
+                type: string
               connectionFailures:
                 default: 0
                 description: |-
@@ -4921,49 +4804,6 @@ spec:
                                                                         Namespace of the resource deployed in the Cluster.
                                                                         Empty for resources scoped at cluster level.
                                                                     type: string
-                                                                owner:
-                                                                    description: Owner is the list of ConfigMap/Secret containing this resource.
-                                                                    properties:
-                                                                        apiVersion:
-                                                                            description: API version of the referent.
-                                                                            type: string
-                                                                        fieldPath:
-                                                                            description: |-
-                                                                                If referring to a piece of an object instead of an entire object, this string
-                                                                                should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                                                For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                                                "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                                                the event) or if no container name is specified "spec.containers[2]" (container with
-                                                                                index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                                                referencing a part of an object.
-                                                                            type: string
-                                                                        kind:
-                                                                            description: |-
-                                                                                Kind of the referent.
-                                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                                            type: string
-                                                                        name:
-                                                                            description: |-
-                                                                                Name of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                                            type: string
-                                                                        namespace:
-                                                                            description: |-
-                                                                                Namespace of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                                            type: string
-                                                                        resourceVersion:
-                                                                            description: |-
-                                                                                Specific resourceVersion to which this reference is made, if any.
-                                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                                            type: string
-                                                                        uid:
-                                                                            description: |-
-                                                                                UID of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                                            type: string
-                                                                    type: object
-                                                                    x-kubernetes-map-type: atomic
                                                                 version:
                                                                     description: Version of the resource deployed in the Cluster.
                                                                     minLength: 1
@@ -4972,7 +4812,6 @@ spec:
                                                                 - group
                                                                 - kind
                                                                 - name
-                                                                - owner
                                                                 - version
                                                             type: object
                                                         type: array
@@ -5077,49 +4916,6 @@ spec:
                                                                         Namespace of the resource deployed in the Cluster.
                                                                         Empty for resources scoped at cluster level.
                                                                     type: string
-                                                                owner:
-                                                                    description: Owner is the list of ConfigMap/Secret containing this resource.
-                                                                    properties:
-                                                                        apiVersion:
-                                                                            description: API version of the referent.
-                                                                            type: string
-                                                                        fieldPath:
-                                                                            description: |-
-                                                                                If referring to a piece of an object instead of an entire object, this string
-                                                                                should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                                                For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                                                "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                                                the event) or if no container name is specified "spec.containers[2]" (container with
-                                                                                index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                                                referencing a part of an object.
-                                                                            type: string
-                                                                        kind:
-                                                                            description: |-
-                                                                                Kind of the referent.
-                                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                                            type: string
-                                                                        name:
-                                                                            description: |-
-                                                                                Name of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                                            type: string
-                                                                        namespace:
-                                                                            description: |-
-                                                                                Namespace of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                                            type: string
-                                                                        resourceVersion:
-                                                                            description: |-
-                                                                                Specific resourceVersion to which this reference is made, if any.
-                                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                                            type: string
-                                                                        uid:
-                                                                            description: |-
-                                                                                UID of the referent.
-                                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                                            type: string
-                                                                    type: object
-                                                                    x-kubernetes-map-type: atomic
                                                                 version:
                                                                     description: Version of the resource deployed in the Cluster.
                                                                     minLength: 1
@@ -5128,7 +4924,6 @@ spec:
                                                                 - group
                                                                 - kind
                                                                 - name
-                                                                - owner
                                                                 - version
                                                             type: object
                                                         type: array
@@ -6537,49 +6332,6 @@ spec:
                                                         Namespace of the resource deployed in the Cluster.
                                                         Empty for resources scoped at cluster level.
                                                     type: string
-                                                owner:
-                                                    description: Owner is the list of ConfigMap/Secret containing this resource.
-                                                    properties:
-                                                        apiVersion:
-                                                            description: API version of the referent.
-                                                            type: string
-                                                        fieldPath:
-                                                            description: |-
-                                                                If referring to a piece of an object instead of an entire object, this string
-                                                                should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                                For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                                "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                                the event) or if no container name is specified "spec.containers[2]" (container with
-                                                                index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                                referencing a part of an object.
-                                                            type: string
-                                                        kind:
-                                                            description: |-
-                                                                Kind of the referent.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                            type: string
-                                                        name:
-                                                            description: |-
-                                                                Name of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                            type: string
-                                                        namespace:
-                                                            description: |-
-                                                                Namespace of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                            type: string
-                                                        resourceVersion:
-                                                            description: |-
-                                                                Specific resourceVersion to which this reference is made, if any.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                            type: string
-                                                        uid:
-                                                            description: |-
-                                                                UID of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                            type: string
-                                                    type: object
-                                                    x-kubernetes-map-type: atomic
                                                 version:
                                                     description: Version of the resource deployed in the Cluster.
                                                     minLength: 1
@@ -6588,7 +6340,6 @@ spec:
                                                 - group
                                                 - kind
                                                 - name
-                                                - owner
                                                 - version
                                             type: object
                                     required:
@@ -6645,49 +6396,6 @@ spec:
                                                         Namespace of the resource deployed in the Cluster.
                                                         Empty for resources scoped at cluster level.
                                                     type: string
-                                                owner:
-                                                    description: Owner is the list of ConfigMap/Secret containing this resource.
-                                                    properties:
-                                                        apiVersion:
-                                                            description: API version of the referent.
-                                                            type: string
-                                                        fieldPath:
-                                                            description: |-
-                                                                If referring to a piece of an object instead of an entire object, this string
-                                                                should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                                For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                                "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                                the event) or if no container name is specified "spec.containers[2]" (container with
-                                                                index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                                referencing a part of an object.
-                                                            type: string
-                                                        kind:
-                                                            description: |-
-                                                                Kind of the referent.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                            type: string
-                                                        name:
-                                                            description: |-
-                                                                Name of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                            type: string
-                                                        namespace:
-                                                            description: |-
-                                                                Namespace of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                            type: string
-                                                        resourceVersion:
-                                                            description: |-
-                                                                Specific resourceVersion to which this reference is made, if any.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                            type: string
-                                                        uid:
-                                                            description: |-
-                                                                UID of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                            type: string
-                                                    type: object
-                                                    x-kubernetes-map-type: atomic
                                                 version:
                                                     description: Version of the resource deployed in the Cluster.
                                                     minLength: 1
@@ -6696,7 +6404,6 @@ spec:
                                                 - group
                                                 - kind
                                                 - name
-                                                - owner
                                                 - version
                                             type: object
                                     required:
@@ -6791,49 +6498,6 @@ spec:
                                                         Namespace of the resource deployed in the Cluster.
                                                         Empty for resources scoped at cluster level.
                                                     type: string
-                                                owner:
-                                                    description: Owner is the list of ConfigMap/Secret containing this resource.
-                                                    properties:
-                                                        apiVersion:
-                                                            description: API version of the referent.
-                                                            type: string
-                                                        fieldPath:
-                                                            description: |-
-                                                                If referring to a piece of an object instead of an entire object, this string
-                                                                should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                                For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                                "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                                the event) or if no container name is specified "spec.containers[2]" (container with
-                                                                index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                                referencing a part of an object.
-                                                            type: string
-                                                        kind:
-                                                            description: |-
-                                                                Kind of the referent.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                            type: string
-                                                        name:
-                                                            description: |-
-                                                                Name of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                            type: string
-                                                        namespace:
-                                                            description: |-
-                                                                Namespace of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                            type: string
-                                                        resourceVersion:
-                                                            description: |-
-                                                                Specific resourceVersion to which this reference is made, if any.
-                                                                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                            type: string
-                                                        uid:
-                                                            description: |-
-                                                                UID of the referent.
-                                                                More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                            type: string
-                                                    type: object
-                                                    x-kubernetes-map-type: atomic
                                                 version:
                                                     description: Version of the resource deployed in the Cluster.
                                                     minLength: 1
@@ -6842,7 +6506,6 @@ spec:
                                                 - group
                                                 - kind
                                                 - name
-                                                - owner
                                                 - version
                                             type: object
                                     required:
@@ -8027,6 +7690,11 @@ spec:
                                 x-kubernetes-list-map-keys:
                                     - featureID
                                 x-kubernetes-list-type: map
+                            failureMessage:
+                                description: |-
+                                    FailureMessage reports any error encountered during the reconciliation of the ClusterSummary
+                                    instance itself, *excluding* errors related to the deployment of individual features.
+                                type: string
                             featureSummaries:
                                 description: |-
                                     FeatureSummaries reports the status of each workload cluster feature
@@ -8080,6 +7748,7 @@ spec:
                                                 - FailedNonRetriable
                                                 - Removing
                                                 - Removed
+                                                - AgentRemoving
                                             type: string
                                     required:
                                         - featureID
@@ -8126,6 +7795,13 @@ spec:
                                     type: object
                                 type: array
                                 x-kubernetes-list-type: atomic
+                            nextReconcileTime:
+                                description: |-
+                                    NextReconcileTime is the earliest time when this resource should be reconciled again.
+                                    Controller skips reconciliation if current time is before this timestamp.
+                                    If not set, reconciliations will happen as usual.
+                                format: date-time
+                                type: string
                         type: object
                 type: object
           served: true

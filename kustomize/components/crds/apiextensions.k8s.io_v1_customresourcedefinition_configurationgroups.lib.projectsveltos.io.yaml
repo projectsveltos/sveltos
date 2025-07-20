@@ -44,8 +44,9 @@ spec:
                 - Remove
                 type: string
               configurationItem:
-                description: ConfigurationItems represents a list of configurations
-                  to deploy
+                description: |-
+                  ConfigurationItems represents a list of configurations to deploy
+                  The order of items in this list determines deployment sequence
                 items:
                   properties:
                     contentRef:
@@ -101,6 +102,7 @@ spec:
                       type: string
                   type: object
                 type: array
+                x-kubernetes-list-type: atomic
               continueOnConflict:
                 default: false
                 description: |-
@@ -221,6 +223,27 @@ spec:
                   When set to true, when any mounted ConfigMap/Secret is modified, Sveltos automatically
                   starts a rolling upgrade for Deployment/StatefulSet/DaemonSet instances mounting it.
                 type: boolean
+              requestorHash:
+                description: |-
+                  RequestorHash represents a hash of the state of the requestor that created this ConfigurationGroup.
+                  This field is optional and can be used to determine when the creating resource's state has
+                  changed and the ConfigurationGroup needs to be updated accordingly.
+                format: byte
+                type: string
+              serviceAccountName:
+                description: |-
+                  ServiceAccountName is the name of the ServiceAccount to impersonate when applying
+                  the configuration. If empty, the default ServiceAccount for the Sveltos-applier
+                  will be used.
+                  The ServiceAccount must exist in the managed cluster.
+                type: string
+              serviceAccountNamespace:
+                description: |-
+                  ServiceAccountNamespace is the namespace of the ServiceAccount to impersonate when applying
+                  the configuration. If empty, the default namespace for the Sveltos-applier
+                  will be used (typically the same namespace where the Sveltos-applier is deployed).
+                  The ServiceAccount must exist in the managed cluster.
+                type: string
               sourceRef:
                 description: |-
                   SourceRef is the user facing Sveltos resource that caused this ConfigurationGroup to be
@@ -282,6 +305,18 @@ spec:
                 format: int32
                 minimum: 1
                 type: integer
+              updatePhase:
+                default: Ready
+                description: |-
+                  UpdatePhase indicates the current phase of configuration updates. When set to "Preparing",
+                  it signals that a new version of this ConfigurationGroup is being prepared, forcing
+                  metadata.generation to advance. This allows detection of differences between
+                  status.observedGeneration and metadata.generation when agents process an older version,
+                  enabling tracking of update propagation across managed clusters.
+                enum:
+                - Ready
+                - Preparing
+                type: string
               validateHealths:
                 description: |-
                   ValidateHealths is a slice of Lua functions to run against
@@ -380,6 +415,22 @@ spec:
                 description: LastAppliedTime is the time feature was last reconciled
                 format: date-time
                 type: string
+              observedGeneration:
+                description: |-
+                  ObservedGeneration reflects the generation of the most recently observed ConfigurationGroup.
+                  When this value matches the ConfigurationGroup's metadata.generation, it indicates that the
+                  status reflects the latest desired specification. If observedGeneration is less than generation,
+                  it means the controller has not yet processed the latest changes to the specification.
+                format: int64
+                type: integer
+              observedRequestorHash:
+                description: |-
+                  ObservedRequestorHash reflects the requestor hash that was last processed by the controller.
+                  When this value matches the spec.requestorHash, it indicates that the controller has
+                  processed the latest state of the creating resource. If observedRequestorHash differs
+                  from spec.requestorHash, it means the requestor has changed and reconciliation is needed.
+                format: byte
+                type: string
               status:
                 description: Status represents the state of the feature in the workload
                   cluster
@@ -390,6 +441,7 @@ spec:
                 - FailedNonRetriable
                 - Removing
                 - Removed
+                - AgentRemoving
                 type: string
             type: object
         type: object

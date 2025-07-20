@@ -101,16 +101,8 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - debuggingconfigurations
-        - sveltosclusters
-        - sveltosclusters/status
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
+        - configurationbundles
+        - configurationgroups
         - rolerequests
       verbs:
         - create
@@ -119,6 +111,26 @@ rules:
         - list
         - patch
         - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationbundles/status
+      verbs:
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationgroups/status
+        - debuggingconfigurations
+        - sveltosclusters
+        - sveltosclusters/status
+      verbs:
+        - get
+        - list
         - watch
     - apiGroups:
         - rbac.authorization.k8s.io

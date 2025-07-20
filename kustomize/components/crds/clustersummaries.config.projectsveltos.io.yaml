@@ -1169,6 +1169,11 @@ spec:
                                 x-kubernetes-list-map-keys:
                                     - featureID
                                 x-kubernetes-list-type: map
+                            failureMessage:
+                                description: |-
+                                    FailureMessage reports any error encountered during the reconciliation of the ClusterSummary
+                                    instance itself, *excluding* errors related to the deployment of individual features.
+                                type: string
                             featureSummaries:
                                 description: |-
                                     FeatureSummaries reports the status of each workload cluster feature
@@ -1222,6 +1227,7 @@ spec:
                                                 - FailedNonRetriable
                                                 - Removing
                                                 - Removed
+                                                - AgentRemoving
                                             type: string
                                     required:
                                         - featureID
@@ -1268,6 +1274,13 @@ spec:
                                     type: object
                                 type: array
                                 x-kubernetes-list-type: atomic
+                            nextReconcileTime:
+                                description: |-
+                                    NextReconcileTime is the earliest time when this resource should be reconciled again.
+                                    Controller skips reconciliation if current time is before this timestamp.
+                                    If not set, reconciliations will happen as usual.
+                                format: date-time
+                                type: string
                         type: object
                 type: object
           served: true
