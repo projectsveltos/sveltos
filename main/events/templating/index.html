@@ -3221,10 +3221,10 @@
 </span></code></pre></div>
 </div>
 <p>After instantiation, EventTrigger fetches the corresponding <code>ConfigMap/Secret</code> based on the dynamically instantiated <code>namespace</code> and <code>name</code>.</p>
-<p>The above logic can change based on specific annotations of the referenced resources.</p>
+<p>Once fetched, Sveltos handles ConfigMap and Secret resources in two distinct ways, depending on specific annotations:</p>
 <ol>
-<li>If the resource does not have the annotation <strong>projectsveltos.io/instantiate</strong> set, the generated Sveltos ClusterProfile will directly reference the same <code>ConfigMap/Secret</code> resource. If the annotation <strong>projectsveltos.io/template</strong> is set, the Sveltos addon controller will instantiate the resource using the cluster's context before deploying it to any matching cluster.</li>
-<li>If the resource has the annotation <strong>projectsveltos.io/instantiate</strong> set, the EventTrigger will instantiate the <code>ConfigMap/Secret</code> using the resource data. The generated Sveltos ClusterProfile will reference the <code>ConfigMap/Secret</code> resource created by the EventTrigger.</li>
+<li>If the resource does not have the annotation <strong>projectsveltos.io/instantiate</strong> set, the generated Sveltos ClusterProfile will directly reference the same fetched <code>ConfigMap/Secret</code> resource. If the annotation <strong>projectsveltos.io/template</strong> is set, the Sveltos addon controller will first instantiate the resource (meaning it will process any templates within it) before deploying it to any matching clusters.</li>
+<li>If a resource has the <strong>projectsveltos.io/instantiate</strong> annotation, the EventTrigger component will be responsible for creating a new ConfigMap or Secret. It will use the event resource's data along with information from the managed cluster where the event occurred. The resulting Sveltos ClusterProfile will then reference this newly instantiated <code>ConfigMap/ Secret</code>.</li>
 </ol>
 <div class="admonition example">
 <p class="admonition-title">Example: EventTrigger.spec.policyRefs</p>
