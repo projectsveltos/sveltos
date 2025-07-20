@@ -83,6 +83,8 @@ rules:
         - lib.projectsveltos.io
       resources:
         - clusterhealthchecks
+        - configurationbundles
+        - configurationgroups
         - reloaderreports
       verbs:
         - create
@@ -109,6 +111,17 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - configurationbundles/status
+        - sveltosclusters
+      verbs:
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationgroups/status
         - debuggingconfigurations
         - healthchecks
         - sveltosclusters/status
@@ -135,15 +148,6 @@ rules:
         - get
         - list
         - update
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
-        - sveltosclusters
-      verbs:
-        - get
-        - list
-        - update
-        - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

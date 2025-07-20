@@ -108,12 +108,37 @@ rules:
       resources:
         - clustersets
         - clustersets/status
+        - configurationgroups/status
         - debuggingconfigurations
         - eventsources
         - sveltosclusters/status
       verbs:
         - get
         - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationbundles
+        - configurationgroups
+        - eventtriggers
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationbundles/status
+        - sveltosclusters
+      verbs:
+        - get
+        - list
+        - update
         - watch
     - apiGroups:
         - lib.projectsveltos.io
@@ -137,18 +162,6 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - eventtriggers
-      verbs:
-        - create
-        - delete
-        - get
-        - list
-        - patch
-        - update
-        - watch
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
         - eventtriggers/finalizers
       verbs:
         - update
@@ -161,13 +174,17 @@ rules:
         - patch
         - update
     - apiGroups:
-        - lib.projectsveltos.io
+        - source.toolkit.fluxcd.io
       resources:
-        - sveltosclusters
+        - buckets
+        - buckets/status
+        - gitrepositories
+        - gitrepositories/status
+        - ocirepositories
+        - ocirepositories/status
       verbs:
         - get
         - list
-        - update
         - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1

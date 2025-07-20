@@ -108,10 +108,10 @@ Users can express `ConfigMaps/Secret` resources as templates. These are dynamica
 
 After instantiation, EventTrigger fetches the corresponding `ConfigMap/Secret` based on the dynamically instantiated `namespace` and `name`.
 
-The above logic can change based on specific annotations of the referenced resources.
+Once fetched, Sveltos handles ConfigMap and Secret resources in two distinct ways, depending on specific annotations:
 
-1. If the resource does not have the annotation __projectsveltos.io/instantiate__ set, the generated Sveltos ClusterProfile will directly reference the same `ConfigMap/Secret` resource. If the annotation __projectsveltos.io/template__ is set, the Sveltos addon controller will instantiate the resource using the cluster's context before deploying it to any matching cluster.
-1. If the resource has the annotation __projectsveltos.io/instantiate__ set, the EventTrigger will instantiate the `ConfigMap/Secret` using the resource data. The generated Sveltos ClusterProfile will reference the `ConfigMap/Secret` resource created by the EventTrigger.
+1. If the resource does not have the annotation __projectsveltos.io/instantiate__ set, the generated Sveltos ClusterProfile will directly reference the same fetched `ConfigMap/Secret` resource. If the annotation __projectsveltos.io/template__ is set, the Sveltos addon controller will first instantiate the resource (meaning it will process any templates within it) before deploying it to any matching clusters.
+1. If a resource has the __projectsveltos.io/instantiate__ annotation, the EventTrigger component will be responsible for creating a new ConfigMap or Secret. It will use the event resource's data along with information from the managed cluster where the event occurred. The resulting Sveltos ClusterProfile will then reference this newly instantiated `ConfigMap/ Secret`.
 
 
 !!! Example "Example: EventTrigger.spec.policyRefs"
