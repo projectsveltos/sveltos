@@ -226,7 +226,7 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
     kind: Secret
     metadata:
       name: YOUR-CLUSTER-NAME-sveltos-kubeconfig
-      namespace: YOUR NAMESPACE
+      namespace: YOUR-CLUSTER-NAMESPACE
     data:
       kubeconfig: BASE64 ENCODED kubeconfig
     type: Opaque
