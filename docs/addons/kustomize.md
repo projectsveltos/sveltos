@@ -15,9 +15,13 @@ authors:
 
 ## Introduction to Kustomize and Sveltos
 
-The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1]. The git repository located at [https://github.com/gianlucam76/kustomize](https://github.com/gianlucam76/kustomize), comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every managed cluster matching the Sveltos *clusterSelector*.
+Sveltos can seamlessly integrate with [Flux](https://fluxcd.io/flux/) to automatically deploy Kustomize code in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.
 
-!!! example ""
+## Sveltos and Flux Sources
+
+The example demonstrates how Sveltos utilizes a Flux GitRepository[^1]. The git repository is located [here](https://github.com/gianlucam76/kustomize) and comprises multiple kustomize directories. Sveltos executes Kustomize on the `helloWorld` directory and deploys the Kustomize output to the `eng` namespace for every Sveltos **managed** cluster matching the defined *clusterSelector*.
+
+!!! example "Sveltos ClusterProfile"
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
@@ -37,7 +41,7 @@ The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1
         targetNamespace: eng
     ```
 
-!!! example ""
+!!! example "Flux GitRepository Resource"
     ```yaml
     ---
     apiVersion: source.toolkit.fluxcd.io/v1
@@ -53,6 +57,9 @@ The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository[^1
       url: ssh://git@github.com/gianlucam76/kustomize
     ```
 
+!!! note
+    Deploy both YAML manifest files to the Sveltos management cluster.
+
 ```bash
 $ sveltosctl show addons
 +-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
@@ -66,14 +73,14 @@ $ sveltosctl show addons
 
 ## Substitution and Templating
 
-The Kustomize build process can generate parameterized YAML manifests. Sveltos can then instantiate these manifests using values provided in two locations:
+The Kustomize build process can generate parameterized YAML manifests. Sveltos can then instantiate the manifests using values provided in two locations.
 
-1. `spec.kustomizationRefs.Values`: This field defines a list of key-value pairs directly within the ClusterProfile. These values are readily available for Sveltos to substitute into the template.
-1. `spec.kustomizationRefs.ValuesFrom`: This field allows referencing external sources like ConfigMaps or Secrets. Their data sections contain key-value pairs that Sveltos can inject during template instantiation.
+1. `spec.kustomizationRefs.Values`: The field defines a list of key-value pairs directly within the ClusterProfile. These values are readily available for Sveltos to substitute into the template.
+1. `spec.kustomizationRefs.ValuesFrom`: The field allows referencing external sources like ConfigMaps or Secrets. Their data sections contain key-value pairs that Sveltos can inject during template instantiation.
 
 ### Example: Sveltos Value Injection
 
-Consider a Kustomize build output that includes a template for a deployment manifest:
+Consider a Kustomize build output that includes a template for a deployment manifest.
 
 !!! example ""
     ```yaml
@@ -90,7 +97,7 @@ Consider a Kustomize build output that includes a template for a deployment mani
       image: nginx:{{ .Version }}  # Placeholder for image version
     ```
 
-Now, imagine Sveltos receives a ClusterProfile containing the following key-value pairs:
+Imagine Sveltos receives a `ClusterProfile` containing the below key-value pairs.
 
 !!! example ""
     ```yaml
@@ -115,12 +122,12 @@ Now, imagine Sveltos receives a ClusterProfile containing the following key-valu
           Version: v1.2.0
     ```
 
-During deployment, Sveltos injects these values into the template, replacing the placeholders:
+During deployment, Sveltos injects these values into the template, replacing the below placeholders.
 
 - {{ default "west" .Region }} is replaced with "east" (from the ClusterProfile's values).
 - {{ .Version }} is replaced with "v1.2.0" (from the ClusterProfile's values).
 
-This process transforms the template into the following concrete deployment manifest:
+Taking this approach, we tranform the template into a concrete deployment manifest like the below.
 
 !!! example ""
     ```yaml
@@ -137,9 +144,9 @@ This process transforms the template into the following concrete deployment mani
       image: nginx:v1.2.0 # Replaced value
     ```
 
-### Template-based Referencing for ValuesFrom
+### Example: Template-based Referencing for ValuesFrom
 
-In the ValuesFrom section, we can express `ConfigMap` and `Secret` names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
+In the _ValuesFrom_ section, we can express `ConfigMap` and `Secret` names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.
 
 Available cluster information:
 
@@ -147,7 +154,7 @@ Available cluster information:
 - cluster name: `.Cluster.metadata.name`
 - cluster type: `.Cluster.kind`
 
-Consider two SveltosCluster instances in the _civo_ namespace:
+Consider two SveltosCluster instances in the _civo_ namespace.
 
 ```bash
 $ kubectl get sveltoscluster -n civo --show-labels
@@ -156,7 +163,7 @@ pre-production   true    v1.29.2+k3s1   env=civo,projectsveltos.io/k8s-version=v
 production       true    v1.28.7+k3s1   env=civo,projectsveltos.io/k8s-version=v1.28.7
 ```
 
-Additionally, there are two ConfigMaps within the civo namespace. Those ConfigMaps Data sections contain same keys but different values
+There are two ConfigMaps within the _civo_ namespace. The ConfigMaps Data sections contain the same keys but different values.
 
 ```bash
 $ kubectl get configmap -n civo
@@ -165,14 +172,12 @@ hello-world-pre-production            2      9m40s
 hello-world-production                2      9m45s
 ```
 
-The only difference between these ConfigMaps is .
-
-Following ClusterProfile:
+The below Sveltos ClusterProfile includes the following.
 
 1. *Matches both SveltosClusters*
-2. *Dynamic ConfigMap Selection*:
+1. *Dynamic ConfigMap Selection*:
     - For the `pre-production` cluster, the profile should use the `hello-world-pre-production` ConfigMap.
-    - For the `production` cluster, the profile should use the `hello-world-production` ConfigMaps.
+    - For the `production` cluster, the profile should use the `hello-world-production` ConfigMap.
 
 !!! example ""
     ```yaml  hl_lines="16-19"
@@ -198,45 +203,44 @@ Following ClusterProfile:
           namespace: civo
     ```
 
-### Dynamic Values with Nested Templates
+### Example: Dynamic Values with Nested Templates
 
-Sveltos offers the capability to define key-value pairs where the value itself can be another template. This nested template can reference resources present in the management cluster.
-
- For example, consider the following key-value pair within a ClusterProfile:
+Sveltos offers the capability to define key-value pairs where the value itself can be another template. The nested template can reference resources present in the **management** cluster. For example, consider the below key-value pair within a ClusterProfile.
 
 ```yaml
   Region:  {{ index .Cluster.metadata.labels "region" }}
   Version: v1.2.0
 ```
 
-In this scenario, the value Region isn't a static string, but a template referencing the _.Cluster.metadata.labels.region_ property. During deployment, Sveltos retrieves information from the **management** cluster's Cluster instance (represented here as .Cluster). It then extracts the value associated with the "region" label using the index function and assigns it to the Region key-value pair.
+The value Region is not a static string, but a template referencing the _.Cluster.metadata.labels.region_ property.
 
-This mechanism allows you to dynamically populate values based on the **management** cluster's configuration, ensuring deployments adapt to specific environments.
+During deployment, Sveltos retrieves information from the **management** cluster's Cluster instance (represented here as .Cluster). It then extracts the value associated with the "region" label using the index function and assigns it to the Region key-value pair.
 
-### Summary
+This mechanism allows us to dynamically populate values based on the **management** cluster's configuration, ensuring deployments adapt to specific environments.
+
+### Example: All-in-One
 
 The section outlines how Sveltos manages deployments using Kustomize and key-value pairs.
 
 1. **Kustomize Build**: Sveltos initiates a Kustomize build process to prepare the deployment manifest template.
 1. **Value Collection**: Sveltos gathers key-value pairs for deployment customization from two sources:
-
     - Directly defined values within the ClusterProfile's spec.kustomizationRefs.values field.
     - ConfigMap/Secret references specified in spec.kustomizationRefs.valuesFrom. Sveltos extracts key-value pairs from the data section of these referenced resources.
 
 1. **Optional: Nested Template Processing (Advanced Usage)**: For advanced scenarios, a key-value pair's value itself can be a template. Sveltos evaluates these nested templates using data available in the context, such as information from the management cluster. This allows dynamic value construction based on the management cluster's configuration.
 1. **Template Instantiation**: Finally, Sveltos uses the processed key-value pairs to substitute placeholder values within the Kustomize build output. These placeholders are typically denoted by _{{ .VariableName }}_.
 
-This process ensures that deployments are customized with appropriate values based on the ClusterProfile configuration and, optionally, the management cluster's state.
+This process ensures deployments are customized with appropriate values based on the ClusterProfile configuration and, optionally, the management cluster's state.
 
-This is a fully working example:
+Fully working example:
 
 1. Flux is used to sync git repository https://github.com/gianlucam76/kustomize
 1. The Kustomize build of `template/helloWorld` is a template
 1. key-value pairs (`Values` field) are expressed as template, so Sveltos will instatiate those using the Cluster instance
-1. instantiated key-value pairs are used by Sveltos to instantiate the output of the Kustomize build
-1. resources are finally deployed to managed cluster
+1. Instantiated key-value pairs are used by Sveltos to instantiate the output of the Kustomize build
+1. Resources are finally deployed to the managed cluster
 
-!!! example ""
+!!! example "Sveltos ClusterProfile"
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
@@ -262,9 +266,7 @@ This is a fully working example:
       syncMode: Continuous
     ```
 
-with GitRepository
-
-!!! example ""
+!!! example "Flux GitRepository Resource"
     ```yaml
     ---
     apiVersion: source.toolkit.fluxcd.io/v1
@@ -291,9 +293,9 @@ $ sveltosctl show addons
 +-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+--------------------------------------+
 ```
 
-### Express Path as Template
+### Example: Express Path as Template
 
-The __path__ field within a kustomizationRef object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
+The __path__ field within a _kustomizationRef_ object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
 
 ```yaml
 ---
@@ -323,11 +325,11 @@ For instance:
 
 This approach allows for flexible configuration based on individual cluster environments.
 
-### Kustomize with ConfigMaps
+### Example: Kustomize with ConfigMaps
 
-If you have directories containing Kustomize resources, you can include them in a ConfigMap (or a Secret) and have a ClusterProfile reference it.
+Directories containing Kustomize resources can be included in a ConfigMap (or a Secret) and use a Sveltos ClusterProfile to reference it.
 
-In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, and then we create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
+In this example, we are cloning the git repository `https://github.com/gianlucam76/kustomize` locally, then we create a `kustomize.tar.gz` with the content of the helloWorldWithOverlays directory.
 
 ```bash
 $ git clone git@github.com:gianlucam76/kustomize.git
@@ -339,7 +341,7 @@ $ kubectl create configmap kustomize --from-file=kustomize.tar.gz
 
 The below ClusterProfile will use the Kustomize SDK to get all the resources needed for deployment. Then will deploy these in the `production` namespace of the managed clusters with the Sveltos clusterSelector set to *env=fv*.
 
-!!! example ""
+!!! example "Sveltos ClusterProfile"
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
@@ -369,6 +371,10 @@ $ sveltosctl show addons
 | default/sveltos-management-workload | :ConfigMap      | production | production-the-map        | N/A     | 2023-05-16 00:59:13 -0700 PDT | kustomize-with-configmap |
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
 ```
+
+## Next Steps
+
+For a better understanding of the Sveltos and Flux integration, check out the Flux Sources examples [here](./example_flux_sources.md).
 
 [^1]: This __ClusterProfile__ allows you to install Flux in your management cluster. However, before applying it, ensure your management cluster has labels that match the specified clusterSelector.
 ```yaml
