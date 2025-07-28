@@ -1219,6 +1219,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sveltos-and-flux-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sveltos and Flux Sources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#substitution-and-templating" class="md-nav__link">
     <span class="md-ellipsis">
       Substitution and Templating
@@ -1238,45 +1247,45 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-based-referencing-for-valuesfrom" class="md-nav__link">
+  <a href="#example-template-based-referencing-for-valuesfrom" class="md-nav__link">
     <span class="md-ellipsis">
-      Template-based Referencing for ValuesFrom
+      Example: Template-based Referencing for ValuesFrom
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynamic-values-with-nested-templates" class="md-nav__link">
+  <a href="#example-dynamic-values-with-nested-templates" class="md-nav__link">
     <span class="md-ellipsis">
-      Dynamic Values with Nested Templates
+      Example: Dynamic Values with Nested Templates
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#example-all-in-one" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Example: All-in-One
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#express-path-as-template" class="md-nav__link">
+  <a href="#example-express-path-as-template" class="md-nav__link">
     <span class="md-ellipsis">
-      Express Path as Template
+      Example: Express Path as Template
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#kustomize-with-configmaps" class="md-nav__link">
+  <a href="#example-kustomize-with-configmaps" class="md-nav__link">
     <span class="md-ellipsis">
-      Kustomize with ConfigMaps
+      Example: Kustomize with ConfigMaps
     </span>
   </a>
   
@@ -1284,6 +1293,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
   
 </li>
       
@@ -3099,6 +3117,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sveltos-and-flux-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sveltos and Flux Sources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#substitution-and-templating" class="md-nav__link">
     <span class="md-ellipsis">
       Substitution and Templating
@@ -3118,45 +3145,45 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-based-referencing-for-valuesfrom" class="md-nav__link">
+  <a href="#example-template-based-referencing-for-valuesfrom" class="md-nav__link">
     <span class="md-ellipsis">
-      Template-based Referencing for ValuesFrom
+      Example: Template-based Referencing for ValuesFrom
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynamic-values-with-nested-templates" class="md-nav__link">
+  <a href="#example-dynamic-values-with-nested-templates" class="md-nav__link">
     <span class="md-ellipsis">
-      Dynamic Values with Nested Templates
+      Example: Dynamic Values with Nested Templates
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#example-all-in-one" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Example: All-in-One
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#express-path-as-template" class="md-nav__link">
+  <a href="#example-express-path-as-template" class="md-nav__link">
     <span class="md-ellipsis">
-      Express Path as Template
+      Example: Express Path as Template
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#kustomize-with-configmaps" class="md-nav__link">
+  <a href="#example-kustomize-with-configmaps" class="md-nav__link">
     <span class="md-ellipsis">
-      Kustomize with ConfigMaps
+      Example: Kustomize with ConfigMaps
     </span>
   </a>
   
@@ -3164,6 +3191,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
   
 </li>
       
@@ -3189,8 +3225,11 @@
   <h1>Deploy Kustomize Kubernetes manifests</h1>
 
 <h2 id="introduction-to-kustomize-and-sveltos">Introduction to Kustomize and Sveltos</h2>
-<p>The below YAML snippet demonstrates how Sveltos utilizes a Flux GitRepository<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The git repository located at <a href="https://github.com/gianlucam76/kustomize">https://github.com/gianlucam76/kustomize</a>, comprises multiple kustomize directories. In this example, Sveltos executes Kustomize on the <code>helloWorld</code> directory and deploys the Kustomize output to the <code>eng</code> namespace for every managed cluster matching the Sveltos <em>clusterSelector</em>.</p>
+<p>Sveltos can seamlessly integrate with <a href="https://fluxcd.io/flux/">Flux</a> to automatically deploy Kustomize code in a Git repository or a Bucket. This powerful combination allows you to manage Kubernetes configurations in a central location and leverage Sveltos to target deployments across clusters.</p>
+<h2 id="sveltos-and-flux-sources">Sveltos and Flux Sources</h2>
+<p>The example demonstrates how Sveltos utilizes a Flux GitRepository<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The git repository is located <a href="https://github.com/gianlucam76/kustomize">here</a> and comprises multiple kustomize directories. Sveltos executes Kustomize on the <code>helloWorld</code> directory and deploys the Kustomize output to the <code>eng</code> namespace for every Sveltos <strong>managed</strong> cluster matching the defined <em>clusterSelector</em>.</p>
 <div class="admonition example">
+<p class="admonition-title">Sveltos ClusterProfile</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3210,6 +3249,7 @@
 </span></code></pre></div>
 </div>
 <div class="admonition example">
+<p class="admonition-title">Flux GitRepository Resource</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nn">---</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3224,6 +3264,10 @@
 </span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh://git@github.com/gianlucam76/kustomize</span>
 </span></code></pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Deploy both YAML manifest files to the Sveltos management cluster.</p>
+</div>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>addons
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>+-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">|</span><span class="w">               </span>CLUSTER<span class="w">               </span><span class="p">|</span><span class="w">  </span>RESOURCE<span class="w"> </span>TYPE<span class="w">  </span><span class="p">|</span><span class="w"> </span>NAMESPACE<span class="w"> </span><span class="p">|</span><span class="w">      </span>NAME<span class="w">      </span><span class="p">|</span><span class="w"> </span>VERSION<span class="w"> </span><span class="p">|</span><span class="w">             </span>TIME<span class="w">              </span><span class="p">|</span><span class="w">           </span>PROFILES<span class="w">              </span><span class="p">|</span>
@@ -3234,13 +3278,13 @@
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>+-------------------------------------+-----------------+-----------+----------------+---------+-------------------------------+---------------------------------+
 </span></code></pre></div>
 <h2 id="substitution-and-templating">Substitution and Templating</h2>
-<p>The Kustomize build process can generate parameterized YAML manifests. Sveltos can then instantiate these manifests using values provided in two locations:</p>
+<p>The Kustomize build process can generate parameterized YAML manifests. Sveltos can then instantiate the manifests using values provided in two locations.</p>
 <ol>
-<li><code>spec.kustomizationRefs.Values</code>: This field defines a list of key-value pairs directly within the ClusterProfile. These values are readily available for Sveltos to substitute into the template.</li>
-<li><code>spec.kustomizationRefs.ValuesFrom</code>: This field allows referencing external sources like ConfigMaps or Secrets. Their data sections contain key-value pairs that Sveltos can inject during template instantiation.</li>
+<li><code>spec.kustomizationRefs.Values</code>: The field defines a list of key-value pairs directly within the ClusterProfile. These values are readily available for Sveltos to substitute into the template.</li>
+<li><code>spec.kustomizationRefs.ValuesFrom</code>: The field allows referencing external sources like ConfigMaps or Secrets. Their data sections contain key-value pairs that Sveltos can inject during template instantiation.</li>
 </ol>
 <h3 id="example-sveltos-value-injection">Example: Sveltos Value Injection</h3>
-<p>Consider a Kustomize build output that includes a template for a deployment manifest:</p>
+<p>Consider a Kustomize build output that includes a template for a deployment manifest.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
@@ -3255,7 +3299,7 @@
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:{{ .Version }}</span><span class="w">  </span><span class="c1"># Placeholder for image version</span>
 </span></code></pre></div>
 </div>
-<p>Now, imagine Sveltos receives a ClusterProfile containing the following key-value pairs:</p>
+<p>Imagine Sveltos receives a <code>ClusterProfile</code> containing the below key-value pairs.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
@@ -3278,12 +3322,12 @@
 </span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">      </span><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1.2.0</span>
 </span></code></pre></div>
 </div>
-<p>During deployment, Sveltos injects these values into the template, replacing the placeholders:</p>
+<p>During deployment, Sveltos injects these values into the template, replacing the below placeholders.</p>
 <ul>
 <li>{{ default "west" .Region }} is replaced with "east" (from the ClusterProfile's values).</li>
 <li>{{ .Version }} is replaced with "v1.2.0" (from the ClusterProfile's values).</li>
 </ul>
-<p>This process transforms the template into the following concrete deployment manifest:</p>
+<p>Taking this approach, we tranform the template into a concrete deployment manifest like the below.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nn">---</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
@@ -3298,33 +3342,32 @@
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:v1.2.0</span><span class="w"> </span><span class="c1"># Replaced value</span>
 </span></code></pre></div>
 </div>
-<h3 id="template-based-referencing-for-valuesfrom">Template-based Referencing for ValuesFrom</h3>
-<p>In the ValuesFrom section, we can express <code>ConfigMap</code> and <code>Secret</code> names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.</p>
+<h3 id="example-template-based-referencing-for-valuesfrom">Example: Template-based Referencing for ValuesFrom</h3>
+<p>In the <em>ValuesFrom</em> section, we can express <code>ConfigMap</code> and <code>Secret</code> names as templates and dynamically generate them using cluster information. This allows for easier management and reduces redundancy.</p>
 <p>Available cluster information:</p>
 <ul>
 <li>cluster namespace: use <code>.Cluster.metadata.namespace</code></li>
 <li>cluster name: <code>.Cluster.metadata.name</code></li>
 <li>cluster type: <code>.Cluster.kind</code></li>
 </ul>
-<p>Consider two SveltosCluster instances in the <em>civo</em> namespace:</p>
+<p>Consider two SveltosCluster instances in the <em>civo</em> namespace.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>civo<span class="w"> </span>--show-labels
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>NAME<span class="w">             </span>READY<span class="w">   </span>VERSION<span class="w">        </span>LABELS
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>pre-production<span class="w">   </span><span class="nb">true</span><span class="w">    </span>v1.29.2+k3s1<span class="w">   </span><span class="nv">env</span><span class="o">=</span>civo,projectsveltos.io/k8s-version<span class="o">=</span>v1.29.2
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>production<span class="w">       </span><span class="nb">true</span><span class="w">    </span>v1.28.7+k3s1<span class="w">   </span><span class="nv">env</span><span class="o">=</span>civo,projectsveltos.io/k8s-version<span class="o">=</span>v1.28.7
 </span></code></pre></div>
-<p>Additionally, there are two ConfigMaps within the civo namespace. Those ConfigMaps Data sections contain same keys but different values</p>
+<p>There are two ConfigMaps within the <em>civo</em> namespace. The ConfigMaps Data sections contain the same keys but different values.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>-n<span class="w"> </span>civo
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>NAME<span class="w">                                  </span>DATA<span class="w">   </span>AGE
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>hello-world-pre-production<span class="w">            </span><span class="m">2</span><span class="w">      </span>9m40s
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>hello-world-production<span class="w">                </span><span class="m">2</span><span class="w">      </span>9m45s
 </span></code></pre></div>
-<p>The only difference between these ConfigMaps is .</p>
-<p>Following ClusterProfile:</p>
+<p>The below Sveltos ClusterProfile includes the following.</p>
 <ol>
 <li><em>Matches both SveltosClusters</em></li>
 <li><em>Dynamic ConfigMap Selection</em>:<ul>
 <li>For the <code>pre-production</code> cluster, the profile should use the <code>hello-world-pre-production</code> ConfigMap.</li>
-<li>For the <code>production</code> cluster, the profile should use the <code>hello-world-production</code> ConfigMaps.</li>
+<li>For the <code>production</code> cluster, the profile should use the <code>hello-world-production</code> ConfigMap.</li>
 </ul>
 </li>
 </ol>
@@ -3351,15 +3394,15 @@
 </span></span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
 </span></code></pre></div>
 </div>
-<h3 id="dynamic-values-with-nested-templates">Dynamic Values with Nested Templates</h3>
-<p>Sveltos offers the capability to define key-value pairs where the value itself can be another template. This nested template can reference resources present in the management cluster.</p>
-<p>For example, consider the following key-value pair within a ClusterProfile:</p>
+<h3 id="example-dynamic-values-with-nested-templates">Example: Dynamic Values with Nested Templates</h3>
+<p>Sveltos offers the capability to define key-value pairs where the value itself can be another template. The nested template can reference resources present in the <strong>management</strong> cluster. For example, consider the below key-value pair within a ClusterProfile.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">  </span><span class="nt">Region</span><span class="p">:</span><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">index .Cluster.metadata.labels &quot;region&quot;</span><span class="w"> </span><span class="p p-Indicator">}}</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1.2.0</span>
 </span></code></pre></div>
-<p>In this scenario, the value Region isn't a static string, but a template referencing the <em>.Cluster.metadata.labels.region</em> property. During deployment, Sveltos retrieves information from the <strong>management</strong> cluster's Cluster instance (represented here as .Cluster). It then extracts the value associated with the "region" label using the index function and assigns it to the Region key-value pair.</p>
-<p>This mechanism allows you to dynamically populate values based on the <strong>management</strong> cluster's configuration, ensuring deployments adapt to specific environments.</p>
-<h3 id="summary">Summary</h3>
+<p>The value Region is not a static string, but a template referencing the <em>.Cluster.metadata.labels.region</em> property.</p>
+<p>During deployment, Sveltos retrieves information from the <strong>management</strong> cluster's Cluster instance (represented here as .Cluster). It then extracts the value associated with the "region" label using the index function and assigns it to the Region key-value pair.</p>
+<p>This mechanism allows us to dynamically populate values based on the <strong>management</strong> cluster's configuration, ensuring deployments adapt to specific environments.</p>
+<h3 id="example-all-in-one">Example: All-in-One</h3>
 <p>The section outlines how Sveltos manages deployments using Kustomize and key-value pairs.</p>
 <ol>
 <li><strong>Kustomize Build</strong>: Sveltos initiates a Kustomize build process to prepare the deployment manifest template.</li>
@@ -3375,16 +3418,17 @@
 </li>
 <li><strong>Template Instantiation</strong>: Finally, Sveltos uses the processed key-value pairs to substitute placeholder values within the Kustomize build output. These placeholders are typically denoted by <em>{{ .VariableName }}</em>.</li>
 </ol>
-<p>This process ensures that deployments are customized with appropriate values based on the ClusterProfile configuration and, optionally, the management cluster's state.</p>
-<p>This is a fully working example:</p>
+<p>This process ensures deployments are customized with appropriate values based on the ClusterProfile configuration and, optionally, the management cluster's state.</p>
+<p>Fully working example:</p>
 <ol>
 <li>Flux is used to sync git repository https://github.com/gianlucam76/kustomize</li>
 <li>The Kustomize build of <code>template/helloWorld</code> is a template</li>
 <li>key-value pairs (<code>Values</code> field) are expressed as template, so Sveltos will instatiate those using the Cluster instance</li>
-<li>instantiated key-value pairs are used by Sveltos to instantiate the output of the Kustomize build</li>
-<li>resources are finally deployed to managed cluster</li>
+<li>Instantiated key-value pairs are used by Sveltos to instantiate the output of the Kustomize build</li>
+<li>Resources are finally deployed to the managed cluster</li>
 </ol>
 <div class="admonition example">
+<p class="admonition-title">Sveltos ClusterProfile</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nn">---</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3409,8 +3453,8 @@
 </span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
 </span></code></pre></div>
 </div>
-<p>with GitRepository</p>
 <div class="admonition example">
+<p class="admonition-title">Flux GitRepository Resource</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nn">---</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
@@ -3434,8 +3478,8 @@
 </span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">|</span><span class="w"> </span>default/clusterapi-workload<span class="w"> </span><span class="p">|</span><span class="w"> </span>:ConfigMap<span class="w">      </span><span class="p">|</span><span class="w"> </span>eng<span class="w">       </span><span class="p">|</span><span class="w"> </span>the-map<span class="w">        </span><span class="p">|</span><span class="w"> </span>N/A<span class="w">     </span><span class="p">|</span><span class="w"> </span><span class="m">2024</span>-05-01<span class="w"> </span><span class="m">11</span>:43:54<span class="w"> </span>+0200<span class="w"> </span>CEST<span class="w"> </span><span class="p">|</span><span class="w"> </span>ClusterProfile/hello-world-with-template<span class="w"> </span><span class="p">|</span>
 </span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>+-----------------------------+-----------------+-----------+----------------+---------+--------------------------------+--------------------------------------+
 </span></code></pre></div>
-<h3 id="express-path-as-template">Express Path as Template</h3>
-<p>The <strong>path</strong> field within a kustomizationRef object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.</p>
+<h3 id="example-express-path-as-template">Example: Express Path as Template</h3>
+<p>The <strong>path</strong> field within a <em>kustomizationRef</em> object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nn">---</span>
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3460,9 +3504,9 @@
 <li>Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.</li>
 </ol>
 <p>This approach allows for flexible configuration based on individual cluster environments.</p>
-<h3 id="kustomize-with-configmaps">Kustomize with ConfigMaps</h3>
-<p>If you have directories containing Kustomize resources, you can include them in a ConfigMap (or a Secret) and have a ClusterProfile reference it.</p>
-<p>In this example, we are cloning the git repository <code>https://github.com/gianlucam76/kustomize</code> locally, and then we create a <code>kustomize.tar.gz</code> with the content of the helloWorldWithOverlays directory.</p>
+<h3 id="example-kustomize-with-configmaps">Example: Kustomize with ConfigMaps</h3>
+<p>Directories containing Kustomize resources can be included in a ConfigMap (or a Secret) and use a Sveltos ClusterProfile to reference it.</p>
+<p>In this example, we are cloning the git repository <code>https://github.com/gianlucam76/kustomize</code> locally, then we create a <code>kustomize.tar.gz</code> with the content of the helloWorldWithOverlays directory.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:gianlucam76/kustomize.git
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>$<span class="w"> </span>tar<span class="w"> </span>-czf<span class="w"> </span>kustomize.tar.gz<span class="w"> </span>-C<span class="w"> </span>kustomize/helloWorldWithOverlays<span class="w"> </span>.
@@ -3471,6 +3515,7 @@
 </span></code></pre></div>
 <p>The below ClusterProfile will use the Kustomize SDK to get all the resources needed for deployment. Then will deploy these in the <code>production</code> namespace of the managed clusters with the Sveltos clusterSelector set to <em>env=fv</em>.</p>
 <div class="admonition example">
+<p class="admonition-title">Sveltos ClusterProfile</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nn">---</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3498,6 +3543,8 @@
 </span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="p">|</span><span class="w"> </span>default/sveltos-management-workload<span class="w"> </span><span class="p">|</span><span class="w"> </span>:ConfigMap<span class="w">      </span><span class="p">|</span><span class="w"> </span>production<span class="w"> </span><span class="p">|</span><span class="w"> </span>production-the-map<span class="w">        </span><span class="p">|</span><span class="w"> </span>N/A<span class="w">     </span><span class="p">|</span><span class="w"> </span><span class="m">2023</span>-05-16<span class="w"> </span><span class="m">00</span>:59:13<span class="w"> </span>-0700<span class="w"> </span>PDT<span class="w"> </span><span class="p">|</span><span class="w"> </span>kustomize-with-configmap<span class="w"> </span><span class="p">|</span>
 </span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>+-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
 </span></code></pre></div>
+<h2 id="next-steps">Next Steps</h2>
+<p>For a better understanding of the Sveltos and Flux integration, check out the Flux Sources examples <a href="../example_flux_sources/">here</a>.</p>
 <div class="footnote">
 <hr />
 <ol>
