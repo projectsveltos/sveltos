@@ -904,6 +904,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Helm Chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interactive Import
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automated-import-with-sidecar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automated Import with Sidecar
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -3192,6 +3216,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Helm Chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interactive Import
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automated-import-with-sidecar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automated Import with Sidecar
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -3359,7 +3407,8 @@
 <h3 id="helm-chart">Helm Chart</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>helm<span class="w"> </span>upgrade<span class="w"> </span>&lt;your<span class="w"> </span>release<span class="w"> </span>name&gt;<span class="w"> </span>projectsveltos/projectsveltos<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--set<span class="w"> </span>prometheus.enabled<span class="o">=</span><span class="nb">true</span>
 </span></code></pre></div>
-<p>Once Grafana and Prometheus are available, proceed by adding the <a href="https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/">Prometheus data source</a> to Grafana and then <strong>import</strong> the below Grafana dashboard.</p>
+<h4 id="interactive-import">Interactive Import</h4>
+<p>Once Grafana and Prometheus are available, proceed by adding the <a href="https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/">Prometheus data source</a> to Grafana and then <strong>importing</strong> the below Grafana dashboard.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
 </span></code></pre></div>
 <div class="admonition note">
@@ -3373,9 +3422,13 @@
 <p>Refresh to begin plotting tracked metrics. Customize the dashboard to maximize utility -- by updating thresholds, adding/removing/editing panels, and transforming metrics tracked.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Some metrics only appear on Grafana when their value is non-zero, e.g. <code>projectsveltos_reconcile_operations_total</code>, and <code>projectsveltos_total_drifts</code>. As long as Prometheus and Grafana have been configured correctly, this should not be a problem.</p>
+<p>Some metrics only appear on Grafana when their value is non-zero, e.g. <code>projectsveltos_reconcile_operations_total</code> and <code>projectsveltos_total_drifts</code>. As long as Prometheus and Grafana have been configured correctly, this should not be a problem.</p>
 </div>
-<p>Detailed descriptions of the panels available on the dashboard, and the tracked metrics, are listed below.</p>
+<p>Detailed descriptions of the panels available on the dashboard and the tracked metrics are listed below.</p>
+<h4 id="automated-import-with-sidecar">Automated Import with Sidecar</h4>
+<p>Planning to use a sidecar for the dashboard import, feel free to use the below <code>.json</code> file. The same notes apply as in the <a href="#interactive-import">above</a> section.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/ssveltosgrafanadashboard_sidecar.json
+</span></code></pre></div>
 <h2 id="available-metrics">Available Metrics</h2>
 <p>Sveltos lets users track and visualize a number of key operational metrics, which include:</p>
 <ul>
