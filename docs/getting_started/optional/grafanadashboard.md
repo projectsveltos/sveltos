@@ -61,7 +61,7 @@ Detailed descriptions of the panels available on the dashboard and the tracked m
 Planning to use a sidecar for the dashboard import, feel free to use the below `.json` file. The same notes apply as in the [above](#interactive-import) section.
 
 ```bash
-https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/ssveltosgrafanadashboard_sidecar.json
+https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard_sidecar.json
 ```
 
 ## Available Metrics
