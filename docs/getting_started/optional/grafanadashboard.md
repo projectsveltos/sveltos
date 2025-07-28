@@ -31,7 +31,9 @@ To allow Prometheus to collect metrics from the **Sveltos management** cluster, 
 $ helm upgrade <your release name> projectsveltos/projectsveltos -n projectsveltos --set prometheus.enabled=true
 ```
 
-Once Grafana and Prometheus are available, proceed by adding the [Prometheus data source](https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/) to Grafana and then **import** the below Grafana dashboard.
+#### Interactive Import
+
+Once Grafana and Prometheus are available, proceed by adding the [Prometheus data source](https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/) to Grafana and then **importing** the below Grafana dashboard.
 
 ```bash
 https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
@@ -50,9 +52,17 @@ Confirm that all metrics are linked to their corresponding panels. The dashboard
 Refresh to begin plotting tracked metrics. Customize the dashboard to maximize utility -- by updating thresholds, adding/removing/editing panels, and transforming metrics tracked.
 
 !!! note
-    Some metrics only appear on Grafana when their value is non-zero, e.g. ``projectsveltos_reconcile_operations_total``, and ``projectsveltos_total_drifts``. As long as Prometheus and Grafana have been configured correctly, this should not be a problem.
+    Some metrics only appear on Grafana when their value is non-zero, e.g. ``projectsveltos_reconcile_operations_total`` and ``projectsveltos_total_drifts``. As long as Prometheus and Grafana have been configured correctly, this should not be a problem.
 
-Detailed descriptions of the panels available on the dashboard, and the tracked metrics, are listed below.
+Detailed descriptions of the panels available on the dashboard and the tracked metrics are listed below.
+
+#### Automated Import with Sidecar
+
+Planning to use a sidecar for the dashboard import, feel free to use the below `.json` file. The same notes apply as in the [above](#interactive-import) section.
+
+```bash
+https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/ssveltosgrafanadashboard_sidecar.json
+```
 
 ## Available Metrics
 
