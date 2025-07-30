@@ -11,6 +11,10 @@ authors:
     - Eleni Grosdouli
 ---
 
+!!!video
+    To learn more about the Sveltos **Pull Mode**, check out the [Youtube Video](https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be). If you find this valuable, we would be thrilled if you shared it! 😊
+
+
 ## Sveltos Cluster Registration Pull Mode
 
 Sveltos supports managed cluster registration in **Pull Mode**. In this model, **managed** clusters actively **pull** configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.
