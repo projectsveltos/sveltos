@@ -1,6 +1,6 @@
 ---
 title: Register Cluster Pull Mode
-description: Sveltos comes with support to automatically discover ClusterAPI powered clusters. Any other cluster (GKE for instance) can easily be registered with Sveltos.
+description: Sveltos can register clusters that are behind a firewall, in air-gapped or edge environments, and in highly regulated setups using Pull Mode.
 tags:
     - Kubernetes
     - add-ons
