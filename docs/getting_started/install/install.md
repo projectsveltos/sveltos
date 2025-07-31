@@ -29,7 +29,7 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 Execute the below commands.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.0.0-beta.0/manifest/manifest.yaml
 ```
 
 ### Mode 2: Centralized Agent Mode (Manifest)
@@ -37,7 +37,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/agents_in_mgmt_cluster_manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.0.0-beta.0/manifest/agents_in_mgmt_cluster_manifest.yaml
 ```
 
 !!! warning
