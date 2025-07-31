@@ -290,6 +290,17 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              sourceStatus:
+                default: Active
+                description: |-
+                  SourceStatus indicates the lifecycle status of the source resource (e.g., ClusterSummary)
+                  that created this ConfigurationGroup. Valid values are "Active" and "Deleted".
+                  This field helps determine if the ConfigurationGroup was created by a source that is
+                  no longer present or in a different state.
+                enum:
+                - Active
+                - Deleted
+                type: string
               tier:
                 default: 100
                 description: |-
