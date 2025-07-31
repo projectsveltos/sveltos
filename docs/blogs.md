@@ -59,7 +59,6 @@ More videos can be found here:
 1. [Sveltos multi-tenancy](https://www.youtube.com/watch?v=m_G9UZ8yduc)
 1. [Sveltos overview](https://www.youtube.com/watch?v=Ai5Mr9haWKM&t=4s)
 1. [Sveltos DryRun mode](https://www.youtube.com/watch?v=gfWN_QJAL6k&t=86s)
-1. [Sveltos Snapshots](https://www.youtube.com/watch?v=ALcp1_Nj9r4)
 1. [Sveltos Rollback](https://www.youtube.com/watch?v=sTo6RcWP1BQ&t=16s)
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>

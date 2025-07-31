@@ -18,25 +18,12 @@ The [Sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") is 
 
 It offers a convenient CLI experience. The Binaries for each release are available on the [releases page](https://github.com/projectsveltos/sveltosctl/releases).
 
-The Binaries are sufficient to register worker clusters with Sveltos, query resources etc. However, if you want more capabilities like the [Snapshot](../sveltosctl/features/snapshot.md), use "Option 2: Run sveltosctl as a pod".
+The Binaries are sufficient to register worker clusters with Sveltos, query resources etc.
 
 ### Option 2: Run sveltosctl as Pod
 
 If you choose to run sveltosctl as a pod in the management cluster, the YAML configuration can be found [here](https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/sveltosctl_manifest.yaml).
 
-Remember that sveltosctl necessitates a PersistentVolume. Before posting the YAML, make the necessary adjustments to the below section.
-
-```yaml
-  volumeClaimTemplates:
-  - metadata:
-      name: snapshot
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "standard"
-      resources:
-        requests:
-          storage: 1Gi
-```
 
 Once the pod is running,
 ```

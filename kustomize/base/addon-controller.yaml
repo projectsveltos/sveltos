@@ -216,6 +216,7 @@ rules:
         - events
       verbs:
         - create
+        - patch
         - update
     - apiGroups:
         - '*'
@@ -348,6 +349,19 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - clusterhealthchecks
+        - configurationgroups/status
+        - debuggingconfigurations
+        - eventtriggers
+        - sveltosclusters
+        - sveltosclusters/status
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
         - clustersets
         - configurationbundles
         - configurationgroups
@@ -386,17 +400,6 @@ rules:
         - get
         - list
         - update
-        - watch
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
-        - configurationgroups/status
-        - debuggingconfigurations
-        - sveltosclusters
-        - sveltosclusters/status
-      verbs:
-        - get
-        - list
         - watch
     - apiGroups:
         - lib.projectsveltos.io
@@ -566,7 +569,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v1.0.0-beta.0
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -579,7 +582,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v1.0.0-beta.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

@@ -30,8 +30,6 @@ Execute the below commands.
 
 ```sh
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/manifest.yaml
-
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
 ### Mode 2: Centralized Agent Mode (Manifest)
@@ -40,8 +38,6 @@ If you do not want to have any Sveltos agent in any **managed cluster**, run the
 
 ```sh
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/agents_in_mgmt_cluster_manifest.yaml
-
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
 !!! warning
@@ -95,16 +91,12 @@ $ helm list -n projectsveltos
 
 ```sh
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=v0.57.2 |kubectl apply -f -
-
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
 #### Mode 2: Centralized Agent Mode
 
 ```sh
 $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v0.57.2 |kubectl apply -f -
-
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v0.57.2/manifest/default-instances.yaml
 ```
 
 ## Sveltos Verification

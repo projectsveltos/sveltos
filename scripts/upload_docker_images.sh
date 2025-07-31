@@ -131,3 +131,12 @@ cd ui-backend
 git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
+
+# sveltos-applier
+echo "processing sveltos-applier"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/sveltos-applier.git
+cd sveltos-applier
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
