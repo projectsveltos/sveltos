@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Mapping between Sveltos resources and the controllers that manage and create them">
+        <meta name="description" content="Sveltos can register clusters that are behind a firewall, in air-gapped or edge environments, and in highly regulated setups using Pull Mode.">
       
       
       
       
-        <link rel="prev" href="../../help_and_tutorials/troubleshooting/">
+        <link rel="prev" href="../register-cluster/">
       
       
-        <link rel="next" href="../../blogs/">
+        <link rel="next" href="../readiness_liveness_checks/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Sveltos Resources and Controller Map - Projectsveltos Documentation</title>
+        <title>Register Cluster Pull Mode - Projectsveltos Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#resource-and-controller-mapping" class="md-skip">
+        <a href="#sveltos-cluster-registration-pull-mode" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos Resources and Controller Map
+              Register Cluster Pull Mode
             
           </span>
         </div>
@@ -846,18 +846,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -873,7 +875,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Register Clusters
@@ -887,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register-cluster/" class="md-nav__link">
+      <a href="../register-cluster/" class="md-nav__link">
         
   
   
@@ -907,10 +909,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../register/register_cluster_pull_mode/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Registration Pull Mode
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -921,6 +943,90 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sveltos-cluster-registration-pull-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sveltos Cluster Registration Pull Mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-does-it-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      How does it work?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How does it work?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advantages
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Register Cluster
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Register Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sveltosctl-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      sveltosctl Registration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Programmatic Registration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -933,7 +1039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/readiness_liveness_checks/" class="md-nav__link">
+      <a href="../readiness_liveness_checks/" class="md-nav__link">
         
   
   
@@ -956,7 +1062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/token-renewal/" class="md-nav__link">
+      <a href="../token-renewal/" class="md-nav__link">
         
   
   
@@ -1017,7 +1123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/cluster_maintenance_window/" class="md-nav__link">
+      <a href="../features/cluster_maintenance_window/" class="md-nav__link">
         
   
   
@@ -2884,20 +2990,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
           <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
@@ -2913,7 +3017,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -2924,32 +3028,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Resource / Controller Matrix
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../reference/resource-owners/" class="md-nav__link">
         
   
   
@@ -2960,53 +3042,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#controller-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      Controller Overview
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-information" class="md-nav__link">
-    <span class="md-ellipsis">
-      Related Information
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -3058,8 +3093,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -3068,29 +3101,68 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#sveltos-cluster-registration-pull-mode" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      Sveltos Cluster Registration Pull Mode
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#controller-overview" class="md-nav__link">
+  <a href="#how-does-it-work" class="md-nav__link">
     <span class="md-ellipsis">
-      Controller Overview
+      How does it work?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How does it work?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advantages
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#related-information" class="md-nav__link">
+  <a href="#register-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      Related Information
+      Register Cluster
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Register Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sveltosctl-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      sveltosctl Registration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Programmatic Registration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3113,240 +3185,97 @@
   
 
 
-<h1 id="resource-and-controller-mapping">Resource and Controller Mapping</h1>
-<p>The following table maps Sveltos resources to their managing controllers and shows where resources are located in different deployment modes (Local vs Centralized Agent Mode). Use this as a reference for operational design, troubleshooting, and understanding controller responsibilities in your Sveltos deployment.</p>
+  <h1>Registration Pull Mode</h1>
+
+<div class="admonition video">
+<p class="admonition-title">Video</p>
+<p>To learn more about the Sveltos <strong>Pull Mode</strong>, check out the <a href="https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be">Youtube Video</a>. If you find this valuable, we would be thrilled if you shared it! 😊</p>
+</div>
+<h2 id="sveltos-cluster-registration-pull-mode">Sveltos Cluster Registration Pull Mode</h2>
+<p>Sveltos supports managed cluster registration in <strong>Pull Mode</strong>. In this model, <strong>managed</strong> clusters actively <strong>pull</strong> configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.</p>
+<p>The <strong>Pull Mode</strong> is ideal for managed clusters behind a firewall, in air-gapped environments, edge deployments with limited bandwidth or highly regulated and secure setups.</p>
+<p>If Sveltos is not already installed, have a look at the installation details located <a href="../../getting_started/install/install/">here</a>.</p>
+<h2 id="how-does-it-work">How does it work?</h2>
+<p>While the core Sveltos controllers run in a <strong>management</strong> cluster and orchestrate deployments, the concept of <strong>Pull Mode</strong> becomes relevant when managing clusters in challenging network environments such as firewalled, air-gapped, or edge deployments, where direct inbound access from the management cluster to the managed clusters is either not possible or not desired.</p>
+<p>This is how the <strong>Pull Mode</strong> flow works:</p>
+<ol>
+<li><strong>Management Cluster</strong>: It defines the desired state. We define our <code>ClusterProfile</code>/<code>Profile</code> resources in the management cluster, specifying which add-ons and configurations should be applied to which managed clusters by utilising the Kubernetes labels selection concept.</li>
+<li><strong>Managed Cluster</strong>: Rather than the management cluster initiating all deployments, a component on the managed cluster initiates a connection to the management cluster.</li>
+<li><strong>Configuration Fetching</strong>: The managed cluster pulls the relevant configuration, manifest, or Helm chart from the management cluster.</li>
+<li><strong>Apply</strong>: The managed cluster's local agent or component applies the pulled configurations to the cluster.</li>
+</ol>
+<p><img alt="Sveltos Pull Mode" src="../../assets/sveltos_pull_mode.png" /></p>
+<h3 id="advantages">Advantages</h3>
+<p>The following items are some of the benefits of utilising Sveltos in <strong>Pull Mode</strong>.</p>
+<ul>
+<li><strong>Firewalled and Air-Gapped Environments</strong>: This is the primary driver. When managed clusters are behind firewalls or in air-gapped networks, direct inbound connections from a central management cluster are not possible. Sveltos in <strong>Pull Mode</strong> allows the managed clusters to reach out to the management cluster or a Git repository to obtain deployment instructions.</li>
+<li><strong>Edge Deployments</strong>: For edge locations with intermittent connectivity or limited network bandwidth, the Sveltos <strong>Pull Mode</strong> offers resilience.</li>
+<li><strong>Security</strong>: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.</li>
+</ul>
+<h2 id="register-cluster">Register Cluster</h2>
+<h3 id="sveltosctl-registration">sveltosctl Registration</h3>
+<p>It is recommended, but not required, to use the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a> for cluster registration. Alternatively, to <strong>programmatically</strong> register clusters, consult the <a href="#programmatic-registration">section</a>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
+</span></code></pre></div>
 <table>
 <thead>
 <tr>
-<th>Resource</th>
-<th>Managing Controller</th>
-<th>Creating by</th>
-<th>Resource Location (Local Agent Mode)</th>
-<th>Resource Location (Centralized Agent Mode)</th>
-<th>Annotation</th>
+<th>Parameter</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>AccessRequests</td>
-<td>Access Manager</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
+<td><code>--namespace</code></td>
+<td>The namespace in the <strong>management</strong> cluster where Sveltos stores information about the registered cluster.</td>
 </tr>
 <tr>
-<td>ClassifierReports</td>
-<td>Classifier Manager</td>
-<td>Sveltos Agent</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td></td>
+<td><code>--cluster</code></td>
+<td>The name of the cluster to identify the registered cluster within Sveltos.</td>
 </tr>
 <tr>
-<td>Classifiers</td>
-<td>Classifier Manager</td>
-<td>User / Install script</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
+<td><code>--pullmode</code></td>
+<td>Enables the Sveltos <strong>Pull Mode</strong> registration.</td>
 </tr>
 <tr>
-<td>ClusterConfigurations</td>
-<td>Unknown</td>
-<td>Unknown</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ClusterHealthChecks</td>
-<td>HealthCheck Manager</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ClusterProfiles / Profiles</td>
-<td>Add-on Controller</td>
-<td>Event Manager / User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ClusterReports</td>
-<td>Unknown</td>
-<td>Unknown</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ClusterSets / Sets</td>
-<td>Add-on Controller</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ClusterSummaries</td>
-<td>Add-on Controller</td>
-<td>Add-on Controller</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td>Useful when debugging ClusterProfiles</td>
-</tr>
-<tr>
-<td>ConfigMap/Secret for EventTriggers</td>
-<td>Event Manager</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>DebuggingConfigurations</td>
-<td>All Controllers</td>
-<td>User / Install script</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td>Useful for adjusting controller log level when filing bug reports</td>
-</tr>
-<tr>
-<td>EventReports</td>
-<td>Event Manager</td>
-<td>Sveltos Agent</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td>Useful when debugging EventSources</td>
-</tr>
-<tr>
-<td>EventSources</td>
-<td>Event Manager</td>
-<td>User</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td>Event Manager deploys EventSource instances to managed clusters</td>
-</tr>
-<tr>
-<td>EventTriggers</td>
-<td>Event Manager</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>HealthCheckReports</td>
-<td>HealthCheck Manager</td>
-<td>Sveltos Agent</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>HealthChecks</td>
-<td>HealthCheck Manager</td>
-<td>User</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td>HealthCheck Manager deploys HealthCheck instances to managed clusters</td>
-</tr>
-<tr>
-<td>ReloaderReports</td>
-<td>Add-on Controller</td>
-<td>Sveltos Agent</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>Reloaders</td>
-<td>Add-on Controller</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>ResourceSummaries</td>
-<td>Add-on Controller</td>
-<td>Add-on Controller</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>RoleRequests</td>
-<td>Access Manager</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td></td>
-</tr>
-<tr>
-<td>SveltosClusters</td>
-<td>SveltosCluster Controller</td>
-<td>User</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td>Periodically connects to cluster and runs readiness and liveness checks</td>
-</tr>
-<tr>
-<td>TechSupports</td>
-<td>TechSupport Controller</td>
-<td>TechSupport Controller</td>
-<td>Management Cluster</td>
-<td>Management Cluster</td>
-<td>Collects logs/events/resources from managed cluster and management cluster</td>
-</tr>
-<tr>
-<td>Sveltos Agent (Deployment)</td>
-<td>Not Applicable</td>
-<td>Classifier Manager</td>
-<td>Managed Cluster</td>
-<td>Management Cluster</td>
-<td>Ensure one agent per cluster. If no agent is present, EventReports are not generated; recreate the Classifier to redeploy the agent.</td>
+<td><code>--labels</code></td>
+<td>(Optional) Comma-separated key-value pairs to define labels for the registered cluster.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="notes">Notes</h2>
+<p>Once the <code>.yaml</code> file is generated, apply it to the Kubernetes <strong>managed</strong> cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/managed/cluster&gt;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sveltoscluster_registration.yaml
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Test the <strong>Pull Mode</strong> with up to <strong>two</strong> managed clusters for free. Need more than two clusters? Contact us at <code>support@projectsveltos.io</code> to explore license options based on your needs!</p>
+</div>
+<h3 id="programmatic-registration">Programmatic Registration</h3>
+<p>To programmatically register clusters with Sveltos in <strong>Pull Mode</strong>, create the below resource and apply it to the <strong>managed</strong> cluster.</p>
 <ul>
-<li><strong>Managing Controller</strong>: Controller that monitors the resource state and makes adjustments as needed</li>
-<li><strong>Creating Controller</strong>: Entity (controller or user) that initially creates the resource</li>
-<li><strong>Resource Location (Local Agent Mode)</strong>: Where the resource is located when using Local Agent Mode (Mode 1) - agents deployed in managed clusters</li>
-<li><strong>Resource Location (Centralized Agent Mode)</strong>: Where the resource is located when using Centralized Agent Mode (Mode 2) - agents centralized in management cluster</li>
-<li><strong>User</strong>: Resources created manually by users</li>
-<li><strong>Unknown</strong>: Items where a clear relationship has not yet been established</li>
-<li><strong>All Controllers</strong>: Resources managed collaboratively by all controllers</li>
+<li><strong>SveltosCluster</strong>: Represent your cluster as an <code>SveltosCluster</code> instance.</li>
 </ul>
-<h2 id="controller-overview">Controller Overview</h2>
-<p>Based on the Sveltos architecture, here are the main controllers and their responsibilities:</p>
-<p><strong>Deployment Modes:</strong></p>
-<ul>
-<li><strong>Local Agent Mode (Mode 1)</strong>: Sveltos agents (sveltos-agent and drift-detection-manager) are deployed in each managed cluster</li>
-<li><strong>Centralized Agent Mode (Mode 2)</strong>: Sveltos agents are created per managed cluster in the management cluster, leaving no footprint on managed clusters</li>
-</ul>
-<p><strong>Controllers:</strong></p>
-<ul>
-<li><strong>SveltosCluster Controller</strong>: Manages SveltosCluster instances, periodically connects to clusters and runs readiness/liveness checks</li>
-<li><strong>Add-on Controller</strong>: Manages ClusterProfile/Profile instances, creates ClusterSummary for matching clusters and deploys resources</li>
-<li><strong>Classifier Manager</strong>: Deploys Classifier instances to managed clusters and sveltos-agent deployment, processes ClassifierReports to update cluster labels</li>
-<li><strong>Event Manager</strong>: Manages EventTrigger instances, deploys EventSource instances to managed clusters and processes EventReports to create new ClusterProfiles</li>
-<li><strong>HealthCheck Manager</strong>: Manages ClusterHealthChecks, deploys HealthCheck instances to managed clusters and processes HealthReports for notifications</li>
-<li><strong>TechSupport Controller</strong>: Manages TechSupport instances, collects logs/events/resources from clusters and delivers tech support messages</li>
-<li><strong>Shard Controller</strong>: Manages deployment and undeployment of Sveltos instances when clusters are marked as belonging to different shards</li>
-</ul>
-<h2 id="related-information">Related Information</h2>
-<p>For more details on Sveltos architecture and each controller, please refer to the following documents:</p>
-<ul>
-<li><a href="../../getting_started/install/install/">Installing Sveltos</a></li>
-<li><a href="../../register/register-cluster/">Cluster Registration</a></li>
-<li><a href="../../addons/addons/">Add-on Distribution</a></li>
-</ul>
+<div class="admonition example">
+<p class="admonition-title">SveltosCluster</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="hll"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span></span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="hll"><span class="nt">metadata</span><span class="p">:</span>
+</span></span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="hll"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR-CLUSTER-NAME</span>
+</span></span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR-CLUSTER-NAMESPACE</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="hll"><span class="w">    </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+</span></span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="hll"><span class="nt">spec</span><span class="p">:</span>
+</span></span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">pullMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+</div>
 
 
 
@@ -3379,7 +3308,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../help_and_tutorials/troubleshooting/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Troubleshooting">
+          <a href="../register-cluster/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Registration">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3389,20 +3318,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Troubleshooting
+                Registration
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../blogs/" class="md-footer__link md-footer__link--next" aria-label="Next: Blogs and videos">
+          <a href="../readiness_liveness_checks/" class="md-footer__link md-footer__link--next" aria-label="Next: Readiness and Liveness Cluster Checks">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Blogs and videos
+                Readiness and Liveness Cluster Checks
               </div>
             </div>
             <div class="md-footer__button md-icon">
