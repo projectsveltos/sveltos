@@ -246,6 +246,22 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
 !!!tip
     To get an idea on how an already registered cluster looks like, check out the Sveltos `mgmt` cluster using the command ```kubectl get sveltoscluster mgmt -n mgmt -o yaml```.
 
+## Register Management Cluster
+
+Sveltos manages add-ons not only on **managed** clusters but also on the **management** clusters. The management cluster is the Kubernetes cluster where Sveltos is deployed. To enable add-ons there, apply the labels of your choice. The Sveltos management cluster is registered in the `mgmt` namespace under the name `mgmt`.
+
+
+```bash
+$  kubectl get sveltoscluster -A --show-labels
+NAMESPACE    NAME         READY   VERSION        AGE   LABELS
+mgmt         mgmt         true    v1.32.6+k3s1   24h   projectsveltos.io/k8s-version=v1.32.6,sveltos-agent=present
+```
+
+```bash
+$ kubectl label sveltoscluster mgmt -n mgmt cluster=mgmt
+```
+
+For a Helm chart installation, have a look at the Helm chart [values](https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values) to include the labels of your choice.
 
 [^1]:
     As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
