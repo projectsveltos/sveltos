@@ -21,6 +21,9 @@ authors:
 
 Sveltos can be configured to connect to and respond to CloudEvents published over NATS and JetStream.
 
+!!!video
+    Learn about the Sveltos and NATS.io integration with a practical example by watching this [Youtube Video](https://www.youtube.com/watch?v=bHjCiIP5f34). If you find this valuable, we would be thrilled if you shared it! 😊
+
 ## Connect to NATS and JetStream
 
 To configure Sveltos to connect to NATS and/or JetStream within a managed cluster, create a Secret named `sveltos-nats` in the `projectsveltos` namespace.  This Secret's data should contain a key also named `sveltos-nats` with the connection details.
@@ -378,44 +381,44 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
         User     string `json:"user"`
         Password string `json:"password"`
     }
-    
+
     type clientCert struct {
         CertPem []byte `json:"certPem"`
         KeyPem  []byte `json:"keyPem"`
     }
-    
+
     type messagingAuthorization struct {
         User       *messagingUser `json:"user,omitempty"`
         Token      *string        `json:"token,omitempty"`
         ClientCert *clientCert    `json:"clientCert,omitempty"`
         RootCA     []byte         `json:"rootCA,omitempty"`
     }
-    
+
     type configuration struct {
         URL           string                 `json:"url"`
         Subjects      []string               `json:"subjects"`
         Authorization messagingAuthorization `json:"authorization,omitempty"`
     }
-    
+
     type stream struct {
         Name     string   `json:"name"`
         Subjects []string `json:"subjects"`
     }
-    
+
     type consumerConfiguration struct {
         URL           string                 `json:"url"`
         Streams       []stream               `json:"streams"`
         Authorization messagingAuthorization `json:"authorization,omitempty"`
     }
-    
+
     type natsConfiguration struct {
         Configuration configuration `json:"configuration"`
     }
-    
+
     type jetstreamConfiguration struct {
         ConsumerConfiguration consumerConfiguration `json:"configuration"`
     }
-    
+
     type messagingConfig struct {
         Nats      *natsConfiguration      `json:"nats,omitempty"`
         Jetstream *jetstreamConfiguration `json:"jetstream,omitempty"`
@@ -564,7 +567,7 @@ To connect to NATS or JetStream, Sveltos expects a JSON configuration that confo
    }
 }
 ```
-Or, for a JetStream connection: 
+Or, for a JetStream connection:
 ```json
 {
   "nats":
