@@ -3183,6 +3183,10 @@
 <p><a href="https://nats.io">NATS</a> is a lightweight, high-performance messaging system designed for speed and scalability.  It excels at simple publish/subscribe communication. <a href="https://docs.nats.io/nats-concepts/jetstream">JetStream</a> builds upon NATS, adding powerful streaming and data management capabilities like message persistence, flow control, and ordered delivery.  Together, NATS and JetStream provide a robust platform for building modern, distributed systems.</p>
 <p><a href="https://cloudevents.io">CloudEvents</a> is a specification for describing event data in a consistent way, regardless of the underlying system or transport protocol.  It simplifies event handling by providing a common format that different systems can understand, enabling interoperability and reducing complexity.  Think of it as a universal language for events.</p>
 <p>Sveltos can be configured to connect to and respond to CloudEvents published over NATS and JetStream.</p>
+<div class="admonition video">
+<p class="admonition-title">Video</p>
+<p>Learn about the Sveltos and NATS.io integration with a practical example by watching this <a href="https://www.youtube.com/watch?v=bHjCiIP5f34">Youtube Video</a>. If you find this valuable, we would be thrilled if you shared it! 😊</p>
+</div>
 <h2 id="connect-to-nats-and-jetstream">Connect to NATS and JetStream</h2>
 <p>To configure Sveltos to connect to NATS and/or JetStream within a managed cluster, create a Secret named <code>sveltos-nats</code> in the <code>projectsveltos</code> namespace.  This Secret's data should contain a key also named <code>sveltos-nats</code> with the connection details.</p>
 <p>For example, to connect to a NATS server exposed as the <code>nats</code> service in the <code>nats</code> namespace on port 4222, with username/password authentication, and for Sveltos to subscribe to the <strong>bar</strong> and <strong>foo</strong> subjects, use the following configuration:</p>
@@ -3679,7 +3683,7 @@ defined as a template. When CloudEvent type is <strong>com.example.auth.login</s
 </span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="w">   </span><span class="p">}</span>
 </span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="p">}</span>
 </span></code></pre></div>
-Or, for a JetStream connection: 
+Or, for a JetStream connection:
 <div class="language-json highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span>
 </span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&quot;nats&quot;</span><span class="p">:</span>
 </span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">   </span><span class="p">{</span>
