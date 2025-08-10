@@ -261,7 +261,7 @@ mgmt         mgmt         true    v1.32.6+k3s1   24h   projectsveltos.io/k8s-ver
 $ kubectl label sveltoscluster mgmt -n mgmt cluster=mgmt
 ```
 
-For a Helm chart installation, have a look at the Helm chart [values](https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values) to include the labels of your choice.
+For a Helm chart installation, have a look at the Helm chart [values](https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values&path=registerMgmtCluster) to include the labels of your choice.
 
 [^1]:
     As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
