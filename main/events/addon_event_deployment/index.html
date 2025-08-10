@@ -3273,6 +3273,10 @@
 </ol>
 <p>For more information, take a peek at <a href="../examples/cross_cluster_configuration/">this</a> link.</p>
 <p><img alt="Event Framework" src="../../assets/events.png" /></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Once Sveltos is deployed to the <strong>management</strong> cluster, it is automatically registered in the <code>mgmt</code> namespace with the name <code>mgmt</code>. Add-ons and applications can be deployed using the Sveltos EventFramework as soon as the appropriate Kubernetes labels are added to the cluster. For more details, see the <a href="../../register/register-cluster.md/#register-management-cluster">registration section</a>.</p>
+</div>
 <h2 id="eventsource">EventSource</h2>
 <p>An <em>Event</em> is a specific operation in the context of Kubernetes objects. To define an event, use the <a href="https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/eventsource_type.go">EventSource</a> Custom Resource Definition (CRD).</p>
 <h3 id="example-createdelete-service-event">Example: Create/Delete Service Event</h3>

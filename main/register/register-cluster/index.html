@@ -991,6 +991,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#register-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Register Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3148,6 +3157,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#register-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Register Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3406,6 +3424,15 @@
 <p class="admonition-title">Tip</p>
 <p>To get an idea on how an already registered cluster looks like, check out the Sveltos <code>mgmt</code> cluster using the command <code>kubectl get sveltoscluster mgmt -n mgmt -o yaml</code>.</p>
 </div>
+<h2 id="register-management-cluster">Register Management Cluster</h2>
+<p>Sveltos manages add-ons not only on <strong>managed</strong> clusters but also on the <strong>management</strong> clusters. The management cluster is the Kubernetes cluster where Sveltos is deployed. To enable add-ons there, apply the labels of your choice. The Sveltos management cluster is registered in the <code>mgmt</code> namespace under the name <code>mgmt</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>$<span class="w">  </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-A<span class="w"> </span>--show-labels
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>NAMESPACE<span class="w">    </span>NAME<span class="w">         </span>READY<span class="w">   </span>VERSION<span class="w">        </span>AGE<span class="w">   </span>LABELS
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>mgmt<span class="w">         </span>mgmt<span class="w">         </span><span class="nb">true</span><span class="w">    </span>v1.32.6+k3s1<span class="w">   </span>24h<span class="w">   </span>projectsveltos.io/k8s-version<span class="o">=</span>v1.32.6,sveltos-agent<span class="o">=</span>present
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>mgmt<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">cluster</span><span class="o">=</span>mgmt
+</span></code></pre></div>
+<p>For a Helm chart installation, have a look at the Helm chart <a href="https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values">values</a> to include the labels of your choice.</p>
 <div class="footnote">
 <hr />
 <ol>
