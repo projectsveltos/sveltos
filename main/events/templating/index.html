@@ -3208,6 +3208,10 @@
 <li><strong>HelmCharts</strong></li>
 <li><strong>KustomizationRefs</strong></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This <a href="../../template/intro_template/#template-functions">template functions</a> are available.</p>
+</div>
 <h3 id="instantiation-flow-templateresourcerefs">Instantiation Flow: TemplateResourceRefs</h3>
 <p>The EventTrigger <strong>TemplateResourceRefs</strong> is instantiated using resource data and set to <strong>ClusterProfile.Spec.TemplateResourceRefs</strong>.</p>
 <p>The <code>namespace</code> and <code>name</code> fields within each reference can be <strong>constants</strong> or <strong>templates</strong>. The templates are dynamically evaluated using data from the <strong>triggering cluster</strong> or <strong>resource</strong>, allowing the generated ClusterProfile to be context-aware and tailored to a specific event.</p>
