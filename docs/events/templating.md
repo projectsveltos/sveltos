@@ -27,6 +27,9 @@ The resulting Sveltos ClusterProfile can include:
 1. **HelmCharts**
 1. **KustomizationRefs**
 
+!!! note
+    This [template functions](../template/intro_template.md#template-functions) are available.
+
 ### Instantiation Flow: TemplateResourceRefs
 
 The EventTrigger __TemplateResourceRefs__ is instantiated using resource data and set to __ClusterProfile.Spec.TemplateResourceRefs__.
