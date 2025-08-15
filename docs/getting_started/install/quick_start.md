@@ -1,4 +1,4 @@
----
+⅕---
 title: Kubernetes add-ons management for tens of clusters quick start
 description: Projectsveltos extends the functionality of Cluster API with a solution for managing the installation, configuration & deletion of Kubernetes cluster add-ons.
 tags:
@@ -212,7 +212,7 @@ EOF
 $ kubectl config set-context kind-clusterapi-workload
 $ kind export kubeconfig --name clusterapi-workload
 
-$ kubectl k get pods,svc -n dev
+$ kubectl get pods,svc -n dev
 NAME                       READY   STATUS    RESTARTS   AGE
 pod/nginx-96b9d695-tmqgf   1/1     Running   0          46s
 
