@@ -140,7 +140,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: projectsveltos/ui-backend:v1.0.0
+                  image: projectsveltos/ui-backend:v1.0.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -156,6 +156,9 @@ spec:
                       protocol: TCP
                     - containerPort: 9440
                       name: healthz
+                      protocol: TCP
+                    - containerPort: 8080
+                      name: gin
                       protocol: TCP
                   readinessProbe:
                     failureThreshold: 3
@@ -198,7 +201,7 @@ spec:
                 app: dashboard
         spec:
             containers:
-                - image: docker.io/projectsveltos/dashboard:v1.0.0
+                - image: docker.io/projectsveltos/dashboard:v1.0.1
                   name: dashboard
                   ports:
                     - containerPort: 5173

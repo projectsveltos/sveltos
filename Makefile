@@ -1,4 +1,4 @@
-TAG ?= v1.0.0
+TAG ?= v1.0.1
 
 generate-manifest:
 	scripts/generate_manifest.sh ${TAG}
