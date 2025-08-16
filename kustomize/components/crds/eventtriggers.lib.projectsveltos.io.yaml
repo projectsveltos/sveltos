@@ -269,6 +269,7 @@ spec:
                                         - paths
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             eventSourceName:
                                 description: |-
                                     EventSourceName is the name of the referenced EventSource.
@@ -657,6 +658,7 @@ spec:
                                         - message: RepositoryName must be defined
                                           rule: 'self.repositoryURL.startsWith(''oci'') ? size(self.repositoryName) >= 1 : true'
                                 type: array
+                                x-kubernetes-list-type: atomic
                             kustomizationRefs:
                                 description: |-
                                     Kustomization refs
@@ -669,6 +671,7 @@ spec:
                                             description: |-
                                                 DeploymentType indicates whether resources need to be deployed
                                                 into the management cluster (local) or the managed cluster (remote)
+                                                NOTE: DeploymentType Local cannot be used when the matching cluster is the management cluster itself.
                                             enum:
                                                 - Local
                                                 - Remote
@@ -800,6 +803,7 @@ spec:
                                         - namespace
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             maxUpdate:
                                 anyOf:
                                     - type: integer
@@ -889,6 +893,7 @@ spec:
                                         - patch
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             policyRefs:
                                 description: |-
                                     PolicyRefs references all the ConfigMaps/Secrets containing kubernetes resources
@@ -950,6 +955,7 @@ spec:
                                         - name
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                             reloader:
                                 default: false
                                 description: |-
@@ -1258,6 +1264,7 @@ spec:
                                         - version
                                     type: object
                                 type: array
+                                x-kubernetes-list-type: atomic
                         required:
                             - eventSourceName
                             - sourceClusterSelector
