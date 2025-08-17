@@ -31,8 +31,8 @@ This is how the **Pull Mode** flow works:
 
 1. **Management Cluster**: It defines the desired state. We define our `ClusterProfile`/`Profile` resources in the management cluster, specifying which add-ons and configurations should be applied to which managed clusters by utilising the Kubernetes labels selection concept.
 1. **Managed Cluster**: Rather than the management cluster initiating all deployments, a component on the managed cluster initiates a connection to the management cluster.
-1. **Configuration Fetching**: The managed cluster pulls the relevant configuration, manifest, or Helm chart from the management cluster.
-1. **Apply**: The managed cluster's local agent or component applies the pulled configurations to the cluster.
+1. **Configuration Fetching**: The managed cluster pulls the relevant configuration, manifest, or Helm chart **from** the **management** cluster. The **management** cluster prepares the relevant configuration bundle for the managed clusters in Pull Mode.
+1. **Apply**: The managed cluster's local agent applies the pulled configurations to the cluster.
 
 ![Sveltos Pull Mode](../assets/sveltos_pull_mode.png)
 
@@ -46,11 +46,15 @@ The following items are some of the benefits of utilising Sveltos in **Pull Mode
 
 ## Register Cluster
 
-### sveltosctl Registration
+To register a cluster in Pull mode, we use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").
 
-It is recommended, but not required, to use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI") for cluster registration. Alternatively, to **programmatically** register clusters, consult the [section](#programmatic-registration).
+### Management Cluster
+
+Pointing the KUBECONFIG to the **management** cluster where Sveltos is installed, perform the following `sveltosctl register` command.
 
 ```bash
+$ export KUBECONFIG=</path/to/kubeconfig/management/cluster>
+
 $ sveltosctl register cluster \
     --namespace=monitoring \
     --cluster=prod-cluster \
@@ -66,33 +70,40 @@ $ sveltosctl register cluster \
 | `--pullmode`     |    Enables the Sveltos **Pull Mode** registration.                                                                   |
 | `--labels`       |    (Optional) Comma-separated key-value pairs to define labels for the registered cluster.                       |
 
-Once the `.yaml` file is generated, apply it to the Kubernetes **managed** cluster.
+When the command is executed, looking at the `sveltosclusters` resource, we do see a new instance called `prod-cluster` in a not "Ready" state. This is the expected behaviour as we register the cluster in **Pull Mode**. Feel free to look at the generated file and identify what resources will be created for the **managed** cluster.
+
+```bash
+$ kubectl get sveltoscluster -n monitoring
+NAMESPACE   NAME           READY   VERSION   AGE
+monitoring  prod-cluster                     1m7s
+```
+
+### Managed Cluster
+
+Apply the generated file to the **managed** cluster.
 
 ```bash
 $ export KUBECONFIG=</path/to/kubeconfig/managed/cluster>
+
 $ kubectl apply -f sveltoscluster_registration.yaml
+namespace/projectsveltos created
+serviceaccount/sveltos-applier-manager created
+clusterrole.rbac.authorization.k8s.io/sveltos-applier-manager-role created
+clusterrolebinding.rbac.authorization.k8s.io/sveltos-applier-manager-rolebinding created
+service/sveltos-applier-metrics-service created
+deployment.apps/sveltos-applier-manager created
+secret/pcluster01-sveltos-kubeconfig created
 ```
 
 !!!note
     Test the **Pull Mode** with up to **two** managed clusters for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
 
-### Programmatic Registration
+### Validation
 
-To programmatically register clusters with Sveltos in **Pull Mode**, create the below resource and apply it to the **managed** cluster.
+```bash
+$ export KUBECONFIG=</path/to/kubeconfig/management/cluster>
 
-- **SveltosCluster**: Represent your cluster as an `SveltosCluster` instance.
-
-!!! example "SveltosCluster"
-    ```yaml hl_lines="2 4-5 9-10"
-    ---
-    apiVersion: lib.projectsveltos.io/v1beta1
-    kind: SveltosCluster
-    metadata:
-      name: YOUR-CLUSTER-NAME
-      namespace: YOUR-CLUSTER-NAMESPACE
-      labels:
-        environment: production
-        tier: backend
-    spec:
-      pullMode: true
-    ```
+$ kubectl get sveltoscluster -n monitoring
+NAMESPACE   NAME           READY   VERSION    AGE
+monitoring  prod-cluster   true    v1.30.5    9m15s
+```
