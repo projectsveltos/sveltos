@@ -1001,18 +1001,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sveltosctl-registration" class="md-nav__link">
+  <a href="#management-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      sveltosctl Registration
+      Management Cluster
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#programmatic-registration" class="md-nav__link">
+  <a href="#managed-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      Programmatic Registration
+      Managed Cluster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
     </span>
   </a>
   
@@ -3167,18 +3176,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sveltosctl-registration" class="md-nav__link">
+  <a href="#management-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      sveltosctl Registration
+      Management Cluster
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#programmatic-registration" class="md-nav__link">
+  <a href="#managed-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      Programmatic Registration
+      Managed Cluster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
     </span>
   </a>
   
@@ -3224,8 +3242,8 @@
 <ol>
 <li><strong>Management Cluster</strong>: It defines the desired state. We define our <code>ClusterProfile</code>/<code>Profile</code> resources in the management cluster, specifying which add-ons and configurations should be applied to which managed clusters by utilising the Kubernetes labels selection concept.</li>
 <li><strong>Managed Cluster</strong>: Rather than the management cluster initiating all deployments, a component on the managed cluster initiates a connection to the management cluster.</li>
-<li><strong>Configuration Fetching</strong>: The managed cluster pulls the relevant configuration, manifest, or Helm chart from the management cluster.</li>
-<li><strong>Apply</strong>: The managed cluster's local agent or component applies the pulled configurations to the cluster.</li>
+<li><strong>Configuration Fetching</strong>: The managed cluster pulls the relevant configuration, manifest, or Helm chart <strong>from</strong> the <strong>management</strong> cluster. The <strong>management</strong> cluster prepares the relevant configuration bundle for the managed clusters in Pull Mode.</li>
+<li><strong>Apply</strong>: The managed cluster's local agent applies the pulled configurations to the cluster.</li>
 </ol>
 <p><img alt="Sveltos Pull Mode" src="../../assets/sveltos_pull_mode.png" /></p>
 <h3 id="advantages">Advantages</h3>
@@ -3236,14 +3254,17 @@
 <li><strong>Security</strong>: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.</li>
 </ul>
 <h2 id="register-cluster">Register Cluster</h2>
-<h3 id="sveltosctl-registration">sveltosctl Registration</h3>
-<p>It is recommended, but not required, to use the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a> for cluster registration. Alternatively, to <strong>programmatically</strong> register clusters, consult the <a href="#programmatic-registration">section</a>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
+<p>To register a cluster in Pull mode, we use the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a>.</p>
+<h3 id="management-cluster">Management Cluster</h3>
+<p>Pointing the KUBECONFIG to the <strong>management</strong> cluster where Sveltos is installed, perform the following <code>sveltosctl register</code> command.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
 </span></code></pre></div>
 <table>
 <thead>
@@ -3271,34 +3292,35 @@
 </tr>
 </tbody>
 </table>
-<p>Once the <code>.yaml</code> file is generated, apply it to the Kubernetes <strong>managed</strong> cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/managed/cluster&gt;
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sveltoscluster_registration.yaml
+<p>When the command is executed, looking at the <code>sveltosclusters</code> resource, we do see a new instance called <code>prod-cluster</code> in a not "Ready" state. This is the expected behaviour as we register the cluster in <strong>Pull Mode</strong>. Feel free to look at the generated file and identify what resources will be created for the <strong>managed</strong> cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>monitoring
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">           </span>READY<span class="w">   </span>VERSION<span class="w">   </span>AGE
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>monitoring<span class="w">  </span>prod-cluster<span class="w">                     </span>1m7s
+</span></code></pre></div>
+<h3 id="managed-cluster">Managed Cluster</h3>
+<p>Apply the generated file to the <strong>managed</strong> cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/managed/cluster&gt;
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sveltoscluster_registration.yaml
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>namespace/projectsveltos<span class="w"> </span>created
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>serviceaccount/sveltos-applier-manager<span class="w"> </span>created
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>clusterrole.rbac.authorization.k8s.io/sveltos-applier-manager-role<span class="w"> </span>created
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>clusterrolebinding.rbac.authorization.k8s.io/sveltos-applier-manager-rolebinding<span class="w"> </span>created
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>service/sveltos-applier-metrics-service<span class="w"> </span>created
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>deployment.apps/sveltos-applier-manager<span class="w"> </span>created
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>secret/pcluster01-sveltos-kubeconfig<span class="w"> </span>created
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Test the <strong>Pull Mode</strong> with up to <strong>two</strong> managed clusters for free. Need more than two clusters? Contact us at <code>support@projectsveltos.io</code> to explore license options based on your needs!</p>
 </div>
-<h3 id="programmatic-registration">Programmatic Registration</h3>
-<p>To programmatically register clusters with Sveltos in <strong>Pull Mode</strong>, create the below resource and apply it to the <strong>managed</strong> cluster.</p>
-<ul>
-<li><strong>SveltosCluster</strong>: Represent your cluster as an <code>SveltosCluster</code> instance.</li>
-</ul>
-<div class="admonition example">
-<p class="admonition-title">SveltosCluster</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="hll"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span></span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="hll"><span class="nt">metadata</span><span class="p">:</span>
-</span></span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="hll"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR-CLUSTER-NAME</span>
-</span></span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR-CLUSTER-NAMESPACE</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="hll"><span class="w">    </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
-</span></span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="hll"><span class="nt">spec</span><span class="p">:</span>
-</span></span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">pullMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<h3 id="validation">Validation</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>monitoring
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">           </span>READY<span class="w">   </span>VERSION<span class="w">    </span>AGE
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>monitoring<span class="w">  </span>prod-cluster<span class="w">   </span><span class="nb">true</span><span class="w">    </span>v1.30.5<span class="w">    </span>9m15s
 </span></code></pre></div>
-</div>
 
 
 
