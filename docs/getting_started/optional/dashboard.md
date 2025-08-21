@@ -59,6 +59,13 @@ Let's provide the service account permissions to access the **managed** clusters
 $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --serviceaccount <namespace>:<service_account>
 ```
 
+| Argument         | Description                                                                                                                                            |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `binding_name`   | It is a descriptive name for the rolebinding.                                                                                                          |
+| `role_name`      | It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see). |
+| `namespace`      | It is the service account's namespace.                                                                                                                 |
+| `service_account`| It is the service account that the permissions are being associated with.                                                                             |
+
 **Command Details**:
 
 - **binding_name**: It is a descriptive name for the rolebinding.

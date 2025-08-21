@@ -31,7 +31,7 @@ For more information, take a peek at [this](./examples/cross_cluster_configurati
 ![Event Framework](../assets/events.png)
 
 !!!tip
-    Once Sveltos is deployed to the **management** cluster, it is automatically registered in the `mgmt` namespace with the name `mgmt`. Add-ons and applications can be deployed using the Sveltos EventFramework as soon as the appropriate Kubernetes labels are added to the cluster. For more details, see the [registration section](../../register/register-cluster.md/#register-management-cluster).
+    Once Sveltos is deployed to the **management** cluster, it is automatically registered in the `mgmt` namespace with the name `mgmt`. Add-ons and applications can be deployed using the Sveltos EventFramework as soon as the appropriate Kubernetes labels are added to the cluster. For more details, see the [registration section](../register/register-cluster.md#register-management-cluster).
 
 ## EventSource
 
