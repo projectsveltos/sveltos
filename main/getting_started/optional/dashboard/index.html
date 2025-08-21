@@ -848,9 +848,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kubectl-installation" class="md-nav__link">
+  <a href="#manifest-installation" class="md-nav__link">
     <span class="md-ellipsis">
-      kubectl Installation
+      Manifest Installation
     </span>
   </a>
   
@@ -3127,9 +3127,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kubectl-installation" class="md-nav__link">
+  <a href="#manifest-installation" class="md-nav__link">
     <span class="md-ellipsis">
-      kubectl Installation
+      Manifest Installation
     </span>
   </a>
   
@@ -3194,9 +3194,13 @@
 
   <h1>Sveltos Dashboard</h1>
 
+<div class="admonition video">
+<p class="admonition-title">Video</p>
+<p>To learn more about the <strong>Sveltos Dashboard</strong>, check out the <a href="https://www.youtube.com/embed/FjFtvrG8LWQ?si=mS8Yt2pleGsl33fK">Youtube Video</a>. If you find this valuable, we would be thrilled if you shared it! 😊</p>
+</div>
 <h2 id="introduction-to-sveltos-dashboard">Introduction to Sveltos Dashboard</h2>
 <p>The Sveltos Dashboard is not part of the generic Sveltos installation. It is a manifest file that will get deployed on top. If you have not installed Sveltos, check out the documentation <a href="../../install/install/">here</a>.</p>
-<h3 id="kubectl-installation">kubectl Installation</h3>
+<h3 id="manifest-installation">Manifest Installation</h3>
 <p>To deploy the Sveltos Dashboard, run the below command using the <code>kubectl</code> utility.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/dashboard-manifest.yaml
 </span></code></pre></div>
@@ -3222,27 +3226,40 @@
 <p>Let's provide the service account permissions to access the <strong>managed</strong> clusters in the <strong>management</strong> cluster.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ kubectl create clusterrolebinding &lt;binding_name&gt; --clusterrole &lt;role_name&gt; --serviceaccount &lt;namespace&gt;:&lt;service_account&gt;
 </span></code></pre></div>
-<p><strong>Command Details</strong>:</p>
-<ul>
-<li><strong>binding_name</strong>: It is a descriptive name for the rolebinding.</li>
-<li><strong>role_name</strong>: It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e, which managed clusters this serviceAccount can see)</li>
-<li><strong>namespace</strong>: It is the service account's namespace.</li>
-<li><strong>service_account</strong>: It is the service account that the permissions are being associated with.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>binding_name</code></td>
+<td>It is a descriptive name for the rolebinding.</td>
+</tr>
+<tr>
+<td><code>role_name</code></td>
+<td>It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see).</td>
+</tr>
+<tr>
+<td><code>namespace</code></td>
+<td>It is the service account's namespace.</td>
+</tr>
+<tr>
+<td><code>service_account</code></td>
+<td>It is the service account that the permissions are being associated with.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="platform-administrator-example">Platform Administrator Example</h3>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create sa platform-admin
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 </span></code></pre></div>
-<p>Create a login token for the service account with the name <code>platform-admin</code> in the <code>default</code> namespace.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Create a login token for the service account with the name <code>platform-admin</code> in the <code>default</code> namespace. The token will be valid for <strong>24 hours</strong>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ kubectl create token platform-admin --duration=24h
 </span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The token created above will expire after 24 hours.</p>
-</div>
 <p>Copy the token generated, login to the Sveltos Dashboard and submit it.</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/FjFtvrG8LWQ?si=mS8Yt2pleGsl33fK" title="Sveltos Dashboard" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
 <div class="footnote">
 <hr />
 <ol>
