@@ -1,7 +1,7 @@
 /*
- * The below code is an anonymous function used as a callback for a defined subscription.
- * The code enhances the copy to clipboard functionality and removes any $ sign from
- * code snippets to achieve better user experience.
+ * When the copy button is clicked, the script temporary modifies the displayed text.
+ * The leading characters '$' or '$ ' are removed from the code snippets.
+ * After 10ms delay, the original text is restored.
  */
 
 document$.subscribe(function() {
@@ -14,15 +14,18 @@ document$.subscribe(function() {
 
     if (codeElement) {
 
-      const actualText = codeElement.textContent;
+      let actualText = codeElement.textContent;
 
       button.addEventListener('click', function() {
 
         const modifiedText = actualText.replace(/^((\$)\s*)/gm, '');
 
-        navigator.clipboard.writeText(modifiedText)
-          .catch(() => {
-          });
+        codeElement.textContent = modifiedText;
+
+        setTimeout(() => {
+          codeElement.textContent = actualText;
+        }, 10);
+
       });
     }
   });
