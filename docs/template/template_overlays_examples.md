@@ -63,33 +63,23 @@ spec:
       optional: true
 ```
 
-Lets say we have two different environments: `staging`and `production`
+With this Sveltos configuration, the specific ConfigMaps used for the Kyverno deployment depend entirely on the environment label of the target cluster.
 
-```yaml
-apiVersion: v1
-data:
-  chartVersion:     3.5.1
-kind: ConfigMap
-metadata:
-  name: kyverno-staging-version
-  namespace: default
----
-apiVersion: v1
-data:
-  values: |2
-          admissionController:
-            replicas: 1
-          backgroundController:
-            replicas: 1
-          cleanupController:
-            replicas: 1
-          reportsController:
-            replicas: 1
-kind: ConfigMap
-metadata:
-  name: kyverno-staging-values
-  namespace: default
-```
+When a cluster has the label `environment: production`, the ClusterProfile's Go templates resolve to the following:
+
+- Version ConfigMap: _kyverno-production-version_
+- Values ConfigMap: _kyverno-production-values_
+
+Sveltos will use these ConfigMaps to install the Kyverno Helm chart with 3 replicas for both the admissionController and backgroundController, as specified in the production ConfigMap. This is a classic example of a production-level, high-availability configuration.
+
+When a cluster has the label `environment: staging`, the ClusterProfile's Go templates resolve to the following:
+
+- Version ConfigMap: _kyverno-staging-version_
+- Values ConfigMap: _kyverno-staging-values_
+
+In this case, Sveltos will install Kyverno with all controllers set to 1 replica, which is typical for a staging or testing environment to conserve resources.
+
+This demonstrates how a single ClusterProfile can manage multiple environments by dynamically selecting the correct configuration "overlay" at runtime based on the cluster's labels.
 
 ```yaml
 apiVersion: v1
@@ -114,5 +104,31 @@ data:
 kind: ConfigMap
 metadata:
   name: kyverno-production-values
+  namespace: default
+```
+
+```yaml
+apiVersion: v1
+data:
+  chartVersion:     3.5.1
+kind: ConfigMap
+metadata:
+  name: kyverno-staging-version
+  namespace: default
+---
+apiVersion: v1
+data:
+  values: |2
+          admissionController:
+            replicas: 1
+          backgroundController:
+            replicas: 1
+          cleanupController:
+            replicas: 1
+          reportsController:
+            replicas: 1
+kind: ConfigMap
+metadata:
+  name: kyverno-staging-values
   namespace: default
 ```
