@@ -3318,7 +3318,7 @@
   <h1>Example Mutlicluster Iteration and Deployment</h1>
 
 <h2 id="use-case-description">Use Case Description</h2>
-<p>There are a number of cases where platform administrators or operators want to discover and iterate through multiple clustes to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.</p>
+<p>There are a number of cases where platform administrators or operators want to discover and iterate through multiple clusters to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.</p>
 <p>The use case can be easily achieved by Sveltos with the use of the <a href="../template_generic_examples/">templating</a> functionality and <a href="../../events/addon_event_deployment/">Sveltos Event Franmework</a>.</p>
 <h2 id="identify-sveltos-managed-clusters">Identify Sveltos Managed Clusters</h2>
 <p>Sveltos <code>Event Framework</code> will be used to dynamically detect all <strong>managed</strong> clusters (of type SveltosCluster) that are different from the management cluster. The management cluster has the Sveltos cluster label set to <code>type:mgmt</code>.</p>
