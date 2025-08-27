@@ -11,7 +11,8 @@ tags:
 authors:
     - Gianluca Mardente
 ---
-<a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="octicon-star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
+
+<a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a>
 
 ## Sveltos Available Articles
 
@@ -35,8 +36,9 @@ authors:
 1. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
 1. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 1. [CIS Benchmark Compliance Across Multiple Kubernetes Clusters](https://itnext.io/ensurincis-benchmark-compliance-across-multiple-kubernetes-clusters-dd544682e786)
-1. [Sveltos Templating: Cilium Cluster Mesh in One Run](https://egrosdou01.github.io/personal-blog/blog/sveltos-templating-cilium-cluster-mesh)
-1. [Sveltos Tiers: Efficient Day-2 Operations and Targeted Updates](https://egrosdou01.github.io/personal-blog/blog/sveltos-introduction-to-tiers)
+1. [Sveltos Templating: Cilium Cluster Mesh in One Run](https://blog.grosdouli.dev/blog/sveltos-templating-cilium-cluster-mesh)
+1. [Sveltos Tiers: Efficient Day-2 Operations and Targeted Updates](https://blog.grosdouli.dev/blog/sveltos-introduction-to-tiers)
+1. [Better Together: CAPI, Sveltos, and Cyclops for Automated Development Environments](https://blog.grosdouli.dev/blog/capi-sveltos-cyclops)
 
 ## Sveltos Video List
 
@@ -53,7 +55,6 @@ authors:
 1. [![Conf42 2023](https://img.youtube.com/vi/Xi2HvRfaNYI/0.jpg)](https://www.youtube.com/watch?v=Xi2HvRfaNYI)
 
 More videos can be found here:
-
 
 1. [Sveltos introduction](https://youtu.be/RyWDz9CXjXs)
 1. [Sveltos features presentation](https://www.youtube.com/watch?v=UfrKOPTJRCc)
@@ -76,8 +77,6 @@ More videos can be found here:
 !!! tip ""
     If you like the project, please <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank">give us a</a> <a href="https://github.com/projectsveltos/sveltos-manager" title="Manage Kubernetes add-ons" target="_blank" class="heart">:octicons-star-fill-24:</a> if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.**
 
-
 [:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){:target="_blank" .md-button}
 
 [![Stargazers repo roster for @projectsveltos/addon-controller](http://reporoster.com/stars/projectsveltos/addon-controller)](https://github.com/projectsveltos/addon-controller/stargazers)
-
