@@ -53,15 +53,11 @@ Sveltos was built to address the challenges posed by various CI/CD tools. Svelto
 
 Key features of Sveltos include multitenancy, agent-based drift notification and synchronisation, and resource optimisation. These features ensure **secure**, **reliable**, and **stable** deployments of Kubernetes add-ons and applications, while reducing operational costs in both on-prem and cloud environments.
 
-## Schedule Free Demo
+## Enterprise Offering
 
-Interested in learning more about Sveltos and how it can benefit you?  Schedule a free demo.
 
-<div style="text-align: center;">
-  <a href="https://cal.com/gianluca-mardente-xqepwq/30min">
-    <img src="assets/schedule-free-demo.png" alt="Schedule a Free Demo" width="200">
-  </a>
-</div>
+Interested in our enterprise offering? [Enterprise offering](https://sveltos.projectsveltos.io/#pricing)
+
 
 ## 😻 Contributing to projectsveltos
 
