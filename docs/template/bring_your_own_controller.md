@@ -103,7 +103,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
       name: bucket
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       bucket.yaml: |
         apiVersion: demo.projectsveltos.io/v1alpha1
@@ -122,7 +122,7 @@ The following YAML instructions are used to deploy add-ons using Sveltos:
       name: uploader
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       secret.yaml: |
         apiVersion: v1

@@ -77,7 +77,7 @@ At this point, you can use the Sveltos' [template](template_generic_examples.md)
       name: ytt-resources
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       resource.yaml: |
         {{ (getResource "YttSource").status.resources }}

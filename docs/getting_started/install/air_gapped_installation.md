@@ -146,7 +146,7 @@ Continue with the **sveltoctl** command-line interface (CLI) definition and inst
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ copy "ImagePullSecret" }}

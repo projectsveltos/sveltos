@@ -101,7 +101,7 @@ metadata:
   name: loadbalancer-class-handler-svc
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/instantiate: "true"
+    projectsveltos.io/instantiate: ok
 data:
   service.yaml: |
     kind: Service
@@ -133,7 +133,7 @@ metadata:
   name: loadbalancer-class-handler-cp
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/instantiate: "true"
+    projectsveltos.io/instantiate: ok
 data:
   cp.yaml: |
     apiVersion: config.projectsveltos.io/v1beta1
@@ -312,7 +312,7 @@ metadata:
   name: loadbalancer-class-handler-status
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/template: "true"
+    projectsveltos.io/template: ok
     projectsveltos.io/subressources: "status"
 data:
   service.yaml: |
@@ -386,7 +386,7 @@ metadata:
   name: loadbalancer-class-handler-svc
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/instantiate: "true"
+    projectsveltos.io/instantiate: ok
 data:
   service.yaml: |
     kind: Service
@@ -418,7 +418,7 @@ metadata:
   name: loadbalancer-class-handler-cp
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/instantiate: "true"
+    projectsveltos.io/instantiate: ok
 data:
   cp.yaml: |
     apiVersion: config.projectsveltos.io/v1beta1
@@ -453,7 +453,7 @@ metadata:
   name: loadbalancer-class-handler-status
   namespace: projectsveltos
   annotations:
-    projectsveltos.io/template: "true"
+    projectsveltos.io/template: ok
     projectsveltos.io/subressources: "status"
 data:
   service.yaml: |

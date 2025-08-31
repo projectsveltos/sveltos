@@ -18,6 +18,10 @@ authors:
 
 Profile is a namespace-scoped resource.  It can only match clusters and reference resources within its own namespace.
 
+### Pause Annotation
+
+Pausing a ClusterProfile with the `profile.projectsveltos.io/paused` annotation prevents Sveltos from performing any reconciliation. This effectively freezes the ClusterProfile in its current state, ensuring that no changes are applied to the clusters it manages.
+
 ### Spec.ClusterSelector
 
 *clusterSelector* field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.
