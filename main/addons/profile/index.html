@@ -1312,6 +1312,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#pause-annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pause Annotation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specclusterselector" class="md-nav__link">
     <span class="md-ellipsis">
       Spec.ClusterSelector
@@ -3246,6 +3255,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#pause-annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pause Annotation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specclusterselector" class="md-nav__link">
     <span class="md-ellipsis">
       Spec.ClusterSelector
@@ -3391,6 +3409,8 @@
 <h2 id="profiles">Profiles</h2>
 <p><a href="https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go" title="Profile to manage Kubernetes add-ons">Profile</a> is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.</p>
 <p>Profile is a namespace-scoped resource.  It can only match clusters and reference resources within its own namespace.</p>
+<h3 id="pause-annotation">Pause Annotation</h3>
+<p>Pausing a ClusterProfile with the <code>profile.projectsveltos.io/paused</code> annotation prevents Sveltos from performing any reconciliation. This effectively freezes the ClusterProfile in its current state, ensuring that no changes are applied to the clusters it manages.</p>
 <h3 id="specclusterselector">Spec.ClusterSelector</h3>
 <p><em>clusterSelector</em> field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.</p>
 <p>This field employs a Kubernetes label selector, allowing you to target clusters based on specific labels.</p>

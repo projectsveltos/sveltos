@@ -2277,6 +2277,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#instantiation-flow-clusterprofile-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instantiation Flow: ClusterProfile Name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Functions
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3200,6 +3218,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#instantiation-flow-clusterprofile-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instantiation Flow: ClusterProfile Name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Functions
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3440,8 +3476,63 @@
 <li>If the resource has the <code>projectsveltos.io/instantiate</code> annotation, Sveltos instantiates the content of the <code>ConfigMap/Secret</code> using the <strong>cluster</strong> and <strong>event data</strong>. A new <code>ConfigMap/Secret</code> is generated with the instantiated value. The generated <code>ClusterProfile.spec.helmCharts.valuesFrom</code> will reference the newly created <code>ConfigMap/Secret</code>.</li>
 </ul>
 <p>The same logic applies to <strong>EventTrigger.spec.kustomizationRefs—fields</strong>.</p>
+<h3 id="instantiation-flow-clusterprofile-name">Instantiation Flow: ClusterProfile Name</h3>
+<p>By default, the <em>ClusterProfile</em> instances created by the event framework are assigned random names. While this is acceptable for most use cases, a predictable name is required in scenarios where other resources must be set as dependent on the instantiated ClusterProfile. The random naming convention makes it impossible to reference these instances programmatically.</p>
+<p>To address this challenge, the EventTrigger <em>spec</em> includes an optional field: <code>InstantiatedProfileNameFormat</code>. This field allows for the definition of a naming template that ensures a predictable name is generated for the ClusterProfile instance. The name is consistently formatted based on a Go template and can leverage data from the cluster and the specific event that triggered the creation.</p>
+<p>In the example below, the template uses the cluster name and the name of the resource that triggered the event.</p>
+<p><code>{{ .Cluster.metadata.name }}-{{ .Resource.metadata.name }}-test</code></p>
+<p>When an event is triggered, Sveltos will automatically apply this template. For example, if the event occurs in a cluster named <em>cluster-alpha</em> and is triggered by a resource named <em>pod-nginx</em>, the resulting ClusterProfile will be named: <em>cluster-alpha-pod-nginx-test</em>.</p>
+<h3 id="template-functions">Template Functions</h3>
+<p>Sveltos supports the template functions included from the <a href="https://masterminds.github.io/sprig/">Sprig</a> open source project. The Sprig library provides over <strong>70 template functions</strong> for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.</p>
+<ol>
+<li><strong>String Functions</strong>: trim, wrap, randAlpha, plural, etc.</li>
+<li><strong>String List Functions</strong>: splitList, sortAlpha, etc.</li>
+<li><strong>Integer Math Functions</strong>: add, max, mul, etc.</li>
+<li><strong>Integer Slice Functions</strong>: until, untilStep</li>
+<li><strong>Float Math Functions</strong>: addf, maxf, mulf, etc.</li>
+<li><strong>Date Functions</strong>: now, date, etc.</li>
+<li><strong>Defaults Functions</strong>: default, empty, coalesce, fromJson, toJson, toPrettyJson, toRawJson, ternary</li>
+<li><strong>Encoding Functions</strong>: b64enc, b64dec, etc.</li>
+<li><strong>Lists and List Functions</strong>: list, first, uniq, etc.</li>
+<li><strong>Dictionaries and Dict Functions</strong>: get, set, dict, hasKey, pluck, dig, deepCopy, etc.</li>
+<li><strong>Type Conversion Functions</strong>: atoi, int64, toString, etc.</li>
+<li><strong>Path and Filepath Functions</strong>: base, dir, ext, clean, isAbs, osBase, osDir, osExt, osClean, osIsAbs</li>
+<li><strong>Flow Control Functions</strong>: fail</li>
+</ol>
+<p>Sveltos includes a dedicated set of functions for manipulating the resources that trigger events. These functions are designed to make it easy to work with Kubernetes resource data directly within your templates.</p>
+<ol>
+<li><strong>getResource</strong>: Takes the resource that generated the event and returns a map[string]interface{} allowing to access any field of the resource. Following fields are automatically cleared: <strong>managedFields</strong>, <strong>resourceVersion</strong> and <strong>uid</strong>.</li>
+<li><strong>copy</strong>: Creates a copy of the resource that generated the event.</li>
+<li><strong>setField</strong>: Takes the resource that generated the event, the field name, and a new value. It returns a modified copy of the resource with the specified field updated.</li>
+<li><strong>removeField</strong>: Takes the resource that generated the event and the field name. Returns a modified copy of the resource with the specified field removed.</li>
+<li><strong>getField</strong>: Takes the resource that generated the event and the field name. Returns the field value</li>
+<li><strong>chainSetField</strong>: This function acts as an extension of setField. It allows for chaining multiple field updates.</li>
+<li><strong>chainRemoveField</strong>: Similar to chainSetField, this function allows for chaining multiple field removals.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These functions operate on copies of the original resource, ensuring the original data remains untouched.</p>
+</div>
+<p>Here are some examples:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="w">  </span><span class="c1"># Use getResource to retrieve the triggering resource and store it in a temporary variable.</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="c1"># This variable will be used as the starting point for all subsequent modifications.</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="c1"># Fields managedFields, resourceVersion and uid are automatically cleared</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">$resource</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="nv">= getResource .Resource</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="c1"># Use chainSetField to modify the &#39;metadata.name&#39; field.</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">  </span><span class="c1"># This function returns the modified resource, allowing it to be chained with the next function.</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">$resource</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="nv">= chainSetField $resource &quot;metadata.name&quot; &quot;new-name&quot;</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">  </span><span class="c1"># Use chainRemoveField to remove the &#39;data&#39; field.</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">  </span><span class="c1"># The previous changes are preserved as the function operates on the modified resource.</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">$resource</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="nv">= chainRemoveField $resource &quot;data&quot;</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">  </span><span class="c1"># Finally, use the toYaml function to output the final, modified resource.</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">  </span><span class="c1"># This will be the resource that is applied to the managed cluster.</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">toYaml $resource</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span></code></pre></div>
 <h2 id="benefits">Benefits</h2>
-<p>The EvenTrigger has access to the resource data and can use them to instantiate <code>namespace/name</code> of the <code>TemplateResourceRefs</code> field and the <code>ConfigMap/Secret</code> of the <code>policyRefs</code> field. This is possible only if the resources have the annotation set to <strong>projectsveltos.io/instantiate</strong>.</p>
+<p>The EvenTrigger has access to the resource data and can use them to instantiate <code>namespace/name</code> of the <code>TemplateResourceRefs</code> field and the <code>ConfigMap/Secret</code> of the <code>policyRefs</code> field.</p>
 <p>Once the EventTrigger is done creating the Sveltos ClusterProfile, the <strong>addon controller</strong> will take over and deploy it to the matching cluster(s). The <strong>addon controller</strong> does not have any access to the resource (only the EventTrigger has access to the resource). However, it can fetch any resource present in the <strong>management cluster</strong> which is defined in the <code>TemplateResourceRefs</code> field.</p>
 <h2 id="next-steps">Next Steps</h2>
 <p>Continue with the Event Generators section located <a href="../generators/">here</a>.</p>
