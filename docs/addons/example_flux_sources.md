@@ -258,7 +258,7 @@ Let's try it out! The content in the "template" directory of the [repository](ht
 ### GitRepository Definition
 
 !!! note
-    Add the __projectsveltos.io/template: "true"__ annotation to the __GitRepository__ resources created further above.
+    Add the __projectsveltos.io/template: ok__ annotation to the __GitRepository__ resources created further above.
 
 !!! example "GitRepository Resource"
     ```yaml
@@ -269,7 +269,7 @@ Let's try it out! The content in the "template" directory of the [repository](ht
       name: flux-system
       namespace: flux-system
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     spec:
       interval: 1m0s
       ref:

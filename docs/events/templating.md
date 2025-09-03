@@ -268,9 +268,73 @@ Additionally, each Helm chart defined in __EventTrigger.spec.helmCharts__ can us
 
 The same logic applies to __EventTrigger.spec.kustomizationRefs—fields__.
 
+### Instantiation Flow: ClusterProfile Name
+
+By default, the _ClusterProfile_ instances created by the event framework are assigned random names. While this is acceptable for most use cases, a predictable name is required in scenarios where other resources must be set as dependent on the instantiated ClusterProfile. The random naming convention makes it impossible to reference these instances programmatically.
+
+To address this challenge, the EventTrigger _spec_ includes an optional field: `InstantiatedProfileNameFormat`. This field allows for the definition of a naming template that ensures a predictable name is generated for the ClusterProfile instance. The name is consistently formatted based on a Go template and can leverage data from the cluster and the specific event that triggered the creation.
+
+ In the example below, the template uses the cluster name and the name of the resource that triggered the event.
+
+`{{ .Cluster.metadata.name }}-{{ .Resource.metadata.name }}-test`
+
+When an event is triggered, Sveltos will automatically apply this template. For example, if the event occurs in a cluster named _cluster-alpha_ and is triggered by a resource named _pod-nginx_, the resulting ClusterProfile will be named: _cluster-alpha-pod-nginx-test_.
+
+### Template Functions
+
+Sveltos supports the template functions included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over **70 template functions** for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.
+
+1. **String Functions**: trim, wrap, randAlpha, plural, etc.
+1. **String List Functions**: splitList, sortAlpha, etc.
+1. **Integer Math Functions**: add, max, mul, etc.
+1. **Integer Slice Functions**: until, untilStep
+1. **Float Math Functions**: addf, maxf, mulf, etc.
+1. **Date Functions**: now, date, etc.
+1. **Defaults Functions**: default, empty, coalesce, fromJson, toJson, toPrettyJson, toRawJson, ternary
+1. **Encoding Functions**: b64enc, b64dec, etc.
+1. **Lists and List Functions**: list, first, uniq, etc.
+1. **Dictionaries and Dict Functions**: get, set, dict, hasKey, pluck, dig, deepCopy, etc.
+1. **Type Conversion Functions**: atoi, int64, toString, etc.
+1. **Path and Filepath Functions**: base, dir, ext, clean, isAbs, osBase, osDir, osExt, osClean, osIsAbs
+1. **Flow Control Functions**: fail
+
+Sveltos includes a dedicated set of functions for manipulating the resources that trigger events. These functions are designed to make it easy to work with Kubernetes resource data directly within your templates.
+
+1. **getResource**: Takes the resource that generated the event and returns a map[string]interface{} allowing to access any field of the resource. Following fields are automatically cleared: __managedFields__, __resourceVersion__ and __uid__.
+1. **copy**: Creates a copy of the resource that generated the event.
+1. **setField**: Takes the resource that generated the event, the field name, and a new value. It returns a modified copy of the resource with the specified field updated.
+1. **removeField**: Takes the resource that generated the event and the field name. Returns a modified copy of the resource with the specified field removed.
+1. **getField**: Takes the resource that generated the event and the field name. Returns the field value
+1. **chainSetField**: This function acts as an extension of setField. It allows for chaining multiple field updates.
+1. **chainRemoveField**: Similar to chainSetField, this function allows for chaining multiple field removals.
+
+!!! note
+    These functions operate on copies of the original resource, ensuring the original data remains untouched.
+
+Here are some examples:
+
+```yaml
+  # Use getResource to retrieve the triggering resource and store it in a temporary variable.
+  # This variable will be used as the starting point for all subsequent modifications.
+  # Fields managedFields, resourceVersion and uid are automatically cleared
+  {{ $resource := getResource .Resource }}
+
+  # Use chainSetField to modify the 'metadata.name' field.
+  # This function returns the modified resource, allowing it to be chained with the next function.
+  {{ $resource := chainSetField $resource "metadata.name" "new-name" }}
+
+  # Use chainRemoveField to remove the 'data' field.
+  # The previous changes are preserved as the function operates on the modified resource.
+  {{ $resource := chainRemoveField $resource "data" }}
+
+  # Finally, use the toYaml function to output the final, modified resource.
+  # This will be the resource that is applied to the managed cluster.
+  {{ toYaml $resource }}
+```
+
 ## Benefits
 
-The EvenTrigger has access to the resource data and can use them to instantiate `namespace/name` of the `TemplateResourceRefs` field and the `ConfigMap/Secret` of the `policyRefs` field. This is possible only if the resources have the annotation set to __projectsveltos.io/instantiate__.
+The EvenTrigger has access to the resource data and can use them to instantiate `namespace/name` of the `TemplateResourceRefs` field and the `ConfigMap/Secret` of the `policyRefs` field.
 
 Once the EventTrigger is done creating the Sveltos ClusterProfile, the **addon controller** will take over and deploy it to the matching cluster(s). The **addon controller** does not have any access to the resource (only the EventTrigger has access to the resource). However, it can fetch any resource present in the **management cluster** which is defined in the `TemplateResourceRefs` field.
 

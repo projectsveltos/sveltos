@@ -67,7 +67,7 @@ When incorporating Go template logic into Sveltos templates, utilise the **escap
       name: meilisearch-proxy-secrets
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       secrets.yaml: |
         {{ $cluster := .Cluster.metadata.name }}

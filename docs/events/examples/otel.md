@@ -123,7 +123,7 @@ Once we have a matching namespace, the `EventTrigger` performs the following act
       name: cluster-receiver-value
       namespace: default
       annotations:
-        projectsveltos.io/instantiate: "true"
+        projectsveltos.io/instantiate: ok
     data:
       cluster-receiver-value.yaml: |
           clusterReceiver:

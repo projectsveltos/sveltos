@@ -124,7 +124,7 @@ Lets assume the clusters where the service should get deployed has the cluster l
       name: nats-services
       namespace: default
       annotations:
-          projectsveltos.io/template: "true"
+          projectsveltos.io/template: ok
     data:
       services.yaml: |
         {{ range $cluster := (getResource "ClusterData").spec.matchingResources }}

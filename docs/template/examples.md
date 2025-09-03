@@ -68,7 +68,7 @@ To simply copy the Secret grabbed from the management cluster to any matching ma
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ copy "ExternalSecret" }}
@@ -144,7 +144,7 @@ spec:
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ setField "NginxDeployment" "spec.replicas" (int64 5) }}
@@ -165,7 +165,7 @@ Consequently, each managed cluster will have the deployment running with 5 repli
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ removeField "NginxDeployment" "spec.replicas" }}
@@ -190,7 +190,7 @@ Building upon the previous example, this section explores how to manipulate vari
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ $depl := (getResource "NginxDeployment") }}
@@ -220,7 +220,7 @@ The example demonstrates a more complex scenario where the template modifies the
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ $currentContainers := (getField "NginxDeployment" "spec.template.spec.containers") }}

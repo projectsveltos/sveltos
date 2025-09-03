@@ -16,6 +16,10 @@ authors:
 
 [ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
+### Pause Annotation
+
+Pausing a ClusterProfile with the `profile.projectsveltos.io/paused` annotation prevents Sveltos from performing any reconciliation. This effectively freezes the ClusterProfile in its current state, ensuring that no changes are applied to the clusters it manages.
+
 ### Spec.ClusterSelector
 
 *clusterSelector* field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.

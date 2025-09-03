@@ -66,7 +66,7 @@ Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
       name: bucket
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       bucket.yaml: |
         apiVersion: storage.gcp.upbound.io/v1beta1
@@ -89,7 +89,7 @@ Once the Pod is deployed, it will upload a file to the `my-bucket` bucket.
       name: uploader
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       secret.yaml: |
         apiVersion: v1

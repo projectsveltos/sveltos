@@ -46,7 +46,7 @@ Install and run Flux in the management cluster. Configure it to synchronise the 
       name: flux-system
       namespace: flux-system
       annotations:
-        projectsveltos.io/template: "true" # (1)
+        projectsveltos.io/template: ok # (1)
     spec:
       interval: 1m0s # (2)
       ref:
@@ -94,7 +94,7 @@ Define a Sveltos ClusterProfile referencing to the `flux-system` `GitRepository`
 Whenever there is a change in the Git repository, Sveltos will leverage the Kustomize SDK to retrieve a list of resources to deploy to any cluster matching the label selector `env=fv` in the `eng` namespace.
 
 !!! note
-    The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. For the templates deployment, we will have to ensure the `GitRepository` Kubernetes resource includes the `projectsveltos.io/template: "true"` annotation.
+    The GitRepository or Bucket content can also be a template. Sveltos will take the content of the files and instantiate them by the use of the data resources in the management cluster. For the templates deployment, we will have to ensure the `GitRepository` Kubernetes resource includes the `projectsveltos.io/template: ok` annotation.
 
 ## More Resources
 

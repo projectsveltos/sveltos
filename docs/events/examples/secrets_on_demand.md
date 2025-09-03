@@ -88,7 +88,7 @@ The `EventTrigger` will then generate a Sveltos `ClusterProfile`. The ClusterPro
       name: namespaces
       namespace: default
       annotations: # This annotation indicates Sveltos to instantiate it using Event data, i.e, the namespaces requiring the credentials
-        projectsveltos.io/instantiate: "true"
+        projectsveltos.io/instantiate: ok
     data:
       namespaces: |
         {{- range $v := .MatchingResources }}
@@ -101,7 +101,7 @@ The `EventTrigger` will then generate a Sveltos `ClusterProfile`. The ClusterPro
       name: info
       namespace: default
       annotations: # This annotation indicates Sveltos the content is a template that needs to be instantiated using resources fetched in TemplateResourceRefs
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       secret.yaml: |
         {{ $namespaces := ( ( index (getResource "Namespaces").data "namespaces" ) | fromYaml ) }}

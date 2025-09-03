@@ -262,7 +262,7 @@ The below YAML definition instruct Sveltos to find a Secret named _autoscaler_ i
         namespace: default
     ```
 
-By adding the special annotation (`projectsveltos.io/template: "true"`) to a ConfigMap named _info_ (also in the _default_ namespace), we can define a template within it. Find the example template below.
+By adding the special annotation (`projectsveltos.io/template: ok`) to a ConfigMap named _info_ (also in the _default_ namespace), we can define a template within it. Find the example template below.
 
 !!! example "Example - ConfigMap Definition"
     ```yaml
@@ -273,7 +273,7 @@ By adding the special annotation (`projectsveltos.io/template: "true"`) to a Con
       name: info
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         # AutoscalerSecret now references the Secret default/autoscaler
@@ -338,13 +338,13 @@ Firstly, we create a `ConfigMap` named _replicate-external-secret-operator-secre
       name: replicate-external-secret-operator-secret
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"  # add annotation to indicate Sveltos content is a template
+        projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
     data:
       secret.yaml: |
         {{ copy "ESOSecret" }}
     ```
 
-- The `projectsveltos.io/template: "true"` annotation tells Sveltos this is a template
+- The `projectsveltos.io/template: ok` annotation tells Sveltos this is a template
 - The template references a placeholder named _ESOSecret_, which will be filled with the actual secret data later
 
 Next, we will define a `ClusterProfile` named _replicate-external-secret-operator-secret_. The profile instructs Sveltos on how to deploy the secrets:
@@ -425,7 +425,7 @@ We expose additional `InfrastructureProviderIdentity` and `InfrastructureProvide
       name: azure-cloud-provider
       namespace: default
       annotations:
-        projectsveltos.io/template: "true"
+        projectsveltos.io/template: ok
     data:
       configmap.yaml: |
         {{- $cluster := .InfrastructureProvider -}}
