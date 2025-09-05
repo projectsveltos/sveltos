@@ -3283,7 +3283,7 @@
 <p>The <code>jsonnet controller</code> offers the capability to process jsonnet files using different sources, such as Flux Sources (GitRepository/OCIRepository/Bucket), ConfigMap, or Secrets. It then programmatically invokes jsonnet go module and stores the output in the Status section making it available for Sveltos to consume.</p>
 <h2 id="option-1-gitrepository">Option 1: GitRepository</h2>
 <p><img alt="Sveltos managing clusters" src="../../assets/flux-jsonnet-sveltos.png" /></p>
-<p>We can leverage GitRepository as a source for the jsonnet controller<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">2</a></sup>. For example, in the provided GitHub repository <a href="https://github.com/gianlucam76/jsonnet-examples">jsonnet-examples</a>, we can find the jsonnet files that Flux will sync.</p>
+<p>We can leverage GitRepository as a source for the jsonnet controller<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. For example, in the provided GitHub repository <a href="https://github.com/gianlucam76/jsonnet-examples">jsonnet-examples</a>, we can find the jsonnet files that Flux will sync.</p>
 <p>To instruct the jsonnet controller to fetch files from this repository, create a JsonnetSource CRD instance with the below configuration:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nn">---</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extension.projectsveltos.io/v1beta1</span>
@@ -3301,7 +3301,7 @@
 </span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span>
 </span></code></pre></div>
 <p>The <code>path</code> field specifies the location within the Git repository where the jsonnet file is stored. Once Flux detects changes in the repository and syncs it, the jsonnet-controller will automatically invoke the jsonnet module and store the output in the Status section of the JsonnetSource instance.</p>
-<p>At this point, you can use the Sveltos' <a href="../template_generic_examples/">template</a> feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">1</a></sup>.</p>
+<p>At this point, you can use the Sveltos' <a href="../template_generic_examples/">template</a> feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
 <h3 id="clusterprofile">ClusterProfile</h3>
 <div class="admonition example">
 <p class="admonition-title">Example - ClusterProfile and Resources Definition</p>
@@ -3415,11 +3415,11 @@
 <div class="footnote">
 <hr />
 <ol>
-<li id="fn:2">
-<p>Instructing Sveltos involves the initial step of retrieving a resource from the management cluster, which is the JsonnetSource instance named <code>jsonnetsource-flux</code> in the <code>default</code> namespace. Sveltos is then responsible for deploying the resources found within the <code>jsonnet-resources</code> ConfigMap. However, this ConfigMap acts as a template, requiring instantiation before deployment. Within the Data section of the ConfigMap, there is a single entry called <code>resource.yaml</code>. After instantiation, this entry will contain the content that the jsonnet controller has stored in the JsonnetSource instance.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
 <li id="fn:1">
-<p>Flux is present in the management cluster and it is used to sync from GitHub repository. The GitRepository instance is the below.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p>Flux is present in the management cluster and it is used to sync from GitHub repository. The GitRepository instance is the below.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Instructing Sveltos involves the initial step of retrieving a resource from the management cluster, which is the JsonnetSource instance named <code>jsonnetsource-flux</code> in the <code>default</code> namespace. Sveltos is then responsible for deploying the resources found within the <code>jsonnet-resources</code> ConfigMap. However, this ConfigMap acts as a template, requiring instantiation before deployment. Within the Data section of the ConfigMap, there is a single entry called <code>resource.yaml</code>. After instantiation, this entry will contain the content that the jsonnet controller has stored in the JsonnetSource instance.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>

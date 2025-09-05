@@ -3315,7 +3315,7 @@
 <p>Each EvenTrigger instance:</p>
 <ol>
 <li>References an <a href="../addon_event_deployment/#eventsource">EventSource</a> (which defines what the event is);</li>
-<li>Has a <em>sourceClusterSelector</em> selecting one or more managed clusters; <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
+<li>Has a <em>sourceClusterSelector</em> selecting one or more managed clusters; <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">2</a></sup></li>
 <li>Contains a list of add-ons to deploy</li>
 </ol>
 <p>The following example demonstrates how to trigger the creation of a Namespace when a user logs in.  It uses an <em>EventTrigger</em> referencing the <code>user-login</code> EventSource (defined previously) and a ConfigMap template.  Sveltos instantiates the ConfigMap template, creating a new Namespace. The Namespace's name is taken from the CloudEvent's subject, and a label is added based on the message within the CloudEvent's data.</p>
@@ -3421,7 +3421,7 @@ defined as a template. When CloudEvent type is <strong>com.example.auth.login</s
 </span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">              </span><span class="no">password: &quot;my-password&quot;</span>
 </span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
 </span></code></pre></div>
-<p>Once NATS is deployed, create a Secret in each production cluster instructing Sveltos to connect to the NATS server<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>:</p>
+<p>Once NATS is deployed, create a Secret in each production cluster instructing Sveltos to connect to the NATS server<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">1</a></sup>:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -3728,9 +3728,6 @@ defined as a template. When CloudEvent type is <strong>com.example.auth.login</s
 <div class="footnote">
 <hr />
 <ol>
-<li id="fn:1">
-<p>EventTrigger can also reference a <a href="../../features/set/"><em>ClusterSet</em></a> to select one or more managed clusters.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
 <li id="fn:2">
 <p>Secret contains following configuration:
 <div class="language-json highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
@@ -3776,7 +3773,10 @@ Or, for a JetStream connection:
 </span><span id="__span-18-21"><a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">        </span><span class="p">}</span>
 </span><span id="__span-18-22"><a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">   </span><span class="p">}</span>
 </span><span id="__span-18-23"><a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="p">}</span>
-</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:1">
+<p>EventTrigger can also reference a <a href="../../features/set/"><em>ClusterSet</em></a> to select one or more managed clusters.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>

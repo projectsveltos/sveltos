@@ -3253,7 +3253,7 @@
 <p><img alt="Sveltos Resource Deployment Order" src="../../assets/sveltos_resource_order.png" /></p>
 <p><img alt="Sveltos Resource Deployment Order" src="../../assets/sveltos_resource_order.gif" /></p>
 <h3 id="postgresql-deployment-and-service">PostgreSQL Deployment and Service</h3>
-<p><sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup>With the ConfigMap <strong>postgresql-deployment</strong> and the <strong>postgresql-service</strong> containing respectively PostgreSQL Deployment and Service<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, the below ClusterProfile
+<p><sup id="fnref:5"><a class="footnote-ref" href="#fn:5">1</a></sup>With the ConfigMap <strong>postgresql-deployment</strong> and the <strong>postgresql-service</strong> containing respectively PostgreSQL Deployment and Service<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">2</a></sup>, the below ClusterProfile
 will instruct Sveltos to create a PostgreSQL Deployment and Service in all clusters matching the label <strong>env: fv</strong>.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3281,7 +3281,7 @@ will instruct Sveltos to create a PostgreSQL Deployment and Service in all clust
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>+-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------+
 </span></code></pre></div>
 <h3 id="create-a-table-in-the-database">Create a Table in the database</h3>
-<p>With the ConfigMap <strong>postgresql-job</strong> containing a Job that creates a table Todo in the database<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, the below YAML definition instruct Sveltos to wait for the PostgreSQL Deployment to be healthy and only then deply the Job.</p>
+<p>With the ConfigMap <strong>postgresql-job</strong> containing a Job that creates a table Todo in the database<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">3</a></sup>, the below YAML definition instruct Sveltos to wait for the PostgreSQL Deployment to be healthy and only then deply the Job.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
@@ -3339,7 +3339,7 @@ will instruct Sveltos to create a PostgreSQL Deployment and Service in all clust
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>+-----------------------------+-----------------+-----------+------------+---------+-------------------------------+------------------------------+
 </span></code></pre></div>
 <h3 id="deploy-todo-app">Deploy todo App</h3>
-<p>With the ConfigMap <strong>todo-app</strong> containing the todo app (ServiceAccount, Deployment, Service)<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>, the below YAML defintion instructs Sveltos to deploy the <code>todo</code> app only after previous Job is complete.</p>
+<p>With the ConfigMap <strong>todo-app</strong> containing the todo app (ServiceAccount, Deployment, Service)<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">4</a></sup>, the below YAML defintion instructs Sveltos to deploy the <code>todo</code> app only after previous Job is complete.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
@@ -3398,7 +3398,7 @@ will instruct Sveltos to create a PostgreSQL Deployment and Service in all clust
 </span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>+-----------------------------+---------------------------+-----------+-------------+---------+-------------------------------+------------------------------+
 </span></code></pre></div>
 <h3 id="write-entry-to-database">Write Entry to Database</h3>
-<p>With the ConfigMap <strong>todo-insert-data</strong> containing a Job which will add an entry to databse<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>, the below YAML definition instructs Sveltos to deploy a Job only after the <code>todo</code> app is <code>healthy</code>.</p>
+<p>With the ConfigMap <strong>todo-insert-data</strong> containing a Job which will add an entry to databse<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">5</a></sup>, the below YAML definition instructs Sveltos to deploy a Job only after the <code>todo</code> app is <code>healthy</code>.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nn">---</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
@@ -3449,6 +3449,9 @@ will instruct Sveltos to create a PostgreSQL Deployment and Service in all clust
 <div class="footnote">
 <hr />
 <ol>
+<li id="fn:5">
+<p>The example used in this document is based on and modified from <a href="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/04-syncwaves-hooks.html">here</a>.&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
 <li id="fn:1">
 <p>Get PostgreSQL YAML
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>wget<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_deployment.yaml
@@ -3458,31 +3461,28 @@ will instruct Sveltos to create a PostgreSQL Deployment and Service in all clust
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>postgresql-deployment<span class="w"> </span>--from-file<span class="w"> </span>postgresql_deployment.yaml
 </span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>postgresql-service<span class="w"> </span>--from-file<span class="w"> </span>postgresql_service.yaml
-</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 <li id="fn:2">
 <p>Get Job YAML
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>wget<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/postgresql_job.yaml
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>postgresql-job<span class="w"> </span>--from-file<span class="w"> </span>postgresql_job.yaml
-</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 3 in the text">&#8617;</a></p>
 </li>
 <li id="fn:3">
 <p>Get todo-app YAML
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>wget<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_app.yaml
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>todo-app<span class="w"> </span>--from-file<span class="w"> </span>todo_app.yaml
-</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 4 in the text">&#8617;</a></p>
 </li>
 <li id="fn:4">
 <p>Get Job YAML
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>wget<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/todo_insert.yaml
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>todo-insert-data<span class="w"> </span>--from-file<span class="w"> </span>todo_insert.yaml
-</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
-</li>
-<li id="fn:5">
-<p>The example used in this document is based on and modified from <a href="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/04-syncwaves-hooks.html">here</a>.&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</span></code></pre></div>&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 5 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
