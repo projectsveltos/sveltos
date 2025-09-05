@@ -55,6 +55,46 @@ To guarantee that cert-manager is not only deployed but also functional, employ 
           end
     ```
 
+#### Common Expression Language (CEL) for Health Validation
+
+Alternatively, you can use Common Expression Language ([CEL](https://cel.dev)), which offers a more concise way to define the same health rule. The example below uses a CEL expression to check if the _availableReplicas_ are equal to the _requested replicas_. The result is the same as the Lua script, providing a healthy and succinct way to validate the state of your deployments.
+
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: cert-manager
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://charts.jetstack.io
+        repositoryName:   jetstack
+        chartName:        jetstack/cert-manager
+        chartVersion:     v1.13.2
+        releaseName:      cert-manager
+        releaseNamespace: cert-manager
+        helmChartAction:  Install
+        values: |
+          installCRDs: true
+      validateHealths:
+      - name: deployment-health
+        featureID: Helm
+        group: "apps"
+        version: "v1"
+        kind: "Deployment"
+        namespace: cert-manager
+        evaluateCEL:
+        - name: deployment_replicas
+          rule: resource.status.availableReplicas == resource.spec.replicas
+    ```
+
+
 ### Example: Nginx and Cert Manager
 
 In the below example, the ClusterPofile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.
