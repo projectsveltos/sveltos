@@ -474,6 +474,7 @@ This step watches `EndpointSlice` updates tied to exported Services and mirrors 
             {{ $key }}: {{ $value }}
             {{- end }}
             {{- end }}
+            multicluster.kubernetes.io/source-cluster: {{ index .Cluster.metadata.labels "cluster.clusterset.k8s.io" }}
             endpointslice.kubernetes.io/managed-by: sveltos
         addressType: {{ .Resource.addressType }}
         {{- if .Resource.endpoints }}
