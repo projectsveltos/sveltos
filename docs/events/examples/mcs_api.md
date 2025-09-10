@@ -1,5 +1,5 @@
 ---
-title: Example – Multi-Cluster Services via Sveltos Event Framework (KEP-1645)
+title: Example – multi-cluster Services via Sveltos Event Framework (KEP-1645)
 description: Use Sveltos' Event Framework to implement the mcs-controller.
 tags:
     - Kubernetes
@@ -15,12 +15,12 @@ authors:
 
 ## Overview
 
-KEP-1645 (Multi-Cluster Services API) from SIG Multi-Cluster standardizes how a Service in one cluster can be exported and discovered in others. See the proposal: [KEP-1645: Multi-Cluster Services API](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/1645-multi-cluster-services-api)
+KEP-1645: Multi-Cluster Services (MCS) API from SIG Multi-Cluster standardizes how a Service in one cluster can be exported and discovered in others. See the proposal: [KEP-1645: Multi-Cluster Services (MCS) API](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/1645-multi-cluster-services-api)
 
 * **ServiceExport**: Marks a namespaced Service for export.
 * **ServiceImport**: ClusterSet-scoped discovery surface for consumers.
 
-### Problem
+### Problem Description
 
 Sveltos does not ship a built-in controller for KEP-1645.
 
@@ -32,7 +32,8 @@ Use Sveltos' **Event Framework** to automate the MCS pipeline:
 2. Create a **derived Service** (normalized to `ClusterIP`) and then a **ServiceImport** populated from the derived Service.
 3. Detect `EndpointSlice` updates and mirror them across clusters, ensuring label/shape compatibility for CoreDNS.
 
-> **Status note**: The examples below focus on resource creation and synchronization. `status` updates (conditions on `ServiceExport`, health, conflicts) are out of scope here and can be implemented later with an auxiliary controller or an additional Event pipeline.
+!!!note
+The examples below focus on resource creation and synchronization. `status` updates (conditions on `ServiceExport`, health, conflicts) are out of scope here and can be implemented later with an auxiliary controller or an additional Event pipeline.
 
 ---
 
@@ -505,11 +506,11 @@ This step watches `EndpointSlice` updates tied to exported Services and mirrors 
 
 ## Step 4: Configure CoreDNS for Multi-Cluster DNS
 
-To enable DNS resolution for `clusterset.local` domain, CoreDNS needs to be configured with the multicluster plugin. This configuration is based on [Cilium's MCS-API prerequisites](https://docs.cilium.io/en/latest/network/clustermesh/mcsapi/#prerequisites).
+To enable DNS resolution for `clusterset.local` domain, CoreDNS needs to be configured with the kubernetes plugin. This configuration is based on [Cilium's MCS-API prerequisites](https://docs.cilium.io/en/latest/network/clustermesh/mcsapi/#prerequisites).
 
 ### Update CoreDNS Version
 
-First, ensure CoreDNS is at version 1.12.2 or later which includes multicluster capability:
+First, ensure CoreDNS is at version 1.12.2 or later which includes multi-cluster capability:
 
 ```bash
 kubectl -n kube-system set image deployment/coredns coredns=registry.k8s.io/coredns/coredns:v1.12.2
