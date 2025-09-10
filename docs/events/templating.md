@@ -332,6 +332,73 @@ Here are some examples:
   {{ toYaml $resource }}
 ```
 
+### Patch Resources
+
+The EventSource acts as a listener. It continuously monitors the managed cluster for any Service resource.
+The `evaluateCEL` rule is used to filter these Services. When a Service is created, updated, or deleted with the _sveltos: fv_ label, it generates an event.
+The `collectResources: true` setting ensures that the full YAML of the Service resource is included in the event, which is essential for the copy template function used later.
+
+The `EventTrigger` defines a chain of actions in response to this event:
+
+- It creates a **ConfigMap** containing a copy of the Service that triggered the event.
+- It creates a **ClusterProfile** that references this new ConfigMap. The ClusterProfile then applies the Service from the ConfigMap, patching it to add two labels, before deploying the modified Service back to the same cluster where the event originated.
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: detect-service
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Service"
+    evaluateCEL:
+    - name: service_with_label_sveltos_fv
+      rule: has(resource.metadata.labels) && has(resource.metadata.labels.sveltos) && resource.metadata.labels.sveltos == "fv"
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: patch-service
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      env: fv
+  eventSourceName: detect-service
+  oneForEvent: true
+  policyRefs:
+  - name: copy-service
+    namespace: default
+    kind: ConfigMap
+  patches:
+  - target:
+      group: ""
+      version: v1
+      kind: Service
+      name: ".*"
+    patch: |
+            - op: add
+              path: /metadata/labels/mirror.linkerd.io~1exported
+              value: "true"
+            - op: add
+              path: /metadata/labels/mirror.linkerd.io~1federated
+              value: member
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: copy-service
+  namespace: default
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  copy.yaml: |
+    {{ copy .Resource }}
+```
+
+
 ## Benefits
 
 The EvenTrigger has access to the resource data and can use them to instantiate `namespace/name` of the `TemplateResourceRefs` field and the `ConfigMap/Secret` of the `policyRefs` field.
