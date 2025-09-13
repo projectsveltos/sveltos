@@ -2295,6 +2295,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#patch-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patch Resources
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3259,6 +3268,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#patch-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patch Resources
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3553,6 +3571,68 @@
 </span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">  </span><span class="c1"># Finally, use the toYaml function to output the final, modified resource.</span>
 </span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">  </span><span class="c1"># This will be the resource that is applied to the managed cluster.</span>
 </span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">  </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">toYaml $resource</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span></code></pre></div>
+<h3 id="patch-resources">Patch Resources</h3>
+<p>The EventSource acts as a listener. It continuously monitors the managed cluster for any Service resource.
+The <code>evaluateCEL</code> rule is used to filter these Services. When a Service is created, updated, or deleted with the <em>sveltos: fv</em> label, it generates an event.
+The <code>collectResources: true</code> setting ensures that the full YAML of the Service resource is included in the event, which is essential for the copy template function used later.</p>
+<p>The <code>EventTrigger</code> defines a chain of actions in response to this event:</p>
+<ul>
+<li>It creates a <strong>ConfigMap</strong> containing a copy of the Service that triggered the event.</li>
+<li>It creates a <strong>ClusterProfile</strong> that references this new ConfigMap. The ClusterProfile then applies the Service from the ConfigMap, patching it to add two labels, before deploying the modified Service back to the same cluster where the event originated.</li>
+</ul>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventSource</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-service</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span><span class="nt">collectResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">  </span><span class="nt">resourceSelectors</span><span class="p">:</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Service&quot;</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="nt">evaluateCEL</span><span class="p">:</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_with_label_sveltos_fv</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">      </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">has(resource.metadata.labels) &amp;&amp; has(resource.metadata.labels.sveltos) &amp;&amp; resource.metadata.labels.sveltos == &quot;fv&quot;</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="nn">---</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventTrigger</span>
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">patch-service</span>
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="w">  </span><span class="nt">sourceClusterSelector</span><span class="p">:</span>
+</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-17-22"><a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fv</span>
+</span><span id="__span-17-23"><a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-service</span>
+</span><span id="__span-17-24"><a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="w">  </span><span class="nt">oneForEvent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-17-25"><a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
+</span><span id="__span-17-26"><a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy-service</span>
+</span><span id="__span-17-27"><a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-17-28"><a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-17-29"><a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a><span class="w">  </span><span class="nt">patches</span><span class="p">:</span>
+</span><span id="__span-17-30"><a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">target</span><span class="p">:</span>
+</span><span id="__span-17-31"><a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a><span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</span><span id="__span-17-32"><a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-17-33"><a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+</span><span id="__span-17-34"><a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*&quot;</span>
+</span><span id="__span-17-35"><a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a><span class="w">    </span><span class="nt">patch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-17-36"><a id="__codelineno-17-36" name="__codelineno-17-36" href="#__codelineno-17-36"></a><span class="w">            </span><span class="no">- op: add</span>
+</span><span id="__span-17-37"><a id="__codelineno-17-37" name="__codelineno-17-37" href="#__codelineno-17-37"></a><span class="w">              </span><span class="no">path: /metadata/labels/mirror.linkerd.io~1exported</span>
+</span><span id="__span-17-38"><a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a><span class="w">              </span><span class="no">value: &quot;true&quot;</span>
+</span><span id="__span-17-39"><a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a><span class="w">            </span><span class="no">- op: add</span>
+</span><span id="__span-17-40"><a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a><span class="w">              </span><span class="no">path: /metadata/labels/mirror.linkerd.io~1federated</span>
+</span><span id="__span-17-41"><a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a><span class="w">              </span><span class="no">value: member</span>
+</span><span id="__span-17-42"><a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a><span class="nn">---</span>
+</span><span id="__span-17-43"><a id="__codelineno-17-43" name="__codelineno-17-43" href="#__codelineno-17-43"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-17-44"><a id="__codelineno-17-44" name="__codelineno-17-44" href="#__codelineno-17-44"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-17-45"><a id="__codelineno-17-45" name="__codelineno-17-45" href="#__codelineno-17-45"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-17-46"><a id="__codelineno-17-46" name="__codelineno-17-46" href="#__codelineno-17-46"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy-service</span>
+</span><span id="__span-17-47"><a id="__codelineno-17-47" name="__codelineno-17-47" href="#__codelineno-17-47"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-17-48"><a id="__codelineno-17-48" name="__codelineno-17-48" href="#__codelineno-17-48"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-17-49"><a id="__codelineno-17-49" name="__codelineno-17-49" href="#__codelineno-17-49"></a><span class="w">    </span><span class="nt">projectsveltos.io/instantiate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
+</span><span id="__span-17-50"><a id="__codelineno-17-50" name="__codelineno-17-50" href="#__codelineno-17-50"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-17-51"><a id="__codelineno-17-51" name="__codelineno-17-51" href="#__codelineno-17-51"></a><span class="w">  </span><span class="nt">copy.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-17-52"><a id="__codelineno-17-52" name="__codelineno-17-52" href="#__codelineno-17-52"></a><span class="w">    </span><span class="no">{{ copy .Resource }}</span>
 </span></code></pre></div>
 <h2 id="benefits">Benefits</h2>
 <p>The EvenTrigger has access to the resource data and can use them to instantiate <code>namespace/name</code> of the <code>TemplateResourceRefs</code> field and the <code>ConfigMap/Secret</code> of the <code>policyRefs</code> field.</p>
