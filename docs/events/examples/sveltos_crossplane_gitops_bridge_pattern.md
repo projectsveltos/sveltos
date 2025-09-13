@@ -24,8 +24,14 @@ The example demonstrates how to integrate the Sveltos EventFramework together wi
 
 **GitOps Bridge Pattern** enables Kubernetes administrators to utilise Infrastructure as Code (IaC) and GitOps tools to deploy Kubernetes add-ons and applications across a fleet of clusters. Go through the GitHub repository to learn more about the pattern and its purpose.
 
+## How does it work?
+
+To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos **management cluster**. The YAML manifests described in the following sections are stored in a Git repository. The GitOps controller monitors this repository and automatically reconciles any changes, ensuring the YAML manifests are always up-to-date in the Sveltos **management cluster**. This approach guarantees that the add-on deployments for **managed clusters** are **versioned** and **auditable**. Sveltos has integration with Flux, for more information take a look [here](../../use_cases/use_case_gitops.md).
+
 ## Pre-requisites
 
+- A Kubernetes cluster acting as the **management cluster**
+- A GitOps controller already available in the **management cluster**
 - Familiarity with the Sveltos EventFramework. If you are new to Sveltos, take a look at the "Quick Start" guide [here](../../getting_started/install/quick_start.md)
 - Basic familiarity with [Crossplane](https://www.crossplane.io/)
 - Fundamental knowledge of GitOps practices
