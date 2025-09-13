@@ -218,6 +218,37 @@ During deployment, Sveltos retrieves information from the **management** cluster
 
 This mechanism allows us to dynamically populate values based on the **management** cluster's configuration, ensuring deployments adapt to specific environments.
 
+### Components
+
+To specify reusable configuration pieces from Kustomize, we can use the _components_ field within a Sveltos ClusterProfile. This allows us to include external components, defined in separate directories, into the main Kustomization.
+
+The _components_ field is a list that points to the directories containing the Kustomize components. Each component should have its own kustomization.yaml file. The paths are relative to the Kustomization we are working
+
+```yaml hl_lines="16-18"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: component-demo
+spec:
+  clusterSelector:
+    matchLabels:
+      env: fv
+  syncMode: Continuous
+  kustomizationRefs:
+  - namespace: flux-system
+    name: flux-system
+    kind: GitRepository
+    path: ./import_components/overlays/community/
+    targetNamespace: eng
+    components:
+    - ../../components/external_db
+    - ../../components/recaptcha
+```
+
+In this example, the kustomizationRefs points to _import_components/overlays/community/kustomization.yaml_. This file will then pull in the two components specified: _external_db_ and _recaptcha_, which are located two directories up in the components folder. This structure enables a modular and reusable approach to configuration.
+
+The repo being used here can be found [here](https://github.com/gianlucam76/kustomize/blob/main/import_components/overlays/community/kustomization.yaml)
+
 ### Example: All-in-One
 
 The section outlines how Sveltos manages deployments using Kustomize and key-value pairs.

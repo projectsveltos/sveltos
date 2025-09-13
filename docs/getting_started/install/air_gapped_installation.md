@@ -97,6 +97,27 @@ The *sveltos-agent* will be deployed in the **management** cluster with the bell
 
     To create the `my-registry-secret` Secret, provide your credentials directly using the command: ```kubectl create secret docker-registry my-registry-secret -n projectsveltos --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>```
 
+## sveltos-applier Configuration
+
+Once we have registered a cluster in [pull mode](../../register/register_cluster_pull_mode.md), Sveltos takes over the management of the _sveltos-applier_ agent. On every Sveltos upgrade, it automatically generates the configuration needed to upgrade the applier, ensuring the agent on the managed cluster is always up-to-date.
+
+If we made any custom changes to the _sveltos-applier_ configuration during the initial registration process, Sveltos provides a way to persist those changes during future upgrades. We can use the _agentPatchSveltosApplierConfigMap_ field to provide a patch that will be applied to the applier's configuration, preventing the custom settings from being overwritten by the automatic upgrade process. This allows us to maintain full control while still benefiting from Sveltos's automated lifecycle management.
+
+```yaml
+classifierManager:
+  agentPatchSveltosApplierConfigMap:
+    name: sveltos-applier-config
+    data:
+      patch: |
+        [
+          {
+            "op": "replace",
+            "path": "/spec/template/spec/containers/0/args/4",
+            "value": "--secret-with-kubeconfig=pullmode-secret"
+          }
+        ]
+```
+
 ## Helm Installation
 
 On the Kubernetes **management** cluster, install ProjectSveltos!
