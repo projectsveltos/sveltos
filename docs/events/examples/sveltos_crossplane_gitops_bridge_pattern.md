@@ -18,27 +18,33 @@ authors:
 
 ## Introduction
 
-The example demonstrates how to integrate the Sveltos EventFramework together with the [Crossplane provider for AWS](https://github.com/crossplane-contrib/provider-aws) to achieve the [GitOps Bridge Pattern](https://github.com/gitops-bridge-dev/gitops-bridge) in a Kubernetes environment.
+The example demonstrates how to integrate the Sveltos Event Framework together with the [Crossplane provider for AWS](https://github.com/crossplane-contrib/provider-aws) to achieve the [GitOps Bridge Pattern](https://github.com/gitops-bridge-dev/gitops-bridge) in a Kubernetes environment.
 
 **Crossplane** is an open-source, CNCF tool that allows users to manage and provision cloud infrastructure using Kubernetes-style configuration files across multiple environments. For more information about Crossplane, check out the official website.
 
 **GitOps Bridge Pattern** enables Kubernetes administrators to utilise Infrastructure as Code (IaC) and GitOps tools to deploy Kubernetes add-ons and applications across a fleet of clusters. Go through the GitHub repository to learn more about the pattern and its purpose.
 
-## How does it work?
-
-To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos **management cluster**. The YAML manifests described in the following sections are stored in a Git repository. The GitOps controller monitors this repository and automatically reconciles any changes, ensuring the YAML manifests are always up-to-date in the Sveltos **management cluster**. This approach guarantees that the add-on deployments for **managed clusters** are **versioned** and **auditable**. Sveltos has integration with Flux, for more information take a look [here](../../use_cases/use_case_gitops.md).
-
 ## Pre-requisites
 
 - A Kubernetes cluster acting as the **management cluster**
-- A GitOps controller already available in the **management cluster**
-- Familiarity with the Sveltos EventFramework. If you are new to Sveltos, take a look at the "Quick Start" guide [here](../../getting_started/install/quick_start.md)
+- A GitOps controller is already available in the **management cluster**
+- Familiarity with the Sveltos Event Framework. If you are new to Sveltos, take a look at the "Quick Start" guide [here](../../getting_started/install/quick_start.md)
 - Basic familiarity with [Crossplane](https://www.crossplane.io/)
 - Fundamental knowledge of GitOps practices
 
-## Workflow Diagram
+## How does it work?
 
-![Sveltos EventFramework and CrossPlane for GitOps Bridge Pattern](../../assets/sveltos_crossplane_gitops_pattern.png)
+To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos **management cluster**. The YAML manifests (described in the sections below) are stored in a Git repository. The GitOps controller continuously monitors this repository and automatically applies any changes, ensuring the manifests in the Sveltos **management cluster** are always in sync with Git. This approach guarantees that the add-on deployments for **managed clusters** are **versioned** and **auditable**. Sveltos uses the updated resources to take care of the add-on deployment across the** managed clusters**. Sveltos has integration with Flux; for more information, take a look [here](../../use_cases/use_case_gitops.md).
+
+## Workflows
+
+### GitOps
+
+![Sveltos Event Framework and CrossPlane for GitOps Bridge Pattern](../../assets/sveltos_gitops.png)
+
+### Managed Cluster Resources
+
+![Sveltos Event Framework and CrossPlane for GitOps Bridge Pattern](../../assets/sveltos_crossplane_gitops_pattern.png)
 
 ## Key Objectives
 
@@ -49,7 +55,7 @@ To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or 
 
 ## Advantages
 
-The proposed pattern let us use Sveltos to collect infrastructure details from the **managed clusters** and pass that information to Crossplane, which then deploys other resources like IAM Roles. This is useful for add-ons that need infrastructure components in place before they can be installed.
+The proposed pattern lets us use Sveltos to collect infrastructure details from the **managed clusters** and pass that information to Crossplane, which then deploys other resources like IAM Roles. This is useful for add-ons that need infrastructure components in place before they can be installed.
 
 It’s like laying the foundation before building, ensuring all necessary infrastructure is in place and making add-on deployment **smooth** and **reliable**. The approach easily scales to support any number of add-ons that need infrastructure to be ready ahead of time.
 
@@ -438,5 +444,6 @@ stringData:
 
 ## Further Reading
 
-1. [Sveltos EventFramework Templating](../templating.md)
+1. [Sveltos Event Framework Templating](../templating.md)
 1. [Sveltos Example Workflow](./service_event_trigger.md)
+1. [Next-Level Kubernetes Deployment and Management: Sveltos and Flux in Action](https://blog.grosdouli.dev/blog/Better%20Together%20Sveltos%20and%20Flux%20Integration#eventsource)
