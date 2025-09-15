@@ -34,9 +34,9 @@ The example demonstrates how to integrate the Sveltos Event Framework together w
 
 ## How does it work?
 
-To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos **management cluster**. The YAML manifests (described in the sections below) are stored in a Git repository. The GitOps controller continuously monitors this repository and automatically applies any changes, ensuring the manifests in the Sveltos **management cluster** are always in sync with Git. This approach guarantees that the add-on deployments for **managed clusters** are **versioned** and **auditable**. Sveltos uses the updated resources to take care of the add-on deployment across the** managed clusters**. Sveltos has integration with Flux; for more information, take a look [here](../../use_cases/use_case_gitops.md).
+To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos **management cluster**. The YAML manifests (described in the sections below) are stored in a Git repository. The GitOps controller continuously monitors this repository and automatically applies any changes, ensuring the manifests in the Sveltos **management cluster** are always in sync with Git. This approach guarantees that the add-on deployments for **managed clusters** are **versioned** and **auditable**. Sveltos uses the updated resources to take care of the add-on deployment across the **managed clusters**. Sveltos has an integration with Flux; for more information, take a look [here](../../use_cases/use_case_gitops.md).
 
-## Workflows
+As part of the flow, **Crossplane** provisions the required **infrastructure** (e.g., IAM Role), and once ready, **Sveltos** observes it. Sveltos pre-instantiates the manifests deployed and performs actions only when the required infrastructure is ready. For more details about how the `EventSource` and `EventTrigger` work, have a look [here](../addon_event_deployment.md).
 
 ### GitOps
 
@@ -49,7 +49,7 @@ To achieve the **GitOps Bridge Pattern**, a GitOps controller such as ArgoCD or 
 ## Key Objectives
 
 - **Listen for Infrastructure Events**: Use Sveltos `EventSource` and `EventTrigger` to monitor infrastructure events.
-- **Copy Infrastructure Details**: Syncronise relevant infrastructure details to the **management cluster**
+- **Copy Infrastructure Details**: Synchronise relevant infrastructure details to the **management cluster**
 - **Deploy IAM Roles for `external-dns` service**: Provision Identity and Access Management (IAM) roles using Crossplane for the `external-dns` service
 - **Trigger `external-dns` Deployment**: Ensure `external-dns` is only deployed once the IAM roles are ready.
 
