@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.18.0
+        controller-gen.kubebuilder.io/version: v0.19.0
     name: clusterprofiles.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -145,10 +145,11 @@ spec:
                                 type: boolean
                             dependsOn:
                                 description: |-
-                                    DependsOn specifies a list of other ClusterProfiles that this instance depends on.
-                                    In any managed cluster that matches this ClusterProfile, the add-ons and applications
-                                    defined in this instance will not be deployed until all add-ons and applications in the
-                                    ClusterProfiles listed as dependencies are deployed.
+                                    DependsOn specifies a list of other profiles that this instance depends on.
+                                    A ClusterProfile can only depend on other ClusterProfiles, and a Profile can
+                                    only depend on other Profiles.
+                                    The add-ons and applications defined in this instance will not be deployed
+                                    until all add-ons and applications in the profiles listed as dependencies are deployed.
                                 items:
                                     type: string
                                 type: array
@@ -314,6 +315,9 @@ spec:
                                                         type: string
                                                     description: Labels that would be added to release metadata.
                                                     type: object
+                                                passCredentialsAll:
+                                                    description: PassCredentialsAll is the flag to pass credentials to all domains
+                                                    type: boolean
                                                 skipCRDs:
                                                     default: false
                                                     description: |-
@@ -590,6 +594,14 @@ spec:
                                     be run on those paths and the outcome will be deployed.
                                 items:
                                     properties:
+                                        components:
+                                            description: |-
+                                                Components is a list of paths to Kustomize components. These paths are relative to the
+                                                `Path` field and are included in the Kustomize build to provide reusable configuration logic.
+                                                The paths can be static or leverage Go templates for dynamic customization.
+                                            items:
+                                                type: string
+                                            type: array
                                         deploymentType:
                                             default: Remote
                                             description: |-
@@ -1020,6 +1032,31 @@ spec:
                                     is healthy
                                 items:
                                     properties:
+                                        evaluateCEL:
+                                            description: |-
+                                                EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                                                Each rule will be evaluated in order against each object selected based on
+                                                the criteria defined above. Each rule's expression must return a boolean value
+                                                indicating whether the object is a match.
+
+                                                Evaluation stops at the first rule that returns true; subsequent
+                                                rules will not be evaluated.
+                                            items:
+                                                description: CELRule defines a named CEL rule used in EvaluateCEL.
+                                                properties:
+                                                    name:
+                                                        description: Name is a human-readable identifier for the rule.
+                                                        type: string
+                                                    rule:
+                                                        description: |-
+                                                            Rule is the CEL (Common Expression Language) expression to evaluate.
+                                                            It must return a bool
+                                                        type: string
+                                                required:
+                                                    - name
+                                                    - rule
+                                                type: object
+                                            type: array
                                         featureID:
                                             description: |-
                                                 FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)

@@ -272,6 +272,22 @@ do
 done
 cd ../../; rm -rf tmp
 
+# mcp-server
+echo "processing mcp-server"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/mcp-server.git
+cd mcp-server
+git checkout ${branch}
+for f in manifest/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../manifest/manifest.yaml
+    echo "---"  >> ../../manifest/manifest.yaml
+    cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+done
+cd ../../; rm -rf tmp
+
 echo "Generate sveltosctl manifest for branch ${branch}"
 
 rm -rf  manifest/sveltosctl_manifest.yaml
