@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.18.0
+        controller-gen.kubebuilder.io/version: v0.19.0
     name: clusterconfigurations.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -101,16 +101,18 @@ spec:
                                                         description: Resources is a list of resources deployed in the Cluster.
                                                         items:
                                                             properties:
+                                                                deploymentType:
+                                                                    default: Remote
+                                                                    description: |-
+                                                                        DeploymentType indicates whether resources is deployed
+                                                                        into the management cluster (local) or the managed cluster (remote)
+                                                                    enum:
+                                                                        - Local
+                                                                        - Remote
+                                                                    type: string
                                                                 group:
                                                                     description: Group of the resource deployed in the Cluster.
                                                                     type: string
-                                                                ignoreForConfigurationDrift:
-                                                                    default: false
-                                                                    description: |-
-                                                                        IgnoreForConfigurationDrift indicates to not track resource
-                                                                        for configuration drift detection.
-                                                                        This field has a meaning only when mode is ContinuousWithDriftDetection
-                                                                    type: boolean
                                                                 kind:
                                                                     description: Kind of the resource deployed in the Cluster.
                                                                     minLength: 1
@@ -213,16 +215,18 @@ spec:
                                                         description: Resources is a list of resources deployed in the Cluster.
                                                         items:
                                                             properties:
+                                                                deploymentType:
+                                                                    default: Remote
+                                                                    description: |-
+                                                                        DeploymentType indicates whether resources is deployed
+                                                                        into the management cluster (local) or the managed cluster (remote)
+                                                                    enum:
+                                                                        - Local
+                                                                        - Remote
+                                                                    type: string
                                                                 group:
                                                                     description: Group of the resource deployed in the Cluster.
                                                                     type: string
-                                                                ignoreForConfigurationDrift:
-                                                                    default: false
-                                                                    description: |-
-                                                                        IgnoreForConfigurationDrift indicates to not track resource
-                                                                        for configuration drift detection.
-                                                                        This field has a meaning only when mode is ContinuousWithDriftDetection
-                                                                    type: boolean
                                                                 kind:
                                                                     description: Kind of the resource deployed in the Cluster.
                                                                     minLength: 1
