@@ -258,4 +258,21 @@ cd ../../; rm -rf tmp
 
 echo ""
 
+# mcp-server
+echo ""
+echo "processing mcp-server"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/mcp-server.git
+cd mcp-server
+git checkout ${branch}
+touch ../../kustomize/base/techsupport.yaml
+for f in manifest/*.yaml
+do
+    echo "Processing $f file..."
+    cat $f >> ../../kustomize/base/techsupport.yaml
+done
+cd ../../; rm -rf tmp
+
+echo ""
+
 echo ""
