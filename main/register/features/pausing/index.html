@@ -3175,8 +3175,8 @@
 
   <h1>Pause Cluster</h1>
 
-<p>To temporarily halt all updates and deployments to a specific cluster, you can use the <strong>SveltosCluster.Spec.Paused</strong> field. When set to true, this field tells Sveltos to pause all operations for that cluster.</p>
-<p>This means that no new add-ons, applications, or configurations will be deployed, and any existing ones managed by Sveltos will not be updated, even if their corresponding ClusterProfile or Profile is changed.</p>
+<p>To temporarily halt all updates and deployments to a specific cluster, use the <strong>SveltosCluster.Spec.Paused</strong> field. When set to <code>true</code>, it instructs Sveltos to pause <strong>all</strong> operations for that cluster.</p>
+<p>What does this mean? No new add-ons, applications, or configurations will be deployed, and any existing ones managed by Sveltos will not be updated, even if their corresponding ClusterProfile or Profile is changed.</p>
 <p>This feature is particularly useful for:</p>
 <ul>
 <li>
@@ -3189,7 +3189,7 @@
 <p><strong>Control</strong>: Gaining fine-grained control over when a cluster receives updates, which is important in environments where changes must be carefully coordinated.</p>
 </li>
 </ul>
-<p>To resume operations, simply set <strong>SveltosCluster.Spec.Paused</strong> back to false or delete the field, and Sveltos will resume its reconciliation loop and apply any pending changes.</p>
+<p>To resume operations, set the <strong>SveltosCluster.Spec.Paused</strong> back to <code>false</code> or delete the field. Sveltos will resume its reconciliation loop and apply any pending changes.</p>
 
 
 

@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-it-works" class="md-skip">
+        <a href="#how-does-it-work" class="md-skip">
           Skip to content
         </a>
       
@@ -2058,9 +2058,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-it-works" class="md-nav__link">
+  <a href="#how-does-it-work" class="md-nav__link">
     <span class="md-ellipsis">
-      How It Works
+      How does it work?
     </span>
   </a>
   
@@ -3232,9 +3232,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-it-works" class="md-nav__link">
+  <a href="#how-does-it-work" class="md-nav__link">
     <span class="md-ellipsis">
-      How It Works
+      How does it work?
     </span>
   </a>
   
@@ -3288,10 +3288,14 @@
 
   <h1>Sveltos MCP Server</h1>
 
-<p>The <strong>Sveltos Management Cluster Protocol</strong> (MCP) Server is a management tool that connects AI assistants and chatbots to your management cluster where Sveltos is running. It provides a structured, programmatic interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.</p>
-<h2 id="how-it-works">How It Works</h2>
-<p>The Sveltos MCP Server acts as a communication layer between AI agents and your Sveltos-managed infrastructure. Instead of an AI directly executing <em>kubectl</em> commands on individual clusters, it sends requests to the MCP Server using the <a href="https://modelcontextprotocol.io/docs/getting-started/intro">Management Cluster Protocol (MCP)</a>. The server then translates these high-level requests into specific Sveltos tool calls.</p>
-<p>This process is not a simple command translation; it involves performing comprehensive checks on cluster statuses, the state of Sveltos deployments, and the state of Sveltos Custom Resources. More than that, the server correlates the state of different resources that are tied to each other, providing a holistic view of the system's health. By consolidating these checks, the MCP Server provides a single, unified result to the AI, which can then present the findings to a user in a clear, conversational format.</p>
+<div class="admonition video">
+<p class="admonition-title">Video</p>
+<p>To learn more about the Sveltos MCP Server, check out the <a href="../../assets/dashboard_mcp.mov">Video</a>! 😊</p>
+</div>
+<p>The <strong>Sveltos Management Cluster Protocol</strong> (MCP) Server is a management tool that connects AI assistants and chatbots to the Sveltos management cluster. It provides a <strong>structured</strong>, <strong>programmatic</strong> interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.</p>
+<h2 id="how-does-it-work">How does it work?</h2>
+<p>The Sveltos MCP Server acts as a communication layer between AI agents and the Sveltos-managed infrastructure. Instead of an AI directly executing <em>kubectl</em> commands on individual clusters, it sends requests to the MCP Server using the <a href="https://modelcontextprotocol.io/docs/getting-started/intro">Management Cluster Protocol (MCP)</a>. The server then translates these high-level requests into specific Sveltos tool calls.</p>
+<p>The described process is not a simple command translation; it involves performing comprehensive checks on cluster statuses, the state of the Sveltos deployments, and the state of the Sveltos Custom Resources. Additionally, the server correlates the state of different resources that are tied to each other, providing a holistic view of the system's health. By consolidating these checks, the MCP Server provides a <strong>single</strong>, <strong>unified</strong> result to the AI, which can then present the findings to a user in a clear, conversational format.</p>
 <p>This abstraction allows AI to perform complex operations, such as diagnosing deployment failures or comparing cluster configurations, with a single, high-level instruction, making Sveltos a powerful tool for automated, multi-cluster management.</p>
 <h2 id="key-capabilities">Key Capabilities</h2>
 <p>The Sveltos MCP Server empowers AI with the ability to:</p>
@@ -3310,18 +3314,18 @@
 </li>
 </ul>
 <h2 id="integrated-dashboard-functionality">Integrated Dashboard Functionality</h2>
-<p>The Sveltos dashboard is designed to enhance your troubleshooting experience by integrating a built-in Sveltos MCP client. This client connects directly to the Sveltos MCP server, providing you with powerful diagnostic capabilities right from the user interface.</p>
-<p>With this integrated client, you can:</p>
+<p>The <a href="../../getting_started/optional/dashboard/">Sveltos dashboard</a> is designed to enhance users' troubleshooting experience by integrating a built-in Sveltos MCP client. The client connects directly to the Sveltos MCP server, providing powerful diagnostic capabilities right from the user interface.</p>
+<p>The integrated client can:</p>
 <ul>
 <li>
-<p><strong>Debug Sveltos Installation</strong>: Instantly verify the health of your Sveltos installation on the management cluster. The client talks to the server, which runs comprehensive checks to ensure all Sveltos components are running correctly. It also verifies checks the status of Sveltos agents deployed across all your managed clusters. This ensures that every cluster is properly configured and communicating with the management cluster.</p>
+<p><strong>Debug Sveltos Installation</strong>: Instantly verify the health of the Sveltos installation on the <strong>management</strong> cluster. The client talks to the server, which runs comprehensive checks to ensure all Sveltos components are running correctly. It also verifies and checks the status of the Sveltos agents deployed across all the managed clusters. This ensures that every cluster is properly configured and communicating with the management cluster.</p>
 </li>
 <li>
-<p><strong>Diagnose Deployment Issues</strong>: You can use the dashboard to pinpoint deployment problems on any managed cluster. The MCP client sends a request to the server, which analyzes the state of Sveltos resources and deployments, and returns a detailed report on any failures or inconsistencies.</p>
+<p><strong>Diagnose Deployment Issues</strong>: The dashboard can be used to pinpoint deployment problems on any Sveltos <strong>managed</strong> cluster. The MCP client sends a request to the server, which analyzes the state of Sveltos' resources and deployments, and returns a detailed report on any failures or inconsistencies.</p>
 </li>
 </ul>
-<p><img alt="Dashboard MCP" src="../../assets/dashboard_mcp.mov" /></p>
-<p>This seamless integration transforms the dashboard from a simple monitoring tool into a proactive, powerful debugging console, leveraging the full capabilities of the Sveltos MCP server to simplify multi-cluster management.</p>
+<p><a href="../../assets/dashboard_mcp.mov">🎥 Dashboard MCP Video</a></p>
+<p>The seamless integration transforms the dashboard from a simple monitoring tool into a <strong>proactive</strong>, <strong>powerful</strong> debugging console, leveraging the full capabilities of the Sveltos MCP server to simplify multi-cluster management.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can test the <strong>Sveltos MCP Server</strong> directly from the Sveltos dashboard to verify your Sveltos installation and diagnose failures on a given cluster. If you want to integrate the Sveltos MCP Server with your AI Site Reliability Engineering (SRE) tools, contact us at <code>support@projectsveltos.io</code>  to discuss licensing options tailored to your specific needs.</p>
