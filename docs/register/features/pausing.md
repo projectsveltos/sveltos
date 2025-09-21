@@ -11,9 +11,9 @@ authors:
     - Gianluca Mardente
 ---
 
-To temporarily halt all updates and deployments to a specific cluster, you can use the __SveltosCluster.Spec.Paused__ field. When set to true, this field tells Sveltos to pause all operations for that cluster.
+To temporarily halt all updates and deployments to a specific cluster, use the __SveltosCluster.Spec.Paused__ field. When set to `true`, it instructs Sveltos to pause **all** operations for that cluster.
 
-This means that no new add-ons, applications, or configurations will be deployed, and any existing ones managed by Sveltos will not be updated, even if their corresponding ClusterProfile or Profile is changed.
+What does this mean? No new add-ons, applications, or configurations will be deployed, and any existing ones managed by Sveltos will not be updated, even if their corresponding ClusterProfile or Profile is changed.
 
 This feature is particularly useful for:
 
@@ -23,4 +23,4 @@ This feature is particularly useful for:
 
 - **Control**: Gaining fine-grained control over when a cluster receives updates, which is important in environments where changes must be carefully coordinated.
 
-To resume operations, simply set __SveltosCluster.Spec.Paused__ back to false or delete the field, and Sveltos will resume its reconciliation loop and apply any pending changes.
+To resume operations, set the __SveltosCluster.Spec.Paused__ back to `false` or delete the field. Sveltos will resume its reconciliation loop and apply any pending changes.
