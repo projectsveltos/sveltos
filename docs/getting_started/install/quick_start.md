@@ -30,6 +30,8 @@ The main goal of Sveltos is to deploy **add-ons** and **applications** in **mana
 ``` bash
 $ git clone https://github.com/projectsveltos/addon-controller && cd addon-controller/
 
+$ git checkout v1.1.1
+
 $ make quickstart
 ```
 
