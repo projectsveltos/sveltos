@@ -20,7 +20,7 @@ authors:
 
 When an event matches all conditions defined in an EventTrigger, it generates a tailored Sveltos ClusterProfile, automating the application of add-ons, policies, or configurations based on real-time changes in an environment.
 
-The resulting Sveltos ClusterProfile can include:
+The resulting ClusterProfile can include the following fields, all of which can be expresssed as templates within the EventTrigger and instantiated by Sveltos during the generation process:
 
 1. **TemplateResourceRefs**
 1. **PolicyRefs**
@@ -29,6 +29,15 @@ The resulting Sveltos ClusterProfile can include:
 
 !!! note
     This [template functions](../template/intro_template.md#template-functions) are available.
+
+The following resources are available for instantiation if the `EventTrigger` has `oneForEvent` set to `true`.
+
+| Name | Meaning | Availability |
+| :--- | :--- | :--- |
+| **MatchingResource** | A reference to the resource that triggered the event, including its **apiVersion**, **kind**, **name**, and **namespace**. | Always available |
+| **Resource** | The full Kubernetes resource that triggered the event. All of its fields, including `.spec` and `.status`, are available for templating. | Only if `collectResource` is set to `true` in the `EventSource`. |
+| **CloudEvent** | The raw CloudEvent that triggered the `EventTrigger`. |  Only if the event was a NATS.io event. |
+| **Cluster** | The `SveltosCluster` or CAPI Cluster instance where the event occurred. | Always available |
 
 ### Instantiation Flow: TemplateResourceRefs
 
@@ -41,6 +50,7 @@ Usage Example:
 - `{{ .Cluster.metadata.name }}`
 - `{{ .Resource.metadata.annotations.env }}`
 - `{{ printf "%s-%s" .Cluster.metadata.labels.region .Resource.metadata.name }}`
+- `{{ .MatchingResource.Name }}`
 
 !!! note
     The templates are resolved at **runtime**. It allows systems to generate tailored Sveltos ClusterProfiles based on the specific context of each event.
