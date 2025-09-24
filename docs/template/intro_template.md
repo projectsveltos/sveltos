@@ -21,6 +21,9 @@ Sveltos lets you define add-ons and applications using templates. Before deployi
 
 In this example, Sveltos retrieves the Secret **imported-secret** from the **default** namespace. This Secret is assigned the alias **ExternalSecret**. The template can subsequently refer to this Secret by employing the alias **ExternalSecret**. It can also be used with [Helm Charts](template_generic_examples.md).
 
+!!!note
+    All resources listed in the `TemplateResourceRefs` section can be accessed within the template using `getResource "<alias>"`. For instance, we could access the Secret in an example with `getResource "ExternalSecret"`.
+
 ## Template Functions
 
 Sveltos supports the template functions included from the [Sprig](https://masterminds.github.io/sprig/) open source project. The Sprig library provides over **70 template functions** for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.
