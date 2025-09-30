@@ -1608,6 +1608,54 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-available-for-capi-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources Available for CAPI Clusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-available-for-sveltosclusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources Available for SveltosClusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieving-management-cluster-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieving Management Cluster Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retrieving Management Cluster Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-accessing-a-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Accessing a Secret
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2333,12 +2381,58 @@
   
   
     <li class="md-nav__item">
+      <a href="../../events/aggregated_selection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Aggregated Selection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../events/templating/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Templating
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../events/templating_all_resources_together/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Templating with All Matched Resources
     
   </span>
   
@@ -2410,10 +2504,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_7" >
         
           
-          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_7" id="__nav_9_7_label" tabindex="0">
             
   
   
@@ -2426,8 +2520,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_7">
             <span class="md-nav__icon md-icon"></span>
             Examples
           </label>
@@ -3278,6 +3372,54 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-available-for-capi-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources Available for CAPI Clusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-available-for-sveltosclusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources Available for SveltosClusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieving-management-cluster-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieving Management Cluster Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retrieving Management Cluster Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-accessing-a-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Accessing a Secret
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3348,14 +3490,70 @@
 <p>Make sure to read the <a href="../intro_template/">"Introduction to Templates"</a> section before continuing. It provides important context for the information that follows.</p>
 </div>
 <h2 id="variables">Variables</h2>
-<p>By default, the Sveltos Templates can access to the mentioned <strong>management</strong> cluster resources.</p>
-<ol>
-<li><strong>CAPI Cluster instance</strong>: <code>Cluster</code></li>
-<li><strong>CAPI Cluster infrastructure provider</strong>: <code>InfrastructureProvider</code></li>
-<li><strong>CAPI Cluster kubeadm provider</strong>:<code>KubeadmControlPlane</code></li>
-<li>Sveltos registered clusters, the <strong>SveltosCluster</strong> instance: <code>Cluster</code></li>
-</ol>
+<p>Sveltos automatically fetches these resources, so we do not need to include them in the <code>TemplateResourceRefs</code> section. They are immediately available for use in the templates through the specified alias.</p>
+<h3 id="resources-available-for-capi-clusters">Resources Available for CAPI Clusters</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Resource</th>
+<th style="text-align: left;">Alias</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>CAPI Cluster instance</strong></td>
+<td style="text-align: left;"><code>Cluster</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CAPI Cluster infrastructure provider</strong></td>
+<td style="text-align: left;"><code>InfrastructureProvider</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CAPI Cluster kubeadm provider</strong></td>
+<td style="text-align: left;"><code>KubeadmControlPlane</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resources-available-for-sveltosclusters">Resources Available for SveltosClusters</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Resource</th>
+<th style="text-align: left;">Alias</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Sveltos registered clusters, the <strong>SveltosCluster</strong> instance</td>
+<td style="text-align: left;"><code>Cluster</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="retrieving-management-cluster-resources">Retrieving Management Cluster Resources</h3>
 <p>Sveltos can retrieve any resource from the <strong>management</strong> cluster. To do this, include the <code>templateResourceRefs</code> in the <code>Spec</code> section of the <a href="../../addons/addons/">ClusterProfile/Profile </a> resource.</p>
+<p>To access any of these resources in your template, use <code>getResource "&lt;alias&gt;"</code>, where the alias is the <code>identifier</code> specified in the <code>templateResourceRefs</code> section.</p>
+<h4 id="example-accessing-a-secret">Example: Accessing a Secret</h4>
+<p>This ClusterProfile retrieves a Secret named <strong>autoscaler</strong> from the management cluster and assigns it the alias <strong>AutoscalerSecret</strong>.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-resources</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">templateResourceRefs</span><span class="p p-Indicator">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">autoscaler</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AutoscalerSecret</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</span></code></pre></div>
+<p>We can reference this Secret in a template using the <code>getResource</code> function with its alias.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">autoscaler</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">(getResource &quot;AutoscalerSecret&quot;).metadata.namespace</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">(getResource &quot;AutoscalerSecret&quot;).data.token</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">ca.crt</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">$data</span><span class="p p-Indicator">:</span><span class="nv">=(getResource &quot;AutoscalerSecret&quot;).data</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">(index $data &quot;ca.crt&quot;)</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span></code></pre></div>
 <h2 id="role-based-access-control-rbac">Role Based Access Control (RBAC)</h2>
 <p>Sveltos adheres to the <a href="https://csrc.nist.gov/glossary/term/least_privilege">least privilege principle</a> concept. That means, by default, Sveltos <strong>does not</strong> have all the necessary permissions to fetch resources from the management cluster. Therefore, when using <code>templateResourceRefs</code>, we need to provide Sveltos with the correct RBAC definition.</p>
 <p>Granting the necessary RBAC permissions to Sveltos is a simple process. The Sveltos <code>ServiceAccount</code> is tied to the <strong>addon-controller-role-extra</strong> ClusterRole. To grant Sveltos the necessary permissions, simply <strong>edit</strong> the role.</p>
@@ -3374,53 +3572,53 @@
 <li><strong>cluster type</strong>: <code>.Cluster.kind</code></li>
 </ul>
 <p>For example, the below template creates a name by combining the cluster's <code>namespace</code> and <code>name</code>.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.namespace</span><span class="nv"> </span><span class="s">}}-{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.namespace</span><span class="nv"> </span><span class="s">}}-{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
 </span></code></pre></div>
 <h2 id="embedding-go-templates-in-sveltos">Embedding Go Templates in Sveltos</h2>
 <p>When incorporating Go template logic into Sveltos templates, utilise the <strong>escape syntax</strong> <code>'{{`&lt;YOUR GO TEMPLATE&gt;`}}'</code>. This ensures that the code is treated as a Go template rather than a Sveltos template.</p>
 <div class="admonition example">
 <p class="admonition-title">Embedding Go Templates in Sveltos</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meilisearch-proxy-secrets</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">secrets.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="no">{{ $cluster := .Cluster.metadata.name }}</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="no">{{- range $env := (list &quot;production&quot; &quot;staging&quot;) }}</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="no">---</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="no">apiVersion: external-secrets.io/v1beta1</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="no">kind: ExternalSecret</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="no">metadata:</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="no">name: meilisearch-proxy</span>
-</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="no">namespace: {{ $env }}</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="no">spec:</span>
-</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="no">refreshInterval: 1h</span>
-</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="no">secretStoreRef:</span>
-</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="no">kind: ClusterSecretStore</span>
-</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">        </span><span class="no">name: vault-backend</span>
-</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="no">target:</span>
-</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="no">name: meilisearch-proxy</span>
-</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="no">template:</span>
-</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">          </span><span class="no">engineVersion: v2</span>
-</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">          </span><span class="no">data:</span>
-</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">            </span><span class="no">MEILISEARCH_HOST: https://meilisearch.{{ $cluster }}</span>
-</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="hll"><span class="w">            </span><span class="no">MEILISEARCH_MASTER_KEY: &#39;{{`{{ .master_key }}`}}&#39;</span>
-</span></span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">            </span><span class="no">PROXY_MASTER_KEY_OVERRIDE: &quot;false&quot;</span>
-</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">            </span><span class="no">CACHE_ENGINE: &quot;redis&quot;</span>
-</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">            </span><span class="no">CACHE_TTL: &quot;300&quot;</span>
-</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">            </span><span class="no">CACHE_URL: &quot;redis://meilisearch-proxy-redis:6379&quot;</span>
-</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">            </span><span class="no">PORT: &quot;80&quot;</span>
-</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">            </span><span class="no">LOG_LEVEL: &quot;info&quot;</span>
-</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">      </span><span class="no">data:</span>
-</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">        </span><span class="no">- secretKey: &#39;master_key&#39;</span>
-</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">          </span><span class="no">remoteRef:</span>
-</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">            </span><span class="no">key: &#39;search&#39;</span>
-</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">            </span><span class="no">property: &#39;{{ $env }}.master_key&#39;</span>
-</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">    </span><span class="no">{{- end }}</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meilisearch-proxy-secrets</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">secrets.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="no">{{ $cluster := .Cluster.metadata.name }}</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="no">{{- range $env := (list &quot;production&quot; &quot;staging&quot;) }}</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="no">---</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="no">apiVersion: external-secrets.io/v1beta1</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="no">kind: ExternalSecret</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="no">name: meilisearch-proxy</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">      </span><span class="no">namespace: {{ $env }}</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="no">refreshInterval: 1h</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="no">secretStoreRef:</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="no">kind: ClusterSecretStore</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">        </span><span class="no">name: vault-backend</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="no">target:</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">        </span><span class="no">name: meilisearch-proxy</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">        </span><span class="no">template:</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">          </span><span class="no">engineVersion: v2</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">          </span><span class="no">data:</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">            </span><span class="no">MEILISEARCH_HOST: https://meilisearch.{{ $cluster }}</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="hll"><span class="w">            </span><span class="no">MEILISEARCH_MASTER_KEY: &#39;{{`{{ .master_key }}`}}&#39;</span>
+</span></span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">            </span><span class="no">PROXY_MASTER_KEY_OVERRIDE: &quot;false&quot;</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">            </span><span class="no">CACHE_ENGINE: &quot;redis&quot;</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">            </span><span class="no">CACHE_TTL: &quot;300&quot;</span>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">            </span><span class="no">CACHE_URL: &quot;redis://meilisearch-proxy-redis:6379&quot;</span>
+</span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="w">            </span><span class="no">PORT: &quot;80&quot;</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="w">            </span><span class="no">LOG_LEVEL: &quot;info&quot;</span>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="w">      </span><span class="no">data:</span>
+</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="w">        </span><span class="no">- secretKey: &#39;master_key&#39;</span>
+</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="w">          </span><span class="no">remoteRef:</span>
+</span><span id="__span-3-39"><a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="w">            </span><span class="no">key: &#39;search&#39;</span>
+</span><span id="__span-3-40"><a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="w">            </span><span class="no">property: &#39;{{ $env }}.master_key&#39;</span>
+</span><span id="__span-3-41"><a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a><span class="w">    </span><span class="no">{{- end }}</span>
 </span></code></pre></div>
 </div>
 <h2 id="learn-more">Learn More</h2>

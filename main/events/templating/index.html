@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../addon_event_deployment/">
+        <link rel="prev" href="../aggregated_selection/">
       
       
-        <link rel="next" href="../generators/">
+        <link rel="next" href="../templating_all_resources_together/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -2241,6 +2241,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregated_selection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Aggregated Selection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -2392,6 +2415,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../templating_all_resources_together/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Templating with All Matched Resources
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../generators/" class="md-nav__link">
         
   
@@ -2446,10 +2492,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_7" >
         
           
-          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_7" id="__nav_9_7_label" tabindex="0">
             
   
   
@@ -2462,8 +2508,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_7">
             <span class="md-nav__icon md-icon"></span>
             Examples
           </label>
@@ -3418,7 +3464,7 @@
 <h2 id="introduction-to-events-and-templating">Introduction to Events and Templating</h2>
 <p><strong>EventTrigger</strong> is a Kubernetes resource that enables <strong>dynamic</strong>, <strong>event-driven</strong> configuration management across clusters by automatically creating Sveltos ClusterProfiles in response to specific events.</p>
 <p>When an event matches all conditions defined in an EventTrigger, it generates a tailored Sveltos ClusterProfile, automating the application of add-ons, policies, or configurations based on real-time changes in an environment.</p>
-<p>The resulting Sveltos ClusterProfile can include:</p>
+<p>The resulting ClusterProfile can include the following fields, all of which can be expresssed as templates within the EventTrigger and instantiated by Sveltos during the generation process:</p>
 <ol>
 <li><strong>TemplateResourceRefs</strong></li>
 <li><strong>PolicyRefs</strong></li>
@@ -3429,6 +3475,38 @@
 <p class="admonition-title">Note</p>
 <p>This <a href="../../template/intro_template/#template-functions">template functions</a> are available.</p>
 </div>
+<p>The following resources are available for instantiation if the <code>EventTrigger</code> has <code>oneForEvent</code> set to <code>true</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Availability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>MatchingResource</strong></td>
+<td style="text-align: left;">A reference to the resource that triggered the event, including its <strong>apiVersion</strong>, <strong>kind</strong>, <strong>name</strong>, and <strong>namespace</strong>.</td>
+<td style="text-align: left;">Always available</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Resource</strong></td>
+<td style="text-align: left;">The full Kubernetes resource that triggered the event. All of its fields, including <code>.spec</code> and <code>.status</code>, are available for templating.</td>
+<td style="text-align: left;">Only if <code>collectResource</code> is set to <code>true</code> in the <code>EventSource</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CloudEvent</strong></td>
+<td style="text-align: left;">The raw CloudEvent that triggered the <code>EventTrigger</code>.</td>
+<td style="text-align: left;">Only if the event was a NATS.io event.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cluster</strong></td>
+<td style="text-align: left;">The <code>SveltosCluster</code> or CAPI Cluster instance where the event occurred.</td>
+<td style="text-align: left;">Always available</td>
+</tr>
+</tbody>
+</table>
 <h3 id="instantiation-flow-templateresourcerefs">Instantiation Flow: TemplateResourceRefs</h3>
 <p>The EventTrigger <strong>TemplateResourceRefs</strong> is instantiated using resource data and set to <strong>ClusterProfile.Spec.TemplateResourceRefs</strong>.</p>
 <p>The <code>namespace</code> and <code>name</code> fields within each reference can be <strong>constants</strong> or <strong>templates</strong>. The templates are dynamically evaluated using data from the <strong>triggering cluster</strong> or <strong>resource</strong>, allowing the generated ClusterProfile to be context-aware and tailored to a specific event.</p>
@@ -3437,6 +3515,7 @@
 <li><code>{{ .Cluster.metadata.name }}</code></li>
 <li><code>{{ .Resource.metadata.annotations.env }}</code></li>
 <li><code>{{ printf "%s-%s" .Cluster.metadata.labels.region .Resource.metadata.name }}</code></li>
+<li><code>{{ .MatchingResource.Name }}</code></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -3765,7 +3844,7 @@ The <code>collectResources: true</code> setting ensures that the full YAML of th
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../addon_event_deployment/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Addon Event Deployment">
+          <a href="../aggregated_selection/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Aggregated Selection">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3775,20 +3854,20 @@ The <code>collectResources: true</code> setting ensures that the full YAML of th
                 Previous
               </span>
               <div class="md-ellipsis">
-                Addon Event Deployment
+                Aggregated Selection
               </div>
             </div>
           </a>
         
         
           
-          <a href="../generators/" class="md-footer__link md-footer__link--next" aria-label="Next: Generators">
+          <a href="../templating_all_resources_together/" class="md-footer__link md-footer__link--next" aria-label="Next: Templating with All Matched Resources">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Generators
+                Templating with All Matched Resources
               </div>
             </div>
             <div class="md-footer__button md-icon">

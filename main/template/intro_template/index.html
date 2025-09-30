@@ -2327,12 +2327,58 @@
   
   
     <li class="md-nav__item">
+      <a href="../../events/aggregated_selection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Aggregated Selection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../events/templating/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Templating
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../events/templating_all_resources_together/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Templating with All Matched Resources
     
   </span>
   
@@ -2404,10 +2450,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_7" >
         
           
-          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_7" id="__nav_9_7_label" tabindex="0">
             
   
   
@@ -2420,8 +2466,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_7">
             <span class="md-nav__icon md-icon"></span>
             Examples
           </label>
@@ -3336,6 +3382,10 @@
 <a href="../lua/">Lua</a> can also be used.</p>
 <p><img alt="Sveltos Templates" src="../../assets/templates.png" /></p>
 <p>In this example, Sveltos retrieves the Secret <strong>imported-secret</strong> from the <strong>default</strong> namespace. This Secret is assigned the alias <strong>ExternalSecret</strong>. The template can subsequently refer to this Secret by employing the alias <strong>ExternalSecret</strong>. It can also be used with <a href="../template_generic_examples/">Helm Charts</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All resources listed in the <code>TemplateResourceRefs</code> section can be accessed within the template using <code>getResource "&lt;alias&gt;"</code>. For instance, we could access the Secret in an example with <code>getResource "ExternalSecret"</code>.</p>
+</div>
 <h2 id="template-functions">Template Functions</h2>
 <p>Sveltos supports the template functions included from the <a href="https://masterminds.github.io/sprig/">Sprig</a> open source project. The Sprig library provides over <strong>70 template functions</strong> for Go’s template language. Some of the functions are listed below. For the full list, have a look at the Spring Github page.</p>
 <ol>
