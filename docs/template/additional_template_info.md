@@ -17,14 +17,56 @@ authors:
 
 ## Variables
 
-By default, the Sveltos Templates can access to the mentioned **management** cluster resources.
+Sveltos automatically fetches these resources, so we do not need to include them in the `TemplateResourceRefs` section. They are immediately available for use in the templates through the specified alias.
 
-1. **CAPI Cluster instance**: `Cluster`
-1. **CAPI Cluster infrastructure provider**: `InfrastructureProvider`
-1. **CAPI Cluster kubeadm provider**:`KubeadmControlPlane`
-1. Sveltos registered clusters, the **SveltosCluster** instance: `Cluster`
+### Resources Available for CAPI Clusters
+
+| Resource | Alias |
+| :--- | :--- |
+| **CAPI Cluster instance** | `Cluster` |
+| **CAPI Cluster infrastructure provider** | `InfrastructureProvider` |
+| **CAPI Cluster kubeadm provider** | `KubeadmControlPlane` |
+
+### Resources Available for SveltosClusters
+
+| Resource | Alias |
+| :--- | :--- |
+| Sveltos registered clusters, the **SveltosCluster** instance | `Cluster` |
+
+### Retrieving Management Cluster Resources
 
 Sveltos can retrieve any resource from the **management** cluster. To do this, include the `templateResourceRefs` in the `Spec` section of the [ClusterProfile/Profile ](../addons/addons.md) resource.
+
+To access any of these resources in your template, use `getResource "<alias>"`, where the alias is the `identifier` specified in the `templateResourceRefs` section.
+
+#### Example: Accessing a Secret
+
+This ClusterProfile retrieves a Secret named **autoscaler** from the management cluster and assigns it the alias **AutoscalerSecret**.
+
+```yaml
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: deploy-resources
+spec:
+  ...
+  templateResourceRefs:
+  - resource:
+      kind: Secret
+      name: autoscaler
+    identifier: AutoscalerSecret
+  ...
+```
+
+We can reference this Secret in a template using the `getResource` function with its alias.
+
+```yaml
+  name: autoscaler
+  namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
+data:
+  token: {{ (getResource "AutoscalerSecret").data.token }}
+  ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+```
 
 ## Role Based Access Control (RBAC)
 
