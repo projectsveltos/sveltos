@@ -130,6 +130,12 @@ $ sveltosctl register cluster \
         --labels=env=test
     ```
 
+    If you use a kubeconfig downloaded from the Rancher UI which will expire in 30 days ( this is by default if expiration time is not modified ) you can enable token-renewal option to continue managing downstream clusters without interruptions.
+
+    After enabling token-renewal on cluster-profiles, must be also enabled JWT Authentication for those downstream clusters to permit dedicated serviceaccount authentication [JWT Authentication on Rancher](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/jwt-authentication).
+    
+    This will permit token renewal on downstream clusters which are accessed through an upstream cluster.
+
 ??? example "Civo"
     If you use [Civo Cloud](https://www.civo.com), simply download the cluster Kubeconfig and perform the below.
 
