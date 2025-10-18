@@ -16,7 +16,7 @@ authors:
 
 # Templating when oneForEvent is false
 
-The following resources are available for instantiation if the `EventTrigger` has `oneForEvent` set to `false`.
+The following resources are available during template instantiation if the `EventTrigger` has `oneForEvent` set to `false`.
 
 | Name | Meaning | Availability |
 | :--- | :--- | :--- |

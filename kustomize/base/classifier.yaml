@@ -27,6 +27,14 @@ rules:
         - list
         - watch
     - apiGroups:
+        - apps
+      resources:
+        - deployments
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
         - authentication.k8s.io
       resources:
         - tokenreviews
@@ -157,12 +165,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.1.1
+                    - --version=v1.2.0
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:v1.1.1
+                  image: docker.io/projectsveltos/classifier:v1.2.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
