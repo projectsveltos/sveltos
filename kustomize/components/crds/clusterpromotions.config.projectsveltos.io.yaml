@@ -3,40 +3,20 @@ kind: CustomResourceDefinition
 metadata:
     annotations:
         controller-gen.kubebuilder.io/version: v0.19.0
-    name: clustersummaries.config.projectsveltos.io
+    name: clusterpromotions.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
     names:
-        kind: ClusterSummary
-        listKind: ClusterSummaryList
-        plural: clustersummaries
-        singular: clustersummary
-    scope: Namespaced
+        kind: ClusterPromotion
+        listKind: ClusterPromotionList
+        plural: clusterpromotions
+        singular: clusterpromotion
+    scope: Cluster
     versions:
-        - additionalPrinterColumns:
-            - description: Time duration since creation of ClusterSummary
-              jsonPath: .metadata.creationTimestamp
-              name: Age
-              type: date
-            - description: Indicates whether HelmCharts are all provisioned
-              jsonPath: .status.featureSummaries[?(@.featureID=="Helm")].status
-              name: HelmCharts
-              priority: 2
-              type: string
-            - description: Indicates whether KustomizeRefs are all provisioned
-              jsonPath: .status.featureSummaries[?(@.featureID=="Kustomize")].status
-              name: KustomizeRefs
-              priority: 2
-              type: string
-            - description: Indicates whether PolicyRefs are all provisioned
-              jsonPath: .status.featureSummaries[?(@.featureID=="Resources")].status
-              name: PolicyRefs
-              priority: 2
-              type: string
-          name: v1beta1
+        - name: v1beta1
           schema:
             openAPIV3Schema:
-                description: ClusterSummary is the Schema for the clustersummaries API
+                description: ClusterPromotion is the Schema for the ClusterPromotions API
                 properties:
                     apiVersion:
                         description: |-
@@ -56,111 +36,19 @@ spec:
                     metadata:
                         type: object
                     spec:
-                        description: ClusterSummarySpec defines the desired state of ClusterSummary
+                        description: spec defines the desired state of ClusterPromotion
                         properties:
-                            clusterName:
-                                description: ClusterName is the name of the workload Cluster this ClusterSummary is for.
-                                type: string
-                            clusterNamespace:
+                            preserveClusterProfilesOnDelete:
                                 description: |-
-                                    ClusterNamespace is the namespace of the workload Cluster this
-                                    ClusterSummary is for.
-                                type: string
-                            clusterProfileSpec:
+                                    PreserveClusterProfilesOnDelete, if true, prevents the controller from deleting
+                                    the associated ClusterProfiles when this ClusterPromotion is deleted.
+                                    The ClusterProfiles will remain, and will need to be manually cleaned up.
+                                type: boolean
+                            profileSpec:
                                 description: |-
-                                    ClusterProfileSpec represent the configuration that will be applied to
-                                    the workload cluster.
+                                    ProfileSpec contains the common configuration for the Sveltos ClusterProfiles
+                                    that will be created at each stage.
                                 properties:
-                                    clusterRefs:
-                                        description: ClusterRefs identifies clusters to associate to.
-                                        items:
-                                            description: ObjectReference contains enough information to let you inspect or modify the referred object.
-                                            properties:
-                                                apiVersion:
-                                                    description: API version of the referent.
-                                                    type: string
-                                                fieldPath:
-                                                    description: |-
-                                                        If referring to a piece of an object instead of an entire object, this string
-                                                        should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                                                        For example, if the object reference is to a container within a pod, this would take on a value like:
-                                                        "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                                                        the event) or if no container name is specified "spec.containers[2]" (container with
-                                                        index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                                                        referencing a part of an object.
-                                                    type: string
-                                                kind:
-                                                    description: |-
-                                                        Kind of the referent.
-                                                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                                                    type: string
-                                                name:
-                                                    description: |-
-                                                        Name of the referent.
-                                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                                    type: string
-                                                namespace:
-                                                    description: |-
-                                                        Namespace of the referent.
-                                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                                                    type: string
-                                                resourceVersion:
-                                                    description: |-
-                                                        Specific resourceVersion to which this reference is made, if any.
-                                                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                                                    type: string
-                                                uid:
-                                                    description: |-
-                                                        UID of the referent.
-                                                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                                                    type: string
-                                            type: object
-                                            x-kubernetes-map-type: atomic
-                                        type: array
-                                    clusterSelector:
-                                        description: ClusterSelector identifies clusters to associate to.
-                                        properties:
-                                            matchExpressions:
-                                                description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
-                                                items:
-                                                    description: |-
-                                                        A label selector requirement is a selector that contains values, a key, and an operator that
-                                                        relates the key and values.
-                                                    properties:
-                                                        key:
-                                                            description: key is the label key that the selector applies to.
-                                                            type: string
-                                                        operator:
-                                                            description: |-
-                                                                operator represents a key's relationship to a set of values.
-                                                                Valid operators are In, NotIn, Exists and DoesNotExist.
-                                                            type: string
-                                                        values:
-                                                            description: |-
-                                                                values is an array of string values. If the operator is In or NotIn,
-                                                                the values array must be non-empty. If the operator is Exists or DoesNotExist,
-                                                                the values array must be empty. This array is replaced during a strategic
-                                                                merge patch.
-                                                            items:
-                                                                type: string
-                                                            type: array
-                                                            x-kubernetes-list-type: atomic
-                                                    required:
-                                                        - key
-                                                        - operator
-                                                    type: object
-                                                type: array
-                                                x-kubernetes-list-type: atomic
-                                            matchLabels:
-                                                additionalProperties:
-                                                    type: string
-                                                description: |-
-                                                    matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
-                                                    map is equivalent to an element of matchExpressions, whose key field is "key", the
-                                                    operator is "In", and the values array contains only "value". The requirements are ANDed.
-                                                type: object
-                                        type: object
-                                        x-kubernetes-map-type: atomic
                                     continueOnConflict:
                                         default: false
                                         description: |-
@@ -245,26 +133,6 @@ spec:
                                             type: object
                                         type: array
                                         x-kubernetes-list-type: atomic
-                                    extraAnnotations:
-                                        additionalProperties:
-                                            type: string
-                                        description: |-
-                                            ExtraAnnotations: These annotations will be added by Sveltos to all Kubernetes resources
-                                            deployed in a managed cluster based on this ClusterProfile/Profile instance.
-                                            **Important:** If a resource deployed by Sveltos already has a annotation with a key present in
-                                            `ExtraAnnotations`, the value from `ExtraAnnotations` will override the existing value.
-                                            (Deprecated use Patches instead)
-                                        type: object
-                                    extraLabels:
-                                        additionalProperties:
-                                            type: string
-                                        description: |-
-                                            ExtraLabels: These labels will be added by Sveltos to all Kubernetes resources deployed in
-                                            a managed cluster based on this ClusterProfile/Profile instance.
-                                            **Important:** If a resource deployed by Sveltos already has a label with a key present in
-                                            `ExtraLabels`, the value from `ExtraLabels` will override the existing value.
-                                            (Deprecated use Patches instead)
-                                        type: object
                                     helmCharts:
                                         description: Helm charts is a list of helm charts that need to be deployed
                                         items:
@@ -955,14 +823,6 @@ spec:
                                             When set to true, when any mounted ConfigMap/Secret is modified, Sveltos automatically
                                             starts a rolling upgrade for Deployment/StatefulSet/DaemonSet instances mounting it.
                                         type: boolean
-                                    setRefs:
-                                        description: |-
-                                            SetRefs identifies referenced (cluster)Sets.
-                                            - ClusterProfile can reference ClusterSet;
-                                            - Profile can reference Set;
-                                        items:
-                                            type: string
-                                        type: array
                                     stopMatchingBehavior:
                                         default: WithdrawPolicies
                                         description: |-
@@ -1189,172 +1049,301 @@ spec:
                                         type: array
                                         x-kubernetes-list-type: atomic
                                 type: object
-                            clusterType:
-                                description: ClusterType is the type of Cluster
-                                type: string
+                            stages:
+                                description: |-
+                                    Stages is a list of environments in the promotion pipeline.
+                                    The pipeline will progress through these stages in the order they are defined.
+                                items:
+                                    description: Stage defines a single step in the promotion pipeline
+                                    properties:
+                                        clusterSelector:
+                                            description: ClusterSelector specifies which clusters this stage's resources will be deployed to.
+                                            properties:
+                                                matchExpressions:
+                                                    description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
+                                                    items:
+                                                        description: |-
+                                                            A label selector requirement is a selector that contains values, a key, and an operator that
+                                                            relates the key and values.
+                                                        properties:
+                                                            key:
+                                                                description: key is the label key that the selector applies to.
+                                                                type: string
+                                                            operator:
+                                                                description: |-
+                                                                    operator represents a key's relationship to a set of values.
+                                                                    Valid operators are In, NotIn, Exists and DoesNotExist.
+                                                                type: string
+                                                            values:
+                                                                description: |-
+                                                                    values is an array of string values. If the operator is In or NotIn,
+                                                                    the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                                                    the values array must be empty. This array is replaced during a strategic
+                                                                    merge patch.
+                                                                items:
+                                                                    type: string
+                                                                type: array
+                                                                x-kubernetes-list-type: atomic
+                                                        required:
+                                                            - key
+                                                            - operator
+                                                        type: object
+                                                    type: array
+                                                    x-kubernetes-list-type: atomic
+                                                matchLabels:
+                                                    additionalProperties:
+                                                        type: string
+                                                    description: |-
+                                                        matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                                        operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                                    type: object
+                                            type: object
+                                            x-kubernetes-map-type: atomic
+                                        name:
+                                            description: Name of the stage, e.g., "qa", "staging", "production".
+                                            type: string
+                                        trigger:
+                                            description: |-
+                                                Trigger for promoting to the next stage in the pipeline.
+                                                This field is only applicable to stages that are not the last stage.
+                                            properties:
+                                                auto:
+                                                    description: |-
+                                                        Auto is an automatic trigger. When set, promotion occurs automatically
+                                                        based on defined conditions.
+                                                    properties:
+                                                        delay:
+                                                            description: |-
+                                                                Delay is an optional time duration to wait after the WaitForStatus condition
+                                                                is met before proceeding with the promotion.
+                                                            type: string
+                                                        postDelayHealthChecks:
+                                                            description: |-
+                                                                PostDelayHealthChecks is a slice of health checks Sveltos will run after the delay
+                                                                period has elapsed.
+                                                            items:
+                                                                properties:
+                                                                    evaluateCEL:
+                                                                        description: |-
+                                                                            EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                                                                            Each rule will be evaluated in order against each object selected based on
+                                                                            the criteria defined above. Each rule's expression must return a boolean value
+                                                                            indicating whether the object is a match.
+
+                                                                            Evaluation stops at the first rule that returns true; subsequent
+                                                                            rules will not be evaluated.
+                                                                        items:
+                                                                            description: CELRule defines a named CEL rule used in EvaluateCEL.
+                                                                            properties:
+                                                                                name:
+                                                                                    description: Name is a human-readable identifier for the rule.
+                                                                                    type: string
+                                                                                rule:
+                                                                                    description: |-
+                                                                                        Rule is the CEL (Common Expression Language) expression to evaluate.
+                                                                                        It must return a bool
+                                                                                    type: string
+                                                                            required:
+                                                                                - name
+                                                                                - rule
+                                                                            type: object
+                                                                        type: array
+                                                                    featureID:
+                                                                        description: |-
+                                                                            FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                                            This field indicates when to run this check.
+                                                                            For instance:
+                                                                            - if set to Helm this check will be run after all helm
+                                                                            charts specified in the ClusterProfile are deployed.
+                                                                            - if set to Resources this check will be run after the content
+                                                                            of all the ConfigMaps/Secrets referenced by ClusterProfile in the
+                                                                            PolicyRef sections is deployed
+                                                                        enum:
+                                                                            - Resources
+                                                                            - Helm
+                                                                            - Kustomize
+                                                                        type: string
+                                                                    group:
+                                                                        description: Group of the resource to fetch in the managed Cluster.
+                                                                        type: string
+                                                                    kind:
+                                                                        description: Kind of the resource to fetch in the managed Cluster.
+                                                                        minLength: 1
+                                                                        type: string
+                                                                    labelFilters:
+                                                                        description: LabelFilters allows to filter resources based on current labels.
+                                                                        items:
+                                                                            properties:
+                                                                                key:
+                                                                                    description: Key is the label key
+                                                                                    type: string
+                                                                                operation:
+                                                                                    description: Operation is the comparison operation
+                                                                                    enum:
+                                                                                        - Equal
+                                                                                        - Different
+                                                                                        - Has
+                                                                                        - DoesNotHave
+                                                                                    type: string
+                                                                                value:
+                                                                                    description: Value is the label value
+                                                                                    type: string
+                                                                            required:
+                                                                                - key
+                                                                                - operation
+                                                                            type: object
+                                                                        type: array
+                                                                    name:
+                                                                        description: Name is the name of this check
+                                                                        type: string
+                                                                    namespace:
+                                                                        description: |-
+                                                                            Namespace of the resource to fetch in the managed Cluster.
+                                                                            Empty for resources scoped at cluster level.
+                                                                        type: string
+                                                                    script:
+                                                                        description: |-
+                                                                            Script is a text containing a lua script.
+                                                                            Must return struct with field "health"
+                                                                            representing whether object is a match (true or false)
+                                                                        type: string
+                                                                    version:
+                                                                        description: Version of the resource to fetch in the managed Cluster.
+                                                                        type: string
+                                                                required:
+                                                                    - featureID
+                                                                    - group
+                                                                    - kind
+                                                                    - name
+                                                                    - version
+                                                                type: object
+                                                            type: array
+                                                        promotionWindow:
+                                                            description: |-
+                                                                PromotionWindow defines the recurring time window during which the
+                                                                automatic promotion is permitted. The controller evaluates this window
+                                                                *only after* the Delay (if defined) has elapsed and all PostDelayHealthChecks
+                                                                have passed. The controller will then wait until the window defined by From/To
+                                                                is open before proceeding.
+                                                            properties:
+                                                                from:
+                                                                    description: |-
+                                                                        From is a cron expression defining the recurring time(s) when the promotion
+                                                                        window opens. The promotion will be blocked until the time defined by 'From'
+                                                                        is reached.
+                                                                    minLength: 1
+                                                                    type: string
+                                                                to:
+                                                                    description: |-
+                                                                        To is a cron expression defining the recurring time(s) when the promotion
+                                                                        window closes. If the promotion process is not complete when 'To' is reached,
+                                                                        the controller should pause and wait for the next 'From' time.
+                                                                    minLength: 1
+                                                                    type: string
+                                                            required:
+                                                                - from
+                                                                - to
+                                                            type: object
+                                                    type: object
+                                                manual:
+                                                    description: Manual is a manual trigger. When set, promotion requires a human signal.
+                                                    properties:
+                                                        approved:
+                                                            description: |-
+                                                                Approved, when set to true, signals to the controller that
+                                                                promotion to the next stage is approved.
+                                                            type: boolean
+                                                        automaticReset:
+                                                            default: true
+                                                            description: |-
+                                                                AutomaticReset, when set to true, instructs the controller to automatically
+                                                                reset the 'Approved' field to nil/false after successfully promoting
+                                                                to the next stage. This prevents unintended immediate advancement
+                                                                past the next manual stage. Defaults to true.
+                                                            type: boolean
+                                                    type: object
+                                            type: object
+                                            x-kubernetes-validations:
+                                                - message: A trigger must have either a 'manual' or 'auto' field, but not both.
+                                                  rule: has(self.manual) != has(self.auto)
+                                    required:
+                                        - name
+                                    type: object
+                                minItems: 1
+                                type: array
+                                x-kubernetes-list-map-keys:
+                                    - name
+                                x-kubernetes-list-type: map
                         required:
-                            - clusterName
-                            - clusterNamespace
-                            - clusterType
+                            - stages
                         type: object
                     status:
-                        description: ClusterSummaryStatus defines the observed state of ClusterSummary
+                        description: status defines the observed state of ClusterPromotion
                         properties:
-                            dependencies:
-                                description: |-
-                                    Dependencies is a summary reporting the status of the dependencies
-                                    for the associated ClusterProfile
+                            currentStageName:
+                                description: |4-
+                                     If the pipeline is currently running, this is the name of the stage
+                                    being processed. If the pipeline is paused or completed, this is the name
+                                    of the last stage that reached a target state.
                                 type: string
-                            deployedGVKs:
-                                description: |-
-                                    DeployedGVKs reports the list of GVKs deployed by ClusterSummary
-                                    in a managed cluster
-                                items:
-                                    properties:
-                                        deployedGroupVersionKind:
-                                            description: |-
-                                                DeployedGroupVersionKind contains all GroupVersionKinds deployed in either
-                                                the workload cluster or the management cluster because of this feature.
-                                                Each element has format kind.version.group
-                                            items:
-                                                type: string
-                                            type: array
-                                        featureID:
-                                            description: FeatureID is an indentifier of the feature whose status is reported
-                                            enum:
-                                                - Resources
-                                                - Helm
-                                                - Kustomize
-                                            type: string
-                                    required:
-                                        - featureID
-                                    type: object
-                                type: array
-                                x-kubernetes-list-map-keys:
-                                    - featureID
-                                x-kubernetes-list-type: map
-                            failureMessage:
-                                description: |-
-                                    FailureMessage reports any error encountered during the reconciliation of the ClusterSummary
-                                    instance itself, *excluding* errors related to the deployment of individual features.
-                                type: string
-                            featureSummaries:
-                                description: |-
-                                    FeatureSummaries reports the status of each workload cluster feature
-                                    directly managed by ClusterProfile.
-                                items:
-                                    description: |-
-                                        FeatureSummary contains a summary of the state of a workload
-                                        cluster feature.
-                                    properties:
-                                        consecutiveFailures:
-                                            description: The number of consecutive deployment failures.
-                                            type: integer
-                                        deployedGroupVersionKind:
-                                            description: |-
-                                                DeployedGroupVersionKind contains all GroupVersionKinds deployed in either
-                                                the workload cluster or the management cluster because of this feature.
-                                                Each element has format kind.version.group
-                                                Deprecated: Replaced by FeatureDeploymentInfo field instead
-                                            items:
-                                                type: string
-                                            type: array
-                                        failureMessage:
-                                            description: FailureMessage provides more information about the error.
-                                            type: string
-                                        failureReason:
-                                            description: FailureReason indicates the type of error that occurred.
-                                            type: string
-                                        featureID:
-                                            description: FeatureID is an indentifier of the feature whose status is reported
-                                            enum:
-                                                - Resources
-                                                - Helm
-                                                - Kustomize
-                                            type: string
-                                        hash:
-                                            description: |-
-                                                Hash represents of a unique value for a feature at a fixed point in
-                                                time
-                                            format: byte
-                                            type: string
-                                        lastAppliedTime:
-                                            description: LastAppliedTime is the time feature was last reconciled
-                                            format: date-time
-                                            type: string
-                                        status:
-                                            description: Status represents the state of the feature in the workload cluster
-                                            enum:
-                                                - Provisioning
-                                                - Provisioned
-                                                - Failed
-                                                - FailedNonRetriable
-                                                - Removing
-                                                - Removed
-                                                - AgentRemoving
-                                            type: string
-                                    required:
-                                        - featureID
-                                    type: object
-                                type: array
-                                x-kubernetes-list-map-keys:
-                                    - featureID
-                                x-kubernetes-list-type: map
-                            helmReleaseSummaries:
-                                description: |-
-                                    HelmReleaseSummaries reports the status of each helm chart
-                                    directly managed by ClusterProfile.
-                                items:
-                                    properties:
-                                        conflictMessage:
-                                            description: |-
-                                                Status indicates whether ClusterSummary can manage the helm
-                                                chart or there is a conflict
-                                            type: string
-                                        releaseName:
-                                            description: ReleaseName is the chart release
-                                            minLength: 1
-                                            type: string
-                                        releaseNamespace:
-                                            description: ReleaseNamespace is the namespace release will be installed
-                                            minLength: 1
-                                            type: string
-                                        status:
-                                            description: |-
-                                                Status indicates whether ClusterSummary can manage the helm
-                                                chart or there is a conflict
-                                            enum:
-                                                - Managing
-                                                - Conflict
-                                            type: string
-                                        valuesHash:
-                                            description: ValuesHash represents of a unique value for the values section
-                                            format: byte
-                                            type: string
-                                    required:
-                                        - releaseName
-                                        - releaseNamespace
-                                        - status
-                                    type: object
-                                type: array
-                                x-kubernetes-list-type: atomic
-                            nextReconcileTime:
-                                description: |-
-                                    NextReconcileTime is the earliest time when this resource should be reconciled again.
-                                    Controller skips reconciliation if current time is before this timestamp.
-                                    If not set, reconciliations will happen as usual.
+                            lastPromotionTime:
+                                description: LastPromotionTime is the time the entire promotion process was successfully completed.
                                 format: date-time
                                 type: string
-                            reconciliationSuspended:
+                            profileSpecHash:
                                 description: |-
-                                    ReconciliationSuspended indicates whether the reconciliation loop for this
-                                    ClusterSummary is currently paused due to an external action (e.g., a user annotation).
-                                    When true, the status will not be updated unless the pause is lifted.
-                                type: boolean
-                            suspensionReason:
-                                description: SuspensionReason provides a brief explanation of why the reconciliation is suspended.
+                                    ProfileSpecHash represents a unique value for the entire ProfileSpec configuration
+                                    at a fixed point in time. This is used to detect configuration changes.
+                                format: byte
+                                type: string
+                            stages:
+                                description: |-
+                                    Stages tracks the status of each configured promotion stage
+                                    (e.g., "qa", "staging", "production").
+                                items:
+                                    description: StageStatus defines the status for a given stage in a progressive deployment.
+                                    properties:
+                                        failureMessage:
+                                            description: FailureMessage reports a detailed error message if a failure occurred.
+                                            type: string
+                                        lastStatusCheckTime:
+                                            description: |-
+                                                LastStatusCheckTime is the time the ClusterPromotion controller last checked the
+                                                statuses of the matching clusters and their provisioned state.
+                                                This is updated frequently while waiting for provisioning to complete.
+                                            format: date-time
+                                            type: string
+                                        lastSuccessfulAppliedTime:
+                                            description: |-
+                                                LastSuccessfulAppliedTime is the time this stage was fully and successfully deployed.
+                                                This means all clusters matching the stage have reported a 'Provisioned' status.
+                                            format: date-time
+                                            type: string
+                                        lastUpdateReconciledTime:
+                                            description: |-
+                                                LastUpdateReconciledTime is the time the ClusterPromotion controller most recently
+                                                created or updated the corresponding ClusterProfile resource for this stage.
+                                                This indicates when the desired state was last applied to the system.
+                                            format: date-time
+                                            type: string
+                                        name:
+                                            description: Name of the stage, e.g., "qa", "staging", "production".
+                                            type: string
+                                    required:
+                                        - name
+                                    type: object
+                                type: array
+                            stagesHash:
+                                description: |-
+                                    StagesHash represents a unique value for the entire list of Stages.
+                                    This hash changes if any stage is added, removed, or if the ordering
+                                    or configuration (ClusterSelector, Trigger) of any stage changes.
+                                format: byte
                                 type: string
                         type: object
+                required:
+                    - spec
                 type: object
           served: true
           storage: true
