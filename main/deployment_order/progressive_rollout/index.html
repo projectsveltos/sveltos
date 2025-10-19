@@ -6,15 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Use Sveltos to deploy Kube-Bench to all managed clusters">
+        <meta name="description" content="Sveltos's rolling update strategy allows add-ons and configurations on managed clusters to be updated gradually, minimizing downtime and reducing risk during multi-cluster deployments.">
       
       
       
       
-        <link rel="prev" href="../example_degrade_certificate_notification/">
-      
-      
-        <link rel="next" href="../display_resources/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +18,7 @@
     
     
       
-        <title>Notifications - Projectsveltos - Projectsveltos Documentation</title>
+        <title>Cluster Add-on Rolling Update Strategy - Projectsveltos Documentation</title>
       
     
     
@@ -75,6 +71,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#cluster-promotion-progressive-rollouts" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -125,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Notifications - Projectsveltos
+              Cluster Add-on Rolling Update Strategy
             
           </span>
         </div>
@@ -1343,7 +1344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../manifest_order/" class="md-nav__link">
         
   
   
@@ -1366,7 +1367,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
+      <a href="../depends_on/" class="md-nav__link">
         
   
   
@@ -1389,7 +1390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1412,7 +1413,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
+      <a href="../tiers/" class="md-nav__link">
         
   
   
@@ -1435,7 +1436,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1458,7 +1459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../order_with_events/" class="md-nav__link">
         
   
   
@@ -2701,20 +2702,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
@@ -2730,7 +2729,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             Cluster Observability
@@ -2744,7 +2743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../notifications/" class="md-nav__link">
+      <a href="../../observability/notifications/" class="md-nav__link">
         
   
   
@@ -2767,7 +2766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_addon_notification/" class="md-nav__link">
+      <a href="../../observability/example_addon_notification/" class="md-nav__link">
         
   
   
@@ -2790,7 +2789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -2813,7 +2812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_deployment_health_notification/" class="md-nav__link">
+      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -2836,7 +2835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -2856,17 +2855,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../observability/example_cis_scan/" class="md-nav__link">
         
   
   
@@ -2877,7 +2869,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -2890,7 +2881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../display_resources/" class="md-nav__link">
+      <a href="../../observability/display_resources/" class="md-nav__link">
         
   
   
@@ -2913,7 +2904,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../different_resources/" class="md-nav__link">
+      <a href="../../observability/different_resources/" class="md-nav__link">
         
   
   
@@ -3224,6 +3215,67 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Execution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers-and-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers and Control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers and Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-automatic-promotion-autotrigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      1️⃣ Automatic Promotion (AutoTrigger)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-manual-promotion-manualtrigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      2️⃣ Manual Promotion (ManualTrigger)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -3242,165 +3294,138 @@
   
 
 
-  <h1>Example CIS Scan with Kube-bench</h1>
-
-<p>Running security scans on managed Kubernetes clusters is crucial to ensure compliance with best practices.</p>
-<p>Sveltos can leverage <a href="https://github.com/aquasecurity/kube-bench">kube-bench</a> to run a security scan on all managed clusters.</p>
-<p>Using the Sveltos event framework, we can centralized CIS Kubernetes Benchmark compliance results for a unified view.</p>
-<p><img alt="Deploy kube-bench to all production clusters" src="../../assets/sveltos-deploy-kube-bench.png" /></p>
-<p><img alt="Post process and collect kube-bench results" src="../../assets/post-process-collect-kube-bench-failures.png" /></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sveltosctl show resources --kind=configmap
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>+---------------+---------------------+------------+---------------------+--------------------------------+
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|    CLUSTER    |         GVK         | NAMESPACE  |        NAME         |            MESSAGE             |
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>+---------------+---------------------+------------+---------------------+--------------------------------+
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>| civo/cluster1 | /v1, Kind=ConfigMap | kube-bench | kube-bench-failures | [FAIL] 4.1.1 Ensure that       |
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|               |                     |            |                     | the kubelet service file       |
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|               |                     |            |                     | permissions are set to 600 or  |
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|               |                     |            |                     | more restrictive (Automated)   |
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|               |                     |            |                     | [FAIL] 4.1.5 Ensure that the   |
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|               |                     |            |                     | --kubeconfig kubelet.conf      |
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|               |                     |            |                     | file permissions are set       |
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|               |                     |            |                     | to 600 or more restrictive     |
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>|               |                     |            |                     | (Automated) [FAIL] 4.1.6       |
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>|               |                     |            |                     | Ensure that the --kubeconfig   |
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>|               |                     |            |                     | kubelet.conf file ownership is |
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|               |                     |            |                     | set to root:root (Automated)   |
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>|               |                     |            |                     | [FAIL] 4.1.9 If the kubelet    |
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|               |                     |            |                     | config.yaml configuration      |
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|               |                     |            |                     | file is being used validate    |
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|               |                     |            |                     | permissions set to 600 or      |
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|               |                     |            |                     | more restrictive (Automated)   |
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|               |                     |            |                     | [FAIL] 4.1.10 If the kubelet   |
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>|               |                     |            |                     | config.yaml configuration      |
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>|               |                     |            |                     | file is being used validate    |
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>|               |                     |            |                     | file ownership is set          |
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>|               |                     |            |                     | to root:root (Automated)       |
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>|               |                     |            |                     | [FAIL] 4.2.1 Ensure that the   |
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>|               |                     |            |                     | --anonymous-auth argument      |
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>|               |                     |            |                     | is set to false (Automated)    |
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>|               |                     |            |                     | [FAIL] 4.2.2 Ensure that       |
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>|               |                     |            |                     | the --authorization-mode       |
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>|               |                     |            |                     | argument is not set to         |
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>|               |                     |            |                     | AlwaysAllow (Automated)        |
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>|               |                     |            |                     | [FAIL] 4.2.3 Ensure that the   |
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>|               |                     |            |                     | --client-ca-file argument is   |
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>|               |                     |            |                     | set as appropriate (Automated) |
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|               |                     |            |                     | [FAIL] 4.2.6 Ensure that the   |
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>|               |                     |            |                     | --make-iptables-util-chains    |
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>|               |                     |            |                     | argument is set to             |
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>|               |                     |            |                     | true (Automated) [FAIL]        |
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>|               |                     |            |                     | 4.2.10 Ensure that the         |
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>|               |                     |            |                     | --rotate-certificates          |
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>|               |                     |            |                     | argument is not set to false   |
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>|               |                     |            |                     | (Automated) [FAIL] 4.3.1       |
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>|               |                     |            |                     | Ensure that the kube-proxy     |
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>|               |                     |            |                     | metrics service is bound       |
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>|               |                     |            |                     | to localhost (Automated)       |
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>|               |                     |            |                     | [FAIL] 5.1.1 Ensure that       |
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>|               |                     |            |                     | the cluster-admin role is      |
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>|               |                     |            |                     | only used where required       |
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>|               |                     |            |                     | (Automated) [FAIL] 5.1.2       |
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>|               |                     |            |                     | Minimize access to secrets     |
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>|               |                     |            |                     | (Automated) [FAIL] 5.1.3       |
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>|               |                     |            |                     | Minimize wildcard use in Roles |
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>|               |                     |            |                     | and ClusterRoles (Automated)   |
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>|               |                     |            |                     | [FAIL] 5.1.4 Minimize access   |
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>|               |                     |            |                     | to create pods (Automated)     |
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>|               |                     |            |                     | [FAIL] 5.1.5 Ensure that       |
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>|               |                     |            |                     | default service accounts are   |
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>|               |                     |            |                     | not actively used. (Automated) |
-</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>|               |                     |            |                     | [FAIL] 5.1.6 Ensure that       |
-</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>|               |                     |            |                     | Service Account Tokens are     |
-</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>|               |                     |            |                     | only mounted where necessary   |
-</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>|               |                     |            |                     | (Automated)                    |
-</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>| civo/cluster2 |                     | kube-bench | kube-bench-failures | [FAIL] 4.1.1 Ensure that       |
-</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>|               |                     |            |                     | the kubelet service file       |
-</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>|               |                     |            |                     | permissions are set to 600 or  |
-</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>|               |                     |            |                     | more restrictive (Automated)   |
-</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>|               |                     |            |                     | [FAIL] 4.1.5 Ensure that the   |
-</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>|               |                     |            |                     | --kubeconfig kubelet.conf      |
-</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>|               |                     |            |                     | file permissions are set       |
-</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>|               |                     |            |                     | to 600 or more restrictive     |
-</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>|               |                     |            |                     | (Automated) [FAIL] 4.1.6       |
-</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>|               |                     |            |                     | Ensure that the --kubeconfig   |
-</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>|               |                     |            |                     | kubelet.conf file ownership is |
-</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>|               |                     |            |                     | set to root:root (Automated)   |
-</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>|               |                     |            |                     | [FAIL] 4.1.9 If the kubelet    |
-</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>|               |                     |            |                     | config.yaml configuration      |
-</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>|               |                     |            |                     | file is being used validate    |
-</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>|               |                     |            |                     | permissions set to 600 or      |
-</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>|               |                     |            |                     | more restrictive (Automated)   |
-</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>|               |                     |            |                     | [FAIL] 4.1.10 If the kubelet   |
-</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>|               |                     |            |                     | config.yaml configuration      |
-</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>|               |                     |            |                     | file is being used validate    |
-</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>|               |                     |            |                     | file ownership is set          |
-</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>|               |                     |            |                     | to root:root (Automated)       |
-</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>|               |                     |            |                     | [FAIL] 4.2.1 Ensure that the   |
-</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>|               |                     |            |                     | --anonymous-auth argument      |
-</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>|               |                     |            |                     | is set to false (Automated)    |
-</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>|               |                     |            |                     | [FAIL] 4.2.2 Ensure that       |
-</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>|               |                     |            |                     | the --authorization-mode       |
-</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>|               |                     |            |                     | argument is not set to         |
-</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>|               |                     |            |                     | AlwaysAllow (Automated)        |
-</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>|               |                     |            |                     | [FAIL] 4.2.3 Ensure that the   |
-</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>|               |                     |            |                     | --client-ca-file argument is   |
-</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>|               |                     |            |                     | set as appropriate (Automated) |
-</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>|               |                     |            |                     | [FAIL] 4.2.6 Ensure that the   |
-</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>|               |                     |            |                     | --make-iptables-util-chains    |
-</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>|               |                     |            |                     | argument is set to             |
-</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>|               |                     |            |                     | true (Automated) [FAIL]        |
-</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>|               |                     |            |                     | 4.2.10 Ensure that the         |
-</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>|               |                     |            |                     | --rotate-certificates          |
-</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>|               |                     |            |                     | argument is not set to false   |
-</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>|               |                     |            |                     | (Automated) [FAIL] 4.3.1       |
-</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>|               |                     |            |                     | Ensure that the kube-proxy     |
-</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>|               |                     |            |                     | metrics service is bound       |
-</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>|               |                     |            |                     | to localhost (Automated)       |
-</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>|               |                     |            |                     | [FAIL] 5.1.1 Ensure that       |
-</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>|               |                     |            |                     | the cluster-admin role is      |
-</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>|               |                     |            |                     | only used where required       |
-</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>|               |                     |            |                     | (Automated) [FAIL] 5.1.2       |
-</span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>|               |                     |            |                     | Minimize access to secrets     |
-</span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>|               |                     |            |                     | (Automated) [FAIL] 5.1.3       |
-</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>|               |                     |            |                     | Minimize wildcard use in Roles |
-</span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>|               |                     |            |                     | and ClusterRoles (Automated)   |
-</span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>|               |                     |            |                     | [FAIL] 5.1.4 Minimize access   |
-</span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>|               |                     |            |                     | to create pods (Automated)     |
-</span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>|               |                     |            |                     | [FAIL] 5.1.5 Ensure that       |
-</span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>|               |                     |            |                     | default service accounts are   |
-</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>|               |                     |            |                     | not actively used. (Automated) |
-</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>|               |                     |            |                     | [FAIL] 5.1.6 Ensure that       |
-</span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>|               |                     |            |                     | Service Account Tokens are     |
-</span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>|               |                     |            |                     | only mounted where necessary   |
-</span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>|               |                     |            |                     | (Automated)                    |
-</span><span id="__span-0-125"><a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>| gke/cluster   |                     | kube-bench | kube-bench-failures | [FAIL] 3.2.1 Ensure that the   |
-</span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>|               |                     |            |                     | --anonymous-auth argument      |
-</span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>|               |                     |            |                     | is set to false (Automated)    |
-</span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>|               |                     |            |                     | [FAIL] 3.2.2 Ensure that       |
-</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>|               |                     |            |                     | the --authorization-mode       |
-</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>|               |                     |            |                     | argument is not set to         |
-</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>|               |                     |            |                     | AlwaysAllow (Automated)        |
-</span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>|               |                     |            |                     | [FAIL] 3.2.3 Ensure that the   |
-</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>|               |                     |            |                     | --client-ca-file argument is   |
-</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>|               |                     |            |                     | set as appropriate (Automated) |
-</span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>|               |                     |            |                     | [FAIL] 3.2.6 Ensure that the   |
-</span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>|               |                     |            |                     | --protect-kernel-defaults      |
-</span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>|               |                     |            |                     | argument is set to true        |
-</span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>|               |                     |            |                     | (Manual) [FAIL] 3.2.9 Ensure   |
-</span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>|               |                     |            |                     | that the --event-qps argument  |
-</span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>|               |                     |            |                     | is set to 0 or a level which   |
-</span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>|               |                     |            |                     | ensures appropriate event      |
-</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>|               |                     |            |                     | capture (Automated) [FAIL]     |
-</span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>|               |                     |            |                     | 3.2.12 Ensure that the         |
-</span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>|               |                     |            |                     | RotateKubeletServerCertificate |
-</span><span id="__span-0-145"><a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>|               |                     |            |                     | argument is set to true        |
-</span><span id="__span-0-146"><a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>|               |                     |            |                     | (Automated)                    |
-</span><span id="__span-0-147"><a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>+---------------+---------------------+------------+---------------------+--------------------------------+
+<h1 id="cluster-promotion-progressive-rollouts">Cluster Promotion: Progressive Rollouts</h1>
+<p>The <code>ClusterPromotion</code> CRD solves the challenge of performing phased rollouts of cluster configurations and add-ons managed by Sveltos. Instead of creating and manually managing multiple ClusterProfile resources with identical content for different environments, you define the configuration once and specify an ordered series of deployment stages.</p>
+<p>Sveltos automatically handles the workflow:</p>
+<ol>
+<li>It takes a single, shared configuration defined in <code>spec.profileSpec</code>.</li>
+<li>It applies this configuration sequentially to clusters matching the selector of the first stage.</li>
+<li>Upon successful deployment of the current stage, Sveltos waits for the configured <code>promotion trigger</code> (e.g., a time delay) before proceeding to the next stage.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>profileSpec</strong></td>
+<td style="text-align: left;">The <strong>single source of truth</strong> for the configuration (e.g., Helm charts, Kubernetes resources, secrets, or config maps). This specification is shared across all stages.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Staged Rollout</strong></td>
+<td style="text-align: left;">An ordered series of stages, each with a unique <strong><code>clusterSelector</code></strong>. The configuration is only deployed to the next stage once the previous stage is fully reconciled and the trigger condition is met.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ClusterProfile Generation</strong></td>
+<td style="text-align: left;">For each active stage, Sveltos automatically generates a temporary <strong><code>ClusterProfile</code></strong> resource using the shared <code>profileSpec</code> and the stage's specific <code>clusterSelector</code>. This keeps the configuration <strong>DRY (Don't Repeat Yourself)</strong> while leveraging Sveltos's core reconciliation logic.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Promotion Control</strong></td>
+<td style="text-align: left;">The <strong><code>trigger</code></strong> field within each stage dictates the criteria for moving to the next stage. Both <strong>Automated Promotion</strong> and <strong>Manual Promotion</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="ClusterPromotion instance" src="../../assets/clusterpromotion.jpeg" />
+<img alt="ClusterPromotion in action" src="../../assets/sveltos-promotion.gif" /></p>
+<h2 id="example">Example</h2>
+<p>This example demonstrates rolling out the <code>kyverno-latest</code> Helm chart with a specific replica count, first to clusters labeled <code>env: staging</code>, and then to clusters labeled <code>env: production</code>.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterPromotion</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-kyverno-rollout</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="c1"># The configuration (profileSpec) is defined once</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">profileSpec</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">3.4.2</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="c1"># Stages are processed sequentially</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="nt">stages</span><span class="p">:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span><span class="w"> </span><span class="c1"># Stage 1: Staging environment</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment before promoting</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span><span class="w"> </span><span class="c1"># Stage 2: Production environment</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment (optional for final stage)</span>
 </span></code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>The YAML defintions can be found <a href="https://github.com/projectsveltos/demos/tree/main/cis-scan">here</a>.</p>
-</div>
+<h2 id="workflow-execution">Workflow Execution</h2>
+<ul>
+<li>Stage 1 (staging): Sveltos creates a ClusterProfile targeting clusters where <code>env: staging</code>.</li>
+<li>Sveltos waits for the deployment to successfully complete on all staging clusters.</li>
+<li>Once complete, Sveltos waits for 5 minutes (the delay period).</li>
+<li>Stage 2 (production): After the delay, the configuration is automatically promoted. Sveltos creates a new ClusterProfile targeting clusters where env: production.</li>
+<li>Sveltos waits for the deployment to successfully complete on all production clusters.</li>
+<li>The ClusterPromotion resource is marked as fully reconciled.</li>
+</ul>
+<h2 id="triggers-and-control">Triggers and Control</h2>
+<p>The progressive rollout is governed by the <code>Trigger</code> defined within each Stage. A stage's trigger dictates the specific condition—manual approval or automatic criteria—that must be met before Sveltos proceeds to the next stage in the pipeline. A stage can have either a <strong>Manual</strong> or <strong>Auto</strong> trigger, but not both.</p>
+<h3 id="1-automatic-promotion-autotrigger">1️⃣ Automatic Promotion (<code>AutoTrigger</code>)</h3>
+<p>The <code>AutoTrigger</code> facilitates a hands-off, time-based, and health-checked promotion flow.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>delay</code></strong></td>
+<td style="text-align: left;"><code>metav1.Duration</code></td>
+<td style="text-align: left;">An optional duration to wait after the current stage's configuration is fully deployed before proceeding to health checks. This is your soak time.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>postDelayHealthChecks</code></strong></td>
+<td style="text-align: left;"><code>[]ValidateHealth</code></td>
+<td style="text-align: left;">A slice of health checks (defined using <code>ValidateHealth</code>) that Sveltos must successfully run <em>after</em> the <code>delay</code> has elapsed. Promotion is blocked until all these checks pass.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>promotionWindow</code></strong></td>
+<td style="text-align: left;"><code>*TimeWindow</code></td>
+<td style="text-align: left;">An optional recurring time window that restricts when the promotion can begin. Sveltos waits for this window to be open <em>after</em> the <code>delay</code> has elapsed and all health checks have passed.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-manual-promotion-manualtrigger">2️⃣ Manual Promotion (<code>ManualTrigger</code>)</h3>
+<p>The <code>ManualTrigger</code> halts the pipeline and requires explicit human intervention, typically used for promotion into high-risk environments like <strong>Production</strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>approved</code></strong></td>
+<td style="text-align: left;">When set to <code>true</code>, this signals to Sveltos that the human operator has reviewed the previous stage and <strong>approved</strong> the promotion to the next stage.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>automaticReset</code></strong></td>
+<td style="text-align: left;">If set to <code>true</code> (default), Sveltos will automatically reset the <code>approved</code> field to <code>nil</code>/<code>false</code> after successfully promoting to the next stage. This prevents unintentional double-advancement past the following stage.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -3428,44 +3453,6 @@
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href="../example_degrade_certificate_notification/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Detect Degrade Certificates Notification">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                Example Detect Degrade Certificates Notification
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../display_resources/" class="md-footer__link md-footer__link--next" aria-label="Next: Display Resources">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Display Resources
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
