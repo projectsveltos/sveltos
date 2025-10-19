@@ -103,4 +103,4 @@ The `ManualTrigger` halts the pipeline and requires explicit human intervention,
 | Field | Description |
 | :--- | :--- |
 | **`approved`** | When set to `true`, this signals to Sveltos that the human operator has reviewed the previous stage and **approved** the promotion to the next stage. |
-| **`automaticReset`** | If set to `true` (default), Sveltos will automatically reset the `approved` field to `nil`/`false` after successfully promoting to the next stage. This prevents unintentional double-advancement past the following stage. |
+| **`automaticReset`** | If set to `true` (default), Sveltos will automatically reset the `approved` field to `nil`/`false` after successfully promoting to the next stage. |
