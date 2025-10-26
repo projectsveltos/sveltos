@@ -37,26 +37,24 @@ graph LR
 
 **Controller**: `addon-controller`
 
-#### When Created
+**API Version**: `config.projectsveltos.io/v1beta1`
 
-A `ClusterSummary` is automatically created when:
+#### When Created
 
 - A cluster matches the `clusterSelector` defined in the ClusterProfile/Profile
 - One ClusterSummary is created per matching cluster per ClusterProfile/Profile
 
 #### When Deleted
 
-A `ClusterSummary` is deleted when:
-
 - The parent ClusterProfile/Profile is deleted (cascade deletion via ownerReferences)
 - The cluster no longer matches the `clusterSelector`
 - `stopMatchingBehavior` is set to `WithdrawPolicies` and cluster stops matching
 
-#### Naming Convention
+#### Relationship with Other CRs
 
-```
-<clusterprofile-name>-<cluster-namespace>-<cluster-name>
-```
+- ClusterProfile/Profile owns ClusterSummary instances
+- ClusterSummary references the cluster (SveltosCluster or CAPI Cluster)
+- ClusterSummary deploys resources to managed clusters
 
 #### Example
 
@@ -70,28 +68,11 @@ metadata:
   - apiVersion: config.projectsveltos.io/v1beta1
     kind: ClusterProfile
     name: deploy-kyverno
-    uid: ca908a7b-e9a7-457b-a077-81400b59902f
     controller: true
-    blockOwnerDeletion: true
 spec:
   clusterName: cluster1
   clusterNamespace: default
   clusterType: Sveltos
-  clusterProfileSpec:
-    # Copy of ClusterProfile spec
-```
-
-#### Verification
-
-```bash
-# List ClusterSummaries and their owners
-kubectl get clustersummary -A
-
-# Check ownership details
-kubectl get clustersummary <name> -n <namespace> -o jsonpath='{.metadata.ownerReferences}'
-
-# Verify matching clusters for a ClusterProfile
-kubectl get clusterprofile <name> -o jsonpath='{.status.matchingClusters}'
 ```
 
 ---
@@ -113,9 +94,9 @@ graph TB
 
 **Resource**: `EventReport`
 
-#### When Created
+**API Version**: `lib.projectsveltos.io/v1beta1`
 
-An `EventReport` is created when:
+#### When Created
 
 - The `sveltos-agent` in a managed cluster detects a resource matching the `EventSource` criteria
 - Lua script or CEL expression in EventSource evaluates to `true`
@@ -123,20 +104,15 @@ An `EventReport` is created when:
 
 #### When Deleted
 
-An `EventReport` is deleted when:
-
 - The matching resource no longer exists in the managed cluster
 - The EventSource is deleted
 - The cluster is unregistered from Sveltos
 
-#### Content
+#### Relationship with Other CRs
 
-The EventReport contains:
-
-- Reference to the EventSource
-- Cluster information (name, namespace, type)
-- Matching resource metadata (always included)
-- Full resource data (if `collectResources: true` in EventSource)
+- EventSource defines what to watch for
+- sveltos-agent creates EventReport instances
+- EventTrigger consumes EventReports
 
 #### Example
 
@@ -156,30 +132,6 @@ spec:
     kind: Service
     name: my-service
     namespace: default
-  resources:  # Only present if collectResources: true
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      name: my-service
-      namespace: default
-      labels:
-        sveltos: fv
-    spec:
-      type: LoadBalancer
-      # ... full resource spec
-```
-
-#### Verification
-
-```bash
-# List all EventReports
-kubectl get eventreport -A
-
-# Check EventReport details
-kubectl describe eventreport <name> -n <namespace>
-
-# View matching resources
-kubectl get eventreport <name> -n <namespace> -o jsonpath='{.spec.matchingResources}'
 ```
 
 ---
@@ -206,9 +158,9 @@ graph TB
 
 **Controller**: `event-manager`
 
-#### When Created
+**API Version**: `lib.projectsveltos.io/v1beta1`
 
-Dynamic ClusterProfile and ConfigMap are created when:
+#### When Created
 
 - An `EventReport` matches the `eventSourceName` in EventTrigger
 - The `event-manager` processes the EventReport
@@ -216,27 +168,20 @@ Dynamic ClusterProfile and ConfigMap are created when:
 
 #### When Deleted
 
-Dynamic resources are deleted when:
-
 - The parent `EventTrigger` is deleted
 - The corresponding `EventReport` is removed
 - Event no longer exists in the managed cluster
 
-#### Naming Pattern
+#### Relationship with Other CRs
 
-**Dynamic ClusterProfile**: `sveltos-<random-suffix>`
-
-**ConfigMap**: `sveltos-<random-suffix>` in `projectsveltos` namespace
-
-#### OneForEvent Behavior
-
-- `oneForEvent: true` - One ClusterProfile per matching resource
-- `oneForEvent: false` - One ClusterProfile for all matching resources
+- EventTrigger consumes EventReports
+- EventTrigger creates and owns dynamic ClusterProfiles
+- EventTrigger creates and owns ConfigMaps with instantiated templates
+- Dynamic ClusterProfiles follow the same lifecycle as regular ClusterProfiles
 
 #### Example
 
 ```yaml
-# Dynamic ClusterProfile created by EventTrigger
 apiVersion: config.projectsveltos.io/v1beta1
 kind: ClusterProfile
 metadata:
@@ -245,9 +190,7 @@ metadata:
   - apiVersion: lib.projectsveltos.io/v1beta1
     kind: EventTrigger
     name: create-network-policy
-    uid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
     controller: true
-    blockOwnerDeletion: true
   labels:
     projectsveltos.io/event-trigger-name: create-network-policy
 spec:
@@ -260,153 +203,48 @@ spec:
     kind: ConfigMap
 ```
 
-```yaml
-# Instantiated ConfigMap created by event-manager
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sveltos-evykjze69n3bz3gavzw4
-  namespace: projectsveltos
-  ownerReferences:
-  - apiVersion: lib.projectsveltos.io/v1beta1
-    kind: EventTrigger
-    name: create-network-policy
-    uid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-    controller: true
-data:
-  policy.yaml: |
-    # Template instantiated with event data
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata:
-      name: front-my-service
-      namespace: default
-    # ... policy spec
-```
-
-#### Verification
-
-```bash
-# List dynamic ClusterProfiles
-kubectl get clusterprofile -l projectsveltos.io/event-trigger-name
-
-# View ConfigMaps created by EventTrigger
-kubectl get configmap -n projectsveltos -l projectsveltos.io/event-trigger-name
-
-# Check EventTrigger status
-kubectl describe eventtrigger <name>
-```
-
 ---
 
-### ClusterSet/Set → Cluster Selection
+### Classifier → ClassifierReport
 
-Dynamic cluster selection for high availability and failover.
-
-```mermaid
-graph TB
-    A[ClusterSet/Set] -->|selects healthy clusters| B[Matching Clusters]
-    C[ClusterProfile/Profile] -->|references| A
-    C -->|deploys only to| D[Selected Clusters]
-    B -->|subset of| D
-```
-
-**Owner**: `ClusterSet` (cluster-scoped) or `Set` (namespace-scoped)
-
-**Affects**: Which clusters receive deployments from referencing ClusterProfiles
-
-**Controller**: `set-controller`
-
-#### When Updated
-
-ClusterSet selection is updated when:
-
-- A cluster's health status changes
-- A cluster becomes unavailable (automatic failover to healthy cluster)
-- `maxReplicas` limit is reached
-- New clusters match the `clusterSelector`
-
-#### Behavior
-
-- Automatically maintains specified number of selected clusters (up to `maxReplicas`)
-- Performs automatic failover when selected cluster becomes unhealthy
-- ClusterProfiles referencing the Set only deploy to currently selected clusters
-
-#### Example
-
-```yaml
-apiVersion: lib.projectsveltos.io/v1beta1
-kind: ClusterSet
-metadata:
-  name: production-set
-spec:
-  clusterSelector:
-    matchLabels:
-      env: production
-  maxReplicas: 2  # Select maximum 2 clusters
-```
-
-```yaml
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: critical-service
-spec:
-  clusterSetRefs:
-  - production-set
-  helmCharts:
-  - repositoryURL: https://charts.example.com
-    chartName: critical-app
-    chartVersion: 1.0.0
-    releaseName: critical-app
-    releaseNamespace: apps
-    helmChartAction: Install
-```
-
-#### Verification
-
-```bash
-# Check selected clusters
-kubectl get clusterset <name> -o jsonpath='{.status.selectedClusterRefs}'
-
-# Verify ClusterProfile using ClusterSet
-kubectl get clusterprofile <name> -o jsonpath='{.spec.clusterSetRefs}'
-```
-
----
-
-### Classifier → Cluster Labels
-
-Dynamic cluster classification based on runtime state.
+Dynamic cluster classification and reporting.
 
 ```mermaid
 graph TB
     A[Classifier] -->|evaluates| B[Managed Cluster<br/>Runtime State]
-    B -->|Lua/CEL evaluation| C{Match?}
-    C -->|Yes| D[Add Labels to<br/>SveltosCluster/CAPI Cluster]
-    C -->|No| E[Remove Labels]
+    B -->|sveltos-agent| C[ClassifierReport]
+    C -->|contains evaluation| D[classifier-manager]
+    D -->|modifies labels| E[SveltosCluster/CAPI Cluster]
 ```
 
-**Owner**: `Classifier`
+**Owner**: `Classifier` (conceptual ownership)
+
+**Created By**: `sveltos-agent` (running in managed cluster)
+
+**Resource**: `ClassifierReport`
 
 **Modifies**: Labels on `SveltosCluster` or CAPI `Cluster` resources
 
 **Controller**: `classifier-manager`
 
-#### When Updated
+**API Version**: `lib.projectsveltos.io/v1beta1`
 
-Cluster labels are updated when:
+#### When Created
 
-- Classifier's Lua/CEL script evaluation result changes
-- Resources in the managed cluster change (detected by sveltos-agent)
-- Classifier `deployedResourceConstraints` criteria are met or unmet
+- Classifier is deployed and sveltos-agent evaluates cluster state
+- ClassifierReport is created by sveltos-agent to report evaluation results
 
-#### Behavior
+#### When Deleted
 
-- Does not own clusters but modifies their labels
-- Labels are added when criteria match
-- Labels are removed when criteria no longer match
-- Multiple Classifiers can add different labels to the same cluster
+- Classifier is deleted
+- Cluster is unregistered from Sveltos
+
+#### Relationship with Other CRs
+
+- Classifier defines classification logic (Lua/CEL scripts)
+- sveltos-agent creates ClassifierReports with evaluation results
+- classifier-manager reads ClassifierReports and updates cluster labels
+- Updated labels influence ClusterProfile/Profile matching
 
 #### Example
 
@@ -430,16 +268,51 @@ spec:
         value: postgresql
 ```
 
-**Effect**: Clusters with PostgreSQL StatefulSets automatically get label `postgres: present`
+---
 
-#### Verification
+### ClusterSet/Set → Cluster Selection
 
-```bash
-# Check cluster labels
-kubectl get sveltoscluster -A --show-labels
+Dynamic cluster selection for high availability and failover.
 
-# View Classifier status
-kubectl get classifier <name> -o jsonpath='{.status.matchingClusterRefs}'
+```mermaid
+graph TB
+    A[ClusterSet/Set] -->|selects clusters from| B[Cluster Pool]
+    B -->|based on maxReplicas| C[Selected Clusters]
+    C -->|influences| D[ClusterProfile Deployment]
+```
+
+**Owner**: `ClusterSet` (cluster-scoped) or `Set` (namespace-scoped)
+
+**Influences**: ClusterProfile/Profile deployment decisions
+
+**Controller**: `sc-manager`
+
+**API Version**: `lib.projectsveltos.io/v1beta1`
+
+#### When Used
+
+- ClusterProfile references a ClusterSet in `clusterRefs`
+- Multiple clusters match the selector
+- `maxReplicas` determines how many clusters receive deployments
+
+#### Relationship with Other CRs
+
+- Does not own clusters but affects deployment targeting
+- ClusterProfile/Profile references ClusterSet for dynamic selection
+- Ensures high availability through controlled replica distribution
+
+#### Example
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: ClusterSet
+metadata:
+  name: production-clusters
+spec:
+  clusterSelector:
+    matchLabels:
+      env: production
+  maxReplicas: 3
 ```
 
 ---
@@ -450,7 +323,8 @@ Health monitoring and notification triggering.
 
 ```mermaid
 graph TB
-    A[ClusterHealthCheck] -->|monitors| B[Cluster Health State]
+    A[ClusterHealthCheck] -->|references| HC[HealthCheck]
+    A -->|monitors| B[Cluster Health State]
     B -->|evaluates| C{Healthy?}
     C -->|No| D[Trigger Notifications<br/>Slack/Teams/Discord/etc]
     C -->|Yes| E[Continue Monitoring]
@@ -458,23 +332,25 @@ graph TB
 
 **Owner**: `ClusterHealthCheck`
 
+**References**: `HealthCheck` resources (optional)
+
 **Triggers**: External notifications (not Kubernetes resources)
 
-**Controller**: `healthcheck-controller`
+**Controller**: `healthcheck-manager`
+
+**API Version**: `lib.projectsveltos.io/v1beta1`
 
 #### When Evaluated
-
-Health checks are evaluated:
 
 - Continuously for matching clusters
 - When cluster state changes
 - According to configured health check criteria
 
-#### Behavior
+#### Relationship with Other CRs
 
-- Does not own other CRs
-- Triggers external notifications based on health status
-- Can check various health indicators (liveness checks, addon status)
+- ClusterHealthCheck can reference HealthCheck CRs for custom logic
+- Monitors SveltosCluster or CAPI Cluster health
+- Triggers external notifications (Slack, Teams, Discord, etc.)
 
 #### Example
 
@@ -488,12 +364,12 @@ spec:
     matchLabels:
       env: production
   livenessChecks:
-  - name: deployment-health
-    type: Addons
+  - name: custom-health-check
+    type: HealthCheck
     livenessSourceRef:
-      kind: Deployment
-      name: critical-app
-      namespace: apps
+      apiVersion: lib.projectsveltos.io/v1alpha1
+      kind: HealthCheck
+      name: pod-crashloop-check
   notifications:
   - name: slack-alert
     type: Slack
@@ -504,14 +380,122 @@ spec:
       namespace: default
 ```
 
-#### Verification
+---
 
-```bash
-# Check health check status
-kubectl get clusterhealthcheck <name> -o jsonpath='{.status}'
+### HealthCheck → Custom Health Logic
 
-# View matching clusters
-kubectl get clusterhealthcheck <name> -o jsonpath='{.status.clusterConditions}'
+Defines custom health check evaluation logic.
+
+```mermaid
+graph TB
+    A[HealthCheck] -->|defines Lua logic| B[Health Evaluation]
+    C[ClusterHealthCheck] -->|references| A
+    B -->|evaluates resources in| D[Managed Clusters]
+```
+
+**Owner**: Standalone CR (user-created)
+
+**Referenced By**: `ClusterHealthCheck`
+
+**Controller**: `healthcheck-manager`
+
+**API Version**: `lib.projectsveltos.io/v1alpha1`
+
+#### When Created
+
+- Manually created by users to define custom health monitoring logic
+
+#### Relationship with Other CRs
+
+- ClusterHealthCheck instances reference HealthCheck CRs via `livenessSourceRef`
+- Contains Lua evaluation scripts that determine resource health status
+- Can check Pods, Deployments, or any Kubernetes resource
+
+#### Example
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1alpha1
+kind: HealthCheck
+metadata:
+  name: pod-crashloop-check
+spec:
+  group: ""
+  version: v1
+  kind: Pod
+  script: |
+    function evaluate()
+      hs = {}
+      hs.status = "Healthy"
+      if obj.status.containerStatuses then
+        for _, containerStatus in ipairs(obj.status.containerStatuses) do
+          if containerStatus.state.waiting and 
+             containerStatus.state.waiting.reason == "CrashLoopBackOff" then
+            hs.status = "Degraded"
+            hs.message = obj.metadata.namespace .. "/" .. obj.metadata.name
+          end
+        end
+      end
+      return hs
+    end
+```
+
+---
+
+### SveltosCluster → Cluster Registration
+
+Represents clusters registered with Sveltos (non-CAPI clusters).
+
+```mermaid
+graph TB
+    A[User/Admin] -->|creates| B[SveltosCluster]
+    C[Classifier] -->|modifies labels| B
+    D[ClusterProfile/Profile] -->|selects via labels| B
+    B -->|references kubeconfig| E[Secret]
+```
+
+**Owner**: User/Administrator
+
+**Modified By**: `Classifier` (labels)
+
+**Referenced By**: ClusterProfile/Profile (via labels)
+
+**Controller**: `sc-manager` (SveltosCluster manager)
+
+**API Version**: `lib.projectsveltos.io/v1beta1`
+
+#### When Created
+
+- Manually created when registering a cluster with Sveltos
+- Created via `sveltosctl register cluster` command
+- Alternative to CAPI Cluster for non-CAPI environments (e.g., GKE, EKS, AKS)
+
+#### When Labels Modified
+
+- Classifier adds/removes labels based on runtime state evaluation
+- Manual label updates by administrators
+
+#### Relationship with Other CRs
+
+- ClusterProfile/Profile selects clusters via labels
+- Classifier modifies labels dynamically
+- ClusterHealthCheck monitors cluster health
+- ClusterSummary is created for matching SveltosClusters
+
+#### Example
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: production-cluster-01
+  namespace: clusters
+  labels:
+    env: production
+    region: us-east
+spec:
+  kubeconfigSecretRef:
+    name: production-cluster-01-kubeconfig
+    namespace: clusters
 ```
 
 ---
@@ -536,9 +520,9 @@ graph TB
 
 **Controller**: `role-request-controller`
 
-#### When Created
+**API Version**: `lib.projectsveltos.io/v1beta1`
 
-RBAC resources are created when:
+#### When Created
 
 - Clusters match the `clusterSelector` in RoleRequest
 - Role and RoleBinding are deployed to each matching cluster
@@ -546,11 +530,15 @@ RBAC resources are created when:
 
 #### When Deleted
 
-RBAC resources are deleted when:
-
 - RoleRequest is deleted
 - Cluster stops matching the selector
 - Deployment is withdrawn per policy
+
+#### Relationship with Other CRs
+
+- RoleRequest selects clusters similar to ClusterProfile
+- Deploys RBAC resources (Role, RoleBinding) to matched clusters
+- Used for multi-tenancy scenarios
 
 #### Example
 
@@ -567,111 +555,134 @@ spec:
   - name: tenant-admin
     namespace: team-alpha
     kind: Role
-  admin: team-alpha-admin  # ServiceAccount
-```
-
-#### Verification
-
-```bash
-# Check RoleRequest status
-kubectl get rolerequest <name> -o jsonpath='{.status}'
-
-# Verify RBAC in managed cluster
-kubectl get role,rolebinding -n <namespace> --context <managed-cluster>
+  admin: team-alpha-admin
 ```
 
 ---
 
-## Complete Ownership Diagram
+### Reloader → Automatic Rolling Updates
 
-The following diagram shows all ownership relationships in the Sveltos ecosystem:
+Configures automatic rolling updates when ConfigMaps/Secrets change.
 
 ```mermaid
 graph TB
-    subgraph "Management Cluster - User Created Resources"
-        CP[ClusterProfile/Profile]
-        ES[EventSource]
-        ET[EventTrigger]
-        CS[ClusterSet/Set]
-        CL[Classifier]
-        CHC[ClusterHealthCheck]
-        RR[RoleRequest]
-    end
-    
-    subgraph "Management Cluster - Auto-Created Resources"
-        CSM[ClusterSummary]
-        DCP[Dynamic ClusterProfile]
-        CM[ConfigMap<br/>projectsveltos namespace]
-        ER[EventReport]
-    end
-    
-    subgraph "Managed Cluster"
-        SA[sveltos-agent]
-        RESOURCES[Deployed Resources<br/>Helm/YAML/Kustomize]
-        RBAC[Role/RoleBinding]
-    end
-    
-    subgraph "External Systems"
-        NOTIF[Notifications<br/>Slack/Teams/Discord]
-    end
-    
-    CP -->|owns & creates| CSM
-    CSM -->|deploys to| RESOURCES
-    
-    ES -->|watched by| SA
-    SA -->|creates| ER
-    
-    ET -->|consumes| ER
-    ET -->|creates & owns| DCP
-    ET -->|creates & owns| CM
-    DCP -->|references| CM
-    DCP -->|owns & creates| CSM
-    
-    CS -->|affects deployment| CP
-    
-    CL -->|modifies labels| SC[SveltosCluster/CAPI Cluster]
-    
-    CHC -->|monitors| SC
-    CHC -->|triggers| NOTIF
-    
-    RR -->|creates in cluster| RBAC
-    
-    style CSM fill:#e1f5ff
-    style DCP fill:#e1f5ff
-    style CM fill:#e1f5ff
-    style ER fill:#e1f5ff
-    style RESOURCES fill:#ffe1e1
-    style RBAC fill:#ffe1e1
+    A[ClusterProfile/Profile] -->|sets reloader: true| B[ClusterSummary]
+    B -->|monitors| C[ConfigMaps/Secrets]
+    C -->|when changed| D[Triggers Rolling Restart]
+    D -->|affects| E[Deployments/StatefulSets/DaemonSets]
+```
+
+**Configured In**: ClusterProfile/Profile spec
+
+**Controller**: `addon-controller`
+
+**API Version**: Part of ClusterProfile/Profile spec
+
+#### When Active
+
+- `reloader: true` is set in ClusterProfile/Profile
+- Sveltos monitors ConfigMaps/Secrets mounted by workloads
+- Changes trigger automatic rolling restarts
+
+#### Relationship with Other CRs
+
+- Configured as part of ClusterProfile/Profile
+- Affects Deployments, StatefulSets, and DaemonSets in managed clusters
+- Ensures workloads use latest configuration
+
+#### Example
+
+```yaml
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: app-with-reloader
+spec:
+  clusterSelector:
+    matchLabels:
+      env: production
+  reloader: true
+  policyRefs:
+  - name: app-config
+    namespace: default
+    kind: ConfigMap
 ```
 
 ---
 
-## Resource Lifecycle Summary
+### ResourceSummary → Deployment Status Tracking
 
-| Resource | Created By | Created When | Deleted When | Owned By |
-|----------|-----------|--------------|--------------|----------|
-| **ClusterSummary** | addon-controller | Cluster matches ClusterProfile/Profile | Parent deleted or cluster stops matching | ClusterProfile/Profile |
-| **EventReport** | sveltos-agent | Event occurs in managed cluster | Event stops existing or EventSource deleted | N/A (managed by agent) |
-| **Dynamic ClusterProfile** | event-manager | EventReport matches EventTrigger | EventReport removed or EventTrigger deleted | EventTrigger |
-| **ConfigMap (template)** | event-manager | EventTrigger processes EventReport | EventTrigger deleted | EventTrigger |
-| **Role/RoleBinding** | role-request-controller | Cluster matches RoleRequest | RoleRequest deleted or cluster stops matching | RoleRequest (deployed to cluster) |
+Internal status tracking for deployed resources.
+
+**Owner**: ClusterSummary (internal)
+
+**Created By**: `addon-controller`
+
+**Controller**: `addon-controller`
+
+**API Version**: `lib.projectsveltos.io/v1alpha1`
+
+#### Purpose
+
+- Internal resource used by Sveltos for tracking deployment status
+- Contains information about resources deployed to managed clusters
+- Not typically interacted with directly by users
+
+#### Relationship with Other CRs
+
+- Created and managed internally by addon-controller
+- Associated with ClusterSummary instances
+- Tracks deployment state and resources
 
 ---
 
+### DebuggingConfiguration → Debug Settings
+
+Configures debugging and logging levels for Sveltos components.
+
+**Owner**: Standalone CR (user-created)
+
+**Controller**: Multiple (affects all Sveltos components)
+
+**API Version**: `lib.projectsveltos.io/v1beta1`
+
+#### When Created
+
+- Manually created to configure debugging for Sveltos components
+- Affects logging levels and verbosity
+
+#### Relationship with Other CRs
+
+- Does not own or create other resources
+- Configures operational behavior of Sveltos controllers
+- Useful for troubleshooting and diagnostics
+
+#### Example
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: DebuggingConfiguration
+metadata:
+  name: debug-config
+spec:
+  configuration:
+  - component: AddonManager
+    logLevel: LogLevelDebug
+  - component: Classifier
+    logLevel: LogLevelInfo
+```
+---
+
 ## Summary
-
-Understanding CR ownership in Sveltos is essential for:
-
-- **Debugging**: Trace resource creation back to source
-- **Cleanup**: Understand what gets deleted when
-- **Architecture**: Comprehend system design and flow
-- **Troubleshooting**: Quickly identify ownership issues
 
 Key ownership patterns:
 
 1. **ClusterProfile/Profile** → **ClusterSummary** (core deployment)
 2. **EventTrigger** → **Dynamic ClusterProfile + ConfigMap** (event-driven)
 3. **sveltos-agent** → **EventReport** (event detection)
-4. **RoleRequest** → **RBAC Resources** (multi-tenancy)
+4. **sveltos-agent** → **ClassifierReport** (classification reporting)
+5. **ClusterHealthCheck** → **HealthCheck** (custom health logic)
+6. **Classifier** → **SveltosCluster/CAPI Cluster labels** (dynamic classification)
+7. **RoleRequest** → **RBAC Resources** (multi-tenancy)
 
 For additional help, consult the [Sveltos documentation](https://projectsveltos.github.io/sveltos/) or reach out on the [Sveltos Slack channel](https://join.slack.com/t/projectsveltos/shared_invite/).
