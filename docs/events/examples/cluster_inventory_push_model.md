@@ -21,14 +21,17 @@ This example shows how to implement the KEP-4322 Cluster Inventory Push Model wi
 
 Throughout this guide, “ClusterProfile” refers to the SIG Multi-Cluster ClusterProfile concept. This walkthrough focuses on generating the Secret (credentials) corresponding to a ClusterProfile. We define a labeling convention on Cluster API `Cluster` resources to indicate the intended ClusterProfile and to locate the corresponding CAPI-derived kubeconfig `Secret` that Sveltos will distribute.
 
-References: [KEP-4322](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/4322-cluster-inventory), [Push Model details](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/4322-cluster-inventory#push-model-via-credentials-in-secret-not-recommended)
+References:
+
+- [KEP-4322](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/4322-cluster-inventory)
+- [Push Model details](https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/4322-cluster-inventory#push-model-via-credentials-in-secret-not-recommended)
 
 ---
 
 ## Prerequisites
 
 - Sveltos (Event Framework) installed in the management cluster.
-- The management cluster labeled so Sveltos can target it, for example: `cluster-api: enabled`.
+- The management cluster labeled so Sveltos can target it, for example: `cluster-api: enabled`. See [Register management cluster](https://projectsveltos.github.io/sveltos/main/register/register-cluster/#register-management-cluster) for label-based management.
 - Cluster API `Cluster` resources labeled to declare the intended ClusterProfile (SIG Multi-Cluster): `clusterprofile-name` (required) and optionally:
   - `clusterprofile-namespace`
   - `clusterset.k8s.io`
@@ -39,7 +42,7 @@ References: [KEP-4322](https://github.com/kubernetes/enhancements/tree/master/ke
 
 ## Label Conventions and Namespace Resolution
 
-These labels express which ClusterProfile (SIG Multi-Cluster) a Cluster targets and how to derive the namespace for Secret generation. No ClusterProfile CR is required for this walkthrough.
+These labels express which ClusterProfile (SIG Multi-Cluster) a Cluster targets and how to derive the namespace for Secret generation. No ClusterProfile resources are required for this walkthrough.
 
 - Required label on `Cluster`:
   - `clusterprofile-name`: ClusterProfile name.
