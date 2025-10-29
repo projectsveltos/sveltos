@@ -15,7 +15,6 @@ authors:
 
 Understanding ownership relationships between Custom Resources (CRs) is crucial for working with Sveltos internals. This document provides comprehensive information about which CRs create, own, and manage other resources within the Sveltos ecosystem.
 
-In Kubernetes, ownership is established through `ownerReferences` in resource metadata. When a resource is owned by another, the owner's deletion automatically triggers the deletion of owned resources through garbage collection.
 
 ---
 
@@ -41,14 +40,15 @@ graph LR
 
 #### When Created
 
-- A cluster matches the `clusterSelector` defined in the ClusterProfile/Profile
+- A cluster can match only existing ClusterProfile/Profile instances
 - One ClusterSummary is created per matching cluster per ClusterProfile/Profile
 
 #### When Deleted
 
 - The parent ClusterProfile/Profile is deleted (cascade deletion via ownerReferences)
-- The cluster no longer matches the `clusterSelector`
-- `stopMatchingBehavior` is set to `WithdrawPolicies` and cluster stops matching
+- `stopMatchingBehavior` is set to `WithdrawPolicies` (this is the default behavior) and cluster stops matching
+
+When a ClusterProfile/Profile is created, `stopMatchingBehavior` can be left to default (`WithdrawPolicies`) or set to `LeavePolicies`. This field indicates what Sveltos does when a ClusterSummary is deleted.
 
 #### Relationship with Other CRs
 
@@ -81,6 +81,10 @@ spec:
 
 Event detection and reporting relationship.
 
+#### Flow Overview
+
+EventTrigger references an EventSource. EventTrigger has a cluster selector that dictates in which cluster the EventSource will be deployed. Once the EventSource is deployed in a cluster, sveltos-agent decides which resources are a match and creates an EventReport. The EventReport then gets copied to the control cluster and used by EventTrigger to create one or more ClusterProfiles (so to deploy new addons/resources).
+
 ```mermaid
 graph TB
     A[EventSource<br/>Management Cluster] -->|watches for events| B[sveltos-agent<br/>Managed Cluster]
@@ -104,9 +108,10 @@ graph TB
 
 #### When Deleted
 
-- The matching resource no longer exists in the managed cluster
-- The EventSource is deleted
-- The cluster is unregistered from Sveltos
+When an EventTrigger is deleted:
+1. Referenced EventSource instance is removed from all clusters matching the EventTrigger
+2. EventReports are deleted as consequence of EventSource being removed
+3. ClusterProfiles created by EventTrigger are also removed
 
 #### Relationship with Other CRs
 
@@ -340,7 +345,7 @@ graph TB
 
 **API Version**: `lib.projectsveltos.io/v1beta1`
 
-#### When Evaluated
+#### When Created
 
 - Continuously for matching clusters
 - When cluster state changes
