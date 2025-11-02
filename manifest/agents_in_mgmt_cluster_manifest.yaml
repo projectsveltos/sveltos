@@ -43,18 +43,19 @@ spec:
                                     ControlPlaneEndpoint represents the endpoint used to communicate with the
                                     management cluster controlplane endpoint. It will be used when generating the
                                     kubeconfig.
+                                minProperties: 1
                                 properties:
                                     host:
                                         description: host is the hostname on which the API server is serving.
                                         maxLength: 512
+                                        minLength: 1
                                         type: string
                                     port:
                                         description: port is the port on which the API server is serving.
                                         format: int32
+                                        maximum: 65535
+                                        minimum: 1
                                         type: integer
-                                required:
-                                    - host
-                                    - port
                                 type: object
                             name:
                                 description: |-
@@ -11295,7 +11296,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.2.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
@@ -11308,7 +11309,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:v1.2.0
+                  image: docker.io/projectsveltos/addon-controller:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11561,7 +11562,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:v1.2.0
+                  image: docker.io/projectsveltos/access-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11722,7 +11723,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:v1.2.0
+                  image: docker.io/projectsveltos/sveltoscluster-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11975,11 +11976,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.2.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:v1.2.0
+                  image: docker.io/projectsveltos/healthcheck-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13772,11 +13773,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.2.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:v1.2.0
+                  image: docker.io/projectsveltos/event-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13987,12 +13988,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.2.0
+                    - --version=main
                     - --registry=
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:v1.2.0
+                  image: docker.io/projectsveltos/classifier:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -14476,7 +14477,7 @@ spec:
                     - --agent-in-mgmt-cluster=true
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:v1.2.0
+                  image: docker.io/projectsveltos/shard-controller:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -14550,7 +14551,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:v1.2.0
+                  image: docker.io/projectsveltos/register-mgmt-cluster:main
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
@@ -14666,7 +14667,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/techsupport:v1.2.0
+                  image: docker.io/projectsveltos/techsupport:main
                   livenessProbe:
                     httpGet:
                         path: /healthz
@@ -14775,7 +14776,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/mcp-server:v1.2.0
+                  image: docker.io/projectsveltos/mcp-server:main
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
