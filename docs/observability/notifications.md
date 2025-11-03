@@ -55,14 +55,21 @@ The supported types are:
 
 The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) resource defines a custom health assessment by first selecting Kubernetes resources and then applying custom evaluation logic to determine their collective health.
 
-| Field | Purpose | Details |
-| :--- | :--- | :--- |
-| **`resourceSelectors`** | **Resource Selection** | An array of `ResourceSelector` objects that define the Kubernetes resources to monitor (by `Group`, `Version`, `Kind`, `Namespace`, `Name`). |
-| `resourceSelectors[*].LabelFilters` | **Filtering by Label** | Filters resources using standard label operations: `Equal`, `Different`, `Has`, or `DoesNotHave`. |
-| `resourceSelectors[*].Evaluate` | **Lua Pre-Filter** | Optional. A Lua script to *additionally* filter resources before the main health check. |
-| `resourceSelectors[*].EvaluateCEL` | **CEL Pre-Filter** | Optional. A list of Common Expression Language (CEL) rules to *additionally* filter resources. |
-| **`evaluateHealth`** | **Custom Health Evaluation** | **Mandatory** Lua script that performs the core health check on all selected resources. |
-
+* **`resourceSelectors`**
+    * **Purpose:** Resource Selection
+    * **Details:** An array of `ResourceSelector` objects. These define the Kubernetes resources to monitor by specifying their `Group`, `Version`, `Kind`, `Namespace`, and `Name`.
+* **`resourceSelectors[*].LabelFilters`**
+    * **Purpose:** Filtering by Label
+    * **Details:** Filters the selected resources using standard label operations: `Equal`, `Different`, `Has`, or `DoesNotHave`.
+* **`resourceSelectors[*].Evaluate`**
+    * **Purpose:** Lua Pre-Filter (Optional)
+    * **Details:** An optional Lua script used to *additionally* filter resources before the main health check is performed.
+* **`resourceSelectors[*].EvaluateCEL`**
+    * **Purpose:** CEL Pre-Filter (Optional)
+    * **Details:** An optional list of Common Expression Language (CEL) rules used to *additionally* filter resources.
+* **`evaluateHealth`**
+    * **Purpose:** Custom Health Evaluation
+    * **Details:** A **mandatory** Lua script that performs the core health check logic on all the final, filtered resources.
 
 The `Spec.evaluateHealth` field must contain a Lua script with a function named **`evaluate()`**.
 
@@ -72,13 +79,21 @@ The function accesses all Kubernetes resources selected by `resourceSelectors` u
 **Required Output:**
 It must return an **array of tables** (structured instances), with the following required and optional fields for each evaluated resource:
 
-| Field | Type | Description |
-| :---: | :---: | :--- |
-| **`resource`** | Object | The specific Kubernetes resource that was evaluated. |
-| **`healthStatus`** | String | The assessment. Must be one of: **`Healthy`**, **`Progressing`**, **`Degraded`**, or **`Suspended`**. |
-| **`message`** | String | Optional, an informative message for the status. |
-| **`reEvaluate`** | Boolean | Optional. If `true`, the check will be re-evaluated in 10 seconds. |
-| **`ignore`** | Boolean | Optional. If `true`, Sveltos will ignore this resource's result. |
+* **`resource`**
+    * **Type:** Object
+    * **Description:** The specific Kubernetes resource that was evaluated.
+* **`healthStatus`**
+    * **Type:** String
+    * **Description:** The assessment of the resource's health. Must be one of: **`Healthy`**, **`Progressing`**, **`Degraded`**, or **`Suspended`**.
+* **`message`**
+    * **Type:** String
+    * **Description:** Optional, an informative message providing context for the status.
+* **`reEvaluate`**
+    * **Type:** Boolean
+    * **Description:** Optional. If set to `true`, the health check will be automatically re-evaluated in 10 seconds.
+* **`ignore`**
+    * **Type:** Boolean
+    * **Description:** Optional. If set to `true`, Sveltos will ignore this resource's result during the overall health calculation.
 
 ## Example: ConfigMap HealthCheck
 

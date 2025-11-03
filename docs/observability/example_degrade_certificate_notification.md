@@ -21,7 +21,7 @@ The below `HealthCheck` YAML definition will detect degrade Certificates.
     apiVersion: lib.projectsveltos.io/v1beta1
     kind: HealthCheck
     metadata:
-    name: failed-cert
+      name: failed-cert
     spec:
       resourceSelectors:
       - group: "cert-manager.io"
