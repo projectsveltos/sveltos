@@ -55,15 +55,6 @@ Sveltos can be installed as a `Helm Chart` or with `Kustomize`. By default, **Mo
 
 ### Helm Installation
 
-??? note "Helm Chart Upgrade Notes"
-    When deploying Sveltos with Helm, the `helm upgrade` command will not automatically update Sveltos's Custom Resource Definitions (CRDs) if they have changed in the new chart version. This is a standard Helm behavior to prevent accidental changes to CRDs that might disrupt existing resources. Manually update of the CRDs before upgrading Sveltos is required.
-    ```sh
-    $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.0.0/manifest/crds/sveltos_crds.yaml
-    ```
-    Sveltos offers a dedicated Helm chart for managing its CRDs, which is the recommended and most reliable approach.
-    ```sh
-    $ helm install projectsveltos/sveltos-crds projectsveltos/sveltos-crds
-    ```
 #### Retrieve Latest Helm Chart
 
 ```sh
