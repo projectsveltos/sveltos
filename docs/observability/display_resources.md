@@ -164,7 +164,7 @@ $ sveltosctl show resources --kind=deployment
 
 Below are all the available options to filter what the `show resources` output displays.
 
-```bash
+```
 --group=<group>: Show Kubernetes resources deployed in clusters matching this group. If not specified, all groups are considered.
 --kind=<kind>: Show Kubernetes resources deployed in clusters matching this Kind. If not specified, all kinds are considered.
 --namespace=<namespace>: Show Kubernetes resources in this namespace. If not specified, all namespaces are considered.
