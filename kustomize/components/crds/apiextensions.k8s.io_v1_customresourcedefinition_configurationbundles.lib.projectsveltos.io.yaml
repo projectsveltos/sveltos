@@ -86,6 +86,27 @@ spec:
                   ConfigurationGroup is deleted. This is intended for resources like
                   Sveltos CRDs or the agents Sveltos deploys in the managed clusters.
                 type: boolean
+              referenceTier:
+                description: |-
+                  ReferenceTier indicates the tier of the object (ConfigMap, Secret, etc)
+                  referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                format: int32
+                type: integer
+              referencedObjectKind:
+                description: |-
+                  ReferencedObjectKind is the Kind of the object (ConfigMap, Secret, etc)
+                  referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                type: string
+              referencedObjectName:
+                description: |-
+                  ReferencedObjectName is the Name of the object (ConfigMap, Secret, etc)
+                  referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                type: string
+              referencedObjectNamespace:
+                description: |-
+                  ReferencedObjectNamespace is the Namespace of the object (ConfigMap, Secret, etc)
+                  referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                type: string
               resources:
                 description: |-
                   Resources contains all resources that need to be deployed.

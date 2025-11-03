@@ -43,19 +43,20 @@ To customize the *drift-detection-manager* deployment you can add your patches t
 addonController:
   driftDetectionManagerPatchConfigMap:
     data:
-      patch: |-
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: drift-detection-manager
-        spec:
-          template:
+      deployment-patch: |-
+          patch: |-
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: drift-detection-manager
             spec:
-              imagePullSecrets:
-                - name: my-registry-secret
-              containers:
-                - name: manager
-                  image: registry.company.io/projectsveltos/drift-detection-manager:dev
+              template:
+                spec:
+                  imagePullSecrets:
+                    - name: my-registry-secret
+                  containers:
+                    - name: manager
+                      image: registry.company.io/projectsveltos/drift-detection-manager:dev
 ...
 ```
 
@@ -68,19 +69,34 @@ The *drift-detection-manager* image is located [here](https://hubgw.docker.com/l
 The *sveltos-agent* can be patched in the same way. In order to edit the deployment the following values can be used:
 
 ```yaml
-...
 classifierManager:
   agentPatchConfigMap:
     data:
-      image-patch: |-
-        - op: replace
-          path: /spec/template/spec/containers/0/image
-          value: registry.company.io/projectsveltos/sveltos-agent:dev
-        - op: add
-          path: /spec/template/spec/imagePullSecrets
-          value:
-            - name: my-registry-secret
-...
+      deployment-patch: |-
+          patch: |-
+            - op: replace
+              path: /spec/template/spec/containers/0/resources/requests/cpu
+              value: 500m
+            - op: replace
+              path: /spec/template/spec/containers/0/resources/requests/memory
+              value: 512Mi
+            - op: replace
+              path: /spec/template/spec/containers/0/resources/limits/cpu
+              value: 500m
+            - op: replace
+              path: /spec/template/spec/containers/0/resources/limits/memory
+              value: 1024Mi
+            - op: replace
+              path: /spec/template/spec/containers/0/image
+              value: registry.company.io/projectsveltos/sveltos-agent:dev
+            - op: add
+              path: /spec/template/spec/imagePullSecrets
+              value:
+                - name: my-registry-secret
+          target:
+            kind: Deployment
+            name: sveltos-agent-manager
+            namespace: projectsveltos
 ```
 
 This example makes use of `JSON Patch (RFC 6902)` to change deployment values. It's not limited to only one item in `data`.
@@ -108,14 +124,19 @@ classifierManager:
   agentPatchSveltosApplierConfigMap:
     name: sveltos-applier-config
     data:
-      patch: |
-        [
-          {
-            "op": "replace",
-            "path": "/spec/template/spec/containers/0/args/4",
-            "value": "--secret-with-kubeconfig=pullmode-secret"
-          }
-        ]
+      deployment-patch: |-
+          patch: |-
+            [
+              {
+                "op": "replace",
+                "path": "/spec/template/spec/containers/0/args/4",
+                "value": "--secret-with-kubeconfig=pullmode-secret"
+              }
+            ]
+          target:
+            kind: Deployment
+            name: sveltos-applier-manager
+            namespace: projectsveltos
 ```
 
 ## Helm Installation
