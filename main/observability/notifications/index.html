@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
     
     
       
@@ -3003,6 +3003,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../example_pod_with_outdated_mounted_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Detecting Stale Configuration – Pods Using Outdated Secrets
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../example_degrade_certificate_notification/" class="md-nav__link">
         
   
@@ -3315,51 +3338,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
-        
-          
-          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Internals
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_14">
-            <span class="md-nav__icon md-icon"></span>
-            Internals
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -3558,9 +3536,7 @@
   <h1>Notifications</h1>
 
 <h2 id="introduction-to-notifications">Introduction to Notifications</h2>
-<p>When a ClusterProfile is instantiated using Sveltos, it automatically watches for clusters that match the ClusterProfile clusterSelector field. When a match is found, <a href="https://github.com/projectsveltos">Sveltos</a> deploys all of the referenced add-ons, such as helm charts or Kubernetes resources.</p>
-<p>Once the necessary add-ons are deployed, there might be a need to perform other operations on the cluster, such as running a CI/CD pipeline. However, it is important to ensure that the cluster is healthy, i.e., all necessary add-ons are deployed, before proceeding. Sveltos can be configured to <strong>assess</strong> the cluster health and send notifications if any changes are detected.</p>
-<p>The notifications can be used by other tools to perform additional actions or trigger workflows. Sveltos will ensure the necessary Kubernetes add-ons are deployed and managed while ensuring the health and stability of the clusters.</p>
+<p>Sveltos uses ClusterProfiles/Profiles to automatically track matching clusters and deploy specified add-ons (like Helm charts or Kubernetes resources). It can then assess the cluster health (ensuring all add-ons are ready) and send notifications. These notifications allow external tools to trigger further workflows, like CI/CD pipelines, only once the cluster is confirmed healthy and stable.</p>
 <h2 id="clusterhealthcheck">ClusterHealthCheck</h2>
 <p><a href="https://github.com/projectsveltos/libsveltos/raw/main/api/v1beta1/clusterhealthcheck_type.go">ClusterHealthCheck</a> is the CRD that can be used to:</p>
 <ol>
@@ -3589,27 +3565,84 @@
 <li><img src="../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> <a href="../example_addon_notification/#kubernetes-event">Kubernetes events</a> (<strong>reason=ClusterHealthCheck</strong>)</li>
 </ol>
 <h3 id="healthcheck-crd">HealthCheck CRD</h3>
-<p>To define a custom health check, simply create a <a href="https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go">HealthCheck</a> instance.</p>
-<p>The <code>HealthCheck</code> specification can can contain the below fields:</p>
-<ol>
-<li><code>`Spec.Group*/*Spec.Version*/*Spec.Kind</code> fields indicates which Kubernetes resources the HealthCheck is for. Sveltos will watch and evaluate these resources anytime a change occurs;</li>
-<li><code>Spec.Namespace</code> field can be used to filter resources by namespace;</li>
-<li><code>Spec.LabelFilters</code> field can be used to filter resources by labels;</li>
-<li><code>Spec.Script</code> can contain a <a href="https://www.lua.org/pil/contents.html">Lua</a> script, which define a custom health check.</li>
-</ol>
-<p>The Lua script must contain the function <code>evaluate()</code> that returns a table with a status field (<strong>Healthy</strong>/<strong>Progressing</strong>/<strong>Degraded</strong>/<strong>Suspended</strong>) and optional message field.</p>
-<p>When providing Sveltos with a <a href="https://www.lua.org/">Lua script</a>, Sveltos expects following format:</p>
-<ol>
-<li>Must contain a function <code>function evaluate()</code>. The function is directly invoked and passed a Kubernetes resource (inside the function <code>obj</code> represents the passed in Kubernetes resource);
-2.Must return a Lua table with following fields:</li>
-<li><code>status</code>: which can be set to either one of   <strong>Healthy</strong>/<strong>Progressing</strong>/<strong>Degraded</strong>/<strong>Suspended</strong>;</li>
-<li><code>ignore</code>: is a boolean field indicating whether Sveltos should ignore the resource. If hs.ignore is set to <code>true</code>, Sveltos will ignore the resource causing that result;</li>
-<li><code>message</code>: is a string that can be set and Sveltos will print a message if it is set</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Keep in mind the <a href="https://cel.dev/">CEL</a> language can be used as a way to express logic.</p>
-</div>
+<p>The <a href="https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go">HealthCheck</a> resource defines a custom health assessment by first selecting Kubernetes resources and then applying custom evaluation logic to determine their collective health.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>resourceSelectors</code></strong></td>
+<td style="text-align: left;"><strong>Resource Selection</strong></td>
+<td style="text-align: left;">An array of <code>ResourceSelector</code> objects that define the Kubernetes resources to monitor (by <code>Group</code>, <code>Version</code>, <code>Kind</code>, <code>Namespace</code>, <code>Name</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resourceSelectors[*].LabelFilters</code></td>
+<td style="text-align: left;"><strong>Filtering by Label</strong></td>
+<td style="text-align: left;">Filters resources using standard label operations: <code>Equal</code>, <code>Different</code>, <code>Has</code>, or <code>DoesNotHave</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resourceSelectors[*].Evaluate</code></td>
+<td style="text-align: left;"><strong>Lua Pre-Filter</strong></td>
+<td style="text-align: left;">Optional. A Lua script to <em>additionally</em> filter resources before the main health check.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resourceSelectors[*].EvaluateCEL</code></td>
+<td style="text-align: left;"><strong>CEL Pre-Filter</strong></td>
+<td style="text-align: left;">Optional. A list of Common Expression Language (CEL) rules to <em>additionally</em> filter resources.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>evaluateHealth</code></strong></td>
+<td style="text-align: left;"><strong>Custom Health Evaluation</strong></td>
+<td style="text-align: left;"><strong>Mandatory</strong> Lua script that performs the core health check on all selected resources.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>Spec.evaluateHealth</code> field must contain a Lua script with a function named <strong><code>evaluate()</code></strong>.</p>
+<p><strong>Input Access:</strong>
+The function accesses all Kubernetes resources selected by <code>resourceSelectors</code> using the global Lua variable: <strong><code>resources</code></strong>.</p>
+<p><strong>Required Output:</strong>
+It must return an <strong>array of tables</strong> (structured instances), with the following required and optional fields for each evaluated resource:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Field</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong><code>resource</code></strong></td>
+<td style="text-align: center;">Object</td>
+<td style="text-align: left;">The specific Kubernetes resource that was evaluated.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>healthStatus</code></strong></td>
+<td style="text-align: center;">String</td>
+<td style="text-align: left;">The assessment. Must be one of: <strong><code>Healthy</code></strong>, <strong><code>Progressing</code></strong>, <strong><code>Degraded</code></strong>, or <strong><code>Suspended</code></strong>.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>message</code></strong></td>
+<td style="text-align: center;">String</td>
+<td style="text-align: left;">Optional, an informative message for the status.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>reEvaluate</code></strong></td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: left;">Optional. If <code>true</code>, the check will be re-evaluated in 10 seconds.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><code>ignore</code></strong></td>
+<td style="text-align: center;">Boolean</td>
+<td style="text-align: left;">Optional. If <code>true</code>, Sveltos will ignore this resource's result.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="example-configmap-healthcheck">Example: ConfigMap HealthCheck</h2>
 <p>In the follwoing example<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, we are creating an HealthCheck that watches all the ConfigMap Kubernetes resources.</p>
 <p><code>hs</code> is the health status object we will return to Sveltos. It must contain a <code>status</code> attribute which indicates whether the resource is <code>Healthy</code>, <code>Progressing</code>, <code>Degraded</code> or <code>Suspended</code>. By default,the status is set to <code>Healthy</code> and the <code>hs.ignore</code> is set to <code>true</code>, as we do not want to mess with the status of other, non-OPA ConfigMaps. Optionally, the health status object may also contain a message.</p>
@@ -3685,21 +3718,6 @@
 </span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webex</span>
 </span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 </span></code></pre></div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>If the Lua language is preferred to write the HealthCheck, it might be handy to validate the definition before use.</p>
-<p>This can be achieved by cloning the <a href="https://github.com/projectsveltos/sveltos-agent">sveltos-agent</a> repository. In the <em>pkg/evaluation/healthchecks</em> directory, create a directory for the deployed resources if it does not exist already. If a directory already exists, create a subdirectory instead.</p>
-<p>In the directory or the subdirectory, create the below points.</p>
-<ol>
-<li>The file named <em>healthcheck.yaml</em> containing the HealthCheck instance with Lua script;</li>
-<li>The file named <em>healthy.yaml</em> containing a Kubernetes resource supposed to be Healthy for the Lua script created in #1 (this is optional);</li>
-<li>The file named <em>progressing.yaml</em> containing a Kubernetes resource supposed to be Progressing for the Lua script created in #1 (this is optional);</li>
-<li>The file named <em>degraded.yaml</em> containing a Kubernetes resource supposed to be Degraded for the Lua script created in #1 (this is optional);</li>
-<li>The file named <em>suspended.yaml</em> containing a Kubernetes resource supposed to be Suspended for the Lua script created in #1 (this is optional);</li>
-<li><em>make test</em></li>
-</ol>
-<p>As mentioned above, one of the following statuses will get returned (<code>Healthy</code>, <code>Progressing</code>, <code>Degraded</code> or <code>Suspended</code>) once the resources are verified.</p>
 </div>
 <h2 id="notifications-and-multi-tenancy">Notifications and multi-tenancy</h2>
 <p>If the below label is set on the HealthCheck instance created by the tenant admin</p>
