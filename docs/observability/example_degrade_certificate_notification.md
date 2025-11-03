@@ -13,8 +13,6 @@ authors:
     - Gianluca Mardente
 ---
 
-## Example: Degrade Certificates Notification
-
 The below `HealthCheck` YAML definition will detect degrade Certificates.
 
 !!! example ""
