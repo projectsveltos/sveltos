@@ -43,19 +43,18 @@ spec:
                                     ControlPlaneEndpoint represents the endpoint used to communicate with the
                                     management cluster controlplane endpoint. It will be used when generating the
                                     kubeconfig.
-                                minProperties: 1
                                 properties:
                                     host:
                                         description: host is the hostname on which the API server is serving.
                                         maxLength: 512
-                                        minLength: 1
                                         type: string
                                     port:
                                         description: port is the port on which the API server is serving.
                                         format: int32
-                                        maximum: 65535
-                                        minimum: 1
                                         type: integer
+                                required:
+                                    - host
+                                    - port
                                 type: object
                             name:
                                 description: |-
@@ -1333,6 +1332,27 @@ spec:
                                     ConfigurationGroup is deleted. This is intended for resources like
                                     Sveltos CRDs or the agents Sveltos deploys in the managed clusters.
                                 type: boolean
+                            referenceTier:
+                                description: |-
+                                    ReferenceTier indicates the tier of the object (ConfigMap, Secret, etc)
+                                    referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                                format: int32
+                                type: integer
+                            referencedObjectKind:
+                                description: |-
+                                    ReferencedObjectKind is the Kind of the object (ConfigMap, Secret, etc)
+                                    referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                                type: string
+                            referencedObjectName:
+                                description: |-
+                                    ReferencedObjectName is the Name of the object (ConfigMap, Secret, etc)
+                                    referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                                type: string
+                            referencedObjectNamespace:
+                                description: |-
+                                    ReferencedObjectNamespace is the Namespace of the object (ConfigMap, Secret, etc)
+                                    referenced by PolicyRefs/KustomizationRef which contributed to this ConfigurationBundle.
+                                type: string
                             resources:
                                 description: |-
                                     Resources contains all resources that need to be deployed.
@@ -2461,6 +2481,7 @@ spec:
                                     - resource: The resource being evaluated
                                     - healthStatus: The health status of the resource, which can be one of "Healthy", "Progressing", "Degraded", or "Suspended"
                                     - message: An optional message providing additional information about the health status
+                                    - reEvaluate: If set to true, this healthCheck instances will be re-evaluated in 10 seconds
                                 minLength: 1
                                 type: string
                             resourceSelectors:
@@ -11263,7 +11284,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v1.2.1
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -11276,7 +11297,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/addon-controller:main
+                  image: docker.io/projectsveltos/addon-controller:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11529,7 +11550,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/access-manager:main
+                  image: docker.io/projectsveltos/access-manager:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11690,7 +11711,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/sveltoscluster-manager:main
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -11943,11 +11964,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v1.2.1
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:main
+                  image: docker.io/projectsveltos/healthcheck-manager:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13740,11 +13761,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v1.2.1
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/event-manager:main
+                  image: docker.io/projectsveltos/event-manager:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -13955,12 +13976,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=main
+                    - --version=v1.2.1
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:main
+                  image: docker.io/projectsveltos/classifier:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -14144,7 +14165,7 @@ spec:
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/shard-controller:main
+                  image: docker.io/projectsveltos/shard-controller:v1.2.1
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -14218,7 +14239,7 @@ spec:
                 - args:
                     - --labels=
                     - --service-account-token=false
-                  image: docker.io/projectsveltos/register-mgmt-cluster:main
+                  image: docker.io/projectsveltos/register-mgmt-cluster:v1.2.1
                   imagePullPolicy: IfNotPresent
                   name: register-mgmt-cluster
                   resources:
@@ -14334,7 +14355,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/techsupport:main
+                  image: docker.io/projectsveltos/techsupport:v1.2.1
                   livenessProbe:
                     httpGet:
                         path: /healthz
@@ -14443,7 +14464,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.cpu
-                  image: docker.io/projectsveltos/mcp-server:main
+                  image: docker.io/projectsveltos/mcp-server:v1.2.1
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3

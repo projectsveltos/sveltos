@@ -13,8 +13,6 @@ authors:
     - Gianluca Mardente
 ---
 
-## Example: Slack Notification for Pods in Crashloopbackoff
-
 ![Send Slack Notification for Pods in Crashloopbackoff state](../assets/notification.gif)
 
 The below `HealthCheck` and `ClusterhealthCheck` YAML definitions can be used to instruct Sveltos to:

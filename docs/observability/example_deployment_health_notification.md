@@ -13,8 +13,6 @@ authors:
     - Gianluca Mardente
 ---
 
-## Example: Deployment Health Notification
-
 The below `HealthCheck` YAML definition considers all the cluster Deployments. It matches any `Deployment`:
 
 1. With the number of available replicas matching the number of requested replicas, it is marked as `Healthy`;

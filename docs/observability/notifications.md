@@ -15,11 +15,7 @@ authors:
 
 ## Introduction to Notifications
 
-When a ClusterProfile is instantiated using Sveltos, it automatically watches for clusters that match the ClusterProfile clusterSelector field. When a match is found, [Sveltos](https://github.com/projectsveltos) deploys all of the referenced add-ons, such as helm charts or Kubernetes resources.
-
-Once the necessary add-ons are deployed, there might be a need to perform other operations on the cluster, such as running a CI/CD pipeline. However, it is important to ensure that the cluster is healthy, i.e., all necessary add-ons are deployed, before proceeding. Sveltos can be configured to **assess** the cluster health and send notifications if any changes are detected.
-
-The notifications can be used by other tools to perform additional actions or trigger workflows. Sveltos will ensure the necessary Kubernetes add-ons are deployed and managed while ensuring the health and stability of the clusters.
+Sveltos uses ClusterProfiles/Profiles to automatically track matching clusters and deploy specified add-ons (like Helm charts or Kubernetes resources). It can then assess the cluster health (ensuring all add-ons are ready) and send notifications. These notifications allow external tools to trigger further workflows, like CI/CD pipelines, only once the cluster is confirmed healthy and stable.
 
 ## ClusterHealthCheck
 
@@ -57,27 +53,32 @@ The supported types are:
 
 ### HealthCheck CRD
 
-To define a custom health check, simply create a [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) instance.
+The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) resource defines a custom health assessment by first selecting Kubernetes resources and then applying custom evaluation logic to determine their collective health.
 
-The `HealthCheck` specification can can contain the below fields:
+| Field | Purpose | Details |
+| :--- | :--- | :--- |
+| **`resourceSelectors`** | **Resource Selection** | An array of `ResourceSelector` objects that define the Kubernetes resources to monitor (by `Group`, `Version`, `Kind`, `Namespace`, `Name`). |
+| `resourceSelectors[*].LabelFilters` | **Filtering by Label** | Filters resources using standard label operations: `Equal`, `Different`, `Has`, or `DoesNotHave`. |
+| `resourceSelectors[*].Evaluate` | **Lua Pre-Filter** | Optional. A Lua script to *additionally* filter resources before the main health check. |
+| `resourceSelectors[*].EvaluateCEL` | **CEL Pre-Filter** | Optional. A list of Common Expression Language (CEL) rules to *additionally* filter resources. |
+| **`evaluateHealth`** | **Custom Health Evaluation** | **Mandatory** Lua script that performs the core health check on all selected resources. |
 
-1. ```Spec.Group*/*Spec.Version*/*Spec.Kind`` fields indicates which Kubernetes resources the HealthCheck is for. Sveltos will watch and evaluate these resources anytime a change occurs;
-2. ```Spec.Namespace``` field can be used to filter resources by namespace;
-3. ```Spec.LabelFilters``` field can be used to filter resources by labels;
-4. ```Spec.Script``` can contain a [Lua](https://www.lua.org/pil/contents.html) script, which define a custom health check.
 
-The Lua script must contain the function `evaluate()` that returns a table with a status field (__Healthy__/__Progressing__/__Degraded__/__Suspended__) and optional message field.
+The `Spec.evaluateHealth` field must contain a Lua script with a function named **`evaluate()`**.
 
-When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expects following format:
+**Input Access:**
+The function accesses all Kubernetes resources selected by `resourceSelectors` using the global Lua variable: **`resources`**.
 
-1. Must contain a function ```function evaluate()```. The function is directly invoked and passed a Kubernetes resource (inside the function ```obj``` represents the passed in Kubernetes resource);
-2.Must return a Lua table with following fields:
-   1. `status`: which can be set to either one of	__Healthy__/__Progressing__/__Degraded__/__Suspended__;
-   2. `ignore`: is a boolean field indicating whether Sveltos should ignore the resource. If hs.ignore is set to `true`, Sveltos will ignore the resource causing that result;
-   3. `message`: is a string that can be set and Sveltos will print a message if it is set
+**Required Output:**
+It must return an **array of tables** (structured instances), with the following required and optional fields for each evaluated resource:
 
-!!! note
-    Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic.
+| Field | Type | Description |
+| :---: | :---: | :--- |
+| **`resource`** | Object | The specific Kubernetes resource that was evaluated. |
+| **`healthStatus`** | String | The assessment. Must be one of: **`Healthy`**, **`Progressing`**, **`Degraded`**, or **`Suspended`**. |
+| **`message`** | String | Optional, an informative message for the status. |
+| **`reEvaluate`** | Boolean | Optional. If `true`, the check will be re-evaluated in 10 seconds. |
+| **`ignore`** | Boolean | Optional. If `true`, Sveltos will ignore this resource's result. |
 
 ## Example: ConfigMap HealthCheck
 
@@ -161,24 +162,6 @@ The below `ClusterHealthCheck` resources, will send a Webex message as notificat
           name: webex
           namespace: default
     ```
-
-!!! tip
-
-    If the Lua language is preferred to write the HealthCheck, it might be handy to validate the definition before use.
-
-    This can be achieved by cloning the [sveltos-agent](https://github.com/projectsveltos/sveltos-agent) repository. In the *pkg/evaluation/healthchecks* directory, create a directory for the deployed resources if it does not exist already. If a directory already exists, create a subdirectory instead.
-
-    In the directory or the subdirectory, create the below points.
-
-    1. The file named *healthcheck.yaml* containing the HealthCheck instance with Lua script;
-    2. The file named *healthy.yaml* containing a Kubernetes resource supposed to be Healthy for the Lua script created in #1 (this is optional);
-    3. The file named *progressing.yaml* containing a Kubernetes resource supposed to be Progressing for the Lua script created in #1 (this is optional);
-    4. The file named *degraded.yaml* containing a Kubernetes resource supposed to be Degraded for the Lua script created in #1 (this is optional);
-    3. The file named *suspended.yaml* containing a Kubernetes resource supposed to be Suspended for the Lua script created in #1 (this is optional);
-    5. *make test*
-
-    As mentioned above, one of the following statuses will get returned (`Healthy`, `Progressing`, `Degraded` or `Suspended`) once the resources are verified.
-
 
 [^1]: Credit for this example to https://blog.cubieserver.de/2022/argocd-health-checks-for-opa-rules/
 
