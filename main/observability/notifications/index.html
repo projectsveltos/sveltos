@@ -3566,83 +3566,65 @@
 </ol>
 <h3 id="healthcheck-crd">HealthCheck CRD</h3>
 <p>The <a href="https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go">HealthCheck</a> resource defines a custom health assessment by first selecting Kubernetes resources and then applying custom evaluation logic to determine their collective health.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Field</th>
-<th style="text-align: left;">Purpose</th>
-<th style="text-align: left;">Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong><code>resourceSelectors</code></strong></td>
-<td style="text-align: left;"><strong>Resource Selection</strong></td>
-<td style="text-align: left;">An array of <code>ResourceSelector</code> objects that define the Kubernetes resources to monitor (by <code>Group</code>, <code>Version</code>, <code>Kind</code>, <code>Namespace</code>, <code>Name</code>).</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>resourceSelectors[*].LabelFilters</code></td>
-<td style="text-align: left;"><strong>Filtering by Label</strong></td>
-<td style="text-align: left;">Filters resources using standard label operations: <code>Equal</code>, <code>Different</code>, <code>Has</code>, or <code>DoesNotHave</code>.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>resourceSelectors[*].Evaluate</code></td>
-<td style="text-align: left;"><strong>Lua Pre-Filter</strong></td>
-<td style="text-align: left;">Optional. A Lua script to <em>additionally</em> filter resources before the main health check.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>resourceSelectors[*].EvaluateCEL</code></td>
-<td style="text-align: left;"><strong>CEL Pre-Filter</strong></td>
-<td style="text-align: left;">Optional. A list of Common Expression Language (CEL) rules to <em>additionally</em> filter resources.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong><code>evaluateHealth</code></strong></td>
-<td style="text-align: left;"><strong>Custom Health Evaluation</strong></td>
-<td style="text-align: left;"><strong>Mandatory</strong> Lua script that performs the core health check on all selected resources.</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li><strong><code>resourceSelectors</code></strong><ul>
+<li><strong>Purpose:</strong> Resource Selection</li>
+<li><strong>Details:</strong> An array of <code>ResourceSelector</code> objects. These define the Kubernetes resources to monitor by specifying their <code>Group</code>, <code>Version</code>, <code>Kind</code>, <code>Namespace</code>, and <code>Name</code>.</li>
+</ul>
+</li>
+<li><strong><code>resourceSelectors[*].LabelFilters</code></strong><ul>
+<li><strong>Purpose:</strong> Filtering by Label</li>
+<li><strong>Details:</strong> Filters the selected resources using standard label operations: <code>Equal</code>, <code>Different</code>, <code>Has</code>, or <code>DoesNotHave</code>.</li>
+</ul>
+</li>
+<li><strong><code>resourceSelectors[*].Evaluate</code></strong><ul>
+<li><strong>Purpose:</strong> Lua Pre-Filter (Optional)</li>
+<li><strong>Details:</strong> An optional Lua script used to <em>additionally</em> filter resources before the main health check is performed.</li>
+</ul>
+</li>
+<li><strong><code>resourceSelectors[*].EvaluateCEL</code></strong><ul>
+<li><strong>Purpose:</strong> CEL Pre-Filter (Optional)</li>
+<li><strong>Details:</strong> An optional list of Common Expression Language (CEL) rules used to <em>additionally</em> filter resources.</li>
+</ul>
+</li>
+<li><strong><code>evaluateHealth</code></strong><ul>
+<li><strong>Purpose:</strong> Custom Health Evaluation</li>
+<li><strong>Details:</strong> A <strong>mandatory</strong> Lua script that performs the core health check logic on all the final, filtered resources.</li>
+</ul>
+</li>
+</ul>
 <p>The <code>Spec.evaluateHealth</code> field must contain a Lua script with a function named <strong><code>evaluate()</code></strong>.</p>
 <p><strong>Input Access:</strong>
 The function accesses all Kubernetes resources selected by <code>resourceSelectors</code> using the global Lua variable: <strong><code>resources</code></strong>.</p>
 <p><strong>Required Output:</strong>
 It must return an <strong>array of tables</strong> (structured instances), with the following required and optional fields for each evaluated resource:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Field</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><strong><code>resource</code></strong></td>
-<td style="text-align: center;">Object</td>
-<td style="text-align: left;">The specific Kubernetes resource that was evaluated.</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong><code>healthStatus</code></strong></td>
-<td style="text-align: center;">String</td>
-<td style="text-align: left;">The assessment. Must be one of: <strong><code>Healthy</code></strong>, <strong><code>Progressing</code></strong>, <strong><code>Degraded</code></strong>, or <strong><code>Suspended</code></strong>.</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong><code>message</code></strong></td>
-<td style="text-align: center;">String</td>
-<td style="text-align: left;">Optional, an informative message for the status.</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong><code>reEvaluate</code></strong></td>
-<td style="text-align: center;">Boolean</td>
-<td style="text-align: left;">Optional. If <code>true</code>, the check will be re-evaluated in 10 seconds.</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong><code>ignore</code></strong></td>
-<td style="text-align: center;">Boolean</td>
-<td style="text-align: left;">Optional. If <code>true</code>, Sveltos will ignore this resource's result.</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li><strong><code>resource</code></strong><ul>
+<li><strong>Type:</strong> Object</li>
+<li><strong>Description:</strong> The specific Kubernetes resource that was evaluated.</li>
+</ul>
+</li>
+<li><strong><code>healthStatus</code></strong><ul>
+<li><strong>Type:</strong> String</li>
+<li><strong>Description:</strong> The assessment of the resource's health. Must be one of: <strong><code>Healthy</code></strong>, <strong><code>Progressing</code></strong>, <strong><code>Degraded</code></strong>, or <strong><code>Suspended</code></strong>.</li>
+</ul>
+</li>
+<li><strong><code>message</code></strong><ul>
+<li><strong>Type:</strong> String</li>
+<li><strong>Description:</strong> Optional, an informative message providing context for the status.</li>
+</ul>
+</li>
+<li><strong><code>reEvaluate</code></strong><ul>
+<li><strong>Type:</strong> Boolean</li>
+<li><strong>Description:</strong> Optional. If set to <code>true</code>, the health check will be automatically re-evaluated in 10 seconds.</li>
+</ul>
+</li>
+<li><strong><code>ignore</code></strong><ul>
+<li><strong>Type:</strong> Boolean</li>
+<li><strong>Description:</strong> Optional. If set to <code>true</code>, Sveltos will ignore this resource's result during the overall health calculation.</li>
+</ul>
+</li>
+</ul>
 <h2 id="example-configmap-healthcheck">Example: ConfigMap HealthCheck</h2>
 <p>In the follwoing example<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, we are creating an HealthCheck that watches all the ConfigMap Kubernetes resources.</p>
 <p><code>hs</code> is the health status object we will return to Sveltos. It must contain a <code>status</code> attribute which indicates whether the resource is <code>Healthy</code>, <code>Progressing</code>, <code>Degraded</code> or <code>Suspended</code>. By default,the status is set to <code>Healthy</code> and the <code>hs.ignore</code> is set to <code>true</code>, as we do not want to mess with the status of other, non-OPA ConfigMaps. Optionally, the health status object may also contain a message.</p>

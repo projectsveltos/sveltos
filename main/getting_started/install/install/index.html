@@ -3765,11 +3765,11 @@
 </div>
 <h3 id="mode-1-local-agent-mode-manifest">Mode 1: Local Agent Mode (Manifest)</h3>
 <p>Execute the below commands.</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.0/manifest/manifest.yaml
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.1/manifest/manifest.yaml
 </span></code></pre></div>
 <h3 id="mode-2-centralized-agent-mode-manifest">Mode 2: Centralized Agent Mode (Manifest)</h3>
 <p>If you do not want to have any Sveltos agent in any <strong>managed cluster</strong>, run the commands below.</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.0/manifest/agents_in_mgmt_cluster_manifest.yaml
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.1/manifest/agents_in_mgmt_cluster_manifest.yaml
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -3808,10 +3808,10 @@ Sveltos offers a dedicated Helm chart for managing its CRDs, which is the recomm
 </span></code></pre></div>
 <h3 id="kustomize-installation">Kustomize Installation</h3>
 <h4 id="mode-1-local-agent-mode_1">Mode 1: Local Agent Mode</h4>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>kustomize<span class="w"> </span>build<span class="w"> </span>https://github.com/projectsveltos/sveltos.git//kustomize/base<span class="se">\?</span>timeout<span class="se">\=</span><span class="m">120</span><span class="se">\&amp;</span>ref<span class="se">\=</span>v1.2.0<span class="w"> </span><span class="p">|</span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>kustomize<span class="w"> </span>build<span class="w"> </span>https://github.com/projectsveltos/sveltos.git//kustomize/base<span class="se">\?</span>timeout<span class="se">\=</span><span class="m">120</span><span class="se">\&amp;</span>ref<span class="se">\=</span>v1.2.1<span class="w"> </span><span class="p">|</span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
 </span></code></pre></div>
 <h4 id="mode-2-centralized-agent-mode_1">Mode 2: Centralized Agent Mode</h4>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>kustomize<span class="w"> </span>build<span class="w"> </span>https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode<span class="se">\?</span>timeout<span class="se">\=</span><span class="m">120</span><span class="se">\&amp;</span>ref<span class="se">\=</span>v1.2.0<span class="w"> </span><span class="p">|</span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>kustomize<span class="w"> </span>build<span class="w"> </span>https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode<span class="se">\?</span>timeout<span class="se">\=</span><span class="m">120</span><span class="se">\&amp;</span>ref<span class="se">\=</span>v1.2.1<span class="w"> </span><span class="p">|</span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
 </span></code></pre></div>
 <h2 id="sveltos-verification">Sveltos Verification</h2>
 <p>Get the Sveltos status and verify that all pods are <strong>Up</strong> and <strong>Running</strong>.</p>
@@ -3838,7 +3838,7 @@ Sveltos offers a dedicated Helm chart for managing its CRDs, which is the recomm
 <p>sveltos-agent will be deployed if there is at least one Classifier instance in the management cluster. Drift detection manager will be deployed if there is a ClusterProfile instance with SyncMode set to <em>ContinuousWithDriftDetection</em>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:2">
-<p>If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: <em>error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.0/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"</em>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p>If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: <em>error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v1.2.1/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"</em>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 <li id="fn:3">
 <p>Sveltos collects <strong>minimal</strong>, <strong>anonymised</strong> data. That includes the <code>version information</code> alognside <code>cluster management data</code> (number of managed SveltosClusters, CAPI clusters, number of ClusterProdiles/Profiles and ClusterSummaries). To <strong>opt-out</strong>, for Helm-based installations use <code>helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set telemetry.disabled=true</code> and for manual deployment use the <code>--disable-telemetry=true</code> flag in the Sveltos <code>addon-controller</code> configuration.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
