@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Overlay pattern for deploying add-ons.">
+        <meta name="description" content="This example shows how to use both rollout and progressive rollout features of Sveltos together.">
       
       
       
       
-        <link rel="prev" href="../template_generic_examples/">
+        <link rel="prev" href="../progressive_rollout/">
       
       
-        <link rel="next" href="../generate_sveltos_configuration/">
+        <link rel="next" href="../order_with_events/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Templates Generic Examples - Projectsveltos Documentation</title>
+        <title>Combining Rollout and Progressive Rollout Across Clusters - Projectsveltos Documentation</title>
       
     
     
@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#all-in-one-rollout-and-progressive-rollout-example" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -127,7 +132,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Templates Generic Examples
+              Combining Rollout and Progressive Rollout Across Clusters
             
           </span>
         </div>
@@ -1520,18 +1525,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1552,7 +1559,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1570,7 +1577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../manifest_order/" class="md-nav__link">
         
   
   
@@ -1598,7 +1605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
+      <a href="../depends_on/" class="md-nav__link">
         
   
   
@@ -1626,7 +1633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1654,7 +1661,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
+      <a href="../tiers/" class="md-nav__link">
         
   
   
@@ -1682,7 +1689,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1710,7 +1717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/progressive_rollout/" class="md-nav__link">
+      <a href="../progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1735,10 +1742,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Rollout and Progressive Rollout
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1754,6 +1788,159 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-manifest-outline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Manifest Outline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full Manifest Outline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxupdate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        maxUpdate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validatehealths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validateHealths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postdelayhealthchecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        postDelayHealthChecks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#during-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        During Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1766,7 +1953,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../order_with_events/" class="md-nav__link">
         
   
   
@@ -1798,20 +1985,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
@@ -1832,7 +2017,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1850,7 +2035,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../intro_template/" class="md-nav__link">
+      <a href="../../template/intro_template/" class="md-nav__link">
         
   
   
@@ -1878,7 +2063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../additional_template_info/" class="md-nav__link">
+      <a href="../../template/additional_template_info/" class="md-nav__link">
         
   
   
@@ -1906,7 +2091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/" class="md-nav__link">
+      <a href="../../template/examples/" class="md-nav__link">
         
   
   
@@ -1934,7 +2119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../template_generic_examples/" class="md-nav__link">
+      <a href="../../template/template_generic_examples/" class="md-nav__link">
         
   
   
@@ -1959,17 +2144,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../template/template_overlays_examples/" class="md-nav__link">
         
   
   
@@ -1985,7 +2163,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1998,7 +2175,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../template/generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -2026,7 +2203,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lua/" class="md-nav__link">
+      <a href="../../template/lua/" class="md-nav__link">
         
   
   
@@ -2054,7 +2231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../crossplane/" class="md-nav__link">
+      <a href="../../template/crossplane/" class="md-nav__link">
         
   
   
@@ -2082,7 +2259,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../external_secret/" class="md-nav__link">
+      <a href="../../template/external_secret/" class="md-nav__link">
         
   
   
@@ -2110,7 +2287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bring_your_own_controller/" class="md-nav__link">
+      <a href="../../template/bring_your_own_controller/" class="md-nav__link">
         
   
   
@@ -2138,7 +2315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ytt_extension/" class="md-nav__link">
+      <a href="../../template/ytt_extension/" class="md-nav__link">
         
   
   
@@ -2166,7 +2343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../jsonnet_extension/" class="md-nav__link">
+      <a href="../../template/jsonnet_extension/" class="md-nav__link">
         
   
   
@@ -2194,7 +2371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_multicluster_iteration_template/" class="md-nav__link">
+      <a href="../../template/example_multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -3987,6 +4164,149 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-manifest-outline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Manifest Outline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full Manifest Outline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxupdate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        maxUpdate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validatehealths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validateHealths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postdelayhealthchecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        postDelayHealthChecks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#during-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        During Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -4006,116 +4326,238 @@
   
 
 
-  <h1>Example Overlays for Cluster-Specific Helm Deployments</h1>
-
-<p>This Sveltos configuration utilizes a powerful overlay pattern to dynamically deploy the Kyverno Helm chart.
-It targets all clusters with the label <code>zone: us-east-2</code> while customizing the deployment for each one. The core of this pattern is the runtime matching of cluster metadata.</p>
-<p>By using Go templates within the <strong>templateResourceRefs</strong> section, the ClusterProfile dynamically constructs the names of ConfigMaps:</p>
+<h1 id="all-in-one-rollout-and-progressive-rollout-example">All in One: Rollout and Progressive Rollout Example</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Navigating through the <a href="../rolling_update_strategy/">rolling update</a> or the <a href="../progressive_rollout/">progressive rollout</a> documentation, we get a good understanding of how these features work and what the benefits of using them are. However, the power comes when they are combined.</p>
+<p>In this example, we will show how to use both features in a single manifest file. We will use the <code>ClusterPromotion</code> Custom Resource Definition (CRD) to create a strong deployment and update strategy for applications and add-ons in various environments. We will deploy cert-manager to a group of clusters in various environments: dev, staging, and prod. We will control the deployment by setting the <code>maxUpdate</code> field. We will use the <code>validateHealths</code> and <code>PostDelayHealthChecks</code> fields, which will help us confirm that cert-manager, the necessary <code>ClusterIssuer</code>, and the <code>secret</code> are available in the cluster.</p>
+<p>For simplicity, the manifest file will be split into different parts to provide an explanation of what we have deployed and how it works.</p>
+<h2 id="benefits">Benefits</h2>
+<p>There are many benefits when combining the two features. Below are some of them.</p>
 <ul>
-<li>kyverno-{{.Cluster.metadata.labels.environment}}-version</li>
-<li>kyverno-{{.Cluster.metadata.labels.environment}}-values.</li>
+<li><strong>No Additional Tools Needed</strong>: Rolling updates and progressive rollouts can be managed without relying on extra tools.</li>
+<li><strong>Reduced Risk</strong>: Detect problems at an early stage.</li>
+<li><strong>Simplified Administration</strong>: Configure settings once and let Sveltos manage the process.</li>
+<li><strong>Health Checks</strong>: Confirm that clusters are ready before proceeding.</li>
+<li><strong>Staged Deployment</strong>: Gradual rollout changes gradually across different environments.</li>
+<li><strong>Flexible Control</strong>: Auto or manual promotion.</li>
 </ul>
-<p>At deployment time, Sveltos fetches the specific ConfigMap that matches the environment label of each target cluster.
-This allows you to maintain a single, reusable ClusterProfile that acts as a blueprint, while the individual ConfigMaps serve as overlays that provide the unique version and values
-for each specific environment (e.g., staging, production).</p>
-<p>This method effectively decouples the deployment logic from the configuration data, enabling a scalable and maintainable GitOps workflow for managing add-ons across diverse Kubernetes clusters.</p>
+<h2 id="full-manifest-outline">Full Manifest Outline</h2>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterPromotion</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-kyverno</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager-rollout-auto</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-2</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nt">templateResourceRefs</span><span class="p">:</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.x-k8s.io/v1beta2</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">.Cluster.metadata.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="hll"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kyverno-{{-</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">index</span><span class="nv"> </span><span class="s">.Cluster.metadata.labels</span><span class="nv"> </span><span class="s">`environment`</span><span class="nv"> </span><span class="s">-}}{{-</span><span class="nv"> </span><span class="s">index</span><span class="nv"> </span><span class="s">.Cluster.metadata.labels</span><span class="nv"> </span><span class="s">`environment`</span><span class="nv"> </span><span class="s">-}}{{-</span><span class="nv"> </span><span class="s">end</span><span class="nv"> </span><span class="s">-}}-version&quot;</span>
-</span></span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Version</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="hll"><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;{{-</span><span class="nv"> </span><span class="s">index</span><span class="nv"> </span><span class="s">(getResource</span><span class="nv"> </span><span class="s">`Version`).data</span><span class="nv"> </span><span class="s">`chartVersion`</span><span class="nv"> </span><span class="s">-}}&quot;</span>
-</span></span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="nt">valuesFrom</span><span class="p">:</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="hll"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-{{- if index .Cluster.metadata.labels `environment` -}}{{- index .Cluster.metadata.labels `environment` -}}{{- end -}}-values</span>
-</span></span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">      </span><span class="nt">optional</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">profileSpec</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="hll"><span class="w">    </span><span class="nt">maxUpdate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10%</span>
+</span></span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://charts.jetstack.io</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">jetstack</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">jetstack/cert-manager</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v1.19.1</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="no">installCRDs: true</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="c1"># Ensure the cert-manager Helm chart has been successfully deployed</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="hll"><span class="w">    </span><span class="nt">validateHealths</span><span class="p">:</span>
+</span></span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="hll"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment-health</span>
+</span></span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="hll"><span class="w">      </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm</span>
+</span></span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="hll"><span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apps&quot;</span>
+</span></span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="hll"><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+</span></span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="hll"><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Deployment&quot;</span>
+</span></span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="hll"><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span></span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="hll"><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span></span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="hll"><span class="w">        </span><span class="no">function evaluate()</span>
+</span></span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="hll"><span class="w">          </span><span class="no">local hs = {healthy = false, message = &quot;available replicas not matching requested replicas&quot;}</span>
+</span></span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="hll"><span class="w">          </span><span class="no">if obj.status and obj.status.availableReplicas ~= nil and obj.status.availableReplicas == obj.spec.replicas then</span>
+</span></span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="hll"><span class="w">            </span><span class="no">hs.healthy = true</span>
+</span></span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="hll"><span class="w">          </span><span class="no">end</span>
+</span></span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="hll"><span class="w">          </span><span class="no">return hs</span>
+</span></span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="hll"><span class="w">        </span><span class="no">end</span>
+</span></span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="hll"><span class="w">    </span><span class="c1"># Store the ClusterIssuer and Secret in a ConfigMap</span>
+</span></span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="hll"><span class="w">    </span><span class="nt">policyRefs</span><span class="p">:</span>
+</span></span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="hll"><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret-clusterissuer-config</span>
+</span></span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="hll"><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span></span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">  </span><span class="c1"># Stages are processed sequentially</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">  </span><span class="nt">stages</span><span class="p">:</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span><span class="w"> </span><span class="c1"># Stage 1: dev environment</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="hll"><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment before promoting</span>
+</span></span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="hll"><span class="w">        </span><span class="nt">postDelayHealthChecks</span><span class="p">:</span>
+</span></span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="hll"><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager-resources-health</span>
+</span></span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="hll"><span class="w">          </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resources</span>
+</span></span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="hll"><span class="w">          </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cert-manager.io&quot;</span>
+</span></span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="hll"><span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+</span></span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="hll"><span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ClusterIssuer&quot;</span>
+</span></span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="hll"><span class="w">          </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span></span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="hll"><span class="w">          </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span></span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a><span class="hll"><span class="w">            </span><span class="no">function evaluate()</span>
+</span></span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="hll"><span class="w">              </span><span class="no">hs = {}</span>
+</span></span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="hll"><span class="w">              </span><span class="no">hs.status = &quot;Degraded&quot;</span>
+</span></span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="hll"><span class="w">              </span><span class="no">hs.message = &quot;Missing Secret or ClusterIssuer not ready&quot;</span>
+</span></span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="hll"><span class="w">              </span><span class="no">local secret = getResource(&quot;v1&quot;, &quot;Secret&quot;, &quot;cert-manager&quot;, &quot;cloudflare-api-token&quot;)</span>
+</span></span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="hll"><span class="w">              </span><span class="no">local issuerReady = false</span>
+</span></span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a><span class="hll"><span class="w">              </span><span class="no">if obj.status and obj.status.conditions then</span>
+</span></span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="hll"><span class="w">                </span><span class="no">for _, cond in ipairs(obj.status.conditions) do</span>
+</span></span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a><span class="hll"><span class="w">                  </span><span class="no">if cond.type == &quot;Ready&quot; and cond.status == &quot;True&quot; then</span>
+</span></span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="hll"><span class="w">                    </span><span class="no">issuerReady = true</span>
+</span></span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="hll"><span class="w">                    </span><span class="no">break</span>
+</span></span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="hll"><span class="w">                  </span><span class="no">end</span>
+</span></span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="hll"><span class="w">                </span><span class="no">end</span>
+</span></span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a><span class="hll"><span class="w">              </span><span class="no">end</span>
+</span></span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a><span class="hll"><span class="w">              </span><span class="no">if secret and issuerReady then</span>
+</span></span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a><span class="hll"><span class="w">                </span><span class="no">hs.status = &quot;Healthy&quot;</span>
+</span></span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a><span class="hll"><span class="w">                </span><span class="no">hs.message = &quot;ClusterIssuer and Secret are ready&quot;</span>
+</span></span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a><span class="hll"><span class="w">              </span><span class="no">end</span>
+</span></span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a><span class="hll"><span class="w">              </span><span class="no">return hs</span>
+</span></span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a><span class="hll"><span class="w">            </span><span class="no">end</span>
+</span></span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span><span class="w"> </span><span class="c1"># Stage 2: staging environment</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment before promoting</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span><span class="w"> </span><span class="c1"># Stage 3: Production environment</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment (optional for final stage)</span>
 </span></code></pre></div>
-<p>With this Sveltos configuration, the specific ConfigMaps used for the Kyverno deployment depend entirely on the environment label of the target cluster.</p>
-<p>When a cluster has the label <code>environment: production</code>, the ClusterProfile's Go templates resolve to the following:</p>
-<ul>
-<li>Version ConfigMap: <em>kyverno-production-version</em></li>
-<li>Values ConfigMap: <em>kyverno-production-values</em></li>
-</ul>
-<p>Sveltos will use these ConfigMaps to install the Kyverno Helm chart with 3 replicas for both the admissionController and backgroundController, as specified in the production ConfigMap. This is a classic example of a production-level, high-availability configuration.</p>
-<p>When a cluster has the label <code>environment: staging</code>, the ClusterProfile's Go templates resolve to the following:</p>
-<ul>
-<li>Version ConfigMap: <em>kyverno-staging-version</em></li>
-<li>Values ConfigMap: <em>kyverno-staging-values</em></li>
-</ul>
-<p>In this case, Sveltos will install Kyverno with all controllers set to 1 replica, which is typical for a staging or testing environment to conserve resources.</p>
-<p>This demonstrates how a single ClusterProfile can manage multiple environments by dynamically selecting the correct configuration "overlay" at runtime based on the cluster's labels.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">secret-clusterissuer-config</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">3.5.1</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-production-version</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nn">---</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|2</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">          </span><span class="no">admissionController:</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">            </span><span class="no">replicas: 3</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">          </span><span class="no">backgroundController:</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">            </span><span class="no">replicas: 3</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">          </span><span class="no">cleanupController:</span>
-</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">          </span><span class="no">reportsController:</span>
-</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-production-values</span>
-</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secret-clusterissuer-config</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">cert-manager-config.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="no">apiVersion: v1</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="no">kind: Secret</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="no">name: cloudflare-api-token</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="no">namespace: cert-manager</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="no">type: Opaque</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="no">stringData:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="no">api-token: &lt;Cloudflare API token&gt;</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="no">---</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="no">apiVersion: cert-manager.io/v1</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="no">kind: ClusterIssuer</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="no">name: cloudflare-issuer</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">      </span><span class="no">acme:</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">        </span><span class="no">server: https://acme-staging-v02.api.letsencrypt.org/directory # For production environments, set the URL to https://acme-v02.api.letsencrypt.org/directory</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="no">email: &quot;&lt;Your email address&gt;&quot;</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="no">privateKeySecretRef:</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">          </span><span class="no">name: cloudflare-private-key</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">        </span><span class="no">solvers:</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">          </span><span class="no">- dns01:</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">              </span><span class="no">cloudflare:</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">                </span><span class="no">apiTokenSecretRef:</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">                  </span><span class="no">name: cloudflare-api-token</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">                  </span><span class="no">key: api-token</span>
 </span></code></pre></div>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">3.5.1</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-staging-version</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nn">---</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|2</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">          </span><span class="no">admissionController:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">          </span><span class="no">backgroundController:</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">          </span><span class="no">cleanupController:</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">          </span><span class="no">reportsController:</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">            </span><span class="no">replicas: 1</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-staging-values</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Deploy the YAML manifest in the Kubernetes <strong>management</strong> cluster where Sveltos is installed.</p>
+</div>
+<h3 id="workflow">Workflow</h3>
+<p>With <code>maxUpdate</code> set to 10%, Sveltos will start the update of 10% of the clusters at a time in each stage (dev, staging, prod). For each cluster, it only moves to the next one after the <code>validateHealths</code> checks pass, ensuring the update is successful. Sveltos also does the <code>postDelayHealthChecks</code> to ensure the <code>ClusterIssuer</code> and <code>secret</code> are set up. When all clusters in a stage are updated, the Helm chart is deployed with the specified configuration (ConfigMap). Then, Sveltos moves on to the next stage.</p>
+<ul>
+<li><code>validateHealths</code> and <code>maxUpdate</code> show the gradual deployment of an application in all clusters in a given stage</li>
+<li><code>postDelayHealthChecks</code> and <code>delay</code> show how we can wait x minutes  and then run a different set of checks</li>
+</ul>
+<h3 id="maxupdate">maxUpdate</h3>
+<p>The <code>maxUpdate</code> field shows the maximum number of clusters that can be updated at the same time. We can set it as a number (like 5) or as a percentage (like 10%). By default, it is 100%. This field lets us control how many clusters get the update at once. If something goes wrong, only a small group of clusters in a stage will be affected, so we can better manage updates.</p>
+<h3 id="validatehealths">validateHealths</h3>
+<p>The <code>validateHealths</code> field lets us set health checks that Sveltos will run before declaring an update as successful. These checks can be written in <a href="https://www.lua.org/">Lua</a> or <a href="https://cel.dev/">CEL</a>. For this demo, we used Lua to check if the <code>availableReplicas</code> in cert-manager match the desired count.</p>
+<h3 id="delay">delay</h3>
+<p>The field sets an optional wait time after the current stage is fully deployed. Then, it can move on to health checks.</p>
+<h3 id="postdelayhealthchecks">postDelayHealthChecks</h3>
+<p>The <code>postDelayHealthChecks</code> lets us set logical checks in Lua or CEL. We do this before marking a cluster as successfully deployed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>postDelayHealthChecks</code> have been defined only in the <code>dev</code> stage, but we can have this field enabled in every stage of our preference.</p>
+</div>
+<h2 id="validation">Validation</h2>
+<h3 id="during-deployment">During Deployment</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterprofile,clustersummary,clusterpromotion<span class="w"> </span>-A
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>NAME<span class="w">                                                                    </span>AGE
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>clusterprofile.config.projectsveltos.io/cert-manager-rollout-auto-dev<span class="w">   </span>21s
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">                                                                                  </span>AGE
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>dev<span class="w">         </span>clustersummary.config.projectsveltos.io/cert-manager-rollout-auto-dev-sveltos-dev01<span class="w">   </span>21s
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">                                                                  </span>AGE
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">            </span>clusterpromotion.config.projectsveltos.io/cert-manager-rollout-auto<span class="w">   </span>21s
 </span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterprofile.config.projectsveltos.io/cert-manager-rollout-auto-dev<span class="w">  </span>-o<span class="w"> </span>yaml
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>...
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>status:
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>matchingClusters:
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>-<span class="w"> </span>apiVersion:<span class="w"> </span>lib.projectsveltos.io/v1beta1
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span>kind:<span class="w"> </span>SveltosCluster
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span>name:<span class="w"> </span>dev01
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span>namespace:<span class="w"> </span>dev
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clustersummary.config.projectsveltos.io/cert-manager-rollout-auto-dev-sveltos-dev01<span class="w">  </span>-n<span class="w"> </span>dev<span class="w"> </span>-o<span class="w"> </span>yaml
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>...
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>status:
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>dependencies:<span class="w"> </span>no<span class="w"> </span>dependencies
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>deployedGVKs:
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>-<span class="w"> </span>deployedGroupVersionKind:
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span>-<span class="w"> </span>Secret.v1.
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span>-<span class="w"> </span>ClusterIssuer.v1.cert-manager.io
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span>featureID:<span class="w"> </span>Resources
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span>featureSummaries:
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span>-<span class="w"> </span>featureID:<span class="w"> </span>Resources
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span>hash:<span class="w"> </span><span class="nv">NJRE7kroCo2BfsuIaXUxLezpk0dtbKtiZALjsg1N4HU</span><span class="o">=</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span>lastAppliedTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T16:56:55Z&quot;</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span>status:<span class="w"> </span>Provisioned
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span>-<span class="w"> </span>featureID:<span class="w"> </span>Helm
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span>hash:<span class="w"> </span>B8mlg6lHmj8shmHObpLv+Tr6GJpgWkOh04D80ew3DVI<span class="o">=</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span>lastAppliedTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T16:56:55Z&quot;</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span>status:<span class="w"> </span>Provisioned
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span>helmReleaseSummaries:
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span>-<span class="w"> </span>releaseName:<span class="w"> </span>cert-manager
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span>releaseNamespace:<span class="w"> </span>cert-manager
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span>status:<span class="w"> </span>Managing
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span>valuesHash:<span class="w"> </span><span class="nv">xqLPNIy7HQxDhOK9g2GIj65m4BTZqOHPiiWBzo3Oqm8</span><span class="o">=</span>
+</span></code></pre></div>
+<h3 id="after-deployment">After Deployment</h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterpromotion.config.projectsveltos.io/cert-manager-rollout-auto<span class="w"> </span>-o<span class="w"> </span>yaml
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>...
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>status:
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>currentStageName:<span class="w"> </span>staging
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>lastPromotionTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T17:02:25Z&quot;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>profileSpecHash:<span class="w"> </span>XtxU0+WdS5gofaCkpJZ53zecEQY7AXZLp1CCXWvTltc<span class="o">=</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>stages:
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span>-<span class="w"> </span>failureMessage:<span class="w"> </span>All<span class="w"> </span>matching<span class="w"> </span>clusters<span class="w"> </span>are<span class="w"> </span>successfully<span class="w"> </span>deployed.
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span>lastStatusCheckTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T16:58:25Z&quot;</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span>lastSuccessfulAppliedTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T16:58:25Z&quot;</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span>lastUpdateReconciledTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T16:56:25Z&quot;</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span>name:<span class="w"> </span>dev
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span>-<span class="w"> </span>failureMessage:<span class="w"> </span>All<span class="w"> </span>matching<span class="w"> </span>clusters<span class="w"> </span>are<span class="w"> </span>successfully<span class="w"> </span>deployed.
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span>lastStatusCheckTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T17:04:25Z&quot;</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span>lastSuccessfulAppliedTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T17:04:25Z&quot;</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span>lastUpdateReconciledTime:<span class="w"> </span><span class="s2">&quot;2025-11-09T17:02:25Z&quot;</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span>name:<span class="w"> </span>staging
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span>stagesHash:<span class="w"> </span>9IEZq/BvODcdF+6Ogxjvm+ayNbh/GejSU4RJijXK50s<span class="o">=</span>
+</span></code></pre></div>
+<p>For more information about the <code>Automatic</code> and <code>Manual</code> promotion and available fields, have a look at the <a href="https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/clusterpromotion_types.go">ClusterPromotion Types</a>.</p>
 
 
 
@@ -4148,7 +4590,7 @@ for each specific environment (e.g., staging, production).</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../template_generic_examples/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Helm Charts and Resource Templates">
+          <a href="../progressive_rollout/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Progressive Rollout Across Clusters">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4158,20 +4600,20 @@ for each specific environment (e.g., staging, production).</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Example Helm Charts and Resource Templates
+                Progressive Rollout Across Clusters
               </div>
             </div>
           </a>
         
         
           
-          <a href="../generate_sveltos_configuration/" class="md-footer__link md-footer__link--next" aria-label="Next: Generating Sveltos Configurations with Sveltos">
+          <a href="../order_with_events/" class="md-footer__link md-footer__link--next" aria-label="Next: Scenario &#39;Event Framework and Resource Deployment&#39;">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Generating Sveltos Configurations with Sveltos
+                Scenario 'Event Framework and Resource Deployment'
               </div>
             </div>
             <div class="md-footer__button md-icon">
