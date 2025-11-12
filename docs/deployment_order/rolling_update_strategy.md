@@ -20,9 +20,9 @@ A ClusterProfile might match more than one clusters. When adding or modifying a 
 
 To support this, Sveltos uses two `ClusterProfile Spec` fields: `MaxUpdate` and `ValidateHealths`.
 
-### MaxUpdate
+### maxUpdate
 
-`MaxUpdate` indicates the maximum number of clusters that can be updated concurrently. The value can be an absolute number (e.g., 5) or a percentage of the desired managed clusters (e.g., 10%). The default vlue is set to 100%.
+`maxUpdate` indicates the maximum number of clusters that can be updated concurrently. The value can be an absolute number (e.g., 5) or a percentage of the desired managed clusters (e.g., 10%). The default vlue is set to 100%.
 
 #### Example
 
@@ -30,7 +30,7 @@ When the field is set to 30%, the list of add-ons/applications in ClusterProfile
 
 ### ValidateHealths
 
-The `validateHealths` field in a ClusterProfile Spec allows you to specify health validation checks that Sveltos should perform before declaring an update successful. These checks are expressed using the Lua language.
+The `validateHealths` field in a `ClusterProfile` Spec allows you to specify health validation checks that Sveltos should perform before declaring an update successful. These checks are expressed using the Lua language.
 
 #### Example
 
@@ -135,3 +135,7 @@ To verify the Lua script without a cluster, you can follow steps pointers.
 
 !!! tip
     If the unit tests pass, the Lua script is valid.
+
+## Next Steps
+
+Take a look at the [progressive rollout](./progressive_rollout.md) approach.

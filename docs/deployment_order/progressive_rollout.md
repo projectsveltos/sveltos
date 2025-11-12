@@ -186,3 +186,7 @@ The `ManualTrigger` stops the pipeline and needs human intervention. It is usual
     Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
 
 For more information about the `Automatic` and `Manual` promotion and available fields, have a look at the [ClusterPromotion Types](https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/clusterpromotion_types.go).
+
+## Next Steps
+
+Take a look at an [example](./example_rollout_and_progressive_rollout.md) on how the rolling update and the progressive rollout approach work together.
