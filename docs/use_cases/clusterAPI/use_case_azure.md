@@ -103,22 +103,26 @@ $ kubectl label sveltoscluster mgmt -n mgmt type=mgmt
 
 ## Step 4: Push a PR to add a new user
 
-To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the `existing-users` ConfigMap within the previously defined repository. The PR will introduce a new user entry, `user1: production`, within the data section of the ConfigMap, as shown in the provided diff.
+To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the `existing-users` ConfigMap within the previously defined repository. The PR will introduce a new user entry, `user01: production`, within the data section of the ConfigMap, as shown in the provided diff.
 
 ```bash
-$ diff --git a/argocd-sveltos-clusterapi-eks/existing-users.yaml b/argocd-sveltos-clusterapi-eks/existing-users.yaml
+$ diff --git a/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml b/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
 index ab0d862..10987b3 100644
---- a/argocd-sveltos-clusterapi-eks/existing-users.yaml
-+++ b/argocd-sveltos-clusterapi-eks/existing-users.yaml
-@@ -3,3 +3,5 @@ kind: ConfigMap
- metadata:
-   name: existing-users
-   namespace: default
-+data:
-+  user1: production
+--- a/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
++++ b/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
+@@ -7,7 +7,7 @@ data:
+-  #user01: |
+-  # env: staging
+-  # version: "1.34.1"
++  user01: |
++    env: staging
++    version: "1.34.1"
+   #user02: |
+   # env: staging
+   # version: "1.34.0"
 ```
 
-Once the PR is merged, ArgoCD will synchronise the changes to the Kubernetes management cluster. The synchronisation updates the ConfigMap. This signals Sveltos to start provisioning a new production Azure cluster for `user1` using CAPI.
+Once the PR is merged, ArgoCD will synchronise the changes to the Kubernetes management cluster. The synchronisation updates the ConfigMap. This signals Sveltos to start provisioning a new production Azure cluster for `user01` using CAPI.
 
 ## Step 5: Install Cilium as Container Network Interface (CNI)
 
