@@ -140,7 +140,7 @@ $ sveltosctl show addons --namespace=user1
 
 ### Sveltos Dashboard View
 
-![ArgoCD, Sveltos and Cluster API on EKS](../../assets/sveltos_dashboard_eks_cluster.png)
+![ArgoCD, Sveltos and Cluster API on EKS](../../assets/sveltos_dashboard_mgmt_cluster_capi.png)
 
 ## Step 6: Sveltos deploys production policies
 
@@ -166,7 +166,7 @@ $ sveltosctl show addons --namespace=user1
 
 ### Sveltos Dashboard View
 
-![ArgoCD, Sveltos and Cluster API on EKS](../../assets/sveltos_dashboard_eks_cluster_dep_helm.png)
+![ArgoCD, Sveltos and Cluster API on EKS Helm charts](../../assets/sveltos_dashboard_eks_cluster_dep_helm.png)
 
 ## Step 7: Removing user
 
