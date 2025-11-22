@@ -140,3 +140,21 @@ cd sveltos-applier
 git checkout ${branch}
 make docker-buildx
 cd ../../; rm -rf tmp
+
+# mcp-server
+echo "processing mcp-server"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/mcp-server.git
+cd mcp-server
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
+
+# crd-manager
+echo "processing crd-manager"
+rm -rf tmp; mkdir tmp; cd tmp
+git clone git@github.com:projectsveltos/crd-manager.git
+cd crd-manager
+git checkout ${branch}
+make docker-buildx
+cd ../../; rm -rf tmp
