@@ -25,6 +25,6 @@ metadata:
   namespace: civo
 spec:
   activeWindow:
-    from: 0 20 * * 5  # Friday 8PM (0 hour, 20th minute, any day of month, any month, Friday)
-    to: 0 7 * * 1    # Monday 7AM (0 hour, 7th minute, any day of month, any month, Monday)
+    from: 0 20 * * 5  # Friday 8:00 PM (0 minute, 20 hour, any day of month, any month, Friday)
+    to: 0 7 * * 1    # Monday 7:00 AM (0 minute, 7 hour, any day of month, any month, Monday)
 ```
