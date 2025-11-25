@@ -45,6 +45,7 @@ authors:
 1. [![Sveltos introduction](https://img.youtube.com/vi/bsWEo79w09c/0.jpg)](https://www.youtube.com/watch?v=bsWEo79w09c)
 1. [![Sveltos event framework](https://img.youtube.com/vi/4mOWuOF0gWY/0.jpg)](https://www.youtube.com/watch?v=4mOWuOF0gWY)
 1. [![Sveltos event framework](https://img.youtube.com/vi/GQM7Qn9rWVU/0.jpg)](https://www.youtube.com/watch?v=GQM7Qn9rWVU)
+1. [![KubeCon 25 North America: Message In, Job Out: Build Event-Driven Workflows in Kubernetes](https://img.youtube.com/vi/IvvuZiTkGZU/0.jpg)](https://www.youtube.com/watch?v=IvvuZiTkGZU)
 1. [![OpenSourceSummit 24: How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud](https://img.youtube.com/vi/IffrzanQRRc/0.jpg)](https://www.youtube.com/watch?v=IffrzanQRRc)
 1. [![Civo Navigate North America 2024](https://img.youtube.com/vi/tAVu190WnKo/0.jpg)](https://www.youtube.com/watch?v=tAVu190WnKo)
 1. [![Rawkode Academy: Hands-on Tutorial of Project Sveltos](https://img.youtube.com/vi/FRYYHAWr0MQ/0.jpg)](https://www.youtube.com/watch?v=FRYYHAWr0MQ)
