@@ -4,14 +4,14 @@ metadata:
   name: event-manager
   namespace: projectsveltos
 spec:
-spec:
   template:
     spec:
       containers:
-      - args:
-        - --diagnostics-address=:8443
-        - --shard-key=
-        - --capi-onboard-annotation=
-        - --v=5
-        - --version=main
-        - --agent-in-mgmt-cluster=true
+        - name: manager
+          args:
+            - --diagnostics-address=:8443
+            - --shard-key=
+            - --capi-onboard-annotation=
+            - --v=5
+            - --version=main
+            - --agent-in-mgmt-cluster=true
