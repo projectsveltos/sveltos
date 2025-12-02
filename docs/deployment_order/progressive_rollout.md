@@ -129,7 +129,9 @@ The example demonstrates rolling out the `kyverno-latest` Helm chart with a spec
     - The `ClusterPromotion` resource is marked as fully reconciled.
 
 !!!tip
-    To **manually promote** the Kyverno deployment from staging to production, perform the changes described below.
+    To **manually promote** the Kyverno deployment from **staging** to **production**, perform the changes described below.
+    
+    When the setting `name.trigger.manual.approved` is set to `false`, Sveltos will deploy to the **staging** environment without manual intervention. Then, it will only promote to **production** once an operator manually approves it by patching the `ClusterPromotion` resource.
 
     ```yaml
           stages:
@@ -149,8 +151,7 @@ The example demonstrates rolling out the `kyverno-latest` Helm chart with a spec
               auto:
                 delay: 5m # Wait 5 minutes after successful deployment (optional for final stage)
     ```
-    An operator must manually set the `trigger.manual.approved` field to `true`. Once that is done, Kyverno will get deployed in the production clusters.
-
+    
     **Verification commands**:
 
     ```bash
