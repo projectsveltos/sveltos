@@ -3770,8 +3770,9 @@
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>To <strong>manually promote</strong> the Kyverno deployment from staging to production, perform the changes described below.</p>
-<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">      </span><span class="nt">stages</span><span class="p">:</span>
+<p>To <strong>manually promote</strong> the Kyverno deployment from <strong>staging</strong> to <strong>production</strong>, perform the changes described below.</p>
+<p>When the setting <code>name.trigger.manual.approved</code> is set to <code>false</code>, Sveltos will deploy to the <strong>staging</strong> environment without manual intervention. Then, it will only promote to <strong>production</strong> once an operator manually approves it by patching the <code>ClusterPromotion</code> resource.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">      </span><span class="nt">stages</span><span class="p">:</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span><span class="w"> </span><span class="c1"># Stage 1: Staging environment</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="nt">clusterSelector</span><span class="p">:</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">          </span><span class="nt">matchLabels</span><span class="p">:</span>
@@ -3788,7 +3789,6 @@
 </span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">          </span><span class="nt">auto</span><span class="p">:</span>
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment (optional for final stage)</span>
 </span></code></pre></div>
-An operator must manually set the <code>trigger.manual.approved</code> field to <code>true</code>. Once that is done, Kyverno will get deployed in the production clusters.</p>
 <p><strong>Verification commands</strong>:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterpromotion,clusterprofile,clustersummary<span class="w"> </span>-A
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
