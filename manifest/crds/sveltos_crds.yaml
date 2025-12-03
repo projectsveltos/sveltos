@@ -43,18 +43,19 @@ spec:
                   ControlPlaneEndpoint represents the endpoint used to communicate with the
                   management cluster controlplane endpoint. It will be used when generating the
                   kubeconfig.
+                minProperties: 1
                 properties:
                   host:
                     description: host is the hostname on which the API server is serving.
                     maxLength: 512
+                    minLength: 1
                     type: string
                   port:
                     description: port is the port on which the API server is serving.
                     format: int32
+                    maximum: 65535
+                    minimum: 1
                     type: integer
-                required:
-                - host
-                - port
                 type: object
               name:
                 description: |-
@@ -382,6 +383,57 @@ spec:
                             Empty for resources scoped at cluster level.
                             For namespaced resources, an empty string "" indicates all namespaces.
                           type: string
+                        selector:
+                          description: |-
+                            Selector is a standard Kubernetes label selector. Resources are selected
+                            if their labels match the selector. This field uses the standard
+                            Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                            If both LabelFilters and Selector are specified, the requirements from
+                            both are logically ANDed.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector
+                                requirements. The requirements are ANDed.
+                              items:
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
+                                  relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector
+                                      applies to.
+                                    type: string
+                                  operator:
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                          x-kubernetes-map-type: atomic
                         version:
                           description: Version of the resource deployed in the Cluster.
                           type: string
@@ -2304,6 +2356,57 @@ spec:
                         Empty for resources scoped at cluster level.
                         For namespaced resources, an empty string "" indicates all namespaces.
                       type: string
+                    selector:
+                      description: |-
+                        Selector is a standard Kubernetes label selector. Resources are selected
+                        if their labels match the selector. This field uses the standard
+                        Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                        If both LabelFilters and Selector are specified, the requirements from
+                        both are logically ANDed.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       type: string
@@ -2609,6 +2712,57 @@ spec:
                         Empty for resources scoped at cluster level.
                         For namespaced resources, an empty string "" indicates all namespaces.
                       type: string
+                    selector:
+                      description: |-
+                        Selector is a standard Kubernetes label selector. Resources are selected
+                        if their labels match the selector. This field uses the standard
+                        Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                        If both LabelFilters and Selector are specified, the requirements from
+                        both are logically ANDed.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                      x-kubernetes-map-type: atomic
                     version:
                       description: Version of the resource deployed in the Cluster.
                       type: string
@@ -3945,6 +4099,57 @@ spec:
                               Empty for resources scoped at cluster level.
                               For namespaced resources, an empty string "" indicates all namespaces.
                             type: string
+                          selector:
+                            description: |-
+                              Selector is a standard Kubernetes label selector. Resources are selected
+                              if their labels match the selector. This field uses the standard
+                              Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                              If both LabelFilters and Selector are specified, the requirements from
+                              both are logically ANDed.
+                            properties:
+                              matchExpressions:
+                                description: matchExpressions is a list of label selector
+                                  requirements. The requirements are ANDed.
+                                items:
+                                  description: |-
+                                    A label selector requirement is a selector that contains values, a key, and an operator that
+                                    relates the key and values.
+                                  properties:
+                                    key:
+                                      description: key is the label key that the selector
+                                        applies to.
+                                      type: string
+                                    operator:
+                                      description: |-
+                                        operator represents a key's relationship to a set of values.
+                                        Valid operators are In, NotIn, Exists and DoesNotExist.
+                                      type: string
+                                    values:
+                                      description: |-
+                                        values is an array of string values. If the operator is In or NotIn,
+                                        the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                        the values array must be empty. This array is replaced during a strategic
+                                        merge patch.
+                                      items:
+                                        type: string
+                                      type: array
+                                      x-kubernetes-list-type: atomic
+                                  required:
+                                  - key
+                                  - operator
+                                  type: object
+                                type: array
+                                x-kubernetes-list-type: atomic
+                              matchLabels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                  map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                  operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                type: object
+                            type: object
+                            x-kubernetes-map-type: atomic
                           version:
                             description: Version of the resource deployed in the Cluster.
                             type: string
@@ -4077,6 +4282,57 @@ spec:
                               Empty for resources scoped at cluster level.
                               For namespaced resources, an empty string "" indicates all namespaces.
                             type: string
+                          selector:
+                            description: |-
+                              Selector is a standard Kubernetes label selector. Resources are selected
+                              if their labels match the selector. This field uses the standard
+                              Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                              If both LabelFilters and Selector are specified, the requirements from
+                              both are logically ANDed.
+                            properties:
+                              matchExpressions:
+                                description: matchExpressions is a list of label selector
+                                  requirements. The requirements are ANDed.
+                                items:
+                                  description: |-
+                                    A label selector requirement is a selector that contains values, a key, and an operator that
+                                    relates the key and values.
+                                  properties:
+                                    key:
+                                      description: key is the label key that the selector
+                                        applies to.
+                                      type: string
+                                    operator:
+                                      description: |-
+                                        operator represents a key's relationship to a set of values.
+                                        Valid operators are In, NotIn, Exists and DoesNotExist.
+                                      type: string
+                                    values:
+                                      description: |-
+                                        values is an array of string values. If the operator is In or NotIn,
+                                        the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                        the values array must be empty. This array is replaced during a strategic
+                                        merge patch.
+                                      items:
+                                        type: string
+                                      type: array
+                                      x-kubernetes-list-type: atomic
+                                  required:
+                                  - key
+                                  - operator
+                                  type: object
+                                type: array
+                                x-kubernetes-list-type: atomic
+                              matchLabels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                  map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                  operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                type: object
+                            type: object
+                            x-kubernetes-map-type: atomic
                           version:
                             description: Version of the resource deployed in the Cluster.
                             type: string
@@ -4129,6 +4385,13 @@ spec:
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
             properties:
+              activeWindowHash:
+                description: |-
+                  ActiveWindowHash is the hash of the SveltosCluster Spec.ActiveWindow.
+                  This is used to detect if the ActiveWindow configuration has changed
+                  and requires recalculation of NextPause and NextUnpause.
+                format: byte
+                type: string
               agentLastReportTime:
                 description: |-
                   AgentLastReportTime indicates the last time the Sveltos agent in the managed cluster
@@ -4587,6 +4850,57 @@ spec:
                             Empty for resources scoped at cluster level.
                             For namespaced resources, an empty string "" indicates all namespaces.
                           type: string
+                        selector:
+                          description: |-
+                            Selector is a standard Kubernetes label selector. Resources are selected
+                            if their labels match the selector. This field uses the standard
+                            Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                            If both LabelFilters and Selector are specified, the requirements from
+                            both are logically ANDed.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector
+                                requirements. The requirements are ANDed.
+                              items:
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
+                                  relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector
+                                      applies to.
+                                    type: string
+                                  operator:
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                          x-kubernetes-map-type: atomic
                         version:
                           description: Version of the resource deployed in the Cluster.
                           type: string
@@ -4746,6 +5060,57 @@ spec:
                             Empty for resources scoped at cluster level.
                             For namespaced resources, an empty string "" indicates all namespaces.
                           type: string
+                        selector:
+                          description: |-
+                            Selector is a standard Kubernetes label selector. Resources are selected
+                            if their labels match the selector. This field uses the standard
+                            Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                            If both LabelFilters and Selector are specified, the requirements from
+                            both are logically ANDed.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector
+                                requirements. The requirements are ANDed.
+                              items:
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
+                                  relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector
+                                      applies to.
+                                    type: string
+                                  operator:
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                          x-kubernetes-map-type: atomic
                         version:
                           description: Version of the resource deployed in the Cluster.
                           type: string
@@ -5403,6 +5768,12 @@ spec:
                                                             default: true
                                                             description: Replaces if set indicates to replace an older release with this one
                                                             type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, install will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
+                                                            type: boolean
                                                     type: object
                                                 labels:
                                                     additionalProperties:
@@ -5501,6 +5872,12 @@ spec:
                                                         subNotes:
                                                             default: false
                                                             description: SubNotes determines whether sub-notes are rendered in the chart.
+                                                            type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, upgrade will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
                                                             type: boolean
                                                         upgradeCRDs:
                                                             default: false
@@ -6658,6 +7035,12 @@ spec:
                                                                     default: true
                                                                     description: Replaces if set indicates to replace an older release with this one
                                                                     type: boolean
+                                                                takeOwnership:
+                                                                    default: false
+                                                                    description: |-
+                                                                        if set, install will ignore the check for helm annotations
+                                                                        and take ownership of the existing resources
+                                                                    type: boolean
                                                             type: object
                                                         labels:
                                                             additionalProperties:
@@ -6756,6 +7139,12 @@ spec:
                                                                 subNotes:
                                                                     default: false
                                                                     description: SubNotes determines whether sub-notes are rendered in the chart.
+                                                                    type: boolean
+                                                                takeOwnership:
+                                                                    default: false
+                                                                    description: |-
+                                                                        if set, upgrade will ignore the check for helm annotations
+                                                                        and take ownership of the existing resources
                                                                     type: boolean
                                                                 upgradeCRDs:
                                                                     default: false
@@ -7666,6 +8055,80 @@ spec:
                                                                     - version
                                                                 type: object
                                                             type: array
+                                                        preHealthCheckDeployment:
+                                                            description: |-
+                                                                PreHealthCheckDeployment is a slice of resources Sveltos will deploy after the Delay
+                                                                period has elapsed and before running PostDelayHealthChecks.
+                                                                This can be used, for example, to deploy a Job that performs validation tasks.
+                                                                The PostDelayHealthChecks can then validate the successful completion of these resources (e.g., a Job).
+                                                            items:
+                                                                properties:
+                                                                    deploymentType:
+                                                                        default: Remote
+                                                                        description: |-
+                                                                            DeploymentType indicates whether resources need to be deployed
+                                                                            into the management cluster (local) or the managed cluster (remote)
+                                                                        enum:
+                                                                            - Local
+                                                                            - Remote
+                                                                        type: string
+                                                                    kind:
+                                                                        description: |-
+                                                                            Kind of the resource. Supported kinds are:
+                                                                            - ConfigMap/Secret
+                                                                            - flux GitRepository;OCIRepository;Bucket
+                                                                        enum:
+                                                                            - GitRepository
+                                                                            - OCIRepository
+                                                                            - Bucket
+                                                                            - ConfigMap
+                                                                            - Secret
+                                                                        type: string
+                                                                    name:
+                                                                        description: |-
+                                                                            Name of the referenced resource.
+                                                                            Name can be expressed as a template and instantiate using any cluster field.
+                                                                        minLength: 1
+                                                                        type: string
+                                                                    namespace:
+                                                                        description: |-
+                                                                            Namespace of the referenced resource.
+                                                                            For ClusterProfile namespace can be left empty. In such a case, namespace will
+                                                                            be implicit set to cluster's namespace.
+                                                                            For Profile namespace must be left empty. Profile namespace will be used.
+                                                                            Namespace can be expressed as a template and instantiate using any cluster field.
+                                                                        type: string
+                                                                    optional:
+                                                                        default: false
+                                                                        description: |-
+                                                                            Optional indicates that the referenced resource is not mandatory.
+                                                                            If set to true and the resource is not found, the error will be ignored,
+                                                                            and Sveltos will continue processing other PolicyRefs.
+                                                                        type: boolean
+                                                                    path:
+                                                                        description: |-
+                                                                            Path to the directory containing the YAML files.
+                                                                            Defaults to 'None', which translates to the root path of the SourceRef.
+                                                                            Used only for GitRepository;OCIRepository;Bucket
+                                                                        type: string
+                                                                    tier:
+                                                                        default: 100
+                                                                        description: |-
+                                                                            Tier controls the order of deployment for resources coming from different PolicyRefs
+                                                                            within the same ClusterProfile or Profile.
+                                                                            When two PolicyRefs attempt to deploy the same resource, the PolicyRef with the lowest
+                                                                            Tier value takes priority and deploys/updates the resource.
+                                                                            This priority mechanism is only checked after the parent ClusterProfile has won
+                                                                            the primary conflict resolution against other ClusterProfiles.
+                                                                            Higher Tier values represent lower priority. The default Tier value is 100.
+                                                                        format: int32
+                                                                        minimum: 1
+                                                                        type: integer
+                                                                required:
+                                                                    - kind
+                                                                    - name
+                                                                type: object
+                                                            type: array
                                                         promotionWindow:
                                                             description: |-
                                                                 PromotionWindow defines the recurring time window during which the
@@ -7751,6 +8214,13 @@ spec:
                                 items:
                                     description: StageStatus defines the status for a given stage in a progressive deployment.
                                     properties:
+                                        currentStatusDescription:
+                                            description: |-
+                                                CurrentStatusDescription provides a high-level description of where the stage is
+                                                in its progression (e.g., "Waiting for cluster profiles to be created",
+                                                "Waiting for all clusters to be Provisioned", "Running post-deployment health checks").
+                                                This helps users understand the current blocking state.
+                                            type: string
                                         failureMessage:
                                             description: FailureMessage reports a detailed error message if a failure occurred.
                                             type: string
@@ -8436,6 +8906,12 @@ spec:
                                                                     default: true
                                                                     description: Replaces if set indicates to replace an older release with this one
                                                                     type: boolean
+                                                                takeOwnership:
+                                                                    default: false
+                                                                    description: |-
+                                                                        if set, install will ignore the check for helm annotations
+                                                                        and take ownership of the existing resources
+                                                                    type: boolean
                                                             type: object
                                                         labels:
                                                             additionalProperties:
@@ -8534,6 +9010,12 @@ spec:
                                                                 subNotes:
                                                                     default: false
                                                                     description: SubNotes determines whether sub-notes are rendered in the chart.
+                                                                    type: boolean
+                                                                takeOwnership:
+                                                                    default: false
+                                                                    description: |-
+                                                                        if set, upgrade will ignore the check for helm annotations
+                                                                        and take ownership of the existing resources
                                                                     type: boolean
                                                                 upgradeCRDs:
                                                                     default: false
@@ -9841,6 +10323,12 @@ spec:
                                                             default: true
                                                             description: Replaces if set indicates to replace an older release with this one
                                                             type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, install will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
+                                                            type: boolean
                                                     type: object
                                                 labels:
                                                     additionalProperties:
@@ -9939,6 +10427,12 @@ spec:
                                                         subNotes:
                                                             default: false
                                                             description: SubNotes determines whether sub-notes are rendered in the chart.
+                                                            type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, upgrade will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
                                                             type: boolean
                                                         upgradeCRDs:
                                                             default: false
@@ -11287,6 +11781,12 @@ spec:
                                                             default: true
                                                             description: Replaces if set indicates to replace an older release with this one
                                                             type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, install will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
+                                                            type: boolean
                                                     type: object
                                                 labels:
                                                     additionalProperties:
@@ -11385,6 +11885,12 @@ spec:
                                                         subNotes:
                                                             default: false
                                                             description: SubNotes determines whether sub-notes are rendered in the chart.
+                                                            type: boolean
+                                                        takeOwnership:
+                                                            default: false
+                                                            description: |-
+                                                                if set, upgrade will ignore the check for helm annotations
+                                                                and take ownership of the existing resources
                                                             type: boolean
                                                         upgradeCRDs:
                                                             default: false

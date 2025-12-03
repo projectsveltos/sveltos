@@ -156,6 +156,115 @@ $ helm list -n projectsveltos
 !!! note
     The `custom_values.yaml` file holds all the changes performed on the Helm chart above.
 
+## Per-Cluster Agent Configuration
+
+While the sections above describe how to apply global patches to the Sveltos agents via Helm values, Sveltos now supports applying **cluster-specific** configuration overrides.
+
+This is useful for complex environments where clusters in different regions, environments, or networks require unique configurations (e.g., using different private registries, specific resource limits, or local proxy settings).
+
+You can reference a _ConfigMap_ or _Secret_ containing deployment patches directly on the target cluster's resource (CAPI Cluster or SveltosCluster) using annotations. The Sveltos controllers will apply this patch before deploying the agent to that specific cluster, overriding any global Helm or default settings.
+
+### Drift Detection Manager Overrides
+
+To provide a cluster-specific override for the drift-detection-manager, use the following annotation on your Cluster or SveltosCluster resource: `driftdetection.projectsveltos.io/config-override-ref``
+
+```yaml
+apiVersion: cluster.x-k8s.io/v1beta2
+kind: Cluster
+metadata:
+  name: regional-cluster-1
+  annotations:
+    # References a ConfigMap named 'east-registry-patch' in a specific namespace (e.g., 'projectsveltos')
+    driftdetection.projectsveltos.io/config-override-ref: projectsveltos/east-registry-patch
+spec:
+  # ...
+```
+
+with
+
+```yaml
+apiVersion: v1
+data:
+  deployment-patch: |-
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: 500m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: 512Mi
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: 500m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 1024Mi
+    target:
+      kind: Deployment
+      name: drift-detection-manager
+      namespace: projectsveltos
+kind: ConfigMap
+metadata:
+  name: projectsveltos
+  namespace: east-registry-patch
+```
+
+### Sveltos Agent Overrides
+
+To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosagent.projectsveltos.io/config-override-ref`
+
+```yaml
+apiVersion: projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: special-cluster-2
+  annotations:
+    # References a ConfigMap named 'agent-resource-limits' in a specific namespace (e.g., 'default')
+    sveltosagent.projectsveltos.io/config-override-ref: default/agent-resource-limits
+spec:
+  # ...
+```
+
+with
+
+```yaml
+apiVersion: v1
+data:
+  deployment-patch: |-
+      patch: |-
+        - op: replace
+          path: /spec/template/spec/containers/0/resources/requests/cpu
+          value: 100m
+        - op: replace
+          path: /spec/template/spec/containers/0/resources/requests/memory
+          value: 256Mi
+        - op: replace
+          path: /spec/template/spec/containers/0/resources/limits/cpu
+          value: 500m
+        - op: replace
+          path: /spec/template/spec/containers/0/resources/limits/memory
+          value: 1024Mi
+      target:
+        kind: Deployment
+        name: sveltos-agent-manager
+        namespace: projectsveltos
+  clusterrole-patch: |-
+      patch: |-
+        - op: remove
+          path: /rules
+      target:
+        kind: ClusterRole
+        name: sveltos-agent-manager-role
+kind: ConfigMap
+metadata:
+  name: agent-resource-limits
+  namespace: default
+```
+
+### Sveltos Applier Overrides
+
+To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosapplier.projectsveltos.io/config-override-ref`
+
 ## Next Steps
 
 Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).

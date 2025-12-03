@@ -147,9 +147,6 @@ The example demonstrates rolling out the `kyverno-latest` Helm chart with a spec
             clusterSelector:
               matchLabels:
                 env: production
-            trigger:
-              auto:
-                delay: 5m # Wait 5 minutes after successful deployment (optional for final stage)
     ```
     
     **Verification commands**:
@@ -168,20 +165,97 @@ The progressive rollout is governed by the `Trigger` defined within each stage. 
 
 The `AutoTrigger` facilitates a hands-off, time-based, and health-checked promotion flow.
 
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| **`delay`** | `metav1.Duration` | An optional duration to wait after the current stage's configuration is fully deployed before proceeding to health checks. This is your soak time. |
-| **`postDelayHealthChecks`** | `[]ValidateHealth` | A slice of health checks (defined using `ValidateHealth`) that Sveltos must successfully run *after* the `delay` has elapsed. Promotion is blocked until all these checks pass. |
-| **`promotionWindow`** | `*TimeWindow` | An optional recurring time window that restricts when the promotion can begin. Sveltos waits for this window to be open *after* the `delay` has elapsed and all health checks have passed. |
+* **`delay`** (Type: `metav1.Duration`)
+    An optional duration to wait after the current stage's configuration is fully deployed before proceeding to health checks. This is your soak time.
+
+* **`preHealthCheckDeployment`** (Type `[]PolicyRef`)
+    Configuration that Sveltos must successfully deploy and reconcile after the delay has elapsed but before the postDelayHealthChecks run. Ideal for temporary validation Jobs referenced via ConfigMap or Secret.
+
+* **`postDelayHealthChecks`** (Type: `[]ValidateHealth`)
+    A slice of health checks (defined using `ValidateHealth`) that Sveltos must successfully run *after* the `delay` has elapsed. Promotion is blocked until all these checks pass.
+
+* **`promotionWindow`** (Type: `*TimeWindow`)
+    An optional recurring time window that restricts when the promotion can begin. Sveltos waits for this window to be open *after* the `delay` has elapsed and all health checks have passed.
 
 ### Manual Promotion (`ManualTrigger`)
 
 The `ManualTrigger` stops the pipeline and needs human intervention. It is usually used for moving into high-risk environments, like **Production**.
 
-| Field | Description |
-| :--- | :--- |
-| **`approved`** | When set to `true`, this signals to Sveltos that the human operator has reviewed the previous stage and **approved** the promotion to the next stage. |
-| **`automaticReset`** | If set to `true` (default), Sveltos will automatically reset the `approved` field to `nil`/`false` after successfully promoting to the next stage. |
+* **`approved`** (Type: `boolean`)
+    When set to `true`, this signals to Sveltos that the human operator has reviewed the previous stage and **approved** the promotion to the next stage.
+
+* **`automaticReset`** (Type: `boolean`)
+    If set to `true` (default), Sveltos will automatically reset the `approved` field to `nil`/`false` after successfully promoting to the next stage.
+
+## Pre-Health Check Deployments
+
+The `PreHealthCheckDeployment` field to the `AutoTrigger` allows to run explicit validation or testing configurations after a soak period but before the final health gate is checked.
+
+This is a powerful mechanism for running synthetic tests or security audits on the target clusters before moving the promotion pipeline forward.
+
+### Workflow with Pre-Health Check
+
+When `PreHealthCheckDeployment` is configured, the automated promotion workflow follows these steps:
+
+- **Stage Deployment**: The main profileSpec configuration is successfully deployed and reconciled.
+
+- **Soak Period**: The trigger.auto.delay duration is awaited.
+
+- **Pre-Health Deployment**: The configuration defined in PreHealthCheckDeployment (e.g., a Kubernetes Job for validation) is applied and must fully reconcile.
+
+- **Health Checks**: The configurations defined in trigger.auto.postDelayHealthChecks are run.
+
+Promotion: If all checks pass, the promotion moves to the next stage.
+
+### Concrete Example: Running a Synthetic Test Job
+
+This example shows how to roll out a critical application and then, after a 5-minute soak period, deploy a validation Job that verifies the application's endpoints are reachable and correct.
+
+!!! example "Example - Validation Job Before Promotion"
+    ```yaml
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterPromotion
+    metadata:
+      name: core-app-rollout
+    spec:
+      # ProfileSpec defines the main application
+      profileSpec:
+        syncMode: Continuous
+        # ... (Application Helm Chart or Resources here) ...
+
+      stages:
+      - name: staging
+        clusterSelector:
+          matchLabels:
+            env: staging
+        trigger:
+          auto:
+            delay: 5m # 1. Wait 5 minutes (soak time)
+
+            # 2. Deploy validation Job via ConfigMap reference
+            preHealthCheckDeployment:
+              configMapRefs:
+              - name: validation-job-staging
+                namespace: projectsveltos
+
+            # 3. Health check for the validation Job itself
+            postDelayHealthChecks:
+            - type: Job
+              group: batch
+              version: v1
+              name: validation-job-stage-staging
+              namespace: default
+              evaluateCEL:
+              - name: success
+                // Checks if the Job status has at least one successful completion (succeeded >= 1)
+                // and has a "Complete" condition set to "True".
+                expression: |
+                  self.status.succeeded >= 1 &&
+                  self.status.conditions.filter(c, c.type == 'Complete' && c.status == 'True').size() == 1
+              # Promotion is blocked until the Job successfully completes
+    ```
+
+In this flow, Sveltos will deploy the Job defined in the validation-job-staging ConfigMap after the 5-minute delay. The promotion will not move to the next stage until the validation-job-stage-staging runs and reports successful completion (i.e., the Job finishes without failure).
 
 !!!note
     Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
