@@ -822,6 +822,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Force Redeployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1090,6 +1113,15 @@
   <a href="#register-management-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       Register Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unregister-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnRegister Cluster
     </span>
   </a>
   
@@ -3605,6 +3637,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#unregister-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnRegister Cluster
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3755,7 +3796,7 @@
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    --kubeconfig=&lt;path to file with Kubeconfig&gt; \
 </span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    --labels=env=test
 </span></code></pre></div>
-<p>If you use a kubeconfig downloaded from Rancher upstream cluster it will expire in 30 days ( this is by default if expiration time is not modified ). 
+<p>If you use a kubeconfig downloaded from Rancher upstream cluster it will expire in 30 days ( this is by default if expiration time is not modified ).
 To overcome this limit can be enabled token-renewal feature to continue managing downstream clusters without interruptions.</p>
 <p>After enabling token-renewal feature on cluster-profiles, it must be also enabled JWT Authentication on Rancher upstream cluster for managed downstream clusters to allow dedicated serviceaccount authentication <a href="https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/jwt-authentication">JWT Authentication on Rancher</a>.</p>
 </details>
@@ -3875,6 +3916,36 @@ To overcome this limit can be enabled token-renewal feature to continue managing
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>mgmt<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">cluster</span><span class="o">=</span>mgmt
 </span></code></pre></div>
 <p>For a Helm chart installation, have a look at the Helm chart <a href="https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values&amp;path=registerMgmtCluster">values</a> to include the labels of your choice.</p>
+<h2 id="unregister-cluster">UnRegister Cluster</h2>
+<p>It is recommended, but not required, to use the sveltosctl for cluster deregistration.</p>
+<p>To remove a cluster that was previously registered with Sveltos, you use the <code>sveltosctl deregister cluster</code> command. This process, often referred to as "deregistration," ensures a clean termination of Sveltos management for the specified cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>deregister<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span>--namespace<span class="o">=</span>sveltos-clusters<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span>--cluster<span class="o">=</span>eng-staging-01<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="o">[</span>--verbose<span class="o">]</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--namespace</code></td>
+<td>The namespace in the <strong>management cluster</strong> where the SveltosCluster resource is located.</td>
+</tr>
+<tr>
+<td><code>--cluster</code></td>
+<td>The <strong>name</strong> of the registered cluster to remove.</td>
+</tr>
+<tr>
+<td><code>--verbose</code></td>
+<td>(Optional) Print each deletion step for troubleshooting.</td>
+</tr>
+</tbody>
+</table>
 <div class="footnote">
 <hr />
 <ol>

@@ -6,30 +6,30 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.">
+        <meta name="description" content="Use sveltosctl to manually trigger a full re-application and reconciliation of all add-ons and resources on a target cluster.">
       
       
       
       
-        <link rel="prev" href="../clusterprofile/">
+        <link rel="prev" href="../dryrun/">
       
       
-        <link rel="next" href="../../deployment_order/manifest_order/">
+        <link rel="next" href="../../../optional/dashboard/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
     
     
       
-        <title>Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease - Projectsveltos Documentation</title>
+        <title>Force Redeployment of Cluster Add-ons - Projectsveltos Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.84d31ad4.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#profiles" class="md-skip">
+        <a href="#cluster-operations" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
   </a>
 
             </div>
-            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../../../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
           </aside>
         
       </div>
@@ -111,9 +111,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -130,7 +130,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease
+              Force Redeployment of Cluster Add-ons
             
           </span>
         </div>
@@ -251,9 +251,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../../assets/logo.png" alt="logo">
 
     </a>
     Projectsveltos Documentation
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../../.." class="md-nav__link">
         
   
   
@@ -340,7 +340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_idp/" class="md-nav__link">
+      <a href="../../../../use_cases/use_case_idp/" class="md-nav__link">
         
   
   
@@ -363,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -386,7 +386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
+      <a href="../../../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
         
   
   
@@ -409,7 +409,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_gitops/" class="md-nav__link">
+      <a href="../../../../use_cases/use_case_gitops/" class="md-nav__link">
         
   
   
@@ -470,7 +470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
+      <a href="../../../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
         
   
   
@@ -493,7 +493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
+      <a href="../../../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
         
   
   
@@ -528,18 +528,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -555,7 +557,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Getting Started
@@ -607,7 +609,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/quick_start/" class="md-nav__link">
+      <a href="../../../install/quick_start/" class="md-nav__link">
         
   
   
@@ -630,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/install/" class="md-nav__link">
+      <a href="../../../install/install/" class="md-nav__link">
         
   
   
@@ -653,7 +655,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/air_gapped_installation/" class="md-nav__link">
+      <a href="../../../install/air_gapped_installation/" class="md-nav__link">
         
   
   
@@ -681,18 +683,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
         
           
           <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
@@ -708,7 +712,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_2">
             <span class="md-nav__icon md-icon"></span>
             sveltosctl
@@ -722,7 +726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
+      <a href="../../sveltosctl/" class="md-nav__link">
         
   
   
@@ -742,18 +746,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" checked>
         
           
           <label class="md-nav__link" for="__nav_3_2_2" id="__nav_3_2_2_label" tabindex="0">
@@ -769,7 +775,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_2_2">
             <span class="md-nav__icon md-icon"></span>
             sveltosctl Features
@@ -783,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
+      <a href="../visibility/" class="md-nav__link">
         
   
   
@@ -806,7 +812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
+      <a href="../dryrun/" class="md-nav__link">
         
   
   
@@ -826,10 +832,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Force Redeployment
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -840,6 +868,50 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#force-redeploy-cluster-add-ons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Force Redeploy Cluster Add-ons
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Force Redeploy Cluster Add-ons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Command Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -906,7 +978,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/dashboard/" class="md-nav__link">
+      <a href="../../../optional/dashboard/" class="md-nav__link">
         
   
   
@@ -929,7 +1001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/grafanadashboard/" class="md-nav__link">
+      <a href="../../../optional/grafanadashboard/" class="md-nav__link">
         
   
   
@@ -1005,7 +1077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register-cluster/" class="md-nav__link">
+      <a href="../../../../register/register-cluster/" class="md-nav__link">
         
   
   
@@ -1028,7 +1100,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register_cluster_pull_mode/" class="md-nav__link">
+      <a href="../../../../register/register_cluster_pull_mode/" class="md-nav__link">
         
   
   
@@ -1051,7 +1123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/readiness_liveness_checks/" class="md-nav__link">
+      <a href="../../../../register/readiness_liveness_checks/" class="md-nav__link">
         
   
   
@@ -1074,7 +1146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/token-renewal/" class="md-nav__link">
+      <a href="../../../../register/token-renewal/" class="md-nav__link">
         
   
   
@@ -1135,7 +1207,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/pausing/" class="md-nav__link">
+      <a href="../../../../register/features/pausing/" class="md-nav__link">
         
   
   
@@ -1158,7 +1230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/cluster_maintenance_window/" class="md-nav__link">
+      <a href="../../../../register/features/cluster_maintenance_window/" class="md-nav__link">
         
   
   
@@ -1193,20 +1265,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -1222,7 +1292,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Deploy add-ons and applications
@@ -1236,7 +1306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../addons/" class="md-nav__link">
+      <a href="../../../../addons/addons/" class="md-nav__link">
         
   
   
@@ -1259,7 +1329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../helm_charts/" class="md-nav__link">
+      <a href="../../../../addons/helm_charts/" class="md-nav__link">
         
   
   
@@ -1282,7 +1352,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../raw_yaml/" class="md-nav__link">
+      <a href="../../../../addons/raw_yaml/" class="md-nav__link">
         
   
   
@@ -1305,7 +1375,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kustomize/" class="md-nav__link">
+      <a href="../../../../addons/kustomize/" class="md-nav__link">
         
   
   
@@ -1328,7 +1398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../combining_all/" class="md-nav__link">
+      <a href="../../../../addons/combining_all/" class="md-nav__link">
         
   
   
@@ -1351,7 +1421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../example_flux_sources/" class="md-nav__link">
+      <a href="../../../../addons/example_flux_sources/" class="md-nav__link">
         
   
   
@@ -1374,7 +1444,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../clusterprofile/" class="md-nav__link">
+      <a href="../../../../addons/clusterprofile/" class="md-nav__link">
         
   
   
@@ -1394,30 +1464,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Deep Dive - Profiles
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../../addons/profile/" class="md-nav__link">
         
   
   
@@ -1428,165 +1478,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#profiles" class="md-nav__link">
-    <span class="md-ellipsis">
-      Profiles
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Profiles">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pause-annotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Pause Annotation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specclusterselector" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ClusterSelector
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#spechelmcharts" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.HelmCharts
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specpolicyrefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.PolicyRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speckustomizationrefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.KustomizationRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specsyncmode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.SyncMode
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specstopmatchingbehavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.StopMatchingBehavior
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specreloader" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.Reloader
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specmaxupdate" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.MaxUpdate
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specvalidatehealths" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ValidateHealths
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#spectemplateresourcerefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.TemplateResourceRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specdependson" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.DependsOn
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speccontinueonerror" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ContinueOnError
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speccontinueonconflict" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ContinueOnConflict
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1644,7 +1535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../../../../deployment_order/manifest_order/" class="md-nav__link">
         
   
   
@@ -1667,7 +1558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
+      <a href="../../../../deployment_order/depends_on/" class="md-nav__link">
         
   
   
@@ -1690,7 +1581,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../../../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1713,7 +1604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
+      <a href="../../../../deployment_order/tiers/" class="md-nav__link">
         
   
   
@@ -1736,7 +1627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../../../../deployment_order/rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1759,7 +1650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/progressive_rollout/" class="md-nav__link">
+      <a href="../../../../deployment_order/progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1782,7 +1673,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
+      <a href="../../../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1805,7 +1696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../../../../deployment_order/order_with_events/" class="md-nav__link">
         
   
   
@@ -1873,7 +1764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/intro_template/" class="md-nav__link">
+      <a href="../../../../template/intro_template/" class="md-nav__link">
         
   
   
@@ -1896,7 +1787,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/additional_template_info/" class="md-nav__link">
+      <a href="../../../../template/additional_template_info/" class="md-nav__link">
         
   
   
@@ -1919,7 +1810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/" class="md-nav__link">
+      <a href="../../../../template/examples/" class="md-nav__link">
         
   
   
@@ -1942,7 +1833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/template_generic_examples/" class="md-nav__link">
+      <a href="../../../../template/template_generic_examples/" class="md-nav__link">
         
   
   
@@ -1965,7 +1856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/template_overlays_examples/" class="md-nav__link">
+      <a href="../../../../template/template_overlays_examples/" class="md-nav__link">
         
   
   
@@ -1988,7 +1879,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../../../template/generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -2011,7 +1902,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/lua/" class="md-nav__link">
+      <a href="../../../../template/lua/" class="md-nav__link">
         
   
   
@@ -2034,7 +1925,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/crossplane/" class="md-nav__link">
+      <a href="../../../../template/crossplane/" class="md-nav__link">
         
   
   
@@ -2057,7 +1948,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/external_secret/" class="md-nav__link">
+      <a href="../../../../template/external_secret/" class="md-nav__link">
         
   
   
@@ -2080,7 +1971,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/bring_your_own_controller/" class="md-nav__link">
+      <a href="../../../../template/bring_your_own_controller/" class="md-nav__link">
         
   
   
@@ -2103,7 +1994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/ytt_extension/" class="md-nav__link">
+      <a href="../../../../template/ytt_extension/" class="md-nav__link">
         
   
   
@@ -2126,7 +2017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/jsonnet_extension/" class="md-nav__link">
+      <a href="../../../../template/jsonnet_extension/" class="md-nav__link">
         
   
   
@@ -2149,7 +2040,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/example_multicluster_iteration_template/" class="md-nav__link">
+      <a href="../../../../template/example_multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -2217,7 +2108,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/dependency-management/" class="md-nav__link">
+      <a href="../../../../features/dependency-management/" class="md-nav__link">
         
   
   
@@ -2240,7 +2131,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/dryrun/" class="md-nav__link">
+      <a href="../../../../features/dryrun/" class="md-nav__link">
         
   
   
@@ -2263,7 +2154,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/configuration_drift/" class="md-nav__link">
+      <a href="../../../../features/configuration_drift/" class="md-nav__link">
         
   
   
@@ -2286,7 +2177,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/post-renderer-patches/" class="md-nav__link">
+      <a href="../../../../features/post-renderer-patches/" class="md-nav__link">
         
   
   
@@ -2309,7 +2200,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/set/" class="md-nav__link">
+      <a href="../../../../features/set/" class="md-nav__link">
         
   
   
@@ -2332,7 +2223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/rolling_upgrade/" class="md-nav__link">
+      <a href="../../../../features/rolling_upgrade/" class="md-nav__link">
         
   
   
@@ -2355,7 +2246,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/mcp/" class="md-nav__link">
+      <a href="../../../../features/mcp/" class="md-nav__link">
         
   
   
@@ -2378,7 +2269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/labels_management/" class="md-nav__link">
+      <a href="../../../../features/labels_management/" class="md-nav__link">
         
   
   
@@ -2439,7 +2330,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/multi-tenancy-full-isolation/" class="md-nav__link">
+      <a href="../../../../features/multi-tenancy-full-isolation/" class="md-nav__link">
         
   
   
@@ -2462,7 +2353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
+      <a href="../../../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
         
   
   
@@ -2493,7 +2384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/techsupport/" class="md-nav__link">
+      <a href="../../../../features/techsupport/" class="md-nav__link">
         
   
   
@@ -2561,7 +2452,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/addon_event_deployment/" class="md-nav__link">
+      <a href="../../../../events/addon_event_deployment/" class="md-nav__link">
         
   
   
@@ -2584,7 +2475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/aggregated_selection/" class="md-nav__link">
+      <a href="../../../../events/aggregated_selection/" class="md-nav__link">
         
   
   
@@ -2607,7 +2498,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating/" class="md-nav__link">
+      <a href="../../../../events/templating/" class="md-nav__link">
         
   
   
@@ -2630,7 +2521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating_all_resources_together/" class="md-nav__link">
+      <a href="../../../../events/templating_all_resources_together/" class="md-nav__link">
         
   
   
@@ -2653,7 +2544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/generators/" class="md-nav__link">
+      <a href="../../../../events/generators/" class="md-nav__link">
         
   
   
@@ -2676,7 +2567,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/nats/" class="md-nav__link">
+      <a href="../../../../events/nats/" class="md-nav__link">
         
   
   
@@ -2737,7 +2628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/secrets_on_demand/" class="md-nav__link">
+      <a href="../../../../events/examples/secrets_on_demand/" class="md-nav__link">
         
   
   
@@ -2760,7 +2651,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/db-as-a-service/" class="md-nav__link">
+      <a href="../../../../events/examples/db-as-a-service/" class="md-nav__link">
         
   
   
@@ -2783,7 +2674,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/managed-services/" class="md-nav__link">
+      <a href="../../../../events/examples/managed-services/" class="md-nav__link">
         
   
   
@@ -2806,7 +2697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/service_event_trigger/" class="md-nav__link">
+      <a href="../../../../events/examples/service_event_trigger/" class="md-nav__link">
         
   
   
@@ -2829,7 +2720,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/otel/" class="md-nav__link">
+      <a href="../../../../events/examples/otel/" class="md-nav__link">
         
   
   
@@ -2852,7 +2743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/flux_sources/" class="md-nav__link">
+      <a href="../../../../events/examples/flux_sources/" class="md-nav__link">
         
   
   
@@ -2875,7 +2766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/api_gateway_contour/" class="md-nav__link">
+      <a href="../../../../events/examples/api_gateway_contour/" class="md-nav__link">
         
   
   
@@ -2898,7 +2789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cross_cluster_configuration/" class="md-nav__link">
+      <a href="../../../../events/examples/cross_cluster_configuration/" class="md-nav__link">
         
   
   
@@ -2921,7 +2812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/loadbalancer/" class="md-nav__link">
+      <a href="../../../../events/examples/loadbalancer/" class="md-nav__link">
         
   
   
@@ -2944,7 +2835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+      <a href="../../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
         
   
   
@@ -2967,7 +2858,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory/" class="md-nav__link">
+      <a href="../../../../events/examples/cluster_inventory/" class="md-nav__link">
         
   
   
@@ -2990,7 +2881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
+      <a href="../../../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
         
   
   
@@ -3013,7 +2904,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/mcs_api/" class="md-nav__link">
+      <a href="../../../../events/examples/mcs_api/" class="md-nav__link">
         
   
   
@@ -3036,7 +2927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
+      <a href="../../../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
         
   
   
@@ -3112,7 +3003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/notifications/" class="md-nav__link">
+      <a href="../../../../observability/notifications/" class="md-nav__link">
         
   
   
@@ -3135,7 +3026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_addon_notification/" class="md-nav__link">
+      <a href="../../../../observability/example_addon_notification/" class="md-nav__link">
         
   
   
@@ -3158,7 +3049,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../../../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -3181,7 +3072,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
+      <a href="../../../../observability/example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -3204,7 +3095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
+      <a href="../../../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
         
   
   
@@ -3227,7 +3118,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../../../../observability/example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -3250,7 +3141,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_cis_scan/" class="md-nav__link">
+      <a href="../../../../observability/example_cis_scan/" class="md-nav__link">
         
   
   
@@ -3273,7 +3164,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/display_resources/" class="md-nav__link">
+      <a href="../../../../observability/display_resources/" class="md-nav__link">
         
   
   
@@ -3296,7 +3187,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/different_resources/" class="md-nav__link">
+      <a href="../../../../observability/different_resources/" class="md-nav__link">
         
   
   
@@ -3364,7 +3255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/vertical_scaling/" class="md-nav__link">
+      <a href="../../../../scalability/vertical_scaling/" class="md-nav__link">
         
   
   
@@ -3387,7 +3278,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
+      <a href="../../../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
         
   
   
@@ -3455,7 +3346,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../help_and_tutorials/troubleshooting/" class="md-nav__link">
+      <a href="../../../../help_and_tutorials/troubleshooting/" class="md-nav__link">
         
   
   
@@ -3523,7 +3414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/resource-owners/" class="md-nav__link">
+      <a href="../../../../reference/resource-owners/" class="md-nav__link">
         
   
   
@@ -3546,7 +3437,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../internals/cr-ownership/" class="md-nav__link">
+      <a href="../../../../internals/cr-ownership/" class="md-nav__link">
         
   
   
@@ -3576,7 +3467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../blogs/" class="md-nav__link">
+      <a href="../../../../blogs/" class="md-nav__link">
         
   
   
@@ -3598,7 +3489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../archive/" class="md-nav__link">
+      <a href="../../../../archive/" class="md-nav__link">
         
   
   
@@ -3630,6 +3521,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -3638,136 +3531,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#profiles" class="md-nav__link">
+  <a href="#force-redeploy-cluster-add-ons" class="md-nav__link">
     <span class="md-ellipsis">
-      Profiles
+      Force Redeploy Cluster Add-ons
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Profiles">
+    <nav class="md-nav" aria-label="Force Redeploy Cluster Add-ons">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pause-annotation" class="md-nav__link">
+  <a href="#command-usage" class="md-nav__link">
     <span class="md-ellipsis">
-      Pause Annotation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specclusterselector" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ClusterSelector
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#spechelmcharts" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.HelmCharts
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specpolicyrefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.PolicyRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speckustomizationrefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.KustomizationRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specsyncmode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.SyncMode
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specstopmatchingbehavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.StopMatchingBehavior
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specreloader" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.Reloader
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specmaxupdate" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.MaxUpdate
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specvalidatehealths" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ValidateHealths
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#spectemplateresourcerefs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.TemplateResourceRefs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#specdependson" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.DependsOn
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speccontinueonerror" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ContinueOnError
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#speccontinueonconflict" class="md-nav__link">
-    <span class="md-ellipsis">
-      Spec.ContinueOnConflict
+      📝 Command Usage
     </span>
   </a>
   
@@ -3797,208 +3573,18 @@
   
 
 
-  <h1>Deep Dive - Profiles</h1>
-
-<h2 id="profiles">Profiles</h2>
-<p><a href="https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go" title="Profile to manage Kubernetes add-ons">Profile</a> is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.</p>
-<p>Profile is a namespace-scoped resource.  It can only match clusters and reference resources within its own namespace.</p>
-<h3 id="pause-annotation">Pause Annotation</h3>
-<p>Pausing a ClusterProfile with the <code>profile.projectsveltos.io/paused</code> annotation prevents Sveltos from performing any reconciliation. This effectively freezes the ClusterProfile in its current state, ensuring that no changes are applied to the clusters it manages.</p>
-<h3 id="specclusterselector">Spec.ClusterSelector</h3>
-<p><em>clusterSelector</em> field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.</p>
-<p>This field employs a Kubernetes label selector, allowing you to target clusters based on specific labels.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span></code></pre></div>
-<p>By leveraging <strong>matchExpressions</strong>, you can create more complex and flexible cluster selection criteria.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">matchExpressions</span><span class="p">:</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="nt"> operator</span><span class="p">:</span><span class="w"> </span><span class="nv">In</span><span class="p p-Indicator">,</span><span class="nt"> values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">staging</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">production</span><span class="p p-Indicator">]}</span>
-</span></code></pre></div>
-<h3 id="spechelmcharts">Spec.HelmCharts</h3>
-<p><em>helmCharts</em> field consists of a list of helm charts to be deployed to the clusters matching clusterSelector;</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="no">admissionController:</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="no">replicas: 1</span>
-</span></code></pre></div>
-<p>Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries.
-For a complete list of features, refer to the <a href="../helm_charts/">Helm chart section</a>.</p>
-<h3 id="specpolicyrefs">Spec.PolicyRefs</h3>
-<p><em>policyRefs</em> field references a list of ConfigMaps/Secrets, each containing Kubernetes resources to be deployed in the clusters matching clusterSelector.</p>
-<p>This field is a slice of <em>PolicyRef</em> structs. Each PolictRef has the following fields:</p>
-<ul>
-<li><em>Kind</em>: The kind of the referenced resource. The supported kinds are Secret and ConfigMap.</li>
-<li><em>Namespace</em>: The namespace of the resource being referenced. This field is automatically set to the namespace of the Profile instance. In other words, a Profile instance can only reference resources that are within its own namespace.</li>
-<li><em>Name</em>: The name of the referenced resource. This field must be at least one character long.</li>
-<li><em>DeploymentType</em>: The deployment type of the referenced resource. This field indicates whether the resource should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.</li>
-</ul>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">policyRefs</span><span class="p">:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-secret-1</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-namespace-1</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">deploymentType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Local</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remote</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-configmap-1</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-namespace-1</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">deploymentType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remote</span>
-</span></code></pre></div>
-<h3 id="speckustomizationrefs">Spec.KustomizationRefs</h3>
-<p><em>kustomizationRefs</em> field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified.</p>
-<p>This field is a slice of <em>KustomizationRef</em> structs. Each KustomizationRef has the following fields:</p>
-<ul>
-<li>
-<p><em>Kind</em>: The kind of the referenced resource. The supported kinds are:</p>
-<ul>
-<li>flux GitRepository, OCIRepository, Bucket: These kinds represent resources that store Kustomization manifests.</li>
-<li>ConfigMap, Secret: These kinds represent resources that contain Kustomization manifests or overlays.</li>
-</ul>
-</li>
-<li>
-<p><em>Namespace</em>: The namespace of the resource being referenced. This field is automatically set to the namespace of the Profile instance. In other words, a Profile instance can only reference resources that are within its own namespace.</p>
-</li>
-<li><em>Name</em>: The name of the referenced resource. This field must be at least one character long.</li>
-<li><em>Path</em>: The path to the directory containing the kustomization.yaml file, or the set of plain YAMLs for which a kustomization.yaml should be generated. This field is optional and defaults to None, which means the root path of the SourceRef.</li>
-<li><em>TargetNamespace</em>: The target namespace for the Kustomization deployment. This field is optional and can be used to override the namespace specified in the kustomization.yaml file.</li>
-<li><em>DeploymentType</em>: The deployment type of the referenced resource. This field indicates whether the Kustomization deployment should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.</li>
-</ul>
-<p>For a complete list of features, refer to the <a href="../kustomize/">Kustomize section</a>.</p>
-<h3 id="specsyncmode">Spec.SyncMode</h3>
-<p>This field can be set to:</p>
-<ul>
-<li><em>OneTime</em></li>
-<li><em>Continuous</em></li>
-<li><em>ContinuousWithDriftDetection</em></li>
-<li><em>DryRun</em></li>
-</ul>
-<p>Let's take a closer look at the <em>OneTime</em> syncMode option. Once you deploy a Profile with a OneTime configuration, Sveltos will check all of your clusters for a match with the clusterSelector. Any matching clusters will have the resources specified in the Profile deployed. However, if you make changes to the Profile later on, those changes will not be automatically deployed to already-matching clusters.</p>
-<p>Now, if you're looking for real-time deployment and updates, the <em>Continuous</em> syncMode is the way to go. With Continuous, any changes made to the Profile will be immediately reconciled into matching clusters. This means that you can add new features, update existing ones, and remove them as necessary, all without lifting a finger. Sveltos will deploy, update, or remove resources in matching clusters as needed, making your life as a Kubernetes admin a breeze.</p>
-<p><em>ContinuousWithDriftDetection</em> instructs Sveltos to monitor the state of managed clusters and detect a configuration drift for any of the resources deployed because of that Profile.
-When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster.
-To know more about configuration drift detection, refer to this <a href="../../features/configuration_drift/">section</a>.</p>
-<p>Imagine you're about to make some important changes to your Profile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the <em>DryRun</em> syncMode configuration comes in. By deploying your Profile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
-To know more about dry run, refer to this <a href="../../features/dryrun/">section</a>.</p>
-<h3 id="specstopmatchingbehavior">Spec.StopMatchingBehavior</h3>
-<p>The <em>stopMatchingBehavior</em> field specifies the behavior when a cluster no longer matches a Profile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to <em>LeavePolicies</em>, any policies deployed by the Profile will remain in the cluster.</p>
-<p>For instance</p>
-<div class="admonition example">
-<p class="admonition-title">Example - Profile Kyverno Deployment</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Profile</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eng</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">stopMatchingBehavior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WithdrawPolicies</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span></code></pre></div>
-</div>
-<p>When a cluster matches the Profile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the Profile, the Kyverno Helm chart will be uninstalled. However, if the <em>stopMatchingBehavior</em> property is set to <em>LeavePolicies</em>, Sveltos will retain the Kyverno Helm chart in the cluster.</p>
-<h3 id="specreloader">Spec.Reloader</h3>
-<p>The <em>reloader</em> property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this Profile when changes are made to mounted ConfigMaps or Secrets.
-When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.</p>
-<p>Please refer to this <a href="../../features/rolling_upgrade/">section</a> for more information.</p>
-<h3 id="specmaxupdate">Spec.MaxUpdate</h3>
-<p>A Profile might match more than one cluster. When a change is maded to a Profile, by default all matching clusters are update concurrently.
-The <em>maxUpdate</em> field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the Profile's add-ons or applications.
-The specified value can be an absolute number (e.g., 5) or a percentage of the desired cluster count (e.g., 10%). The default value is 100%, allowing all matching Clusters to be updated simultaneously.
-For instance, if set to 30%, when modifications are made to the Profile's add-ons or applications, only 30% of matching Clusters will be updated concurrently. Updates to the remaining matching Clusters will only commence upon successful completion of updates in the initially targeted Clusters. This approach ensures a controlled and manageable update process, minimizing potential disruptions to the overall cluster environment.
-Please refer to this <a href="../../deployment_order/rolling_update_strategy/">section</a> for more information.</p>
-<h3 id="specvalidatehealths">Spec.ValidateHealths</h3>
-<p>The <em>validateHealths</em> property defines a set of Lua functions that Sveltos executes against the managed cluster to assess the health and status of the add-ons and applications specified in the Profile. These Lua functions act as validation checks, ensuring that the deployed add-ons and applications are functioning properly and aligned with the desired state. By executing these functions, Sveltos proactively identifies any potential issues or misconfigurations that could arise, maintaining the overall health and stability of the managed cluster.</p>
-<p>The ValidateHealths property accepts a slice of Lua functions, where each function encapsulates a specific validation check. These functions can access the managed cluster's state to perform comprehensive checks on the add-ons and applications. The results of the validation checks are aggregated and reported back to Sveltos, providing valuable insights into the health and status of the managed cluster's components.</p>
-<p>Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.</p>
-<p>Please refer to this <a href="../../deployment_order/rolling_update_strategy/">section</a> for more information.</p>
-<p>Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:</p>
-<ul>
-<li>Deploy Kyverno Helm chart;</li>
-<li>Validate Deployment Health: Perform health checks on each deployment within the kyverno namespace. Verify that the number of active replicas matches the requested replicas;</li>
-<li>Successful Deployment: Once the health checks are successfully completed, Sveltos considers the Profile as successfully deployed.</li>
-</ul>
-<div class="admonition example">
-<p class="admonition-title">Example - Profile Kyverno and Lua</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nn">---</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Profile</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eng</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="nt">validateHealths</span><span class="p">:</span>
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment-health</span>
-</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">      </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm</span>
-</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apps&quot;</span>
-</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
-</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Deployment&quot;</span>
-</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">        </span><span class="no">function evaluate()</span>
-</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">          </span><span class="no">hs = {}</span>
-</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">          </span><span class="no">hs.healthy = false</span>
-</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">          </span><span class="no">hs.message = &quot;available replicas not matching requested replicas&quot;</span>
-</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">          </span><span class="no">if obj.status ~= nil then</span>
-</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">            </span><span class="no">if obj.status.availableReplicas ~= nil then</span>
-</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">              </span><span class="no">if obj.status.availableReplicas == obj.spec.replicas then</span>
-</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">                </span><span class="no">hs.healthy = true</span>
-</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">              </span><span class="no">end</span>
-</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">            </span><span class="no">end</span>
-</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">          </span><span class="no">end</span>
-</span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">          </span><span class="no">return hs</span>
-</span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">        </span><span class="no">end</span>
-</span></code></pre></div>
-</div>
-<h3 id="spectemplateresourcerefs">Spec.TemplateResourceRefs</h3>
-<p>The <em>templateResourceRefs</em> property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
-Refer to <a href="../../template/template_generic_examples/">template</a> section for more info and examples.</p>
-<h3 id="specdependson">Spec.DependsOn</h3>
-<p>The <em>dependsOn</em> property specifies a list of other Profiles that this instance relies on. In any managed cluster that matches to this Profile, the add-ons and applications defined in this instance will only be deployed after all add-ons and applications in the designated dependency Profiles have been successfully deployed.</p>
-<p>For example, profile-a can depend on another <em>profile-b</em>. This implies that any Helm charts or raw YAML files associated with CProfile A will not be deployed until all add-ons and applications specified in Profile B have been successfully provisioned.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nn">---</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Profile</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">profile_a</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eng</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">profile_b</span>
-</span></code></pre></div>
-<p>Sveltos automatically resolves and deploys the prerequisite profiles specified in the DependsOn field. Sveltos will analyze the dependency graph, identify
-the required prerequisite profiles, and ensure they are deployed to the same clusters.</p>
-<h3 id="speccontinueonerror">Spec.ContinueOnError</h3>
-<p><em>ContinueOnError</em> configures Sveltos' error handling. When true, errors are logged, but deployment continues. When false (default), Sveltos stops at the first error and retries the failing resource. For instance, if deploying three Helm charts, a failure during the second chart's deployment will halt the process, and Sveltos will retry the second chart. Only if ContinueOnError is true will Sveltos proceed to deploy the third chart <em>before retrying</em> the second chart.</p>
-<h3 id="speccontinueonconflict">Spec.ContinueOnConflict</h3>
-<p><em>ContinueOnConflict</em> configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another <em>profile</em> has already deployed the same resource.</p>
+<h1 id="cluster-operations">Cluster Operations</h1>
+<p>This section details advanced cluster management commands available via the <code>sveltosctl</code> CLI tool.</p>
+<h2 id="force-redeploy-cluster-add-ons">Force Redeploy Cluster Add-ons</h2>
+<p>The <code>sveltosctl redeploy cluster</code> command provides a manual mechanism to force Sveltos to re-apply all configured add-ons and resources on a specified target cluster. This is achieved by resetting the cluster's internal reconciliation status, compelling the Addon Controller to immediately re-process all associated <code>ClusterProfile</code> or <code>Profile</code> configurations.</p>
+<p>This command is invaluable when you need to trigger a rolling update or configuration re-application without making dummy changes to the <code>ClusterProfile</code>/<code>Profile</code> specification.</p>
+<h3 id="command-usage">📝 Command Usage</h3>
+<p>```bash
+sveltosctl redeploy cluster \
+    --namespace=<CLUSTER_NAMESPACE> \
+    --cluster=<CLUSTER_NAME> \
+    --cluster-type=<TYPE> \
+    [--verbose]</p>
 
 
 
@@ -4031,7 +3617,7 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../clusterprofile/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Deep Dive - ClusterProfiles">
+          <a href="../dryrun/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dry Run">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4041,20 +3627,20 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
                 Previous
               </span>
               <div class="md-ellipsis">
-                Deep Dive - ClusterProfiles
+                Dry Run
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../deployment_order/manifest_order/" class="md-footer__link md-footer__link--next" aria-label="Next: Profile Resource Deployment Order">
+          <a href="../../../optional/dashboard/" class="md-footer__link md-footer__link--next" aria-label="Next: Sveltos Dashboard">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Profile Resource Deployment Order
+                Sveltos Dashboard
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -4144,12 +3730,12 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
-        <script src="../../javascript/extra.js"></script>
+        <script src="../../../../javascript/extra.js"></script>
       
     
   </body>

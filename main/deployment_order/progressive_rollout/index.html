@@ -822,6 +822,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Force Redeployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1679,39 @@
   <a href="#manual-promotion-manualtrigger" class="md-nav__link">
     <span class="md-ellipsis">
       Manual Promotion (ManualTrigger)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-health-check-deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-Health Check Deployments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Health Check Deployments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-with-pre-health-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow with Pre-Health Check
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-example-running-a-synthetic-test-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concrete Example: Running a Synthetic Test Job
     </span>
   </a>
   
@@ -3609,6 +3665,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pre-health-check-deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-Health Check Deployments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Health Check Deployments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-with-pre-health-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow with Pre-Health Check
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-example-running-a-synthetic-test-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concrete Example: Running a Synthetic Test Job
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       Next Steps
@@ -3785,9 +3874,6 @@
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="nt">clusterSelector</span><span class="p">:</span>
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">          </span><span class="nt">matchLabels</span><span class="p">:</span>
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="nt">trigger</span><span class="p">:</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">          </span><span class="nt">auto</span><span class="p">:</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"> </span><span class="c1"># Wait 5 minutes after successful deployment (optional for final stage)</span>
 </span></code></pre></div>
 <p><strong>Verification commands</strong>:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterpromotion,clusterprofile,clustersummary<span class="w"> </span>-A
@@ -3799,52 +3885,103 @@
 <p>The progressive rollout is governed by the <code>Trigger</code> defined within each stage. A stage's trigger defines the condition needed—either manual approval or automatic criteria—before Sveltos moves to the next stage in the pipeline. A stage can have either a <strong>Manual</strong> or <strong>Auto</strong> trigger, but not both.</p>
 <h3 id="automatic-promotion-autotrigger">Automatic Promotion (<code>AutoTrigger</code>)</h3>
 <p>The <code>AutoTrigger</code> facilitates a hands-off, time-based, and health-checked promotion flow.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Field</th>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong><code>delay</code></strong></td>
-<td style="text-align: left;"><code>metav1.Duration</code></td>
-<td style="text-align: left;">An optional duration to wait after the current stage's configuration is fully deployed before proceeding to health checks. This is your soak time.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong><code>postDelayHealthChecks</code></strong></td>
-<td style="text-align: left;"><code>[]ValidateHealth</code></td>
-<td style="text-align: left;">A slice of health checks (defined using <code>ValidateHealth</code>) that Sveltos must successfully run <em>after</em> the <code>delay</code> has elapsed. Promotion is blocked until all these checks pass.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong><code>promotionWindow</code></strong></td>
-<td style="text-align: left;"><code>*TimeWindow</code></td>
-<td style="text-align: left;">An optional recurring time window that restricts when the promotion can begin. Sveltos waits for this window to be open <em>after</em> the <code>delay</code> has elapsed and all health checks have passed.</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li>
+<p><strong><code>delay</code></strong> (Type: <code>metav1.Duration</code>)
+    An optional duration to wait after the current stage's configuration is fully deployed before proceeding to health checks. This is your soak time.</p>
+</li>
+<li>
+<p><strong><code>preHealthCheckDeployment</code></strong> (Type <code>[]PolicyRef</code>)
+    Configuration that Sveltos must successfully deploy and reconcile after the delay has elapsed but before the postDelayHealthChecks run. Ideal for temporary validation Jobs referenced via ConfigMap or Secret.</p>
+</li>
+<li>
+<p><strong><code>postDelayHealthChecks</code></strong> (Type: <code>[]ValidateHealth</code>)
+    A slice of health checks (defined using <code>ValidateHealth</code>) that Sveltos must successfully run <em>after</em> the <code>delay</code> has elapsed. Promotion is blocked until all these checks pass.</p>
+</li>
+<li>
+<p><strong><code>promotionWindow</code></strong> (Type: <code>*TimeWindow</code>)
+    An optional recurring time window that restricts when the promotion can begin. Sveltos waits for this window to be open <em>after</em> the <code>delay</code> has elapsed and all health checks have passed.</p>
+</li>
+</ul>
 <h3 id="manual-promotion-manualtrigger">Manual Promotion (<code>ManualTrigger</code>)</h3>
 <p>The <code>ManualTrigger</code> stops the pipeline and needs human intervention. It is usually used for moving into high-risk environments, like <strong>Production</strong>.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Field</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong><code>approved</code></strong></td>
-<td style="text-align: left;">When set to <code>true</code>, this signals to Sveltos that the human operator has reviewed the previous stage and <strong>approved</strong> the promotion to the next stage.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong><code>automaticReset</code></strong></td>
-<td style="text-align: left;">If set to <code>true</code> (default), Sveltos will automatically reset the <code>approved</code> field to <code>nil</code>/<code>false</code> after successfully promoting to the next stage.</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li>
+<p><strong><code>approved</code></strong> (Type: <code>boolean</code>)
+    When set to <code>true</code>, this signals to Sveltos that the human operator has reviewed the previous stage and <strong>approved</strong> the promotion to the next stage.</p>
+</li>
+<li>
+<p><strong><code>automaticReset</code></strong> (Type: <code>boolean</code>)
+    If set to <code>true</code> (default), Sveltos will automatically reset the <code>approved</code> field to <code>nil</code>/<code>false</code> after successfully promoting to the next stage.</p>
+</li>
+</ul>
+<h2 id="pre-health-check-deployments">Pre-Health Check Deployments</h2>
+<p>The <code>PreHealthCheckDeployment</code> field to the <code>AutoTrigger</code> allows to run explicit validation or testing configurations after a soak period but before the final health gate is checked.</p>
+<p>This is a powerful mechanism for running synthetic tests or security audits on the target clusters before moving the promotion pipeline forward.</p>
+<h3 id="workflow-with-pre-health-check">Workflow with Pre-Health Check</h3>
+<p>When <code>PreHealthCheckDeployment</code> is configured, the automated promotion workflow follows these steps:</p>
+<ul>
+<li>
+<p><strong>Stage Deployment</strong>: The main profileSpec configuration is successfully deployed and reconciled.</p>
+</li>
+<li>
+<p><strong>Soak Period</strong>: The trigger.auto.delay duration is awaited.</p>
+</li>
+<li>
+<p><strong>Pre-Health Deployment</strong>: The configuration defined in PreHealthCheckDeployment (e.g., a Kubernetes Job for validation) is applied and must fully reconcile.</p>
+</li>
+<li>
+<p><strong>Health Checks</strong>: The configurations defined in trigger.auto.postDelayHealthChecks are run.</p>
+</li>
+</ul>
+<p>Promotion: If all checks pass, the promotion moves to the next stage.</p>
+<h3 id="concrete-example-running-a-synthetic-test-job">Concrete Example: Running a Synthetic Test Job</h3>
+<p>This example shows how to roll out a critical application and then, after a 5-minute soak period, deploy a validation Job that verifies the application's endpoints are reachable and correct.</p>
+<div class="admonition example">
+<p class="admonition-title">Example - Validation Job Before Promotion</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterPromotion</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">core-app-rollout</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="c1"># ProfileSpec defines the main application</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">profileSpec</span><span class="p">:</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="c1"># ... (Application Helm Chart or Resources here) ...</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">stages</span><span class="p">:</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">      </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nt">trigger</span><span class="p">:</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">      </span><span class="nt">auto</span><span class="p">:</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">        </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"> </span><span class="c1"># 1. Wait 5 minutes (soak time)</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">        </span><span class="c1"># 2. Deploy validation Job via ConfigMap reference</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">        </span><span class="nt">preHealthCheckDeployment</span><span class="p">:</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">          </span><span class="nt">configMapRefs</span><span class="p">:</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validation-job-staging</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">            </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">        </span><span class="c1"># 3. Health check for the validation Job itself</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">        </span><span class="nt">postDelayHealthChecks</span><span class="p">:</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Job</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">          </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">batch</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validation-job-stage-staging</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">          </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">          </span><span class="nt">evaluateCEL</span><span class="p">:</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">success</span>
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">// Checks if the Job status has at least one successful completion (succeeded &gt;= 1)</span>
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">// and has a &quot;Complete&quot; condition set to &quot;True&quot;.</span>
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">            </span><span class="nt">expression</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-4-38"><a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="w">              </span><span class="no">self.status.succeeded &gt;= 1 &amp;&amp;</span>
+</span><span id="__span-4-39"><a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="w">              </span><span class="no">self.status.conditions.filter(c, c.type == &#39;Complete&#39; &amp;&amp; c.status == &#39;True&#39;).size() == 1</span>
+</span><span id="__span-4-40"><a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a><span class="w">          </span><span class="c1"># Promotion is blocked until the Job successfully completes</span>
+</span></code></pre></div>
+</div>
+<p>In this flow, Sveltos will deploy the Job defined in the validation-job-staging ConfigMap after the 5-minute delay. The promotion will not move to the next stage until the validation-job-stage-staging runs and reports successful completion (i.e., the Job finishes without failure).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Test the <strong>progressive rollout</strong> capabilities with up to <strong>two</strong> <code>ClusterPromotion</code> instances for free. Need more than two clusters? Contact us at <code>support@projectsveltos.io</code> to explore license options based on your needs!</p>
