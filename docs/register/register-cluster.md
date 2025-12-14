@@ -130,11 +130,11 @@ $ sveltosctl register cluster \
         --labels=env=test
     ```
 
-    If you use a kubeconfig downloaded from Rancher upstream cluster it will expire in 30 days ( this is by default if expiration time is not modified ). 
+    If you use a kubeconfig downloaded from Rancher upstream cluster it will expire in 30 days ( this is by default if expiration time is not modified ).
     To overcome this limit can be enabled token-renewal feature to continue managing downstream clusters without interruptions.
 
     After enabling token-renewal feature on cluster-profiles, it must be also enabled JWT Authentication on Rancher upstream cluster for managed downstream clusters to allow dedicated serviceaccount authentication [JWT Authentication on Rancher](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/jwt-authentication).
-    
+
 ??? example "Civo"
     If you use [Civo Cloud](https://www.civo.com), simply download the cluster Kubeconfig and perform the below.
 
@@ -267,6 +267,28 @@ $ kubectl label sveltoscluster mgmt -n mgmt cluster=mgmt
 ```
 
 For a Helm chart installation, have a look at the Helm chart [values](https://artifacthub.io/packages/helm/sveltos/projectsveltos?modal=values&path=registerMgmtCluster) to include the labels of your choice.
+
+## UnRegister Cluster
+
+It is recommended, but not required, to use the sveltosctl for cluster deregistration.
+
+To remove a cluster that was previously registered with Sveltos, you use the `sveltosctl deregister cluster` command. This process, often referred to as "deregistration," ensures a clean termination of Sveltos management for the specified cluster.
+
+```bash
+$ sveltosctl deregister cluster \
+    --namespace=sveltos-clusters \
+    --cluster=eng-staging-01 \
+    [--verbose]
+```
+
+
+
+| Parameter        |    Description                                                                                                   |
+|------------------|------------------------------------------------------------------------------------------------------------------|
+| `--namespace`    |    The namespace in the **management cluster** where the SveltosCluster resource is located. |
+| `--cluster`      |    The **name** of the registered cluster to remove.                                         |
+| `--verbose`      |    (Optional) Print each deletion step for troubleshooting.                                  |
+
 
 [^1]:
     As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.
