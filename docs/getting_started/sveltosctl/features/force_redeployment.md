@@ -30,3 +30,4 @@ sveltosctl redeploy cluster \
     --cluster=<CLUSTER_NAME> \
     --cluster-type=<TYPE> \
     [--verbose]
+```
