@@ -3579,12 +3579,12 @@
 <p>The <code>sveltosctl redeploy cluster</code> command provides a manual mechanism to force Sveltos to re-apply all configured add-ons and resources on a specified target cluster. This is achieved by resetting the cluster's internal reconciliation status, compelling the Addon Controller to immediately re-process all associated <code>ClusterProfile</code> or <code>Profile</code> configurations.</p>
 <p>This command is invaluable when you need to trigger a rolling update or configuration re-application without making dummy changes to the <code>ClusterProfile</code>/<code>Profile</code> specification.</p>
 <h3 id="command-usage">📝 Command Usage</h3>
-<p>```bash
-sveltosctl redeploy cluster \
-    --namespace=<CLUSTER_NAMESPACE> \
-    --cluster=<CLUSTER_NAME> \
-    --cluster-type=<TYPE> \
-    [--verbose]</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sveltosctl<span class="w"> </span>redeploy<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>--namespace<span class="o">=</span>&lt;CLUSTER_NAMESPACE&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>--cluster<span class="o">=</span>&lt;CLUSTER_NAME&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>--cluster-type<span class="o">=</span>&lt;TYPE&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="o">[</span>--verbose<span class="o">]</span>
+</span></code></pre></div>
 
 
 
