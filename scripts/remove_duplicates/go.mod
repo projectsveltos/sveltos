@@ -3,7 +3,7 @@ module github.com/projectsveltos/sveltos/scripts/remove_duplicates
 go 1.25.5
 
 require (
-	github.com/projectsveltos/libsveltos v1.3.0
+	github.com/projectsveltos/libsveltos v1.3.1
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.34.3
 )
