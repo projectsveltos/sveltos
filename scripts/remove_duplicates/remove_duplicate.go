@@ -30,6 +30,7 @@ func main() {
 }
 
 // get all resources in file and removes duplicate namespace entries
+// it also removes ServiceMonitor resources
 func updateFile(fileDir, fileName string) {
 	filePath := filepath.Join(fileDir, fileName)
 	fmt.Printf("Read file %s\n", filePath)

@@ -54,26 +54,25 @@ Follow the steps below to set up Projectsveltos to display deployment replicas f
           message = ""
 
           for _,resource in ipairs(resources) do
-            if resource.spec.replicas == 0 then
-              continue
-            end
-
-            if resource.status ~= nil then
-              if resource.status.availableReplicas ~= nil then
-                if resource.status.availableReplicas == resource.spec.replicas then
-                  status = "Healthy"
-                  message = "All replicas " .. resource.spec.replicas .. " are healthy"
-                else
-                  status = "Progressing"
-                  message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
+            -- Skip deployments with 0 replicas
+            if resource.spec.replicas ~= 0 then
+              if resource.status ~= nil then
+                if resource.status.availableReplicas ~= nil then
+                  if resource.status.availableReplicas == resource.spec.replicas then
+                    status = "Healthy"
+                    message = "All replicas " .. resource.spec.replicas .. " are healthy"
+                  else
+                    status = "Progressing"
+                    message = "expected replicas: " .. resource.spec.replicas .. " available: " .. resource.status.availableReplicas
+                  end
+                end
+                if resource.status.unavailableReplicas ~= nil then
+                  status = "Degraded"
+                  message = "deployments have unavailable replicas"
                 end
               end
-              if resource.status.unavailableReplicas ~= nil then
-                status = "Degraded"
-                message = "deployments have unavailable replicas"
-              end
+              table.insert(statuses, {resource=resource, status = status, message = message})
             end
-            table.insert(statuses, {resource=resource, status = status, message = message})
           end
 
           local hs = {}

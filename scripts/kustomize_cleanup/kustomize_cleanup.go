@@ -43,6 +43,9 @@ func main() {
 	// under components/rds
 	moveCRDs(cwd)
 
+	// Remove ServiceMonitors
+	removeServiceMonitors(cwd)
+
 	// Every file present in base will be added to kustomization.yaml
 	updateBaseKustomizationFile(cwd)
 
@@ -52,6 +55,53 @@ func main() {
 	// Create kustomization.yaml in overlays/agentless-mode listing every file in
 	// overlays/agentless-mode
 	createOverlaysKustomizationFile(cwd)
+}
+
+func removeServiceMonitors(cwd string) {
+	baseDir := filepath.Join(filepath.Dir(filepath.Dir(cwd)), kustomizeDirName, baseDirName)
+	// Read directory with components contents
+	files, err := os.ReadDir(baseDir)
+	if err != nil {
+		fmt.Println("Error reading directory:", err)
+		panic(1)
+	}
+
+	// Loop through each file. Any CustomResourceDefinition will be removed from the file
+	// and a corresponding file under base/components/crds will be created
+	for _, file := range files {
+		if !file.IsDir() {
+			removeServiceMonitorsFromFile(cwd, baseDir, file.Name())
+		}
+	}
+}
+
+// Remove any ServicerMonitos from filename.
+func removeServiceMonitorsFromFile(cwd, fileDir, fileName string) {
+	filePath := filepath.Join(fileDir, fileName)
+	fmt.Printf("Removing ServiceMonitors from file %s\n", filePath)
+
+	resources := getResources(fileDir, fileName)
+
+	err := os.Remove(filePath)
+	if err != nil {
+		panic(1)
+	}
+
+	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY, permission0644)
+	if err != nil {
+		panic(1)
+	}
+	defer f.Close()
+
+	for i := range resources {
+		if resources[i].GetKind() != "ServiceMonitor" {
+			// Leave resource to file
+			fmt.Printf("add resource %s:%s/%s\n", resources[i].GetKind(), resources[i].GetNamespace(), resources[i].GetName())
+			writeUnstructuredToFile(f, resources[i])
+		}
+	}
+
+	fmt.Printf("Removed CRD from file %s\n", f.Name())
 }
 
 func moveCRDs(cwd string) {
