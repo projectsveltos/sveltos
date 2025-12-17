@@ -94,6 +94,11 @@ do
         continue
     fi
 
+    # ignore service monitor
+    if [[ "$f" == *"service_monitor.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/sveltoscluster-manager.yaml
 done
