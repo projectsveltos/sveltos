@@ -3692,7 +3692,7 @@
 </tbody>
 </table>
 <h3 id="platform-administrator-example">Platform Administrator Example</h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create sa platform-admin
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create sa platform-admin -n default
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 </span></code></pre></div>
 <p>Create a login token for the service account with the name <code>platform-admin</code> in the <code>default</code> namespace. The token will be valid for <strong>24 hours</strong>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
