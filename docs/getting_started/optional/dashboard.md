@@ -74,7 +74,7 @@ $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --s
 ### Platform Administrator Example
 
 ```
-$ kubectl create sa platform-admin
+$ kubectl create sa platform-admin -n default
 $ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 ```
 
