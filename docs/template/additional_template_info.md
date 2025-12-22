@@ -148,7 +148,7 @@ When incorporating Go template logic into Sveltos templates, utilise the **escap
 
 ## Learn More
 
-1. **Example - Helm Chart and Resources as Templates**: Checkout the template examples [here](../template/template_generic_examples.md)
+1. **Example - Helm Chart and Resources as Templates**: Checkout the template examples [here](../template/examples/template_generic.md)
 1. **Helm Charts**: See the "Example: Express Helm Values as Templates" section in [here](../addons/helm_charts.md#example-express-helm-values-as-templates)
 1. **YAML & JSON**: Refer to the "Example Template with Git Repository/Bucket Content" section in [here](../addons/example_flux_sources.md#example-template-with-git-repositorybucket-content)
 1. **Kustomize**: Substitution and templating are explained [here](../addons/kustomize.md#substitution-and-templating)

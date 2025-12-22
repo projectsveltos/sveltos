@@ -184,7 +184,7 @@ The demonstrated approach provides a **flexible** and **centralized** way to ref
 
 ## Template
 
-Define the content for resources in your `PolicyRefs` using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster. See the template section [template section](../template/template_generic_examples.md) for details.
+Define the content for resources in your `PolicyRefs` using templates. During deployment, Sveltos will automatically populate these templates with relevant information from your cluster and other resources in the management cluster. See the template section [template section](../template/examples/template_generic.md) for details.
 
 Remember to adapt the provided resources to your specific repository structure, cluster configuration, and desired templating logic.
 

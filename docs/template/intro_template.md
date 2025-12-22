@@ -19,7 +19,7 @@ Sveltos lets you define add-ons and applications using templates. Before deployi
 
 ![Sveltos Templates](../assets/templates.png)
 
-In this example, Sveltos retrieves the Secret **imported-secret** from the **default** namespace. This Secret is assigned the alias **ExternalSecret**. The template can subsequently refer to this Secret by employing the alias **ExternalSecret**. It can also be used with [Helm Charts](template_generic_examples.md).
+In this example, Sveltos retrieves the Secret **imported-secret** from the **default** namespace. This Secret is assigned the alias **ExternalSecret**. The template can subsequently refer to this Secret by employing the alias **ExternalSecret**. It can also be used with [Helm Charts](./examples/template_generic.md).
 
 !!!note
     All resources listed in the `TemplateResourceRefs` section can be accessed within the template using `getResource "<alias>"`. For instance, we could access the Secret in an example with `getResource "ExternalSecret"`.
@@ -57,7 +57,7 @@ Sveltos provides a set of functions specifically designed for manipulating resou
 !!! note
     These functions operate on copies of the original resource, ensuring the original data remains untouched.
 
-For practical examples, take a look [here](examples.md).
+For practical examples, take a look [here](./examples/resource_manipulation_functions.md.
 
 Consider combining those methods with the [post render patches](../features/post-renderer-patches.md) approach.
 

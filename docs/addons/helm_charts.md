@@ -281,7 +281,7 @@ The below points are included in the `ClusterProfile`.
 
 Both the __values__ section and the content stored in referenced `ConfigMaps` and `Secrets` can be written using templates. Sveltos will instantiate the templates using resources in the **management** cluster.
 
-Sveltos deploys the Helm chart with the final, resolved values. See the [template section](../template/template_generic_examples.md) for more details.
+Sveltos deploys the Helm chart with the final, resolved values. See the [template section](../template/examples/template_generic.md) for more details.
 
 !!! example ""
     ```yaml
