@@ -14,11 +14,11 @@ authors:
 
 In the example below, we will guide you through the process of extending Sveltos with your own controller. The example focuses on extending Sveltos by the use of a new controller that allocates a storage bucket from Google Cloud, followed by Sveltos deploying a pod in the managed cluster to upload a file to that bucket, all using a single YAML configuration.
 
-If you are new to Sveltos, please go through the [deploy Kubernetes add-ons](../addons/addons.md) and the [Sveltos events](../events/addon_event_deployment.md) resources before proceeding.
+If you are new to Sveltos, please go through the [deploy Kubernetes add-ons](../../addons/addons.md) and the [Sveltos events](../../events/addon_event_deployment.md) resources before proceeding.
 
 ## Deploy Sveltos in the management cluster
 
-Our management cluster is a Kind cluster running on a laptop. To deploy Sveltos on the management cluster, follow the steps described in the [instructions](../getting_started/install/install.md) documentation.
+Our management cluster is a Kind cluster running on a laptop. To deploy Sveltos on the management cluster, follow the steps described in the [instructions](../../getting_started/install/install.md) documentation.
 
 ```bash
 $ kubectl get pods -n projectsveltos
@@ -61,7 +61,7 @@ rules:
   - "*"
 ```
 
-![Google Cloud Storage Bucket](../assets/sveltos-extension.png)
+![Google Cloud Storage Bucket](../../assets/sveltos-extension.png)
 
 The following YAML instructions are used to deploy add-ons using Sveltos:
 
@@ -176,7 +176,7 @@ default     sveltos-demo-bucket   sveltos-demo-sveltos-management-workload   htt
 
 The gcs-storage-controller processes this instance and creates a bucket on Google Cloud Storage.
 
-![Google Cloud Storage Bucket](../assets/google_cloud_storage_bucket.png)
+![Google Cloud Storage Bucket](../../assets/google_cloud_storage_bucket.png)
 
 To verify the bucket has been created on Google Cloud Storage
 
@@ -186,7 +186,7 @@ $ gsutil iam get gs://<BUCKET NAME>
 
 Sveltos has also deployed a Pod in the managed cluster and has passed this Pod with a secret containing the credentials to access the bucket (this information was provided to Sveltos by the gcs controller we developed). This pod has then uploaded a file to the Google Storage Bucket just created.
 
-![Google Cloud Storage Bucket](../assets/bucket_objects.png)
+![Google Cloud Storage Bucket](../../assets/bucket_objects.png)
 
 ## Summary
 

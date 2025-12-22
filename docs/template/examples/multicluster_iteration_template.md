@@ -16,7 +16,7 @@ authors:
 
 There are a number of cases where platform administrators or operators want to discover and iterate through multiple clusters to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.
 
-The use case can be easily achieved by Sveltos with the use of the [templating](../template/template_generic_examples.md) functionality and [Sveltos Event Franmework](../events/addon_event_deployment.md).
+The use case can be easily achieved by Sveltos with the use of the [templating](./template_generic.md) functionality and [Sveltos Event Franmework](../../events/addon_event_deployment.md).
 
 ## Identify Sveltos Managed Clusters
 

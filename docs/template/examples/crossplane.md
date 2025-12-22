@@ -14,7 +14,7 @@ authors:
 
 # Sveltos coordinating Crossplane
 
-![Sveltos, ClusterAPI and Crossplane](../assets/sveltos_clusterapi_crossplane.gif)
+![Sveltos, ClusterAPI and Crossplane](../../assets/sveltos_clusterapi_crossplane.gif)
 
 In this example, we will use Sveltos to coordinate with Crossplane to create a Google Cloud Storage Bucket for each managed cluster. We will then deploy an application in each managed cluster that uploads a file to the proper bucket.
 

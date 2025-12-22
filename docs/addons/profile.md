@@ -232,7 +232,7 @@ Consider a scenario where a new cluster with the label env:prod is created. The 
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
-Refer to [template](../template/template_generic_examples.md) section for more info and examples.
+Refer to [template](../template/examples/template_generic.md) section for more info and examples.
 
 ### Spec.DependsOn
 

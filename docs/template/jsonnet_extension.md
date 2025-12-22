@@ -53,7 +53,7 @@ spec:
 
 The `path` field specifies the location within the Git repository where the jsonnet file is stored. Once Flux detects changes in the repository and syncs it, the jsonnet-controller will automatically invoke the jsonnet module and store the output in the Status section of the JsonnetSource instance.
 
-At this point, you can use the Sveltos' [template](template_generic_examples.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
+At this point, you can use the Sveltos' [template](./examples/template_generic.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
 
 ### ClusterProfile
 !!! example "Example - ClusterProfile and Resources Definition"

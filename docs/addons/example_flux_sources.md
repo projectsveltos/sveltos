@@ -408,4 +408,4 @@ spec:
     repositoryURL: https://fluxcd-community.github.io/helm-charts
 ```
 [^2]: The YAML was obtained by running ```helm template nginx-stable nginx-stable/nginx-ingress```.
-[^3]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/template_generic_examples.md).
+[^3]: Do you want to dive deeper into Sveltos's templating features? Check out this [section](../template/examples/template_generic.md).
