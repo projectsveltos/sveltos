@@ -6,30 +6,30 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template.">
+        <meta name="description" content="Learn how Sveltos coordinates with Crossplane or any other open source projects. Discover how to use Sveltos to create Google Cloud Storage Buckets for managed clusters and deploy applications that interact with these buckets. Dive into the YAML code that instructs Sveltos, explore the process step-by-step, and witness the seamless coordination between Sveltos and Crossplane in action.">
       
       
       
       
-        <link rel="prev" href="../jsonnet_extension/">
+        <link rel="prev" href="../template_overlays/">
       
       
-        <link rel="next" href="../../features/dependency-management/">
+        <link rel="next" href="../external_secret/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
     
     
       
-        <title>Templates - Projectsveltos Documentation</title>
+        <title>Extending Sveltos - Projectsveltos Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.84d31ad4.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#use-case-description" class="md-skip">
+        <a href="#sveltos-coordinating-crossplane" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
   </a>
 
             </div>
-            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
           </aside>
         
       </div>
@@ -111,9 +111,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -130,7 +130,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Templates
+              Extending Sveltos
             
           </span>
         </div>
@@ -251,9 +251,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../assets/logo.png" alt="logo">
 
     </a>
     Projectsveltos Documentation
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -340,7 +340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_idp/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_idp/" class="md-nav__link">
         
   
   
@@ -363,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -386,7 +386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
         
   
   
@@ -409,7 +409,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_gitops/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_gitops/" class="md-nav__link">
         
   
   
@@ -470,7 +470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
+      <a href="../../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
         
   
   
@@ -493,7 +493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
+      <a href="../../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
         
   
   
@@ -607,7 +607,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/quick_start/" class="md-nav__link">
+      <a href="../../../getting_started/install/quick_start/" class="md-nav__link">
         
   
   
@@ -630,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/install/" class="md-nav__link">
+      <a href="../../../getting_started/install/install/" class="md-nav__link">
         
   
   
@@ -653,7 +653,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/air_gapped_installation/" class="md-nav__link">
+      <a href="../../../getting_started/install/air_gapped_installation/" class="md-nav__link">
         
   
   
@@ -722,7 +722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
         
   
   
@@ -783,7 +783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
         
   
   
@@ -806,7 +806,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
         
   
   
@@ -829,7 +829,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
         
   
   
@@ -906,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/dashboard/" class="md-nav__link">
+      <a href="../../../getting_started/optional/dashboard/" class="md-nav__link">
         
   
   
@@ -929,7 +929,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/grafanadashboard/" class="md-nav__link">
+      <a href="../../../getting_started/optional/grafanadashboard/" class="md-nav__link">
         
   
   
@@ -1005,7 +1005,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register-cluster/" class="md-nav__link">
+      <a href="../../../register/register-cluster/" class="md-nav__link">
         
   
   
@@ -1028,7 +1028,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register_cluster_pull_mode/" class="md-nav__link">
+      <a href="../../../register/register_cluster_pull_mode/" class="md-nav__link">
         
   
   
@@ -1051,7 +1051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/readiness_liveness_checks/" class="md-nav__link">
+      <a href="../../../register/readiness_liveness_checks/" class="md-nav__link">
         
   
   
@@ -1074,7 +1074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/token-renewal/" class="md-nav__link">
+      <a href="../../../register/token-renewal/" class="md-nav__link">
         
   
   
@@ -1135,7 +1135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/pausing/" class="md-nav__link">
+      <a href="../../../register/features/pausing/" class="md-nav__link">
         
   
   
@@ -1158,7 +1158,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/cluster_maintenance_window/" class="md-nav__link">
+      <a href="../../../register/features/cluster_maintenance_window/" class="md-nav__link">
         
   
   
@@ -1234,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/addons/" class="md-nav__link">
+      <a href="../../../addons/addons/" class="md-nav__link">
         
   
   
@@ -1257,7 +1257,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/helm_charts/" class="md-nav__link">
+      <a href="../../../addons/helm_charts/" class="md-nav__link">
         
   
   
@@ -1280,7 +1280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/raw_yaml/" class="md-nav__link">
+      <a href="../../../addons/raw_yaml/" class="md-nav__link">
         
   
   
@@ -1303,7 +1303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/kustomize/" class="md-nav__link">
+      <a href="../../../addons/kustomize/" class="md-nav__link">
         
   
   
@@ -1326,7 +1326,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/combining_all/" class="md-nav__link">
+      <a href="../../../addons/combining_all/" class="md-nav__link">
         
   
   
@@ -1349,7 +1349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/example_flux_sources/" class="md-nav__link">
+      <a href="../../../addons/example_flux_sources/" class="md-nav__link">
         
   
   
@@ -1372,7 +1372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/clusterprofile/" class="md-nav__link">
+      <a href="../../../addons/clusterprofile/" class="md-nav__link">
         
   
   
@@ -1395,7 +1395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/profile/" class="md-nav__link">
+      <a href="../../../addons/profile/" class="md-nav__link">
         
   
   
@@ -1463,7 +1463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../../../deployment_order/manifest_order/" class="md-nav__link">
         
   
   
@@ -1486,7 +1486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
+      <a href="../../../deployment_order/depends_on/" class="md-nav__link">
         
   
   
@@ -1509,7 +1509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1532,7 +1532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
+      <a href="../../../deployment_order/tiers/" class="md-nav__link">
         
   
   
@@ -1555,7 +1555,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../../../deployment_order/rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1578,7 +1578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/progressive_rollout/" class="md-nav__link">
+      <a href="../../../deployment_order/progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1601,7 +1601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
+      <a href="../../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1624,7 +1624,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../../../deployment_order/order_with_events/" class="md-nav__link">
         
   
   
@@ -1694,7 +1694,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../intro_template/" class="md-nav__link">
+      <a href="../../intro_template/" class="md-nav__link">
         
   
   
@@ -1717,7 +1717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../additional_template_info/" class="md-nav__link">
+      <a href="../../additional_template_info/" class="md-nav__link">
         
   
   
@@ -1740,76 +1740,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Example Resource Manipulating Functions
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../template_generic_examples/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Example Helm Charts and Resource Templates
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../template_overlays_examples/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Example Overlays for Cluster-Specific Helm Deployments
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -1832,7 +1763,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../lua/" class="md-nav__link">
+      <a href="../../lua/" class="md-nav__link">
         
   
   
@@ -1855,7 +1786,171 @@
   
   
     <li class="md-nav__item">
-      <a href="../crossplane/" class="md-nav__link">
+      <a href="../../ytt_extension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Support for Carvel ytt
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jsonnet_extension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Support for Jsonnet
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7_7" id="__nav_7_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_7">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resource_manipulation_functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Resource Manipulating Functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template_generic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Helm Charts and Resource Templates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template_overlays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Example Overlays for Cluster-Specific Helm Deployments
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1866,6 +1961,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -1924,73 +2020,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ytt_extension/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Support for Carvel ytt
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../jsonnet_extension/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Support for Jsonnet
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Example Mutlicluster Iteration and Deployment
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="../multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -2001,131 +2031,13 @@
   
 
       </a>
-      
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#use-case-description" class="md-nav__link">
-    <span class="md-ellipsis">
-      Use Case Description
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#identify-sveltos-managed-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Identify Sveltos Managed Clusters
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Identify Sveltos Managed Clusters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eventreport-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      EventReport Output
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-service-creation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Service Creation
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Automatic Service Creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterProfile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      ConfigMap
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#results" class="md-nav__link">
-    <span class="md-ellipsis">
-      Results
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Clusters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-services" class="md-nav__link">
-    <span class="md-ellipsis">
-      Kubernetes Services
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-updates-advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Updates Advantages
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -2184,7 +2096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/dependency-management/" class="md-nav__link">
+      <a href="../../../features/dependency-management/" class="md-nav__link">
         
   
   
@@ -2207,7 +2119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/dryrun/" class="md-nav__link">
+      <a href="../../../features/dryrun/" class="md-nav__link">
         
   
   
@@ -2230,7 +2142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/configuration_drift/" class="md-nav__link">
+      <a href="../../../features/configuration_drift/" class="md-nav__link">
         
   
   
@@ -2253,7 +2165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/post-renderer-patches/" class="md-nav__link">
+      <a href="../../../features/post-renderer-patches/" class="md-nav__link">
         
   
   
@@ -2276,7 +2188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/set/" class="md-nav__link">
+      <a href="../../../features/set/" class="md-nav__link">
         
   
   
@@ -2299,7 +2211,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/rolling_upgrade/" class="md-nav__link">
+      <a href="../../../features/rolling_upgrade/" class="md-nav__link">
         
   
   
@@ -2322,7 +2234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/mcp/" class="md-nav__link">
+      <a href="../../../features/mcp/" class="md-nav__link">
         
   
   
@@ -2345,7 +2257,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/labels_management/" class="md-nav__link">
+      <a href="../../../features/labels_management/" class="md-nav__link">
         
   
   
@@ -2406,7 +2318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/multi-tenancy-full-isolation/" class="md-nav__link">
+      <a href="../../../features/multi-tenancy-full-isolation/" class="md-nav__link">
         
   
   
@@ -2429,7 +2341,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
+      <a href="../../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
         
   
   
@@ -2460,7 +2372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/techsupport/" class="md-nav__link">
+      <a href="../../../features/techsupport/" class="md-nav__link">
         
   
   
@@ -2528,7 +2440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/addon_event_deployment/" class="md-nav__link">
+      <a href="../../../events/addon_event_deployment/" class="md-nav__link">
         
   
   
@@ -2551,7 +2463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/aggregated_selection/" class="md-nav__link">
+      <a href="../../../events/aggregated_selection/" class="md-nav__link">
         
   
   
@@ -2574,7 +2486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating/" class="md-nav__link">
+      <a href="../../../events/templating/" class="md-nav__link">
         
   
   
@@ -2597,7 +2509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating_all_resources_together/" class="md-nav__link">
+      <a href="../../../events/templating_all_resources_together/" class="md-nav__link">
         
   
   
@@ -2620,7 +2532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/generators/" class="md-nav__link">
+      <a href="../../../events/generators/" class="md-nav__link">
         
   
   
@@ -2643,7 +2555,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/nats/" class="md-nav__link">
+      <a href="../../../events/nats/" class="md-nav__link">
         
   
   
@@ -2704,7 +2616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/secrets_on_demand/" class="md-nav__link">
+      <a href="../../../events/examples/secrets_on_demand/" class="md-nav__link">
         
   
   
@@ -2727,7 +2639,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/db-as-a-service/" class="md-nav__link">
+      <a href="../../../events/examples/db-as-a-service/" class="md-nav__link">
         
   
   
@@ -2750,7 +2662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/managed-services/" class="md-nav__link">
+      <a href="../../../events/examples/managed-services/" class="md-nav__link">
         
   
   
@@ -2773,7 +2685,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/service_event_trigger/" class="md-nav__link">
+      <a href="../../../events/examples/service_event_trigger/" class="md-nav__link">
         
   
   
@@ -2796,7 +2708,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/otel/" class="md-nav__link">
+      <a href="../../../events/examples/otel/" class="md-nav__link">
         
   
   
@@ -2819,7 +2731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/flux_sources/" class="md-nav__link">
+      <a href="../../../events/examples/flux_sources/" class="md-nav__link">
         
   
   
@@ -2842,7 +2754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/api_gateway_contour/" class="md-nav__link">
+      <a href="../../../events/examples/api_gateway_contour/" class="md-nav__link">
         
   
   
@@ -2865,7 +2777,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cross_cluster_configuration/" class="md-nav__link">
+      <a href="../../../events/examples/cross_cluster_configuration/" class="md-nav__link">
         
   
   
@@ -2888,7 +2800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/loadbalancer/" class="md-nav__link">
+      <a href="../../../events/examples/loadbalancer/" class="md-nav__link">
         
   
   
@@ -2911,7 +2823,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+      <a href="../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
         
   
   
@@ -2934,7 +2846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory/" class="md-nav__link">
+      <a href="../../../events/examples/cluster_inventory/" class="md-nav__link">
         
   
   
@@ -2957,7 +2869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
+      <a href="../../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
         
   
   
@@ -2980,7 +2892,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/mcs_api/" class="md-nav__link">
+      <a href="../../../events/examples/mcs_api/" class="md-nav__link">
         
   
   
@@ -3003,7 +2915,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
+      <a href="../../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
         
   
   
@@ -3079,7 +2991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/notifications/" class="md-nav__link">
+      <a href="../../../observability/notifications/" class="md-nav__link">
         
   
   
@@ -3102,7 +3014,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_addon_notification/" class="md-nav__link">
+      <a href="../../../observability/example_addon_notification/" class="md-nav__link">
         
   
   
@@ -3125,7 +3037,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -3148,7 +3060,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
+      <a href="../../../observability/example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -3171,7 +3083,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
+      <a href="../../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
         
   
   
@@ -3194,7 +3106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../../../observability/example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -3217,7 +3129,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_cis_scan/" class="md-nav__link">
+      <a href="../../../observability/example_cis_scan/" class="md-nav__link">
         
   
   
@@ -3240,7 +3152,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/display_resources/" class="md-nav__link">
+      <a href="../../../observability/display_resources/" class="md-nav__link">
         
   
   
@@ -3263,7 +3175,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/different_resources/" class="md-nav__link">
+      <a href="../../../observability/different_resources/" class="md-nav__link">
         
   
   
@@ -3331,7 +3243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/vertical_scaling/" class="md-nav__link">
+      <a href="../../../scalability/vertical_scaling/" class="md-nav__link">
         
   
   
@@ -3354,7 +3266,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
+      <a href="../../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
         
   
   
@@ -3422,7 +3334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../help_and_tutorials/troubleshooting/" class="md-nav__link">
+      <a href="../../../help_and_tutorials/troubleshooting/" class="md-nav__link">
         
   
   
@@ -3490,7 +3402,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/resource-owners/" class="md-nav__link">
+      <a href="../../../reference/resource-owners/" class="md-nav__link">
         
   
   
@@ -3513,7 +3425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../internals/cr-ownership/" class="md-nav__link">
+      <a href="../../../internals/cr-ownership/" class="md-nav__link">
         
   
   
@@ -3543,7 +3455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../blogs/" class="md-nav__link">
+      <a href="../../../blogs/" class="md-nav__link">
         
   
   
@@ -3565,7 +3477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../archive/" class="md-nav__link">
+      <a href="../../../archive/" class="md-nav__link">
         
   
   
@@ -3597,122 +3509,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#use-case-description" class="md-nav__link">
-    <span class="md-ellipsis">
-      Use Case Description
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#identify-sveltos-managed-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Identify Sveltos Managed Clusters
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Identify Sveltos Managed Clusters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eventreport-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      EventReport Output
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-service-creation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Service Creation
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Automatic Service Creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterProfile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      ConfigMap
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#results" class="md-nav__link">
-    <span class="md-ellipsis">
-      Results
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Clusters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-services" class="md-nav__link">
-    <span class="md-ellipsis">
-      Kubernetes Services
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-updates-advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Updates Advantages
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -3731,161 +3529,122 @@
   
 
 
-  <h1>Example Mutlicluster Iteration and Deployment</h1>
-
-<h2 id="use-case-description">Use Case Description</h2>
-<p>There are a number of cases where platform administrators or operators want to discover and iterate through multiple clusters to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.</p>
-<p>The use case can be easily achieved by Sveltos with the use of the <a href="../template_generic_examples/">templating</a> functionality and <a href="../../events/addon_event_deployment/">Sveltos Event Franmework</a>.</p>
-<h2 id="identify-sveltos-managed-clusters">Identify Sveltos Managed Clusters</h2>
-<p>Sveltos <code>Event Framework</code> will be used to dynamically detect all <strong>managed</strong> clusters (of type SveltosCluster) that are different from the management cluster. The management cluster has the Sveltos cluster label set to <code>type:mgmt</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example - EventSource and EventTrigger Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; eventsource_eventtrigger.yaml &lt;&lt;EOF</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nn">---</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventSource</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nt">collectResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nt">resourceSelectors</span><span class="p">:</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib.projectsveltos.io&quot;</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1beta1&quot;</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SveltosCluster&quot;</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nt">labelFilters</span><span class="p">:</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Equal</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Different</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nn">---</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventTrigger</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-cluster</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">  </span><span class="nt">sourceClusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">  </span><span class="nt">oneForEvent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<p>Once the above YAML definition file is applied to the <strong>management</strong> cluster, an <code>EventReport</code> resource named <code>detect-clusters</code> will be created within the <code>projectsveltos</code> namespace.</p>
-<p>The report stores the information about all discovered managed clusters. Sveltos templating feature can reference the resource to retrieve a <strong>list</strong> of managed clusters. This allows a dynamic configuration based on the cluster environment.</p>
-<h3 id="eventreport-output">EventReport Output</h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventReport</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nn">...</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">matchingResources</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-1</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-2</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span></code></pre></div>
-<h2 id="automatic-service-creation">Automatic Service Creation</h2>
-<p>Lets assume the clusters where the service should get deployed has the cluster label set to <code>type:nats</code>. The below YAML defintion will create a Sveltos <code>ClusterProfile</code> resource that points to the <code>EventReport</code> mentioned above and deploy a <code>ConfigMap</code> defined as a template.</p>
-<h3 id="clusterprofile">ClusterProfile</h3>
-<div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_nats.yaml &lt;&lt;EOF</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nn">---</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-resources</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">templateResourceRefs</span><span class="p">:</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventReport</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterData</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats-services</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<h3 id="configmap">ConfigMap</h3>
-<div class="admonition example">
-<p class="admonition-title">Example - ConfigMap Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; cm_nats_services.yaml &lt;&lt;EOF</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nn">---</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats-services</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">services.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="no">{{ range $cluster := (getResource &quot;ClusterData&quot;).spec.matchingResources }}</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="no">apiVersion: v1</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="no">kind: Service</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="no">metadata:</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="no">labels:</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">          </span><span class="no">app: nats</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">          </span><span class="no">tailscale.com/proxy-class: default</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">        </span><span class="no">annotations:</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">          </span><span class="no">tailscale.com/tailnet-fqdn: nats-{{ $cluster.name }}</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="no">name: nats-{{ $cluster.name }}</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="no">spec:</span>
-</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">        </span><span class="no">externalName: placeholder</span>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">        </span><span class="no">type: ExternalName</span>
-</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">    </span><span class="no">---</span>
-</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">    </span><span class="no">{{ end }}</span>
-</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The ConfigMap resource will create the <code>nats-{{ $cluster.name }}</code> services in the <code>default</code> namespace on every cluster with the cluster label set to <code>type:nats</code>.</p>
-</div>
-<h2 id="results">Results</h2>
-<p>Once the <code>ClusterProfile</code> resource gets deployed on the management cluster, all the clusters with the label set to <code>type:nats</code> should get the Kubernetes service with the name <code>nats-{{ $cluster.name }}</code>.</p>
-<h3 id="sveltos-clusters">Sveltos Clusters</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-A<span class="w"> </span>--show-labels
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>NAMESPACE<span class="w">  </span>NAME<span class="w">    </span>READY<span class="w">  </span>VERSION<span class="w">    </span>LABELS
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>civo<span class="w">    </span>cluster-1<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.29.2+k3s1<span class="w">  </span>sveltos-agent<span class="o">=</span>present
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>civo<span class="w">    </span>cluster-2<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.28.7+k3s1<span class="w">  </span>sveltos-agent<span class="o">=</span>present
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>mgmt<span class="w">    </span>mgmt<span class="w">       </span><span class="nb">true</span><span class="w">  </span>v1.30.0<span class="w">       </span>sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>mgmt
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>nats<span class="w">    </span>cluster-3<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.28.7+k3s1<span class="w">  </span><span class="nv">type</span><span class="o">=</span>nats
-</span></code></pre></div>
-<h3 id="kubernetes-services">Kubernetes Services</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>service
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>NAME<span class="w">       </span>TYPE<span class="w">      </span>CLUSTER-IP<span class="w">  </span>EXTERNAL-IP<span class="w">  </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">  </span>AGE
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>...
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>nats-cluster-1<span class="w">  </span>ExternalName<span class="w">  </span>&lt;none&gt;<span class="w">    </span>placeholder<span class="w">  </span>&lt;none&gt;<span class="w">  </span>68s
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>nats-cluster-2<span class="w">  </span>ExternalName<span class="w">  </span>&lt;none&gt;<span class="w">    </span>placeholder<span class="w">  </span>&lt;none&gt;<span class="w">  </span>68s
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The output above is from the <code>cluster-3</code>.</p>
-</div>
-<h2 id="automatic-updates-advantages">Automatic Updates Advantages</h2>
-<p>The beauty of Sveltos is its automatic reaction to changes. If we create or destroy managed clusters, Sveltos will automatically:</p>
+<h1 id="sveltos-coordinating-crossplane">Sveltos coordinating Crossplane</h1>
+<p><img alt="Sveltos, ClusterAPI and Crossplane" src="../../../assets/sveltos_clusterapi_crossplane.gif" /></p>
+<p>In this example, we will use Sveltos to coordinate with Crossplane to create a Google Cloud Storage Bucket for each managed cluster. We will then deploy an application in each managed cluster that uploads a file to the proper bucket.</p>
+<p>The following YAML code:</p>
 <ol>
-<li>Detect the change through the detect-clusters <code>EventSource</code></li>
-<li>Re-evaluate the nats-services template with updated data</li>
-<li>Add or remove Service instances in the mentioned clusters as needed</li>
+<li>Creates a ClusterProfile resource that instructs Sveltos to create a Bucket Custom Resource (CR) in the management cluster.</li>
+<li>Instructs Sveltos to fetch the Bucket CR instance, and use the Bucket status <strong>url</strong> and <strong>id</strong> fields to instantiate a Pod template.</li>
+<li>Deploys the Pod in the managed cluster.</li>
 </ol>
-<p>This ensures the clusters remain <strong>dynamically updated</strong> based on the managed cluster configuration.</p>
+<p>Once the Pod is deployed, it will upload a file to the <code>my-bucket</code> bucket.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; crossplane_google_bucket.yaml &lt;&lt;EOF</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nn">---</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-resources</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fv</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">templateResourceRefs</span><span class="p">:</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage.gcp.upbound.io/v1beta1</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bucket</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">crossplane-bucket-{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CrossplaneBucket</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">crossplane-system</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp-secret</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Credentials</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deploymentType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Local</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bucket</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deploymentType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remote</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uploader</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="nn">---</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bucket</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">  </span><span class="nt">bucket.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">    </span><span class="no">apiVersion: storage.gcp.upbound.io/v1beta1</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">    </span><span class="no">kind: Bucket</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">    </span><span class="no">name: crossplane-bucket-{{ .Cluster.metadata.namespace }}-{{ .Cluster.metadata.name }}</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="w">    </span><span class="no">labels:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">      </span><span class="no">docs.crossplane.io/example: provider-gcp</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">      </span><span class="no">clustername: {{ .Cluster.metadata.name }}</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">      </span><span class="no">clusternamespace: {{ .Cluster.metadata.namespace }}</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">      </span><span class="no">forProvider:</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="w">        </span><span class="no">location: US</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="w">      </span><span class="no">providerConfigRef:</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="w">        </span><span class="no">name: default</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="nn">---</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uploader</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="w">    </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="w">  </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a><span class="w">    </span><span class="no">apiVersion: v1</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="w">    </span><span class="no">kind: Secret</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="w">      </span><span class="no">name: gcs-credentials</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="w">      </span><span class="no">namespace: default</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a><span class="w">      </span><span class="no">annotations:</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a><span class="w">        </span><span class="no">bucket: &quot;{{ (getResource &quot;CrossplaneBucket&quot;).status.atProvider.url }}&quot;</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a><span class="w">    </span><span class="no">type: Opaque</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a><span class="w">    </span><span class="no">data:</span>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a><span class="w">      </span><span class="no">service-account.json: {{ $data:=(getResource &quot;Credentials&quot;).data }} {{ (index $data &quot;creds&quot;) }}</span>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a><span class="w">  </span><span class="nt">pod.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a><span class="w">    </span><span class="no">apiVersion: v1</span>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="w">    </span><span class="no">kind: Pod</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a><span class="w">      </span><span class="no">name: create-and-upload-to-gcs</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="w">      </span><span class="no">namespace: default</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a><span class="w">      </span><span class="no">annotations:</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a><span class="w">        </span><span class="no">bucket: {{ (getResource &quot;CrossplaneBucket&quot;).status.atProvider.url }}</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a><span class="w">      </span><span class="no">containers:</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a><span class="w">      </span><span class="no">- name: uploader</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a><span class="w">        </span><span class="no">image: google/cloud-sdk:slim</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="w">        </span><span class="no">command: [&quot;bash&quot;]</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a><span class="w">        </span><span class="no">args:</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a><span class="w">          </span><span class="no">- &quot;-c&quot;</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a><span class="w">          </span><span class="no">- |</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a><span class="w">            </span><span class="no">echo &quot;Hello world&quot; &gt; /tmp/hello.txt</span>
+</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a><span class="w">            </span><span class="no">gcloud auth activate-service-account --key-file=/var/run/secrets/cloud.google.com/service-account.json</span>
+</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a><span class="w">            </span><span class="no">gsutil cp /tmp/hello.txt gs://{{ (getResource &quot;CrossplaneBucket&quot;).metadata.name }}</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a><span class="w">        </span><span class="no">volumeMounts:</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a><span class="w">          </span><span class="no">- name: gcp-sa</span>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a><span class="w">            </span><span class="no">mountPath: /var/run/secrets/cloud.google.com/</span>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a><span class="w">            </span><span class="no">readOnly: true</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a><span class="w">      </span><span class="no">volumes:</span>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a><span class="w">        </span><span class="no">- name: gcp-sa</span>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a><span class="w">          </span><span class="no">secret:</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a><span class="w">            </span><span class="no">secretName: gcs-credentials</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
+</span></code></pre></div>
+</div>
 
 
 
@@ -3918,7 +3677,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../jsonnet_extension/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Support for Jsonnet">
+          <a href="../template_overlays/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Overlays for Cluster-Specific Helm Deployments">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3928,20 +3687,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Support for Jsonnet
+                Example Overlays for Cluster-Specific Helm Deployments
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../features/dependency-management/" class="md-footer__link md-footer__link--next" aria-label="Next: Dependency Management">
+          <a href="../external_secret/" class="md-footer__link md-footer__link--next" aria-label="Next: Example Integration with External Secret Management">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Dependency Management
+                Example Integration with External Secret Management
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -4031,12 +3790,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
-        <script src="../../javascript/extra.js"></script>
+        <script src="../../../javascript/extra.js"></script>
       
     
   </body>
