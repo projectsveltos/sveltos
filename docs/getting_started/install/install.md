@@ -106,6 +106,14 @@ projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
 projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
 ```
 
+!!!note "Upgrade Information"
+    - **Sveltos v1.1.1 and later**
+        - **Manifest:** Simply apply the latest manifest available. The YAML directly updates CRDs and all components.
+        - **Helm Chart:** The Sveltos Helm chart automatically updates CRDs before other components using a built-in Job.
+    - **Sveltos v1.1.0 and earlier**
+        - **Helm Chart:** Follow the standard [Helm chart upgrade process](https://helm.sh/docs/helm/helm_upgrade/).
+        - **Sveltos Helm Chart and CRDs Helm Chart:** If Sveltos was initially deployed using separate Helm charts for Sveltos and its CRDs, this approach must be maintained for all upgrades. Switching to the combined chart installation or upgrade is **not supported**. The Sveltos CRDs Helm chart should be upgraded first, followed by the main Sveltos chart.
+
 ## Optional Components
 
 ### Sveltos Dashboard
