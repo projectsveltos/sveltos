@@ -112,7 +112,7 @@ projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
         - **Helm Chart:** The Sveltos Helm chart automatically updates CRDs before other components using a built-in Job.
     - **Sveltos v1.1.0 and earlier**
         - **Helm Chart:** Follow the standard [Helm chart upgrade process](https://helm.sh/docs/helm/helm_upgrade/).
-        - **Sveltos Helm Chart and CRDs Helm Chart:** Upgrade the Sveltos CRDs Helm chart first before processing to the main Sveltos chart upgrade.
+        - **Sveltos Helm Chart and CRDs Helm Chart:** Upgrade the Sveltos CRDs Helm chart first before processing to the main Sveltos chart upgrade. Keep in mind, the CRDs built-in Job included in v1.1.1 does not apply here.
 
 ## Optional Components
 
