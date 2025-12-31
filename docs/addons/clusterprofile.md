@@ -75,7 +75,7 @@ policyRefs:
   name: my-secret-1
   namespace: my-namespace-1
   deploymentType: Local
-- kind: Remote
+- kind: ConfigMap
   name: my-configmap-1
   namespace: my-namespace-1
   deploymentType: Remote
