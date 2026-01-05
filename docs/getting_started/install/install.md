@@ -98,12 +98,18 @@ $ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overl
 Get the Sveltos status and verify that all pods are **Up** and **Running**.
 
 ```
-projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
-projectsveltos addon-controller-df8965884-x7hp5        2/2     Running   0  40s
-projectsveltos classifier-manager-6489f67447-52xd6     2/2     Running   0  40s
-projectsveltos hc-manager-7b6d7c4968-x8f7b             2/2     Running   0  39s
-projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
-projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
+$ kubectl get pods -n projectsveltos
+NAME                                      READY   STATUS    RESTARTS   AGE
+access-manager-d968dc949-gsznw            1/1     Running   0          3m22s
+addon-controller-ddb67b8b-stkxd           1/1     Running   0          3m22s
+classifier-manager-666fbf775f-2w9ct       1/1     Running   0          3m22s
+event-manager-84688bcf8b-x88sq            1/1     Running   0          3m22s
+hc-manager-694984b5c-j6kf8                1/1     Running   0          3m22s
+mcp-server-6d578c594d-lgl6z               1/1     Running   0          3m22s
+sc-manager-5bfff7fdc8-fd94g               1/1     Running   0          3m22s
+shard-controller-d858df478-9qcr2          1/1     Running   0          3m22s
+sveltos-agent-manager-7f4dbc8955-k56g6    1/1     Running   0          2m19s
+techsupport-controller-584c96df59-dcdhh   1/1     Running   0          3m22s
 ```
 
 !!!note "Upgrade Information"
