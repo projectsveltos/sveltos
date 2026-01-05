@@ -3990,12 +3990,18 @@
 </span></code></pre></div>
 <h2 id="sveltos-verification">Sveltos Verification</h2>
 <p>Get the Sveltos status and verify that all pods are <strong>Up</strong> and <strong>Running</strong>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>projectsveltos access-manager-69d7fd69fc-7r4lw         2/2     Running   0  40s
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>projectsveltos addon-controller-df8965884-x7hp5        2/2     Running   0  40s
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>projectsveltos classifier-manager-6489f67447-52xd6     2/2     Running   0  40s
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>projectsveltos hc-manager-7b6d7c4968-x8f7b             2/2     Running   0  39s
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>projectsveltos sc-manager-cb6786669-9qzdw              2/2     Running   0  40s
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>projectsveltos event-manager-7b885dbd4c-tmn6m          2/2     Running   0  40s
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$ kubectl get pods -n projectsveltos
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>NAME                                      READY   STATUS    RESTARTS   AGE
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>access-manager-d968dc949-gsznw            1/1     Running   0          3m22s
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>addon-controller-ddb67b8b-stkxd           1/1     Running   0          3m22s
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>classifier-manager-666fbf775f-2w9ct       1/1     Running   0          3m22s
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>event-manager-84688bcf8b-x88sq            1/1     Running   0          3m22s
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>hc-manager-694984b5c-j6kf8                1/1     Running   0          3m22s
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>mcp-server-6d578c594d-lgl6z               1/1     Running   0          3m22s
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>sc-manager-5bfff7fdc8-fd94g               1/1     Running   0          3m22s
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>shard-controller-d858df478-9qcr2          1/1     Running   0          3m22s
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>sveltos-agent-manager-7f4dbc8955-k56g6    1/1     Running   0          2m19s
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>techsupport-controller-584c96df59-dcdhh   1/1     Running   0          3m22s
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Upgrade Information</p>
