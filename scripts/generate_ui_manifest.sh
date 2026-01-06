@@ -17,6 +17,11 @@ cd ui-backend
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/dashboard-manifest.yaml
     echo "---"  >> ../../manifest/dashboard-manifest.yaml
@@ -31,6 +36,11 @@ cd dashboard
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/dashboard-manifest.yaml
     echo "---"  >> ../../manifest/dashboard-manifest.yaml
