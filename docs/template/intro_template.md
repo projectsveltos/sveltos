@@ -57,7 +57,7 @@ Sveltos provides a set of functions specifically designed for manipulating resou
 !!! note
     These functions operate on copies of the original resource, ensuring the original data remains untouched.
 
-For practical examples, take a look [here](./examples/resource_manipulation_functions.md.
+For practical examples, take a look [here](./resource_manipulation_functions.md).
 
 Consider combining those methods with the [post render patches](../features/post-renderer-patches.md) approach.
 
@@ -71,7 +71,3 @@ Consider combining those methods with the [post render patches](../features/post
 1. **fromYamlArray**: It converts a **YAML array** into a []interface{}
 1. **fromJson**: It converts a **YAML** document into a map[string]interface{}
 1. **fromJsonArray**: It converts a **JSON array** into a []interface{}
-
-## Next Steps
-
-- [Additional Templates Information](../template/additional_template_info.md)

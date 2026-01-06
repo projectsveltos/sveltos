@@ -26,7 +26,7 @@ The `ytt controller` offers the capability to process Carvel ytt files using dif
 
 ## Option 1: GitRepository
 
-![Sveltos managing clusters](../assets/flux-ytt-sveltos.png)
+![Sveltos managing clusters](../../assets/flux-ytt-sveltos.png)
 
 We can leverage the GitRepository as a source for the ytt controller[^1]. For example, in the provided GitHub repository [ytt-examples](https://github.com/gianlucam76/ytt-examples), we can find the ytt files that Flux will sync. To instruct the ytt controller to fetch files from this repository, create a YttSource CRD instance with the below configuration:
 
@@ -45,7 +45,7 @@ spec:
 
 The `path` field specifies the location within the Git repository where the ytt files are stored. Once Flux detects changes in the repository and syncs it, the ytt-controller will automatically invoke the ytt module and store the output in the Status section of the YttSource instance.
 
-At this point, you can use the Sveltos' [template](./examples/template_generic.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
+At this point, you can use the Sveltos' [template](./template_generic.md) feature to deploy the output of ytt (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
 
 ### ClusterProfile
 !!! example "Example - ClusterProfile and Resources Definition"

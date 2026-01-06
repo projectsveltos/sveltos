@@ -28,7 +28,7 @@ The `jsonnet controller` offers the capability to process jsonnet files using di
 
 ## Option 1: GitRepository
 
-![Sveltos managing clusters](../assets/flux-jsonnet-sveltos.png)
+![Sveltos managing clusters](../../assets/flux-jsonnet-sveltos.png)
 
 We can leverage GitRepository as a source for the jsonnet controller[^1]. For example, in the provided GitHub repository [jsonnet-examples](https://github.com/gianlucam76/jsonnet-examples), we can find the jsonnet files that Flux will sync.
 
@@ -53,7 +53,7 @@ spec:
 
 The `path` field specifies the location within the Git repository where the jsonnet file is stored. Once Flux detects changes in the repository and syncs it, the jsonnet-controller will automatically invoke the jsonnet module and store the output in the Status section of the JsonnetSource instance.
 
-At this point, you can use the Sveltos' [template](./examples/template_generic.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
+At this point, you can use the Sveltos' [template](./template_generic.md) feature to deploy the output of the jsonnet (Kubernetes resources) to a managed cluster. The Kubernetes add-on controller will take care of deploying it[^2].
 
 ### ClusterProfile
 !!! example "Example - ClusterProfile and Resources Definition"

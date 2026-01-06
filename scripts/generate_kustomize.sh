@@ -23,6 +23,11 @@ cd libsveltos
 git checkout ${branch}
 for f in manifests/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cp $f ../../kustomize/components/crds/.
 done
@@ -38,6 +43,11 @@ git checkout ${branch}
 touch ../../kustomize/base/addon-controller.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -73,6 +83,11 @@ git checkout ${branch}
 touch ../../kustomize/base/access-manager.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/access-manager.yaml
 done
@@ -88,6 +103,11 @@ git checkout ${branch}
 touch ../../kustomize/base/sveltoscluster-manager.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -114,6 +134,11 @@ git checkout ${branch}
 touch ../../kustomize/base/healthcheck-manager.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -135,6 +160,11 @@ git checkout ${branch}
 touch ../../kustomize/base/event-manager.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -156,6 +186,11 @@ git checkout ${branch}
 touch ../../kustomize/base/classifier.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -185,6 +220,11 @@ cd sveltos-agent
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cp $f ../../kustomize/overlays/agentless-mode/sveltos-agent.yaml
@@ -203,6 +243,11 @@ cd drift-detection-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cp $f ../../kustomize/overlays/agentless-mode/drift-detection-manager.yaml
@@ -222,6 +267,11 @@ git checkout ${branch}
 touch ../../kustomize/base/shard-controller.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/shard-controller.yaml
 done
@@ -239,6 +289,11 @@ git checkout ${branch}
 touch ../../kustomize/base/register-mgmt-cluster.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/register-mgmt-cluster.yaml
 done
@@ -256,6 +311,11 @@ git checkout ${branch}
 touch ../../kustomize/base/techsupport.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../kustomize/base/techsupport.yaml
 done
@@ -270,11 +330,16 @@ rm -rf tmp; mkdir tmp; cd tmp
 git clone git@github.com:projectsveltos/mcp-server.git
 cd mcp-server
 git checkout ${branch}
-touch ../../kustomize/base/techsupport.yaml
+touch ../../kustomize/base/mcp-server.yaml
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
-    cat $f >> ../../kustomize/base/techsupport.yaml
+    cat $f >> ../../kustomize/base/mcp-server.yaml
 done
 cd ../../; rm -rf tmp
 

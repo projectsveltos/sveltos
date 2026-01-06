@@ -21,6 +21,11 @@ cd libsveltos
 git checkout ${branch}
 for f in manifests/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -46,6 +51,11 @@ cd addon-controller
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -79,6 +89,11 @@ cd access-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -95,6 +110,11 @@ cd sveltoscluster-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -117,6 +137,11 @@ cd healthcheck-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -139,6 +164,11 @@ cd event-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -161,6 +191,11 @@ cd classifier
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -194,6 +229,11 @@ cd sveltos-agent
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -213,6 +253,11 @@ cd drift-detection-manager
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     if [[ "$f" == *"mgmt_cluster_common_manifest.yaml"* ]]; then
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
@@ -232,6 +277,11 @@ cd shard-controller
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -248,6 +298,11 @@ cd register-mgmt-cluster
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -264,6 +319,11 @@ cd techsupport
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -280,6 +340,11 @@ cd mcp-server
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml
@@ -301,6 +366,11 @@ cd sveltosctl
 git checkout ${branch}
 for f in manifest/*.yaml
 do
+    # ignore kustomization.yaml file
+    if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/sveltosctl_manifest.yaml
     echo "---"  >> ../../manifest/sveltosctl_manifest.yaml
