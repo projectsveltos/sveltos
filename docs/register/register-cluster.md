@@ -253,7 +253,7 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
 
 ## Register Open Cluster Management (OCM) Cluster
 
-With the [sveltos-ocm-addon](https://github.com/guilhem/sveltos-ocm-addon), an [Open Cluster Management AddOn](https://open-cluster-management.io/), users can automatically register OCM-managed clusters as Sveltos clusters.
+With the [sveltos-ocm-addon](https://github.com/guilhem/sveltos-ocm-addon), an [Open Cluster Management addon](https://open-cluster-management.io/), users can automatically register OCM-managed clusters as Sveltos clusters.
 
 **How does it work?**
 
@@ -262,7 +262,7 @@ With the [sveltos-ocm-addon](https://github.com/guilhem/sveltos-ocm-addon), an [
 - The addon sets up **service accounts**, **RBAC**, and creates a `SveltosCluster` resource for each cluster.
 - Sveltos can now manage the clusters.
 
-For more information about the integration, refer to the [sveltos-ocm-addon GitHub repository](https://github.com/guilhem/sveltos-ocm-addon).
+For more information about the integration and deployment, refer to the [sveltos-ocm-addon GitHub repository](https://github.com/guilhem/sveltos-ocm-addon).
 
 ## Register Management Cluster
 
