@@ -251,6 +251,19 @@ By default, Sveltos searches for a `Secret` named `<cluster-name>-sveltos-kubeco
 !!!tip
     To get an idea on how an already registered cluster looks like, check out the Sveltos `mgmt` cluster using the command ```kubectl get sveltoscluster mgmt -n mgmt -o yaml```.
 
+## Register Open Cluster Management (OCM) Cluster
+
+With the [sveltos-ocm-addon](https://github.com/guilhem/sveltos-ocm-addon), an [Open Cluster Management addon](https://open-cluster-management.io/), users can automatically register OCM-managed clusters as Sveltos clusters.
+
+**How does it work?**
+
+- Deploy the Sveltos OCM addon on the [OCM Hub](https://open-cluster-management.io/docs/scenarios/manage-cluster-with-multiple-hubs/).
+- Use OCM Placement and labels to select OCM-managed clusters for registration.
+- The addon sets up **service accounts**, **RBAC**, and creates a `SveltosCluster` resource for each cluster.
+- Sveltos can now manage the clusters.
+
+For more information about the integration and deployment, refer to the [sveltos-ocm-addon GitHub repository](https://github.com/guilhem/sveltos-ocm-addon).
+
 ## Register Management Cluster
 
 Sveltos manages add-ons not only on **managed** clusters but also on the **management** clusters. The management cluster is the Kubernetes cluster where Sveltos is deployed. To enable add-ons there, apply the labels of your choice. The Sveltos management cluster is registered in the `mgmt` namespace under the name `mgmt`.
@@ -270,9 +283,9 @@ For a Helm chart installation, have a look at the Helm chart [values](https://ar
 
 ## UnRegister Cluster
 
-It is recommended, but not required, to use the sveltosctl for cluster deregistration.
+It is recommended, but not required, to use the `sveltosctl` for cluster deregistration.
 
-To remove a cluster that was previously registered with Sveltos, you use the `sveltosctl deregister cluster` command. This process, often referred to as "deregistration," ensures a clean termination of Sveltos management for the specified cluster.
+To remove a cluster that was previously registered with Sveltos, you use the `sveltosctl deregister cluster` command. This process, often referred to as "deregistration", ensures a clean termination of Sveltos management for the specified cluster.
 
 ```bash
 $ sveltosctl deregister cluster \
@@ -280,8 +293,6 @@ $ sveltosctl deregister cluster \
     --cluster=eng-staging-01 \
     [--verbose]
 ```
-
-
 
 | Parameter        |    Description                                                                                                   |
 |------------------|------------------------------------------------------------------------------------------------------------------|
