@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+    name: mcp-server
+    namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: sveltos-mcp-server
+rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
+---
+apiVersion: v1
+kind: Service
+metadata:
+    labels:
+        control-plane: mcp-server
+    name: mcp-server
+    namespace: projectsveltos
+spec:
+    ports:
+        - name: mcp
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+    selector:
+        control-plane: mcp-server
+    type: ClusterIP
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: sveltos-mcp-server
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: sveltos-mcp-server
+subjects:
+    - kind: ServiceAccount
+      name: mcp-server
+      namespace: projectsveltos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        control-plane: mcp-server
+    name: mcp-server
+    namespace: projectsveltos
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            control-plane: mcp-server
+    template:
+        metadata:
+            annotations:
+                kubectl.kubernetes.io/default-container: controller
+            labels:
+                control-plane: mcp-server
+        spec:
+            containers:
+                - args:
+                    - --v=5
+                  command:
+                    - /manager
+                  env:
+                    - name: GOMEMLIMIT
+                      valueFrom:
+                        resourceFieldRef:
+                            resource: limits.memory
+                    - name: GOMAXPROCS
+                      valueFrom:
+                        resourceFieldRef:
+                            resource: limits.cpu
+                  image: docker.io/projectsveltos/mcp-server:main
+                  imagePullPolicy: IfNotPresent
+                  livenessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /healthz
+                        port: mcp
+                        scheme: HTTP
+                    initialDelaySeconds: 15
+                    periodSeconds: 20
+                  name: controller
+                  ports:
+                    - containerPort: 8080
+                      name: mcp
+                      protocol: TCP
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                        path: /readyz
+                        port: mcp
+                        scheme: HTTP
+                    initialDelaySeconds: 5
+                    periodSeconds: 10
+                  resources:
+                    requests:
+                        memory: 256Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+                    seccompProfile:
+                        type: RuntimeDefault
+                  volumeMounts:
+                    - mountPath: /tmp
+                      name: tmp
+            securityContext:
+                runAsNonRoot: true
+            serviceAccountName: mcp-server
+            terminationGracePeriodSeconds: 10
+            volumes:
+                - emptyDir: {}
+                  name: tmp
+---
