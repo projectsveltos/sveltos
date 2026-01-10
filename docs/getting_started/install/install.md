@@ -32,7 +32,7 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 Execute the below commands.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.3.1/manifest/manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.4.0/manifest/manifest.yaml
 ```
 
 ### Mode 2: Centralized Agent Mode (Manifest)
@@ -40,7 +40,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.3
 If you do not want to have any Sveltos agent in any **managed cluster**, run the commands below.
 
 ```sh
-$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.3.1/manifest/agents_in_mgmt_cluster_manifest.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.4.0/manifest/agents_in_mgmt_cluster_manifest.yaml
 ```
 
 !!! warning
@@ -84,13 +84,13 @@ $ helm list -n projectsveltos
 #### Mode 1: Local Agent Mode
 
 ```sh
-$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=v1.3.1 |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/base\?timeout\=120\&ref\=v1.4.0 |kubectl apply -f -
 ```
 
 #### Mode 2: Centralized Agent Mode
 
 ```sh
-$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v1.3.1 |kubectl apply -f -
+$ kustomize build https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode\?timeout\=120\&ref\=v1.4.0 |kubectl apply -f -
 ```
 
 ## Sveltos Verification
@@ -136,5 +136,5 @@ Sveltos also offers a Grafana dashboard to help users track and visualize a numb
 Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
 
 [^1]: sveltos-agent will be deployed if there is at least one Classifier instance in the management cluster. Drift detection manager will be deployed if there is a ClusterProfile instance with SyncMode set to *ContinuousWithDriftDetection*.
-[^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v1.3.1/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
+[^2]: If Prometheus operator is not present in your management cluster, you will see (and can ignore) following error: *error: unable to recognize "https://raw.githubusercontent.com/projectsveltos/sveltos/v1.4.0/manifest/manifest.yaml": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"*
 [^3]: Sveltos collects **minimal**, **anonymised** data. That includes the `version information` alognside `cluster management data` (number of managed SveltosClusters, CAPI clusters, number of ClusterProdiles/Profiles and ClusterSummaries). To **opt-out**, for Helm-based installations use ```helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace --set telemetry.disabled=true``` and for manual deployment use the ```--disable-telemetry=true``` flag in the Sveltos `addon-controller` configuration.
