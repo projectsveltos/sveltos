@@ -6,30 +6,30 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos' ClusterSet lets you manage groups of clusters and automatically deploy your applications to healthy ones. If a cluster fails, Sveltos automatically picks another to keep things running smoothly.">
+        <meta name="description" content="Sveltos allows you to use Cluster API resources and automate the deployment of customised Kubernetes clusters on Docker.">
       
       
       
       
-        <link rel="prev" href="../post-renderer-patches/">
+        <link rel="prev" href="../use_case_azure/">
       
       
-        <link rel="next" href="../rolling_upgrade/">
+        <link rel="next" href="../../../getting_started/install/quick_start/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
     
     
       
-        <title>Sveltos ClusterSet/Set - Projectsveltos Documentation</title>
+        <title>Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Docker - Projectsveltos Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.84d31ad4.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#clusterset-and-set" class="md-skip">
+        <a href="#scenario" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
   </a>
 
             </div>
-            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
           </aside>
         
       </div>
@@ -111,9 +111,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../.." title="Projectsveltos Documentation" class="md-header__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -130,7 +130,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos ClusterSet/Set
+              Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Docker
             
           </span>
         </div>
@@ -251,9 +251,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
+    <a href="../../.." title="Projectsveltos Documentation" class="md-nav__button md-logo" aria-label="Projectsveltos Documentation" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../../assets/logo.png" alt="logo">
 
     </a>
     Projectsveltos Documentation
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -299,18 +299,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -326,7 +328,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Use Cases
@@ -340,7 +342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_idp/" class="md-nav__link">
+      <a href="../../use_case_idp/" class="md-nav__link">
         
   
   
@@ -363,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -386,7 +388,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_multi-tenancy/" class="md-nav__link">
+      <a href="../../use_case_multi-tenancy/" class="md-nav__link">
         
   
   
@@ -409,7 +411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/use_case_gitops/" class="md-nav__link">
+      <a href="../../use_case_gitops/" class="md-nav__link">
         
   
   
@@ -429,18 +431,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
         
           
           <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
@@ -456,7 +460,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_5">
             <span class="md-nav__icon md-icon"></span>
             Cluster API
@@ -470,7 +474,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
+      <a href="../use_case_eks/" class="md-nav__link">
         
   
   
@@ -493,7 +497,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
+      <a href="../use_case_azure/" class="md-nav__link">
         
   
   
@@ -513,10 +517,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../use_cases/clusterAPI/use_case_docker/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Cluster API on Docker
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -527,6 +551,132 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scenario
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github Resources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-create-a-kind-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Create a Kind Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-initialise-and-deploy-capi-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Initialise and Deploy CAPI Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-install-argocd-on-the-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Install ArgoCD on the Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-deploy-sveltos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Deploy Sveltos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-push-a-prmerge-request-to-add-a-new-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Push a PR/Merge Request to add a new user
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-install-cilium-as-container-network-interface-cni" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Install Cilium as Container Network Interface (CNI)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-remove-a-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6: Remove a User
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -630,7 +780,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/quick_start/" class="md-nav__link">
+      <a href="../../../getting_started/install/quick_start/" class="md-nav__link">
         
   
   
@@ -653,7 +803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/install/" class="md-nav__link">
+      <a href="../../../getting_started/install/install/" class="md-nav__link">
         
   
   
@@ -676,7 +826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/install/air_gapped_installation/" class="md-nav__link">
+      <a href="../../../getting_started/install/air_gapped_installation/" class="md-nav__link">
         
   
   
@@ -745,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/sveltosctl/" class="md-nav__link">
         
   
   
@@ -806,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/visibility/" class="md-nav__link">
         
   
   
@@ -829,7 +979,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/dryrun/" class="md-nav__link">
         
   
   
@@ -852,7 +1002,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
+      <a href="../../../getting_started/sveltosctl/features/force_redeployment/" class="md-nav__link">
         
   
   
@@ -929,7 +1079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/dashboard/" class="md-nav__link">
+      <a href="../../../getting_started/optional/dashboard/" class="md-nav__link">
         
   
   
@@ -952,7 +1102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/optional/grafanadashboard/" class="md-nav__link">
+      <a href="../../../getting_started/optional/grafanadashboard/" class="md-nav__link">
         
   
   
@@ -1028,7 +1178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register-cluster/" class="md-nav__link">
+      <a href="../../../register/register-cluster/" class="md-nav__link">
         
   
   
@@ -1051,7 +1201,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/register_cluster_pull_mode/" class="md-nav__link">
+      <a href="../../../register/register_cluster_pull_mode/" class="md-nav__link">
         
   
   
@@ -1074,7 +1224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/readiness_liveness_checks/" class="md-nav__link">
+      <a href="../../../register/readiness_liveness_checks/" class="md-nav__link">
         
   
   
@@ -1097,7 +1247,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/token-renewal/" class="md-nav__link">
+      <a href="../../../register/token-renewal/" class="md-nav__link">
         
   
   
@@ -1158,7 +1308,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/pausing/" class="md-nav__link">
+      <a href="../../../register/features/pausing/" class="md-nav__link">
         
   
   
@@ -1181,7 +1331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../register/features/cluster_maintenance_window/" class="md-nav__link">
+      <a href="../../../register/features/cluster_maintenance_window/" class="md-nav__link">
         
   
   
@@ -1257,7 +1407,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/addons/" class="md-nav__link">
+      <a href="../../../addons/addons/" class="md-nav__link">
         
   
   
@@ -1280,7 +1430,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/helm_charts/" class="md-nav__link">
+      <a href="../../../addons/helm_charts/" class="md-nav__link">
         
   
   
@@ -1303,7 +1453,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/raw_yaml/" class="md-nav__link">
+      <a href="../../../addons/raw_yaml/" class="md-nav__link">
         
   
   
@@ -1326,7 +1476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/kustomize/" class="md-nav__link">
+      <a href="../../../addons/kustomize/" class="md-nav__link">
         
   
   
@@ -1349,7 +1499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/combining_all/" class="md-nav__link">
+      <a href="../../../addons/combining_all/" class="md-nav__link">
         
   
   
@@ -1372,7 +1522,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/example_flux_sources/" class="md-nav__link">
+      <a href="../../../addons/example_flux_sources/" class="md-nav__link">
         
   
   
@@ -1395,7 +1545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/clusterprofile/" class="md-nav__link">
+      <a href="../../../addons/clusterprofile/" class="md-nav__link">
         
   
   
@@ -1418,7 +1568,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../addons/profile/" class="md-nav__link">
+      <a href="../../../addons/profile/" class="md-nav__link">
         
   
   
@@ -1486,7 +1636,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
+      <a href="../../../deployment_order/manifest_order/" class="md-nav__link">
         
   
   
@@ -1509,7 +1659,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
+      <a href="../../../deployment_order/depends_on/" class="md-nav__link">
         
   
   
@@ -1532,7 +1682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
+      <a href="../../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
         
   
   
@@ -1555,7 +1705,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
+      <a href="../../../deployment_order/tiers/" class="md-nav__link">
         
   
   
@@ -1578,7 +1728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../../../deployment_order/rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -1601,7 +1751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/progressive_rollout/" class="md-nav__link">
+      <a href="../../../deployment_order/progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1624,7 +1774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
+      <a href="../../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
         
   
   
@@ -1647,7 +1797,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../../../deployment_order/order_with_events/" class="md-nav__link">
         
   
   
@@ -1715,7 +1865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/intro_template/" class="md-nav__link">
+      <a href="../../../template/intro_template/" class="md-nav__link">
         
   
   
@@ -1738,7 +1888,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/additional_template_info/" class="md-nav__link">
+      <a href="../../../template/additional_template_info/" class="md-nav__link">
         
   
   
@@ -1761,7 +1911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/resource_manipulation_functions/" class="md-nav__link">
+      <a href="../../../template/resource_manipulation_functions/" class="md-nav__link">
         
   
   
@@ -1784,7 +1934,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/lua/" class="md-nav__link">
+      <a href="../../../template/lua/" class="md-nav__link">
         
   
   
@@ -1807,7 +1957,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../../template/generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -1868,7 +2018,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/template_generic/" class="md-nav__link">
+      <a href="../../../template/examples/template_generic/" class="md-nav__link">
         
   
   
@@ -1891,7 +2041,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/template_overlays/" class="md-nav__link">
+      <a href="../../../template/examples/template_overlays/" class="md-nav__link">
         
   
   
@@ -1914,7 +2064,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/crossplane/" class="md-nav__link">
+      <a href="../../../template/examples/crossplane/" class="md-nav__link">
         
   
   
@@ -1937,7 +2087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/external_secret/" class="md-nav__link">
+      <a href="../../../template/examples/external_secret/" class="md-nav__link">
         
   
   
@@ -1960,7 +2110,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/bring_your_own_controller/" class="md-nav__link">
+      <a href="../../../template/examples/bring_your_own_controller/" class="md-nav__link">
         
   
   
@@ -1983,7 +2133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/multicluster_iteration_template/" class="md-nav__link">
+      <a href="../../../template/examples/multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -2006,7 +2156,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/ytt_extension/" class="md-nav__link">
+      <a href="../../../template/examples/ytt_extension/" class="md-nav__link">
         
   
   
@@ -2029,7 +2179,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../template/examples/jsonnet_extension/" class="md-nav__link">
+      <a href="../../../template/examples/jsonnet_extension/" class="md-nav__link">
         
   
   
@@ -2064,20 +2214,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -2093,7 +2241,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             Features
@@ -2107,7 +2255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dependency-management/" class="md-nav__link">
+      <a href="../../../features/dependency-management/" class="md-nav__link">
         
   
   
@@ -2130,7 +2278,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dryrun/" class="md-nav__link">
+      <a href="../../../features/dryrun/" class="md-nav__link">
         
   
   
@@ -2153,7 +2301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration_drift/" class="md-nav__link">
+      <a href="../../../features/configuration_drift/" class="md-nav__link">
         
   
   
@@ -2176,7 +2324,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../post-renderer-patches/" class="md-nav__link">
+      <a href="../../../features/post-renderer-patches/" class="md-nav__link">
         
   
   
@@ -2196,30 +2344,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Dynamic Cluster Management and Failover
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../features/set/" class="md-nav__link">
         
   
   
@@ -2230,153 +2358,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#clusterset-and-set" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterSet and Set
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ClusterSet and Set">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-capabilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Capabilities
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#referencing-clustersetset-in-a-clusterprofileprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Referencing ClusterSet/Set in a ClusterProfile/Profile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#activepassive-failover-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Active/Passive Failover Example
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Active/Passive Failover Example">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#register-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Register Clusters:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#create-a-clusterset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Create a ClusterSet
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-detects-matching-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Detects Matching Clusters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deploy-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Deploy a ClusterProfile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-deploys-kyverno" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Deploys Kyverno
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#selected-cluster-becomes-unhealthy" class="md-nav__link">
-    <span class="md-ellipsis">
-      Selected Cluster Becomes Unhealthy
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#clusterset-selects-new-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterSet Selects New Cluster
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile-re-deploys-add-ons" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterProfile Re-deploys Add-ons
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      Summary
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2389,7 +2370,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../rolling_upgrade/" class="md-nav__link">
+      <a href="../../../features/rolling_upgrade/" class="md-nav__link">
         
   
   
@@ -2412,7 +2393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mcp/" class="md-nav__link">
+      <a href="../../../features/mcp/" class="md-nav__link">
         
   
   
@@ -2435,7 +2416,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../labels_management/" class="md-nav__link">
+      <a href="../../../features/labels_management/" class="md-nav__link">
         
   
   
@@ -2496,7 +2477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../multi-tenancy-full-isolation/" class="md-nav__link">
+      <a href="../../../features/multi-tenancy-full-isolation/" class="md-nav__link">
         
   
   
@@ -2519,7 +2500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../multi-tenancy-sharing-cluster/" class="md-nav__link">
+      <a href="../../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
         
   
   
@@ -2550,7 +2531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../techsupport/" class="md-nav__link">
+      <a href="../../../features/techsupport/" class="md-nav__link">
         
   
   
@@ -2618,7 +2599,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/addon_event_deployment/" class="md-nav__link">
+      <a href="../../../events/addon_event_deployment/" class="md-nav__link">
         
   
   
@@ -2641,7 +2622,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/aggregated_selection/" class="md-nav__link">
+      <a href="../../../events/aggregated_selection/" class="md-nav__link">
         
   
   
@@ -2664,7 +2645,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating/" class="md-nav__link">
+      <a href="../../../events/templating/" class="md-nav__link">
         
   
   
@@ -2687,7 +2668,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/templating_all_resources_together/" class="md-nav__link">
+      <a href="../../../events/templating_all_resources_together/" class="md-nav__link">
         
   
   
@@ -2710,7 +2691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/generators/" class="md-nav__link">
+      <a href="../../../events/generators/" class="md-nav__link">
         
   
   
@@ -2733,7 +2714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/nats/" class="md-nav__link">
+      <a href="../../../events/nats/" class="md-nav__link">
         
   
   
@@ -2794,7 +2775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/secrets_on_demand/" class="md-nav__link">
+      <a href="../../../events/examples/secrets_on_demand/" class="md-nav__link">
         
   
   
@@ -2817,7 +2798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/db-as-a-service/" class="md-nav__link">
+      <a href="../../../events/examples/db-as-a-service/" class="md-nav__link">
         
   
   
@@ -2840,7 +2821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/managed-services/" class="md-nav__link">
+      <a href="../../../events/examples/managed-services/" class="md-nav__link">
         
   
   
@@ -2863,7 +2844,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/service_event_trigger/" class="md-nav__link">
+      <a href="../../../events/examples/service_event_trigger/" class="md-nav__link">
         
   
   
@@ -2886,7 +2867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/otel/" class="md-nav__link">
+      <a href="../../../events/examples/otel/" class="md-nav__link">
         
   
   
@@ -2909,7 +2890,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/flux_sources/" class="md-nav__link">
+      <a href="../../../events/examples/flux_sources/" class="md-nav__link">
         
   
   
@@ -2932,7 +2913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/api_gateway_contour/" class="md-nav__link">
+      <a href="../../../events/examples/api_gateway_contour/" class="md-nav__link">
         
   
   
@@ -2955,7 +2936,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cross_cluster_configuration/" class="md-nav__link">
+      <a href="../../../events/examples/cross_cluster_configuration/" class="md-nav__link">
         
   
   
@@ -2978,7 +2959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/loadbalancer/" class="md-nav__link">
+      <a href="../../../events/examples/loadbalancer/" class="md-nav__link">
         
   
   
@@ -3001,7 +2982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+      <a href="../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
         
   
   
@@ -3024,7 +3005,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory/" class="md-nav__link">
+      <a href="../../../events/examples/cluster_inventory/" class="md-nav__link">
         
   
   
@@ -3047,7 +3028,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
+      <a href="../../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
         
   
   
@@ -3070,7 +3051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/mcs_api/" class="md-nav__link">
+      <a href="../../../events/examples/mcs_api/" class="md-nav__link">
         
   
   
@@ -3093,7 +3074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
+      <a href="../../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
         
   
   
@@ -3169,7 +3150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/notifications/" class="md-nav__link">
+      <a href="../../../observability/notifications/" class="md-nav__link">
         
   
   
@@ -3192,7 +3173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_addon_notification/" class="md-nav__link">
+      <a href="../../../observability/example_addon_notification/" class="md-nav__link">
         
   
   
@@ -3215,7 +3196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -3238,7 +3219,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
+      <a href="../../../observability/example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -3261,7 +3242,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
+      <a href="../../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
         
   
   
@@ -3284,7 +3265,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../../../observability/example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -3307,7 +3288,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_cis_scan/" class="md-nav__link">
+      <a href="../../../observability/example_cis_scan/" class="md-nav__link">
         
   
   
@@ -3330,7 +3311,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/display_resources/" class="md-nav__link">
+      <a href="../../../observability/display_resources/" class="md-nav__link">
         
   
   
@@ -3353,7 +3334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/different_resources/" class="md-nav__link">
+      <a href="../../../observability/different_resources/" class="md-nav__link">
         
   
   
@@ -3421,7 +3402,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/vertical_scaling/" class="md-nav__link">
+      <a href="../../../scalability/vertical_scaling/" class="md-nav__link">
         
   
   
@@ -3444,7 +3425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
+      <a href="../../../scalability/horizontal_scaling_sharding/" class="md-nav__link">
         
   
   
@@ -3512,7 +3493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../help_and_tutorials/troubleshooting/" class="md-nav__link">
+      <a href="../../../help_and_tutorials/troubleshooting/" class="md-nav__link">
         
   
   
@@ -3580,7 +3561,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/resource-owners/" class="md-nav__link">
+      <a href="../../../reference/resource-owners/" class="md-nav__link">
         
   
   
@@ -3603,7 +3584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../internals/cr-ownership/" class="md-nav__link">
+      <a href="../../../internals/cr-ownership/" class="md-nav__link">
         
   
   
@@ -3633,7 +3614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../blogs/" class="md-nav__link">
+      <a href="../../../blogs/" class="md-nav__link">
         
   
   
@@ -3655,7 +3636,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../archive/" class="md-nav__link">
+      <a href="../../../archive/" class="md-nav__link">
         
   
   
@@ -3695,129 +3676,108 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#clusterset-and-set" class="md-nav__link">
+  <a href="#scenario" class="md-nav__link">
     <span class="md-ellipsis">
-      ClusterSet and Set
+      Scenario
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="ClusterSet and Set">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-capabilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Capabilities
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#referencing-clustersetset-in-a-clusterprofileprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Referencing ClusterSet/Set in a ClusterProfile/Profile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#activepassive-failover-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Active/Passive Failover Example
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Active/Passive Failover Example">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#register-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Register Clusters:
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#create-a-clusterset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Create a ClusterSet
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-detects-matching-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Detects Matching Clusters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deploy-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      Deploy a ClusterProfile
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-deploys-kyverno" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sveltos Deploys Kyverno
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#selected-cluster-becomes-unhealthy" class="md-nav__link">
-    <span class="md-ellipsis">
-      Selected Cluster Becomes Unhealthy
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#clusterset-selects-new-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterSet Selects New Cluster
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile-re-deploys-add-ons" class="md-nav__link">
-    <span class="md-ellipsis">
-      ClusterProfile Re-deploys Add-ons
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#github-resources" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Github Resources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-create-a-kind-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Create a Kind Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-initialise-and-deploy-capi-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Initialise and Deploy CAPI Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-install-argocd-on-the-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Install ArgoCD on the Management Cluster
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-deploy-sveltos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Deploy Sveltos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-push-a-prmerge-request-to-add-a-new-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Push a PR/Merge Request to add a new user
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-install-cilium-as-container-network-interface-cni" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Install Cilium as Container Network Interface (CNI)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-remove-a-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6: Remove a User
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
     </span>
   </a>
   
@@ -3842,205 +3802,109 @@
   
 
 
-  <h1>Dynamic Cluster Management and Failover</h1>
+  <h1>Cluster API on Docker</h1>
 
-<h2 id="clusterset-and-set">ClusterSet and Set</h2>
-<p>Sveltos offers two resources, <code>ClusterSet</code> and <code>Set</code>, to manage groups of clusters and dynamically select a subset of those clusters for deployments based on specific criteria.
-This enables automated deployments and failover across healthy clusters in your environment.</p>
-<h3 id="key-capabilities">Key Capabilities</h3>
-<ol>
-<li>Selection: Choose clusters using a defined clusterSelector (e.g., label matching).</li>
-<li>Capping: Limit the number of selected clusters with maxReplicas.</li>
-<li>Failover: If a selected cluster becomes unavailable, Sveltos automatically picks another healthy one from the matching pool to maintain the desired number of active clusters (up to the maxReplicas limit).</li>
-</ol>
-<h3 id="referencing-clustersetset-in-a-clusterprofileprofile">Referencing ClusterSet/Set in a ClusterProfile/Profile</h3>
-<p>A ClusterProfile or Profile can reference a ClusterSet or Set by specifying its name. The add-ons defined in the profile will only be deployed to the currently selected clusters within the referenced set.</p>
-<p>The add-ons defined in the ClusterProfile/Profile will be deployed only to the currently selected clusters within the referenced ClusterSet/Set.
-This enables dynamic deployment management based on the available and healthy clusters in the set.</p>
-<p>This feature is particularly useful for scenarios where you want to implement active/passive failover: create a ClusterSet/Set with maxReplicas: 1 and have it match two clusters in the clusterSelector.
-This ensures only one cluster is active at a time. If the active cluster goes down, the backup cluster will be automatically selected for deployments.</p>
-<h3 id="activepassive-failover-example">Active/Passive Failover Example</h3>
-<p>This scenario demonstrates active/passive failover with a ClusterSet.</p>
-<p><img alt="Cluster Failover" src="../../assets/clusterset.gif" /></p>
-<h4 id="register-clusters">Register Clusters:</h4>
-<p>We have two Civo clusters registered with Sveltos, all labeled <code>env:prod</code>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ kubectl get sveltoscluster -A --show-labels
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>NAMESPACE  NAME    READY  VERSION    LABELS
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>civo    cluster1  true  v1.29.2+k3s1  env=prod
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>civo    cluster2  true  v1.28.7+k3s1  env=prod
+<h2 id="scenario">Scenario</h2>
+<p>In previous scenarios, <a href="../use_case_eks/">Cluster API on EKS</a> and <a href="../use_case_azure/">Cluster API on Azure</a>, we demonstrated how easy it is to deploy Kubernetes clusters across different hyperscalers using Sveltos and following a GitOps approach. But there are times when we need a local development environment running on a local machine using <a href="https://www.docker.com/">Docker</a>.</p>
+<p>In this post, we will outline how to automate local development environments using Docker, Kind, Cluster API (CAPI), and Sveltos!</p>
+<p>If you are not familiar with CAPI, take a look at the <a href="https://github.com/kubernetes-sigs/cluster-api">CAPI Github repository</a> and the <a href="https://cluster-api.sigs.k8s.io/">getting started guide</a>.</p>
+<h2 id="github-resources">Github Resources</h2>
+<p>The full code examples are located in the <a href="https://github.com/egrosdou01/blog-post-resources/tree/main/capi-docker-sveltos">GitHub repository</a>.</p>
+<h2 id="diagram">Diagram</h2>
+<p><img alt="Sveltos and Cluster API on Docker" src="../../../assets/capd.png" /></p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Docker and <a href="https://kind.sigs.k8s.io/docs/user/quick-start/">Kind</a> are installed</li>
+<li>kubectl installed</li>
+<li>clusterctl installed</li>
+<li>Familiarity with CAPI</li>
+</ul>
+<h2 id="step-1-create-a-kind-management-cluster">Step 1: Create a Kind Management Cluster</h2>
+<p>As mentioned in the beginning, we can work on local development environments. For that reason, we will create a Kind cluster that can run on top of Docker.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; kind-cluster-with-extramounts.yaml &lt;&lt;EOF</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kind.x-k8s.io/v1alpha4</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">nodes</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">control-plane</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">extraMounts</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">containerPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
 </span></code></pre></div>
-<h4 id="create-a-clusterset">Create a ClusterSet</h4>
-<p>A ClusterSet named <strong>prod</strong> is created with <code>clusterSelector</code> to match all prod clusters and <code>maxReplicas: 1</code> to ensure only one cluster is active at a time.</p>
-<div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nn">---</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterSet</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kind<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>--config<span class="w"> </span>kind-cluster-with-extramounts.yaml<span class="w"> </span>--kubeconfig<span class="o">=</span>/path/to/store/kubeconfig
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/mgmt/kubeconfig
 </span></code></pre></div>
+<h2 id="step-2-initialise-and-deploy-capi-management-cluster">Step 2: Initialise and Deploy CAPI Management Cluster</h2>
+<p>Let us begin by deploying CAPI using the Docker Infrastructure Provider.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_TOPOLOGY</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="c1"># Used to enable support for managed topologies and ClusterClass</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>$<span class="w"> </span>clusterctl<span class="w"> </span>init<span class="w"> </span>--infrastructure<span class="w"> </span>docker
+</span></code></pre></div>
+<h2 id="step-3-install-argocd-on-the-management-cluster">Step 3: Install ArgoCD on the Management Cluster</h2>
+<p>There are different ways to install ArgoCD on a Kubernetes cluster. For this demonstration, we will use the simplest option, the manifest installation. For more information about the different ArgoCD installation options, have a look <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/installation/">here</a>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>argocd
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>--current<span class="w"> </span>--namespace<span class="o">=</span>argocd
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>$<span class="w"> </span>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/argocd-server<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span><span class="m">8080</span>:443<span class="w"> </span><span class="c1"># Optional to get a glimpse of the ArgoCD UI</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The admin password for the ArgoCD dashboard is in the Secret called <code>argocd-initial-admin-secret</code> in the argocd namespace.</p>
 </div>
-<h4 id="sveltos-detects-matching-clusters">Sveltos Detects Matching Clusters</h4>
-<p>Sveltos identifies both clusters as matches (<code>status.matchingClusterRefs</code>) and selects one (e.g., cluster2) as the active cluster (<code>status.selectedClusterRefs</code>).</p>
-<div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterSet</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nt">status</span><span class="p">:</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">matchingClusterRefs</span><span class="p">:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster1</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster2</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">  </span><span class="nt">selectedClusterRefs</span><span class="p">:</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster2</span>
-</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
+<h2 id="step-4-deploy-sveltos">Step 4: Deploy Sveltos</h2>
+<p>We will leverage ArgoCD to automate the deployment of Sveltos to our management Kubernetes cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>argocd<span class="w"> </span>app<span class="w"> </span>create<span class="w"> </span>sveltos<span class="w"> </span>--repo<span class="w"> </span>https://github.com/projectsveltos/helm-charts.git<span class="w"> </span>--path<span class="w"> </span>charts/projectsveltos<span class="w"> </span>--dest-server<span class="w"> </span>https://kubernetes.default.svc<span class="w"> </span>--dest-namespace<span class="w"> </span>projectsveltos
 </span></code></pre></div>
-</div>
-<h4 id="deploy-a-clusterprofile">Deploy a ClusterProfile</h4>
-<p>A ClusterProfile named kyverno is deployed referencing the prod ClusterSet.</p>
-<div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="nt">setRefs</span><span class="p">:</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span><span class="w"> </span><span class="c1"># name of the ClusterSet</span>
+<p>Then, we will use the ArgoCD <code>Application</code> resource to set the location of our configuration related to CAPI and Sveltos. This will ensure ArgoCD deploys the configuration to the management cluster and keeps any code changes up to date. </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>argocd<span class="w"> </span>app<span class="w"> </span>create<span class="w"> </span>sveltos-configuration<span class="w"> </span>--repo<span class="w"> </span>https://github.com/egrosdou01/blog-post-resources.git<span class="w"> </span>--path<span class="w"> </span>capi-azure-sveltos/pt3/<span class="w"> </span>--dest-server<span class="w"> </span>https://kubernetes.default.svc
 </span></code></pre></div>
-</div>
-<h4 id="sveltos-deploys-kyverno">Sveltos Deploys Kyverno</h4>
-<p>Sveltos deploys the Kyverno charts specified in the ClusterProfile onto the cluster selected by the ClusterSet (e.g., civo/cluster3).</p>
-<div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="nt">setRefs</span><span class="p">:</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="nt">status</span><span class="p">:</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span><span class="nt">matchingClusters</span><span class="p">:</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster2</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
+<p>The Sveltos configuration establishes a dynamic cluster creation process. Sveltos monitors a ConfigMap named <code>existing-users</code> in the <code>default</code> namespace. The resource keeps a list of users. Each entry shows the user's name, the type of environment, and the CAPI version to be deployed. When Sveltos spots a new user entry, it triggers the deployment of a CAPI configuration and creates a managed Kubernetes cluster in the Azure cloud.</p>
+<p>To allow Sveltos to manage resources in the Kubernetes management cluster, we will add the label <code>type: mgmt</code> to the cluster.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>mgmt<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">type</span><span class="o">=</span>mgmt
 </span></code></pre></div>
-</div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ sveltosctl show addons
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>|    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>| civo/cluster2 | helm chart    | kyverno   | kyverno-latest | 3.0.1   | 2024-03-13 10:19:06 +0100 CET | ClusterProfile/kyverno |
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span></code></pre></div>
-<h4 id="selected-cluster-becomes-unhealthy">Selected Cluster Becomes Unhealthy</h4>
-<p>If the cluster selected by <code>ClusterSet</code> instance becomes unhealthy, Sveltos detects that and ClusterSet selects another healthy cluster out of the matching ones.</p>
-<p>In this example, <strong>cluster2</strong> was deleted.</p>
-<p>Sveltos detected that and marked the cluster as not ready</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ kubectl get sveltoscluster -A
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>NAMESPACE NAME   READY VERSION
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>civo    cluster1 true  v1.29.2+k3s1
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>civo    cluster2       v1.28.7+k3s1
-</span></code></pre></div>
-<h4 id="clusterset-selects-new-cluster">ClusterSet Selects New Cluster</h4>
-<p>The ClusterSet automatically picks another healthy cluster from the matching ones (e.g., <strong>cluster1</strong>) as the new active cluster.</p>
-<div class="admonition example">
+<h2 id="step-4-push-a-prmerge-request-to-add-a-new-user">Step 4: Push a PR/Merge Request to add a new user</h2>
+<p>To add a new user and trigger the creation of a corresponding Kubernetes cluster on Docker, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the <code>existing-users</code> ConfigMap within the previously defined repository. The PR will introduce a new user entry, <code>user01: test</code>, within the data section of the ConfigMap.
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterSet</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nt">status</span><span class="p">:</span>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span><span class="nt">matchingClusterRefs</span><span class="p">:</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster1</span>
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span><span class="nt">selectedClusterRefs</span><span class="p">:</span>
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster1</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span></code></pre></div>
-</div>
-<h4 id="clusterprofile-re-deploys-add-ons">ClusterProfile Re-deploys Add-ons</h4>
-<p>The ClusterProfile reacts to the change and re-deploys its add-ons (Kyverno in this case) to the newly selected cluster (civo/cluster1).</p>
-<div class="admonition example">
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">existing-users</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="nt">user01</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="no">env: test</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="c1"># user02: |</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="c1">#   env: staging</span>
+</span></code></pre></div></p>
+<p>Once the PR is merged, ArgoCD will synchronise the changes to the Kubernetes management cluster. The synchronisation updates the ConfigMap. This signals Sveltos to start provisioning a new Kubernetes cluster for <code>user01</code> using CAPI.</p>
+<h2 id="step-5-install-cilium-as-container-network-interface-cni">Step 5: Install Cilium as Container Network Interface (CNI)</h2>
+<p>By the time one of the controller nodes is available and the kube-api is reachable, Sveltos installs <a href="https://docs.cilium.io/en/stable/index.html">Cilium</a> as our CNI. Everything is controlled by Sveltos using the below <code>ClusterProfile</code>, and there is no need for manual interventions.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nn">---</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-capd-managed</span>
 </span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno/kyverno</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v3.3.3</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno-latest</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">  </span><span class="nt">setRefs</span><span class="p">:</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="nt">status</span><span class="p">:</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">  </span><span class="nt">matchingClusters</span><span class="p">:</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster1</span>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">matchExpressions</span><span class="p">:</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="nt"> operator</span><span class="p">:</span><span class="w"> </span><span class="nv">In</span><span class="p p-Indicator">,</span><span class="nt"> values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">test</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">staging</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium/cilium</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.18.5</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://helm.cilium.io/</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="no">kubeProxyReplacement: true</span>
 </span></code></pre></div>
-</div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$ sveltosctl show addons
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>|    CLUSTER    | RESOURCE TYPE | NAMESPACE |      NAME      | VERSION |             TIME              |        PROFILES        |
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>| civo/cluster1 | helm chart    | kyverno   | kyverno-latest | 3.0.1   | 2024-03-13 10:27:46 +0100 CET | ClusterProfile/kyverno |
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>+---------------+---------------+-----------+----------------+---------+-------------------------------+------------------------+
-</span></code></pre></div>
-<h2 id="summary">Summary</h2>
-<p>ClusterSet and Set in Sveltos provide a powerful mechanism for managing cluster deployments and enabling automated failover for high availability in your applications.</p>
+<h2 id="step-6-remove-a-user">Step 6: Remove a User</h2>
+<p>To remove a user, update the <code>existing-users</code> ConfigMap. Then, submit a PR and merge the code. After that, let ArgoCD sync the change to the management cluster. Sveltos will handle the rest! Again, no magic, only Sveltos goodness!</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In a few steps, we demonstrated how engineers can use Sveltos with CAPI on Docker following a GitOps approach to create scalable, maintainable, and easily managed Kubernetes clusters with versioned, auditable deployments.</p>
 
 
 
@@ -4073,7 +3937,7 @@ This ensures only one cluster is active at a time. If the active cluster goes do
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../post-renderer-patches/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Post Renderer Patches">
+          <a href="../use_case_azure/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Cluster API on Azure">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4083,20 +3947,20 @@ This ensures only one cluster is active at a time. If the active cluster goes do
                 Previous
               </span>
               <div class="md-ellipsis">
-                Post Renderer Patches
+                Cluster API on Azure
               </div>
             </div>
           </a>
         
         
           
-          <a href="../rolling_upgrade/" class="md-footer__link md-footer__link--next" aria-label="Next: Rolling Upgrade Deployment, StatefulSet, DaemonSet">
+          <a href="../../../getting_started/install/quick_start/" class="md-footer__link md-footer__link--next" aria-label="Next: Quick Start">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Rolling Upgrade Deployment, StatefulSet, DaemonSet
+                Quick Start
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -4186,12 +4050,12 @@ This ensures only one cluster is active at a time. If the active cluster goes do
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "search.share", "navigation.footer", "navigation.instant.progress", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
-        <script src="../../javascript/extra.js"></script>
+        <script src="../../../javascript/extra.js"></script>
       
     
   </body>

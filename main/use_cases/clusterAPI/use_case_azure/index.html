@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos allows you to use Cluster API resources and automated the deployment of customised Kubernetes clusters on Azure cloud.">
+        <meta name="description" content="Sveltos allows you to use Cluster API resources and automate the deployment of customised Kubernetes clusters on Azure cloud.">
       
       
       
@@ -14,7 +14,7 @@
         <link rel="prev" href="../use_case_eks/">
       
       
-        <link rel="next" href="../../../getting_started/install/quick_start/">
+        <link rel="next" href="../use_case_docker/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -678,6 +678,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use_case_docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cluster API on Docker
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -3844,7 +3867,7 @@
 <li>argoctl installed</li>
 </ul>
 <h2 id="step-1-install-capi-on-the-management-cluster">Step 1: Install CAPI on the Management Cluster</h2>
-<p>For this demonstration, a Kind cluster is used. Let us begin by deploying CAPI using the AWS Infrastructure Provider.</p>
+<p>For this demonstration, a Kind cluster is used. Let us begin by deploying CAPI using the Azure Infrastructure Provider.</p>
 <h3 id="azure-cloud-credentials">Azure Cloud credentials</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">AZURE_SUBSCRIPTION_ID</span><span class="o">=</span><span class="s2">&quot;&lt;your azure subscription ID&gt;&quot;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -3887,7 +3910,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>mgmt<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">type</span><span class="o">=</span>mgmt
 </span></code></pre></div>
 <h2 id="step-4-push-a-pr-to-add-a-new-user">Step 4: Push a PR to add a new user</h2>
-<p>To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the <code>existing-users</code> ConfigMap within the previously defined repository. The PR will introduce a new user entry, <code>user01: production</code>, within the data section of the ConfigMap, as shown in the provided diff.</p>
+<p>To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the <code>existing-users</code> ConfigMap within the previously defined repository. The PR will introduce a new user entry, <code>user01: staging</code>, within the data section of the ConfigMap, as shown in the provided diff.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>diff<span class="w"> </span>--git<span class="w"> </span>a/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml<span class="w"> </span>b/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>index<span class="w"> </span>ab0d862..10987b3<span class="w"> </span><span class="m">100644</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>---<span class="w"> </span>a/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
@@ -4006,13 +4029,13 @@
         
         
           
-          <a href="../../../getting_started/install/quick_start/" class="md-footer__link md-footer__link--next" aria-label="Next: Quick Start">
+          <a href="../use_case_docker/" class="md-footer__link md-footer__link--next" aria-label="Next: Cluster API on Docker">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Quick Start
+                Cluster API on Docker
               </div>
             </div>
             <div class="md-footer__button md-icon">
