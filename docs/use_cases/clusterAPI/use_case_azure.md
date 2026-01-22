@@ -1,6 +1,6 @@
 ---
 title: Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Azure cloud
-description: Sveltos allows you to use Cluster API resources and automated the deployment of customised Kubernetes clusters on Azure cloud.
+description: Sveltos allows you to use Cluster API resources and automate the deployment of customised Kubernetes clusters on Azure cloud.
 tags:
     - Kubernetes
     - add-ons
@@ -34,7 +34,7 @@ The code example is located in the [GitHub repository](https://github.com/egrosd
 
 ## Step 1: Install CAPI on the Management Cluster
 
-For this demonstration, a Kind cluster is used. Let us begin by deploying CAPI using the AWS Infrastructure Provider.
+For this demonstration, a Kind cluster is used. Let us begin by deploying CAPI using the Azure Infrastructure Provider.
 
 ### Azure Cloud credentials
 
@@ -103,7 +103,7 @@ $ kubectl label sveltoscluster mgmt -n mgmt type=mgmt
 
 ## Step 4: Push a PR to add a new user
 
-To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the `existing-users` ConfigMap within the previously defined repository. The PR will introduce a new user entry, `user01: production`, within the data section of the ConfigMap, as shown in the provided diff.
+To add a new user and trigger the creation of a corresponding Azure cluster, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the `existing-users` ConfigMap within the previously defined repository. The PR will introduce a new user entry, `user01: staging`, within the data section of the ConfigMap, as shown in the provided diff.
 
 ```bash
 $ diff --git a/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml b/capi-azure-sveltos/pt3/kubernetes_resources/cm_users.yaml
