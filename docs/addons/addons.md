@@ -17,19 +17,19 @@ authors:
 
 [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a set of Kubernetes controllers that run in the management cluster. From the management cluster, Sveltos can manage add-ons and applications on a fleet of managed Kubernetes clusters.
 
-Sveltos comes with support to automatically discover [ClusterAPI](https://github.com/kubernetes-sigs/cluster-api) powered clusters, but it doesn't stop there. You can easily [register](../register/register-cluster.md) any other cluster (on-prem, Cloud) and manage Kubernetes add-ons seamlessly.
+Sveltos comes with support to automatically discover [Cluster API (CAPI)](https://github.com/kubernetes-sigs/cluster-api) powered clusters, but it doesn't stop there. We can easily [register](../register/register-cluster.md) any other cluster (on-prem, Cloud) and manage Kubernetes add-ons seamlessly.
 
 ![Sveltos managing clusters](../assets/multi-clusters.png)
 
-## How it works?
+## How does it work?
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") are the CustomerResourceDefinitions used to instruct Sveltos which add-ons to deploy on a set of clusters.
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") and [Profile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/profile_types.go "Profile to manage Kubernetes add-ons") are the Custom Resource Definitions (CRDs) used to instruct Sveltos which add-ons to deploy on a set of clusters.
 
 - __ClusterProfile__: It is a cluster-wide resource. It can match any cluster and reference any resource regardless of their namespace.
 
 - __Profile__: It is a namespace-scoped resource that is specific to a single namespace. It can only match clusters and reference resources within its own namespace.
 
-By creating a **ClusterProfile**, **Profile** instances, we can easily deploy the following points across a set of Kubernetes clusters.
+By creating a **ClusterProfile** and **Profile** instances, we can easily deploy the following points across a set of Kubernetes clusters.
 
 - Helm charts
 - Resources assembled with Kustomize
@@ -42,14 +42,16 @@ Define which Kubernetes add-ons to deploy and where:
 
 Simple as that!
 
+!!!note "CRDs Details"
+    To get a list of all the available options defined in a ClusterProfile and Profile resources, take a look at the [ClusterProfile](./clusterprofile.md) and the [Profile](./profile.md) deep dive documentation.
+
 ## Example: Deploy Kyverno using a ClusterProfile
 
-The below example deploys a Kyverno Helm chart in every cluster with the label selector set to `env=prod`.
+The example deploys a Kyverno Helm chart in every cluster with the label selector set to `env=prod`.
 
-### Step 1: Register Clusters with Sveltos
+### Step 1: Register Clusters with Sveltos (non-CAPI clusters)
 
-The first step is to register clusters with Sveltos to receive the required addons and deployments. If the clusters are not registered yet, follow the instructions outlined [here](../register/register-cluster.md). This applies to non-CAPI clusters.
-
+The first step is to register clusters with Sveltos to receive the required addons and deployments. If the clusters are not registered yet, follow the instructions outlined [here](../register/register-cluster.md).
 
 ```bash
 $ kubectl get sveltosclusters -n projectsveltos --show-labels
@@ -60,11 +62,20 @@ cluster13   true    v1.26.9+rke2r1   sveltos-agent=present
 ```
 
 !!! note
-    The CAPI clusters are registered in the **projectsveltos** namespace. If you register the clusters in a different namespace, update the command above.
+    The CAPI clusters are detected automatically by Sveltos. They are registered in the **projectsveltos** namespace by default. If we register the clusters in a different namespace, update the command above.
 
-### Step 2: Create the ClusterProfile
+### Step 2: Assign Labels
 
-The second step is to create a `ClusterProfile` and apply it to the **management** cluster.
+Once the clusters are registered and in a "READY" state, we can assign labels and start deploying add-ons and applications. For that, we can use the `kubectl label` command.
+
+```bash
+$ kubectl label sveltosclusters cluster12 -n projectsveltos env=prod
+$ kubectl label sveltosclusters cluster13 -n projectsveltos env=prod
+```
+
+### Step 3: Create the ClusterProfile
+
+The third step is to create a `ClusterProfile` and apply it to the **management** cluster.
 
 !!! example "Sveltos ClusterProfile Kyverno"
     ```yaml
@@ -90,6 +101,8 @@ The second step is to create a `ClusterProfile` and apply it to the **management
     ```
 
 ```bash
+$ export KUBECONFIG=/path/to/kubeconfig/management/cluster
+
 $ kubectl apply -f "clusterprofile_kyverno.yaml"
 
 $ sveltosctl show addons
@@ -107,7 +120,7 @@ $ sveltosctl show addons
 ![Sveltos in action](../assets/addons_deployment.gif)
 
 !!! note
-    If you are not aware of the `sveltosctl` utility, have a look at the installation documentation found [here](../getting_started/sveltosctl/sveltosctl.md).
+    To explore and install the `sveltosctl` utility, take a look at the installation guide found [here](../getting_started/sveltosctl/sveltosctl.md).
 
 ## More Resources
 
