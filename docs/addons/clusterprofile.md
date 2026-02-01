@@ -11,10 +11,13 @@ tags:
     - Sveltos
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 ## ClusterProfiles
 
-[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the CustomerResourceDefinition used to instruct Sveltos which add-ons to deploy on a set of clusters.
+[ClusterProfile](https://github.com/projectsveltos/sveltos-manager/blob/main/api/v1beta1/clusterprofile_types.go "ClusterProfile to manage Kubernetes add-ons") is the Custom Resource Definition (CRD) used to instruct Sveltos which add-ons to deploy on a set of clusters.
+
+The ClusterProfile is a **cluster-wide** resource. It can only match clusters and reference resources to the cluster as a whole.
 
 ### Pause Annotation
 
@@ -24,7 +27,7 @@ Pausing a ClusterProfile with the `profile.projectsveltos.io/paused` annotation 
 
 *clusterSelector* field is used to specify which managed clusters should receive the add-ons and applications defined in the configuration.
 
-This field employs a Kubernetes label selector, allowing you to target clusters based on specific labels.
+This field employs a Kubernetes label selector, allowing us to target clusters based on specific labels.
 
 ```yaml
 clusterSelector:
@@ -32,7 +35,7 @@ clusterSelector:
       env: prod
 ```
 
-By leveraging __matchExpressions__, you can create more complex and flexible cluster selection criteria.
+By leveraging __matchExpressions__, we can create more complex and flexible cluster selection criteria.
 
 ```yaml
 clusterSelector:
@@ -44,16 +47,17 @@ clusterSelector:
 
 *helmCharts* field consists of a list of helm charts to be deployed to the clusters matching clusterSelector;
 
-```yaml
-  helmCharts:
-  - repositoryURL:    https://kyverno.github.io/kyverno/
-    repositoryName:   kyverno
-    chartName:        kyverno/kyverno
-    chartVersion:     v3.3.3
-    releaseName:      kyverno-latest
-    releaseNamespace: kyverno
-    helmChartAction:  Install
-```
+!!! example "Example - HelmCharts"
+    ```yaml
+    helmCharts:
+    - repositoryURL:    https://kyverno.github.io/kyverno/
+      repositoryName:   kyverno
+      chartName:        kyverno/kyverno
+      chartVersion:     v3.3.3
+      releaseName:      kyverno-latest
+      releaseNamespace: kyverno
+      helmChartAction:  Install
+    ```
 
 Helm chart values can be dynamically retrieved from ConfigMaps or Secrets for flexible configuration. Customize Helm behavior with various options, and deploy charts from private container registries.
 For a complete list of features, refer to the [Helm chart section](helm_charts.md).
@@ -64,38 +68,39 @@ For a complete list of features, refer to the [Helm chart section](helm_charts.m
 
 This field is a slice of *PolicyRef* structs. Each PolictRef has the following fields:
 
-- *Kind*: The kind of the referenced resource. The supported kinds are Secret and ConfigMap.
-- *Namespace*: The namespace of the referenced resource. This field is optional, and if empty, the namespace will be set to the matching cluster's namespace.
-- *Name*: The name of the referenced resource. This field must be at least one character long.
-- *DeploymentType*: The deployment type of the referenced resource. This field indicates whether the resource should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.
+| Field | Type | Description | Optional | Default |
+|-------|------|-------------|----------|---------|
+| Kind | string | The kind of the referenced resource. Supported kinds: `Secret` and `ConfigMap`. | No | — |
+| Namespace | string | The namespace of the referenced resource. If empty, the namespace will be set to the matching cluster's namespace. | Yes | — |
+| Name | string | The name of the referenced resource. Must be at least one character long. | No | — |
+| DeploymentType | string | Indicates whether the resource should be deployed to the management cluster (`Local`) or the managed cluster (`Remote`). | Yes | `Remote` |
 
-```yaml
-policyRefs:
-- kind: Secret
-  name: my-secret-1
-  namespace: my-namespace-1
-  deploymentType: Local
-- kind: ConfigMap
-  name: my-configmap-1
-  namespace: my-namespace-1
-  deploymentType: Remote
-```
+!!! example "Example - policyRefs"
+    ```yaml
+    policyRefs:
+    - kind: Secret
+      name: my-secret-1
+      namespace: my-namespace-1
+      deploymentType: Local
+    - kind: ConfigMap
+      name: my-configmap-1
+      namespace: my-namespace-1
+      deploymentType: Remote
+    ```
 
 ### Spec.KustomizationRefs
 *kustomizationRefs* field is a list of sources containing kustomization files. Resources will be deployed in the clusters matching the clusterSelector specified.
 
 This field is a slice of *KustomizationRef* structs. Each KustomizationRef has the following fields:
 
-- *Kind*: The kind of the referenced resource. The supported kinds are:
-
-    - flux GitRepository, OCIRepository, Bucket: These kinds represent resources that store Kustomization manifests.
-    - ConfigMap, Secret: These kinds represent resources that contain Kustomization manifests or overlays.
-
-- *Namespace*: The namespace of the referenced resource. This field is optional and can be left empty. If it is empty, the namespace will be set to the cluster's namespace.
-- *Name*: The name of the referenced resource. This field must be at least one character long.
-- *Path*: The path to the directory containing the kustomization.yaml file, or the set of plain YAMLs for which a kustomization.yaml should be generated. This field is optional and defaults to None, which means the root path of the SourceRef.
-- *TargetNamespace*: The target namespace for the Kustomization deployment. This field is optional and can be used to override the namespace specified in the kustomization.yaml file.
-- *DeploymentType*: The deployment type of the referenced resource. This field indicates whether the Kustomization deployment should be deployed to the management cluster (local) or the managed cluster (remote). The default value is Remote.
+| Field | Type | Description | Optional | Default |
+|-------|------|-------------|----------|---------|
+| Kind | string | The kind of the referenced resource. Supported kinds: `flux GitRepository`, `OCIRepository`, `Bucket` (resources that store Kustomization manifests), and `ConfigMap`, `Secret` (resources that contain Kustomization manifests or overlays). | No | — |
+| Namespace | string | The namespace of the referenced resource. If empty, the namespace will be set to the cluster's namespace. | Yes | — |
+| Name | string | The name of the referenced resource. Must be at least one character long. | No | — |
+| Path | string | The path to the directory containing the `kustomization.yaml` file, or the set of plain YAMLs for which a `kustomization.yaml` should be generated. Defaults to the root path of the SourceRef. | Yes | `None` |
+| TargetNamespace | string | The target namespace for the Kustomization deployment. Can be used to override the namespace specified in the `kustomization.yaml` file. | Yes | — |
+| DeploymentType | string | Indicates whether the Kustomization deployment should be deployed to the management cluster (`Local`) or the managed cluster (`Remote`). | Yes | `Remote` |
 
 For a complete list of features, refer to the [Kustomize section](kustomize.md).
 
@@ -108,22 +113,18 @@ This field can be set to:
 - *ContinuousWithDriftDetection*
 - *DryRun*
 
-Let's take a closer look at the *OneTime* syncMode option. Once you deploy a ClusterProfile with a OneTime configuration, Sveltos will check all of your clusters for a match with the clusterSelector. Any matching clusters will have the resources specified in the ClusterProfile deployed. However, if you make changes to the ClusterProfile later on, those changes will not be automatically deployed to already-matching clusters.
+**OneTime**: Once we deploy a ClusterProfile with a OneTime configuration, Sveltos will check the matching clusters using the clusterSelector. Any matching cluster will have the resources specified in the ClusterProfile deployed. However, if we make changes to the ClusterProfile later on, those changes will not be automatically deployed to already-matching clusters.
 
-Now, if you're looking for real-time deployment and updates, the *Continuous* syncMode is the way to go. With Continuous, any changes made to the ClusterProfile will be immediately reconciled into matching clusters. This means that you can add new features, update existing ones, and remove them as necessary, all without lifting a finger. Sveltos will deploy, update, or remove resources in matching clusters as needed, making your life as a Kubernetes admin a breeze.
+**Continuous**: Ideal option if we are looking for real-time deployment and updates. Any changes made to the ClusterProfile will be immediately reconciled into matching clusters. This means that we can add new features, update existing ones, and remove them as necessary, all without lifting a finger. Sveltos will deploy, update, or remove resources in matching clusters as needed, making our life as a Kubernetes admin a breeze.
 
-*ContinuousWithDriftDetection* instructs Sveltos to monitor the state of managed clusters and detect a configuration drift for any of the resources deployed because of that ClusterProfile.
-When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster.
-To know more about configuration drift detection, refer to this [section](../features/configuration_drift.md).
+**ContinuousWithDriftDetection**: Instructs Sveltos to monitor the state of managed clusters and detect a configuration drift for any of the resources deployed because of that ClusterProfile. When Sveltos detects a configuration drift, it automatically re-syncs the cluster state back to the state described in the management cluster. To know more about configuration drift detection, refer to this [section](../features/configuration_drift.md).
 
-Imagine you're about to make some important changes to your ClusterProfile, but you're not entirely sure what the results will be. You don't want to risk causing any unwanted side effects, right? Well, that's where the *DryRun* syncMode configuration comes in. By deploying your ClusterProfile with this configuration, you can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so you can rest easy knowing that there won't be any surprises.
-To know more about dry run, refer to this [section](../features/dryrun.md).
+**DryRun**: If we do not want to risk deploying changes that could cause any unwanted side effects, the *DryRun* option is ideal. By deploying a ClusterProfile with this configuration, we can launch a simulation of all the operations that would normally be executed in a live run. The best part? No actual changes will be made to the matching clusters during this dry run workflow, so we can rest easy knowing that there will not be any surprises. To know more about dry run, refer to this [section](../features/dryrun.md).
 
 ### Spec.StopMatchingBehavior
 
 The *stopMatchingBehavior* field specifies the behavior when a cluster no longer matches a ClusterProfile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to *LeavePolicies*, any policies deployed by the ClusterProfile will remain in the cluster.
 
-For instance
 !!! example "Example - ClusterProfile Kyverno Deployment"
     ```yaml
     ---
@@ -150,16 +151,14 @@ When a cluster matches the ClusterProfile, Kyverno Helm chart will be deployed i
 
 ### Spec.Reloader
 
-The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets.
-When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
+The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets. When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
 
-Please refer to this [section](../features/rolling_upgrade.md) for more information.
+Refer to the [dedicated section](../features/rolling_upgrade.md) for more information.
 
 ### Spec.MaxUpdate
 
-A ClusterProfile might match more than one cluster. When a change is maded to a ClusterProfile, by default all matching clusters are update concurrently.
-The *maxUpdate* field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the ClusterProfile's add-ons or applications.
-The specified value can be an absolute number (e.g., 5) or a percentage of the desired cluster count (e.g., 10%). The default value is 100%, allowing all matching Clusters to be updated simultaneously.
+A ClusterProfile might match more than one cluster. When a change is maded to a ClusterProfile, by default all matching clusters are update concurrently. The *maxUpdate* field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the ClusterProfile's add-ons or applications. The specified value can be an absolute number (e.g., 5) or a percentage of the desired cluster count (e.g., 10%). The default value is 100%, allowing all matching Clusters to be updated simultaneously.
+
 For instance, if set to 30%, when modifications are made to the ClusterProfile's add-ons or applications, only 30% of matching Clusters will be updated concurrently. Updates to the remaining matching Clusters will only commence upon successful completion of updates in the initially targeted Clusters. This approach ensures a controlled and manageable update process, minimizing potential disruptions to the overall cluster environment.
 Please refer to this [section](../deployment_order/rolling_update_strategy.md) for more information.
 
@@ -171,7 +170,7 @@ The ValidateHealths property accepts a slice of Lua functions, where each functi
 
 Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.
 
-Please refer to this [section](../deployment_order/rolling_update_strategy.md) for more information.
+Refer to the [ dedicated section](../deployment_order/rolling_update_strategy.md) for more information.
 
 Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:
 
