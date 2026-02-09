@@ -2781,9 +2781,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-onboard-a-new-managed-cluster" class="md-nav__link">
+  <a href="#step-5-onboard-new-managed-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 5: Onboard a new managed cluster
+      Step 5: Onboard new managed cluster
     </span>
   </a>
   
@@ -3747,9 +3747,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-onboard-a-new-managed-cluster" class="md-nav__link">
+  <a href="#step-5-onboard-new-managed-cluster" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 5: Onboard a new managed cluster
+      Step 5: Onboard new managed cluster
     </span>
   </a>
   
@@ -3803,24 +3803,25 @@
 
   <h1>Example DB as a Service</h1>
 
-<p>This demo will showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand.</p>
-<p>By simply labeling a managed cluster with  <code>postgres=required</code>, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. This database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.</p>
+<p>The demo showcase Sveltos' ability to dynamically provision PostgreSQL databases on demand.</p>
+<p>By labeling a managed cluster with  <code>postgres=required</code>, Sveltos will automatically deploy a dedicated PostgreSQL database within the services managed cluster. The created database will then be made accessible to the requesting cluster, ensuring seamless integration and data access.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This tutorial assumes that each managed cluster is in a different namespace.</p>
 </div>
 <h2 id="lab-setup">Lab Setup</h2>
-<p>A Civo cluster serves as the management cluster.
-Another Civo cluster, labeled <code>type=services</code>, is dedicated to automatic Postgres DB deployment by Sveltos.</p>
-<p>Postgres DB will be deployed using <a href="https://github.com/cloudnative-pg/cloudnative-pg">Cloudnative-pg</a>.</p>
+<p>A Civo cluster serves as our management cluster. Another Civo cluster, labeled as <code>type=services</code>, is dedicated to automatic Postgres DB deployment by Sveltos.</p>
+<p>The Postgres DB will be deployed using <a href="https://github.com/cloudnative-pg/cloudnative-pg">Cloudnative-pg</a>.</p>
 <p><img alt="Sveltos: Deploy Cloudnative-pg" src="../../../assets/sveltos-db-as-a-service.gif" /></p>
 <h2 id="step-1-install-sveltos-on-management-cluster">Step 1: Install Sveltos on Management Cluster</h2>
 <p>For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found <a href="../../../getting_started/install/install/">here</a>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.16.1 --set crds.enabled=true
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>projectsveltos<span class="w"> </span>https://projectsveltos.github.io/helm-charts
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>$<span class="w"> </span>helm<span class="w"> </span>repo<span class="w"> </span>update
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>projectsveltos<span class="w"> </span>projectsveltos/projectsveltos<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--create-namespace
 </span></code></pre></div>
-<p>Add the label <code>type=mgmt</code> to the management cluster:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl label sveltoscluster -n mgmt mgmt type=mgmt
+<p>Label the management cluster using <code>type=mgmt</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">type</span><span class="o">=</span>mgmt
 </span></code></pre></div>
 <h3 id="granting-extra-rbac">Granting Extra RBAC</h3>
 <p>For this demo, Sveltos needs to be granted extra permission:</p>
@@ -3842,75 +3843,99 @@ Another Civo cluster, labeled <code>type=services</code>, is dedicated to automa
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>}&#39;
 </span></code></pre></div>
 <h2 id="step-2-register-clusters-with-sveltos">Step 2: Register Clusters with Sveltos</h2>
-<p>Using Civo UI, download the Kubeconfigs, then:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl create ns managed-services
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sveltosctl register cluster --namespace=managed-services --cluster=cluster --kubeconfig=&lt;managed cluster kubeconfig&gt; --labels=type=services
+<p>Ensure you have access to the Kubeconfig files of the respective managed clusters.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/management/kubeconfig
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>ns<span class="w"> </span>managed-services
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span>--namespace<span class="o">=</span>managed-services<span class="w"> </span>--cluster<span class="o">=</span>services<span class="w"> </span>--kubeconfig<span class="o">=</span>&lt;managed<span class="w"> </span>cluster<span class="w"> </span>kubeconfig&gt;<span class="w"> </span>--labels<span class="o">=</span><span class="nv">type</span><span class="o">=</span>services
 </span></code></pre></div>
-<p>Verify clusters were successfully registered:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl get sveltoscluster -A --show-labels
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>NAMESPACE          NAME      READY   VERSION        LABELS
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>mgmt               mgmt      true    v1.29.2+k3s1   projectsveltos.io/k8s-version=v1.29.2,sveltos-agent=present,type=mgmt
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>managed-services   cluster   true    v1.29.8+k3s1   projectsveltos.io/k8s-version=v1.29.8,sveltos-agent=present,type=services
+<p>More information about the registration options, take a look <a href="../../../register/register-cluster/">here</a>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-A<span class="w"> </span>--show-labels
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>NAMESPACE<span class="w">          </span>NAME<span class="w">        </span>READY<span class="w">   </span>VERSION<span class="w">        </span>AGE<span class="w">     </span>LABELS
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>managed-services<span class="w">   </span>services<span class="w">    </span><span class="nb">true</span><span class="w">    </span>v1.34.2+k3s1<span class="w">   </span>11m<span class="w">     </span>projectsveltos.io/k8s-version<span class="o">=</span>v1.32.5,sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>services
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mgmt<span class="w">               </span>mgmt<span class="w">        </span><span class="nb">true</span><span class="w">    </span>v1.34.2+k3s1<span class="w">   </span>15m<span class="w">     </span>projectsveltos.io/k8s-version<span class="o">=</span>v1.32.5,sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>mgmt
 </span></code></pre></div>
 <h2 id="step-3-deploy-cloudnative-pg">Step 3: Deploy cloudnative-pg</h2>
-<p>Following ClusterProfile will deploy Cloudnative-pg in the managed cluster with label <code>type=services</code></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/cloudnative-pg.yaml
+<p>The following ClusterProfile will deploy Cloudnative-pg in the managed cluster with label <code>type=services</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/management/kubeconfig
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/cloudnative-pg.yaml
 </span></code></pre></div>
-<p>Verify resources were deployed</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sveltosctl show addons
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>|         CLUSTER          | RESOURCE TYPE |  NAMESPACE  | NAME | VERSION |              TIME              |          PROFILES          |
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>+--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>| managed-services/cluster | helm chart    | cnpg-system | cnpg | 0.22.1  | 2024-10-25 15:47:54 +0200 CEST | ClusterProfile/deploy-cnpg |
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>+--------------------------+---------------+-------------+------+---------+--------------------------------+----------------------------+
+<p>Verify whether the resources have been deployed to the cluster marked with the <code>type=services</code> label.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>addons
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sveltosctl<span class="w"> </span>show<span class="w"> </span>addons
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>┌────────────────────────────┬────────────────────────────┬─────────────┬──────────────────────┬─────────┬───────────────────────────────┬─────────────────┬─────────────────────────────────────────────┐
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│<span class="w">          </span>CLUSTER<span class="w">           </span>│<span class="w">       </span>RESOURCE<span class="w"> </span>TYPE<span class="w">        </span>│<span class="w">  </span>NAMESPACE<span class="w">  </span>│<span class="w">         </span>NAME<span class="w">         </span>│<span class="w"> </span>VERSION<span class="w"> </span>│<span class="w">             </span>TIME<span class="w">              </span>│<span class="w"> </span>DEPLOYMENT<span class="w"> </span>TYPE<span class="w"> </span>│<span class="w">                  </span>PROFILES<span class="w">                   </span>│
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>├────────────────────────────┼────────────────────────────┼─────────────┼──────────────────────┼─────────┼───────────────────────────────┼─────────────────┼─────────────────────────────────────────────┤
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│<span class="w"> </span>managed-services/services<span class="w">  </span>│<span class="w"> </span>helm<span class="w"> </span>chart<span class="w">                 </span>│<span class="w"> </span>cnpg-system<span class="w"> </span>│<span class="w"> </span>cnpg<span class="w">                 </span>│<span class="w"> </span><span class="m">0</span>.27.1<span class="w">  </span>│<span class="w"> </span><span class="m">2026</span>-02-08<span class="w"> </span><span class="m">17</span>:07:25<span class="w"> </span>+0100<span class="w"> </span>CET<span class="w"> </span>│<span class="w"> </span>Managed<span class="w"> </span>cluster<span class="w"> </span>│<span class="w"> </span>ClusterProfile/deploy-cnpg<span class="w">                  </span>│
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>└────────────────────────────┴────────────────────────────┴─────────────┴──────────────────────┴─────────┴────────────────────────────────┴─────────────────┴─────────────────────────────────────────────┘
 </span></code></pre></div>
 <p><img alt="Sveltos: Deploy Cloudnative-pg" src="../../../assets/sveltos-cloudnative-pg.png" /></p>
 <h2 id="step-4-instruct-sveltos-to-automatically-deploy-postgres-db">Step 4: Instruct Sveltos to automatically deploy Postgres DB</h2>
-<p>Following configuration will instruct Sveltos to watch for managed cluster with labels <code>postgres=required</code>. Anytime such a cluster is detect, Sveltos will:</p>
+<p>Following configuration will instruct Sveltos to watch for managed cluster with the label set to <code>postgres=required</code>. Anytime such a cluster is detected, Sveltos will perform the points listed below.</p>
 <ol>
-<li>Create a Postgres Cluster instance in the managed cluster with label <code>type:services</code>. DB will be exposed via a LoadBalancer service.</li>
+<li>Create a Postgres Cluster instance in the managed cluster with label <code>type=services</code>. DB will be exposed via a <code>LoadBalancer</code> service.</li>
 <li>Fetch credentials to access the DB.</li>
-<li>fetch the LoadBalancer service external ip: port</li>
+<li>Fetch the LoadBalancer service external ip: port</li>
 </ol>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/auto-deploy-postgres-cluster.yaml
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/management/kubeconfig
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/auto-deploy-postgres-cluster.yaml
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/fetch-postgres-data.yaml
 </span></code></pre></div>
-<h2 id="step-5-onboard-a-new-managed-cluster">Step 5: Onboard a new managed cluster</h2>
-<p>Whenever a new managed cluster is registered with Sveltos and labeled with 'postgres=required', Sveltos will initiate the deployment of a new Postgres database on the 'type=services' cluster.
-Once deployed, Sveltos will gather the essential connection information, including credentials, external IP address, and port number, for this newly created Postgres instance.</p>
-<p>Here we created a new Civo cluster and registered with Sveltos:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl create ns coke
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sveltosctl register cluster --namespace=coke --cluster=my-app --kubeconfig=&lt;managed cluster kubeconfig&gt; --labels=postgres=required
+<h2 id="step-5-onboard-new-managed-cluster">Step 5: Onboard new managed cluster</h2>
+<p>When a new managed cluster is registered with Sveltos using the label <code>postgres=required</code>, Sveltos will initiate the deployment of a new Postgres database on the <code>type=services</code> cluster.</p>
+<p>Once deployed, Sveltos will gather the connection information, including credentials, external IP address, and port number, for this newly created Postgres instance.</p>
+<p>Below, we will register a new cluster with Sveltos and assign the label <code>postgres=required</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/management/kubeconfig
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>ns<span class="w"> </span>coke
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span>--namespace<span class="o">=</span>coke<span class="w"> </span>--cluster<span class="o">=</span>my-app<span class="w"> </span>--kubeconfig<span class="o">=</span>&lt;managed<span class="w"> </span>cluster<span class="w"> </span>kubeconfig&gt;<span class="w"> </span>--labels<span class="o">=</span><span class="nv">postgres</span><span class="o">=</span>required
 </span></code></pre></div>
-<p>Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kubectl get secret -n coke
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>NAME                         TYPE     DATA   AGE
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>pg-credentials          Opaque   2      0s
+<p>Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/coke/kubeconfig
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>-n<span class="w"> </span>coke
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>NAME<span class="w">                         </span>TYPE<span class="w">     </span>DATA<span class="w">   </span>AGE
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>pg-credentials<span class="w">          </span>Opaque<span class="w">   </span><span class="m">2</span><span class="w">      </span>0s
 </span></code></pre></div>
-<p>The Secret Data section contains:</p>
+<p>The Secret Data section contains similar output as the below.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>data:
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  password: bTloaW9UYUFBdVE1cFBQY1QzWGN6RDF2R3JUYzF5d3NVRTcwUTJQQXVUaTNucEZhRVdEYXpsZ1pmcnAzYWZwdg==
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  user: dG9kbw==
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubectl get configmap -n coke
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>NAME                        DATA   AGE
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>...
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>pg-loadbalancer-data   2      58s
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/coke/kubeconfig
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>-n<span class="w"> </span>coke
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>NAME<span class="w">                        </span>DATA<span class="w">   </span>AGE
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>...
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>pg-loadbalancer-data<span class="w">   </span><span class="m">2</span><span class="w">      </span>58s
 </span></code></pre></div>
-<p>The ConfigMap Data section contains:</p>
+<p>The ConfigMap Data section contains similar output as the below.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>data:
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  external-ip: 212.2.242.242
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  port: &quot;5432&quot;
 </span></code></pre></div>
 <h2 id="step-6-deploy-an-application-that-access-the-postgres-db">Step 6: Deploy an application that access the Postgres DB</h2>
-<p>Sveltos can now be used to deploy a Job in the <code>coke</code> cluster. This Job will access the Postgres DB in the <code>services</code> cluster.</p>
-<p>This Job is expressed as a template and will be deployed by Sveltos in any cluster with label <code>type=app</code>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/job-to-create-table.yaml
+<p>Sveltos can be used to deploy a Job in the <code>coke</code> cluster. This Job will access the Postgres DB in the <code>services</code> cluster.</p>
+<p>The Job is expressed as a Sveltos template which will be pre-instantiated and get deployed by Sveltos in any cluster with the matching label <code>type=app</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/management/kubeconfig
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/job-to-create-table.yaml
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>coke<span class="w"> </span>my-app<span class="w"> </span><span class="nv">type</span><span class="o">=</span>app
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>kubectl label sveltoscluster -n coke my-app type=app
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example, we will use the coke cluster to deploy the application.</p>
+</div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltosclusters<span class="w"> </span>--show-labels<span class="w"> </span>-A<span class="w">                                                                                                                        </span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>NAMESPACE<span class="w">          </span>NAME<span class="w">        </span>READY<span class="w">   </span>VERSION<span class="w">        </span>AGE<span class="w">     </span>LABELS
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>managed-services<span class="w">   </span>services<span class="w">    </span><span class="nb">true</span><span class="w">    </span>v1.34.2+k3s1<span class="w">   </span>11m<span class="w">     </span>projectsveltos.io/k8s-version<span class="o">=</span>v1.32.5,sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>services
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>mgmt<span class="w">               </span>mgmt<span class="w">        </span><span class="nb">true</span><span class="w">    </span>v1.34.2+k3s1<span class="w">   </span>15m<span class="w">     </span>projectsveltos.io/k8s-version<span class="o">=</span>v1.32.5,sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>mgmt
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>req-db<span class="w">             </span>my-app<span class="w">      </span><span class="nb">true</span><span class="w">    </span>v1.34.2+k3s1<span class="w">   </span>3m28s<span class="w">   </span><span class="nv">postgres</span><span class="o">=</span>required,projectsveltos.io/k8s-version<span class="o">=</span>v1.34.2,sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>app
 </span></code></pre></div>
 <h2 id="step-7-add-another-managed-cluster">Step 7: Add another managed cluster</h2>
-<p>Here we created yet another Civo cluster and registered with Sveltos<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. As result:</p>
+<p>Create another managed cluster and register it with Sveltos<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The expected outcome is as follows.</p>
 <ol>
 <li>Sveltos deployed a new Postgres DB in the <code>services</code> cluster;</li>
 <li>Fetched the credentials and external-ip:port info to access the cluster;</li>
