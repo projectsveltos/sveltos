@@ -101,11 +101,11 @@ Verify whether the resources have been deployed to the cluster marked with the `
 
 ```bash
 $ sveltosctl show addons
-┌────────────────────────────┬────────────────────────────┬─────────────┬──────────────────────┬─────────┬───────────────────────────────┬─────────────────┬─────────────────────────────────────────────┐
-│          CLUSTER           │       RESOURCE TYPE        │  NAMESPACE  │         NAME         │ VERSION │             TIME              │ DEPLOYMENT TYPE │                  PROFILES                   │
-├────────────────────────────┼────────────────────────────┼─────────────┼──────────────────────┼─────────┼───────────────────────────────┼─────────────────┼─────────────────────────────────────────────┤
-│ managed-services/services  │ helm chart                 │ cnpg-system │ cnpg                 │ 0.27.1  │ 2026-02-08 17:07:25 +0100 CET │ Managed cluster │ ClusterProfile/deploy-cnpg                  │
-└────────────────────────────┴────────────────────────────┴─────────────┴──────────────────────┴─────────┴────────────────────────────────┴─────────────────┴─────────────────────────────────────────────┘
+┌───────────────────────────┬───────────────┬─────────────┬──────┬─────────┬───────────────────────────────┬─────────────────┬────────────────────────────┐
+│          CLUSTER          │ RESOURCE TYPE │  NAMESPACE  │ NAME │ VERSION │             TIME              │ DEPLOYMENT TYPE │          PROFILES          │
+├───────────────────────────┼───────────────┼─────────────┼──────┼─────────┼───────────────────────────────┼─────────────────┼────────────────────────────┤
+│ managed-services/services │ helm chart    │ cnpg-system │ cnpg │ 0.27.1  │ 2026-02-10 09:19:13 +0100 CET │ Managed cluster │ ClusterProfile/deploy-cnpg │
+└───────────────────────────┴───────────────┴─────────────┴──────┴─────────┴───────────────────────────────┴─────────────────┴────────────────────────────┘
 ```
 
 ![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-cloudnative-pg.png)
@@ -144,7 +144,7 @@ $ sveltosctl register cluster --namespace=coke --cluster=my-app --kubeconfig=<ma
 Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect.
 
 ```bash
-$ export KUBECONFIG=/path/to/coke/kubeconfig
+$ export KUBECONFIG=/path/to/management/kubeconfig
 
 $ kubectl get secret -n coke
 NAME                         TYPE     DATA   AGE
@@ -160,7 +160,7 @@ data:
 ```
 
 ```bash
-$ export KUBECONFIG=/path/to/coke/kubeconfig
+$ export KUBECONFIG=/path/to/management/kubeconfig
 
 $ kubectl get configmap -n coke
 NAME                        DATA   AGE
