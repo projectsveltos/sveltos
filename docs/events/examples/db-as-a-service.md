@@ -28,7 +28,7 @@ The Postgres DB will be deployed using [Cloudnative-pg](https://github.com/cloud
 
 ## Step 1: Install Sveltos on Management Cluster
 
-For this tutorial, we will install Sveltos in the management cluster. Sveltos installation details can be found [here](../../getting_started/install/install.md).
+For this tutorial, we will install Sveltos in the **management** cluster. Sveltos installation details can be found [here](../../getting_started/install/install.md).
 
 ```bash
 $ helm repo add projectsveltos https://projectsveltos.github.io/helm-charts
@@ -36,6 +36,7 @@ $ helm repo update
 
 $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace
 ```
+### Add Label management Cluster
 
 Label the management cluster using `type=mgmt`.
 
@@ -68,7 +69,7 @@ kubectl patch clusterrole addon-controller-role-extra -p '{
 
 ## Step 2: Register Clusters with Sveltos
 
-Ensure you have access to the Kubeconfig files of the respective managed clusters.
+Ensure access to the managed clusters Kubeconfig files as they will be used during the Sveltos registration process.
 
 ```bash
 $ export KUBECONFIG=/path/to/management/kubeconfig
@@ -100,12 +101,11 @@ Verify whether the resources have been deployed to the cluster marked with the `
 
 ```bash
 $ sveltosctl show addons
-sveltosctl show addons
-┌────────────────────────────┬────────────────────────────┬─────────────┬──────────────────────┬─────────┬───────────────────────────────┬─────────────────┬─────────────────────────────────────────────┐
-│          CLUSTER           │       RESOURCE TYPE        │  NAMESPACE  │         NAME         │ VERSION │             TIME              │ DEPLOYMENT TYPE │                  PROFILES                   │
-├────────────────────────────┼────────────────────────────┼─────────────┼──────────────────────┼─────────┼───────────────────────────────┼─────────────────┼─────────────────────────────────────────────┤
-│ managed-services/services  │ helm chart                 │ cnpg-system │ cnpg                 │ 0.27.1  │ 2026-02-08 17:07:25 +0100 CET │ Managed cluster │ ClusterProfile/deploy-cnpg                  │
-└────────────────────────────┴────────────────────────────┴─────────────┴──────────────────────┴─────────┴────────────────────────────────┴─────────────────┴─────────────────────────────────────────────┘
+┌───────────────────────────┬───────────────┬─────────────┬──────┬─────────┬───────────────────────────────┬─────────────────┬────────────────────────────┐
+│          CLUSTER          │ RESOURCE TYPE │  NAMESPACE  │ NAME │ VERSION │             TIME              │ DEPLOYMENT TYPE │          PROFILES          │
+├───────────────────────────┼───────────────┼─────────────┼──────┼─────────┼───────────────────────────────┼─────────────────┼────────────────────────────┤
+│ managed-services/services │ helm chart    │ cnpg-system │ cnpg │ 0.27.1  │ 2026-02-10 09:19:13 +0100 CET │ Managed cluster │ ClusterProfile/deploy-cnpg │
+└───────────────────────────┴───────────────┴─────────────┴──────┴─────────┴───────────────────────────────┴─────────────────┴────────────────────────────┘
 ```
 
 ![Sveltos: Deploy Cloudnative-pg](../../assets/sveltos-cloudnative-pg.png)
@@ -144,7 +144,7 @@ $ sveltosctl register cluster --namespace=coke --cluster=my-app --kubeconfig=<ma
 Verify Sveltos deployed the Postgres Cluster and fetched the info necessary to connect.
 
 ```bash
-$ export KUBECONFIG=/path/to/coke/kubeconfig
+$ export KUBECONFIG=/path/to/management/kubeconfig
 
 $ kubectl get secret -n coke
 NAME                         TYPE     DATA   AGE
@@ -160,7 +160,7 @@ data:
 ```
 
 ```bash
-$ export KUBECONFIG=/path/to/coke/kubeconfig
+$ export KUBECONFIG=/path/to/management/kubeconfig
 
 $ kubectl get configmap -n coke
 NAME                        DATA   AGE
@@ -186,18 +186,25 @@ The Job is expressed as a Sveltos template which will be pre-instantiated and ge
 $ export KUBECONFIG=/path/to/management/kubeconfig
 
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/job-to-create-table.yaml
+```
+
+### Add Label coke Cluster
+
+```bash
+$ export KUBECONFIG=/path/to/management/kubeconfig
+
 $ kubectl label sveltoscluster -n coke my-app type=app
 ```
 
 !!!note
-    In this example, we will use the coke cluster to deploy the application.
+    In this example, we will use the `coke` cluster to deploy the application.
 
 ```bash
 $ kubectl get sveltosclusters --show-labels -A                                                                                                                        
 NAMESPACE          NAME        READY   VERSION        AGE     LABELS
 managed-services   services    true    v1.34.2+k3s1   11m     projectsveltos.io/k8s-version=v1.32.5,sveltos-agent=present,type=services
 mgmt               mgmt        true    v1.34.2+k3s1   15m     projectsveltos.io/k8s-version=v1.32.5,sveltos-agent=present,type=mgmt
-req-db             my-app      true    v1.34.2+k3s1   3m28s   postgres=required,projectsveltos.io/k8s-version=v1.34.2,sveltos-agent=present,type=app
+coke               my-app      true    v1.34.2+k3s1   3m28s   postgres=required,projectsveltos.io/k8s-version=v1.34.2,sveltos-agent=present,type=app
 ```
 
 ## Step 7: Add another managed cluster
