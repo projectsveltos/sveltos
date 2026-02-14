@@ -59,8 +59,6 @@ rules:
         - cluster.x-k8s.io
       resources:
         - clusters/status
-        - machines
-        - machines/status
       verbs:
         - get
         - list
@@ -165,12 +163,12 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.4.0
+                    - --version=v1.5.0
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:v1.4.0
+                  image: docker.io/projectsveltos/classifier:v1.5.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
