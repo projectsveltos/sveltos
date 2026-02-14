@@ -146,7 +146,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: projectsveltos/ui-backend:v1.4.0
+                  image: projectsveltos/ui-backend:v1.5.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -207,7 +207,7 @@ spec:
                 app: dashboard
         spec:
             containers:
-                - image: docker.io/projectsveltos/dashboard:v1.4.0
+                - image: docker.io/projectsveltos/dashboard:v1.5.0
                   name: dashboard
                   ports:
                     - containerPort: 5173

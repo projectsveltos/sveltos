@@ -57,6 +57,14 @@ spec:
                   - reEvaluate: If set to true, this healthCheck instances will be re-evaluated in 10 seconds
                 minLength: 1
                 type: string
+              evaluateIndependently:
+                default: true
+                description: |-
+                  EvaluateIndependently indicates whether matching resources can be evaluated
+                  in smaller batches to save memory.
+                  Set this to true if the Lua script evaluates each resource independently.
+                  Set this to false if the Lua script needs to compare all selected resources
+                type: boolean
               resourceSelectors:
                 description: ResourceSelectors identifies what resources to select
                   to evaluate health
