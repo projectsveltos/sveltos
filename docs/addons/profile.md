@@ -262,3 +262,31 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
 ### Spec.ContinueOnConflict
 
 *ContinueOnConflict* configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another *profile* has already deployed the same resource.
+
+### Spec.PreDeleteChecks
+
+The *preDeleteChecks* field defines a set of safety checks that Sveltos must perform *before* it begins removing resources from a managed cluster. If any of these checks fail (i.e., the Lua script returns health = false), Sveltos will halt the deletion process and retry later.
+
+This is particularly useful for ensuring:
+
+1. Data Integrity: Verifying that a backup job has completed before deleting a database.
+2. Dependency Logic: Ensuring a "consumer" application is removed before the "provider" service it relies on.
+
+### Spec.PostDeleteChecks
+
+The *postDeleteChecks* field defines checks that Sveltos executes *after* the deletion commands have been issued. These checks verify that the cluster has reached a truly "clean" state.
+
+Common use cases include:
+
+1. Orphaned Resource Detection: Verifying that cloud-provider resources (like LoadBalancers or PVCs) were actually released.
+2. Namespace Cleanup: Ensuring a namespace is fully terminated and not stuck in a "Terminating" state due to finalizers.
+
+### Spec.PatchesFrom
+
+The *patchesFrom* field allows you to decouple patch definitions from the ClusterProfile itself. By referencing ConfigMaps or Secrets, you can inject environment-specific configurations into your resources at runtime.
+
+This is particularly effective for:
+
+1. Security: Storing sensitive patches in Secrets rather than plain-text ClusterProfiles.
+2. Scalability: Using a single ClusterProfile for hundreds of clusters while tailoring replica counts, node selectors, or resource limits for each one.
+3. Dynamic Customization: Leveraging Go templating in the name and namespace fields to automatically fetch patches based on the target cluster's metadata.
