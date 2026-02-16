@@ -1601,6 +1601,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#specpredeletechecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PreDeleteChecks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specpostdeletechecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PostDeleteChecks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specpatchesfrom" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PatchesFrom
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2401,6 +2428,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/pre_post_delete_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pre and Post Delete Checks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/set/" class="md-nav__link">
         
   
@@ -2501,10 +2551,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_10" >
         
           
-          <label class="md-nav__link" for="__nav_8_9" id="__nav_8_9_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_10" id="__nav_8_10_label" tabindex="0">
             
   
   
@@ -2517,8 +2567,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_9">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_10">
             <span class="md-nav__icon md-icon"></span>
             Multi-tenancy
           </label>
@@ -3865,6 +3915,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#specpredeletechecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PreDeleteChecks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specpostdeletechecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PostDeleteChecks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specpatchesfrom" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spec.PatchesFrom
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4158,6 +4235,28 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
 <p><em>ContinueOnError</em> configures Sveltos' error handling. When true, errors are logged, but deployment continues. When false (default), Sveltos stops at the first error and retries the failing resource. For instance, if deploying three Helm charts, a failure during the second chart's deployment will halt the process, and Sveltos will retry the second chart. Only if ContinueOnError is true will Sveltos proceed to deploy the third chart <em>before retrying</em> the second chart.</p>
 <h3 id="speccontinueonconflict">Spec.ContinueOnConflict</h3>
 <p><em>ContinueOnConflict</em> configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another <em>profile</em> has already deployed the same resource.</p>
+<h3 id="specpredeletechecks">Spec.PreDeleteChecks</h3>
+<p>The <em>preDeleteChecks</em> field defines a set of safety checks that Sveltos must perform <em>before</em> it begins removing resources from a managed cluster. If any of these checks fail (i.e., the Lua script returns health = false), Sveltos will halt the deletion process and retry later.</p>
+<p>This is particularly useful for ensuring:</p>
+<ol>
+<li>Data Integrity: Verifying that a backup job has completed before deleting a database.</li>
+<li>Dependency Logic: Ensuring a "consumer" application is removed before the "provider" service it relies on.</li>
+</ol>
+<h3 id="specpostdeletechecks">Spec.PostDeleteChecks</h3>
+<p>The <em>postDeleteChecks</em> field defines checks that Sveltos executes <em>after</em> the deletion commands have been issued. These checks verify that the cluster has reached a truly "clean" state.</p>
+<p>Common use cases include:</p>
+<ol>
+<li>Orphaned Resource Detection: Verifying that cloud-provider resources (like LoadBalancers or PVCs) were actually released.</li>
+<li>Namespace Cleanup: Ensuring a namespace is fully terminated and not stuck in a "Terminating" state due to finalizers.</li>
+</ol>
+<h3 id="specpatchesfrom">Spec.PatchesFrom</h3>
+<p>The <em>patchesFrom</em> field allows you to decouple patch definitions from the ClusterProfile itself. By referencing ConfigMaps or Secrets, you can inject environment-specific configurations into your resources at runtime.</p>
+<p>This is particularly effective for:</p>
+<ol>
+<li>Security: Storing sensitive patches in Secrets rather than plain-text ClusterProfiles.</li>
+<li>Scalability: Using a single ClusterProfile for hundreds of clusters while tailoring replica counts, node selectors, or resource limits for each one.</li>
+<li>Dynamic Customization: Leveraging Go templating in the name and namespace fields to automatically fetch patches based on the target cluster's metadata.</li>
+</ol>
 
 
 
