@@ -80,4 +80,4 @@ More videos can be found here:
 
 [:star: projectsveltos](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){:target="_blank" .md-button}
 
-[![Stargazers repo roster for @projectsveltos/addon-controller](http://reporoster.com/stars/projectsveltos/addon-controller)](https://github.com/projectsveltos/addon-controller/stargazers)
+[![Stargazers repo roster for @projectsveltos/addon-controller](//reporoster.com/stars/projectsveltos/addon-controller)](https://github.com/projectsveltos/addon-controller/stargazers)
