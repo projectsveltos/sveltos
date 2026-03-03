@@ -251,3 +251,5 @@ data:
       kind: Deployment
       name: nginx-deployment
 ```
+
+This [tutorial](https://github.com/gianlucam76/devops-tutorial/blob/main/late-binding-patches/README.md) covers yet another example.

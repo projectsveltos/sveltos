@@ -19,6 +19,7 @@ authors:
 1. [Deploy Kubernetes add-ons](https://medium.com/@gianluca.mardente/sveltos-a-solution-to-deploy-kubernetes-add-ons-in-clusterapi-powered-clusters-b9d4b48fc819)
 1. [Managing Kubernetes Beyond The Firewall - Introducing Pull Mode](https://www.everythingdevops.dev/blog/managing-kubernetes-beyond-the-firewall-with-pull-mode)
 1. [Centralized Resource Display for Multiple Kubernetes Clusters](https://dev.to/gianlucam76/centralized-resource-display-for-multiple-kubernetes-clusters-4ngi)
+1. [Patches](https://github.com/gianlucam76/devops-tutorial/blob/main/late-binding-patches/README.md)
 1. [Sveltos and Kustomize](https://dev.to/gianlucam76/kubernetes-add-ons-management-introducing-kustomize-integration-with-sveltos-2cpn)
 1. [Gateway API: Exposing managed services with Kong and Sveltos](https://medium.com/p/d26b87cbd5a4)
 1. [Sveltos, Carvel ytt and Flux](https://medium.com/@gianluca.mardente/simplify-kubernetes-resource-management-with-sveltos-carvel-ytt-and-flux-da960298c321)
