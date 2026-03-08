@@ -35,9 +35,16 @@ Sveltos automatically fetches these resources, so we do not need to include them
 
 ### Retrieving Management Cluster Resources
 
-Sveltos can retrieve any resource from the **management** cluster. To do this, include the `templateResourceRefs` in the `Spec` section of the [ClusterProfile/Profile ](../addons/addons.md) resource.
+Sveltos can retrieve any resource from the **management cluster**. To do this, include the `templateResourceRefs` in the `Spec` section of the [ClusterProfile/Profile ](../addons/addons.md) resource.
 
 To access any of these resources in your template, use `getResource "<alias>"`, where the alias is the `identifier` specified in the `templateResourceRefs` section.
+
+**Configuration Options**
+
+When referencing a resource, you can fine-tune how Sveltos reacts to its lifecycle:
+
+- **optional: true**: Indicates the resource is not mandatory. If the resource is missing, Sveltos will ignore the error and continue processing other references. This is ideal for "best-effort" configurations that vary across environments.
+- **ignoreStatusChanges: true**: Prevents unnecessary re-deployments. Sveltos will only trigger a reconciliation if the resource's spec or metadata (generation) changes, ignoring frequent "noise" from the status subresource.
 
 #### Example: Accessing a Secret
 
@@ -49,13 +56,17 @@ kind: ClusterProfile
 metadata:
   name: deploy-resources
 spec:
-  ...
+  clusterSelector: env=production
   templateResourceRefs:
   - resource:
       kind: Secret
       name: autoscaler
+      namespace: default
     identifier: AutoscalerSecret
-  ...
+  policyRefs:
+  - kind: ConfigMap
+    name: autoscaler-template
+    namespace: default
 ```
 
 We can reference this Secret in a template using the `getResource` function with its alias.
