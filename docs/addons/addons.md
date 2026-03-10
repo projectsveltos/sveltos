@@ -86,7 +86,7 @@ The third step is to create a `ClusterProfile` and apply it to the **management*
     name: kyverno
     spec:
     clusterSelector:
-        matchLabels:
+      matchLabels:
         env: prod
     syncMode: Continuous
     helmCharts:
