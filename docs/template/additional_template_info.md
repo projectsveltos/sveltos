@@ -59,6 +59,7 @@ spec:
   clusterSelector: env=production
   templateResourceRefs:
   - resource:
+      apiVersion: v1
       kind: Secret
       name: autoscaler
       namespace: default
