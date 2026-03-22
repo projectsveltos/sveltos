@@ -27,6 +27,10 @@ authors:
 
 [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller. It makes deploying and managing Kubernetes add-ons and applications easier across **multiple** clusters. This works for on-prem, cloud, or multitenant setups.
 
+!!! tip "Have Questions?"
+    Join the **#projectsveltos** Slack channel for questions, discussions, and community support!
+    [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brighteen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q)
+
 !!! note
     Sveltos is not a replacement for GitOps. It's designed to be an extension for GitOps workflows when managing multiple clusters.
 
