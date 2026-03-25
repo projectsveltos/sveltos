@@ -3737,6 +3737,7 @@
 <h2 id="configuration-drift">Configuration Drift</h2>
 <p><em>Configuration drift</em> is a commonly used term to describe a change that takes place in an environment. Drift is an issue as it causes systems and parts of a system which supposed to be consistent, to become inconsistent and unpredictable. In our case, <em>configuration drift</em> is a change of a resource deployed by Sveltos down the managed clusters.</p>
 <p>Sveltos allows users to set the <code>sync</code> mode within a ClusterProfile to <em>ContinuousWithDriftDetection</em>. It enables Sveltos to monitor the state of managed clusters and detect configuration drift for any of the resources deployed by a ClusterProfile.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -3753,14 +3754,19 @@
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
 </span></code></pre></div>
-<p>When Sveltos detects a configuration drift, it will automatically re-sync the cluster state back to its original state which is described in the management cluster. Sveltos deploys a service in each managed cluster and configures it with a list of Kubernetes resources deployed for each ClusterProfile in SyncModeContinuousWithDriftDetection mode.</p>
-<p>The service starts a watcher for each GroupVersionKind with at least one resource to watch. When any watched resources are modified (labels, annotations, spec or rules sections), the service notifies the management cluster about potential configuration drifts. The management cluster then reacts by redeploying affected ClusterProfiles.</p>
-<p>This way, Sveltos ensures that the systems are always consistent and predictable, preventing unexpected issues caused by the configuration drifts.</p>
+</div>
+<p>When Sveltos detects a configuration drift, it will <strong>automatically</strong> <strong>re-sync</strong> the cluster state back to its original state which is described in the management cluster. What actually happens, Sveltos deploys a service in each managed cluster and configures it with a list of Kubernetes resources deployed for each ClusterProfile in <code>SyncModeContinuousWithDriftDetection</code> mode. The service starts a watcher for each <code>GroupVersionKind</code> with at least one resource to watch. When any watched resources are modified (labels, annotations, spec or rules sections), the service notifies the management cluster about potential configuration drifts. The management cluster then reacts by redeploying affected ClusterProfiles.</p>
+<p>Sveltos ensures the systems are always <strong>consistent</strong> and <strong>predictable</strong>, preventing <strong>unexpected</strong> issues.</p>
 <p><img alt="Configuration drift recovery" src="../../assets/reconcile_configuration_drift.gif" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To learn more about the available <code>syncMode</code> options, take a look <a href="https://projectsveltos.github.io/sveltos/main/addons/clusterprofile/#specsyncmode">here</a>.</p>
+</div>
 <h2 id="ignore-annotation">Ignore Annotation</h2>
-<p>You can stop certain resources from being tracked for configuration drift. This is done by adding a special annotation <code>projectsveltos.io/driftDetectionIgnore</code> to those resources.</p>
-<p>For instance, following ClusterProfile will deploy Kyverno helm chart. Patches are used to apply annotation to the Kyverno <code>kyverno-admission-controller</code> deployment.
-This means any changes made to resources deployed by the Helm chart itself will be flagged as a configuration drift. However, any modifications directly to the kyverno-admission-controller deployment won't be detected as drift.</p>
+<p>We can stop certain resources from being tracked for configuration drift. This is done by adding a special annotation <code>projectsveltos.io/driftDetectionIgnore</code> to the resources of interest.</p>
+<p>The below ClusterProfile will deploy a Kyverno helm chart. Patches are used to apply annotation to the Kyverno <code>kyverno-admission-controller</code> deployment.
+Any changes made to the resources deployed by the Helm chart will be flagged as a configuration drift. However, any modifications directly to the kyverno-admission-controller deployment will not be detected as drift.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
@@ -3789,9 +3795,10 @@ This means any changes made to resources deployed by the Helm chart itself will 
 </span></span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="hll"><span class="w">            </span><span class="no">path: /metadata/annotations/projectsveltos.io~1driftDetectionIgnore</span>
 </span></span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="hll"><span class="w">            </span><span class="no">value: &quot;ok&quot;</span>
 </span></span></code></pre></div>
+</div>
 <h2 id="ignore-fields">Ignore Fields</h2>
-<p>You can optionally specify fields to be excluded from drift detection using JSON Pointers.</p>
-<p>Here's an example configuration in YAML format:</p>
+<p>We can optionally specify fields to be excluded from the drift detection using JSON Pointers. The below snippet is an example of how this could be achieved.</p>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -3815,10 +3822,12 @@ This means any changes made to resources deployed by the Helm chart itself will 
 </span></span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="hll"><span class="w">    </span><span class="nt">target</span><span class="p">:</span>
 </span></span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="hll"><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
 </span></span></code></pre></div>
+</div>
 <h2 id="customize-drift-detection-manager-configuration">Customize drift-detection-manager configuration</h2>
 <p>In some cases, we might want to tailor the deployment of the <code>drift-detection-manager</code>. To achieve this, the <code>addon-controller</code> pod accepts a new argument named <code>drift-detection-config</code>.</p>
 <p>The <code>drift-detection-config</code> argument points to a <code>ConfigMap</code> within the <strong>projectsveltos</strong> namespace. The <code>ConfigMap</code> holds patches that will be applied to the <code>drift-detection-manager</code> before its deployment in the managed cluster.</p>
 <h4 id="configmap-example">ConfigMap Example</h4>
+<div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -3840,6 +3849,7 @@ This means any changes made to resources deployed by the Helm chart itself will 
 </span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">                </span><span class="no">requests:</span>
 </span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">                  </span><span class="no">memory: 256Mi</span>
 </span></code></pre></div>
+</div>
 <p>Along with creating the <code>ConfigMap</code>, we also need to configure the <strong>addon-controller</strong> deployment to use it. To do this, add the below argument to the deployment.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">args</span><span class="p">:</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
