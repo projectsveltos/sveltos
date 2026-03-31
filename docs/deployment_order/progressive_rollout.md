@@ -130,7 +130,7 @@ The example demonstrates rolling out the `kyverno-latest` Helm chart with a spec
 
 !!!tip
     To **manually promote** the Kyverno deployment from **staging** to **production**, perform the changes described below.
-    
+
     When the setting `name.trigger.manual.approved` is set to `false`, Sveltos will deploy to the **staging** environment without manual intervention. Then, it will only promote to **production** once an operator manually approves it by patching the `ClusterPromotion` resource.
 
     ```yaml
@@ -148,7 +148,7 @@ The example demonstrates rolling out the `kyverno-latest` Helm chart with a spec
               matchLabels:
                 env: production
     ```
-    
+
     **Verification commands**:
 
     ```bash
@@ -180,6 +180,12 @@ The `AutoTrigger` facilitates a hands-off, time-based, and health-checked promot
 ### Manual Promotion (`ManualTrigger`)
 
 The `ManualTrigger` stops the pipeline and needs human intervention. It is usually used for moving into high-risk environments, like **Production**.
+
+* **`preHealthCheckDeployment`** (Type `[]PolicyRef`)
+    Configuration that Sveltos must successfully deploy and reconcile after the delay has elapsed but before the postDelayHealthChecks run. Ideal for temporary validation Jobs referenced via ConfigMap or Secret.
+
+* **`postDelayHealthChecks`** (Type: `[]ValidateHealth`)
+    A slice of health checks (defined using `ValidateHealth`) that Sveltos must successfully run *after* the `delay` has elapsed. Those checks must pass before an operator can authorize the promotion.
 
 * **`approved`** (Type: `boolean`)
     When set to `true`, this signals to Sveltos that the human operator has reviewed the previous stage and **approved** the promotion to the next stage.
