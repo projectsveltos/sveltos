@@ -4022,6 +4022,14 @@
 <p>The <code>ManualTrigger</code> stops the pipeline and needs human intervention. It is usually used for moving into high-risk environments, like <strong>Production</strong>.</p>
 <ul>
 <li>
+<p><strong><code>preHealthCheckDeployment</code></strong> (Type <code>[]PolicyRef</code>)
+    Configuration that Sveltos must successfully deploy and reconcile after the delay has elapsed but before the postDelayHealthChecks run. Ideal for temporary validation Jobs referenced via ConfigMap or Secret.</p>
+</li>
+<li>
+<p><strong><code>postDelayHealthChecks</code></strong> (Type: <code>[]ValidateHealth</code>)
+    A slice of health checks (defined using <code>ValidateHealth</code>) that Sveltos must successfully run <em>after</em> the <code>delay</code> has elapsed. Those checks must pass before an operator can authorize the promotion.</p>
+</li>
+<li>
 <p><strong><code>approved</code></strong> (Type: <code>boolean</code>)
     When set to <code>true</code>, this signals to Sveltos that the human operator has reviewed the previous stage and <strong>approved</strong> the promotion to the next stage.</p>
 </li>
