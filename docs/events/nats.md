@@ -27,6 +27,14 @@ Sveltos can be configured to connect to and respond to CloudEvents published ove
 ## Connect to NATS and JetStream
 
 To configure Sveltos to connect to NATS and/or JetStream within a managed cluster, create a Secret named `sveltos-nats` in the `projectsveltos` namespace.  This Secret's data should contain a key also named `sveltos-nats` with the connection details.
+Crucially, for this configuration to take effect, the NATS watcher must be activated during the classifier deployment. You can enable this by setting the following flag in the deployment configuration:
+
+```
+--enable-nats-watcher=true
+```
+
+!!!note
+    By default, this feature is disabled. Using this flag allows the sveltos-agent to actively listen for cloud events via NATS.io.
 
 For example, to connect to a NATS server exposed as the `nats` service in the `nats` namespace on port 4222, with username/password authentication, and for Sveltos to subscribe to the __bar__ and __foo__ subjects, use the following configuration:
 
