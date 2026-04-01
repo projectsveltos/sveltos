@@ -16,11 +16,11 @@ authors:
 !!!video
     To learn more about the Sveltos MCP Server, check out the [Video](../assets/dashboard_mcp.mov)! 😊
 
-The __Sveltos Management Cluster Protocol__ (MCP) Server is a management tool that connects AI assistants and chatbots to the Sveltos management cluster. It provides a **structured**, **programmatic** interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.
+Sveltos has an integrated Model Context Protocol (MCP) server that connects AI assistants and chatbots to the Sveltos management cluster. It provides a **structured**, **programmatic** interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.
 
 ## How does it work?
 
-The Sveltos MCP Server acts as a communication layer between AI agents and the Sveltos-managed infrastructure. Instead of an AI directly executing _kubectl_ commands on individual clusters, it sends requests to the MCP Server using the [Management Cluster Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro). The server then translates these high-level requests into specific Sveltos tool calls.
+The Sveltos MCP Server acts as a communication layer between AI agents and the Sveltos-managed infrastructure. Instead of an AI directly executing _kubectl_ commands on individual clusters, it sends requests to the MCP Server using the [MCP](https://modelcontextprotocol.io/docs/getting-started/intro). The server then translates these high-level requests into specific Sveltos tool calls.
 
 The described process is not a simple command translation; it involves performing comprehensive checks on cluster statuses, the state of the Sveltos deployments, and the state of the Sveltos Custom Resources. Additionally, the server correlates the state of different resources that are tied to each other, providing a holistic view of the system's health. By consolidating these checks, the MCP Server provides a **single**, **unified** result to the AI, which can then present the findings to a user in a clear, conversational format.
 
