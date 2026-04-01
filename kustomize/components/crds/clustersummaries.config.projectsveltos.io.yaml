@@ -425,7 +425,10 @@ spec:
                                                                     type: integer
                                                                 recreate:
                                                                     default: false
-                                                                    description: Recreate will (if true) recreate pods after a rollback.
+                                                                    description: |-
+                                                                        Recreate will (if true) recreate pods after a rollback.
+
+                                                                        Deprecated: This field is no longer supported
                                                                     type: boolean
                                                                 resetThenReuseValues:
                                                                     default: false
@@ -1580,6 +1583,9 @@ spec:
                                             description: |-
                                                 Status indicates whether ClusterSummary can manage the helm
                                                 chart or there is a conflict
+                                            type: string
+                                        failureMessage:
+                                            description: FailureMessage provides the specific error from the Helm engine for this release
                                             type: string
                                         releaseName:
                                             description: ReleaseName is the chart release

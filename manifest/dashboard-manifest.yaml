@@ -146,7 +146,7 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: projectsveltos/ui-backend:v1.6.1
+                  image: projectsveltos/ui-backend:v1.7.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -179,7 +179,7 @@ spec:
                         cpu: 500m
                         memory: 512Mi
                     requests:
-                        cpu: 10m
+                        cpu: 100m
                         memory: 128Mi
                   securityContext:
                     allowPrivilegeEscalation: false
@@ -188,6 +188,8 @@ spec:
                             - ALL
             securityContext:
                 runAsNonRoot: true
+                seccompProfile:
+                    type: RuntimeDefault
             serviceAccountName: ui-backend-manager
             terminationGracePeriodSeconds: 10
 ---
@@ -209,8 +211,8 @@ spec:
             containers:
                 - env:
                     - name: VITE_APP_VERSION
-                      value: v1.6.1
-                  image: docker.io/projectsveltos/dashboard:v1.6.1
+                      value: v1.7.0
+                  image: docker.io/projectsveltos/dashboard:v1.7.0
                   name: dashboard
                   ports:
                     - containerPort: 5173
