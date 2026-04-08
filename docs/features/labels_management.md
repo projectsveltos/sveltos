@@ -14,26 +14,26 @@ authors:
 ---
 ## Classifier - Automatically Manage Cluster Labels and Add-Ons
 
-Sveltos provides users with the power to decide which add-ons should get deployed to which clusters programmatically by the use of a ClusterSelector. Sometimes the versions of the required and needed add-ons depend on the cluster's runtime state. This is where the Sveltos Classifier comes into play.
+Sveltos provides users with the power to decide which add-ons should get deployed to which clusters programmatically by the use of a `ClusterSelector`. Sometimes the versions of the required and needed add-ons depend on the cluster's runtime state. This is where the Sveltos `Classifier` comes into play.
 
-With the Classifier, Sveltos can be configured to automatically update the cluster labels based on the cluster runtime state. As the runtime state changes, the cluster labels are automatically updated. This ensures that the appropriate ClusterProfile instances match the specified clusters, leading to an automatic upgrade of the Kubernetes add-ons.
+With the `Classifier`, Sveltos can be configured to automatically update the cluster labels based on the cluster runtime state. As the runtime state changes, the cluster labels are automatically updated. This makes sure the right `ClusterProfile` instances match the chosen clusters. Then, it allows automatic upgrades of the Kubernetes add-ons.
 
-Once the Classifier is deployed in the management cluster, it is distributed to each cluster, and a Sveltos service running in each managed cluster monitors the cluster runtime state. As soon as a match is found, information is transmitted back to the management cluster, and the cluster labels are appropriately updated by Sveltos.
+Once the `Classifier` is deployed in the **management** cluster, it is distributed to each cluster. A Sveltos service runs in every managed cluster to monitor the cluster's runtime state. As soon as a match is detected, the information is transmitted back to the management cluster, and the cluster labels are appropriately updated by Sveltos.
 
-By combining the Classifier with the ClusterProfiles, Sveltos can monitor the runtime status of each cluster, update the cluster labels when the cluster runtime state changes, and deploy, upgrade the Kubernetes add-ons accordingly.
+Sveltos can track each cluster's runtime status by combining the `Classifier` with the `ClusterProfile` resource. When the cluster's state changes, it updates the cluster labels and manages the deployment and upgrade of Kubernetes add-ons as needed.
 
 ![Classifier in action](../assets/classifier.gif)
 
 ## Use Case: Upgrade Helm Charts when Kubernetes Cluster is Upgraded
 
-Suppose you are managing several Kubernetes clusters with different versions and you want to deploy the below points:
+Suppose we are managing several Kubernetes clusters with different versions, and we want to deploy the points below.
 
 1. OPA Gatekeeper version 3.10.0 in any Kubernetes cluster whose version is >= v1.25.0
-2. OPA Gatekeeper version 3.9.0 in any Kubernetes cluster whose version is >= v1.24.0 && < v1.25.0
+1. OPA Gatekeeper version 3.9.0 in any Kubernetes cluster whose version is >= v1.24.0 && < v1.25.0
 
 ### Management Cluster
 
-#### ClusterProfiles
+#### ClusterProfile
 
 !!! example ""
     ```yaml
@@ -79,7 +79,7 @@ Suppose you are managing several Kubernetes clusters with different versions and
         helmChartAction: Install
     ```
 
-#### Classifiers
+#### Classifier
 
 !!! example ""
     ```yaml
@@ -115,77 +115,78 @@ Suppose you are managing several Kubernetes clusters with different versions and
         version: 1.25.0
     ```
 
-Based on the above configuration, we achieved the below.
+Based on the configuration above, we achieved the below outcomes.
 
-1. Any cluster with a Kubernetes version v1.24.x will get the label _gatekeeper:v3.9_ added and then the Gatekeeper v3.9.0 helm chart will be deployed;
-1. Any cluster with a Kubernetes version v1.25.x will get the label _gatekeeper:v3.10_ added and then the Gatekeeper v3.10.0 helm chart will be deployed;
-1. As soon as a cluster is upgraded from Kubernetes v1.24.x to v1.25.x, Gatekeeper helm chart will be automatically upgraded from 3.9.0 to 3.10.0
+1. Any cluster with a Kubernetes version **v1.24.x** will get the label _gatekeeper:v3.9_ added, and then the Gatekeeper v3.9.0 Helm chart will be deployed
+1. Any cluster with a Kubernetes version **v1.25.x** will get the label _gatekeeper:v3.10_ added, and then the Gatekeeper v3.10.0 Helm chart will be deployed
+1. As soon as a cluster is upgraded from Kubernetes **v1.24.x** to **v1.25.x**, the Gatekeeper Helm chart will be automatically upgraded from 3.9.0 to 3.10.0
 
 ### More Resources
 
-To read more about the classifier configuration, with examles using the resources and the Lua script, have a look at the [section](labels_management.md#classifier-controller-configuration).
+To read more about the Classifier configuration, with examples using the resources and the [Lua](https://www.lua.org/) language, have a look at the [section](labels_management.md#classifier-controller-configuration).
 
 ### More Examples
 
-1. Classify clusters based on their Kubernetes version [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/kubernetes_version.yaml)
+1. Classify clusters based on Kubernetes version [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/kubernetes_version.yaml)
 1. Classify clusters based on the number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
-1. Classify clusters based on their Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
+1. Classify clusters based on Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
 
 ## Use Case: Metrics-based Classifier
 
-There are cases when end-users want to deploy add-ons and applications in Kubernetes clusters that are not heavily loaded. That means, based on the CPU, memory or any other metric, control what will get deployed and where.
+There are cases when end-users want to deploy add-ons and applications in Kubernetes clusters that are not heavily loaded. That means, based on the CPU, memory, or any other metric, controlling what will get deployed and where.
 
-The functionality can be achieved by allowing the _deployedResourceConstraint_ to reference resources that live in the management cluster. The available feature request is located [here](https://github.com/projectsveltos/classifier/issues/375).
+We can achieve this functionality by letting the _deployedResourceConstraint_  reference resources in the management cluster. The available feature request is located [here](https://github.com/projectsveltos/classifier/issues/375).
 
 ### Example
 
-```yaml
-apiVersion: lib.projectsveltos.io/v1beta1
-kind: Classifier
-metadata:
-  name: low-load
-spec:
-  classifierLabels:
-  - key: load # Label applied to matching clusters
-    value: low
-  deployedResourceConstraint:
-    resourceSelectors:
-    - group: metrics.keptn.sh
-      version: v1alpha1 # Adjust based on the Keptn version
-      kind: KeptnMetric
-      namespace: sveltos-metrics # KeptnMetric runs in the mgmt cluster
-      name: keptnmetric-cpu-{{ .cluster }}
-      evaluate: | # Use Lua for conditional checks
-        function evaluate()
-          local hs = { matching = false, message = "" }
-          local v = tonumber(obj.status.value)
-          if v and v < 0.5 then
-            hs.matching = true          -- cluster is “low load”
-          else
-            hs.message = "CPU util " .. tostring(v)
-          end
-          return hs
-        end
-  # <--- new field proposed in #375
-  sourceClusterScope: Local
-```
+!!! example ""
+    ```yaml
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: Classifier
+    metadata:
+      name: low-load
+    spec:
+      classifierLabels:
+      - key: load # Label applied to matching clusters
+        value: low
+      deployedResourceConstraint:
+        resourceSelectors:
+        - group: metrics.keptn.sh
+          version: v1alpha1 # Adjust based on the Keptn version
+          kind: KeptnMetric
+          namespace: sveltos-metrics # KeptnMetric runs in the mgmt cluster
+          name: keptnmetric-cpu-{{ .cluster }}
+          evaluate: | # Use Lua for conditional checks
+            function evaluate()
+              local hs = { matching = false, message = "" }
+              local v = tonumber(obj.status.value)
+              if v and v < 0.5 then
+                hs.matching = true          -- cluster is “low load”
+              else
+                hs.message = "CPU util " .. tostring(v)
+              end
+              return hs
+            end
+      # <--- new field proposed in #375
+      sourceClusterScope: Local
+    ```
 
 How does the proposed resource work? The _KeptnMetric.status.value_ already carries the live metric. The `Lua` code used will evaluate the block checks and the threshold directly. No additional controller is required. When the defined metric goes over the defined limit, the label is either added or removed, and any `ClusterProfile` will react automatically.
 
-## Classifier CRD - Deep dive
+## Classifier CRD - Deep Dive
 
 [Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
 
 ### Classifier Labels
 The field *classifierLabels* contains all the labels (key/value pair) which will be added automatically to any cluster matching a Classifier instance.
 
-### Kubernetes version constraints
+### Kubernetes Version constraints
 The field *kubernetesVersionConstraints* can be used to classify a cluster based on its current Kubernetes version.
 
-### Resource constraints
-The field *deployedResourceConstraint* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace and labels and some fields. It supports Lua script as well.
+### Resource Constraints
+The field *deployedResourceConstraint* can be used to classify a cluster based on current deployed resources. Resources are identified by Group/Version/Kind and can be filtered based on their namespace, labels and some fields. It supports Lua script as well.
 
-Following classifier, matches any cluster with a Service with label __sveltos:fv__.
+Following `Classifier` matches any cluster with a service with the label __sveltos:fv__.
 
 !!! example ""
     ```yaml
@@ -209,7 +210,7 @@ Following classifier, matches any cluster with a Service with label __sveltos:fv
             value: fv
     ```
 
-Following classifier, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_
+Following `Classifier`, matches any cluster with a ClusterIssuer using _acme-staging-v02.api.letsencrypt.org_.
 
 !!! example ""
     ```yaml
@@ -241,22 +242,20 @@ Following classifier, matches any cluster with a ClusterIssuer using _acme-stagi
             end
     ```
 
-A Classifier can also look at the resources of different kinds all together.
+A `Classifier` can also look at the resources of different kinds altogether.
 
-__AggregatedClassification__ is optional and can be used to specify a Lua function that will be used to further detect whether the subset of the resources selected using the ResourceSelectors field are a match for this Classifier.
-The function will receive the array of resources selected by ResourceSelectors. If this field is not specified, a cluster is a match for Classifier instance, if all ResourceSelectors returns at least one match.
-This field allows to perform more complex evaluation on the resources, looking at all resources together. This can be useful for more sophisticated tasks, such as identifying resources that are related to each other or that have similar properties.
+__AggregatedClassification__ is optional and can be used to specify a Lua function that will be used to further detect whether the subset of the resources selected using the ResourceSelectors field is a match for this `Classifier`. The function will receive the array of resources selected by ResourceSelectors. If this field is not specified, a cluster is a match for the `Classifier` instance, if all ResourceSelectors returns at least one match. This field allows to perform more complex evaluation on the resources, looking at all resources together. This can be useful for more sophisticated tasks, such as identifying resources that are related to each other or that have similar properties.
 The Lua function must return a struct with:
 
-- "matching" field: boolean indicating whether cluster is a match;
-- "message" field: (optional) message.
+- "matching" field: boolean indicating whether the cluster is a match
+- "message" field: (optional) message
 
 !!! note
     Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic.
 
-### Classifier controller configuration
+### Classifier Controller Configuration
 
-1. *concurrent-reconciles*: By default Sveltos manager reconcilers runs with a parallelism set to 10. This arg can be used to change level of parallelism;
-1. *worker-number*: Number of workers performing long running task. By default this is set to 20. If number of Classifier instances is in the hundreds, please consider increasing this;
-1. *report-mode*: By default Classifier controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each Classifier Agent send back ClassifierReport to management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are update of ClassifierReports.
-1. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable frm each managed cluster.
+1. *concurrent-reconciles*: By default, Sveltos manager reconcilers run with a parallelism set to 10. This arg can be used to change the level of parallelism
+1. *worker-number*: Number of workers performing long-running task. By default, this is set to **20**. If the number of `Classifier` instances is in the hundreds, please consider increasing this
+1. *report-mode*: By default, the `Classifier` controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each `Classifier` Agent send back ClassifierReport to the management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are the update of ClassifierReports
+1. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable from each managed cluster
