@@ -1,32 +1,52 @@
 /*
- * When the copy button is clicked, the script temporary modifies the displayed text.
- * The leading characters '$' or '$ ' are removed from the code snippets.
- * After 10ms delay, the original text is restored.
+ * Strip leading '$' or '$ ' from code snippets on copy.
  */
+(function () {
+  'use strict';
 
-document$.subscribe(function() {
+  function strip(text) {
+    return typeof text === 'string' ? text.replace(/^(\$\s*)/gm, '') : text;
+  }
 
-  const copyButton = document.querySelectorAll('.md-clipboard');
+  // Layer 1: prototype patch: Intercepts calls that go through the prototype
+  // chain regardless of when they are made relative to this script loading.
+  if (typeof Clipboard !== 'undefined' && Clipboard.prototype.writeText) {
+    const _proto = Clipboard.prototype.writeText;
+    Clipboard.prototype.writeText = function (text) {
+      try {
+        return _proto.call(this, strip(text));
+      } catch {
+        return _proto.call(this, text);
+      }
+    };
+  }
 
-  copyButton.forEach(function(button) {
+  // Layer 2: instance patch: Shadows the prototype on the live object so
+  // a direct navigator.clipboard.writeText(…) lookup finds our version first.
+  if (navigator.clipboard) {
+    const _orig = navigator.clipboard.writeText.bind(navigator.clipboard);
+    navigator.clipboard.writeText = function (text) {
+      try {
+        return _orig(strip(text));
+      } catch {
+        return _orig(text);
+      }
+    };
+  }
 
-    const codeElement = button.closest('.highlight, pre').querySelector('code');
-
-    if (codeElement) {
-
-      let actualText = codeElement.textContent;
-
-      button.addEventListener('click', function() {
-
-        const modifiedText = actualText.replace(/^((\$)\s*)/gm, '');
-
-        codeElement.textContent = modifiedText;
-
-        setTimeout(() => {
-          codeElement.textContent = actualText;
-        }, 10);
-
-      });
+  // Layer 3: copy DOM event: Handles execCommand-based copies and Ctrl+C.
+  document.addEventListener('copy', function (e) {
+    try {
+      if (!e.clipboardData) return;
+      const sel = window.getSelection() ? window.getSelection().toString() : '';
+      if (!sel) return;
+      const stripped = strip(sel);
+      if (stripped !== sel) {
+        e.clipboardData.setData('text/plain', stripped);
+        e.preventDefault();
+      }
+    } catch {
     }
   });
-});
+
+}());

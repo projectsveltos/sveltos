@@ -56,6 +56,7 @@ authors:
 1. [![Simplify Add-On Management in K8s with Sveltos | Kubesimplify Webinar](https://img.youtube.com/vi/yifrTO7gDPM/0.jpg)](https://www.youtube.com/watch?v=yifrTO7gDPM)
 1. [![Conf42 DevOps 24](https://img.youtube.com/vi/n2lFfxPP6jE/0.jpg)](https://www.youtube.com/watch?v=n2lFfxPP6jE)
 1. [![Conf42 2023](https://img.youtube.com/vi/Xi2HvRfaNYI/0.jpg)](https://www.youtube.com/watch?v=Xi2HvRfaNYI)
+1. [![Cloud Native Rejekts Europe 2026](https://img.youtube.com/vi/7O8pqiK22wA/0.jpg)](https://www.youtube.com/watch?v=7O8pqiK22wA)
 
 More videos can be found here:
 
