@@ -1172,6 +1172,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#gitops-compatibility-in-place-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitOps Compatibility (In-place Renewal)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-gke" class="md-nav__link">
     <span class="md-ellipsis">
       Example: GKE
@@ -3627,6 +3636,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#gitops-compatibility-in-place-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitOps Compatibility (In-place Renewal)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-gke" class="md-nav__link">
     <span class="md-ellipsis">
       Example: GKE
@@ -3663,6 +3681,19 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">saName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">saNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
 </span></code></pre></div>
+<h3 id="gitops-compatibility-in-place-renewal">GitOps Compatibility (In-place Renewal)</h3>
+<p>By default, Sveltos creates a new key (<code>re-kubeconfig</code>) in the Secret during rotation. In GitOps environments (ArgoCD/Flux), this causes "drift." To prevent this, set <code>kubeconfigKeyName</code> inside <code>tokenRequestRenewalOption</code> to match your existing key name. This forces Sveltos to overwrite the token in-place without modifying the <code>SveltosCluster</code> Spec.</p>
+<p>Add or modify the <code>tokenRequestRenewalOption</code> section:</p>
+<p><code>yaml
+ tokenRequestRenewalOption:
+   renewTokenRequestInterval: 1h0m0s
+   tokenDuration: 5h
+   saName: projectsveltos
+   saNamespace: projectsveltos
+  # Set this to the same value as spec.kubeconfigKeyName to prevent GitOps drift
+  kubeconfigKeyName: kubeconfig</code></p>
+<p>If kubeconfigKeyName is provided and matches the current spec.kubeconfigKeyName, Sveltos performs an in-place update.
+It updates the Secret data but does not change the SveltosCluster spec, ensuring compatibility with GitOps tools that monitor for Spec changes.</p>
 <details>
    <summary>Supplementary Notes on Token Rotation</summary>
 
