@@ -25,6 +25,24 @@ tokenRequestRenewalOption:
   saNamespace: projectsveltos
 ```
 
+### GitOps Compatibility (In-place Renewal)
+By default, Sveltos creates a new key (`re-kubeconfig`) in the Secret during rotation. In GitOps environments (ArgoCD/Flux), this causes "drift." To prevent this, set `kubeconfigKeyName` inside `tokenRequestRenewalOption` to match your existing key name. This forces Sveltos to overwrite the token in-place without modifying the `SveltosCluster` Spec.
+
+Add or modify the `tokenRequestRenewalOption` section:
+
+ ```yaml
+ tokenRequestRenewalOption:
+   renewTokenRequestInterval: 1h0m0s
+   tokenDuration: 5h
+   saName: projectsveltos
+   saNamespace: projectsveltos
+  # Set this to the same value as spec.kubeconfigKeyName to prevent GitOps drift
+  kubeconfigKeyName: kubeconfig
+```
+
+If kubeconfigKeyName is provided and matches the current spec.kubeconfigKeyName, Sveltos performs an in-place update.
+It updates the Secret data but does not change the SveltosCluster spec, ensuring compatibility with GitOps tools that monitor for Spec changes.
+
 <details>
    <summary>Supplementary Notes on Token Rotation</summary>
 

@@ -128,6 +128,32 @@ Consider the provided ClusterProfile, when we have two workload clusters matchin
 
 More ClusterProfile examples can be found [here](https://github.com/projectsveltos/sveltos-manager/tree/main/examples "Manage Kubernetes add-ons: examples").
 
+### Bypassing Automatic Namespace Creation
+
+By default, when Sveltos deploys resources defined in policyRefs or kustomizationRefs, it automatically checks if the target namespace exists in the managed cluster. If the namespace is missing, Sveltos attempts to create it.
+
+While convenient, this requires Sveltos to have cluster-wide get and create permissions for Namespaces. In multi-tenant or restricted RBAC environments, namespaces are often pre-provisioned by cluster administrators, and Sveltos may not have the permissions required to manage namespaces at the cluster level.
+
+To handle these scenarios, you can use the skipNamespaceCreation field. When set to true, Sveltos bypasses the namespace check/creation logic and attempts to deploy resources directly into the existing namespace.
+
+```yaml hl_lines="13-15"
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: deploy-to-preprovisioned-ns
+spec:
+  clusterSelector:
+    matchLabels:
+      env: production
+  policyRefs:
+    - name: nginx
+      namespace: default
+      kind: ConfigMap
+      # If true, Sveltos won't try to create the target namespace
+      # even if it is defined within the ConfigMap resources.
+      skipNamespaceCreation: true
+```
+
 ### Example: Template-based Referencing for ConfigMaps and Secrets
 
 We can express `ConfigMap` and `Secret` **names** as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.
