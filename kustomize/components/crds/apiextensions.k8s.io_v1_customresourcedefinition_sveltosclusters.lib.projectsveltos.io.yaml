@@ -452,6 +452,14 @@ spec:
                 description: TokenRequestRenewalOption contains options describing
                   how to renew TokenRequest
                 properties:
+                  kubeconfigKeyName:
+                    description: |-
+                      KubeconfigKeyName is the name of the key in the Secret where the renewed
+                      kubeconfig will be stored.
+                      If nil, Sveltos defaults to "re-kubeconfig" and updates SveltosCluster.Spec.KubeconfigKeyName.
+                      If set, Sveltos writes to this key. To prevent GitOps drift, set this to the
+                      same value as SveltosCluster.Spec.KubeconfigKeyName.
+                    type: string
                   renewTokenRequestInterval:
                     description: RenewTokenRequestInterval is the interval at which
                       to renew the TokenRequest
