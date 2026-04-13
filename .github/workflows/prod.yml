@@ -1,48 +1,48 @@
 name: CI build prod documentation
 on:
   release:
-    types: [published]
+    types: [ published ]
 permissions:
   contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v6
-        with:
-          python-version: 3.x
-      - name: Install Dependencies
-        run: |
-          pip install mkdocs-material==9.6.23
-          pip install mike==2.1.3
-      - name: Setup Docs Deploy
-        run: |
-          git config --global user.name "Sveltos Docu Deploy"
-          git config --global user.email "docu@projectsveltos.io"
-      - name: Build Docs Website
-        run: mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
-      - name: Hide Older Releases
-        run: |
-          VISIBLE_RELEASES=2
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v6
+      with:
+        python-version: 3.x
+    - name: Install Dependencies
+      run: |
+        pip install zensical==0.0.32
+        pip install git+https://github.com/squidfunk/mike.git
+    - name: Setup Docs Deploy
+      run: |
+        git config --global user.name "Sveltos Docu Deploy"
+        git config --global user.email "docu@projectsveltos.io"
+    - name: Build Docs Website
+      run: mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
+    - name: Hide Older Releases
+      run: |
+        VISIBLE_RELEASES=2
 
-          all_releases=$(mike list --json | \
-                                 jq -r '.[] | select(.properties.hidden | not) | .version' | \
-                                 grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+(\-.*)?$' | \
-                                 sort -V)
+        all_releases=$(mike list --json | \
+                               jq -r '.[] | select(.properties.hidden | not) | .version' | \
+                               grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+(\-.*)?$' | \
+                               sort -V)
 
-          releases_array=($all_releases)
-          num_releases=${#releases_array[@]}
+        releases_array=($all_releases)
+        num_releases=${#releases_array[@]}
 
-          if (( num_releases > VISIBLE_RELEASES )); then
-            hide_num_releases=$((num_releases - VISIBLE_RELEASES))
-            for (( i=0; i<hide_num_releases; i++ )); do
-              hide_version=${releases_array[i]}
-              echo "Hide release version: $hide_version"
-              mike props --set hidden=true "$hide_version" --push 
-            done
-          else
-            echo "No release versions to hide. Exit"
-          fi
+        if (( num_releases > VISIBLE_RELEASES )); then
+          hide_num_releases=$((num_releases - VISIBLE_RELEASES))
+          for (( i=0; i<hide_num_releases; i++ )); do
+            hide_version=${releases_array[i]}
+            echo "Hide release version: $hide_version"
+            mike props --set hidden=true "$hide_version" --push 
+          done
+        else
+          echo "No release versions to hide. Exit"
+        fi

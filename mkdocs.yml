@@ -4,7 +4,11 @@ site_description: 'Sveltos is a lightweight application designed to manage add-o
 markdown_extensions:
 - admonition
 - pymdownx.details
-- pymdownx.superfences
+- pymdownx.superfences:
+    custom_fences:
+    - name: mermaid
+      class: mermaid
+      format: !!python/name:pymdownx.superfences.fence_code_format ""
 - attr_list
 - md_in_html
 - footnotes
@@ -13,22 +17,17 @@ markdown_extensions:
     anchor_linenums: true
     line_spans: __span
     pygments_lang_class: true
-- pymdownx.superfences:
-    custom_fences:
-    - name: mermaid
-      class: mermaid
-      format: !!python/name:pymdownx.superfences.fence_code_format
 - pymdownx.tabbed:
     alternate_style: true
 - pymdownx.inlinehilite
 - pymdownx.snippets
 - pymdownx.emoji:
-    emoji_index: !!python/name:material.extensions.emoji.twemoji
-    emoji_generator: !!python/name:material.extensions.emoji.to_svg
+    emoji_index: !!python/name:zensical.extensions.emoji.twemoji ""
+    emoji_generator: !!python/name:zensical.extensions.emoji.to_svg ""
 nav:
 - Projectsveltos: 'index.md'
 - Use Cases:
-  - Build an Internal Developer Platform (IDP) : 'use_cases/use_case_idp.md'
+  - Build an Internal Developer Platform (IDP): 'use_cases/use_case_idp.md'
   - Hybrid Multicloud: 'use_cases/use_case_hybrid_multicloud.md'
   - GitOps Integration: 'use_cases/use_case_gitops.md'
   - Multi-Tenant Onboarding: 'use_cases/use_case_multi_tenant_onboarding.md'
@@ -151,37 +150,31 @@ nav:
 theme:
   features:
   - content.code.copy
+  - content.code.annotate
   - search.share
   - navigation.footer
   - navigation.instant.progress
-  - content.code.annotate
-  name: material
   logo: assets/logo.png
   custom_dir: overrides
   palette:
   - scheme: default
-    primary: light blue
-    accent: blue
     toggle:
-      icon: material/brightness-7
+      icon: lucide/sun
       name: Switch to dark mode
-  # Palette toggle for dark mode
   - scheme: slate
-    primary: light blue
-    accent: blue
     toggle:
-      icon: material/brightness-4
+      icon: lucide/moon
       name: Switch to light mode
 repo_url: https://github.com/projectsveltos
 repo_name: projectsveltos
 extra_javascript:
-  - javascript/extra.js
+- javascript/extra.js
 extra:
   version:
     provider: mike
     alias: true
     default:
-      - latest
+    - latest
   social:
   - icon: fontawesome/solid/house
     link: https://sveltos.projectsveltos.io/
@@ -201,4 +194,3 @@ extra_css:
 - stylesheets/extra.css
 plugins:
 - search
-- mike

@@ -36,6 +36,7 @@ authors:
 1. [L4-L7 with Sveltos](https://medium.com/@projectsveltos/how-to-deploy-l4-and-l7-routing-on-multiple-kubernetes-clusters-securely-and-programmatically-930ebe65fa8c)
 1. [Using Projectsveltos to Manage Kubernetes Add-ons on Civo Cloud Clusters](https://medium.com/p/ec4089c503a7)
 1. [Flux and Sveltos](https://medium.com/@projectsveltos/flux-and-sveltos-friends-or-enemies-7cdc8fb8f953)
+1. [Flux and Sveltos - Better Together Practical Example](https://blog.grosdouli.dev/blog/Better%20Together%20Sveltos%20and%20Flux%20Integration)
 1. [Multi-tenancy with Sveltos](https://medium.com/@gianluca.mardente/kubernetes-multi-tenancy-with-sveltos-8a1b3c2b82c5)
 1. [CIS Benchmark Compliance Across Multiple Kubernetes Clusters](https://itnext.io/ensurincis-benchmark-compliance-across-multiple-kubernetes-clusters-dd544682e786)
 1. [Sveltos Templating: Cilium Cluster Mesh in One Run](https://blog.grosdouli.dev/blog/sveltos-templating-cilium-cluster-mesh)
@@ -56,6 +57,7 @@ authors:
 1. [![Simplify Add-On Management in K8s with Sveltos | Kubesimplify Webinar](https://img.youtube.com/vi/yifrTO7gDPM/0.jpg)](https://www.youtube.com/watch?v=yifrTO7gDPM)
 1. [![Conf42 DevOps 24](https://img.youtube.com/vi/n2lFfxPP6jE/0.jpg)](https://www.youtube.com/watch?v=n2lFfxPP6jE)
 1. [![Conf42 2023](https://img.youtube.com/vi/Xi2HvRfaNYI/0.jpg)](https://www.youtube.com/watch?v=Xi2HvRfaNYI)
+1. [![Cloud Native Rejekts Europe 2026](https://img.youtube.com/vi/7O8pqiK22wA/0.jpg)](https://www.youtube.com/watch?v=7O8pqiK22wA)
 
 More videos can be found here:
 
