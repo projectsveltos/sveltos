@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
 {% block outdated %}
-  You are viewing the main documentation.
-  <a href="https://projectsveltos.github.io/sveltos/latest/" style="margin-left: 10px; margin-right: 10px;">
-    <strong style="padding: 5px;">Go to latest.</strong>
-  </a>
-  <a href="https://projectsveltos.github.io/sveltos/main/archive/" style="margin-left: 10px; margin-right: 10px;">
-    <strong style="padding: 5px;">View all versions.</strong>
-  </a>
+  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <span>You're viewing the main documentation.</span>
+    
+    <a href="https://projectsveltos.github.io/sveltos/latest/" 
+       style="background-color: #0066cc; color: white; padding: 5px 12px; border-radius: 3px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 13px;">
+      View Latest Version
+    </a>
+    
+    <a href="https://projectsveltos.github.io/sveltos/main/archive/" 
+       style="background-color: #f0f0f0; color: #333; padding: 5px 12px; border-radius: 3px; text-decoration: none; font-weight: 600; display: inline-block; border: 1px solid #ccc; font-size: 13px;">
+      All Versions
+    </a>
+  </div>
 {% endblock %}
