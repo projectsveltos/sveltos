@@ -23,6 +23,10 @@ authors:
 
 <h1>Sveltos Kubernetes Add-on Controller - Simplify Add-on Management in Kubernetes</h1>
 
+## 🌐 Project Website
+For the latest updates, documentation, and blog posts, visit our official site:
+👉 **[https://website.projectsveltos.io/](https://website.projectsveltos.io/)**
+
 ## What is Sveltos?
 
 [Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller. It makes deploying and managing Kubernetes add-ons and applications easier across **multiple** clusters. This works for on-prem, cloud, or multitenant setups.
@@ -62,7 +66,7 @@ Sveltos stands out with features like multitenancy, agent-based drift detection,
 ## Enterprise Offering
 
 
-Interested in our enterprise offering? [Enterprise offering](https://sveltos.projectsveltos.io/#pricing)
+Interested in our enterprise offering? [Enterprise offering](https://website.projectsveltos.io/pricing/)
 
 
 ## 😻 Contributing to projectsveltos
