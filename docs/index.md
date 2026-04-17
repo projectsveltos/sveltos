@@ -25,7 +25,8 @@ authors:
 
 ## 🌐 Project Website
 For the latest updates, documentation, and blog posts, visit our official site:
-👉 **[https://website.projectsveltos.io/](https://website.projectsveltos.io/)**
+
+👉 **[https://website.projectsveltos.io/](https://website.projectsveltos.io/){:target="_blank"}**
 
 ## What is Sveltos?
 
