@@ -54,7 +54,7 @@ The example demonstrates how Sveltos utilizes a Flux GitRepository[^1]. The git 
       ref:
         branch: main
       timeout: 60s
-      url: ssh://git@github.com/gianlucam76/kustomize
+      url: https://github.com/gianlucam76/kustomize
     ```
 
 !!! note
@@ -420,7 +420,7 @@ spec:
       cluster: mgmt
   helmCharts:
   - chartName: flux2/flux2
-    chartVersion: 2.12.4
+    chartVersion: 2.18.2
     helmChartAction: Install
     releaseName: flux2
     releaseNamespace: flux2
