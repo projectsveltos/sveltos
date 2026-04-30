@@ -1864,6 +1864,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#specpredeploychecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec.PreDeployChecks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specpredeletechecks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4675,6 +4686,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#specpredeploychecks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec.PreDeployChecks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specpredeletechecks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4999,6 +5021,13 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
 <p><em>ContinueOnError</em> configures Sveltos' error handling. When true, errors are logged, but deployment continues. When false (default), Sveltos stops at the first error and retries the failing resource. For instance, if deploying three Helm charts, a failure during the second chart's deployment will halt the process, and Sveltos will retry the second chart. Only if ContinueOnError is true will Sveltos proceed to deploy the third chart <em>before retrying</em> the second chart.</p>
 <h3 id="speccontinueonconflict">Spec.ContinueOnConflict</h3>
 <p><em>ContinueOnConflict</em> configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another <em>profile</em> has already deployed the same resource.</p>
+<h3 id="specpredeploychecks">Spec.PreDeployChecks</h3>
+<p>The <em>preDeployChecks</em> field defines a set of checks that Sveltos must pass <em>before</em> deploying resources for a given feature. If any check fails, deployment is held and retried — no resources are applied until all checks pass.</p>
+<p>Common use cases include:</p>
+<ol>
+<li>Readiness Gates: Ensuring a required <code>StorageClass</code>, <code>CustomResourceDefinition</code>, or operator is present before deploying an application that depends on it.</li>
+<li>Capacity Validation: Verifying that sufficient quota or node capacity exists in the target cluster before rolling out a workload.</li>
+</ol>
 <h3 id="specpredeletechecks">Spec.PreDeleteChecks</h3>
 <p>The <em>preDeleteChecks</em> field defines a set of safety checks that Sveltos must perform <em>before</em> it begins removing resources from a managed cluster. If any of these checks fail (i.e., the Lua script returns health = false), Sveltos will halt the deletion process and retry later.</p>
 <p>This is particularly useful for ensuring:</p>

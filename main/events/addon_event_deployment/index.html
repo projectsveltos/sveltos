@@ -4837,9 +4837,13 @@
 <h3 id="eventsource-collectresources-setting">EventSource CollectResources Setting</h3>
 <p>The collectResources field in an EventSource (<strong>default: false</strong>) determines whether Kubernetes resources matching the EventSource should be collected and transmitted to the management cluster for template instantiation.</p>
 <ul>
-<li>When collectResources is true: templates can directly reference the Resource, which is a full representation of the matched Kubernetes resource (e.g., a Service with the label sveltos:fv) from the managed cluster.</li>
-<li>When collectResources is false: templates can access the MatchingResources, a corev1.ObjectReference providing essential metadata information about the matched resource (e.g., Service with the label sveltos:fv) without the complete resource details.</li>
+<li>When <code>collectResources</code> is <code>true</code>: templates can directly reference <code>.Resource</code> (with <code>oneForEvent: true</code>) or <code>.Resources</code> (with <code>oneForEvent: false</code>), which are full representations of the matched Kubernetes resources from the managed cluster.</li>
+<li>When <code>collectResources</code> is <code>false</code>: templates can access <code>.MatchingResource</code> (with <code>oneForEvent: true</code>) or <code>.MatchingResources</code> (with <code>oneForEvent: false</code>), a <code>corev1.ObjectReference</code> providing essential metadata — <strong>apiVersion</strong>, <strong>kind</strong>, <strong>name</strong>, <strong>namespace</strong> — without the complete resource details.</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The variable name is <strong>singular</strong> (<code>.MatchingResource</code>, <code>.Resource</code>) when <code>oneForEvent: true</code>, and <strong>plural</strong> (<code>.MatchingResources</code>, <code>.Resources</code>) when <code>oneForEvent: false</code>. Using the wrong form will result in a template rendering error.</p>
+</div>
 <p>Based on the example above, the below EventReport instance can be found in the management cluster.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
@@ -4884,7 +4888,8 @@
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>default<span class="w">     </span>front-another-service<span class="w">   </span>app.kubernetes.io/name<span class="o">=</span>MyApp-secure<span class="w">   </span>8m40s
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>default<span class="w">     </span>front-my-service<span class="w">        </span>app.kubernetes.io/name<span class="o">=</span>MyApp<span class="w">          </span>8m40s
 </span></code></pre></div>
-<p>A possible example for OneForEvent false, is when the add-ons to deploy are not template. For instance if Kyverno needs to be deployed in any managed cluster where certain event happened.</p>
+<p>The key distinction is <strong>cardinality</strong>: <code>oneForEvent: true</code> creates one <code>ClusterProfile</code> per matching resource; <code>oneForEvent: false</code> creates one <code>ClusterProfile</code> that covers all matching resources at once. Both modes support templating — with <code>oneForEvent: false</code> the template receives <code>.MatchingResources</code> (a slice) instead of a single <code>.MatchingResource</code>. See <a href=".././templating_all_resources_together/">Templating when oneForEvent is false</a> for a full example using <code>range .MatchingResources</code>.</p>
+<p>A simple use case for <code>oneForEvent: false</code> is deploying a fixed add-on (no per-resource templating needed) to any cluster where a certain event happened. For instance, installing Kyverno as soon as a matching resource is detected:</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nn">---</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
@@ -4907,7 +4912,10 @@
 </span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
 </span></code></pre></div>
 </div>
-<p><strong>Currently, it is not possible to change this field once set.</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>oneForEvent</code> is <strong>immutable</strong> — it cannot be changed after the <code>EventTrigger</code> is created. Delete and recreate the resource if you need to switch modes.</p>
+</div>
 <h3 id="cleanup">Cleanup</h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
