@@ -253,6 +253,15 @@ the required prerequisite profiles, and ensure they are deployed to the same clu
 
 *ContinueOnConflict* configures Sveltos' conflict resolution behavior. When true, Sveltos logs the conflicts but continues deploying the remaining resources. When false (default), Sveltos halts deployment at the first detected conflict. This can happen when another *profile* has already deployed the same resource.
 
+### Spec.PreDeployChecks
+
+The *preDeployChecks* field defines a set of checks that Sveltos must pass *before* deploying resources for a given feature. If any check fails, deployment is held and retried — no resources are applied until all checks pass.
+
+Common use cases include:
+
+1. Readiness Gates: Ensuring a required `StorageClass`, `CustomResourceDefinition`, or operator is present before deploying an application that depends on it.
+2. Capacity Validation: Verifying that sufficient quota or node capacity exists in the target cluster before rolling out a workload.
+
 ### Spec.PreDeleteChecks
 
 The *preDeleteChecks* field defines a set of safety checks that Sveltos must perform *before* it begins removing resources from a managed cluster. If any of these checks fail (i.e., the Lua script returns health = false), Sveltos will halt the deletion process and retry later.

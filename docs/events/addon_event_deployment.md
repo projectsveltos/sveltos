@@ -304,8 +304,11 @@ In a nutshell, the below flow is executed.
 
 The collectResources field in an EventSource (__default: false__) determines whether Kubernetes resources matching the EventSource should be collected and transmitted to the management cluster for template instantiation.
 
-- When collectResources is true: templates can directly reference the Resource, which is a full representation of the matched Kubernetes resource (e.g., a Service with the label sveltos:fv) from the managed cluster.
-- When collectResources is false: templates can access the MatchingResources, a corev1.ObjectReference providing essential metadata information about the matched resource (e.g., Service with the label sveltos:fv) without the complete resource details.
+- When `collectResources` is `true`: templates can directly reference `.Resource` (with `oneForEvent: true`) or `.Resources` (with `oneForEvent: false`), which are full representations of the matched Kubernetes resources from the managed cluster.
+- When `collectResources` is `false`: templates can access `.MatchingResource` (with `oneForEvent: true`) or `.MatchingResources` (with `oneForEvent: false`), a `corev1.ObjectReference` providing essential metadata — **apiVersion**, **kind**, **name**, **namespace** — without the complete resource details.
+
+!!! note
+    The variable name is **singular** (`.MatchingResource`, `.Resource`) when `oneForEvent: true`, and **plural** (`.MatchingResources`, `.Resources`) when `oneForEvent: false`. Using the wrong form will result in a template rendering error.
 
 Based on the example above, the below EventReport instance can be found in the management cluster.
 
@@ -362,7 +365,9 @@ default     front-another-service   app.kubernetes.io/name=MyApp-secure   8m40s
 default     front-my-service        app.kubernetes.io/name=MyApp          8m40s
 ```
 
-A possible example for OneForEvent false, is when the add-ons to deploy are not template. For instance if Kyverno needs to be deployed in any managed cluster where certain event happened.
+The key distinction is **cardinality**: `oneForEvent: true` creates one `ClusterProfile` per matching resource; `oneForEvent: false` creates one `ClusterProfile` that covers all matching resources at once. Both modes support templating — with `oneForEvent: false` the template receives `.MatchingResources` (a slice) instead of a single `.MatchingResource`. See [Templating when oneForEvent is false](./templating_all_resources_together.md) for a full example using `range .MatchingResources`.
+
+A simple use case for `oneForEvent: false` is deploying a fixed add-on (no per-resource templating needed) to any cluster where a certain event happened. For instance, installing Kyverno as soon as a matching resource is detected:
 
 !!! example ""
     ```yaml
@@ -387,7 +392,8 @@ A possible example for OneForEvent false, is when the add-ons to deploy are not 
         helmChartAction:  Install
     ```
 
-__Currently, it is not possible to change this field once set.__
+!!! warning
+    `oneForEvent` is **immutable** — it cannot be changed after the `EventTrigger` is created. Delete and recreate the resource if you need to switch modes.
 
 ### Cleanup
 
