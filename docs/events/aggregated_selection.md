@@ -64,7 +64,7 @@ spec:
 
         local deployments = {}
         local autoscalers = {}
-        local deploymentsWithNoAutoscaler = {}
+        local unusedAutoscalers = {}
 
         for _, resource in ipairs(resources) do
           local kind = resource.kind

@@ -9,8 +9,28 @@ authors:
     - Gianluca Mardente
 ---
 
-Sveltos provides a robust framework to ensure your managed clusters are in the correct state throughout the entire lifecycle of a resource—from initial deployment to final deletion. This is achieved through three types of checks: `ValidateHealthChecks`, `PreDeleteChecks`, and `PostDeleteChecks`.
+Sveltos provides a robust framework to ensure your managed clusters are in the correct state throughout the entire lifecycle of a resource—from pre-deployment gating to final deletion. This is achieved through four types of checks: `PreDeployChecks`, `ValidateHealthChecks`, `PreDeleteChecks`, and `PostDeleteChecks`.
 These checks are defined within the `spec` section of a `ClusterProfile` or a `Profile`.
+
+## Pre-Deploy Checks
+
+`PreDeployChecks` are executed *before* Sveltos deploys any resources for a given feature. If any check fails, deployment is held and retried later — no resources are applied until all checks pass. This is useful for enforcing prerequisites that must exist in the target cluster before an application is rolled out.
+
+```yaml
+spec:
+  preDeployChecks:
+  - name: "require-storage-class"
+    featureID: Resources
+    group: "storage.k8s.io"
+    version: "v1"
+    kind: "StorageClass"
+    labelFilters:
+    - key: tier
+      operation: Equal
+      value: ssd
+```
+
+In the example above, Sveltos will not deploy the `Resources` feature until at least one `StorageClass` with the label `tier=ssd` exists in the managed cluster.
 
 ## Validate Health Checks
 
