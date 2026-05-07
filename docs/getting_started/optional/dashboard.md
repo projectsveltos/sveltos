@@ -49,6 +49,10 @@ To access the dashboard, expose the `dashboard` service in the `projectsveltos` 
 
 ## Authentication
 
+The Sveltos Dashboard supports two authentication methods: **manual token authentication** (default) and **OIDC authentication**. The active method is determined at deploy time by the Helm values provided.
+
+### Manual Token Authentication
+
 To authenticate with the Sveltos Dashboard, we will utilise a `serviceAccount`, a `ClusterRoleBinding`/`RoleBinding` and a `token`.
 
 Let's create a `service account` in the desired namespace.
@@ -71,7 +75,7 @@ $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --s
 | `namespace`      | It is the service account's namespace.                                                                                                                 |
 | `service_account`| It is the service account that the permissions are being associated with.                                                                             |
 
-### Platform Administrator Example
+#### Platform Administrator Example
 
 ```
 $ kubectl create sa platform-admin -n default
@@ -87,3 +91,63 @@ $ kubectl create token platform-admin --duration=24h
 Copy the token generated, login to the Sveltos Dashboard and submit it.
 
 [^1]: While the example uses __cluster-admin__ for simplicity, the dashboard only requires read access to Sveltos CRs and Cluster API cluster instances.
+
+### OIDC Authentication
+
+The dashboard supports OIDC authentication using the **Authorization Code Flow with PKCE** (public client). When enabled, the login page will show the OIDC login option instead of the manual token form.
+
+Setting up OIDC requires three steps: configuring the dashboard, configuring the Kubernetes API server, and setting up RBAC for your dashboard users.
+
+#### 1. Configure the Dashboard
+
+OIDC is enabled by providing the following Helm values at install time:
+
+| Helm Value | Description | Default |
+|---|---|---|
+| `auth.oidc.issuer` | Issuer URL of your OIDC provider | — |
+| `auth.oidc.clientId` | Client ID registered with your OIDC provider | — |
+| `auth.oidc.redirectUri` | Full redirect URI after OIDC login | `<origin>/oidc-callback` |
+
+```bash
+$ helm install sveltos-dashboard projectsveltos/sveltos-dashboard -n projectsveltos \
+  --set auth.oidc.issuer=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc \
+  --set auth.oidc.clientId=k8s-oidc-client \
+  --set auth.oidc.redirectUri=https://dashboard.example.com/oidc-callback
+```
+
+Make sure that the client exists, it is configured as a **public client** (no client secret), and the redirect URI is registered in the OIDC provider.
+
+If `auth.oidc.issuer` and `auth.oidc.clientId` are not set, the dashboard falls back to manual token authentication.
+
+#### 2. Configure the Kubernetes API Server
+
+The Kubernetes API server must be configured to accept and validate OIDC tokens. The required and optional flags are documented [here](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens).
+
+#### 3. Configure RBAC for OIDC Users
+
+The API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens) for details on prefixing behaviour.
+
+The following example grants `cluster-admin` to the OIDC user `test`:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: k8s-oidc-dashboard-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc#test
+```
+
+Note that `subjects.name` includes the OIDC issuer URL prefix followed by the username claim value.
+
+In production, avoid granting admin level grants to the dashboard users.
+
+#### 4. Logging In
+
+Once all three steps are complete, the dashboard login page will display the OIDC login option. Clicking it redirects the user to the OIDC provider. After a successful sign-in, the provider redirects back to the configured redirect URI, and the user is taken to the dashboard.
