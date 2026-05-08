@@ -94,6 +94,12 @@ do
         continue
     fi
 
+    # this file contains the template to start a deployment
+    # for managing a shard
+    if [[ "$f" == *"deployment-shard.yaml"* ]]; then
+        continue
+    fi
+
     echo "Processing $f file..."
     cat $f >> ../../manifest/manifest.yaml
     echo "---"  >> ../../manifest/manifest.yaml

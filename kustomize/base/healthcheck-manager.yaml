@@ -73,8 +73,10 @@ rules:
     - apiGroups:
         - config.projectsveltos.io
       resources:
+        - clusterprofiles
         - clustersummaries
         - clustersummaries/status
+        - profiles
       verbs:
         - get
         - list
@@ -187,11 +189,11 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.8.0
+                    - --version=v1.9.0
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/healthcheck-manager:v1.8.0
+                  image: docker.io/projectsveltos/healthcheck-manager:v1.9.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
