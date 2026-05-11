@@ -1188,6 +1188,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#manual-token-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Token Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Token Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#platform-administrator-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1195,6 +1207,72 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oidc-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OIDC Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OIDC Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-configure-the-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configure the Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-configure-the-kubernetes-api-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configure the Kubernetes API Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-configure-rbac-for-oidc-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Configure RBAC for OIDC Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-logging-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Logging In
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -4425,6 +4503,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#manual-token-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Token Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Token Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#platform-administrator-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4432,6 +4522,72 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oidc-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OIDC Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OIDC Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-configure-the-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configure the Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-configure-the-kubernetes-api-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Configure the Kubernetes API Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-configure-rbac-for-oidc-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Configure RBAC for OIDC Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-logging-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Logging In
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -4485,6 +4641,8 @@
 </div>
 <p>To access the dashboard, expose the <code>dashboard</code> service in the <code>projectsveltos</code> namespace. The deployment, by default, is configured as a <em>ClusterIP</em> service. To expose the service externally, we can edit it to either a <em>LoadBalancer</em> service or use an Ingress/Gateway API.</p>
 <h2 id="authentication">Authentication</h2>
+<p>The Sveltos Dashboard supports two authentication methods: <strong>manual token authentication</strong> (default) and <strong>OIDC authentication</strong>. The active method is determined at deploy time by the Helm values provided.</p>
+<h3 id="manual-token-authentication">Manual Token Authentication</h3>
 <p>To authenticate with the Sveltos Dashboard, we will utilise a <code>serviceAccount</code>, a <code>ClusterRoleBinding</code>/<code>RoleBinding</code> and a <code>token</code>.</p>
 <p>Let's create a <code>service account</code> in the desired namespace.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ kubectl create sa &lt;user&gt; -n &lt;namespace&gt;
@@ -4518,7 +4676,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="platform-administrator-example">Platform Administrator Example</h3>
+<h4 id="platform-administrator-example">Platform Administrator Example</h4>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ kubectl create sa platform-admin -n default
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 </span></code></pre></div>
@@ -4526,6 +4684,73 @@
 <div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ kubectl create token platform-admin --duration=24h
 </span></code></pre></div>
 <p>Copy the token generated, login to the Sveltos Dashboard and submit it.</p>
+<h3 id="oidc-authentication">OIDC Authentication</h3>
+<p>The dashboard supports OIDC authentication using the <strong>Authorization Code Flow with PKCE</strong> (public client). When enabled, the login page will show the OIDC login option instead of the manual token form.</p>
+<p>Setting up OIDC requires three steps: configuring the dashboard, configuring the Kubernetes API server, and setting up RBAC for your dashboard users.</p>
+<h4 id="1-configure-the-dashboard">1. Configure the Dashboard</h4>
+<p>OIDC is enabled by providing the following Helm values at install time:</p>
+<table>
+<thead>
+<tr>
+<th>Helm Value</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth.oidc.issuer</code></td>
+<td>Issuer URL of your OIDC provider</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>auth.oidc.clientId</code></td>
+<td>Client ID registered with your OIDC provider</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>auth.oidc.redirectUri</code></td>
+<td>Full redirect URI after OIDC login</td>
+<td><code>&lt;origin&gt;/oidc-callback</code></td>
+</tr>
+</tbody>
+</table>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>sveltos-dashboard<span class="w"> </span>projectsveltos/sveltos-dashboard<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.issuer<span class="o">=</span>https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.clientId<span class="o">=</span>k8s-oidc-client<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.redirectUri<span class="o">=</span>https://dashboard.example.com/oidc-callback
+</span></code></pre></div>
+<p>Make sure that the client exists, it is configured as a <strong>public client</strong> (no client secret), and the redirect URI is registered in the OIDC provider.</p>
+<p>If <code>auth.oidc.issuer</code> and <code>auth.oidc.clientId</code> are not set, the dashboard falls back to manual token authentication.</p>
+<h4 id="2-configure-the-kubernetes-api-server">2. Configure the Kubernetes API Server</h4>
+<p>The Kubernetes API server must be configured to accept and validate OIDC tokens. The required and optional flags are documented <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens">here</a>.</p>
+<p>Here is an example of configuring OIDC in a k3d cluster, for demo/test purposes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>k3d cluster create oidc-test   --k3s-arg &quot;--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*&quot;   --k3s-arg &quot;--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*&quot;   --k3s-arg &quot;--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*&quot;
+</span></code></pre></div>
+<p>In this example, we use the <code>--oidc-username-claim</code> parameter to let the API server use the <code>preferred_username</code> claim from the OIDC token as the username.</p>
+<h4 id="3-configure-rbac-for-oidc-users">3. Configure RBAC for OIDC Users</h4>
+<p>The API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens">Kubernetes documentation</a> for details on prefixing behaviour.</p>
+<p>The following example grants <code>cluster-admin</code> to the OIDC user <code>test</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-oidc-dashboard-admin</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-admin</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc#test</span>
+</span></code></pre></div>
+<p>Note that <code>subjects.name</code> includes the OIDC issuer URL prefix followed by the username claim value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In production, avoid granting admin level grants to the dashboard users.</p>
+</div>
+<h4 id="4-logging-in">4. Logging In</h4>
+<p>Once all three steps are complete, the dashboard login page will display the OIDC login option. Clicking it redirects the user to the OIDC provider. After a successful sign-in, the provider redirects back to the configured redirect URI, and the user is taken to the dashboard.</p>
 <div class="footnote">
 <hr />
 <ol>
