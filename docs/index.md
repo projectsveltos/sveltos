@@ -67,13 +67,13 @@ Sveltos stands out with features like multitenancy, agent-based drift detection,
 
 ## Sveltos at the Edge
 
-Running Kubernetes at the edge usually means tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.
+Running Kubernetes at the edge usually means a tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.
 
 **What gets deployed and when**
 
-- **drift-detection-manager**: Only shows up when a matching profile sets `syncMode: ContinuousWithDriftDetection`. It watches **only** the resources that Sveltos itself deployed, nothing more. Footprint and resource consumption stays small.
+- **drift-detection-manager**: Only shows up when a matching profile sets `syncMode: ContinuousWithDriftDetection`. It watches **only** the resources that Sveltos itself deployed, nothing more. Footprint and resource consumption stay small.
 
-- **sveltos-agent**: Handles event detection. If we have not defined any events to watch, it barely consumes anything. Even when watching resources, memory usage scales with what you ask it to observe. In a typical edge cluster setup, we probably will not have thousands of secrets. Even if we do, Sveltos will not act unless we specifically tell it to watch them all.
+- **sveltos-agent**: Handles event detection. If we have not defined any events to watch, it barely consumes resources. Even when watching resources, memory usage scales with what we ask Sveltos to observe. In a typical edge cluster setup, we will not have thousands of resources to watch. Even if we do, Sveltos will not act unless we specifically tell it to watch them.
 
 - **sveltos-applier (Pull Mode)**: It polls the **management** cluster for new configurations to apply. That is all it does. Very light resource consumption.
 
