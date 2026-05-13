@@ -44,6 +44,9 @@ The following items are some of the benefits of utilising Sveltos in **Pull Mode
 - **Edge Deployments**: For edge locations with intermittent connectivity or limited network bandwidth, the Sveltos **Pull Mode** offers resilience.
 - **Security**: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.
 
+!!!tip
+    Find out [here](../index.md#sveltos-at-the-edge) what is being deployed by Sveltos when we talk about Edge deployments.
+
 ## Register Cluster
 
 To register a cluster in Pull mode, we use the [sveltosctl](https://github.com/projectsveltos/sveltosctl "Sveltos CLI").

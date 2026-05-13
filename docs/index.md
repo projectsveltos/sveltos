@@ -12,6 +12,7 @@ tags:
     - multi-tenancy
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -64,11 +65,21 @@ Sveltos was created to tackle the real challenges of managing multi-cluster add-
 
 Sveltos stands out with features like multitenancy, agent-based drift detection, and resource optimisation. With powerful templating, an event framework, and progressive rollouts, teams can safely and reliably deploy Kubernetes add-ons and applications. These capabilities lower operational costs, whether we run workloads on-site or in the cloud.
 
+## Sveltos at the Edge
+
+Running Kubernetes at the edge usually means tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.
+
+**What gets deployed and when**
+
+- **drift-detection-manager**: Only shows up when a matching profile sets `syncMode: ContinuousWithDriftDetection`. It watches **only** the resources that Sveltos itself deployed, nothing more. Footprint and resource consumption stays small.
+
+- **sveltos-agent**: Handles event detection. If we have not defined any events to watch, it barely consumes anything. Even when watching resources, memory usage scales with what you ask it to observe. In a typical edge cluster setup, we probably will not have thousands of secrets. Even if we do, Sveltos will not act unless we specifically tell it to watch them all.
+
+- **sveltos-applier (Pull Mode)**: It polls the **management** cluster for new configurations to apply. That is all it does. Very light resource consumption.
+
 ## Enterprise Offering
 
-
 Interested in our enterprise offering? [Enterprise offering](https://website.projectsveltos.io/pricing/)
-
 
 ## 😻 Contributing to projectsveltos
 
