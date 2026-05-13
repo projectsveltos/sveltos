@@ -360,6 +360,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sveltos-at-the-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sveltos at the Edge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#enterprise-offering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4422,6 +4433,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sveltos-at-the-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sveltos at the Edge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#enterprise-offering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4513,6 +4535,20 @@
 <h2 id="why-sveltos">Why Sveltos?</h2>
 <p>Sveltos was created to tackle the real challenges of managing multi-cluster add-ons. Many CI/CD tools find this tough. Sveltos can enhance or replace current GitOps tools. Its integration with Flux CD improves scalability and automation across different environments.</p>
 <p>Sveltos stands out with features like multitenancy, agent-based drift detection, and resource optimisation. With powerful templating, an event framework, and progressive rollouts, teams can safely and reliably deploy Kubernetes add-ons and applications. These capabilities lower operational costs, whether we run workloads on-site or in the cloud.</p>
+<h2 id="sveltos-at-the-edge">Sveltos at the Edge</h2>
+<p>Running Kubernetes at the edge usually means a tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.</p>
+<p><strong>What gets deployed and when</strong></p>
+<ul>
+<li>
+<p><strong>drift-detection-manager</strong>: Only shows up when a matching profile sets <code>syncMode: ContinuousWithDriftDetection</code>. It watches <strong>only</strong> the resources that Sveltos itself deployed, nothing more. Footprint and resource consumption stay small.</p>
+</li>
+<li>
+<p><strong>sveltos-agent</strong>: Handles event detection. If we have not defined any events to watch, it barely consumes resources. Even when watching resources, memory usage scales with what we ask Sveltos to observe. In a typical edge cluster setup, we will not have thousands of resources to watch. Even if we do, Sveltos will not act unless we specifically tell it to watch them.</p>
+</li>
+<li>
+<p><strong>sveltos-applier (Pull Mode)</strong>: It polls the <strong>management</strong> cluster for new configurations to apply. That is all it does. Very light resource consumption.</p>
+</li>
+</ul>
 <h2 id="enterprise-offering">Enterprise Offering</h2>
 <p>Interested in our enterprise offering? <a href="https://website.projectsveltos.io/pricing/">Enterprise offering</a></p>
 <h2 id="contributing-to-projectsveltos">😻 Contributing to projectsveltos</h2>
