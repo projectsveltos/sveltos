@@ -30,13 +30,27 @@ This abstraction allows AI to perform complex operations, such as diagnosing dep
 
 The Sveltos MCP Server empowers AI with the ability to:
 
-- **Analyze Cluster State**: The AI can read the operational status of all Sveltos-managed clusters, including the health of Sveltos agents and the state of deployed resources. This provides a single source of truth for your entire fleet.
+- **Verify Installation Health**: The AI can instantly check the health of all Sveltos components on the management cluster and confirm that agents are correctly deployed — either in each managed cluster or running centrally in the management cluster in agentless mode. This is the best starting point when something looks wrong.
 
-- **Automate Troubleshooting**: When a user reports an issue, the AI can use the MCP Server's tools to perform diagnostic checks automatically. For example, it can call the analyze_profile_deployment tool to investigate a deployment failure, identify the specific error, and provide a resolution plan.
+- **Analyze Cluster State**: The AI can read the operational status of all Sveltos-managed clusters, including the health of Sveltos agents and the state of deployed resources. It can list every managed cluster, filter by label selector (e.g. `env=production`), and get a single source of truth for your entire fleet.
 
-- **Ensure Configuration Consistency**: The compare_managed_clusters tool allows AI to proactively monitor for configuration drift between clusters. It can quickly identify what's different and alert operators to potential compliance issues or misconfigurations.
+- **Inspect Deployed Resources**: The AI can list all Kubernetes resources and Helm charts that Sveltos has successfully deployed on a given cluster, or instantly surface all deployment failures without having to inspect individual profiles one by one.
 
-- **Streamline Operations**: The server's tools enable AI to handle routine operational tasks, such as listing deployed resources on a cluster or verifying the Sveltos installation status. This frees up human operators to focus on more complex tasks.
+- **Automate Troubleshooting**: When a user reports an issue, the AI can use the MCP Server's tools to perform diagnostic checks automatically. For example, it can call the `analyze_profile_deployment` tool to investigate a deployment failure, identify the specific error, and provide a resolution plan. It can also list every ClusterProfile and Profile targeting a cluster with per-feature status (Helm, Resources, Kustomize) and pending dependencies.
+
+- **Deep-Dive into Helm and Kustomize**: The AI can retrieve detailed information about a specific Helm release — combining Sveltos metadata with the actual Helm state from the workload cluster (deployed, failed, pending-upgrade, user values) — or verify that every Flux source (GitRepository, OCIRepository, Bucket) and plain source (ConfigMap, Secret) referenced by Kustomize profiles exists and is ready.
+
+- **Trace Profile Dependencies**: The AI can walk the full `DependsOn` chain of a profile on a cluster and identify the root-cause node when a profile is stalled because a dependency is not yet provisioned.
+
+- **Ensure Configuration Consistency**: The `compare_managed_clusters` tool allows AI to proactively monitor for configuration drift between clusters. It can quickly identify what is common, different, or unique across two clusters and alert operators to potential compliance issues or misconfigurations.
+
+- **Streamline Operations**: The server's tools enable AI to handle routine operational tasks, such as listing profiles whose updates are currently queued (and whether the hold is due to a suspended cluster or a `MaxUpdate` throttle), or previewing the changes that DryRun-mode profiles would apply before committing to live deployment. This frees up human operators to focus on more complex tasks.
+
+- **Trace Event-Driven Deployments**: The AI can follow an event-driven deployment end-to-end — from EventSource detection on the managed cluster, through EventTrigger evaluation, to the creation and deployment of the resulting dynamic ClusterProfile — and identify exactly where the chain breaks. It can also list all ClusterProfiles dynamically created by EventTriggers and map each back to its originating event.
+
+- **Monitor Health Checks**: The AI can trace the full health-check pipeline for a cluster: validating that ClusterHealthCheck selectors match, confirming HealthCheck resource distribution, inspecting HealthCheckReports for resource-level results (Healthy, Degraded, Progressing), and reporting notification delivery status.
+
+- **Manage Progressive Delivery**: The AI can list all ClusterPromotion pipelines with their current stage and whether any pipeline is blocked waiting for manual approval. It can also provide a detailed per-stage breakdown of a single pipeline — selector, trigger type, approval state, timing configuration, and runtime status — so it can explain exactly what is blocking a promotion.
 
 ## Integrated Dashboard Functionality
 
