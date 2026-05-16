@@ -45,6 +45,22 @@ When referencing a resource, you can fine-tune how Sveltos reacts to its lifecyc
 
 - **optional: true**: Indicates the resource is not mandatory. If the resource is missing, Sveltos will ignore the error and continue processing other references. This is ideal for "best-effort" configurations that vary across environments.
 - **ignoreStatusChanges: true**: Prevents unnecessary re-deployments. Sveltos will only trigger a reconciliation if the resource's spec or metadata (generation) changes, ignoring frequent "noise" from the status subresource.
+- **watchFields**: Provides fine-grained control over which fields trigger reconciliation. Only the listed dot-separated field paths (e.g., `status.readyReplicas`, `metadata.labels`) contribute to change detection — all other fields are ignored. When set, `watchFields` takes precedence over `ignoreStatusChanges`.
+
+```yaml
+templateResourceRefs:
+  - resource:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: my-app
+      namespace: default
+    identifier: MyDeployment
+    watchFields:
+      - status.readyReplicas
+      - status.updatedReplicas
+```
+
+This is useful when `ignoreStatusChanges: true` is too broad. For example, you may want to react when a Deployment's `status.readyReplicas` changes (to update a downstream config) without being triggered by every other status field update.
 
 #### Example: Accessing a Secret
 
