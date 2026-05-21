@@ -23,6 +23,9 @@ Sveltos automatically handles the workflow:
 1. It applies this configuration sequentially to clusters matching the selector of the first stage.
 1. Upon successful deployment of the current stage, Sveltos waits for the configured `promotion trigger` (e.g., a time delay) before proceeding to the next stage.
 
+
+![Rollouts Across Clusters](../assets/cluster_promotion.png)
+
 | Concept | Description |
 | :--- | :--- |
 | **profileSpec** | The **single source of truth** for the configuration (e.g., Helm charts, Kubernetes resources, secrets, or config maps). This specification is shared across all stages. |
