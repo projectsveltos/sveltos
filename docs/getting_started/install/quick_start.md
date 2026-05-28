@@ -14,7 +14,9 @@ authors:
 
 ## What is Sveltos?
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a [Kubernetes fleet management controller](https://github.com/projectsveltos/addon-controller). It deploys and manages add-ons and applications across many clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities. A GitOps controller monitors a repository and syncs manifests. In contrast, Sveltos takes these manifests and applies them across the entire fleet. Its configurations are cluster-agnostic; they do not reference a specific cluster. Instead, they target clusters by labels, which means when a new cluster joins the fleet, it requires no configuration changes, only the right labels. One configuration can serve any number of clusters that meet the defined criteria.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a [Kubernetes fleet management controller](https://github.com/projectsveltos/addon-controller). It deploys and manages add-ons and applications across many clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities.
+
+A GitOps controller monitors a repository and syncs manifests. In contrast, Sveltos takes these manifests and applies them across the entire fleet. Its configurations are cluster-agnostic; they do not reference a specific cluster. Instead, they target clusters by labels, which means when a new cluster joins the fleet, it requires no configuration changes, only the right labels. One configuration can serve any number of clusters that meet the defined criteria.
 
 ## Before you Begin
 
