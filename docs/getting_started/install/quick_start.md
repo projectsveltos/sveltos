@@ -22,7 +22,7 @@ To continue with the demo setup, ensure the following are satisfied.
 
 - [Docker](https://docs.docker.com/engine/install/)
 
-??? tip "Tested Environments"
+??? tip "Test Environment"
     The demo was tested on an Ubuntu 24.04 server with Docker version `29.2.1`, and on a Mac with Docker version `29.3.1`. For Linux operating systems, ensure the `fs.inotify.max_user_watches` and `fs.inotify.max_user_instances` values are not limiting the demo deployment.
 
 ## Deploy Demo Environment
@@ -112,16 +112,29 @@ $ kubectl apply -f clusterprofile_kyverno.yaml
 
 ### Validation
 
+### Management Cluster
+
+```bash
+$ kubectl get clusterprofile,clustersummary
+NAME                                                     AGE
+clusterprofile.config.projectsveltos.io/deploy-kyverno   140m
+
+NAME                                                                              AGE
+clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload   140m
+```
+
+### Managed Cluster
+
 ```bash
 $ kubectl config set-context kind-clusterapi-workload
 $ kind export kubeconfig --name clusterapi-workload
 
 $ kubectl get pods -n kyverno
 NAME                                             READY   STATUS    RESTARTS   AGE
-kyverno-admission-controller-6f6589ffb7-xh7dq    1/1     Running   0          102s
-kyverno-background-controller-6989c5bf45-mbkbh   1/1     Running   0          102s
-kyverno-cleanup-controller-788ffb4596-w6t46      1/1     Running   0          102s
-kyverno-reports-controller-bfb4856f8-5sd69       1/1     Running   0          102s
+kyverno-admission-controller-6f6589ffb7-xh7dq    1/1     Running   0          3m46s
+kyverno-background-controller-6989c5bf45-mbkbh   1/1     Running   0          3m46s
+kyverno-cleanup-controller-788ffb4596-w6t46      1/1     Running   0          3m46s
+kyverno-reports-controller-bfb4856f8-5sd69       1/1     Running   0          3m46s
 ```
 
 ✅ Success! You have deployed **Kyverno** on your managed cluster! 🚀
@@ -131,14 +144,12 @@ kyverno-reports-controller-bfb4856f8-5sd69       1/1     Running   0          10
 Sveltos can deploy raw `YAML` and `JSON` resources. For this example, we will deploy [nginx](https://projectcontour.io/docs/1.23/guides/gateway-api/) in the `dev` namespace.
 
 1. Connect to the **management** cluster
-
     ```bash
     $ kubectl config set-context kind-sveltos-management
     $ kind export kubeconfig --name sveltos-management
     ```
 
 1. Specify the nginx deployment details (namespace, deployment, service)
-
 ```yaml
 cat > nginx_deploy.yaml <<EOF
 apiVersion: v1
@@ -216,6 +227,21 @@ EOF
 
 ### Validation
 
+### Management Cluster
+
+```bash
+$ kubectl get clusterprofile,clustersummary
+NAME                                                     AGE
+clusterprofile.config.projectsveltos.io/deploy-kyverno   140m
+clusterprofile.config.projectsveltos.io/nginx-deploy     138m
+
+NAME                                                                              AGE
+clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload   140m
+clustersummary.config.projectsveltos.io/nginx-deploy-capi-clusterapi-workload     138m
+```
+
+### Managed Cluster
+
 ```bash
 $ kubectl config set-context kind-clusterapi-workload
 $ kind export kubeconfig --name clusterapi-workload
@@ -271,3 +297,7 @@ An example list is found [here](../../addons/kustomize.md). For more information
 ## Carvel ytt and Jsonnet
 
 Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the [Carvel ytt](../../template/examples/ytt_extension.md) and [Jsonnet](../../template/examples/jsonnet_extension.md) sections.
+
+## Next Steps
+
+Continue with the [installation](install.md) details and the [registration](../../register/register-cluster.md) process (non Cluster API).
