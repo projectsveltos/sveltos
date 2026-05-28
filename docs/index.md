@@ -31,7 +31,7 @@ For the latest updates, documentation, and blog posts, visit our official site:
 
 ## What is Sveltos?
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a Kubernetes add-on controller. It makes deploying and managing Kubernetes add-ons and applications easier across **multiple** clusters. This works for on-prem, cloud, or multitenant setups.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a [Kubernetes add-on controller](https://github.com/projectsveltos/addon-controller). It makes deploying and managing Kubernetes add-ons and applications easier across **multiple** clusters. This works for on-prem, cloud, or multitenant setups.
 
 !!! tip "Have Questions?"
     Join the **#projectsveltos** Slack channel for questions, discussions, and community support!
