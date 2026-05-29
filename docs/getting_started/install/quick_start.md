@@ -114,7 +114,7 @@ $ kubectl apply -f clusterprofile_kyverno.yaml
 
 ### Validation
 
-### Management Cluster
+#### Management Cluster
 
 ```bash
 $ kubectl get clusterprofile,clustersummary
@@ -125,7 +125,7 @@ NAME                                                                            
 clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload   140m
 ```
 
-### Managed Cluster
+#### Managed Cluster
 
 ```bash
 $ kubectl config set-context kind-clusterapi-workload
@@ -229,7 +229,7 @@ EOF
 
 ### Validation
 
-### Management Cluster
+#### Management Cluster
 
 ```bash
 $ kubectl get clusterprofile,clustersummary
@@ -242,7 +242,7 @@ clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload 
 clustersummary.config.projectsveltos.io/nginx-deploy-capi-clusterapi-workload     138m
 ```
 
-### Managed Cluster
+#### Managed Cluster
 
 ```bash
 $ kubectl config set-context kind-clusterapi-workload
@@ -299,6 +299,14 @@ An example list is found [here](../../addons/kustomize.md). For more information
 ## Carvel ytt and Jsonnet
 
 Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the [Carvel ytt](../../template/examples/ytt_extension.md) and [Jsonnet](../../template/examples/jsonnet_extension.md) sections.
+
+## Undeploy Demo
+
+To undeploy the demo environment, simply perform the command listed below.
+
+``` bash
+$ make undeploy-quickstart
+```
 
 ## Next Steps
 
