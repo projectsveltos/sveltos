@@ -874,7 +874,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#management-cluster" class="md-nav__link">
@@ -895,6 +896,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -924,7 +930,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#management-cluster_1" class="md-nav__link">
@@ -952,6 +959,11 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#deploy-kustomize-using-gitops" class="md-nav__link">
@@ -969,6 +981,17 @@
     <span class="md-ellipsis">
       
         Carvel ytt and Jsonnet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#undeploy-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Undeploy Demo
       
     </span>
   </a>
@@ -4616,7 +4639,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#management-cluster" class="md-nav__link">
@@ -4637,6 +4661,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -4666,7 +4695,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#management-cluster_1" class="md-nav__link">
@@ -4694,6 +4724,11 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#deploy-kustomize-using-gitops" class="md-nav__link">
@@ -4711,6 +4746,17 @@
     <span class="md-ellipsis">
       
         Carvel ytt and Jsonnet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#undeploy-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Undeploy Demo
       
     </span>
   </a>
@@ -4830,7 +4876,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>clusterprofile_kyverno.yaml
 </span></code></pre></div>
 <h3 id="validation_1">Validation</h3>
-<h3 id="management-cluster">Management Cluster</h3>
+<h4 id="management-cluster">Management Cluster</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterprofile,clustersummary
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>NAME<span class="w">                                                     </span>AGE
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>clusterprofile.config.projectsveltos.io/deploy-kyverno<span class="w">   </span>140m
@@ -4838,7 +4884,7 @@
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>NAME<span class="w">                                                                              </span>AGE
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload<span class="w">   </span>140m
 </span></code></pre></div>
-<h3 id="managed-cluster">Managed Cluster</h3>
+<h4 id="managed-cluster">Managed Cluster</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>kind-clusterapi-workload
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>$<span class="w"> </span>kind<span class="w"> </span><span class="nb">export</span><span class="w"> </span>kubeconfig<span class="w"> </span>--name<span class="w"> </span>clusterapi-workload
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
@@ -4933,7 +4979,7 @@
 </li>
 </ol>
 <h3 id="validation_2">Validation</h3>
-<h3 id="management-cluster_1">Management Cluster</h3>
+<h4 id="management-cluster_1">Management Cluster</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clusterprofile,clustersummary
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>NAME<span class="w">                                                     </span>AGE
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>clusterprofile.config.projectsveltos.io/deploy-kyverno<span class="w">   </span>140m
@@ -4943,7 +4989,7 @@
 </span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>clustersummary.config.projectsveltos.io/deploy-kyverno-capi-clusterapi-workload<span class="w">   </span>140m
 </span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>clustersummary.config.projectsveltos.io/nginx-deploy-capi-clusterapi-workload<span class="w">     </span>138m
 </span></code></pre></div>
-<h3 id="managed-cluster_1">Managed Cluster</h3>
+<h4 id="managed-cluster_1">Managed Cluster</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>kind-clusterapi-workload
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>$<span class="w"> </span>kind<span class="w"> </span><span class="nb">export</span><span class="w"> </span>kubeconfig<span class="w"> </span>--name<span class="w"> </span>clusterapi-workload
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
@@ -4991,6 +5037,10 @@
 <p>An example list is found <a href="../../../addons/kustomize/">here</a>. For more information about the Sveltos and FluxCD integration, check out the <a href="../../../use_cases/use_case_gitops/">information</a>.</p>
 <h2 id="carvel-ytt-and-jsonnet">Carvel ytt and Jsonnet</h2>
 <p>Sveltos offers support for Carvel ytt and Jsonnet as tools to define add-ons that can be deployed in a managed cluster. For additional information, please consult the <a href="../../../template/examples/ytt_extension/">Carvel ytt</a> and <a href="../../../template/examples/jsonnet_extension/">Jsonnet</a> sections.</p>
+<h2 id="undeploy-demo">Undeploy Demo</h2>
+<p>To undeploy the demo environment, simply perform the command listed below.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>$<span class="w"> </span>make<span class="w"> </span>undeploy-quickstart
+</span></code></pre></div>
 <h2 id="next-steps">Next Steps</h2>
 <p>Continue with the <a href="../install/">installation</a> details and the <a href="../../../register/register-cluster/">registration</a> process (non Cluster API).</p>
 
