@@ -172,21 +172,11 @@ Please refer to this [section](../deployment_order/rolling_update_strategy.md) f
 
 ### Spec.ValidateHealths
 
-The *validateHealths* property defines a set of Lua functions that Sveltos executes against the managed cluster to assess the health and status of the add-ons and applications specified in the Profile. These Lua functions act as validation checks, ensuring that the deployed add-ons and applications are functioning properly and aligned with the desired state. By executing these functions, Sveltos proactively identifies any potential issues or misconfigurations that could arise, maintaining the overall health and stability of the managed cluster.
+The *validateHealths* property defines a set of checks that Sveltos executes against the managed cluster to assess the health of add-ons and applications in the Profile. Sveltos holds the Profile in a non-provisioned state until all checks pass.
 
-The ValidateHealths property accepts a slice of Lua functions, where each function encapsulates a specific validation check. These functions can access the managed cluster's state to perform comprehensive checks on the add-ons and applications. The results of the validation checks are aggregated and reported back to Sveltos, providing valuable insights into the health and status of the managed cluster's components.
+Checks can inspect Kubernetes resources (Lua or CEL), query Prometheus-compatible metric endpoints, or combine both. For the full field reference and all examples see [Spec.ValidateHealths](./clusterprofile.md#specvalidatehealths) in the ClusterProfile documentation — `Profile` and `ClusterProfile` share the same field definition.
 
-Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.
-
-Please refer to this [section](../deployment_order/rolling_update_strategy.md) for more information.
-
-Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:
-
-- Deploy Kyverno Helm chart;
-- Validate Deployment Health: Perform health checks on each deployment within the kyverno namespace. Verify that the number of active replicas matches the requested replicas;
-- Successful Deployment: Once the health checks are successfully completed, Sveltos considers the Profile as successfully deployed.
-
-!!! example "Example - Profile Kyverno and Lua"
+!!! example "Example - deployment readiness check"
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
@@ -206,27 +196,21 @@ Consider a scenario where a new cluster with the label env:prod is created. The 
         releaseName:      kyverno-latest
         releaseNamespace: kyverno
         helmChartAction:  Install
-        validateHealths:
-        - name: deployment-health
-          featureID: Helm
-          group: "apps"
-          version: "v1"
-          kind: "Deployment"
-          namespace: kyverno
-          script: |
-            function evaluate()
-              hs = {}
-              hs.healthy = false
-              hs.message = "available replicas not matching requested replicas"
-              if obj.status ~= nil then
-                if obj.status.availableReplicas ~= nil then
-                  if obj.status.availableReplicas == obj.spec.replicas then
-                    hs.healthy = true
-                  end
-                end
-              end
-              return hs
+      validateHealths:
+      - name: deployment-health
+        featureID: Helm
+        group: "apps"
+        version: "v1"
+        kind: "Deployment"
+        namespace: kyverno
+        script: |
+          function evaluate(obj)
+            if obj.status ~= nil and obj.status.availableReplicas ~= nil
+                and obj.status.availableReplicas == obj.spec.replicas then
+              return {healthy=true, message=""}
             end
+            return {healthy=false, message="available replicas not matching requested replicas"}
+          end
     ```
 
 ### Spec.TemplateResourceRefs

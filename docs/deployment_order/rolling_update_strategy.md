@@ -30,11 +30,11 @@ When the field is set to 30%, the list of add-ons/applications in ClusterProfile
 
 ### ValidateHealths
 
-The `validateHealths` field in a `ClusterProfile` Spec allows you to specify health validation checks that Sveltos should perform before declaring an update successful. These checks are expressed using the Lua language.
+The `validateHealths` field specifies health checks that Sveltos must pass before declaring an update successful. Checks can inspect Kubernetes resources (Lua or CEL), query Prometheus-compatible metric endpoints, or combine both. For the full field reference and all examples — including metric-based and combined checks — see [Spec.ValidateHealths](../addons/clusterprofile.md#specvalidatehealths).
 
 #### Example
 
-For instance, when deploying Helm charts, it is possible to instruct Sveltos to check the deployments health (number of active replicas) before declaring the Helm chart deployment successful.
+When deploying Helm charts, instruct Sveltos to verify that all deployments reach the desired replica count before declaring the chart deployment successful.
 
 ```yaml
 validateHealths:
@@ -45,24 +45,16 @@ validateHealths:
   kind: "Deployment"
   namespace: kyverno
   script: |
-    function evaluate()
-      hs = {}
-      hs.healthy = false
-      hs.message = "available replicas not matching requested replicas"
-      if obj.status ~= nil then
-        if obj.status.availableReplicas ~= nil then
-          if obj.status.availableReplicas == obj.spec.replicas then
-            hs.healthy = true
-          end
-        end
+    function evaluate(obj)
+      if obj.status ~= nil and obj.status.availableReplicas ~= nil
+          and obj.status.availableReplicas == obj.spec.replicas then
+        return {healthy=true, message=""}
       end
-      return hs
+      return {healthy=false, message="available replicas not matching requested replicas"}
     end
 ```
 
-The above YAML definition instructs Sveltos to fetch all the deployments in the kyverno namespace. For each of those, the Lua script is evaluated.
-
-The Lua function must be named `evaluate`. It is passed as a single argument, which is an instance of the object being validated (`obj`). The function must return a struct containing a field `healthy`, which is a boolean indicating whether the resource is healthy or not. The struct can also have an optional field `message`, which will be reported back by Sveltos if the resource is not healthy.
+Sveltos fetches all Deployments in the `kyverno` namespace and evaluates the script once per object, passing it as `obj`. The function must return a table with a `healthy` boolean field and an optional `message` field reported when unhealthy.
 
 ## Rolling Update Strategy Benefits
 
@@ -106,18 +98,12 @@ The following ClusterProfile Spec would update a maximum of 30% of matching clus
         kind: "Deployment"
         namespace: kyverno
         script: |
-          function evaluate()
-            hs = {}
-            hs.healthy = false
-            hs.message = "available replicas not matching requested replicas"
-            if obj.status ~= nil then
-              if obj.status.availableReplicas ~= nil then
-                if obj.status.availableReplicas == obj.spec.replicas then
-                  hs.healthy = true
-                end
-              end
+          function evaluate(obj)
+            if obj.status ~= nil and obj.status.availableReplicas ~= nil
+                and obj.status.availableReplicas == obj.spec.replicas then
+              return {healthy=true, message=""}
             end
-            return hs
+            return {healthy=false, message="available replicas not matching requested replicas"}
           end
     ```
 
