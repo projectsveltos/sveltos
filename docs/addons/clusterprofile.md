@@ -164,60 +164,162 @@ Please refer to this [section](../deployment_order/rolling_update_strategy.md) f
 
 ### Spec.ValidateHealths
 
-The *validateHealths* property defines a set of Lua functions that Sveltos executes against the managed cluster to assess the health and status of the add-ons and applications specified in the ClusterProfile. These Lua functions act as validation checks, ensuring that the deployed add-ons and applications are functioning properly and aligned with the desired state. By executing these functions, Sveltos proactively identifies any potential issues or misconfigurations that could arise, maintaining the overall health and stability of the managed cluster.
+The *validateHealths* property defines a set of checks that Sveltos executes against the managed cluster to assess the health of add-ons and applications in the ClusterProfile. Sveltos holds the ClusterProfile in a non-provisioned state until all checks pass.
 
-The ValidateHealths property accepts a slice of Lua functions, where each function encapsulates a specific validation check. These functions can access the managed cluster's state to perform comprehensive checks on the add-ons and applications. The results of the validation checks are aggregated and reported back to Sveltos, providing valuable insights into the health and status of the managed cluster's components.
+Each check can:
 
-Lua's scripting capabilities offer flexibility in defining complex validation logic tailored to specific add-ons or applications.
+- **Inspect Kubernetes resources** — fetch objects by Group/Version/Kind and evaluate them with a Lua script or CEL rules.
+- **Query a Prometheus-compatible metrics endpoint** — run PromQL instant queries and evaluate the results with a Lua script.
+- **Combine both** — inspect a resource and metric values in the same script.
 
-Refer to the [ dedicated section](../deployment_order/rolling_update_strategy.md) for more information.
+Refer to the [rolling update strategy](../deployment_order/rolling_update_strategy.md) for how `validateHealths` integrates with `maxUpdate` to roll changes across clusters safely.
 
-Consider a scenario where a new cluster with the label env:prod is created. The following instructions guide Sveltos to:
+#### Resource-based checks
 
-- Deploy Kyverno Helm chart;
-- Validate Deployment Health: Perform health checks on each deployment within the kyverno namespace. Verify that the number of active replicas matches the requested replicas;
-- Successful Deployment: Once the health checks are successfully completed, Sveltos considers the ClusterProfile as successfully deployed.
+Set `group`, `version`, and `kind` to identify the resource type. Sveltos fetches all matching objects and runs the script once per object, passing it as `obj`.
 
-!!! example "Example - ClusterProfile Kyverno and Lua"
+!!! example "Example - deployment readiness check (Lua)"
     ```yaml
-    ---
-    apiVersion: config.projectsveltos.io/v1beta1
-    kind: ClusterProfile
-    metadata:
-      name: kyverno
-    spec:
-      clusterSelector:
-        matchLabels:
-          env: prod
-      helmCharts:
-      - repositoryURL:    https://kyverno.github.io/kyverno/
-        repositoryName:   kyverno
-        chartName:        kyverno/kyverno
-        chartVersion:     v3.3.3
-        releaseName:      kyverno-latest
-        releaseNamespace: kyverno
-        helmChartAction:  Install
-        validateHealths:
-        - name: deployment-health
-          featureID: Helm
-          group: "apps"
-          version: "v1"
-          kind: "Deployment"
-          namespace: kyverno
-          script: |
-            function evaluate()
-              hs = {}
-              hs.healthy = false
-              hs.message = "available replicas not matching requested replicas"
-              if obj.status ~= nil then
-                if obj.status.availableReplicas ~= nil then
-                  if obj.status.availableReplicas == obj.spec.replicas then
-                    hs.healthy = true
-                  end
-                end
-              end
-              return hs
-            end
+    validateHealths:
+    - name: deployment-health
+      featureID: Helm
+      group: "apps"
+      version: "v1"
+      kind: "Deployment"
+      namespace: kyverno
+      script: |
+        function evaluate(obj)
+          if obj.status ~= nil and obj.status.availableReplicas ~= nil
+              and obj.status.availableReplicas == obj.spec.replicas then
+            return {healthy=true, message=""}
+          end
+          return {healthy=false, message="available replicas not matching requested replicas"}
+        end
+    ```
+
+CEL is also supported:
+
+!!! example "Example - deployment readiness check (CEL)"
+    ```yaml
+    validateHealths:
+    - name: deployment-health
+      featureID: Helm
+      group: "apps"
+      version: "v1"
+      kind: "Deployment"
+      namespace: kyverno
+      evaluateCEL:
+      - name: replicas_match
+        rule: resource.status.availableReplicas == resource.spec.replicas
+    ```
+
+#### Metric-based checks
+
+Set `metricSource` to identify the Prometheus endpoint and `metricQueries` to list the PromQL instant queries to run. Each query result is a scalar float available in the script as `metrics["<name>"]`. When `group`/`version`/`kind` are omitted the script is called once with no resource argument.
+
+**Connectivity**: in push mode the addon-controller running on the management cluster makes a direct HTTP request to the URL, so the metric service must be reachable from the management cluster (e.g. via a NodePort or LoadBalancer). In pull mode the sveltos-applier agent running inside the managed cluster makes the request, so an in-cluster DNS name such as `http://prometheus-server.monitoring.svc:9090` works without any external exposure.
+
+**Credentials**: if the endpoint requires authentication, create a Secret with either a `token` key (bearer token) or `username` and `password` keys (basic auth). In push mode the Secret must exist in the management cluster in the same namespace as the ClusterProfile; in pull mode it must exist on the managed cluster.
+
+!!! example "Example - error rate check, no credentials"
+    ```yaml
+    validateHealths:
+    - name: error-rate-low
+      featureID: Helm
+      metricSource:
+        url: http://prometheus-server.monitoring.svc:9090
+      metricQueries:
+      - name: errorRate
+        query: >-
+          sum(rate(http_requests_errors_total{namespace="my-app"}[5m]))
+          /
+          sum(rate(http_requests_total{namespace="my-app"}[5m]))
+      script: |
+        function evaluate()
+          if metrics["errorRate"] > 0.05 then
+            return {healthy=false, message="error rate above 5%: " .. metrics["errorRate"]}
+          end
+          return {healthy=true, message=""}
+        end
+    ```
+
+When the Prometheus endpoint requires a bearer token, first create the Secret:
+
+```bash
+$ kubectl create secret generic prometheus-token \
+  --from-literal=token=<bearer-token> \
+  -n <secret-namespace>
+```
+
+Then reference it via `metricSource.secretRef`:
+
+!!! example "Example - error rate check, bearer token"
+    ```yaml
+    validateHealths:
+    - name: error-rate-low
+      featureID: Helm
+      metricSource:
+        url: http://prometheus-server.monitoring.svc:9090
+        secretRef:
+          namespace: monitoring
+          name: prometheus-token
+      metricQueries:
+      - name: errorRate
+        query: >-
+          sum(rate(http_requests_errors_total{namespace="my-app"}[5m]))
+          /
+          sum(rate(http_requests_total{namespace="my-app"}[5m]))
+      script: |
+        function evaluate()
+          if metrics["errorRate"] > 0.05 then
+            return {healthy=false, message="error rate above 5%: " .. metrics["errorRate"]}
+          end
+          return {healthy=true, message=""}
+        end
+    ```
+
+For basic auth create the Secret with `username` and `password` keys instead:
+
+```bash
+kubectl create secret generic prometheus-basic-auth \
+  --from-literal=username=admin \
+  --from-literal=password=<password> \
+  -n <secret-namespace>
+```
+
+#### Combined resource and metric check
+
+A single check can inspect a Kubernetes resource and evaluate metric values in the same script. Both `obj` and the `metrics` map are in scope.
+
+!!! example "Example - deployment ready and webhook latency within bound"
+    ```yaml
+    validateHealths:
+    - name: kyverno-healthy
+      featureID: Helm
+      group: "apps"
+      version: "v1"
+      kind: "Deployment"
+      namespace: kyverno
+      metricSource:
+        url: http://prometheus-server.monitoring.svc:9090
+      metricQueries:
+      - name: webhookP99Ms
+        query: >-
+          histogram_quantile(0.99,
+            rate(kyverno_admission_review_duration_seconds_bucket[5m])
+          ) * 1000
+      script: |
+        function evaluate(obj)
+          if obj.status == nil or obj.status.availableReplicas == nil
+              or obj.status.availableReplicas == 0 then
+            return {healthy=false, message="no available replicas"}
+          end
+          if metrics["webhookP99Ms"] > 500 then
+            return {healthy=false,
+                    message="webhook p99 above 500 ms: " .. metrics["webhookP99Ms"]}
+          end
+          return {healthy=true, message=""}
+        end
     ```
 
 ### Spec.TemplateResourceRefs
