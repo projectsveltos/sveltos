@@ -47,7 +47,7 @@ clusterSelector:
 
 *helmCharts* field consists of a list of helm charts to be deployed to the clusters matching clusterSelector;
 
-!!! example "Example - HelmCharts"
+!!! example "Example - spec.helmCharts"
     ```yaml
     helmCharts:
     - repositoryURL:    https://kyverno.github.io/kyverno/
@@ -75,7 +75,7 @@ This field is a slice of *PolicyRef* structs. Each PolictRef has the following f
 | Name | string | The name of the referenced resource. Must be at least one character long. | No | — |
 | DeploymentType | string | Indicates whether the resource should be deployed to the management cluster (`Local`) or the managed cluster (`Remote`). | Yes | `Remote` |
 
-!!! example "Example - policyRefs"
+!!! example "Example - spec.policyRefs"
     ```yaml
     policyRefs:
     - kind: Secret
@@ -125,7 +125,7 @@ This field can be set to:
 
 The *stopMatchingBehavior* field specifies the behavior when a cluster no longer matches a ClusterProfile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to *LeavePolicies*, any policies deployed by the ClusterProfile will remain in the cluster.
 
-!!! example "Example - ClusterProfile Kyverno Deployment"
+!!! example "Example - spec.stopMatchingBehavior"
     ```yaml
     ---
     apiVersion: config.projectsveltos.io/v1beta1
@@ -166,11 +166,11 @@ Please refer to this [section](../deployment_order/rolling_update_strategy.md) f
 
 The *validateHealths* property defines a set of checks that Sveltos executes against the managed cluster to assess the health of add-ons and applications in the ClusterProfile. Sveltos holds the ClusterProfile in a non-provisioned state until all checks pass.
 
-Each check can:
+Each check can perform the following:
 
-- **Inspect Kubernetes resources** — fetch objects by Group/Version/Kind and evaluate them with a Lua script or CEL rules.
-- **Query a Prometheus-compatible metrics endpoint** — run PromQL instant queries and evaluate the results with a Lua script.
-- **Combine both** — inspect a resource and metric values in the same script.
+- **Inspect Kubernetes resources**: Fetch objects by Group/Version/Kind and evaluate them with a Lua script or CEL rules.
+- **Query a Prometheus-compatible metrics endpoint**: Run PromQL instant queries and evaluate the results with a Lua script.
+- **Combine both**: Inspect a resource and metric values in the same script.
 
 Refer to the [rolling update strategy](../deployment_order/rolling_update_strategy.md) for how `validateHealths` integrates with `maxUpdate` to roll changes across clusters safely.
 
@@ -178,7 +178,7 @@ Refer to the [rolling update strategy](../deployment_order/rolling_update_strate
 
 Set `group`, `version`, and `kind` to identify the resource type. Sveltos fetches all matching objects and runs the script once per object, passing it as `obj`.
 
-!!! example "Example - deployment readiness check (Lua)"
+!!! example "Example - spec.validateHealths (Lua)"
     ```yaml
     validateHealths:
     - name: deployment-health
@@ -199,7 +199,7 @@ Set `group`, `version`, and `kind` to identify the resource type. Sveltos fetche
 
 CEL is also supported:
 
-!!! example "Example - deployment readiness check (CEL)"
+!!! example "Example - spec.validateHealths (CEL)"
     ```yaml
     validateHealths:
     - name: deployment-health
@@ -281,7 +281,7 @@ Then reference it via `metricSource.secretRef`:
 For basic auth create the Secret with `username` and `password` keys instead:
 
 ```bash
-kubectl create secret generic prometheus-basic-auth \
+$ kubectl create secret generic prometheus-basic-auth \
   --from-literal=username=admin \
   --from-literal=password=<password> \
   -n <secret-namespace>
@@ -333,16 +333,17 @@ The *dependsOn* property specifies a list of other ClusterProfiles that this ins
 
 For example, clusterprofile-a can depend on another *clusterprofile-b*. This implies that any Helm charts or raw YAML files associated with ClusterProfile A will not be deployed until all add-ons and applications specified in ClusterProfile B have been successfully provisioned.
 
-```yaml hl_lines="7-8"
----
-apiVersion: config.projectsveltos.io/v1beta1
-kind: ClusterProfile
-metadata:
-  name: clusterprofile-a
-spec:
-  dependsOn:
-  - clusterprofile_b
-```
+!!! example "Example - spec.dependsOn"
+    ```yaml hl_lines="7-8"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: clusterprofile-a
+    spec:
+      dependsOn:
+      - clusterprofile_b
+    ```
 
 Sveltos automatically resolves and deploys the prerequisite profiles specified in the DependsOn field. Sveltos will analyze the dependency graph, identify
 the required prerequisite profiles, and ensure they are deployed to the same clusters.
@@ -362,7 +363,7 @@ The *preDeployChecks* field defines a set of checks that Sveltos must pass *befo
 Common use cases include:
 
 1. Readiness Gates: Ensuring a required `StorageClass`, `CustomResourceDefinition`, or operator is present before deploying an application that depends on it.
-2. Capacity Validation: Verifying that sufficient quota or node capacity exists in the target cluster before rolling out a workload.
+1. Capacity Validation: Verifying that sufficient quota or node capacity exists in the target cluster before rolling out a workload.
 
 ### Spec.PreDeleteChecks
 
@@ -371,7 +372,7 @@ The *preDeleteChecks* field defines a set of safety checks that Sveltos must per
 This is particularly useful for ensuring:
 
 1. Data Integrity: Verifying that a backup job has completed before deleting a database.
-2. Dependency Logic: Ensuring a "consumer" application is removed before the "provider" service it relies on.
+1. Dependency Logic: Ensuring a "consumer" application is removed before the "provider" service it relies on.
 
 ### Spec.PostDeleteChecks
 
@@ -380,7 +381,7 @@ The *postDeleteChecks* field defines checks that Sveltos executes *after* the de
 Common use cases include:
 
 1. Orphaned Resource Detection: Verifying that cloud-provider resources (like LoadBalancers or PVCs) were actually released.
-2. Namespace Cleanup: Ensuring a namespace is fully terminated and not stuck in a "Terminating" state due to finalizers.
+1. Namespace Cleanup: Ensuring a namespace is fully terminated and not stuck in a "Terminating" state due to finalizers.
 
 ### Spec.PatchesFrom
 
@@ -389,5 +390,5 @@ The *patchesFrom* field allows you to decouple patch definitions from the Cluste
 This is particularly effective for:
 
 1. Security: Storing sensitive patches in Secrets rather than plain-text ClusterProfiles.
-2. Scalability: Using a single ClusterProfile for hundreds of clusters while tailoring replica counts, node selectors, or resource limits for each one.
-3. Dynamic Customization: Leveraging Go templating in the name and namespace fields to automatically fetch patches based on the target cluster's metadata.
+1. Scalability: Using a single ClusterProfile for hundreds of clusters while tailoring replica counts, node selectors, or resource limits for each one.
+1. Dynamic Customization: Leveraging Go templating in the name and namespace fields to automatically fetch patches based on the target cluster's metadata.
