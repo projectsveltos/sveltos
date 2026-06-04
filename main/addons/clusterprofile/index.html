@@ -4852,7 +4852,7 @@
 <h3 id="spechelmcharts">Spec.HelmCharts</h3>
 <p><em>helmCharts</em> field consists of a list of helm charts to be deployed to the clusters matching clusterSelector;</p>
 <div class="admonition example">
-<p class="admonition-title">Example - HelmCharts</p>
+<p class="admonition-title">Example - spec.helmCharts</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">helmCharts</span><span class="p">:</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://kyverno.github.io/kyverno/</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">kyverno</span>
@@ -4910,7 +4910,7 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 </tbody>
 </table>
 <div class="admonition example">
-<p class="admonition-title">Example - policyRefs</p>
+<p class="admonition-title">Example - spec.policyRefs</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">policyRefs</span><span class="p">:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-secret-1</span>
@@ -4996,7 +4996,7 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 <h3 id="specstopmatchingbehavior">Spec.StopMatchingBehavior</h3>
 <p>The <em>stopMatchingBehavior</em> field specifies the behavior when a cluster no longer matches a ClusterProfile. By default, all Kubernetes resources and Helm charts deployed to the cluster will be removed. However, if StopMatchingBehavior is set to <em>LeavePolicies</em>, any policies deployed by the ClusterProfile will remain in the cluster.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Kyverno Deployment</p>
+<p class="admonition-title">Example - spec.stopMatchingBehavior</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -5027,17 +5027,17 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 Please refer to this <a href="../../deployment_order/rolling_update_strategy/">section</a> for more information.</p>
 <h3 id="specvalidatehealths">Spec.ValidateHealths</h3>
 <p>The <em>validateHealths</em> property defines a set of checks that Sveltos executes against the managed cluster to assess the health of add-ons and applications in the ClusterProfile. Sveltos holds the ClusterProfile in a non-provisioned state until all checks pass.</p>
-<p>Each check can:</p>
+<p>Each check can perform the following:</p>
 <ul>
-<li><strong>Inspect Kubernetes resources</strong> — fetch objects by Group/Version/Kind and evaluate them with a Lua script or CEL rules.</li>
-<li><strong>Query a Prometheus-compatible metrics endpoint</strong> — run PromQL instant queries and evaluate the results with a Lua script.</li>
-<li><strong>Combine both</strong> — inspect a resource and metric values in the same script.</li>
+<li><strong>Inspect Kubernetes resources</strong>: Fetch objects by Group/Version/Kind and evaluate them with a Lua script or CEL rules.</li>
+<li><strong>Query a Prometheus-compatible metrics endpoint</strong>: Run PromQL instant queries and evaluate the results with a Lua script.</li>
+<li><strong>Combine both</strong>: Inspect a resource and metric values in the same script.</li>
 </ul>
 <p>Refer to the <a href="../../deployment_order/rolling_update_strategy/">rolling update strategy</a> for how <code>validateHealths</code> integrates with <code>maxUpdate</code> to roll changes across clusters safely.</p>
 <h4 id="resource-based-checks">Resource-based checks</h4>
 <p>Set <code>group</code>, <code>version</code>, and <code>kind</code> to identify the resource type. Sveltos fetches all matching objects and runs the script once per object, passing it as <code>obj</code>.</p>
 <div class="admonition example">
-<p class="admonition-title">Example - deployment readiness check (Lua)</p>
+<p class="admonition-title">Example - spec.validateHealths (Lua)</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">validateHealths</span><span class="p">:</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment-health</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm</span>
@@ -5057,7 +5057,7 @@ Please refer to this <a href="../../deployment_order/rolling_update_strategy/">s
 </div>
 <p>CEL is also supported:</p>
 <div class="admonition example">
-<p class="admonition-title">Example - deployment readiness check (CEL)</p>
+<p class="admonition-title">Example - spec.validateHealths (CEL)</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">validateHealths</span><span class="p">:</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment-health</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm</span>
@@ -5128,7 +5128,7 @@ Please refer to this <a href="../../deployment_order/rolling_update_strategy/">s
 </span></code></pre></div>
 </div>
 <p>For basic auth create the Secret with <code>username</code> and <code>password</code> keys instead:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>prometheus-basic-auth<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>prometheus-basic-auth<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">username</span><span class="o">=</span>admin<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>--from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span>&lt;password&gt;<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>-n<span class="w"> </span>&lt;secret-namespace&gt;
@@ -5172,6 +5172,8 @@ Refer to <a href="../../template/examples/template_generic/">template</a> sectio
 <h3 id="specdependson">Spec.DependsOn</h3>
 <p>The <em>dependsOn</em> property specifies a list of other ClusterProfiles that this instance relies on. In any managed cluster that matches to this ClusterProfile, the add-ons and applications defined in this instance will only be deployed after all add-ons and applications in the designated dependency ClusterProfiles have been successfully deployed.</p>
 <p>For example, clusterprofile-a can depend on another <em>clusterprofile-b</em>. This implies that any Helm charts or raw YAML files associated with ClusterProfile A will not be deployed until all add-ons and applications specified in ClusterProfile B have been successfully provisioned.</p>
+<div class="admonition example">
+<p class="admonition-title">Example - spec.dependsOn</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nn">---</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
@@ -5181,6 +5183,7 @@ Refer to <a href="../../template/examples/template_generic/">template</a> sectio
 </span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="hll"><span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span>
 </span></span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="hll"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clusterprofile_b</span>
 </span></span></code></pre></div>
+</div>
 <p>Sveltos automatically resolves and deploys the prerequisite profiles specified in the DependsOn field. Sveltos will analyze the dependency graph, identify
 the required prerequisite profiles, and ensure they are deployed to the same clusters.</p>
 <h3 id="speccontinueonerror">Spec.ContinueOnError</h3>
