@@ -4527,26 +4527,30 @@
 <tr>
 <td><code>patch</code></td>
 <td>yes</td>
-<td>The patch content — either a Strategic Merge Patch document or a JSON Patch (RFC 6902) array</td>
+<td>The patch content — either a <a href="http://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/">Strategic Merge Patch</a> document (must include <code>apiVersion</code>, <code>kind</code>, and <code>metadata.name</code> headers) or a <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a> array</td>
 </tr>
 <tr>
 <td><code>target</code></td>
-<td>no</td>
-<td>Selector that restricts which component the patch applies to (see below). Defaults to all <code>apps/v1 Deployment</code> resources, which means all five shard components</td>
+<td>yes</td>
+<td>Selector that controls which component the patch applies to. Use <code>group: apps</code> and <code>kind: Deployment</code> to match all five shard components, or add a <code>name</code> to target one specifically</td>
 </tr>
 </tbody>
 </table>
 <p>The <code>target</code> field mirrors the standard Sveltos patch selector:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">target</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps</span><span class="w">          </span><span class="c1"># API group — defaults to &quot;apps&quot;</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span><span class="w">     </span><span class="c1"># resource kind — defaults to &quot;Deployment&quot;</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name&gt;</span><span class="w">         </span><span class="c1"># optional: match a specific deployment name</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps</span><span class="w">          </span><span class="c1"># API group</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span><span class="w">     </span><span class="c1"># resource kind</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;prefix&gt;</span><span class="w">       </span><span class="c1"># optional: regex matched against the deployment name</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;ns&gt;</span><span class="w">      </span><span class="c1"># optional: match a specific namespace</span>
 </span></code></pre></div>
 <p>Patches whose <code>target</code> does not match a given component are silently skipped for that component, so a single <code>ConfigMap</code> can carry patches for different components side by side.</p>
 <h3 id="example-scheduling-all-shard-components-on-dedicated-nodes">Example: scheduling all shard components on dedicated nodes</h3>
 <p>A common production pattern is to reserve a set of nodes exclusively for shard controller workloads. Nodes are tainted so that regular workloads cannot land on them, and the shard components need a matching toleration (and optionally a <code>nodeSelector</code>) to be scheduled there.</p>
-<p>Assume the dedicated nodes carry the taint <code>dedicated=sveltos-shards:NoSchedule</code> and the label <code>node-role=sveltos-shards</code>. The following <code>ConfigMap</code> applies a Strategic Merge Patch to all five shard components at once — no <code>target</code> is needed because the default already covers every <code>apps/v1 Deployment</code>:</p>
+<p>Assume the dedicated nodes carry the taint <code>dedicated=sveltos-shards:NoSchedule</code> and the label <code>node-role=sveltos-shards</code>. The following <code>ConfigMap</code> uses a Strategic Merge Patch to add the toleration and the node selector to all five shard components at once. The <code>target</code> matches any <code>apps/v1 Deployment</code>, so the patch is applied to every component in the shard set.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A Strategic Merge Patch must include <code>apiVersion</code>, <code>kind</code>, and <code>metadata.name</code> headers. The value of <code>metadata.name</code> is arbitrary — the <code>target</code> selector controls which Deployments actually receive the patch.</p>
+</div>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -4555,21 +4559,26 @@
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">node-scheduling</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="no">patch: |-</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="no">spec:</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">        </span><span class="no">template:</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">          </span><span class="no">spec:</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">            </span><span class="no">tolerations:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">              </span><span class="no">- key: dedicated</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">                </span><span class="no">operator: Equal</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">                </span><span class="no">value: sveltos-shards</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">                </span><span class="no">effect: NoSchedule</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="no">nodeSelector:</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">              </span><span class="no">node-role: sveltos-shards</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="no">apiVersion: apps/v1</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="no">kind: Deployment</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="no">metadata:</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">        </span><span class="no">name: any-name</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="no">spec:</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="no">template:</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">          </span><span class="no">spec:</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="no">tolerations:</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">              </span><span class="no">- key: dedicated</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">                </span><span class="no">operator: Equal</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">                </span><span class="no">value: sveltos-shards</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">                </span><span class="no">effect: NoSchedule</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">            </span><span class="no">nodeSelector:</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">              </span><span class="no">node-role: sveltos-shards</span>
 </span></code></pre></div>
 <p>With this in place, every Deployment shard-controller creates for any shard key will be scheduled exclusively on the dedicated nodes.</p>
 <h3 id="example-per-component-resource-limits">Example: per-component resource limits</h3>
 <p>Different Sveltos components have different resource profiles. For example, the healthcheck-manager polls managed clusters frequently and may need more memory than the other components, while the others can run with lighter settings. Applying a blanket resource-limit patch to all components would either over-provision the lightweight ones or under-provision the busy ones.</p>
-<p>Use the <code>name</code> field in <code>target</code> to restrict a patch to one specific component. The <code>name</code> value is treated as a regular expression, so <code>hc-manager</code> matches <code>hc-manager-eu-west</code>, <code>hc-manager-shard1</code>, and so on — regardless of the shard key.</p>
+<p>Use the <code>name</code> field in <code>target</code> to restrict a patch to one specific component. The <code>name</code> value is treated as an <strong>anchored</strong> regular expression (kustomize wraps it as <code>^(?:&lt;name&gt;)$</code>). Because shard deployment names include the shard key (e.g. <code>hc-manager-shard1</code>), use a trailing <code>.*</code> so the pattern matches any shard suffix — for example <code>hc-manager.*</code> matches <code>hc-manager-shard1</code>, <code>hc-manager-eu-west</code>, and so on.</p>
+<p>Use a JSON Patch (RFC 6902) when targeting a single component. A Strategic Merge Patch requires a <code>metadata.name</code> in the patch body to identify the resource, but shard deployment names are dynamic (they include the shard key), so there is no fixed name to put there. JSON Patch operates on JSON paths directly and has no such requirement:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -4593,40 +4602,46 @@
 </span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">    </span><span class="no">target:</span>
 </span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="no">group: apps</span>
 </span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="no">kind: Deployment</span>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="no">name: hc-manager</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="no">name: hc-manager.*</span>
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The key names inside <code>data</code> (here <code>hc-manager-limits</code>) are arbitrary. Use descriptive names to make the intent of each patch clear.</p>
 </div>
-<p>The same pattern applies to any of the other four components:</p>
+<p>The same pattern applies to any of the other four components. The deployment name prefix and main container name for each are:</p>
 <table>
 <thead>
 <tr>
 <th>Component</th>
 <th>Deployment name prefix</th>
+<th>Main container name</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>addon-controller</td>
 <td><code>addon-controller</code></td>
+<td><code>controller</code></td>
 </tr>
 <tr>
 <td>classifier</td>
-<td><code>classifier</code></td>
+<td><code>classifier-manager</code></td>
+<td><code>manager</code></td>
 </tr>
 <tr>
 <td>sveltoscluster-manager</td>
 <td><code>sc-manager</code></td>
+<td><code>manager</code></td>
 </tr>
 <tr>
 <td>event-manager</td>
 <td><code>event-manager</code></td>
+<td><code>manager</code></td>
 </tr>
 <tr>
 <td>healthcheck-manager</td>
 <td><code>hc-manager</code></td>
+<td><code>manager</code></td>
 </tr>
 </tbody>
 </table>
