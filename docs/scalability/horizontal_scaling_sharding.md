@@ -50,16 +50,16 @@ Each value in the `ConfigMap`'s `data` is a YAML document with two fields:
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `patch` | yes | The patch content — either a Strategic Merge Patch document or a JSON Patch (RFC 6902) array |
-| `target` | no | Selector that restricts which component the patch applies to (see below). Defaults to all `apps/v1 Deployment` resources, which means all five shard components |
+| `patch` | yes | The patch content — either a [Strategic Merge Patch](http://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) document (must include `apiVersion`, `kind`, and `metadata.name` headers) or a [JSON Patch (RFC 6902)](https://datatracker.ietf.org/doc/html/rfc6902) array |
+| `target` | yes | Selector that controls which component the patch applies to. Use `group: apps` and `kind: Deployment` to match all five shard components, or add a `name` to target one specifically |
 
 The `target` field mirrors the standard Sveltos patch selector:
 
 ```yaml
 target:
-  group: apps          # API group — defaults to "apps"
-  kind: Deployment     # resource kind — defaults to "Deployment"
-  name: <name>         # optional: match a specific deployment name
+  group: apps          # API group
+  kind: Deployment     # resource kind
+  name: <prefix>       # optional: regex matched against the deployment name
   namespace: <ns>      # optional: match a specific namespace
 ```
 
@@ -69,7 +69,10 @@ Patches whose `target` does not match a given component are silently skipped for
 
 A common production pattern is to reserve a set of nodes exclusively for shard controller workloads. Nodes are tainted so that regular workloads cannot land on them, and the shard components need a matching toleration (and optionally a `nodeSelector`) to be scheduled there.
 
-Assume the dedicated nodes carry the taint `dedicated=sveltos-shards:NoSchedule` and the label `node-role=sveltos-shards`. The following `ConfigMap` applies a Strategic Merge Patch to all five shard components at once — no `target` is needed because the default already covers every `apps/v1 Deployment`:
+Assume the dedicated nodes carry the taint `dedicated=sveltos-shards:NoSchedule` and the label `node-role=sveltos-shards`. The following `ConfigMap` uses a Strategic Merge Patch to add the toleration and the node selector to all five shard components at once. The `target` matches any `apps/v1 Deployment`, so the patch is applied to every component in the shard set.
+
+!!! note
+    A Strategic Merge Patch must include `apiVersion`, `kind`, and `metadata.name` headers. The value of `metadata.name` is arbitrary — the `target` selector controls which Deployments actually receive the patch.
 
 ```yaml
 apiVersion: v1
@@ -80,6 +83,10 @@ metadata:
 data:
   node-scheduling: |-
     patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: any-name
       spec:
         template:
           spec:
@@ -98,7 +105,9 @@ With this in place, every Deployment shard-controller creates for any shard key 
 
 Different Sveltos components have different resource profiles. For example, the healthcheck-manager polls managed clusters frequently and may need more memory than the other components, while the others can run with lighter settings. Applying a blanket resource-limit patch to all components would either over-provision the lightweight ones or under-provision the busy ones.
 
-Use the `name` field in `target` to restrict a patch to one specific component. The `name` value is treated as a regular expression, so `hc-manager` matches `hc-manager-eu-west`, `hc-manager-shard1`, and so on — regardless of the shard key.
+Use the `name` field in `target` to restrict a patch to one specific component. The `name` value is treated as an **anchored** regular expression (kustomize wraps it as `^(?:<name>)$`). Because shard deployment names include the shard key (e.g. `hc-manager-shard1`), use a trailing `.*` so the pattern matches any shard suffix — for example `hc-manager.*` matches `hc-manager-shard1`, `hc-manager-eu-west`, and so on.
+
+Use a JSON Patch (RFC 6902) when targeting a single component. A Strategic Merge Patch requires a `metadata.name` in the patch body to identify the resource, but shard deployment names are dynamic (they include the shard key), so there is no fixed name to put there. JSON Patch operates on JSON paths directly and has no such requirement:
 
 ```yaml
 apiVersion: v1
@@ -124,21 +133,21 @@ data:
     target:
       group: apps
       kind: Deployment
-      name: hc-manager
+      name: hc-manager.*
 ```
 
 !!! tip
     The key names inside `data` (here `hc-manager-limits`) are arbitrary. Use descriptive names to make the intent of each patch clear.
 
-The same pattern applies to any of the other four components:
+The same pattern applies to any of the other four components. The deployment name prefix and main container name for each are:
 
-| Component | Deployment name prefix |
-|-----------|------------------------|
-| addon-controller | `addon-controller` |
-| classifier | `classifier` |
-| sveltoscluster-manager | `sc-manager` |
-| event-manager | `event-manager` |
-| healthcheck-manager | `hc-manager` |
+| Component | Deployment name prefix | Main container name |
+|-----------|------------------------|---------------------|
+| addon-controller | `addon-controller` | `controller` |
+| classifier | `classifier-manager` | `manager` |
+| sveltoscluster-manager | `sc-manager` | `manager` |
+| event-manager | `event-manager` | `manager` |
+| healthcheck-manager | `hc-manager` | `manager` |
 
 A single `ConfigMap` can hold one entry per component, giving each its own resource profile.
 
