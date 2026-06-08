@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Discover how you can automatically manage declarative dependencies in your Sveltos resources with Renovate. Learn how to use the Sveltos manager to update dependencies in Helm-Charts for Sveltos resources.">
+        <meta name="description" content="Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.">
       
       
       
       
-        <link rel="prev" href="../../template/examples/jsonnet_extension/">
+        <link rel="prev" href="../example_deployment_health_notification/">
       
       
-        <link rel="next" href="../dryrun/">
+        <link rel="next" href="../example_pod_with_outdated_mounted_data/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Dependency Management - Projectsveltos Documentation</title>
+        <title>Notifications - Projectsveltos - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dependency-management" class="md-skip">
+        <a href="#example-alert-when-expected-resources-are-missing" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +143,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Dependency Management
+              Notifications - Projectsveltos
             
           </span>
         </div>
@@ -2450,20 +2450,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -2484,7 +2482,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2499,35 +2497,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Dependency Management
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../features/dependency-management/" class="md-nav__link">
         
   
   
@@ -2543,69 +2516,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#dependency-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dependency Management
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-renovate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configure Renovate
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sveltos-manager" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sveltos Manager
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2618,7 +2528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dryrun/" class="md-nav__link">
+      <a href="../../features/dryrun/" class="md-nav__link">
         
   
   
@@ -2646,7 +2556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration_drift/" class="md-nav__link">
+      <a href="../../features/configuration_drift/" class="md-nav__link">
         
   
   
@@ -2674,7 +2584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../post-renderer-patches/" class="md-nav__link">
+      <a href="../../features/post-renderer-patches/" class="md-nav__link">
         
   
   
@@ -2702,7 +2612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pre_post_delete_checks/" class="md-nav__link">
+      <a href="../../features/pre_post_delete_checks/" class="md-nav__link">
         
   
   
@@ -2730,7 +2640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../set/" class="md-nav__link">
+      <a href="../../features/set/" class="md-nav__link">
         
   
   
@@ -2758,7 +2668,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../rolling_upgrade/" class="md-nav__link">
+      <a href="../../features/rolling_upgrade/" class="md-nav__link">
         
   
   
@@ -2786,7 +2696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mcp/" class="md-nav__link">
+      <a href="../../features/mcp/" class="md-nav__link">
         
   
   
@@ -2814,7 +2724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../labels_management/" class="md-nav__link">
+      <a href="../../features/labels_management/" class="md-nav__link">
         
   
   
@@ -2889,7 +2799,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../multi-tenancy-full-isolation/" class="md-nav__link">
+      <a href="../../features/multi-tenancy-full-isolation/" class="md-nav__link">
         
   
   
@@ -2917,7 +2827,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../multi-tenancy-sharing-cluster/" class="md-nav__link">
+      <a href="../../features/multi-tenancy-sharing-cluster/" class="md-nav__link">
         
   
   
@@ -2953,7 +2863,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../techsupport/" class="md-nav__link">
+      <a href="../../features/techsupport/" class="md-nav__link">
         
   
   
@@ -3654,18 +3564,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
@@ -3686,7 +3598,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
@@ -3704,7 +3616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/notifications/" class="md-nav__link">
+      <a href="../notifications/" class="md-nav__link">
         
   
   
@@ -3732,7 +3644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_addon_notification/" class="md-nav__link">
+      <a href="../example_addon_notification/" class="md-nav__link">
         
   
   
@@ -3760,7 +3672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_crashloopbackoff_notification/" class="md-nav__link">
+      <a href="../example_crashloopbackoff_notification/" class="md-nav__link">
         
   
   
@@ -3788,7 +3700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_deployment_health_notification/" class="md-nav__link">
+      <a href="../example_deployment_health_notification/" class="md-nav__link">
         
   
   
@@ -3813,10 +3725,35 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../observability/example_missing_resources_healthcheck/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Alert When Expected Resources Are Missing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -3832,6 +3769,75 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example-alert-when-expected-resources-are-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Alert When Expected Resources Are Missing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example: Alert When Expected Resources Are Missing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HealthCheck Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clusterhealthcheck-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClusterHealthCheck Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observed-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observed Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3844,7 +3850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_pod_with_outdated_mounted_data/" class="md-nav__link">
+      <a href="../example_pod_with_outdated_mounted_data/" class="md-nav__link">
         
   
   
@@ -3872,7 +3878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_degrade_certificate_notification/" class="md-nav__link">
+      <a href="../example_degrade_certificate_notification/" class="md-nav__link">
         
   
   
@@ -3900,7 +3906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/example_cis_scan/" class="md-nav__link">
+      <a href="../example_cis_scan/" class="md-nav__link">
         
   
   
@@ -3928,7 +3934,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/display_resources/" class="md-nav__link">
+      <a href="../display_resources/" class="md-nav__link">
         
   
   
@@ -3956,7 +3962,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/different_resources/" class="md-nav__link">
+      <a href="../different_resources/" class="md-nav__link">
         
   
   
@@ -4377,46 +4383,52 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dependency-management" class="md-nav__link">
+  <a href="#example-alert-when-expected-resources-are-missing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependency Management
+        Example: Alert When Expected Resources Are Missing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example: Alert When Expected Resources Are Missing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HealthCheck Definition
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#clusterhealthcheck-definition" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prerequisites
+        ClusterHealthCheck Definition
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-renovate" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#observed-output" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configure Renovate
+        Observed Output
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#sveltos-manager" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sveltos Manager
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4438,33 +4450,112 @@
   
 
 
-  <h1 id="__skip">Dependency Management</h1>
+  <h1 id="__skip">Notifications - Projectsveltos</h1>
 
-<h2 id="dependency-management">Dependency Management</h2>
-<p><em>Dependency Management</em> is a crucial aspect of maintaining a healthy and secure Kubernetes environment. It ensures that all resources and configurations are up-to-date. In the context of Sveltos, dependency management is particularly important when using Helm-Charts to deploy resources.</p>
-<p>Renovate is a tool that helps you automate dependency management in your Sveltos resources. It uses the Sveltos manager to update dependencies in Helm-Charts for Sveltos resources.</p>
-<h2 id="prerequisites">Prerequisites</h2>
-<p>Before you can use Renovate to manage dependencies in your Sveltos resources, you need to have Renovate already configured for your Git-Repository. If you haven't set up Renovate yet, follow the <a href="https://docs.renovatebot.com/getting-started/use-cases/">Renovate Getting Started Guide</a>. The following documentation shows you how to configure Renovate for Sveltos resources for a public Github-Repository.</p>
-<p>You can manage your Github organisations/repositories via <a href="https://developer.mend.io">https://developer.mend.io</a>.</p>
-<h2 id="configure-renovate">Configure Renovate</h2>
-<p>For <a href="https://docs.renovatebot.com/modules/platform/github/">Github repositories</a> you can use the <a href="https://github.com/apps/renovate">Renovate Github App</a>. You need to authroize the Renovate Github App for your repository/organisation, where you would like to use it. Renovate will then automatically create a configuration file in your repository.</p>
-<h2 id="sveltos-manager">Sveltos Manager</h2>
-<p><strong>Note:</strong> The Sveltos manager was introduced with version <a href="https://github.com/renovatebot/renovate/releases/tag/38.124.0">38.124.0</a> of Renovate. You must use this version or newer to use the <a href="https://docs.renovatebot.com/modules/manager/sveltos/">Sveltos manager</a>.</p>
-<p>The Sveltos manager for renovate supports dependency management for <a href="https://projectsveltos.github.io/sveltos/addons/helm_charts/"><code>helmCharts</code></a> specs for all relevant sveltos resources. Refer to the upstream manager documentation for a detailed explanation.</p>
-<p>A very simple configuration for the Sveltos manager looks like this:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://docs.renovatebot.com/renovate-schema.json&quot;</span><span class="p">,</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;extends&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;config:recommended&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;:dependencyDashboard&quot;</span><span class="p">],</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;prHourlyLimit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;prConcurrentLimit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">&quot;branchConcurrentLimit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">&quot;sveltos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;fileMatch&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;^.*/*\\.yaml$&quot;</span><span class="p">]</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
+<h2 id="example-alert-when-expected-resources-are-missing">Example: Alert When Expected Resources Are Missing</h2>
+<p>In some scenarios the <strong>absence</strong> of a resource is itself a problem. For example, if deployments in the <code>metrics</code> namespace are mandatory, their absence indicates a broken rollout or misconfiguration and should trigger an alert.</p>
+<p>When a <code>HealthCheck</code>'s <code>resourceSelectors</code> match no resources in a cluster, Sveltos passes an empty <code>resources</code> table to the Lua <code>evaluate()</code> function. The script can check for this condition and return a top-level <code>status</code> and <code>message</code>. Sveltos then creates a synthetic entry in the <code>HealthCheckReport</code> (one per <code>ResourceSelector</code>) so the degraded state is visible and can trigger notifications.</p>
+<h3 id="healthcheck-definition">HealthCheck Definition</h3>
+<p>The <code>HealthCheck</code> below targets Deployments in the <code>metrics</code> namespace. It first checks whether any resources were found at all, and then — if they were — verifies their replica counts.</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-deployments</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">resourceSelectors</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apps&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">evaluateHealth</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="no">function evaluate()</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="no">local hs = {}</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="no">-- Surface a degraded status when no deployments exist in the namespace.</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="no">if resources == nil or #resources == 0 then</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="no">hs.status = &quot;Degraded&quot;</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="no">hs.message = &quot;No deployments found in namespace metrics&quot;</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="no">return hs</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="no">end</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">      </span><span class="no">local unhealthy = {}</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="no">for _, resource in ipairs(resources) do</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="no">local status = resource.status or {}</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">        </span><span class="no">local spec = resource.spec or {}</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="no">local metadata = resource.metadata or {}</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">        </span><span class="no">local desired = spec.replicas or 0</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">        </span><span class="no">local available = status.availableReplicas or 0</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">        </span><span class="no">local ready = status.readyReplicas or 0</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">        </span><span class="no">local unavailable = status.unavailableReplicas or 0</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">        </span><span class="no">local issue = nil</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">        </span><span class="no">if unavailable &gt; 0 then</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">          </span><span class="no">issue = string.format(&quot;Deployment %s/%s has %d unavailable replicas&quot;,</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">                  </span><span class="no">metadata.namespace, metadata.name, unavailable)</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">        </span><span class="no">elseif available &lt; desired then</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">          </span><span class="no">issue = string.format(&quot;Deployment %s/%s has %d available replicas (Expected %d)&quot;,</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">                  </span><span class="no">metadata.namespace, metadata.name, available, desired)</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">        </span><span class="no">elseif ready &lt; desired then</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">          </span><span class="no">issue = string.format(&quot;Deployment %s/%s has %d ready replicas (Expected %d)&quot;,</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">                  </span><span class="no">metadata.namespace, metadata.name, ready, desired)</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="w">        </span><span class="no">end</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">        </span><span class="no">if issue then</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">          </span><span class="no">table.insert(unhealthy, {resource = resource, message = issue, status = &quot;Degraded&quot;})</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="w">        </span><span class="no">end</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">      </span><span class="no">end</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="w">      </span><span class="no">if #unhealthy &gt; 0 then</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="w">        </span><span class="no">hs.resources = unhealthy</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="w">      </span><span class="no">end</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a><span class="w">      </span><span class="no">return hs</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="w">    </span><span class="no">end</span>
 </span></code></pre></div>
-<p>As stated in the <a href="https://docs.renovatebot.com/modules/manager/sveltos/">manager documentation</a>, you must define a <code>fileMatch</code> pattern. This pattern tells Renovate which files to consider for dependency updates. In the example above, Renovate will only consider files named <code>profile.yaml</code> for dependency updates. This could also be any yaml file (<code>**.yaml</code>) or the convetions you are using in your repository.</p>
-<p>With this config all the limits for branches and PRs are set to <code>0</code>, which means that Renovate will not be limited. This is required for large repositories with many dependencies. See more <a href="https://docs.renovatebot.com/configuration-options/">Configurations</a> for Renovate.</p>
+</div>
+<h3 id="clusterhealthcheck-definition">ClusterHealthCheck Definition</h3>
+<p>The <code>ClusterHealthCheck</code> below references the <code>HealthCheck</code> above and sends a Slack notification whenever the liveness state changes (e.g. deployments disappear or recover).</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nn">---</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterHealthCheck</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-deployments</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">livenessChecks</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-deployments</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">livenessSourceRef</span><span class="p">:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-deployments</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="nt">notifications</span><span class="p">:</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Slack</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="nt">notificationRef</span><span class="p">:</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span></code></pre></div>
+</div>
+<h3 id="observed-output">Observed Output</h3>
+<p>When the <code>metrics</code> namespace contains no Deployments, <code>sveltosctl show health</code> displays a synthetic degraded entry. The <code>NAME</code> column is empty because no individual resource was found — Sveltos creates one entry per <code>ResourceSelector</code> to identify which GVK and namespace had no matches.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>+-----------------------------+------------------------------+-----------+------+-------------------------------------------+
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>|           CLUSTER           |             GVK              | NAMESPACE | NAME |                  MESSAGE                  |
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>+-----------------------------+------------------------------+-----------+------+-------------------------------------------+
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>| default/clusterapi-workload | apps/v1, Kind=Deployment     | metrics   |      | No deployments found in namespace metrics |
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>+-----------------------------+------------------------------+-----------+------+-------------------------------------------+
+</span></code></pre></div>
+<p>Once deployments are present and healthy, the entry disappears and a recovery notification is sent.</p>
 
 
   <nav class="md-tags" >
@@ -4480,13 +4571,6 @@
       
       
       
-        <span class="md-tag">Sveltos</span>
-      
-    
-      
-      
-      
-      
         <span class="md-tag">add-ons</span>
       
     
@@ -4494,21 +4578,35 @@
       
       
       
-        <span class="md-tag">renovate</span>
+        <span class="md-tag">helm</span>
       
     
       
       
       
       
-        <span class="md-tag">dependencies</span>
+        <span class="md-tag">clusterapi</span>
       
     
       
       
       
       
-        <span class="md-tag">dependency</span>
+        <span class="md-tag">multi-tenancy</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Sveltos</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">Slack</span>
       
     
   </nav>
@@ -4545,7 +4643,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../template/examples/jsonnet_extension/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Support for Jsonnet">
+          <a href="../example_deployment_health_notification/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Deployment Health Notification">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -4555,20 +4653,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Example Support for Jsonnet
+                Example Deployment Health Notification
               </div>
             </div>
           </a>
         
         
           
-          <a href="../dryrun/" class="md-footer__link md-footer__link--next" aria-label="Next: DryRun">
+          <a href="../example_pod_with_outdated_mounted_data/" class="md-footer__link md-footer__link--next" aria-label="Next: Example Detecting Stale Configuration – Pods Using Outdated Secrets">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                DryRun
+                Example Detecting Stale Configuration – Pods Using Outdated Secrets
               </div>
             </div>
             <div class="md-footer__button md-icon">
