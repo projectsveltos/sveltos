@@ -1714,6 +1714,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#run-helm-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run Helm Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4661,6 +4672,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#run-helm-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run Helm Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5139,25 +5161,52 @@ Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
 </span></span><span id="__span-23-15"><a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="w">        </span><span class="nt">upgradeCRDs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
 </div>
-<h3 id="options">Options</h3>
-<p>Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the <a href="https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184">CRD</a>.</p>
+<h3 id="run-helm-tests">Run Helm Tests</h3>
+<p>Set <code>runTests: true</code> on a helmChart entry to have Sveltos automatically run <a href="https://helm.sh/docs/topics/chart_tests/">Helm test hooks</a> (<code>helm.sh/hook: test</code>) after each successful install or upgrade. Failing tests are treated as a deployment failure and the error is surfaced in the <code>ClusterSummary</code> status, providing an automated operational gate.</p>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nn">---</span>
 </span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XXXX</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
 </span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">helmCharts</span><span class="p p-Indicator">:</span>
-</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">&lt;REPO URL&gt;</span>
-</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">&lt;REPO NAME&gt;</span>
-</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">&lt;CHART NAME&gt;</span>
-</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">&lt;CHART VERSION&gt;</span>
-</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
-</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="hll"><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
-</span></span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="hll"><span class="w">    </span><span class="nt">options</span><span class="p">:</span>
-</span></span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">      </span><span class="nt">disableHooks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="hll"><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span></span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://charts.jetstack.io</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">jetstack</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">jetstack/cert-manager</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">v1.13.2</span>
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-24-18"><a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="w">    </span><span class="nt">runTests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>runTests</code> has no effect when the ClusterProfile <code>syncMode</code> is set to <code>DryRun</code>.</p>
+</div>
+<h3 id="options">Options</h3>
+<p>Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the <a href="https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184">CRD</a>.</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nn">---</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XXXX</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">helmCharts</span><span class="p p-Indicator">:</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">&lt;REPO URL&gt;</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">&lt;REPO NAME&gt;</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">&lt;CHART NAME&gt;</span>
+</span><span id="__span-25-12"><a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">&lt;CHART VERSION&gt;</span>
+</span><span id="__span-25-13"><a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
+</span><span id="__span-25-14"><a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="hll"><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
+</span></span><span id="__span-25-15"><a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a><span class="hll"><span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+</span></span><span id="__span-25-16"><a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="w">      </span><span class="nt">disableHooks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
 </div>
 
