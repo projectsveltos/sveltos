@@ -254,8 +254,9 @@ spec:
             properties:
               clusterInfo:
                 description: |-
-                  ClusterInfo reference all the cluster-api Cluster where Classifier
-                  has been/is being deployed
+                  Deprecated: ClusterInfo is deprecated and will be removed in a future release.
+                  Per-cluster deployment tracking (hash, status, failure message) is now stored in the
+                  Status of the corresponding ClassifierReport instance (one per classifier/cluster pair).
                 items:
                   properties:
                     cluster:
@@ -307,7 +308,7 @@ spec:
                       type: string
                     hash:
                       description: |-
-                        Hash represents the hash of the Classifier currently deployed
+                        Hash represents the hash of the resource currently deployed
                         in the Cluster
                       format: byte
                       type: string
@@ -329,8 +330,9 @@ spec:
                 type: array
               machingClusterStatuses:
                 description: |-
-                  MatchingClusterRefs reference all the cluster-api Cluster currently matching
-                  Classifier
+                  Deprecated: MachingClusterStatuses is deprecated and will be removed in a future release.
+                  Per-cluster matching and label-management status is now stored in the Status of the
+                  corresponding ClassifierReport instance (one per classifier/cluster pair).
                 items:
                   properties:
                     clusterRef:

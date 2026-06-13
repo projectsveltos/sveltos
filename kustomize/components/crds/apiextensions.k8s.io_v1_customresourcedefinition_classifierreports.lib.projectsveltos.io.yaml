@@ -70,6 +70,32 @@ spec:
           status:
             description: ClassifierReportStatus defines the observed state of ClassifierReport
             properties:
+              deploymentStatus:
+                description: DeploymentStatus is the current deployment status of
+                  the Classifier on the cluster.
+                enum:
+                - Provisioning
+                - Provisioned
+                - Failed
+                - FailedNonRetriable
+                - Removing
+                - Removed
+                type: string
+              failureMessage:
+                description: FailureMessage provides more information when DeploymentStatus
+                  is Failed.
+                type: string
+              hash:
+                description: Hash is the hash of the Classifier that was last successfully
+                  deployed to the cluster.
+                format: byte
+                type: string
+              managedLabels:
+                description: ManagedLabels lists the labels this Classifier instance
+                  is managing on the cluster.
+                items:
+                  type: string
+                type: array
               phase:
                 description: Phase represents the current phase of report.
                 enum:
@@ -77,6 +103,26 @@ spec:
                 - Delivering
                 - Processed
                 type: string
+              unmanagedLabels:
+                description: |-
+                  UnManagedLabels lists labels this Classifier instance would like to manage but cannot
+                  because a different Classifier instance is already managing them.
+                items:
+                  properties:
+                    failureMessage:
+                      description: |-
+                        FailureMessage is a human consumable message explaining the
+                        misconfiguration
+                      type: string
+                    key:
+                      description: |-
+                        Key represents a label Classifier would like to manage
+                        but cannot because currently managed by different instance
+                      type: string
+                  required:
+                  - key
+                  type: object
+                type: array
             type: object
         type: object
     served: true

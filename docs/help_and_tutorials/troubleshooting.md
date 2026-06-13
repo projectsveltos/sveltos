@@ -208,6 +208,38 @@ $ kubectl get clustersummary <clustersummary name> -n <clustersummary namespace>
 We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click [here](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) to join us.
 
 
+## Kubernetes Warning Events for Deployment Failures
+
+When Sveltos encounters certain failure conditions it emits a Kubernetes `Warning` event on the relevant `ClusterSummary`. These events surface the root cause immediately, without requiring log inspection.
+
+A Warning event is raised in the following situations:
+
+| Condition | Meaning |
+|-----------|---------|
+| **Conflict** | Two ClusterProfiles are trying to manage the same resource and their ownership rules conflict. |
+| **Missing referenced resource** | A ConfigMap, Secret, or other object referenced in the ClusterProfile does not exist. |
+| **Template instantiation error** | Template rendering failed with a non-retriable error (e.g. a missing key or a type mismatch in a template expression). |
+| **Max consecutive failures reached** | The controller gave up after hitting the maximum consecutive failure count for a feature. |
+
+### Viewing events
+
+```bash
+kubectl describe clustersummary <name> -n <namespace>
+```
+
+The `Events` section at the bottom of the output lists the Warning events with a `Reason` and `Message` field that identify the specific failure. For example:
+
+```
+Events:
+  Type     Reason                   Age   From              Message
+  ----     ------                   ----  ----              -------
+  Warning  MissingReferencedObject  2m    addon-controller  ConfigMap default/my-config not found
+  Warning  MaxFailuresReached       1m    addon-controller  feature Helm reached max consecutive failures; giving up
+```
+
+!!! tip
+    Event-watching tools (e.g. `kubectl get events -n <namespace> --field-selector involvedObject.name=<clustersummary-name>`) and observability platforms that ingest Kubernetes events will surface these warnings automatically.
+
 ## Debugging
 
 Sveltos provides a custom resource called `DebuggingConfiguration` that allows users to configure the log level for various system components. This is useful for troubleshooting specific issues by increasing verbosity.

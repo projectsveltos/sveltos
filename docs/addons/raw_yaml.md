@@ -220,6 +220,73 @@ Remember to adapt the provided resources to your specific repository structure, 
 $ kubectl create configmap nginx --from-file=namespace.yaml --from-file=deployment.yaml
 ```
 
+## Remote URL Sources
+
+Instead of storing YAML in a `ConfigMap` or `Secret`, a `PolicyRef` entry can point directly at an HTTP or HTTPS URL. This removes the ~1 MB size limit imposed by ConfigMaps and is useful for referencing upstream manifests such as operator releases hosted on GitHub.
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+Sveltos fetches the content on every reconciliation and redeploys only when the hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes):
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+      interval: 1h0m0s
+```
+
+### Authentication
+
+Private URLs are supported via a `secretRef`. The referenced Secret can contain any of the following keys:
+
+| Key | Description |
+|-----|-------------|
+| `token` | Bearer token sent as `Authorization: Bearer <token>` |
+| `username` / `password` | HTTP basic authentication credentials |
+| `caFile` | PEM-encoded CA certificate for TLS verification |
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: remote-auth
+  namespace: default
+stringData:
+  token: <bearer-token>
+```
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: https://private-server.example.com/manifests/app.yaml
+      secretRef:
+        name: remote-auth
+        namespace: default
+```
+
+### Template rendering
+
+Set `template: true` to treat the fetched content as a Go template. Sveltos instantiates it using management-cluster data, the same way it handles the `projectsveltos.io/template` annotation on a ConfigMap.
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: https://private-server.example.com/manifests/app.yaml
+      template: true
+```
+
 ## Subresources
 
 Sveltos can update specific subresources of a resource. This is achieved by leveraging the `projectsveltos.io/subresources` annotation. When the annotation is present on a resource referenced in the `PolicyRefs` section, Sveltos updates the designated subresources alongside the main resource. Subresources are specified as a comma-separated list within the annotation value.

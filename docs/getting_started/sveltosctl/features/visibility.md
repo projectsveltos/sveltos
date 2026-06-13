@@ -40,15 +40,18 @@ show addons command allows filtering by:
 - clusters' namespace
 - clusters' name
 - ClusterProfile
+- resource type (Helm releases only, or Kubernetes resources only)
 
 ```
 $ sveltosctl show addons --help
 Usage:
-  sveltosctl show features [options] [--namespace=<name>] [--cluster=<name>] [--clusterprofile=<name>] [--verbose]
+  sveltosctl show features [options] [--namespace=<name>] [--cluster=<name>] [--clusterprofile=<name>] [--helm-charts] [--resources] [--verbose]
 
      --namespace=<name>      Show features deployed in clusters in this namespace. If not specified all namespaces are considered.
      --cluster=<name>        Show features deployed in cluster with name. If not specified all cluster names are considered.
      --clusterprofile=<name> Show features deployed because of this clusterprofile. If not specified all clusterprofile names are considered.
+     --helm-charts           Show only Helm releases. Cannot be combined with --resources.
+     --resources             Show only Kubernetes resources. Cannot be combined with --helm-charts.
 ```
 
 ### show resources

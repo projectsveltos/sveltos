@@ -403,6 +403,25 @@ $ sveltosctl show addons
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
 ```
 
+## Bypassing Automatic Namespace Creation
+
+By default, Sveltos checks whether the target namespace exists in the managed cluster before deploying resources from a `kustomizationRef`, and creates it if missing. This requires cluster-wide `get` and `create` permissions for Namespaces.
+
+In multi-tenant or restricted RBAC environments, namespaces are often pre-provisioned and Sveltos may not have cluster-level namespace permissions. Set `skipNamespaceCreation: true` on the `kustomizationRef` entry to bypass the check-and-create step:
+
+```yaml hl_lines="9"
+spec:
+  kustomizationRefs:
+  - namespace: flux-system
+    name: flux-system
+    kind: GitRepository
+    path: ./overlays/production/
+    targetNamespace: production
+    skipNamespaceCreation: true
+```
+
+Sveltos will attempt to deploy resources directly into the existing namespace. If the namespace does not exist, the deployment will fail.
+
 ## Next Steps
 
 For a better understanding of the Sveltos and Flux integration, check out the Flux Sources examples [here](./example_flux_sources.md).
