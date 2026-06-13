@@ -92,16 +92,17 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
-        - classifiers/finalizers
-      verbs:
-        - update
-    - apiGroups:
-        - lib.projectsveltos.io
-      resources:
+        - classifierreports/status
         - classifiers/status
       verbs:
         - get
         - patch
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers/finalizers
+      verbs:
         - update
     - apiGroups:
         - lib.projectsveltos.io
@@ -163,12 +164,26 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.10.0
+                    - --version=v1.11.1
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
-                  image: docker.io/projectsveltos/classifier:v1.10.0
+                  env:
+                    - name: TOTAL_MEMORY_LIMIT
+                      valueFrom:
+                        resourceFieldRef:
+                            resource: limits.memory
+                    - name: GOMAXPROCS
+                      valueFrom:
+                        resourceFieldRef:
+                            resource: limits.cpu
+                    - name: NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.namespace
+                  image: docker.io/projectsveltos/classifier:v1.11.1
+                  imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -199,7 +214,32 @@ spec:
                         memory: 512Mi
                     requests:
                         cpu: 100m
-                        memory: 128Mi
+                        memory: 256Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+            initContainers:
+                - command:
+                    - /manager
+                  env:
+                    - name: NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.namespace
+                    - name: IS_INITIALIZATION
+                      value: "true"
+                  image: docker.io/projectsveltos/classifier:v1.11.1
+                  imagePullPolicy: IfNotPresent
+                  name: migrate
+                  resources:
+                    limits:
+                        cpu: 100m
+                        memory: 256Mi
+                    requests:
+                        cpu: 100m
+                        memory: 256Mi
                   securityContext:
                     allowPrivilegeEscalation: false
                     capabilities:

@@ -519,6 +519,35 @@ Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
             upgradeCRDs: true
     ```
 
+### Run Helm Tests
+
+Set `runTests: true` on a helmChart entry to have Sveltos automatically run [Helm test hooks](https://helm.sh/docs/topics/chart_tests/) (`helm.sh/hook: test`) after each successful install or upgrade. Failing tests are treated as a deployment failure and the error is surfaced in the `ClusterSummary` status, providing an automated operational gate.
+
+!!! example ""
+    ```yaml hl_lines="10"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: cert-manager
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://charts.jetstack.io
+        repositoryName:   jetstack
+        chartName:        jetstack/cert-manager
+        chartVersion:     v1.13.2
+        releaseName:      cert-manager
+        releaseNamespace: cert-manager
+        helmChartAction:  Install
+        runTests: true
+    ```
+
+!!! note
+    `runTests` has no effect when the ClusterProfile `syncMode` is set to `DryRun`.
+
 ### Options
 
 Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the [CRD](https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184).
