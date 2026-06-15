@@ -19010,6 +19010,8 @@ metadata:
     name: classifier-manager
     namespace: projectsveltos
 spec:
+    strategy:
+      type: Recreate
     replicas: 1
     selector:
         matchLabels:
