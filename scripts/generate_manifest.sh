@@ -72,6 +72,10 @@ do
         cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
         echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
         echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+    elif [[ "$f" == *"extra-role-agentless.yaml"* ]]; then
+        cat $f >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        echo "" >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
+        echo "---"  >> ../../manifest/agents_in_mgmt_cluster_manifest.yaml
     else
         cat $f >> ../../manifest/manifest.yaml
         echo "---"  >> ../../manifest/manifest.yaml

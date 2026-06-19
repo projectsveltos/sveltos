@@ -13,6 +13,7 @@ rm -rf  kustomize/overlays/agentless-mode/drift_detection_manager_rbac.yaml
 rm -rf  kustomize/overlays/agentless-mode/drift-detection-manager.yaml
 rm -rf  kustomize/overlays/agentless-mode/sveltos-agent.yaml
 rm -rf  kustomize/overlays/agentless-mode/sveltos_agent_rbac.yaml
+rm -rf  kustomize/overlays/agentless-mode/extra-role-agentless.yaml
 
 # libsveltos
 echo ""
@@ -66,6 +67,8 @@ do
 
     echo "Processing $f file..."
     if [[ "$f" == *"drift_detection_manager_rbac.yaml"* ]]; then
+        cp $f ../../kustomize/overlays/agentless-mode/.
+    elif [[ "$f" == *"extra-role-agentless.yaml"* ]]; then
         cp $f ../../kustomize/overlays/agentless-mode/.
     else
         cat $f >> ../../kustomize/base/addon-controller.yaml
