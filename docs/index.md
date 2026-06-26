@@ -73,6 +73,8 @@ Sveltos stands out for:
 - **Per-cluster templating**: Same definition, different values per cluster.
 - **Event framework and progressive rollouts**: Safe, automated, and adaptable.
 
+For a detailed breakdown of every component, which ones are optional, and how the two deployment modes differ in managed-cluster permissions, see the [Architecture](./internals/architecture.md) page.
+
 ## Sveltos at the Edge
 
 Running Kubernetes at the edge usually means a tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.
