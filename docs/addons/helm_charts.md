@@ -542,7 +542,8 @@ Set `runTests: true` on a helmChart entry to have Sveltos automatically run [Hel
         releaseName:      cert-manager
         releaseNamespace: cert-manager
         helmChartAction:  Install
-        runTests: true
+        options:
+          runTests: true
     ```
 
 !!! note
