@@ -222,17 +222,18 @@ $ kubectl create configmap nginx --from-file=namespace.yaml --from-file=deployme
 
 ## Remote URL Sources
 
-Instead of storing YAML in a `ConfigMap` or `Secret`, a `PolicyRef` entry can point directly at an HTTP or HTTPS URL. This removes the ~1 MB size limit imposed by ConfigMaps and is useful for referencing upstream manifests such as operator releases hosted on GitHub.
+Instead of storing YAML in a `ConfigMap` or `Secret`, a `PolicyRef` entry can point directly at a remote source. This removes the ~1 MB size limit imposed by ConfigMaps. Two source types are supported:
 
-```yaml
-spec:
-  policyRefs:
-  - deploymentType: Remote
-    remoteURL:
-      url: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
+| Scheme | Description |
+|--------|-------------|
+| `http://` / `https://` | HTTP/HTTPS endpoint returning raw YAML or JSON |
+| `oci://` | OCI registry artifact containing YAML manifests |
 
-Sveltos fetches the content on every reconciliation and redeploys only when the hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes):
+Sveltos fetches the content on every reconciliation and redeploys only when the content hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes).
+
+### HTTP/HTTPS
+
+Reference upstream manifests hosted on any HTTP/HTTPS endpoint. For example, operator releases hosted on GitHub.
 
 ```yaml
 spec:
@@ -243,25 +244,66 @@ spec:
       interval: 1h0m0s
 ```
 
+### OCI Registry
+
+Reference YAML manifests stored as OCI artifacts in any OCI-compliant registry. Sveltos pulls the artifact layers and extracts all **.yaml**, **.yml**, and **.json** files found inside:
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: oci://ghcr.io/my-org/my-manifests:v1.0.0
+      interval: 5m0s
+```
+
+The artifact can be produced with any OCI-compatible tool, for example with [ORAS}(https://github.com/oras-project/oras).
+
+```bash
+$ oras push ghcr.io/my-org/my-manifests:v1.0.0 manifests/
+```
+
 ### Authentication
 
-Private URLs are supported via a `secretRef`. The referenced Secret can contain any of the following keys:
+Private sources are supported via a `secretRef`. If a `namespace` is omitted, Sveltos defaults to the matching cluster's namespace. Both `name` and `namespace` are treated as Go templates, so they can reference cluster fields. An example can be found below.
+
+```yaml
+secretRef:
+  name: registry-auth-{{ .Cluster.metadata.name }}
+  namespace: "{{ .Cluster.metadata.namespace }}"
+```
+
+!!! note
+    Setting an explicit namespace (e.g. `projectsveltos`) allows a single Secret in the management cluster to be shared across multiple ClusterProfiles without replication.
+
+The Secret must use type `addons.projectsveltos.io/cluster-profile` and can contain the following keys:
 
 | Key | Description |
 |-----|-------------|
-| `token` | Bearer token sent as `Authorization: Bearer <token>` |
-| `username` / `password` | HTTP basic authentication credentials |
+| `token` | Bearer token (`Authorization: Bearer <token>`) — for HTTP endpoints and pre-obtained OCI registry tokens |
+| `username` / `password` | Basic auth for HTTP endpoints; for OCI registries (e.g. GHCR), provide the registry username and a PAT with `read:packages` scope |
 | `caFile` | PEM-encoded CA certificate for TLS verification |
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: remote-auth
-  namespace: default
-stringData:
-  token: <bearer-token>
+```bash
+$ kubectl create secret generic registry-auth \
+    --namespace=projectsveltos \
+    --from-literal=username=<username> \
+    --from-literal=password=<token-or-password> \
+    --type=addons.projectsveltos.io/cluster-profile
 ```
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: oci://ghcr.io/my-org/private-manifests:v1.0.0
+      secretRef:
+        name: registry-auth
+        namespace: projectsveltos
+```
+
+The same `secretRef` syntax applies to private HTTP endpoints.
 
 ```yaml
 spec:
@@ -270,8 +312,8 @@ spec:
     remoteURL:
       url: https://private-server.example.com/manifests/app.yaml
       secretRef:
-        name: remote-auth
-        namespace: default
+        name: registry-auth
+        namespace: projectsveltos
 ```
 
 ### Template rendering
@@ -283,7 +325,7 @@ spec:
   policyRefs:
   - deploymentType: Remote
     remoteURL:
-      url: https://private-server.example.com/manifests/app.yaml
+      url: oci://ghcr.io/my-org/my-manifests:v1.0.0
       template: true
 ```
 
