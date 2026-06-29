@@ -1332,17 +1332,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#common-flags" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common flags
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aws-eks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4517,17 +4506,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#common-flags" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common flags
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#aws-eks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4631,42 +4609,14 @@
 <p>Workload Identity registration requires Sveltos <strong>v1.12.0</strong> or later.</p>
 </div>
 <h2 id="register-a-cluster">Register a Cluster</h2>
-<p>Use <code>sveltosctl register cluster</code> with <code>--workload-identity-provider</code> and the provider-specific flags.</p>
-<h3 id="common-flags">Common flags</h3>
-<table>
-<thead>
-<tr>
-<th>Flag</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--workload-identity-provider</code></td>
-<td>Cloud provider. One of <code>aws</code>, <code>gcp</code>, <code>azure</code>.</td>
-</tr>
-<tr>
-<td><code>--workload-identity-endpoint</code></td>
-<td>API server URL of the managed cluster (e.g. <code>https://...</code>). Required.</td>
-</tr>
-<tr>
-<td><code>--workload-identity-ca-file</code></td>
-<td>Path to the CA certificate for the managed cluster API server. When provided, sveltosctl creates a <code>&lt;cluster&gt;-sveltos-ca</code> Secret and references it in the SveltosCluster.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>--workload-identity-provider</code> is mutually exclusive with <code>--kubeconfig</code> and <code>--fleet-cluster-context</code>.</p>
-</div>
+<p>When using workload identity, each cloud provider has a dedicated subcommand: <code>register cluster-eks</code> for Amazon EKS, <code>register cluster-gke</code> for Google GKE, and <code>register cluster-aks</code> for Azure AKS. If you are registering a cluster with a kubeconfig, use <code>register cluster</code> instead.</p>
 <h3 id="aws-eks">AWS (EKS)</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster-eks<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--namespace<span class="o">=</span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--cluster<span class="o">=</span>&lt;cluster-name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--workload-identity-provider<span class="o">=</span>aws<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--workload-identity-endpoint<span class="o">=</span>&lt;eks-api-server-url&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--workload-identity-ca-file<span class="o">=</span>/tmp/managed-ca.crt<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>--aws-cluster-name<span class="o">=</span>&lt;eks-cluster-name&gt;
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--endpoint<span class="o">=</span>&lt;eks-api-server-url&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--eks-cluster-name<span class="o">=</span>&lt;eks-cluster-name&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--ca-file<span class="o">=</span>/tmp/managed-ca.crt
 </span></code></pre></div>
 <table>
 <thead>
@@ -4678,32 +4628,41 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--aws-cluster-name</code></td>
+<td><code>--endpoint</code></td>
+<td>Yes</td>
+<td>API server URL of the EKS cluster (e.g. <code>https://...</code>).</td>
+</tr>
+<tr>
+<td><code>--eks-cluster-name</code></td>
 <td>Yes</td>
 <td>EKS cluster name. Embedded in the bearer token so the API server can identify the target cluster.</td>
 </tr>
 <tr>
-<td><code>--aws-role-arn</code></td>
+<td><code>--ca-file</code></td>
+<td>No</td>
+<td>Path to the CA certificate for the EKS API server. When provided, sveltosctl creates a <code>&lt;cluster&gt;-sveltos-ca</code> Secret and references it in the SveltosCluster.</td>
+</tr>
+<tr>
+<td><code>--role-arn</code></td>
 <td>No</td>
 <td>IAM role ARN to assume before generating the token. If omitted, the pod's own IRSA role is used directly.</td>
 </tr>
 <tr>
-<td><code>--aws-region</code></td>
+<td><code>--region</code></td>
 <td>No</td>
 <td>AWS region of the EKS cluster. Defaults to the <code>AWS_REGION</code> environment variable injected by IRSA.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="gcp-gke">GCP (GKE)</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster-gke<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--namespace<span class="o">=</span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--cluster<span class="o">=</span>&lt;cluster-name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--workload-identity-provider<span class="o">=</span>gcp<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--workload-identity-endpoint<span class="o">=</span>https://&lt;endpoint&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--workload-identity-ca-file<span class="o">=</span>/tmp/ca.crt<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>--gcp-project-id<span class="o">=</span>&lt;project-id&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>--gcp-cluster-name<span class="o">=</span>&lt;gke-cluster-name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span>--gcp-location<span class="o">=</span>&lt;region-or-zone&gt;
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--endpoint<span class="o">=</span>https://&lt;endpoint&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--project-id<span class="o">=</span>&lt;project-id&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--gke-cluster-name<span class="o">=</span>&lt;gke-cluster-name&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>--location<span class="o">=</span>&lt;region-or-zone&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>--ca-file<span class="o">=</span>/tmp/ca.crt
 </span></code></pre></div>
 <table>
 <thead>
@@ -4715,30 +4674,39 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--gcp-project-id</code></td>
+<td><code>--endpoint</code></td>
+<td>Yes</td>
+<td>API server URL of the GKE cluster (e.g. <code>https://34.x.x.x</code>).</td>
+</tr>
+<tr>
+<td><code>--project-id</code></td>
 <td>Yes</td>
 <td>GCP project ID.</td>
 </tr>
 <tr>
-<td><code>--gcp-cluster-name</code></td>
+<td><code>--gke-cluster-name</code></td>
 <td>Yes</td>
 <td>GKE cluster name.</td>
 </tr>
 <tr>
-<td><code>--gcp-location</code></td>
+<td><code>--location</code></td>
 <td>Yes</td>
 <td>GCP region or zone (e.g. <code>us-central1-a</code>).</td>
+</tr>
+<tr>
+<td><code>--ca-file</code></td>
+<td>No</td>
+<td>Path to the CA certificate for the GKE API server.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="azure-aks">Azure (AKS)</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster-aks<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--namespace<span class="o">=</span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cluster<span class="o">=</span>&lt;cluster-name&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--workload-identity-provider<span class="o">=</span>azure<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--workload-identity-endpoint<span class="o">=</span>https://&lt;aks-api-server&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--azure-tenant-id<span class="o">=</span>&lt;tenant-id&gt;<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--azure-client-id<span class="o">=</span>&lt;client-id&gt;
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--endpoint<span class="o">=</span>https://&lt;aks-api-server&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--tenant-id<span class="o">=</span>&lt;tenant-id&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--client-id<span class="o">=</span>&lt;client-id&gt;
 </span></code></pre></div>
 <table>
 <thead>
@@ -4750,27 +4718,37 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--azure-tenant-id</code></td>
+<td><code>--endpoint</code></td>
+<td>Yes</td>
+<td>API server URL of the AKS cluster (e.g. <code>https://my-aks.hcp.eastus.azmk8s.io</code>).</td>
+</tr>
+<tr>
+<td><code>--tenant-id</code></td>
 <td>Yes</td>
 <td>Azure AD tenant ID.</td>
 </tr>
 <tr>
-<td><code>--azure-client-id</code></td>
+<td><code>--client-id</code></td>
 <td>Yes</td>
 <td>Client ID of the managed identity or app registration federated with the management cluster service account.</td>
 </tr>
 <tr>
-<td><code>--azure-subscription-id</code></td>
+<td><code>--ca-file</code></td>
+<td>No</td>
+<td>Path to the CA certificate for the AKS API server.</td>
+</tr>
+<tr>
+<td><code>--subscription-id</code></td>
 <td>No</td>
 <td>Azure subscription containing the AKS cluster.</td>
 </tr>
 <tr>
-<td><code>--azure-resource-group</code></td>
+<td><code>--resource-group</code></td>
 <td>No</td>
 <td>Resource group containing the AKS cluster.</td>
 </tr>
 <tr>
-<td><code>--azure-cluster-name</code></td>
+<td><code>--aks-cluster-name</code></td>
 <td>No</td>
 <td>AKS cluster name.</td>
 </tr>
@@ -4783,10 +4761,10 @@
 </span></code></pre></div>
 <p>This deletes the SveltosCluster and the <code>&lt;cluster&gt;-sveltos-ca</code> Secret if one was created.</p>
 <h2 id="end-to-end-setup-guides">End-to-end Setup Guides</h2>
-<p>The guides below walk through the full cloud-side setup required before running <code>sveltosctl register cluster</code>.</p>
+<p>The guides below walk through the full cloud-side setup required before running the registration command.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These guides show one specific way we configured each cloud provider. They are not the only valid approach. If you already know how to set up IRSA, GKE Workload Identity, or Azure federated credentials for a Kubernetes workload, you can skip straight to the <code>sveltosctl register cluster</code> command above — the cloud setup only needs to end with the management cluster pod having permission to call the managed cluster's API server.</p>
+<p>These guides show one specific way we configured each cloud provider. They are not the only valid approach. If you already know how to set up IRSA, GKE Workload Identity, or Azure federated credentials for a Kubernetes workload, you can skip straight to the <code>sveltosctl register cluster-eks/cluster-gke/cluster-aks</code> command above. The cloud setup only needs to end with the management cluster pod having permission to call the managed cluster's API server.</p>
 </div>
 <details class="example">
 <summary>EKS — IRSA-based workload identity</summary>
@@ -4877,13 +4855,12 @@ in namespace <code>projectsveltos</code>.</p>
 </span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>/tmp/managed-ca.crt
 </span></code></pre></div>
 <p><strong>Step 8 — Register the managed cluster</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster-eks<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span>--namespace<span class="o">=</span>projectsveltos<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>--cluster<span class="o">=</span>eks-managed<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span>--workload-identity-provider<span class="o">=</span>aws<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span>--workload-identity-endpoint<span class="o">=</span><span class="si">${</span><span class="nv">ENDPOINT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span>--workload-identity-ca-file<span class="o">=</span>/tmp/managed-ca.crt<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span>--aws-cluster-name<span class="o">=</span><span class="si">${</span><span class="nv">MANAGED_CLUSTER</span><span class="si">}</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span>--endpoint<span class="o">=</span><span class="si">${</span><span class="nv">ENDPOINT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span>--eks-cluster-name<span class="o">=</span><span class="si">${</span><span class="nv">MANAGED_CLUSTER</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span>--ca-file<span class="o">=</span>/tmp/managed-ca.crt
 </span></code></pre></div>
 <p><strong>Step 9 — Verify</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>eks-managed<span class="w"> </span>-n<span class="w"> </span>projectsveltos
@@ -4898,7 +4875,7 @@ in namespace <code>projectsveltos</code>.</p>
 </span></code></pre></div>
 <p><em>OIDC provider missing</em>: <code>aws iam list-open-id-connect-providers</code> returns an empty list. Re-run step 3.</p>
 <p><em>Cluster created as root</em>: Only the creating IAM entity has access by default. Delete and recreate the cluster as your IAM user, or add the IAM user via an EKS access entry using root credentials.</p>
-<p><em>AWS_REGION not set</em>: <code>--aws-region</code> is optional and falls back to the <code>AWS_REGION</code> environment variable injected by IRSA. Set it explicitly in the flag if you see a region error.</p>
+<p><em>AWS_REGION not set</em>: <code>--region</code> is optional and falls back to the <code>AWS_REGION</code> environment variable injected by IRSA. Set it explicitly in the flag if you see a region error.</p>
 </details>
 <details class="example">
 <summary>GKE — Workload Identity</summary>
@@ -4973,15 +4950,14 @@ same GCP project.</p>
 </span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>/tmp/ca.crt
 </span></code></pre></div>
 <p><strong>Step 9 — Register the managed cluster</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster-gke<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span>--namespace<span class="o">=</span>projectsveltos<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span>--cluster<span class="o">=</span>gke-managed<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span>--workload-identity-provider<span class="o">=</span>gcp<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span>--workload-identity-endpoint<span class="o">=</span>https://<span class="si">${</span><span class="nv">ENDPOINT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span>--workload-identity-ca-file<span class="o">=</span>/tmp/ca.crt<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--gcp-project-id<span class="o">=</span><span class="si">${</span><span class="nv">PROJECT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span>--gcp-cluster-name<span class="o">=</span><span class="si">${</span><span class="nv">MANAGED_CLUSTER</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">  </span>--gcp-location<span class="o">=</span><span class="si">${</span><span class="nv">ZONE</span><span class="si">}</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span>--endpoint<span class="o">=</span>https://<span class="si">${</span><span class="nv">ENDPOINT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span>--project-id<span class="o">=</span><span class="si">${</span><span class="nv">PROJECT</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span>--gke-cluster-name<span class="o">=</span><span class="si">${</span><span class="nv">MANAGED_CLUSTER</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--location<span class="o">=</span><span class="si">${</span><span class="nv">ZONE</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span>--ca-file<span class="o">=</span>/tmp/ca.crt
 </span></code></pre></div>
 <p><strong>Step 10 — Verify</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>gke-managed<span class="w"> </span>-n<span class="w"> </span>projectsveltos
