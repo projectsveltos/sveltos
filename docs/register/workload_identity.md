@@ -30,76 +30,68 @@ No kubeconfig `Secret` is stored in the Sveltos management cluster. The credenti
 
 ## Register a Cluster
 
-Use `sveltosctl register cluster` with `--workload-identity-provider` and the provider-specific flags.
-
-### Common flags
-
-| Flag | Description |
-|------|-------------|
-| `--workload-identity-provider` | Cloud provider. One of `aws`, `gcp`, `azure`. |
-| `--workload-identity-endpoint` | API server URL of the managed cluster (e.g. `https://...`). Required. |
-| `--workload-identity-ca-file` | Path to the CA certificate for the managed cluster API server. When provided, sveltosctl creates a `<cluster>-sveltos-ca` Secret and references it in the SveltosCluster. |
-
-!!! note
-    `--workload-identity-provider` is mutually exclusive with `--kubeconfig` and `--fleet-cluster-context`.
+When using workload identity, each cloud provider has a dedicated subcommand: `register cluster-eks` for Amazon EKS, `register cluster-gke` for Google GKE, and `register cluster-aks` for Azure AKS. If you are registering a cluster with a kubeconfig, use `register cluster` instead.
 
 ### AWS (EKS)
 
 ```bash
-$ sveltosctl register cluster \
+$ sveltosctl register cluster-eks \
   --namespace=<namespace> \
   --cluster=<cluster-name> \
-  --workload-identity-provider=aws \
-  --workload-identity-endpoint=<eks-api-server-url> \
-  --workload-identity-ca-file=/tmp/managed-ca.crt \
-  --aws-cluster-name=<eks-cluster-name>
+  --endpoint=<eks-api-server-url> \
+  --eks-cluster-name=<eks-cluster-name> \
+  --ca-file=/tmp/managed-ca.crt
 ```
 
 | Flag | Required | Description |
 |------|----------|-------------|
-| `--aws-cluster-name` | Yes | EKS cluster name. Embedded in the bearer token so the API server can identify the target cluster. |
-| `--aws-role-arn` | No | IAM role ARN to assume before generating the token. If omitted, the pod's own IRSA role is used directly. |
-| `--aws-region` | No | AWS region of the EKS cluster. Defaults to the `AWS_REGION` environment variable injected by IRSA. |
+| `--endpoint` | Yes | API server URL of the EKS cluster (e.g. `https://...`). |
+| `--eks-cluster-name` | Yes | EKS cluster name. Embedded in the bearer token so the API server can identify the target cluster. |
+| `--ca-file` | No | Path to the CA certificate for the EKS API server. When provided, sveltosctl creates a `<cluster>-sveltos-ca` Secret and references it in the SveltosCluster. |
+| `--role-arn` | No | IAM role ARN to assume before generating the token. If omitted, the pod's own IRSA role is used directly. |
+| `--region` | No | AWS region of the EKS cluster. Defaults to the `AWS_REGION` environment variable injected by IRSA. |
 
 ### GCP (GKE)
 
 ```bash
-$ sveltosctl register cluster \
+$ sveltosctl register cluster-gke \
   --namespace=<namespace> \
   --cluster=<cluster-name> \
-  --workload-identity-provider=gcp \
-  --workload-identity-endpoint=https://<endpoint> \
-  --workload-identity-ca-file=/tmp/ca.crt \
-  --gcp-project-id=<project-id> \
-  --gcp-cluster-name=<gke-cluster-name> \
-  --gcp-location=<region-or-zone>
+  --endpoint=https://<endpoint> \
+  --project-id=<project-id> \
+  --gke-cluster-name=<gke-cluster-name> \
+  --location=<region-or-zone> \
+  --ca-file=/tmp/ca.crt
 ```
 
 | Flag | Required | Description |
 |------|----------|-------------|
-| `--gcp-project-id` | Yes | GCP project ID. |
-| `--gcp-cluster-name` | Yes | GKE cluster name. |
-| `--gcp-location` | Yes | GCP region or zone (e.g. `us-central1-a`). |
+| `--endpoint` | Yes | API server URL of the GKE cluster (e.g. `https://34.x.x.x`). |
+| `--project-id` | Yes | GCP project ID. |
+| `--gke-cluster-name` | Yes | GKE cluster name. |
+| `--location` | Yes | GCP region or zone (e.g. `us-central1-a`). |
+| `--ca-file` | No | Path to the CA certificate for the GKE API server. |
 
 ### Azure (AKS)
 
 ```bash
-$ sveltosctl register cluster \
+$ sveltosctl register cluster-aks \
   --namespace=<namespace> \
   --cluster=<cluster-name> \
-  --workload-identity-provider=azure \
-  --workload-identity-endpoint=https://<aks-api-server> \
-  --azure-tenant-id=<tenant-id> \
-  --azure-client-id=<client-id>
+  --endpoint=https://<aks-api-server> \
+  --tenant-id=<tenant-id> \
+  --client-id=<client-id>
 ```
 
 | Flag | Required | Description |
 |------|----------|-------------|
-| `--azure-tenant-id` | Yes | Azure AD tenant ID. |
-| `--azure-client-id` | Yes | Client ID of the managed identity or app registration federated with the management cluster service account. |
-| `--azure-subscription-id` | No | Azure subscription containing the AKS cluster. |
-| `--azure-resource-group` | No | Resource group containing the AKS cluster. |
-| `--azure-cluster-name` | No | AKS cluster name. |
+| `--endpoint` | Yes | API server URL of the AKS cluster (e.g. `https://my-aks.hcp.eastus.azmk8s.io`). |
+| `--tenant-id` | Yes | Azure AD tenant ID. |
+| `--client-id` | Yes | Client ID of the managed identity or app registration federated with the management cluster service account. |
+| `--ca-file` | No | Path to the CA certificate for the AKS API server. |
+| `--subscription-id` | No | Azure subscription containing the AKS cluster. |
+| `--resource-group` | No | Resource group containing the AKS cluster. |
+| `--aks-cluster-name` | No | AKS cluster name. |
 
 ## Deregister a Cluster
 
@@ -113,10 +105,10 @@ This deletes the SveltosCluster and the `<cluster>-sveltos-ca` Secret if one was
 
 ## End-to-end Setup Guides
 
-The guides below walk through the full cloud-side setup required before running `sveltosctl register cluster`.
+The guides below walk through the full cloud-side setup required before running the registration command.
 
 !!! note
-    These guides show one specific way we configured each cloud provider. They are not the only valid approach. If you already know how to set up IRSA, GKE Workload Identity, or Azure federated credentials for a Kubernetes workload, you can skip straight to the `sveltosctl register cluster` command above — the cloud setup only needs to end with the management cluster pod having permission to call the managed cluster's API server.
+    These guides show one specific way we configured each cloud provider. They are not the only valid approach. If you already know how to set up IRSA, GKE Workload Identity, or Azure federated credentials for a Kubernetes workload, you can skip straight to the `sveltosctl register cluster-eks/cluster-gke/cluster-aks` command above. The cloud setup only needs to end with the management cluster pod having permission to call the managed cluster's API server.
 
 ??? example "EKS — IRSA-based workload identity"
 
@@ -240,13 +232,12 @@ The guides below walk through the full cloud-side setup required before running 
     **Step 8 — Register the managed cluster**
 
     ```bash
-    $ sveltosctl register cluster \
+    $ sveltosctl register cluster-eks \
       --namespace=projectsveltos \
       --cluster=eks-managed \
-      --workload-identity-provider=aws \
-      --workload-identity-endpoint=${ENDPOINT} \
-      --workload-identity-ca-file=/tmp/managed-ca.crt \
-      --aws-cluster-name=${MANAGED_CLUSTER}
+      --endpoint=${ENDPOINT} \
+      --eks-cluster-name=${MANAGED_CLUSTER} \
+      --ca-file=/tmp/managed-ca.crt
     ```
 
     **Step 9 — Verify**
@@ -272,7 +263,7 @@ The guides below walk through the full cloud-side setup required before running 
 
     *Cluster created as root*: Only the creating IAM entity has access by default. Delete and recreate the cluster as your IAM user, or add the IAM user via an EKS access entry using root credentials.
 
-    *AWS_REGION not set*: `--aws-region` is optional and falls back to the `AWS_REGION` environment variable injected by IRSA. Set it explicitly in the flag if you see a region error.
+    *AWS_REGION not set*: `--region` is optional and falls back to the `AWS_REGION` environment variable injected by IRSA. Set it explicitly in the flag if you see a region error.
 
 ??? example "GKE — Workload Identity"
 
@@ -381,15 +372,14 @@ The guides below walk through the full cloud-side setup required before running 
     **Step 9 — Register the managed cluster**
 
     ```bash
-    $ sveltosctl register cluster \
+    $ sveltosctl register cluster-gke \
       --namespace=projectsveltos \
       --cluster=gke-managed \
-      --workload-identity-provider=gcp \
-      --workload-identity-endpoint=https://${ENDPOINT} \
-      --workload-identity-ca-file=/tmp/ca.crt \
-      --gcp-project-id=${PROJECT} \
-      --gcp-cluster-name=${MANAGED_CLUSTER} \
-      --gcp-location=${ZONE}
+      --endpoint=https://${ENDPOINT} \
+      --project-id=${PROJECT} \
+      --gke-cluster-name=${MANAGED_CLUSTER} \
+      --location=${ZONE} \
+      --ca-file=/tmp/ca.crt
     ```
 
     **Step 10 — Verify**
