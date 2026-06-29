@@ -94,6 +94,44 @@ $ sveltosctl show usage
 +----------------+--------------------+----------------------------+-------------------------------------+
 ```
 
+### show classifier-labels
+
+*show classifier-labels* displays labels that `Classifier` and `ManagementClusterClassifier` instances are actively managing on each cluster, along with the name of the instance that owns each label.
+
+The displayed information are:
+
+- The CAPI/Sveltos Cluster in the form namespace/name;
+- Label key and value;
+- The name of the `Classifier` or `ManagementClusterClassifier` instance managing the label;
+- The type (`Classifier` or `ManagementClusterClassifier`).
+
+```bash
+$ sveltosctl show classifier-labels
++-----------------------------+-------------+------------+-------------------------+----------------------------+
+|           CLUSTER           |     KEY     |   VALUE    |      CLASSIFIER/MCC     |           TYPE             |
++-----------------------------+-------------+------------+-------------------------+----------------------------+
+| capi-clusters/prod-eu1      | env         | production | tag-production-clusters | ManagementClusterClassifier|
+| capi-clusters/prod-eu1      | cost-centre | platform   | tag-production-clusters | ManagementClusterClassifier|
+| capi-clusters/staging-eu1   | gatekeeper  | v3-10      | deploy-gatekeeper-3-10  | Classifier                 |
++-----------------------------+-------------+------------+-------------------------+----------------------------+
+```
+
+*show classifier-labels* allows filtering by:
+
+- clusters' namespace
+- clusters' name
+
+Pass `--warnings` to display only label conflicts, where two instances are competing to own the same label key on the same cluster:
+
+```bash
+$ sveltosctl show classifier-labels --warnings
++-----------------------------+------+------------------+------------+----------------------------------------------+
+|           CLUSTER           | KEY  |    WANTED BY     |    TYPE    |                   CONFLICT                   |
++-----------------------------+------+------------------+------------+----------------------------------------------+
+| capi-clusters/prod-eu1      | env  | other-classifier | Classifier | label already managed by tag-production-...  |
++-----------------------------+------+------------------+------------+----------------------------------------------+
+```
+
 ### show admin-rbac
 
 *show admin-rbac* can be used to display permissions granted to tenant admins in each managed clusters by the platform admin.
