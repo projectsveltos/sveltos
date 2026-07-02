@@ -11,7 +11,7 @@ authors:
 
 # Sveltos Controllers and Agents
 
-Sveltos runs as a set of controllers in the management cluster, backed by installation jobs and per-cluster agents. Some controllers are mandatory and cannot be disabled, while others are optional and can be turned on or off depending on the features in use. This page outlines each component and its role. For more details about Sveltos' architecture, take a look at the [comprehensive documentation](../architecture/architecture.md).
+Sveltos runs as a set of controllers in the management cluster, backed by installation jobs and per-cluster agents. Some controllers are mandatory and cannot be disabled, while others are optional and can be turned on or off depending on the features in use. This page outlines each component and its role. For more details about Sveltos' architecture, take a look at the [comprehensive documentation](../architecture/architecture.md), or for a quick reference, check out the [visual representation](https://github.com/projectsveltos/sveltos/blob/main/docs/assets/architecture-controllers.png).
 
 ## Core Controllers (Mandatory)
 

@@ -33,4 +33,8 @@ Sveltos comes with a rich set of features designed for the modern era of Continu
 
 ## Sveltos for Edge Deployments
 
-Sveltos is built with edge constraints in mind. Agents are lightweight and only deploy what is actually needed. Resource consumption scales with what you ask Sveltos to do.Nothing more. To explore Sveltos' capabilities at a large scale, take a look at [Artem's Lajko post "GitOps for 15,000+ Clusters: What Large-Scale Testing with vCluster Taught Us"](https://itnext.io/gitops-for-15-000-clusters-what-large-scale-testing-with-vcluster-taught-us-41e4b0d43e0b).
+Sveltos is built with edge constraints in mind. Agents are lightweight and only deploy what is actually needed. Resource consumption scales with what you ask Sveltos to do.Nothing more. To explore Sveltos' capabilities at a large scale, take a look at [Artem Lajko's post "GitOps for 15,000+ Clusters: What Large-Scale Testing with vCluster Taught Us"](https://itnext.io/gitops-for-15-000-clusters-what-large-scale-testing-with-vcluster-taught-us-41e4b0d43e0b).
+
+## Next Steps
+
+To get an understanding of the Sveltos architecture and the individual components, continue with the [architecture](../architecture/architecture.md) section. To get started with Sveltos, take a look at the [quick start guide](../../getting_started/install/quick_start.md) or go directly to the [Sveltos installation](../../getting_started/install/install.md) and the [registration details](../../register/register-cluster.md).
