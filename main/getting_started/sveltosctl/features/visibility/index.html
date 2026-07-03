@@ -1258,6 +1258,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#show-classifier-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show classifier-labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#show-admin-rbac" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3139,6 +3150,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../../../features/mgmt_cluster_classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classify from Management Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -3148,10 +3187,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_11" >
         
           
-          <label class="md-nav__link" for="__nav_9_10" id="__nav_9_10_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_11" id="__nav_9_11_label" tabindex="0">
             
   
   
@@ -3169,8 +3208,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_10">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_11">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4720,6 +4759,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#show-classifier-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show classifier-labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#show-admin-rbac" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4821,21 +4871,52 @@
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>| ConfigMap      | default            | kyverno-disallow-gateway   | default/sveltos-management-workload |
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>+----------------+--------------------+----------------------------+-------------------------------------+
 </span></code></pre></div>
+<h3 id="show-classifier-labels">show classifier-labels</h3>
+<p><em>show classifier-labels</em> displays labels that <code>Classifier</code> and <code>ManagementClusterClassifier</code> instances are actively managing on each cluster, along with the name of the instance that owns each label.</p>
+<p>The displayed information are:</p>
+<ul>
+<li>The CAPI/Sveltos Cluster in the form namespace/name;</li>
+<li>Label key and value;</li>
+<li>The name of the <code>Classifier</code> or <code>ManagementClusterClassifier</code> instance managing the label;</li>
+<li>The type (<code>Classifier</code> or <code>ManagementClusterClassifier</code>).</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>classifier-labels
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>+-----------------------------+-------------+------------+-------------------------+----------------------------+
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">|</span><span class="w">           </span>CLUSTER<span class="w">           </span><span class="p">|</span><span class="w">     </span>KEY<span class="w">     </span><span class="p">|</span><span class="w">   </span>VALUE<span class="w">    </span><span class="p">|</span><span class="w">      </span>CLASSIFIER/MCC<span class="w">     </span><span class="p">|</span><span class="w">           </span>TYPE<span class="w">             </span><span class="p">|</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>+-----------------------------+-------------+------------+-------------------------+----------------------------+
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">|</span><span class="w"> </span>capi-clusters/prod-eu1<span class="w">      </span><span class="p">|</span><span class="w"> </span>env<span class="w">         </span><span class="p">|</span><span class="w"> </span>production<span class="w"> </span><span class="p">|</span><span class="w"> </span>tag-production-clusters<span class="w"> </span><span class="p">|</span><span class="w"> </span>ManagementClusterClassifier<span class="p">|</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">|</span><span class="w"> </span>capi-clusters/prod-eu1<span class="w">      </span><span class="p">|</span><span class="w"> </span>cost-centre<span class="w"> </span><span class="p">|</span><span class="w"> </span>platform<span class="w">   </span><span class="p">|</span><span class="w"> </span>tag-production-clusters<span class="w"> </span><span class="p">|</span><span class="w"> </span>ManagementClusterClassifier<span class="p">|</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">|</span><span class="w"> </span>capi-clusters/staging-eu1<span class="w">   </span><span class="p">|</span><span class="w"> </span>gatekeeper<span class="w">  </span><span class="p">|</span><span class="w"> </span>v3-10<span class="w">      </span><span class="p">|</span><span class="w"> </span>deploy-gatekeeper-3-10<span class="w">  </span><span class="p">|</span><span class="w"> </span>Classifier<span class="w">                 </span><span class="p">|</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>+-----------------------------+-------------+------------+-------------------------+----------------------------+
+</span></code></pre></div>
+<p><em>show classifier-labels</em> allows filtering by:</p>
+<ul>
+<li>clusters' namespace</li>
+<li>clusters' name</li>
+</ul>
+<p>Pass <code>--warnings</code> to display only label conflicts, where two instances are competing to own the same label key on the same cluster:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>classifier-labels<span class="w"> </span>--warnings
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+-----------------------------+------+------------------+------------+----------------------------------------------+
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">|</span><span class="w">           </span>CLUSTER<span class="w">           </span><span class="p">|</span><span class="w"> </span>KEY<span class="w">  </span><span class="p">|</span><span class="w">    </span>WANTED<span class="w"> </span>BY<span class="w">     </span><span class="p">|</span><span class="w">    </span>TYPE<span class="w">    </span><span class="p">|</span><span class="w">                   </span>CONFLICT<span class="w">                   </span><span class="p">|</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+-----------------------------+------+------------------+------------+----------------------------------------------+
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">|</span><span class="w"> </span>capi-clusters/prod-eu1<span class="w">      </span><span class="p">|</span><span class="w"> </span>env<span class="w">  </span><span class="p">|</span><span class="w"> </span>other-classifier<span class="w"> </span><span class="p">|</span><span class="w"> </span>Classifier<span class="w"> </span><span class="p">|</span><span class="w"> </span>label<span class="w"> </span>already<span class="w"> </span>managed<span class="w"> </span>by<span class="w"> </span>tag-production-...<span class="w">  </span><span class="p">|</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>+-----------------------------+------+------------------+------------+----------------------------------------------+
+</span></code></pre></div>
 <h3 id="show-admin-rbac">show admin-rbac</h3>
 <p><em>show admin-rbac</em> can be used to display permissions granted to tenant admins in each managed clusters by the platform admin.</p>
 <p>If we have two clusters, a ClusterAPI powered one and a SveltosCluster, both matching label selector
 <code>env=internal</code> and we post <a href="https://raw.githubusercontent.com/projectsveltos/access-manager/main/examples/shared_access.yaml">RoleRequests</a>, we get:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ sveltosctl show admin-rbac
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>|                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>| Cluster:default/sveltos-management-workload | eng   | build          | *          | *         | *              | *     |
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>| Cluster:default/sveltos-management-workload | eng   | ci-cd          | *          | *         | *              | *     |
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>| Cluster:default/sveltos-management-workload | hr    | human-resource | *          | *         | *              | *     |
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>| SveltosCluster:gke/prod-cluster             | eng   | build          | *          | *         | *              | *     |
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>| SveltosCluster:gke/prod-cluster             | eng   | ci-cd          | *          | *         | *              | *     |
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>| SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ sveltosctl show admin-rbac
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>|                   CLUSTER                   | ADMIN |   NAMESPACE    | API GROUPS | RESOURCES | RESOURCE NAMES | VERBS |
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>| Cluster:default/sveltos-management-workload | eng   | build          | *          | *         | *              | *     |
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>| Cluster:default/sveltos-management-workload | eng   | ci-cd          | *          | *         | *              | *     |
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>| Cluster:default/sveltos-management-workload | hr    | human-resource | *          | *         | *              | *     |
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>| SveltosCluster:gke/prod-cluster             | eng   | build          | *          | *         | *              | *     |
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>| SveltosCluster:gke/prod-cluster             | eng   | ci-cd          | *          | *         | *              | *     |
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>| SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 </span></code></pre></div>
 
 
