@@ -131,48 +131,6 @@ To read more about the Classifier configuration, with examples using the resourc
 1. Classify clusters based on the number of namespaces [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/resources.yaml)
 1. Classify clusters based on Kubernetes version and resources [classifier.yaml](https://raw.githubusercontent.com/projectsveltos/classifier/main/examples/multiple_constraints.yaml)
 
-## Use Case: Metrics-based Classifier
-
-There are cases when end-users want to deploy add-ons and applications in Kubernetes clusters that are not heavily loaded. That means, based on the CPU, memory, or any other metric, controlling what will get deployed and where.
-
-We can achieve this functionality by letting the _deployedResourceConstraint_  reference resources in the management cluster. The available feature request is located [here](https://github.com/projectsveltos/classifier/issues/375).
-
-### Example
-
-!!! example ""
-    ```yaml
-    apiVersion: lib.projectsveltos.io/v1beta1
-    kind: Classifier
-    metadata:
-      name: low-load
-    spec:
-      classifierLabels:
-      - key: load # Label applied to matching clusters
-        value: low
-      deployedResourceConstraint:
-        resourceSelectors:
-        - group: metrics.keptn.sh
-          version: v1alpha1 # Adjust based on the Keptn version
-          kind: KeptnMetric
-          namespace: sveltos-metrics # KeptnMetric runs in the mgmt cluster
-          name: keptnmetric-cpu-{{ .cluster }}
-          evaluate: | # Use Lua for conditional checks
-            function evaluate()
-              local hs = { matching = false, message = "" }
-              local v = tonumber(obj.status.value)
-              if v and v < 0.5 then
-                hs.matching = true          -- cluster is “low load”
-              else
-                hs.message = "CPU util " .. tostring(v)
-              end
-              return hs
-            end
-      # <--- new field proposed in #375
-      sourceClusterScope: Local
-    ```
-
-How does the proposed resource work? The _KeptnMetric.status.value_ already carries the live metric. The `Lua` code used will evaluate the block checks and the threshold directly. No additional controller is required. When the defined metric goes over the defined limit, the label is either added or removed, and any `ClusterProfile` will react automatically.
-
 ## Classifier CRD - Deep Dive
 
 [Classifier CRD](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/classifier_types.go) is the CRD used to instructs Sveltos on how to classify a cluster.
@@ -259,3 +217,12 @@ The Lua function must return a struct with:
 1. *worker-number*: Number of workers performing long-running task. By default, this is set to **20**. If the number of `Classifier` instances is in the hundreds, please consider increasing this
 1. *report-mode*: By default, the `Classifier` controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each `Classifier` Agent send back ClassifierReport to the management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are the update of ClassifierReports
 1. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable from each managed cluster
+
+### How labels are applied to clusters
+
+The classifier controller applies labels to cluster objects using a standard Kubernetes `Update` call (not Server-Side Apply and not a strategic merge patch). The controller reads the current cluster object, modifies the labels map in memory, and writes the full object back. Sveltos internally keeps track of which `Classifier` instance owns each label key on a given cluster, so conflicting writes are detected and only the owning `Classifier` may write that key.
+
+Run the `sveltosctl show classifier-labels` command to lists all labels managed by a `Classifier` in every cluster. Add the `--warnings` flag to show any conflicts. See the [sveltosctl visibility](../getting_started/sveltosctl/features/visibility.md#show-classifier-labels) section for details.
+
+!!! note
+    Classification signals must come from the managed cluster. `sveltos-agent` runs in (or targets) the managed cluster, so every resource it can inspect lives there: workloads, installed CRDs, running services. If the classification signal lives in the **management cluster** itself, such as a ConfigMap recording which clusters belong to a business unit or a custom resource written by a compliance scanner, see [Classify Clusters from Management Cluster Resources](mgmt_cluster_classification.md). Use `Classifier` when you need to evaluate rules against resources that exist inside each managed cluster.
