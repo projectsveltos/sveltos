@@ -1,0 +1,237 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.21.0
+  name: managementclusterclassifiers.lib.projectsveltos.io
+spec:
+  group: lib.projectsveltos.io
+  names:
+    kind: ManagementClusterClassifier
+    listKind: ManagementClusterClassifierList
+    plural: managementclusterclassifiers
+    singular: managementclusterclassifier
+  scope: Cluster
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          ManagementClusterClassifier evaluates resources on the management cluster and
+          labels managed clusters accordingly. Unlike Classifier, no deployment to managed
+          clusters is required: the Lua function runs entirely on the management cluster and
+          returns the list of clusters to label.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagementClusterClassifierSpec defines the desired state
+              of ManagementClusterClassifier.
+            properties:
+              classificationLua:
+                description: |-
+                  ClassificationLua is a Lua function called once per reconcile with the full
+                  set of resources matched by MatchResources. It receives the array as resources
+                  and must return an array of cluster references.
+                  Each entry must have fields: namespace (string), name (string), kind (string).
+                  kind must be "SveltosCluster" or "Cluster". Entries with a missing or unrecognized
+                  kind are skipped and recorded in status.failureMessage.
+                  Passing all resources at once allows the function to make decisions that
+                  depend on the relationship between multiple resources.
+                type: string
+              classifierLabels:
+                description: |-
+                  ClassifierLabels is the set of labels to add to every cluster returned by
+                  ClassificationLua. Same type as Classifier.spec.classifierLabels.
+                items:
+                  properties:
+                    key:
+                      description: Key is the label key
+                      type: string
+                    value:
+                      description: Value is the label value
+                      type: string
+                  required:
+                  - key
+                  - value
+                  type: object
+                type: array
+              matchResources:
+                description: |-
+                  MatchResources lists the management-cluster resource types to watch.
+                  Reuses the existing ResourceSelector type. Label/name/namespace filters
+                  and per-resource Lua (ResourceSelector.Evaluate) all apply: only objects
+                  where Evaluate returns {matching: true} are included in the resources array
+                  passed to ClassificationLua. Same behavior as the existing Classifier.
+                items:
+                  description: ResourceSelector defines what resources are a match
+                  properties:
+                    evaluate:
+                      description: |-
+                        Evaluate contains a function "evaluate" in lua language.
+                        The function will be passed one of the object selected based on
+                        above criteria.
+                        Must return struct with field "matching" representing whether
+                        object is a match and an optional "message" field.
+                      type: string
+                    evaluateCEL:
+                      description: |-
+                        EvaluateCEL contains a list of named CEL (Common Expression Language) rules.
+                        Each rule will be evaluated in order against each object selected based on
+                        the criteria defined above. Each rule's expression must return a boolean value
+                        indicating whether the object is a match.
+
+                        Evaluation stops at the first rule that returns true; subsequent
+                        rules will not be evaluated.
+                      items:
+                        description: CELRule defines a named CEL rule used in EvaluateCEL.
+                        properties:
+                          name:
+                            description: Name is a human-readable identifier for the
+                              rule.
+                            type: string
+                          rule:
+                            description: |-
+                              Rule is the CEL (Common Expression Language) expression to evaluate.
+                              It must return a bool
+                            type: string
+                        required:
+                        - name
+                        - rule
+                        type: object
+                      type: array
+                    group:
+                      description: Group of the resource deployed in the Cluster.
+                      type: string
+                    kind:
+                      description: Kind of the resource deployed in the Cluster.
+                      minLength: 1
+                      type: string
+                    labelFilters:
+                      description: LabelFilters allows to filter resources based on
+                        current labels.
+                      items:
+                        properties:
+                          key:
+                            description: Key is the label key
+                            type: string
+                          operation:
+                            description: Operation is the comparison operation
+                            enum:
+                            - Equal
+                            - Different
+                            - Has
+                            - DoesNotHave
+                            type: string
+                          value:
+                            description: Value is the label value
+                            type: string
+                        required:
+                        - key
+                        - operation
+                        type: object
+                      type: array
+                    name:
+                      description: Name of the resource deployed in the  Cluster.
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the resource deployed in the  Cluster.
+                        Empty for resources scoped at cluster level.
+                        For namespaced resources, an empty string "" indicates all namespaces.
+                      type: string
+                    selector:
+                      description: |-
+                        Selector is a standard Kubernetes label selector. Resources are selected
+                        if their labels match the selector. This field uses the standard
+                        Kubernetes label matching syntax (e.g., {"environment": "production"}).
+                        If both LabelFilters and Selector are specified, the requirements from
+                        both are logically ANDed.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    version:
+                      description: Version of the resource deployed in the Cluster.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - version
+                  type: object
+                type: array
+            required:
+            - classificationLua
+            - classifierLabels
+            - matchResources
+            type: object
+          status:
+            description: ManagementClusterClassifierStatus defines the observed state
+              of ManagementClusterClassifier.
+            properties:
+              failureMessage:
+                description: |-
+                  FailureMessage reports the error from the last reconcile, if any.
+                  Set when resource collection or Lua evaluation fails; cleared on success.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

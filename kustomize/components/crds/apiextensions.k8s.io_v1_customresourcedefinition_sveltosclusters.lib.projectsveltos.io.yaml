@@ -493,7 +493,142 @@ spec:
                 required:
                 - renewTokenRequestInterval
                 type: object
+              workloadIdentity:
+                description: |-
+                  WorkloadIdentity configures authentication to the managed cluster via the
+                  cloud provider's workload identity mechanism. When set, Sveltos does not
+                  read a kubeconfig Secret; instead it obtains short-lived credentials from
+                  the cloud provider at runtime.
+                  Mutually exclusive with KubeconfigName/KubeconfigKeyName.
+                properties:
+                  aws:
+                    description: |-
+                      AWS contains configuration specific to AWS IRSA / EKS Pod Identity.
+                      Required when Provider is AWS.
+                    properties:
+                      clusterName:
+                        description: |-
+                          ClusterName is the name of the EKS cluster. Required: it is embedded in
+                          the bearer token header (x-k8s-aws-id) sent to the EKS API server.
+                        minLength: 1
+                        type: string
+                      region:
+                        description: |-
+                          Region is the AWS region of the EKS cluster. If empty, the AWS_REGION
+                          environment variable injected by IRSA is used.
+                        type: string
+                      roleARN:
+                        description: |-
+                          RoleARN is the ARN of the IAM role Sveltos should assume before generating
+                          the EKS bearer token. If empty, the pod's own IRSA credentials are used directly.
+                        type: string
+                    required:
+                    - clusterName
+                    type: object
+                  azure:
+                    description: |-
+                      Azure contains configuration specific to Azure Workload Identity.
+                      Required when Provider is Azure.
+                    properties:
+                      clientID:
+                        description: |-
+                          ClientID is the client ID of the managed identity or app registration
+                          federated with the management cluster service account.
+                        minLength: 1
+                        type: string
+                      clusterName:
+                        description: |-
+                          ClusterName is the name of the AKS cluster.
+                          Kept for future auto-discovery support.
+                        type: string
+                      resourceGroup:
+                        description: |-
+                          ResourceGroup is the Azure resource group containing the AKS cluster.
+                          Kept for future auto-discovery support.
+                        type: string
+                      subscriptionID:
+                        description: |-
+                          SubscriptionID is the Azure subscription containing the AKS cluster.
+                          Kept for future auto-discovery support.
+                        type: string
+                      tenantID:
+                        description: TenantID is the Azure Active Directory tenant
+                          ID.
+                        minLength: 1
+                        type: string
+                    required:
+                    - clientID
+                    - tenantID
+                    type: object
+                  caSecretRef:
+                    description: |-
+                      CASecretRef references a Secret in the management cluster containing the
+                      CA certificate of the managed cluster's API server under the key "ca.crt".
+                      If not set, the system certificate pool is used.
+                    properties:
+                      name:
+                        default: ""
+                        description: |-
+                          Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  endpoint:
+                    description: Endpoint is the API server endpoint of the managed
+                      cluster (e.g. https://…).
+                    minLength: 1
+                    type: string
+                  gcp:
+                    description: |-
+                      GCP contains configuration specific to GCP Workload Identity Federation.
+                      Required when Provider is GCP.
+                    properties:
+                      clusterName:
+                        description: ClusterName is the name of the GKE cluster.
+                        minLength: 1
+                        type: string
+                      location:
+                        description: Location is the GCP region or zone of the GKE
+                          cluster (e.g. "us-central1").
+                        minLength: 1
+                        type: string
+                      projectID:
+                        description: ProjectID is the GCP project ID that contains
+                          the GKE cluster.
+                        minLength: 1
+                        type: string
+                    required:
+                    - clusterName
+                    - location
+                    - projectID
+                    type: object
+                  provider:
+                    description: Provider is the cloud provider implementing the workload
+                      identity mechanism.
+                    enum:
+                    - AWS
+                    - GCP
+                    - Azure
+                    type: string
+                required:
+                - endpoint
+                - provider
+                type: object
+                x-kubernetes-validations:
+                - message: aws must be set if and only if provider is AWS
+                  rule: (self.provider == 'AWS') == has(self.aws)
+                - message: gcp must be set if and only if provider is GCP
+                  rule: (self.provider == 'GCP') == has(self.gcp)
+                - message: azure must be set if and only if provider is Azure
+                  rule: (self.provider == 'Azure') == has(self.azure)
             type: object
+            x-kubernetes-validations:
+            - message: 'workloadIdentity, kubeconfigName: conflict'
+              rule: '!has(self.workloadIdentity) || !has(self.kubeconfigName)'
           status:
             description: SveltosClusterStatus defines the status of SveltosCluster
             properties:
