@@ -7,6 +7,11 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+    name: classifier-controller-role-extra
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
     name: classifier-manager-role
 rules:
     - apiGroups:
@@ -70,6 +75,7 @@ rules:
         - classifiers
         - configurationbundles
         - configurationgroups
+        - managementclusterclassifiers
       verbs:
         - create
         - delete
@@ -82,6 +88,7 @@ rules:
         - lib.projectsveltos.io
       resources:
         - classifierreports
+        - managementclusterclassifierreports
       verbs:
         - create
         - delete
@@ -94,6 +101,8 @@ rules:
       resources:
         - classifierreports/status
         - classifiers/status
+        - managementclusterclassifierreports/status
+        - managementclusterclassifiers/status
       verbs:
         - get
         - patch
@@ -102,6 +111,7 @@ rules:
         - lib.projectsveltos.io
       resources:
         - classifiers/finalizers
+        - managementclusterclassifiers/finalizers
       verbs:
         - update
     - apiGroups:
@@ -138,6 +148,19 @@ subjects:
       name: classifier-manager
       namespace: projectsveltos
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: classifier-manager-rolebinding-extra
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: classifier-controller-role-extra
+subjects:
+    - kind: ServiceAccount
+      name: classifier-manager
+      namespace: projectsveltos
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -150,6 +173,8 @@ spec:
     selector:
         matchLabels:
             control-plane: classifier
+    strategy:
+        type: Recreate
     template:
         metadata:
             annotations:
@@ -164,7 +189,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.11.1
+                    - --version=v1.12.0
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
@@ -182,7 +207,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/classifier:v1.11.1
+                  image: docker.io/projectsveltos/classifier:v1.12.0
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
@@ -230,7 +255,7 @@ spec:
                             fieldPath: metadata.namespace
                     - name: IS_INITIALIZATION
                       value: "true"
-                  image: docker.io/projectsveltos/classifier:v1.11.1
+                  image: docker.io/projectsveltos/classifier:v1.12.0
                   imagePullPolicy: IfNotPresent
                   name: migrate
                   resources:
@@ -247,6 +272,8 @@ spec:
                             - ALL
             securityContext:
                 runAsNonRoot: true
+                seccompProfile:
+                    type: RuntimeDefault
             serviceAccountName: classifier-manager
             terminationGracePeriodSeconds: 10
 ---
