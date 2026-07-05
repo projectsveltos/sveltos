@@ -28,6 +28,39 @@ No kubeconfig `Secret` is stored in the Sveltos management cluster. The credenti
 !!!note
     Workload Identity registration requires Sveltos **v1.12.0** or later.
 
+## Which Service Accounts Need the Cloud Identity Annotation
+
+Only the Sveltos components that talk to managed clusters need the cloud provider's workload identity annotation on their ServiceAccount:
+
+- `access-manager`
+- `addon-controller`
+- `event-manager`
+- `hc-manager`
+- `sc-manager`
+- `techsupport-controller`
+- `mcp-server`
+- `drift-detection-manager` and `sveltos-agent-manager`, but only when Sveltos runs in agentless mode (`agent.managementCluster: true` in the Helm chart)
+
+!!! tip "Preferred: set the annotation once via Helm"
+    If Sveltos is installed with the `projectsveltos` Helm chart, set `global.serviceAccountAnnotations` instead of annotating each ServiceAccount by hand. The value is merged into every ServiceAccount listed above, and a component-specific `<component>.serviceAccount.annotations` still takes precedence on key collisions:
+
+    ```yaml
+    # values.yaml
+    global:
+      serviceAccountAnnotations:
+        iam.gke.io/gcp-service-account: sveltos-wi@<project>.iam.gserviceaccount.com   # GKE
+        # eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/sveltos-wi        # EKS
+        # azure.workload.identity/client-id: <client-id>                              # AKS
+    ```
+
+    ```bash
+    $ helm upgrade --install projectsveltos projectsveltos/projectsveltos \
+      -n projectsveltos --create-namespace \
+      -f values.yaml
+    ```
+
+    The manual `kubectl annotate serviceaccount` steps in the guides below still work, and are the only option for installs that don't use the Helm chart.
+
 ## Register a Cluster
 
 When using workload identity, each cloud provider has a dedicated subcommand: `register cluster-eks` for Amazon EKS, `register cluster-gke` for Google GKE, and `register cluster-aks` for Azure AKS. If you are registering a cluster with a kubeconfig, use `register cluster` instead.
@@ -122,6 +155,9 @@ The guides below walk through the full cloud-side setup required before running 
     $ export REGION=us-east-1
     $ export MGMT_CLUSTER=sveltos-mgmt
     $ export MANAGED_CLUSTER=sveltos-managed
+    $ export SERVICE_ACCOUNTS="access-manager addon-controller event-manager hc-manager sc-manager techsupport-controller mcp-server"
+    # Agentless mode (agent.managementCluster: true)? drift-detection-manager and sveltos-agent-manager need access too:
+    # $ export SERVICE_ACCOUNTS="${SERVICE_ACCOUNTS} drift-detection-manager sveltos-agent-manager"
     ```
 
     **Step 1 — Create clusters as an IAM user (not root)**
@@ -154,12 +190,19 @@ The guides below walk through the full cloud-side setup required before running 
       --query "cluster.identity.oidc.issuer" --output text | awk -F'/' '{print $NF}')
     ```
 
-    **Step 4 — Create an IAM role for the sc-manager pod**
+    **Step 4 — Create an IAM role trusted by every Sveltos service account**
 
-    The `sc-manager` deployment uses the Kubernetes service account `sc-manager`
-    in namespace `projectsveltos`.
+    One IAM role is shared by all the service accounts in `SERVICE_ACCOUNTS`
+    (all in namespace `projectsveltos`). The trust policy's `sub` condition
+    lists one entry per service account.
 
     ```bash
+    $ SUBS=""
+    $ for sa in ${SERVICE_ACCOUNTS}; do
+        SUBS="${SUBS}\"system:serviceaccount:projectsveltos:${sa}\","
+      done
+    $ SUBS="[${SUBS%,}]"
+
     $ cat > /tmp/trust-policy.json << EOF
     {
       "Version": "2012-10-17",
@@ -172,8 +215,10 @@ The guides below walk through the full cloud-side setup required before running 
           "Action": "sts:AssumeRoleWithWebIdentity",
           "Condition": {
             "StringEquals": {
-              "oidc.eks.${REGION}.amazonaws.com/id/${OIDC_ID}:sub": "system:serviceaccount:projectsveltos:sc-manager",
               "oidc.eks.${REGION}.amazonaws.com/id/${OIDC_ID}:aud": "sts.amazonaws.com"
+            },
+            "ForAnyValue:StringEquals": {
+              "oidc.eks.${REGION}.amazonaws.com/id/${OIDC_ID}:sub": ${SUBS}
             }
           }
         }
@@ -182,21 +227,27 @@ The guides below walk through the full cloud-side setup required before running 
     EOF
 
     $ aws iam create-role \
-      --role-name sveltos-sc-manager \
+      --role-name sveltos-wi \
       --assume-role-policy-document file:///tmp/trust-policy.json
     ```
 
-    **Step 5 — Annotate the sc-manager service account**
+    **Step 5 — Annotate every service account**
 
     ```bash
-    $ kubectl annotate serviceaccount sc-manager \
-      -n projectsveltos \
-      eks.amazonaws.com/role-arn=arn:aws:iam::${ACCOUNT_ID}:role/sveltos-sc-manager
+    $ for sa in ${SERVICE_ACCOUNTS}; do
+        kubectl annotate serviceaccount ${sa} -n projectsveltos \
+          eks.amazonaws.com/role-arn=arn:aws:iam::${ACCOUNT_ID}:role/sveltos-wi --overwrite
+      done
 
-    $ kubectl rollout restart deployment sc-manager -n projectsveltos
+    $ kubectl rollout restart deployment -n projectsveltos \
+      access-manager addon-controller event-manager hc-manager sc-manager techsupport-controller mcp-server
     ```
 
-    Verify IRSA environment variables are injected:
+    `drift-detection-manager` and `sveltos-agent-manager` (agentless mode) are not
+    static Deployments — Sveltos (re)creates their pods on demand, so no rollout
+    restart is needed for them; the annotation is picked up the next time a pod is created.
+
+    Verify IRSA environment variables are injected, e.g. for `sc-manager`:
 
     ```bash
     $ kubectl describe pod -n projectsveltos -l app=sc-manager | grep "AWS_ROLE_ARN\|AWS_WEB_IDENTITY_TOKEN_FILE"
@@ -207,12 +258,12 @@ The guides below walk through the full cloud-side setup required before running 
     ```bash
     $ aws eks create-access-entry \
       --cluster-name ${MANAGED_CLUSTER} \
-      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-sc-manager \
+      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-wi \
       --region ${REGION}
 
     $ aws eks associate-access-policy \
       --cluster-name ${MANAGED_CLUSTER} \
-      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-sc-manager \
+      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-wi \
       --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy \
       --access-scope type=cluster \
       --region ${REGION}
@@ -255,7 +306,7 @@ The guides below walk through the full cloud-side setup required before running 
     ```bash
     $ aws eks list-associated-access-policies \
       --cluster-name ${MANAGED_CLUSTER} \
-      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-sc-manager \
+      --principal-arn arn:aws:iam::${ACCOUNT_ID}:role/sveltos-wi \
       --region ${REGION}
     ```
 
@@ -277,6 +328,9 @@ The guides below walk through the full cloud-side setup required before running 
     $ export MGMT_CLUSTER=cluster-mgmt
     $ export MANAGED_CLUSTER=cluster-managed
     $ export ZONE=us-central1-a
+    $ export SERVICE_ACCOUNTS="access-manager addon-controller event-manager hc-manager sc-manager techsupport-controller mcp-server"
+    # Agentless mode (agent.managementCluster: true)? drift-detection-manager and sveltos-agent-manager need access too:
+    # $ export SERVICE_ACCOUNTS="${SERVICE_ACCOUNTS} drift-detection-manager sveltos-agent-manager"
     ```
 
     **Step 1 — Create clusters**
@@ -332,21 +386,28 @@ The guides below walk through the full cloud-side setup required before running 
     $ gcloud iam service-accounts create sveltos-wi --project=${PROJECT}
     ```
 
-    **Step 6 — Link the Kubernetes service account to the GSA**
+    **Step 6 — Link every Kubernetes service account to the GSA**
 
     ```bash
-    $ gcloud iam service-accounts add-iam-policy-binding \
-      sveltos-wi@${PROJECT}.iam.gserviceaccount.com \
-      --role=roles/iam.workloadIdentityUser \
-      --member="serviceAccount:${PROJECT}.svc.id.goog[projectsveltos/sc-manager]" \
-      --project=${PROJECT}
+    $ for sa in ${SERVICE_ACCOUNTS}; do
+        gcloud iam service-accounts add-iam-policy-binding \
+          sveltos-wi@${PROJECT}.iam.gserviceaccount.com \
+          --role=roles/iam.workloadIdentityUser \
+          --member="serviceAccount:${PROJECT}.svc.id.goog[projectsveltos/${sa}]" \
+          --project=${PROJECT}
 
-    $ kubectl annotate serviceaccount sc-manager \
-      -n projectsveltos \
-      iam.gke.io/gcp-service-account=sveltos-wi@${PROJECT}.iam.gserviceaccount.com
+        kubectl annotate serviceaccount ${sa} \
+          -n projectsveltos \
+          iam.gke.io/gcp-service-account=sveltos-wi@${PROJECT}.iam.gserviceaccount.com --overwrite
+      done
 
-    $ kubectl rollout restart deployment sveltoscluster-manager -n projectsveltos
+    $ kubectl rollout restart deployment -n projectsveltos \
+      access-manager addon-controller event-manager hc-manager sc-manager techsupport-controller mcp-server
     ```
+
+    `drift-detection-manager` and `sveltos-agent-manager` (agentless mode) are not
+    static Deployments — Sveltos (re)creates their pods on demand, so no rollout
+    restart is needed for them; the annotation is picked up the next time a pod is created.
 
     **Step 7 — Grant the GSA access to the managed cluster**
 
