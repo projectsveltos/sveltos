@@ -55,6 +55,8 @@ The **addon-controller** continuously monitors the system using efficient event-
 
 ### Core Controllers
 
+![visual representation](../../assets/architecture-controllers.png)
+
 These controllers are **always** deployed and **cannot** be disabled.
 
 | Component | Helm key | Purpose |
@@ -63,7 +65,7 @@ These controllers are **always** deployed and **cannot** be disabled.
 | **classifier-manager** | `classifierManager` | Evaluates `Classifier` rules (Kubernetes version, deployed resources) against each cluster and applies the matching labels. Also, the component responsible for bootstrapping `sveltos-agent` (or `sveltos-applier` in pull mode) in every managed cluster. |
 | **event-manager** | `eventManager` | Implements the event-driven add-on workflow. Deploys `EventSource` instances to managed clusters, collects `EventReport` results, and creates new `ClusterProfile` instances when events fire. |
 | **sveltoscluster-manager** | `scManager` | Monitors connectivity to every registered cluster (both `SveltosCluster` and [Cluster API](https://cluster-api.sigs.k8s.io/) `Cluster`). Periodically connects to each cluster, updates its heartbeat, and runs user-defined readiness and liveness checks. |
-| **healthcheck-manager** | `hcManager.enabled` | Manages `ClusterHealthCheck` resources; deploys `HealthCheck` instances to managed clusters; collects `HealthCheckReport` results; sends notifications to Slack, Teams, and similar channels. |
+| **healthcheck-manager** | `hcManager` | Manages `ClusterHealthCheck` resources; deploys `HealthCheck` instances to managed clusters; collects `HealthCheckReport` results; sends notifications to Slack, Teams, and similar channels. |
 
 ### Optional Components
 
@@ -261,4 +263,4 @@ The kubeconfig stored in the management cluster is generated for the `sa-deploye
 
 ## Next Steps
 
-Continue with the [core components](../components_overview/core_controllers.md) and the [CRDs](../components_overview/custom_resource_definitions.md) sections.
+Continue with the [CRDs](../architecture/custom_resource_definitions.md) sections.

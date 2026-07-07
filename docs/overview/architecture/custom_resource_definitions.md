@@ -11,7 +11,9 @@ authors:
 
 # Sveltos Custom Resource Definitions (CRDs)
 
-Sveltos exposes its functionality through a set of Kubernetes [CRDs](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). Users create and manage these resources through the **management cluster** API, and a dedicated controller reconciles each of them. The table below maps every CRD to what it defines and the controller responsible for it. For a quick reference, check out the [visual representation](https://github.com/projectsveltos/sveltos/blob/main/docs/assets/architecture-crds.png).
+Sveltos exposes its functionality through a set of Kubernetes [CRDs](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). Users create and manage these resources through the **management cluster** API, and a dedicated controller reconciles each of them. The table below maps every CRD to what it defines and the controller responsible for it.
+
+![visual representation](../assets/architecture-crds.png)
 
 ## CRD Reference
 
