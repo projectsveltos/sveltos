@@ -14,7 +14,7 @@
         <link rel="prev" href="../../introdution/introduction_to_sveltos/">
       
       
-        <link rel="next" href="../../components_overview/core_controllers/">
+        <link rel="next" href="../custom_resource_definitions/">
       
       
         
@@ -928,83 +928,8 @@
   
   
   
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Components Overview
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Components Overview
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="../../components_overview/core_controllers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Core Controllers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../components_overview/custom_resource_definitions/" class="md-nav__link">
+      <a href="../custom_resource_definitions/" class="md-nav__link">
         
   
   
@@ -1020,14 +945,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -5003,6 +4920,7 @@
 <p>The <strong>addon-controller</strong> continuously monitors the system using efficient event-driven watchers, minimizing CPU overhead by only acting when state changes occur.</p>
 <h2 id="management-cluster-components">Management Cluster Components</h2>
 <h3 id="core-controllers">Core Controllers</h3>
+<p><img alt="visual representation" src="../../../assets/architecture-controllers.png" /></p>
 <p>These controllers are <strong>always</strong> deployed and <strong>cannot</strong> be disabled.</p>
 <table>
 <thead>
@@ -5035,7 +4953,7 @@
 </tr>
 <tr>
 <td><strong>healthcheck-manager</strong></td>
-<td><code>hcManager.enabled</code></td>
+<td><code>hcManager</code></td>
 <td>Manages <code>ClusterHealthCheck</code> resources; deploys <code>HealthCheck</code> instances to managed clusters; collects <code>HealthCheckReport</code> results; sends notifications to Slack, Teams, and similar channels.</td>
 </tr>
 </tbody>
@@ -5307,7 +5225,7 @@
 <p>The Pull mode is orthogonal to Mode 1 and Mode 2. When a <code>SveltosCluster</code> sets the <code>spec.pullMode: true</code>, the <code>sveltos-applier</code> is deployed in the managed cluster and <strong>initiates outbound connections</strong> to the management cluster to fetch configurations. This is designed for clusters behind firewalls or in restricted networks where the management cluster cannot reach the managed cluster's API server. See <a href="../../register/register_cluster_pull_mode/">Registration Pull Mode</a> for more details.</p>
 </div>
 <h2 id="next-steps">Next Steps</h2>
-<p>Continue with the <a href="../../components_overview/core_controllers/">core components</a> and the <a href="../../components_overview/custom_resource_definitions/">CRDs</a> sections.</p>
+<p>Continue with the <a href="../../architecture/custom_resource_definitions/">CRDs</a> sections.</p>
 
 
   <nav class="md-tags" >
@@ -5384,13 +5302,13 @@
         
         
           
-          <a href="../../components_overview/core_controllers/" class="md-footer__link md-footer__link--next" aria-label="Next: Core Controllers">
+          <a href="../custom_resource_definitions/" class="md-footer__link md-footer__link--next" aria-label="Next: Custom Resource Definitions (CRDs) Reference">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Core Controllers
+                Custom Resource Definitions (CRDs) Reference
               </div>
             </div>
             <div class="md-footer__button md-icon">

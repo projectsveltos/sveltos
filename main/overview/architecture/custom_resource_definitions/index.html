@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Reference of the Sveltos controllers, installation jobs, and per-managed-cluster agents, including which components are mandatory and which are optional.">
+        <meta name="description" content="Reference of the Sveltos CRDs, what each one defines, and which controller reconciles it.">
       
       
       
       
-        <link rel="prev" href="../../architecture/architecture/">
+        <link rel="prev" href="../architecture/">
       
       
-        <link rel="next" href="../custom_resource_definitions/">
+        <link rel="next" href="../../../getting_started/install/quick_start/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Sveltos Controllers and Agents - Projectsveltos Documentation</title>
+        <title>Sveltos Custom Resource Definitions - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sveltos-controllers-and-agents" class="md-skip">
+        <a href="#sveltos-custom-resource-definitions-crds" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +143,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos Controllers and Agents
+              Sveltos Custom Resource Definitions
             
           </span>
         </div>
@@ -698,7 +698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -727,55 +727,6 @@
   
   
   
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Components Overview
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Components Overview
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-    
-  
-  
-  
     <li class="md-nav__item md-nav__item--active">
       
       
@@ -791,7 +742,7 @@
   <span class="md-ellipsis">
     
   
-    Core Controllers
+    Custom Resource Definitions (CRDs) Reference
   
 
     
@@ -809,7 +760,7 @@
   <span class="md-ellipsis">
     
   
-    Core Controllers
+    Custom Resource Definitions (CRDs) Reference
   
 
     
@@ -836,10 +787,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#core-controllers-mandatory" class="md-nav__link">
+  <a href="#crd-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Controllers (Mandatory)
+        CRD Reference
       
     </span>
   </a>
@@ -847,32 +798,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-controllers" class="md-nav__link">
+  <a href="#grouping-by-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Optional Controllers
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation-jobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation Jobs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#per-managed-cluster-agents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Per Managed Cluster Agents
+        Grouping by Controller
       
     </span>
   </a>
@@ -882,42 +811,6 @@
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../custom_resource_definitions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Custom Resource Definitions (CRDs) Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -4692,10 +4585,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#core-controllers-mandatory" class="md-nav__link">
+  <a href="#crd-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Controllers (Mandatory)
+        CRD Reference
       
     </span>
   </a>
@@ -4703,32 +4596,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-controllers" class="md-nav__link">
+  <a href="#grouping-by-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Optional Controllers
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation-jobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation Jobs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#per-managed-cluster-agents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Per Managed Cluster Agents
+        Grouping by Controller
       
     </span>
   </a>
@@ -4753,112 +4624,81 @@
   
 
 
-<h1 id="sveltos-controllers-and-agents">Sveltos Controllers and Agents</h1>
-<p>Sveltos runs as a set of controllers in the management cluster, backed by installation jobs and per-cluster agents. Some controllers are mandatory and cannot be disabled, while others are optional and can be turned on or off depending on the features in use. This page outlines each component and its role. For more details about Sveltos' architecture, take a look at the <a href="../../architecture/architecture/">comprehensive documentation</a>, or for a quick reference, check out the <a href="https://github.com/projectsveltos/sveltos/blob/main/docs/assets/architecture-controllers.png">visual representation</a>.</p>
-<h2 id="core-controllers-mandatory">Core Controllers (Mandatory)</h2>
-<p>These controllers are <strong>always</strong> deployed and cannot be disabled.</p>
+<h1 id="sveltos-custom-resource-definitions-crds">Sveltos Custom Resource Definitions (CRDs)</h1>
+<p>Sveltos exposes its functionality through a set of Kubernetes <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">CRDs</a>. Users create and manage these resources through the <strong>management cluster</strong> API, and a dedicated controller reconciles each of them. The table below maps every CRD to what it defines and the controller responsible for it.</p>
+<p><img alt="visual representation" src="../../assets/architecture-crds.png" /></p>
+<h2 id="crd-reference">CRD Reference</h2>
 <table>
 <thead>
 <tr>
-<th>Controller</th>
-<th>Purpose</th>
+<th>CRD</th>
+<th>What it defines</th>
+<th>Reconciled by</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>addon-controller</strong></td>
-<td>Deploys Helm charts and Kubernetes resources.</td>
+<td><strong>ClusterProfile / Profile</strong></td>
+<td>What needs to be deployed on which sets of clusters.</td>
+<td>addon-controller</td>
 </tr>
 <tr>
-<td><strong>classifier-manager</strong></td>
-<td>Deploys <code>sveltos-agent</code> and classifies clusters.</td>
+<td><strong>ClusterPromotion</strong></td>
+<td><em>How</em> and <em>when</em> the deployments safely roll out across different environments.</td>
+<td>addon-controller</td>
 </tr>
 <tr>
-<td><strong>event-manager</strong></td>
-<td>Core of the event framework. Creates Profiles in response to events.</td>
+<td><strong>Classifier</strong></td>
+<td>Classify a managed cluster based on its live state.</td>
+<td>classifier-manager</td>
 </tr>
 <tr>
-<td><strong>sveltoscluster-manager</strong></td>
-<td>Verifies <code>SveltosCluster</code> connectivity. Renews the token when necessary.</td>
+<td><strong>ManagementClusterClassifier</strong></td>
+<td>Classify a managed cluster based on resources in the control cluster.</td>
+<td>classifier-manager</td>
 </tr>
 <tr>
-<td><strong>healthcheck-manager</strong></td>
-<td>Sends notifications when resources are deployed or fail to be deployed.</td>
+<td><strong>EventSource</strong></td>
+<td>Defines what an event is.</td>
+<td>event-manager</td>
+</tr>
+<tr>
+<td><strong>EventTrigger</strong></td>
+<td>When the event happens, it triggers Sveltos to deploy resources.</td>
+<td>event-manager</td>
+</tr>
+<tr>
+<td><strong>HealthCheck</strong></td>
+<td>Defines the criteria for what healthy looks like for resources.</td>
+<td>healthcheck-manager</td>
+</tr>
+<tr>
+<td><strong>ClusterHealthCheck</strong></td>
+<td>Send notifications based on the health of Kubernetes resources.</td>
+<td>healthcheck-manager</td>
+</tr>
+<tr>
+<td><strong>Techsupport</strong></td>
+<td>Defines which resources/logs to collect and where to send them.</td>
+<td>techsupport</td>
+</tr>
+<tr>
+<td><strong>RoleRequest</strong></td>
+<td>Define tenant permissions.</td>
+<td>access-manager</td>
 </tr>
 </tbody>
 </table>
-<h2 id="optional-controllers">Optional Controllers</h2>
-<p>These controllers can be enabled or disabled depending on the features and use cases covered.</p>
-<table>
-<thead>
-<tr>
-<th>Controller</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>access-manager</strong></td>
-<td>Grants permissions to tenant admins inside managed clusters.</td>
-</tr>
-<tr>
-<td><strong>shard-controller</strong></td>
-<td>Enables horizontal scaling.</td>
-</tr>
-<tr>
-<td><strong>techsupport</strong></td>
-<td>Collects logs, events, and resources from mgmt and managed clusters.</td>
-</tr>
-<tr>
-<td><strong>mcp-server</strong></td>
-<td>MCP server. AI tools can inspect and manage the Sveltos fleet.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="installation-jobs">Installation Jobs</h2>
-<p>These run at <strong>install</strong> and <strong>upgrade</strong> time. They are not long-running controllers.</p>
-<table>
-<thead>
-<tr>
-<th>Job</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>crd-manager</strong></td>
-<td>Installs and upgrades all Sveltos CRDs before the controllers start.</td>
-</tr>
-<tr>
-<td><strong>register-mgmt-cluster</strong></td>
-<td>Registers the management cluster as a <code>SveltosCluster</code>.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="per-managed-cluster-agents">Per Managed Cluster Agents</h2>
-<p>These agents handle work that requires direct access to a managed cluster.</p>
-<table>
-<thead>
-<tr>
-<th>Agent</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>sveltos-agent</strong></td>
-<td>Evaluates <code>Classifier</code>, <code>EventSource</code>, and <code>HealthCheck</code> against the resources in a cluster.</td>
-</tr>
-<tr>
-<td><strong>drift-detection-manager</strong></td>
-<td>Detects and reports configuration drifts.</td>
-</tr>
-<tr>
-<td><strong>sveltos-applier</strong></td>
-<td>In pull mode, fetches configuration from the management cluster.</td>
-</tr>
-</tbody>
-</table>
+<h2 id="grouping-by-controller">Grouping by Controller</h2>
+<p>The CRDs group naturally around the controller that owns them.</p>
+<ul>
+<li><strong>addon-controller</strong>: <code>ClusterProfile</code> / <code>Profile</code>, <code>ClusterPromotion</code>. The deployment and rollout layer. What is deployed, where, and how it is promoted across environments.</li>
+<li><strong>classifier-manager</strong>: <code>Classifier</code>, <code>ManagementClusterClassifier</code>. Cluster classification based on either the managed cluster's live state or resources in the control cluster.</li>
+<li><strong>event-manager</strong>: <code>EventSource</code>, <code>EventTrigger</code>. The event-driven layer defines events and the actions taken when they fire.</li>
+<li><strong>healthcheck-manager</strong>: <code>HealthCheck</code>, <code>ClusterHealthCheck</code>. Health criteria for resources and notifications based on cluster health.</li>
+<li><strong>techsupport</strong>: <code>Techsupport</code>. Collection of logs and resources for support bundles.</li>
+<li><strong>access-manager</strong>: <code>RoleRequest</code>. Tenant permissions for multi-tenancy.</li>
+</ul>
 
 
   <nav class="md-tags" >
@@ -4881,7 +4721,7 @@
       
       
       
-        <span class="md-tag">Controllers</span>
+        <span class="md-tag">CRDs</span>
       
     
   </nav>
@@ -4918,7 +4758,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../architecture/architecture/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Architecture Outline">
+          <a href="../architecture/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Architecture Outline">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -4935,13 +4775,13 @@
         
         
           
-          <a href="../custom_resource_definitions/" class="md-footer__link md-footer__link--next" aria-label="Next: Custom Resource Definitions (CRDs) Reference">
+          <a href="../../../getting_started/install/quick_start/" class="md-footer__link md-footer__link--next" aria-label="Next: Quick Start">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Custom Resource Definitions (CRDs) Reference
+                Quick Start
               </div>
             </div>
             <div class="md-footer__button md-icon">
