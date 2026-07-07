@@ -55,7 +55,7 @@ The **addon-controller** continuously monitors the system using efficient event-
 
 ### Core Controllers
 
-![visual representation](../../assets/architecture-controllers.png)
+![Sveltos Controllers](../../assets/architecture-controllers.png)
 
 These controllers are **always** deployed and **cannot** be disabled.
 
