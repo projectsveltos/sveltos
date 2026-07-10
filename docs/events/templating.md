@@ -12,6 +12,7 @@ tags:
     - Templating
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 ## Introduction to Events and Templating
@@ -203,12 +204,12 @@ The approach enables context-aware policy injection based on dynamically generat
 
 ### Instantiation Flow: Helm Charts
 
-In EventTrigger, the `spec.helmCharts` field defines which Helm charts should be applied when an event occurs. Each Helm chart entry can be defined in two ways.
+In EventTrigger definitions, the `spec.helmCharts` field specified which Helm charts should be applied when an event occurs. Each Helm chart entry can be defined in two ways.
 
 1. **Constant**: A fixed chart definition (e.g., chart name, repo, values, version).
 1. **Template**: A dynamic chart definition using Go templates, which are instantiated using data from the triggering cluster and/or event resource.
 
-When Helm chart fields (such as name, version, or values) are defined as templates, EventTrigger evaluates them at runtime using the cluster and resource metadata that triggered the event. The resulting Helm chart specification is included in the generated Sveltos ClusterProfile, which uses these instantiated Helm chart definitions.
+When the Helm chart fields (such as name, version, or values) are defined as templates, EventTrigger evaluates them at runtime using the cluster and resource metadata that triggered the event. The resulting Helm chart specification is included in the generated Sveltos ClusterProfile, which uses these instantiated Helm chart definitions.
 
 !!! Example "Example: EventTrigger.spec.helmCharts"
 
@@ -280,15 +281,26 @@ The same logic applies to __EventTrigger.spec.kustomizationRefs—fields__.
 
 ### Instantiation Flow: ClusterProfile Name
 
-By default, the _ClusterProfile_ instances created by the event framework are assigned random names. While this is acceptable for most use cases, a predictable name is required in scenarios where other resources must be set as dependent on the instantiated ClusterProfile. The random naming convention makes it impossible to reference these instances programmatically.
+By default, the _ClusterProfile_ instances created by the Event Framework are assigned random names. While this is acceptable for most use cases, a predictable name is required when other resources must be set as **dependent** on the instantiated ClusterProfile. However, the random naming convention makes it impossible to reference these instances programmatically.
 
-To address this challenge, the EventTrigger _spec_ includes an optional field: `InstantiatedProfileNameFormat`. This field allows for the definition of a naming template that ensures a predictable name is generated for the ClusterProfile instance. The name is consistently formatted based on a Go template and can leverage data from the cluster and the specific event that triggered the creation.
+To address this challenge, the EventTrigger _spec_ includes an optional field: `profileNameFormat`. This field allows defining a naming template that ensures a predictable name is generated for the ClusterProfile instance. The name is consistently formatted using a Go template and can leverage data from the cluster and the specific event that triggered its creation. For more details about the `profileNameFormat` field, take a look at the [Go code](https://github.com/projectsveltos/event-manager/blob/c54f8c4892ee8d0c81130d8585397bf210fd7c7c/api/v1beta1/eventtrigger_types.go#L129).
 
- In the example below, the template uses the cluster name and the name of the resource that triggered the event.
+!!! Example "Example: EventTrigger.spec.profileNameFormat"
+
+    ```yaml
+      apiVersion: lib.projectsveltos.io/v1beta1
+      kind: EventTrigger
+      metadata:
+        name: deploy-a-resource
+      spec:
+        profileNameFormat: "{{ .Cluster.metadata.name }}-{{ .Resource.metadata.name }}-test"
+    ```
+
+The template uses the cluster name and the name of the resource that triggered the event, making the example easier to follow.
 
 `{{ .Cluster.metadata.name }}-{{ .Resource.metadata.name }}-test`
 
-When an event is triggered, Sveltos will automatically apply this template. For example, if the event occurs in a cluster named _cluster-alpha_ and is triggered by a resource named _pod-nginx_, the resulting ClusterProfile will be named: _cluster-alpha-pod-nginx-test_.
+When an event is triggered, Sveltos will automatically apply the template. For example, if the event occurs in a cluster named cluster-alpha and is triggered by a resource named pod-nginx, the resulting ClusterProfile will be `cluster-alpha-pod-nginx-test`.
 
 ### Template Functions
 
