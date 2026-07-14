@@ -72,13 +72,19 @@ tools scraped by the same Prometheus instance — the prefix is not tied to the 
 component happens to be deployed into, so it stays stable across every install.
 
 !!! note
-    A few metric names are emitted by **more than one component** (e.g. both addon-controller and
-    event-manager export a `reconcile_duration_seconds`), each with a different label set and meaning —
-    the same pattern controller-runtime's own generic metrics already use, disambiguated by which
-    component's `/metrics` endpoint was scraped. When a query below needs to isolate one component's
-    series from another's, it filters on a label only that component sets (e.g. `profile_name!=""` for
-    addon-controller, `event_trigger_name!=""` for event-manager, `feature=""` for event-manager's
-    duration histogram, since addon-controller always sets `feature` and event-manager never does).
+    A few metric names are emitted by **more than one component** (e.g. addon-controller,
+    event-manager, and classifier all export a `reconcile_duration_seconds`), each with a different
+    label set and meaning — the same pattern controller-runtime's own generic metrics already use,
+    disambiguated by which component's `/metrics` endpoint was scraped. When a query below needs to
+    isolate one component's series from another's, it filters on a label only that component sets
+    (e.g. `profile_name!=""` for addon-controller, `event_trigger_name!=""` for event-manager,
+    `classifier_name!=""` for classifier, `feature=""` for event-manager's duration histogram, since
+    addon-controller always sets `feature` and event-manager never does). The one exception is
+    classifier's own `reconcile_duration_seconds`: it carries the exact same three labels as
+    event-manager's (`cluster_type`/`cluster_namespace`/`cluster_name`, no fourth distinguishing label),
+    so isolating it requires filtering on the Prometheus-injected `job`/`instance` label from the scrape
+    target instead (e.g. `job="classifier"`, depending on how the ServiceMonitor's job name resolves in
+    your Prometheus setup) rather than an in-metric label.
 
 ### SveltosCluster Manager
 
@@ -121,6 +127,22 @@ All four metrics are removed entirely when a cluster is deregistered from Svelto
 * ``projectsveltos_matching_resources:`` Gauge of how many resources the most recently processed EventReport matched for an EventTrigger on a cluster (`EventReport.spec.matchingResources`, not CloudEvents — a separate matching mechanism). Labeled by `event_trigger_name`/`cluster_type`/`cluster_namespace`/`cluster_name`. Set independent of whether ClusterProfile creation subsequently succeeds — it's a fact about the EventReport, not about what Sveltos did with it.
 
 * ``projectsveltos_reconcile_last_success_timestamp_seconds:`` Gauge with the Unix timestamp of the last successful terminal outcome for an EventTrigger on a cluster. Same semantics as addon-controller's version above, labeled by `event_trigger_name` instead of profile.
+
+### Classifier
+
+* ``projectsveltos_reconcile_duration_seconds:`` Histogram of the duration to program a Classifier (deploy sveltos-agent, required CRDs, and the Classifier instance itself) on a workload cluster. Labeled by `cluster_type`/`cluster_namespace`/`cluster_name` only — the same three labels as event-manager's metric of the same name, with no fourth label to disambiguate; see the note above on filtering by the scrape `job` instead.
+
+* ``projectsveltos_reconcile_outcome_total:`` Counter of terminal reconcile outcomes (`status="success"` or `status="failure"`) for a Classifier on a cluster. Labeled by cluster, status, and `classifier_name`.
+
+* ``projectsveltos_reconcile_last_success_timestamp_seconds:`` Gauge with the Unix timestamp of the last successful (Provisioned) terminal outcome for a Classifier on a cluster. Same semantics as the addon-controller/event-manager versions above, labeled by `classifier_name`.
+
+* ``projectsveltos_matching_clusters:`` Gauge of how many clusters currently match a Classifier's rules (`kubernetesVersionConstraints`, `deployedResourceConstraint`) and so receive its `classifierLabels`. Labeled by `classifier_name` only.
+
+* ``projectsveltos_label_conflicts:`` Gauge of how many clusters currently have at least one label key this Classifier wants to manage but can't, because another Classifier already owns that key on that cluster (see the keymanager conflict-detection logic). Labeled by `classifier_name` only. Unique to classifier — no equivalent in addon-controller or event-manager.
+
+* ``projectsveltos_mgmt_cluster_matching_clusters:`` Gauge of how many clusters currently match a `ManagementClusterClassifier`'s `classificationLua` (evaluated against management-cluster resources, not managed clusters). Labeled by `classifier_name`. Kept as a separate metric from `matching_clusters` above since `ManagementClusterClassifier` is a distinct CRD/reconciler with its own matching semantics.
+
+* ``projectsveltos_mgmt_cluster_label_conflicts:`` Gauge of how many clusters currently have at least one label key a `ManagementClusterClassifier` cannot manage due to a conflict. Labeled by `classifier_name`. Same relationship to `label_conflicts` above as `mgmt_cluster_matching_clusters` has to `matching_clusters`.
 
 ## Dashboard Panels
 
@@ -275,5 +297,50 @@ sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature=""}[5m])) by (
 - **Purpose**: Shows how long it has been since each pull-mode cluster's sveltos-agent last reported in.
 - **Query Used**: ``time() - projectsveltos_agent_last_heartbeat_timestamp_seconds``
 - **Interpretation**: Specific to pull-mode/air-gapped clusters, where sveltos-agent pushes heartbeats rather than the management cluster polling — a climbing value here catches a stalled agent even before `cluster_connectivity_status` would flag it, since heartbeat staleness and general API connectivity are checked independently.
+
+### 24. Classifier Reconcile Duration - Latency Heatmap
+- **Type**: Heatmap
+- **Purpose**: Provides a heatmap of Classifier programming latencies (deploying sveltos-agent, required CRDs, and the Classifier instance to a workload cluster).
+- **Query Used**:
+``
+sum(rate(projectsveltos_reconcile_duration_seconds_bucket{job="classifier"}[5m])) by (le)
+``
+- **Interpretation**: Filtered by the scrape `job` rather than an in-metric label, since classifier's `reconcile_duration_seconds` shares the exact same label set as event-manager's metric of the same name (see the note above). Adjust the `job` label value to match how your Prometheus/ServiceMonitor setup names the classifier scrape target.
+
+### 25. Classifier Reconcile Outcomes
+- **Type**: Time Series
+- **Purpose**: Shows the rate of successful vs. failed terminal reconcile outcomes, per Classifier and status.
+- **Query Used**: ``sum(rate(projectsveltos_reconcile_outcome_total{classifier_name!=""}[5m])) by (classifier_name, status)``
+- **Interpretation**: A rising `failure` line for a given `classifier_name` means that Classifier is actively failing to deploy to at least one cluster.
+
+### 26. Matching Clusters per Classifier
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently match each Classifier's rules.
+- **Query Used**: ``projectsveltos_matching_clusters{classifier_name!=""}``
+- **Interpretation**: A Classifier matching `0` clusters may indicate overly-restrictive `kubernetesVersionConstraints`/`deployedResourceConstraint` rules; tracked over time this also shows how a label rolls out across the fleet.
+
+### 27. Label Conflicts per Classifier
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently have a label-key conflict for each Classifier.
+- **Query Used**: ``projectsveltos_label_conflicts{classifier_name!=""}``
+- **Interpretation**: A non-zero, rising value means this Classifier is currently losing ownership of at least one label key to another Classifier on some clusters — worth cross-referencing with `ClassifierReport.status.unmanagedLabels` for which key and which competing Classifier.
+
+### 28. Time Since Last Success per Classifier
+- **Type**: Time Series
+- **Purpose**: Shows how long it has been since each Classifier last successfully reconciled a cluster.
+- **Query Used**: ``time() - projectsveltos_reconcile_last_success_timestamp_seconds{classifier_name!=""}``
+- **Interpretation**: Same semantics as the ClusterProfile/EventTrigger versions above — catches a Classifier that's gone stale even if it isn't failing on every single reconcile.
+
+### 29. Matching Clusters per ManagementClusterClassifier
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently match each `ManagementClusterClassifier`'s `classificationLua`.
+- **Query Used**: ``projectsveltos_mgmt_cluster_matching_clusters``
+- **Interpretation**: Same idea as panel 26, applied to `ManagementClusterClassifier` instead of `Classifier` — evaluated against management-cluster resources rather than managed clusters.
+
+### 30. Label Conflicts per ManagementClusterClassifier
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently have a label-key conflict for each `ManagementClusterClassifier`.
+- **Query Used**: ``projectsveltos_mgmt_cluster_label_conflicts``
+- **Interpretation**: Same idea as panel 27, applied to `ManagementClusterClassifier` instead of `Classifier`.
 
 
