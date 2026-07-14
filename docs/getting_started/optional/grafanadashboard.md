@@ -66,27 +66,61 @@ https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/svelto
 
 ## Available Metrics
 
-Sveltos lets users track and visualize a number of key operational metrics, which include:
+Sveltos lets users track and visualize a number of key operational metrics. All custom metrics are prefixed
+`projectsveltos_` regardless of which component emits them, purely to avoid name collisions with unrelated
+tools scraped by the same Prometheus instance — the prefix is not tied to the Kubernetes namespace a given
+component happens to be deployed into, so it stays stable across every install.
+
+!!! note
+    A few metric names are emitted by **more than one component** (e.g. both addon-controller and
+    event-manager export a `reconcile_duration_seconds`), each with a different label set and meaning —
+    the same pattern controller-runtime's own generic metrics already use, disambiguated by which
+    component's `/metrics` endpoint was scraped. When a query below needs to isolate one component's
+    series from another's, it filters on a label only that component sets (e.g. `profile_name!=""` for
+    addon-controller, `event_trigger_name!=""` for event-manager, `feature=""` for event-manager's
+    duration histogram, since addon-controller always sets `feature` and event-manager never does).
+
+### SveltosCluster Manager
+
+The microservice that continuously verifies connectivity with registered clusters.
 
 * ``projectsveltos_cluster_connectivity_status``: Gauge indicating the connectivity status of each cluster, where `0` means healthy and `1` means disconnected.
 
-* ``projectsveltos_kubernetes_version_info:`` Gauge providing the Kubernetes version (major.minor.patch) of each cluster.
+* ``projectsveltos_kubernetes_version_info:`` Gauge providing the Kubernetes version (major.minor.patch) of each cluster, using the "info metric" pattern (value always `1`, the version lives in the `kubernetes_version` label). Any prior version's row for a cluster is cleared before the current one is set, so a cluster upgrade doesn't leave both the old and new version showing simultaneously.
 
-* ``projectsveltos_program_charts_time_seconds_count:`` Counter of the total number of Helm charts deployed.
+* ``projectsveltos_connection_failures:`` Gauge mirroring `SveltosCluster.status.connectionFailures` — resets to `0` on the next successful check, so it answers "is this cluster stuck failing connectivity checks right now," the same distinction `reconcile_consecutive_failures` makes for addon-controller.
 
-* ``projectsveltos_program_charts_time_seconds_bucket:`` Histogram of the durations taken to deploy Helm charts on workload clusters.
- <!-- [0.3, 0.6, 0.9, 1.2, 1.5, 2, 3, 5, 10, 30, 60] -->
-* ``projectsveltos_program_resources_time_seconds_count:`` Counter of the total number of resources deployed.
+* ``projectsveltos_agent_last_heartbeat_timestamp_seconds:`` Gauge with the Unix timestamp of the last heartbeat received from a pull-mode cluster's sveltos-agent (`SveltosCluster.status.agentLastReportTime`). Distinct from `cluster_connectivity_status`: heartbeat staleness is specific to the pull-mode agent-push mechanism, not general management-cluster-to-workload-cluster API connectivity. `time() - projectsveltos_agent_last_heartbeat_timestamp_seconds` gives seconds since the last heartbeat.
 
-* ``projectsveltos_program_resources_time_seconds_bucket:`` Histogram of the durations taken to deploy resources on workload clusters
+All four metrics are removed entirely when a cluster is deregistered from Sveltos, so a deleted cluster's last-known state doesn't linger in Prometheus indefinitely.
 
-* ``projectsveltos_reconcile_operations_total:`` Counter of the total number of reconcile operations performed for Helm charts, Resources, and Kustomizations across clusters.
+### Addon Controller
 
-* ``projectsveltos_total_drifts:`` Counter of the total number of configuration drifts detected in clusters, categorized by cluster and feature.
+* ``projectsveltos_reconcile_duration_seconds:`` Histogram of the duration to program a feature (Resources, Helm, or Kustomize) on a workload cluster. Labeled by `cluster_type`/`cluster_namespace`/`cluster_name`/`feature`, so it can be filtered to one cluster, aggregated to a namespace, or averaged fleet-wide, and each feature type is distinguishable rather than lumped together.
 
-* Per-Cluster `program_resources_time_seconds` Histograms: Histograms (per cluster) of durations taken to deploy resources, indexed by cluster information.
+* ``projectsveltos_reconcile_operations_total:`` Counter of the total number of reconcile operations (attempts, regardless of outcome) performed for Helm charts, Resources, and Kustomizations, labeled by cluster and feature.
 
-* Per-Cluster `program_charts_time_seconds` Histograms: Histograms (per cluster) of durations taken to deploy Helm charts, indexed by cluster information.
+* ``projectsveltos_reconcile_outcome_total:`` Counter of terminal reconcile outcomes (`status="success"` or `status="failure"`), unlike `reconcile_operations_total` which counts every attempt blind to outcome. Labeled by cluster, feature, status, and the owning `profile_kind`/`profile_namespace`/`profile_name` (ClusterProfile or Profile) — this is what answers "is add-on X currently failing on N clusters."
+
+* ``projectsveltos_matching_clusters:`` Gauge of how many clusters currently match a ClusterProfile/Profile's selector. Labeled by `profile_kind`/`profile_namespace`/`profile_name`. Set independently of any reconcile activity, so it stays accurate even for a profile matching zero clusters.
+
+* ``projectsveltos_reconcile_consecutive_failures:`` Gauge mirroring `ClusterSummary.status.featureSummaries[].consecutiveFailures` — resets to `0` on the next success, so it answers "is this stuck failing right now," unlike `reconcile_outcome_total` which only accumulates and never reflects recovery.
+
+* ``projectsveltos_reconcile_last_success_timestamp_seconds:`` Gauge with the Unix timestamp of the last successful (Provisioned/Removed) terminal outcome for a feature on a cluster. Only moves forward on success, so `time() - projectsveltos_reconcile_last_success_timestamp_seconds` gives "seconds since this last worked," useful even for something failing intermittently rather than in a tight consecutive streak.
+
+* ``projectsveltos_total_drifts:`` Counter of the total number of configuration drifts detected in clusters, labeled by cluster, feature, and the owning `profile_kind`/`profile_namespace`/`profile_name`.
+
+### Event Manager
+
+* ``projectsveltos_reconcile_duration_seconds:`` Histogram of the duration to process an EventTrigger for a cluster (evaluate matching events, create/update the resulting ClusterProfile(s)). Labeled by `cluster_type`/`cluster_namespace`/`cluster_name` only — no `feature` label, unlike addon-controller's metric of the same name, which is the label to filter on when disambiguating the two.
+
+* ``projectsveltos_reconcile_outcome_total:`` Counter of terminal reconcile outcomes for an EventTrigger on a cluster. Labeled by cluster, status, and `event_trigger_name`.
+
+* ``projectsveltos_matching_clusters:`` Gauge of how many clusters currently match an EventTrigger's `sourceClusterSelector`. Labeled by `event_trigger_name` only.
+
+* ``projectsveltos_matching_resources:`` Gauge of how many resources the most recently processed EventReport matched for an EventTrigger on a cluster (`EventReport.spec.matchingResources`, not CloudEvents — a separate matching mechanism). Labeled by `event_trigger_name`/`cluster_type`/`cluster_namespace`/`cluster_name`. Set independent of whether ClusterProfile creation subsequently succeeds — it's a fact about the EventReport, not about what Sveltos did with it.
+
+* ``projectsveltos_reconcile_last_success_timestamp_seconds:`` Gauge with the Unix timestamp of the last successful terminal outcome for an EventTrigger on a cluster. Same semantics as addon-controller's version above, labeled by `event_trigger_name` instead of profile.
 
 ## Dashboard Panels
 
@@ -105,13 +139,13 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 ### 3. Total Helm Charts Deployments
 - **Type**: Stat
 - **Purpose**: Counts the number of Helm chart deployments.
-- **Query Used**: ``projectsveltos_program_charts_time_seconds_count``
+- **Query Used**: ``sum(projectsveltos_reconcile_duration_seconds_count{feature="Helm"})``
 - **Interpretation**: Displays the number of Helm charts deployed across all sveltosclusters. This helps users assess the workload managed by Sveltos, track deployment activity, correlate any change in application performance with deployments, and optimize deployment strategies accordingly.
 
 ### 4. Total Resources Deployments
 - **Type**: Stat
 - **Purpose**: Counts the number of resource deployments.
-- **Query Used**: ``projectsveltos_program_resources_time_seconds_count``
+- **Query Used**: ``sum(projectsveltos_reconcile_duration_seconds_count{feature="Resources"})``
 - **Interpretation**: Displays the total count of resources deployed across all sveltosclusters. This helps users assess the workload managed by Sveltos, track deployment activity, correlate any change in application performance with deployments, and optimize deployment strategies accordingly.
 
 
@@ -119,28 +153,28 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 - **Type**: Bar Chart
 - **Purpose**: Depicts the time required for deploying Helm Charts, by visualizing the 50th and 90th percentile of deployment times.
 - **Queries Used**:
-``histogram_quantile(0.90, projectsveltos_program_charts_time_seconds_bucket)``
-``histogram_quantile(0.50, projectsveltos_program_charts_time_seconds_bucket)``
+``histogram_quantile(0.90, sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Helm"}[5m])) by (le))``
+``histogram_quantile(0.50, sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Helm"}[5m])) by (le))``
 - **Interpretation**: Provides deeper insights into the deployment times required by Helm Charts. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.
 
 ### 6. Time to Deploy Resources in a Profile
 - **Type**: Bar Chart
 - **Purpose**: Depicts the time required for deploying Resources, by visualizing the 50th and 90th percentile of deployment times.
 - **Queries Used**:
-``histogram_quantile(0.90, projectsveltos_program_resources_time_seconds_bucket)``
-``histogram_quantile(0.50, projectsveltos_program_resources_time_seconds_bucket)``
+``histogram_quantile(0.90, sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Resources"}[5m])) by (le))``
+``histogram_quantile(0.50, sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Resources"}[5m])) by (le))``
 - **Interpretation**: Provides deeper insights into the resource deployment times. By plotting both the 50th and the 90th percentile, this chart intends to help users gauge performance consistency and distribution, and update their deployment strategies accordingly.
 
 ### 7.Time to Deploy Helm Charts in a Profile - Histogram
 - **Type**: Bar Gauge
 - **Purpose**: Provides a histogram view of deployment times for Helm charts.
-- **Query Used**: ``projectsveltos_program_charts_time_seconds_bucket``
+- **Query Used**: ``projectsveltos_reconcile_duration_seconds_bucket{feature="Helm"}``
 - **Interpretation**: Captures the distribution of deployment times for Helm charts, and allows users to track and address long-tail latencies.
 
 ### 8. Time to Deploy Resources in a Profile - Histogram
 - **Type**: Bar Gauge
 - **Purpose**: Offers a histogram vieew of resource deployment times.
-- **Query Used**: ``projectsveltos_program_resources_time_seconds_bucket``
+- **Query Used**: ``projectsveltos_reconcile_duration_seconds_bucket{feature="Resources"}``
 - **Interpretation**: Captures the distribution of deployment times for resources, and allows users to track and address long-tail latencies.
 
 ### 9. Deploy Helm Charts in a Profile - Latency Heatmap
@@ -148,7 +182,7 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 - **Purpose**: Provides a heatmap of Helm chart deployment latencies
 - **Query Used**:
 ``
-	sum(rate(projectsveltos_program_charts_time_seconds_bucket[5m]))
+sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Helm"}[5m])) by (le)
 ``
 - **Interpretation**: Highlights the frequency and duration of Helm chart deployment latencies to help users identify patterns and optimize deployment management.
 
@@ -157,7 +191,7 @@ Sveltos lets users track and visualize a number of key operational metrics, whic
 - **Purpose**: Provides a heatmap of Resource deployment latencies
 - **Query Used**:
 ``
-sum(rate(projectsveltos_program_resources_time_seconds_bucket[5m]))
+sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature="Resources"}[5m])) by (le)
 ``
 - **Interpretation**: Highlights the frequency and duration of resource deployment latencies to help users identify patterns and optimize deployment management.
 
@@ -172,5 +206,74 @@ sum(rate(projectsveltos_program_resources_time_seconds_bucket[5m]))
 - **Purpose**: Tracks and displays drifts, categorized by cluster (type, namespace, name) and feature.
 - **Query Used**: ``projectsveltos_total_drifts``
 - **Interpretation**: Allows users to monitor configuration drifts, crucial for maintaining consistency and compliance across sveltosclusters, so they may detect and rectify discrepancies in workload clusters.
+
+### 13. Reconcile Outcomes
+- **Type**: Time Series
+- **Purpose**: Shows the rate of successful vs. failed terminal reconcile outcomes, per ClusterProfile/Profile and status.
+- **Query Used**: ``sum(rate(projectsveltos_reconcile_outcome_total{profile_name!=""}[5m])) by (profile_name, status)``
+- **Interpretation**: Answers "is add-on X currently failing on N clusters" directly — a rising `failure` line for a given `profile_name` means that ClusterProfile/Profile is actively failing to deploy, distinct from `reconcile_operations_total` which counts every attempt regardless of outcome.
+
+### 14. Matching Clusters per Profile
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently match each ClusterProfile/Profile's selector.
+- **Query Used**: ``projectsveltos_matching_clusters{profile_name!=""}``
+- **Interpretation**: A profile matching `0` clusters may indicate a misconfigured `clusterSelector`; tracked over time this also shows fleet adoption of a given add-on.
+
+### 15. Consecutive Failures per Profile
+- **Type**: Time Series
+- **Purpose**: Shows the current consecutive-failure streak for each cluster/feature/profile combination.
+- **Query Used**: ``projectsveltos_reconcile_consecutive_failures{profile_name!=""}``
+- **Interpretation**: Unlike the cumulative outcome counter, this resets to `0` on the next success — a non-zero, rising value means something is stuck failing *right now*, rather than having failed at some point in the past.
+
+### 16. Time Since Last Success per Profile
+- **Type**: Time Series
+- **Purpose**: Shows how long it has been since each cluster/feature/profile combination last reached a successful terminal state.
+- **Query Used**: ``time() - projectsveltos_reconcile_last_success_timestamp_seconds{profile_name!=""}``
+- **Interpretation**: Catches staleness even for something failing intermittently rather than in a tight consecutive streak that would trip the panel above.
+
+### 17. EventTrigger Reconcile Duration - Latency Heatmap
+- **Type**: Heatmap
+- **Purpose**: Provides a heatmap of EventTrigger processing latencies (evaluating matching events and creating/updating the resulting ClusterProfile(s)).
+- **Query Used**:
+``
+sum(rate(projectsveltos_reconcile_duration_seconds_bucket{feature=""}[5m])) by (le)
+``
+- **Interpretation**: The `feature=""` filter isolates event-manager's series from addon-controller's metric of the same name, since only addon-controller ever sets the `feature` label.
+
+### 18. EventTrigger Reconcile Outcomes
+- **Type**: Time Series
+- **Purpose**: Shows the rate of successful vs. failed terminal reconcile outcomes, per EventTrigger and status.
+- **Query Used**: ``sum(rate(projectsveltos_reconcile_outcome_total{event_trigger_name!=""}[5m])) by (event_trigger_name, status)``
+- **Interpretation**: A rising `failure` line for a given EventTrigger means it's actively failing to process events into ClusterProfiles for at least one cluster — worth cross-referencing with `EventTrigger.status.clusterInfo[].failureMessage` for the reason.
+
+### 19. Matching Clusters per EventTrigger
+- **Type**: Time Series
+- **Purpose**: Shows how many clusters currently match each EventTrigger's `sourceClusterSelector`.
+- **Query Used**: ``projectsveltos_matching_clusters{event_trigger_name!=""}``
+- **Interpretation**: Same idea as the ClusterProfile version above, applied to EventTriggers — a `0` may indicate a misconfigured selector.
+
+### 20. Matching Resources per EventTrigger
+- **Type**: Time Series
+- **Purpose**: Shows how many resources the most recently processed EventReport matched, per EventTrigger and cluster.
+- **Query Used**: ``projectsveltos_matching_resources``
+- **Interpretation**: Lets you tell "this EventTrigger keeps getting EventReports but nothing ever matches" (misconfigured EventSource) apart from "this is actively firing." Unique to event-manager, no name collision to filter around.
+
+### 21. Time Since Last Success per EventTrigger
+- **Type**: Time Series
+- **Purpose**: Shows how long it has been since each EventTrigger last successfully processed a cluster.
+- **Query Used**: ``time() - projectsveltos_reconcile_last_success_timestamp_seconds{event_trigger_name!=""}``
+- **Interpretation**: Same semantics as the ClusterProfile version above — catches an EventTrigger that's gone stale even if it isn't failing on every single reconcile.
+
+### 22. Connection Failures per Cluster
+- **Type**: Time Series
+- **Purpose**: Shows the current consecutive-failure streak for each cluster's connectivity checks, as tracked by sveltoscluster-manager.
+- **Query Used**: ``projectsveltos_connection_failures``
+- **Interpretation**: Resets to `0` on the next successful check, so a non-zero, rising value means a cluster is stuck failing connectivity checks right now — the same "is this stuck right now" signal `reconcile_consecutive_failures` gives for addon-controller, applied to basic cluster reachability instead of add-on deployment.
+
+### 23. Time Since Last Agent Heartbeat (Pull Mode)
+- **Type**: Time Series
+- **Purpose**: Shows how long it has been since each pull-mode cluster's sveltos-agent last reported in.
+- **Query Used**: ``time() - projectsveltos_agent_last_heartbeat_timestamp_seconds``
+- **Interpretation**: Specific to pull-mode/air-gapped clusters, where sveltos-agent pushes heartbeats rather than the management cluster polling — a climbing value here catches a stalled agent even before `cluster_connectivity_status` would flag it, since heartbeat staleness and general API connectivity are checked independently.
 
 
