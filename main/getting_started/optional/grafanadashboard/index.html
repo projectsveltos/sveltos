@@ -1407,6 +1407,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1671,6 +1682,83 @@
     <span class="md-ellipsis">
       
         23. Time Since Last Agent Heartbeat (Pull Mode)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-classifier-reconcile-duration-latency-heatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. Classifier Reconcile Duration - Latency Heatmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-classifier-reconcile-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Classifier Reconcile Outcomes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-matching-clusters-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26. Matching Clusters per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-label-conflicts-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        27. Label Conflicts per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-time-since-last-success-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28. Time Since Last Success per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-matching-clusters-per-managementclusterclassifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        29. Matching Clusters per ManagementClusterClassifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-label-conflicts-per-managementclusterclassifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30. Label Conflicts per ManagementClusterClassifier
       
     </span>
   </a>
@@ -5041,6 +5129,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5311,6 +5410,83 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#24-classifier-reconcile-duration-latency-heatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. Classifier Reconcile Duration - Latency Heatmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-classifier-reconcile-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Classifier Reconcile Outcomes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-matching-clusters-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26. Matching Clusters per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-label-conflicts-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        27. Label Conflicts per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-time-since-last-success-per-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28. Time Since Last Success per Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-matching-clusters-per-managementclusterclassifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        29. Matching Clusters per ManagementClusterClassifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-label-conflicts-per-managementclusterclassifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30. Label Conflicts per ManagementClusterClassifier
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5372,13 +5548,19 @@ tools scraped by the same Prometheus instance — the prefix is not tied to the 
 component happens to be deployed into, so it stays stable across every install.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A few metric names are emitted by <strong>more than one component</strong> (e.g. both addon-controller and
-event-manager export a <code>reconcile_duration_seconds</code>), each with a different label set and meaning —
-the same pattern controller-runtime's own generic metrics already use, disambiguated by which
-component's <code>/metrics</code> endpoint was scraped. When a query below needs to isolate one component's
-series from another's, it filters on a label only that component sets (e.g. <code>profile_name!=""</code> for
-addon-controller, <code>event_trigger_name!=""</code> for event-manager, <code>feature=""</code> for event-manager's
-duration histogram, since addon-controller always sets <code>feature</code> and event-manager never does).</p>
+<p>A few metric names are emitted by <strong>more than one component</strong> (e.g. addon-controller,
+event-manager, and classifier all export a <code>reconcile_duration_seconds</code>), each with a different
+label set and meaning — the same pattern controller-runtime's own generic metrics already use,
+disambiguated by which component's <code>/metrics</code> endpoint was scraped. When a query below needs to
+isolate one component's series from another's, it filters on a label only that component sets
+(e.g. <code>profile_name!=""</code> for addon-controller, <code>event_trigger_name!=""</code> for event-manager,
+<code>classifier_name!=""</code> for classifier, <code>feature=""</code> for event-manager's duration histogram, since
+addon-controller always sets <code>feature</code> and event-manager never does). The one exception is
+classifier's own <code>reconcile_duration_seconds</code>: it carries the exact same three labels as
+event-manager's (<code>cluster_type</code>/<code>cluster_namespace</code>/<code>cluster_name</code>, no fourth distinguishing label),
+so isolating it requires filtering on the Prometheus-injected <code>job</code>/<code>instance</code> label from the scrape
+target instead (e.g. <code>job="classifier"</code>, depending on how the ServiceMonitor's job name resolves in
+your Prometheus setup) rather than an in-metric label.</p>
 </div>
 <h3 id="sveltoscluster-manager">SveltosCluster Manager</h3>
 <p>The microservice that continuously verifies connectivity with registered clusters.</p>
@@ -5437,6 +5619,30 @@ duration histogram, since addon-controller always sets <code>feature</code> and 
 </li>
 <li>
 <p><code>projectsveltos_reconcile_last_success_timestamp_seconds:</code> Gauge with the Unix timestamp of the last successful terminal outcome for an EventTrigger on a cluster. Same semantics as addon-controller's version above, labeled by <code>event_trigger_name</code> instead of profile.</p>
+</li>
+</ul>
+<h3 id="classifier">Classifier</h3>
+<ul>
+<li>
+<p><code>projectsveltos_reconcile_duration_seconds:</code> Histogram of the duration to program a Classifier (deploy sveltos-agent, required CRDs, and the Classifier instance itself) on a workload cluster. Labeled by <code>cluster_type</code>/<code>cluster_namespace</code>/<code>cluster_name</code> only — the same three labels as event-manager's metric of the same name, with no fourth label to disambiguate; see the note above on filtering by the scrape <code>job</code> instead.</p>
+</li>
+<li>
+<p><code>projectsveltos_reconcile_outcome_total:</code> Counter of terminal reconcile outcomes (<code>status="success"</code> or <code>status="failure"</code>) for a Classifier on a cluster. Labeled by cluster, status, and <code>classifier_name</code>.</p>
+</li>
+<li>
+<p><code>projectsveltos_reconcile_last_success_timestamp_seconds:</code> Gauge with the Unix timestamp of the last successful (Provisioned) terminal outcome for a Classifier on a cluster. Same semantics as the addon-controller/event-manager versions above, labeled by <code>classifier_name</code>.</p>
+</li>
+<li>
+<p><code>projectsveltos_matching_clusters:</code> Gauge of how many clusters currently match a Classifier's rules (<code>kubernetesVersionConstraints</code>, <code>deployedResourceConstraint</code>) and so receive its <code>classifierLabels</code>. Labeled by <code>classifier_name</code> only.</p>
+</li>
+<li>
+<p><code>projectsveltos_label_conflicts:</code> Gauge of how many clusters currently have at least one label key this Classifier wants to manage but can't, because another Classifier already owns that key on that cluster (see the keymanager conflict-detection logic). Labeled by <code>classifier_name</code> only. Unique to classifier — no equivalent in addon-controller or event-manager.</p>
+</li>
+<li>
+<p><code>projectsveltos_mgmt_cluster_matching_clusters:</code> Gauge of how many clusters currently match a <code>ManagementClusterClassifier</code>'s <code>classificationLua</code> (evaluated against management-cluster resources, not managed clusters). Labeled by <code>classifier_name</code>. Kept as a separate metric from <code>matching_clusters</code> above since <code>ManagementClusterClassifier</code> is a distinct CRD/reconciler with its own matching semantics.</p>
+</li>
+<li>
+<p><code>projectsveltos_mgmt_cluster_label_conflicts:</code> Gauge of how many clusters currently have at least one label key a <code>ManagementClusterClassifier</code> cannot manage due to a conflict. Labeled by <code>classifier_name</code>. Same relationship to <code>label_conflicts</code> above as <code>mgmt_cluster_matching_clusters</code> has to <code>matching_clusters</code>.</p>
 </li>
 </ul>
 <h2 id="dashboard-panels">Dashboard Panels</h2>
@@ -5607,6 +5813,56 @@ duration histogram, since addon-controller always sets <code>feature</code> and 
 <li><strong>Purpose</strong>: Shows how long it has been since each pull-mode cluster's sveltos-agent last reported in.</li>
 <li><strong>Query Used</strong>: <code>time() - projectsveltos_agent_last_heartbeat_timestamp_seconds</code></li>
 <li><strong>Interpretation</strong>: Specific to pull-mode/air-gapped clusters, where sveltos-agent pushes heartbeats rather than the management cluster polling — a climbing value here catches a stalled agent even before <code>cluster_connectivity_status</code> would flag it, since heartbeat staleness and general API connectivity are checked independently.</li>
+</ul>
+<h3 id="24-classifier-reconcile-duration-latency-heatmap">24. Classifier Reconcile Duration - Latency Heatmap</h3>
+<ul>
+<li><strong>Type</strong>: Heatmap</li>
+<li><strong>Purpose</strong>: Provides a heatmap of Classifier programming latencies (deploying sveltos-agent, required CRDs, and the Classifier instance to a workload cluster).</li>
+<li><strong>Query Used</strong>:
+<code>sum(rate(projectsveltos_reconcile_duration_seconds_bucket{job="classifier"}[5m])) by (le)</code></li>
+<li><strong>Interpretation</strong>: Filtered by the scrape <code>job</code> rather than an in-metric label, since classifier's <code>reconcile_duration_seconds</code> shares the exact same label set as event-manager's metric of the same name (see the note above). Adjust the <code>job</code> label value to match how your Prometheus/ServiceMonitor setup names the classifier scrape target.</li>
+</ul>
+<h3 id="25-classifier-reconcile-outcomes">25. Classifier Reconcile Outcomes</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows the rate of successful vs. failed terminal reconcile outcomes, per Classifier and status.</li>
+<li><strong>Query Used</strong>: <code>sum(rate(projectsveltos_reconcile_outcome_total{classifier_name!=""}[5m])) by (classifier_name, status)</code></li>
+<li><strong>Interpretation</strong>: A rising <code>failure</code> line for a given <code>classifier_name</code> means that Classifier is actively failing to deploy to at least one cluster.</li>
+</ul>
+<h3 id="26-matching-clusters-per-classifier">26. Matching Clusters per Classifier</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how many clusters currently match each Classifier's rules.</li>
+<li><strong>Query Used</strong>: <code>projectsveltos_matching_clusters{classifier_name!=""}</code></li>
+<li><strong>Interpretation</strong>: A Classifier matching <code>0</code> clusters may indicate overly-restrictive <code>kubernetesVersionConstraints</code>/<code>deployedResourceConstraint</code> rules; tracked over time this also shows how a label rolls out across the fleet.</li>
+</ul>
+<h3 id="27-label-conflicts-per-classifier">27. Label Conflicts per Classifier</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how many clusters currently have a label-key conflict for each Classifier.</li>
+<li><strong>Query Used</strong>: <code>projectsveltos_label_conflicts{classifier_name!=""}</code></li>
+<li><strong>Interpretation</strong>: A non-zero, rising value means this Classifier is currently losing ownership of at least one label key to another Classifier on some clusters — worth cross-referencing with <code>ClassifierReport.status.unmanagedLabels</code> for which key and which competing Classifier.</li>
+</ul>
+<h3 id="28-time-since-last-success-per-classifier">28. Time Since Last Success per Classifier</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how long it has been since each Classifier last successfully reconciled a cluster.</li>
+<li><strong>Query Used</strong>: <code>time() - projectsveltos_reconcile_last_success_timestamp_seconds{classifier_name!=""}</code></li>
+<li><strong>Interpretation</strong>: Same semantics as the ClusterProfile/EventTrigger versions above — catches a Classifier that's gone stale even if it isn't failing on every single reconcile.</li>
+</ul>
+<h3 id="29-matching-clusters-per-managementclusterclassifier">29. Matching Clusters per ManagementClusterClassifier</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how many clusters currently match each <code>ManagementClusterClassifier</code>'s <code>classificationLua</code>.</li>
+<li><strong>Query Used</strong>: <code>projectsveltos_mgmt_cluster_matching_clusters</code></li>
+<li><strong>Interpretation</strong>: Same idea as panel 26, applied to <code>ManagementClusterClassifier</code> instead of <code>Classifier</code> — evaluated against management-cluster resources rather than managed clusters.</li>
+</ul>
+<h3 id="30-label-conflicts-per-managementclusterclassifier">30. Label Conflicts per ManagementClusterClassifier</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how many clusters currently have a label-key conflict for each <code>ManagementClusterClassifier</code>.</li>
+<li><strong>Query Used</strong>: <code>projectsveltos_mgmt_cluster_label_conflicts</code></li>
+<li><strong>Interpretation</strong>: Same idea as panel 27, applied to <code>ManagementClusterClassifier</code> instead of <code>Classifier</code>.</li>
 </ul>
 
 
