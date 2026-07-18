@@ -132,6 +132,9 @@ We can leverage `tiers` to prioritize the upgrade for **west** regions. Check th
 
 The `kyverno` ClusterProfile (tier:50) overrides the default `validation-and-monitoring` profile (tier:100) for the Kyverno deployment in west clusters. This ensures Kyverno gets upgraded to version 3.1.4 only in the desired region.
 
+!!!note
+    In this example both `ClusterProfiles` keep matching the `west` clusters indefinitely. The conflict is resolved by tier every reconciliation, permanently. If instead you want to fully retire the old `ClusterProfile`'s match on a cluster once the migration is done (for example, when `ClusterProfiles` are treated as immutable and a new one is created per upgrade), see [Zero-Downtime Migration Between ClusterProfiles](clusterprofile_ownership_transfer.md) for the overlap-then-cutover approach and its tradeoffs versus tiers.
+
 The snippet below shows a sample cluster state after applying both ClusterProfiles.
 
 ```
