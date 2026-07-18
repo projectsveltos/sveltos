@@ -549,6 +549,26 @@ Set `runTests: true` on a helmChart entry to have Sveltos automatically run [Hel
 !!! note
     `runTests` has no effect when the ClusterProfile `syncMode` is set to `DryRun`.
 
+### Force Replace on Rejected Upgrades
+
+Setting `options.upgradeOptions.force: true` tells Sveltos to force a Helm upgrade through when a normal update is rejected, for the same class of errors described in [Recovering from Rejected Updates](raw_yaml.md#recovering-from-rejected-updates): an immutable field, or an invalid combination of fields, such as a Deployment's `strategy.type` changing from the server-defaulted `RollingUpdate` to `Recreate`.
+
+```yaml hl_lines="14-15"
+helmCharts:
+- repositoryURL:    <REPO URL>
+  repositoryName:   <REPO NAME>
+  chartName:        <CHART NAME>
+  chartVersion:     <CHART VERSION>
+  releaseName:      <...>
+  releaseNamespace: <...>
+  options:
+    upgradeOptions:
+      force: true
+```
+
+!!! note
+    Helm's own force-replace mechanism deletes and recreates the affected resource, so expect a brief disruption, the same as `force` on `policyRefs`/`kustomizationRefs`.
+
 ### Options
 
 Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the [CRD](https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184).

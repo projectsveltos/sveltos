@@ -154,6 +154,23 @@ spec:
       skipNamespaceCreation: true
 ```
 
+### Recovering from Rejected Updates
+
+By default, if an update to a resource in `policyRefs` is rejected by the API server with an error that only a delete and recreate can resolve (for example, an immutable field, or an invalid combination of fields, such as a Deployment's `strategy.type` changing from the server-defaulted `RollingUpdate` to `Recreate`), Sveltos surfaces the error instead of resolving it.
+
+Setting `force: true` on that `PolicyRef` tells Sveltos to delete and recreate the resource instead of surfacing the error.
+
+```yaml hl_lines="7"
+policyRefs:
+  - name: my-deployment
+    namespace: default
+    kind: ConfigMap
+    force: true
+```
+
+!!! note
+    `force` causes the resource to be briefly unavailable while it is deleted and recreated. It never applies to `CustomResourceDefinitions`, since deleting one cascades to every instance of it.
+
 ### Example: Template-based Referencing for ConfigMaps and Secrets
 
 We can express `ConfigMap` and `Secret` **names** as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.
