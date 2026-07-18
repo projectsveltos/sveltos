@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos can verify the integrity and origin of a Helm chart before deploying it, using Cosign signature verification for OCI charts and GPG provenance verification for HTTP charts.">
+        <meta name="description" content="How to move a managed cluster from one ClusterProfile to another (for example to roll out a new CNI Helm chart version) without Sveltos uninstalling and reinstalling the release.">
       
       
       
       
-        <link rel="prev" href="../helm_charts/">
+        <link rel="prev" href="../tiers/">
       
       
-        <link rel="next" href="../raw_yaml/">
+        <link rel="next" href="../rolling_update_strategy/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Sveltos - Helm Chart Supply Chain Verification - Projectsveltos Documentation</title>
+        <title>Zero-Downtime Helm Chart Upgrades - Transferring Ownership Between ClusterProfiles - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#helm-chart-supply-chain-verification" class="md-skip">
+        <a href="#the-problem" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +143,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos - Helm Chart Supply Chain Verification
+              Zero-Downtime Helm Chart Upgrades - Transferring Ownership Between ClusterProfiles
             
           </span>
         </div>
@@ -1587,20 +1587,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1621,7 +1619,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1639,7 +1637,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../addons/" class="md-nav__link">
+      <a href="../../addons/addons/" class="md-nav__link">
         
   
   
@@ -1667,7 +1665,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../helm_charts/" class="md-nav__link">
+      <a href="../../addons/helm_charts/" class="md-nav__link">
         
   
   
@@ -1675,6 +1673,370 @@
     
   
     Deploy Helm Charts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/helm_chart_verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Helm Chart Supply Chain Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/raw_yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy YAML/JSON Kubernetes manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/kustomize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy Kustomize Kubernetes manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/combining_all/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example ClusterProfile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/example_flux_sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Flux Sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/clusterprofile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Dive - ClusterProfiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addons/profile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Dive - Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resource Deployment Order
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resource Deployment Order
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manifest_order/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Resource Deployment Order
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../depends_on/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile dependsOn Field
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../depends_on_with_health_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile dependsOn and validateHealths
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tiers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Tiers
   
 
     
@@ -1709,7 +2071,7 @@
   <span class="md-ellipsis">
     
   
-    Helm Chart Supply Chain Verification
+    Zero-Downtime Migration Between ClusterProfiles
   
 
     
@@ -1727,7 +2089,7 @@
   <span class="md-ellipsis">
     
   
-    Helm Chart Supply Chain Verification
+    Zero-Downtime Migration Between ClusterProfiles
   
 
     
@@ -1752,10 +2114,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#helm-chart-supply-chain-verification" class="md-nav__link">
+  <a href="#the-problem" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Helm Chart Supply Chain Verification
+        The Problem
       
     </span>
   </a>
@@ -1763,177 +2125,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cosign-signature-verification-oci-charts" class="md-nav__link">
+  <a href="#the-solution-overlap-dont-swap" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cosign Signature Verification (OCI charts)
+        The Solution: Overlap, Don't Swap
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Cosign Signature Verification (OCI charts)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#keyless-provider" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Keyless Provider
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Keyless Provider">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-verify-a-chart-signed-by-a-github-actions-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example: Verify a Chart Signed by a GitHub Actions Workflow
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-keyless-verification-with-your-own-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using Keyless Verification With Your Own Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#publickey-provider" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PublicKey Provider
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PublicKey Provider">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-generate-cosign-key-pair" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1 — Generate Cosign Key Pair
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-sign-the-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2 — Sign the Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-store-the-public-key-in-a-secret-on-the-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Store the Public Key in a Secret on the Management Cluster
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-reference-it-in-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4: Reference It in a ClusterProfile
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpg-provenance-verification-http-charts" class="md-nav__link">
+  <a href="#example-rolling-out-a-new-cni-chart-version-to-a-subset-of-clusters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPG Provenance Verification (HTTP charts)
+        Example: Rolling Out a New CNI Chart Version to a Subset of Clusters
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="GPG Provenance Verification (HTTP charts)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-package-and-sign-the-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: Package and Sign the Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-export-the-gpg-public-key-and-store-it-in-a-secret" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Export the GPG Public Key and Store It in a Secret
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-reference-it-in-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Reference It in a ClusterProfile
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#checking-verification-status" class="md-nav__link">
+  <a href="#verifying-the-handover" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Checking Verification Status
+        Verifying the Handover
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-resolving-the-conflict-with-tiers-instead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: Resolving the Conflict with Tiers Instead
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caveats
       
     </span>
   </a>
@@ -1956,369 +2195,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../raw_yaml/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deploy YAML/JSON Kubernetes manifests
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../kustomize/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deploy Kustomize Kubernetes manifests
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../combining_all/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Example ClusterProfile
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../example_flux_sources/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Example Flux Sources
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../clusterprofile/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deep Dive - ClusterProfiles
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../profile/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deep Dive - Profiles
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resource Deployment Order
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Resource Deployment Order
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/manifest_order/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Profile Resource Deployment Order
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Profile dependsOn Field
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/depends_on_with_health_checks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Profile dependsOn and validateHealths
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/tiers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Profile Tiers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/clusterprofile_ownership_transfer/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Zero-Downtime Migration Between ClusterProfiles
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deployment_order/rolling_update_strategy/" class="md-nav__link">
+      <a href="../rolling_update_strategy/" class="md-nav__link">
         
   
   
@@ -2346,7 +2223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/progressive_rollout/" class="md-nav__link">
+      <a href="../progressive_rollout/" class="md-nav__link">
         
   
   
@@ -2374,7 +2251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/example_rollout_and_progressive_rollout/" class="md-nav__link">
+      <a href="../example_rollout_and_progressive_rollout/" class="md-nav__link">
         
   
   
@@ -2402,7 +2279,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment_order/order_with_events/" class="md-nav__link">
+      <a href="../order_with_events/" class="md-nav__link">
         
   
   
@@ -4772,10 +4649,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#helm-chart-supply-chain-verification" class="md-nav__link">
+  <a href="#the-problem" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Helm Chart Supply Chain Verification
+        The Problem
       
     </span>
   </a>
@@ -4783,177 +4660,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cosign-signature-verification-oci-charts" class="md-nav__link">
+  <a href="#the-solution-overlap-dont-swap" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cosign Signature Verification (OCI charts)
+        The Solution: Overlap, Don't Swap
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Cosign Signature Verification (OCI charts)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#keyless-provider" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Keyless Provider
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Keyless Provider">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-verify-a-chart-signed-by-a-github-actions-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example: Verify a Chart Signed by a GitHub Actions Workflow
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-keyless-verification-with-your-own-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using Keyless Verification With Your Own Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#publickey-provider" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PublicKey Provider
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PublicKey Provider">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-generate-cosign-key-pair" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1 — Generate Cosign Key Pair
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-sign-the-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2 — Sign the Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-store-the-public-key-in-a-secret-on-the-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Store the Public Key in a Secret on the Management Cluster
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-reference-it-in-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4: Reference It in a ClusterProfile
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpg-provenance-verification-http-charts" class="md-nav__link">
+  <a href="#example-rolling-out-a-new-cni-chart-version-to-a-subset-of-clusters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPG Provenance Verification (HTTP charts)
+        Example: Rolling Out a New CNI Chart Version to a Subset of Clusters
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="GPG Provenance Verification (HTTP charts)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-package-and-sign-the-chart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: Package and Sign the Chart
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-export-the-gpg-public-key-and-store-it-in-a-secret" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Export the GPG Public Key and Store It in a Secret
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-reference-it-in-a-clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Reference It in a ClusterProfile
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#checking-verification-status" class="md-nav__link">
+  <a href="#verifying-the-handover" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Checking Verification Status
+        Verifying the Handover
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-resolving-the-conflict-with-tiers-instead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: Resolving the Conflict with Tiers Instead
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caveats
       
     </span>
   </a>
@@ -4978,255 +4732,111 @@
   
 
 
-  <h1 id="__skip">Sveltos - Helm Chart Supply Chain Verification</h1>
+  <h1 id="__skip">Zero-Downtime Helm Chart Upgrades - Transferring Ownership Between ClusterProfiles</h1>
 
-<h2 id="helm-chart-supply-chain-verification">Helm Chart Supply Chain Verification</h2>
-<p>Before deploying a Helm chart, Sveltos can verify that it was signed by a trusted source and that its contents have not been modified. Two mechanisms are supported depending on where the chart is hosted.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>Some Helm releases, a CNI, an ingress controller, a service mesh, should never be fully removed and reinstalled just to move to a new version. A brief network outage while the CNI is uninstalled and reinstalled is often unacceptable.</p>
+<p>Teams frequently keep <code>ClusterProfile</code> resources immutable in Git and roll out changes by creating a <em>new</em> <code>ClusterProfile</code> rather than editing the existing one. This is done deliberately: editing an existing <code>ClusterProfile</code> in place immediately rolls the change out to every cluster matching its <code>clusterSelector</code>. Sveltos does offer its own controls for that (see <a href="../rolling_update_strategy/">Add-on Rollout Strategy</a> and <a href="../progressive_rollout/">Progressive Rollout Across Clusters</a>, which stage a change across the clusters already matching a single <code>ClusterProfile</code>), but many teams additionally want the coarser, explicit control of deciding cluster by cluster whether it should pick up a new <code>ClusterProfile</code> at all, which is why they create a new <code>ClusterProfile</code> with its own selector rather than editing the existing one in place.</p>
+<p>That pattern raises a question. If cluster <code>X</code> currently matches <code>ClusterProfile</code> <strong>A</strong> (which deploys a CNI Helm chart), and you want to move it to <code>ClusterProfile</code> <strong>B</strong> (which deploys a newer version of the same chart), what actually happens on the cluster when you make <code>X</code> stop matching <strong>A</strong> and start matching <strong>B</strong>?</p>
+<p>If you simply relabel the cluster so it stops matching <strong>A</strong> at the same time it starts matching <strong>B</strong>, Sveltos's default <code>stopMatchingBehavior</code> (<code>WithdrawPolicies</code>) removes everything <strong>A</strong> deployed, including uninstalling the Helm release for the CNI, before <strong>B</strong> installs it again. That uninstall/reinstall cycle is the outage you're trying to avoid.</p>
+<h2 id="the-solution-overlap-dont-swap">The Solution: Overlap, Don't Swap</h2>
+<p>For Helm charts, Sveltos tracks, per release, which <code>ClusterSummary</code> currently owns it. When a <code>ClusterSummary</code> is being torn down (because its cluster stopped matching the parent <code>ClusterProfile</code>/<code>Profile</code>), Sveltos checks whether another <code>ClusterSummary</code> on the same cluster already wants to manage that same Helm release. If one exists, ownership of the release is <strong>handed over</strong> to that other <code>ClusterSummary</code> in place: the release is <em>upgraded</em>, not uninstalled and reinstalled.</p>
+<p>This means the outage isn't caused by the ownership model itself. It's caused by removing the old match and adding the new match in the same step, before the new <code>ClusterSummary</code> has had a chance to exist. The fix is to make the cluster match <strong>both</strong> <code>ClusterProfiles</code> for a brief overlap window, and only <em>then</em> remove it from the old one:</p>
+<ol>
+<li>The cluster starts matching the new <code>ClusterProfile</code> <strong>while still matching the old one</strong>. This creates a second <code>ClusterSummary</code> for the same Helm release. Sveltos detects the conflict, and the new <code>ClusterSummary</code> reports <code>FailedNonRetriable</code>, but it does nothing destructive. The chart already deployed by the old <code>ClusterProfile</code> is left untouched.</li>
+<li>Only after that second <code>ClusterSummary</code> exists do you make the cluster stop matching the old <code>ClusterProfile</code>. Sveltos tears down the old <code>ClusterSummary</code>, sees the new one is waiting to take over the same release, and hands over ownership in place. If the new <code>ClusterProfile</code> deploys a different chart version, Sveltos performs a Helm <strong>upgrade</strong> to that version, not an uninstall followed by an install.</li>
+</ol>
+<p>If, instead, you removed the old match and added the new match at the same time (or removed the old one first), there is no overlap window: the old <code>ClusterSummary</code> is torn down with nothing yet waiting to take over, so <code>WithdrawPolicies</code> uninstalls the release before the new <code>ClusterSummary</code> is even created.</p>
+<h2 id="example-rolling-out-a-new-cni-chart-version-to-a-subset-of-clusters">Example: Rolling Out a New CNI Chart Version to a Subset of Clusters</h2>
+<p>Two <code>ClusterProfiles</code> are created up front, both immutable once committed. The first is already rolled out to every cluster; the second targets only the clusters you're ready to migrate.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cni-v1</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">cni-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">&lt;cni-repo-url&gt;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">cni</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">cni/cni-chart</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">1.18.12</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">cni</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nn">---</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cni-v2</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="nt">cni-migrate-v2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">&lt;cni-repo-url&gt;</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">cni</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">cni/cni-chart</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">1.19.6</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">cni</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
+</span></code></pre></div>
+<p>Note that <code>cni-v2</code> uses a distinct selector label (<code>cni-migrate-v2</code>) rather than a value change on the same label. This keeps the two <code>ClusterProfiles</code> from ever racing to claim a cluster based on the same key, and makes the migration state of any given cluster visible directly from its labels.</p>
+<p>Migrate a cluster by moving its labels through three states:</p>
 <table>
 <thead>
 <tr>
-<th>Chart source</th>
-<th>Verification mechanism</th>
+<th>Step</th>
+<th>Cluster labels</th>
+<th>Matches</th>
+<th>Result</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>OCI registry (<code>oci://</code>)</td>
-<td>Cosign signature verification</td>
+<td>0, start</td>
+<td><code>cni-version: v1</code></td>
+<td><code>cni-v1</code> only</td>
+<td><code>cni-v1</code> owns the <code>ClusterSummary</code>. CNI 1.18.12 is deployed.</td>
 </tr>
 <tr>
-<td>HTTP repository (<code>https://</code>)</td>
-<td>Helm GPG provenance (<code>.prov</code>) verification</td>
+<td>1, onboard</td>
+<td><code>cni-version: v1</code>, <code>cni-migrate-v2: "true"</code></td>
+<td><code>cni-v1</code> <strong>and</strong> <code>cni-v2</code></td>
+<td>A second <code>ClusterSummary</code> (owned by <code>cni-v2</code>) is created and reports a conflict. Nothing changes on the cluster yet. The CNI keeps running as deployed by <code>cni-v1</code>.</td>
+</tr>
+<tr>
+<td>2, cut over</td>
+<td><code>cni-migrate-v2: "true"</code> (drop <code>cni-version: v1</code>)</td>
+<td><code>cni-v2</code> only</td>
+<td><code>cni-v1</code>'s <code>ClusterSummary</code> is torn down. Ownership of the Helm release transfers to <code>cni-v2</code>'s <code>ClusterSummary</code> in place. Sveltos performs a Helm <strong>upgrade</strong> from 1.18.12 to 1.19.6. There is no uninstall/reinstall step.</td>
 </tr>
 </tbody>
 </table>
-<p>If verification fails the chart is not deployed and the failure reason is recorded on the <a href="https://projectsveltos.io/main/internals/cr-ownership/#clusterprofileprofile-clustersummary"><code>ClusterSummary</code></a> status. Charts without a verification field deploy as before.</p>
-<hr />
-<h2 id="cosign-signature-verification-oci-charts">Cosign Signature Verification (OCI charts)</h2>
-<p>When a chart is pulled from an OCI registry, Sveltos can verify its Cosign signature. Two providers are available:  <strong>Keyless</strong> for charts signed by a CI pipeline using short-lived OIDC certificates and <strong>PublicKey</strong> for charts signed with a static key pair.</p>
-<h3 id="keyless-provider">Keyless Provider</h3>
-<p>Keyless signing is used when a CI system such as GitHub Actions signs the chart at release time. No long-lived key is involved. Instead, the signing identity is encoded in a short-lived certificate issued by Fulcio (part of the Sigstore public infrastructure) and recorded in the Rekor transparency log.</p>
-<p>Sveltos verifies that the chart was signed by a certificate matching the expected OIDC issuer and subject before deploying it.</p>
-<h4 id="example-verify-a-chart-signed-by-a-github-actions-workflow">Example: Verify a Chart Signed by a GitHub Actions Workflow</h4>
-<p>The chart <code>registry-1.docker.io/gianlucam76/cosign-test:0.1.0</code> is a public chart signed by the GitHub Actions workflow at <code>https://github.com/gianlucam76/cosign-test</code>. You can use it to test keyless verification end to end.</p>
-<div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosign-keyless-example</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">oci://registry-1.docker.io/gianlucam76</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">cosign-test</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">cosign-test</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">cosign-test</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosign-test</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">signatureVerification</span><span class="p">:</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Keyless</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">matchOIDCIdentity</span><span class="p">:</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://token.actions.githubusercontent.com$&quot;</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://github.com/gianlucam76/cosign-test/.*$&quot;</span>
+<p>Step 1 is the important one: apply the <code>cni-migrate-v2: "true"</code> label to a cluster <em>without removing</em> <code>cni-version: v1</code>, verify the second <code>ClusterSummary</code> exists (<code>kubectl get clustersummary -A</code>) and reports the conflict as expected, and only then remove <code>cni-version: v1</code> in a follow-up change. Doing both label changes in the same commit collapses the overlap window to zero and reintroduces the outage.</p>
+<h2 id="verifying-the-handover">Verifying the Handover</h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Step 1: confirm both ClusterSummaries exist for the migrating cluster</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>clustersummary<span class="w"> </span>-A<span class="w"> </span>-o<span class="w"> </span>wide
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Step 2, after cutover: confirm only the v2 ClusterSummary remains,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># and that the Helm release was upgraded rather than reinstalled</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>kubectl<span class="w"> </span>get<span class="w"> </span>clustersummary<span class="w"> </span>-A<span class="w"> </span>-o<span class="w"> </span>wide
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>helm<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;release-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;release-namespace&gt;<span class="w"> </span>--kube-context<span class="w"> </span>&lt;managed-cluster&gt;
 </span></code></pre></div>
-</div>
-<p>The <code>issuer</code> and <code>subject</code> fields are regular expressions. Sveltos verifies that at least one signature on the chart was issued by a certificate matching both. If the chart was signed by a different workflow or repository, the deployment is blocked.</p>
-<p>To verify the same chart manually with the cosign CLI:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>cosign<span class="w"> </span>verify<span class="w"> </span>registry-1.docker.io/gianlucam76/cosign-test:0.1.0<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--certificate-oidc-issuer<span class="o">=</span><span class="s2">&quot;https://token.actions.githubusercontent.com&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--certificate-identity-regexp<span class="o">=</span><span class="s2">&quot;https://github.com/gianlucam76/cosign-test&quot;</span>
-</span></code></pre></div>
-<h4 id="using-keyless-verification-with-your-own-chart">Using Keyless Verification With Your Own Chart</h4>
-<p>To sign a chart from a GitHub Actions workflow and verify it with Sveltos:</p>
-<p><strong>Step 1</strong> — add a workflow that packages, pushes and signs the chart:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># .github/workflows/publish.yaml</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Publish</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">on</span><span class="p">:</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nt">permissions</span><span class="p">:</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span><span class="w">   </span><span class="c1"># required for keyless OIDC signing</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="nt">jobs</span><span class="p">:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="nt">publish-and-sign</span><span class="p">:</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sigstore/cosign-installer@v3</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azure/setup-helm@v4</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Log in to registry</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker/login-action@v3</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.REGISTRY_USERNAME }}</span>
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.REGISTRY_TOKEN }}</span>
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>
-</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Package and push</span>
-</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push</span>
-</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">          </span><span class="no">helm package charts/mychart</span>
-</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">          </span><span class="no">DIGEST=$(helm push mychart-1.0.0.tgz oci://registry-1.docker.io/myorg 2&gt;&amp;1 \</span>
-</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">            </span><span class="no">| grep &#39;^Digest:&#39; | awk &#39;{print $2}&#39;)</span>
-</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">          </span><span class="no">echo &quot;digest=${DIGEST}&quot; &gt;&gt; &quot;$GITHUB_OUTPUT&quot;</span>
-</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
-</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Sign</span>
-</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
-</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">          </span><span class="nt">REGISTRY_USERNAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.REGISTRY_USERNAME }}</span>
-</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">          </span><span class="nt">REGISTRY_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.REGISTRY_TOKEN }}</span>
-</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">          </span><span class="no">cosign sign --yes \</span>
-</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">            </span><span class="no">--registry-username &quot;${REGISTRY_USERNAME}&quot; \</span>
-</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">            </span><span class="no">--registry-password &quot;${REGISTRY_TOKEN}&quot; \</span>
-</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="w">            </span><span class="no">registry-1.docker.io/myorg/mychart@${{ steps.push.outputs.digest }}</span>
-</span></code></pre></div>
-<p><strong>Step 2</strong> — reference the chart in a ClusterProfile:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">oci://registry-1.docker.io/myorg</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="nt">signatureVerification</span><span class="p">:</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Keyless</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="nt">matchOIDCIdentity</span><span class="p">:</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://token.actions.githubusercontent.com$&quot;</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://github.com/myorg/myrepo/.*$&quot;</span>
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The subject regexp should match the specific workflow path and branch you want to trust. Using <code>.*</code> at the end matches any branch and workflow file in the repository. Tighten it as needed, for example <code>^https://github.com/myorg/myrepo/.github/workflows/publish.yaml@refs/heads/main$</code> to trust only the main branch publish workflow.</p>
-</div>
-<hr />
-<h3 id="publickey-provider">PublicKey Provider</h3>
-<p>The PublicKey provider verifies the signature against a static PEM-encoded public key stored in a Kubernetes Secret on the management cluster. No Sigstore transparency log or certificate authority is contacted. Verification uses only the public key and the signature stored in the OCI registry.</p>
-<h4 id="step-1-generate-cosign-key-pair">Step 1 — Generate Cosign Key Pair</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>cosign<span class="w"> </span>generate-key-pair
-</span></code></pre></div>
-<p>This creates <code>cosign.key</code> (private key, keep secret) and <code>cosign.pub</code> (public key).</p>
-<h4 id="step-2-sign-the-chart">Step 2 — Sign the Chart</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Push the chart to an OCI registry first</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$<span class="w"> </span>helm<span class="w"> </span>push<span class="w"> </span>mychart-1.0.0.tgz<span class="w"> </span>oci://registry-1.docker.io/myorg
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Sign with the private key</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>$<span class="w"> </span>cosign<span class="w"> </span>sign<span class="w"> </span>--key<span class="w"> </span>cosign.key<span class="w"> </span>registry-1.docker.io/myorg/mychart:1.0.0
-</span></code></pre></div>
-<h4 id="step-3-store-the-public-key-in-a-secret-on-the-management-cluster">Step 3: Store the Public Key in a Secret on the Management Cluster</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>cosign-pubkey<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--from-file<span class="o">=</span>cosign.pub<span class="o">=</span>cosign.pub<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--namespace<span class="o">=</span>projectsveltos
-</span></code></pre></div>
-<p>The Secret must have a key named exactly <code>cosign.pub</code>. It can live in any namespace on the management cluster.</p>
-<h4 id="step-4-reference-it-in-a-clusterprofile">Step 4: Reference It in a ClusterProfile</h4>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart-static-key</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">oci://registry-1.docker.io/myorg</span>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="nt">signatureVerification</span><span class="p">:</span>
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PublicKey</span>
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">      </span><span class="nt">secretRef</span><span class="p">:</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosign-pubkey</span>
-</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <code>namespace</code> field in <code>secretRef</code> lets us place the Secret in any namespace on the management cluster. This avoids having to replicate the Secret when a ClusterProfile targets clusters in multiple namespaces. If <code>namespace</code> is omitted, Sveltos falls back to the managed cluster's namespace.</p>
-</div>
-<hr />
-<h2 id="gpg-provenance-verification-http-charts">GPG Provenance Verification (HTTP charts)</h2>
-<p>When a chart is pulled from an HTTP repository, Sveltos can verify the Helm <code>.prov</code> provenance file. The <code>.prov</code> file contains a SHA256 checksum of the chart archive and a PGP signature over that checksum. Sveltos fetches both the chart and its <code>.prov</code> file, verifies the PGP signature using the provided GPG public key, and confirms the checksum matches the downloaded bytes.</p>
-<p>This is the same mechanism used by <code>helm verify</code> and <code>helm install --verify</code>.</p>
-<h4 id="step-1-package-and-sign-the-chart">Step 1: Package and Sign the Chart</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Sign the chart with a GPG key</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>$<span class="w"> </span>helm<span class="w"> </span>package<span class="w"> </span>mychart/
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>$<span class="w"> </span>helm<span class="w"> </span>sign<span class="w"> </span>mychart-1.0.0.tgz<span class="w"> </span>--key<span class="w"> </span><span class="s2">&quot;My Chart Key&quot;</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># This produces mychart-1.0.0.tgz and mychart-1.0.0.tgz.prov</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># Upload both to your Helm repository</span>
-</span></code></pre></div>
-<h4 id="step-2-export-the-gpg-public-key-and-store-it-in-a-secret">Step 2: Export the GPG Public Key and Store It in a Secret</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Export the public key as a binary GPG keyring</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>$<span class="w"> </span>gpg<span class="w"> </span>--export<span class="w"> </span><span class="s2">&quot;My Chart Key&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>keyring.gpg
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Create the Secret on the management cluster</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>chart-gpg-keyring<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span>--from-file<span class="o">=</span>keyring.gpg<span class="o">=</span>keyring.gpg<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span>--namespace<span class="o">=</span>projectsveltos
-</span></code></pre></div>
-<p>The Secret must have a key named exactly <code>keyring.gpg</code>. It can live in any namespace on the management cluster.</p>
-<h4 id="step-3-reference-it-in-a-clusterprofile">Step 3: Reference It in a ClusterProfile</h4>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nn">---</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart-gpg</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
-</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">https://charts.example.com</span>
-</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">myrepo</span>
-</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="nt">chartName</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">myrepo/mychart</span>
-</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mychart</span>
-</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="nt">provenanceVerification</span><span class="p">:</span>
-</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">      </span><span class="nt">keyringSecretRef</span><span class="p">:</span>
-</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chart-gpg-keyring</span>
-</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <code>namespace</code> field in <code>keyringSecretRef</code> lets you place the Secret in any namespace on the management cluster, avoiding replication when a ClusterProfile targets clusters in multiple namespaces. If <code>namespace</code> is omitted, Sveltos falls back to the managed cluster's namespace.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>provenanceVerification</code> only applies to HTTP chart repositories. It is ignored for OCI charts and for charts fetched from Flux sources.</p>
-</div>
-<hr />
-<h2 id="checking-verification-status">Checking Verification Status</h2>
-<p>When verification fails, the reason for the failure is recorded in the <code>ClusterSummary</code> status.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>clustersummary<span class="w"> </span>&lt;name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.featureSummaries}&#39;</span>
-</span></code></pre></div>
-<p>If verification prevents a deployment from proceeding, the status might look similar to the below.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">status</span><span class="p">:</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">featureSummaries</span><span class="p">:</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">featureID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Helm</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Failed</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nt">failureMessage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cosign</span><span class="nv"> </span><span class="s">signature</span><span class="nv"> </span><span class="s">verification</span><span class="nv"> </span><span class="s">failed</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">registry-1.docker.io/myorg/mychart:1.0.0:</span><span class="nv"> </span><span class="s">...&quot;</span>
-</span></code></pre></div>
+<p>A successful in-place transfer shows a single Helm release revision incrementing (an <code>upgrade</code> in <code>helm history</code>), never a <code>REVISION 1</code> with a new install timestamp following an uninstall.</p>
+<h2 id="alternative-resolving-the-conflict-with-tiers-instead">Alternative: Resolving the Conflict with Tiers Instead</h2>
+<p>The overlap-then-cutover choreography above isn't the only way to hand off a Helm release between two <code>ClusterProfiles</code>. <a href="../tiers/">Tiers</a> resolve the same "two <code>ClusterProfiles</code> target the same resource on the same cluster" conflict using priority instead of a timed cutover: give the new <code>ClusterProfile</code> a lower <code>tier</code> value, and it always wins over the old one for that release, for as long as both keep matching the cluster. For raw manifests (<code>policyRefs</code>) and Kustomize output (<code>kustomizationRefs</code>), tiers are not just an alternative, they're the only option, since the in-place handover described above is Helm-specific.</p>
+<p>Tiers are the simpler option when you're fine with the cluster matching both <code>ClusterProfiles</code> indefinitely. There's no ordering to get right, since the resolution happens by priority on every reconciliation rather than by which <code>ClusterSummary</code> was there first. The tradeoff: the old <code>ClusterProfile</code> is still silently in the loop. If the new one ever stops matching the cluster (a bad label change, a selector typo), Sveltos falls back to the old <code>ClusterProfile</code> and reverts the release to whatever it manages, which may not be what you want for something like a CNI version.</p>
+<p>Use the overlap-then-cutover approach in this page when you want a clean, permanent handoff with the old <code>ClusterProfile</code> fully out of the picture afterward. That's the common case when <code>ClusterProfiles</code> are treated as immutable and a new one is created per upgrade. Use tiers when a lightweight, permanent override is enough and you don't need to fully retire the old match.</p>
+<h2 id="caveats">Caveats</h2>
+<ul>
+<li><strong>This page covers Helm charts (<code>spec.helmCharts</code>) only.</strong> The in-place handover described here relies on Sveltos tracking Helm release ownership per <code>releaseName</code>/<code>releaseNamespace</code>. There is no equivalent mechanism for raw Kubernetes manifests deployed via <code>policyRefs</code> or Kustomize output deployed via <code>kustomizationRefs</code>: moving one of those between <code>ClusterProfiles</code> follows the default <code>stopMatchingBehavior</code> and is removed by the old <code>ClusterSummary</code> before the new one applies it, regardless of any overlap window. For those resource types, use <a href="../tiers/">Tiers</a> instead: tiers resolve ownership by priority rather than by handover, and apply to raw manifests and Kustomize output as well as Helm charts.</li>
+<li>This only works if the <em>same</em> Helm release (same <code>releaseName</code> and <code>releaseNamespace</code>) is targeted by both <code>ClusterProfiles</code>. If the new <code>ClusterProfile</code> renames the release or moves it to a different namespace, Sveltos has no way to know it's the "same" release, and the old one is removed independently of the new one being installed.</li>
+<li>The overlap window only needs to be long enough for the second <code>ClusterSummary</code> to be created and reconciled at least once, seconds, not minutes, but the two label changes must land as separate reconciliations, not a single atomic update.</li>
+<li>This pattern applies to any Helm based add-on managed by <code>ClusterProfile</code>/<code>Profile</code>, not just CNIs. It is the general mechanism Sveltos uses whenever ownership of a Helm release moves from one <code>ClusterSummary</code> to another. See <a href="../../internals/cr-ownership/">Custom Resource Ownership</a> for the underlying <code>ClusterProfile</code>/<code>Profile</code> → <code>ClusterSummary</code> ownership model.</li>
+</ul>
 
 
   <nav class="md-tags" >
@@ -5249,28 +4859,21 @@
       
       
       
+        <span class="md-tag">ClusterProfile</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">upgrades</span>
+      
+    
+      
+      
+      
+      
         <span class="md-tag">helm</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">cosign</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">supply chain</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">security</span>
       
     
   </nav>
@@ -5307,7 +4910,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../helm_charts/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Deploy Helm Charts">
+          <a href="../tiers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Profile Tiers">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -5317,20 +4920,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Deploy Helm Charts
+                Profile Tiers
               </div>
             </div>
           </a>
         
         
           
-          <a href="../raw_yaml/" class="md-footer__link md-footer__link--next" aria-label="Next: Deploy YAML&#x2f;JSON Kubernetes manifests">
+          <a href="../rolling_update_strategy/" class="md-footer__link md-footer__link--next" aria-label="Next: Add-on Rollout Strategy">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Deploy YAML/JSON Kubernetes manifests
+                Add-on Rollout Strategy
               </div>
             </div>
             <div class="md-footer__button md-icon">
