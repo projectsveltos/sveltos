@@ -422,6 +422,25 @@ spec:
 
 Sveltos will attempt to deploy resources directly into the existing namespace. If the namespace does not exist, the deployment will fail.
 
+## Recovering from Rejected Updates
+
+By default, if an update to a resource produced by a `kustomizationRef` is rejected by the API server with an error that only a delete and recreate can resolve (for example, an immutable field, or an invalid combination of fields, such as a Deployment's `strategy.type` changing from the server-defaulted `RollingUpdate` to `Recreate`), Sveltos surfaces the error instead of resolving it.
+
+Setting `force: true` on that `kustomizationRef` tells Sveltos to delete and recreate the resource instead of surfacing the error.
+
+```yaml hl_lines="7"
+kustomizationRefs:
+- namespace: flux-system
+  name: flux-system
+  kind: GitRepository
+  path: ./overlays/production/
+  targetNamespace: production
+  force: true
+```
+
+!!! note
+    `force` causes the resource to be briefly unavailable while it is deleted and recreated. It never applies to `CustomResourceDefinitions`, since deleting one cascades to every instance of it.
+
 ## Next Steps
 
 For a better understanding of the Sveltos and Flux integration, check out the Flux Sources examples [here](./example_flux_sources.md).
