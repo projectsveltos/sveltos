@@ -403,6 +403,63 @@ $ sveltosctl show addons
 +-------------------------------------+-----------------+------------+---------------------------+---------+-------------------------------+--------------------------+
 ```
 
+## Remote URL Sources
+
+Instead of a Flux `GitRepository`/`OCIRepository`/`Bucket` or a `ConfigMap`/`Secret`, a `kustomizationRef` entry can point directly at a remote source. Two source types are supported:
+
+| Scheme | Description |
+|--------|-------------|
+| `oci://` | OCI registry artifact containing the Kustomize directory |
+| `http://` / `https://` | HTTP/HTTPS endpoint returning a gzipped tarball (`.tar.gz`) of the Kustomize directory |
+
+Sveltos fetches the content on every reconciliation and redeploys only when the content hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes).
+
+!!! note
+    Unlike `policyRefs`' `remoteURL` (which extracts individual YAML/JSON files, flattening them into one set of manifests), `kustomizationRefs`' `remoteURL` preserves the fetched content's directory structure. This matters because `kustomize build` resolves `resources`, `bases`, `patches`, and generator `files` by relative path, within a `kustomization.yaml` at some path in the tree, so the directory layout has to survive the fetch intact. Use `path` (and `components`) exactly as you would with a Flux source, to point at the right directory within the fetched tree.
+
+### OCI Registry
+
+Reference a Kustomize directory packaged as an OCI artifact, in any OCI-compliant registry:
+
+```yaml
+spec:
+  kustomizationRefs:
+  - remoteURL:
+      url: oci://ghcr.io/my-org/my-kustomize:v1.0.0
+      interval: 5m0s
+    path: overlays/production
+```
+
+### HTTP/HTTPS
+
+The URL must serve a gzipped tarball of the Kustomize directory, for example a repository archive:
+
+```yaml
+spec:
+  kustomizationRefs:
+  - remoteURL:
+      url: https://github.com/my-org/my-kustomize-repo/archive/refs/heads/main.tar.gz
+      interval: 1h0m0s
+    path: my-kustomize-repo-main/overlays/production
+```
+
+### Authentication
+
+Private sources are supported via a `secretRef`. If a `namespace` is omitted, Sveltos defaults to the matching cluster's namespace. Both `name` and `namespace` are treated as Go templates, so they can reference cluster fields.
+
+```yaml
+spec:
+  kustomizationRefs:
+  - remoteURL:
+      url: oci://ghcr.io/my-org/private-kustomize:v1.0.0
+      secretRef:
+        name: registry-auth
+        namespace: projectsveltos
+    path: overlays/production
+```
+
+The Secret can contain the same keys as `policyRefs`' `remoteURL`: `token` (bearer token), `username`/`password` (basic auth, or an OCI registry username and a PAT with `read:packages` scope), and `caFile` (PEM-encoded CA certificate). See [Remote URL Sources](raw_yaml.md#remote-url-sources) for the full Secret setup.
+
 ## Bypassing Automatic Namespace Creation
 
 By default, Sveltos checks whether the target namespace exists in the managed cluster before deploying resources from a `kustomizationRef`, and creates it if missing. This requires cluster-wide `get` and `create` permissions for Namespaces.
