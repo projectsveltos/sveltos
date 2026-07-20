@@ -116,6 +116,12 @@ All four metrics are removed entirely when a cluster is deregistered from Svelto
 
 * ``projectsveltos_total_drifts:`` Counter of the total number of configuration drifts detected in clusters, labeled by cluster, feature, and the owning `profile_kind`/`profile_namespace`/`profile_name`.
 
+* ``projectsveltos_outdated_helm_chart:`` Gauge that is `1` for every Helm chart deployment currently behind the latest version published in its upstream repository/registry, labeled by the owning `profile_kind`/`profile_namespace`/`profile_name`, cluster, and chart/release. Set by a periodic check, independent of the reconcile loop; see [Detecting Newer Helm Chart Versions](../../addons/helm_charts.md#detecting-newer-helm-chart-versions).
+
+* ``projectsveltos_outdated_helm_chart_check_last_run_timestamp_seconds:`` Gauge with the Unix timestamp of the last completed pass of the periodic outdated-Helm-chart checker. Runs only on the default (unsharded) addon-controller instance, since the check needs visibility across every cluster to avoid checking the same chart more than once.
+
+* ``projectsveltos_outdated_helm_chart_check_failures_total:`` Counter of chart lookups skipped in the most recent check pass because their upstream repository/registry could not be queried (unreachable, authentication failure, timeout, chart not found). A coarse "is the checker itself healthy" signal — per-chart failures are logged instead, not exposed as a metric label, to avoid unbounded label cardinality.
+
 ### Event Manager
 
 * ``projectsveltos_reconcile_duration_seconds:`` Histogram of the duration to process an EventTrigger for a cluster (evaluate matching events, create/update the resulting ClusterProfile(s)). Labeled by `cluster_type`/`cluster_namespace`/`cluster_name` only — no `feature` label, unlike addon-controller's metric of the same name, which is the label to filter on when disambiguating the two.
@@ -342,5 +348,17 @@ sum(rate(projectsveltos_reconcile_duration_seconds_bucket{job="classifier"}[5m])
 - **Purpose**: Shows how many clusters currently have a label-key conflict for each `ManagementClusterClassifier`.
 - **Query Used**: ``projectsveltos_mgmt_cluster_label_conflicts``
 - **Interpretation**: Same idea as panel 27, applied to `ManagementClusterClassifier` instead of `Classifier`.
+
+### 31. Outdated Helm Chart Check Failures
+- **Type**: Time Series
+- **Purpose**: Shows how many chart lookups failed (unreachable repository/registry, authentication failure, timeout) during the most recent outdated-Helm-chart check pass.
+- **Query Used**: ``projectsveltos_outdated_helm_chart_check_failures_total``
+- **Interpretation**: A coarse checker-health signal, not a per-chart diagnostic — a non-zero, rising value means the periodic version check is degraded for at least one chart, separate from any individual chart actually being outdated. Cross-reference addon-controller logs for which repository/registry failed.
+
+### 32. Time Since Last Outdated Helm Chart Check
+- **Type**: Time Series
+- **Purpose**: Shows how long it has been since the periodic outdated-Helm-chart checker last completed a full pass.
+- **Query Used**: ``time() - projectsveltos_outdated_helm_chart_check_last_run_timestamp_seconds``
+- **Interpretation**: A climbing value means the checker has stopped running or is stuck — without this, a broken checker is indistinguishable from "every chart happens to be up to date," since `projectsveltos_outdated_helm_chart` alone reads the same in both cases. In a sharded deployment this metric is emitted only by the default (unsharded) instance, which keeps running the check for the whole fleet — there's no per-shard equivalent to scrape.
 
 
