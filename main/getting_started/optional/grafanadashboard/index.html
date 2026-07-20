@@ -1765,6 +1765,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#31-outdated-helm-chart-check-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        31. Outdated Helm Chart Check Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-time-since-last-outdated-helm-chart-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        32. Time Since Last Outdated Helm Chart Check
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5515,6 +5537,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#31-outdated-helm-chart-check-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        31. Outdated Helm Chart Check Failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-time-since-last-outdated-helm-chart-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        32. Time Since Last Outdated Helm Chart Check
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5629,6 +5673,15 @@ your Prometheus setup) rather than an in-metric label.</p>
 </li>
 <li>
 <p><code>projectsveltos_total_drifts:</code> Counter of the total number of configuration drifts detected in clusters, labeled by cluster, feature, and the owning <code>profile_kind</code>/<code>profile_namespace</code>/<code>profile_name</code>.</p>
+</li>
+<li>
+<p><code>projectsveltos_outdated_helm_chart:</code> Gauge that is <code>1</code> for every Helm chart deployment currently behind the latest version published in its upstream repository/registry, labeled by the owning <code>profile_kind</code>/<code>profile_namespace</code>/<code>profile_name</code>, cluster, and chart/release. Set by a periodic check, independent of the reconcile loop; see <a href="../../../addons/helm_charts/#detecting-newer-helm-chart-versions">Detecting Newer Helm Chart Versions</a>.</p>
+</li>
+<li>
+<p><code>projectsveltos_outdated_helm_chart_check_last_run_timestamp_seconds:</code> Gauge with the Unix timestamp of the last completed pass of the periodic outdated-Helm-chart checker. Runs only on the default (unsharded) addon-controller instance, since the check needs visibility across every cluster to avoid checking the same chart more than once.</p>
+</li>
+<li>
+<p><code>projectsveltos_outdated_helm_chart_check_failures_total:</code> Counter of chart lookups skipped in the most recent check pass because their upstream repository/registry could not be queried (unreachable, authentication failure, timeout, chart not found). A coarse "is the checker itself healthy" signal — per-chart failures are logged instead, not exposed as a metric label, to avoid unbounded label cardinality.</p>
 </li>
 </ul>
 <h3 id="event-manager">Event Manager</h3>
@@ -5891,6 +5944,20 @@ your Prometheus setup) rather than an in-metric label.</p>
 <li><strong>Purpose</strong>: Shows how many clusters currently have a label-key conflict for each <code>ManagementClusterClassifier</code>.</li>
 <li><strong>Query Used</strong>: <code>projectsveltos_mgmt_cluster_label_conflicts</code></li>
 <li><strong>Interpretation</strong>: Same idea as panel 27, applied to <code>ManagementClusterClassifier</code> instead of <code>Classifier</code>.</li>
+</ul>
+<h3 id="31-outdated-helm-chart-check-failures">31. Outdated Helm Chart Check Failures</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how many chart lookups failed (unreachable repository/registry, authentication failure, timeout) during the most recent outdated-Helm-chart check pass.</li>
+<li><strong>Query Used</strong>: <code>projectsveltos_outdated_helm_chart_check_failures_total</code></li>
+<li><strong>Interpretation</strong>: A coarse checker-health signal, not a per-chart diagnostic — a non-zero, rising value means the periodic version check is degraded for at least one chart, separate from any individual chart actually being outdated. Cross-reference addon-controller logs for which repository/registry failed.</li>
+</ul>
+<h3 id="32-time-since-last-outdated-helm-chart-check">32. Time Since Last Outdated Helm Chart Check</h3>
+<ul>
+<li><strong>Type</strong>: Time Series</li>
+<li><strong>Purpose</strong>: Shows how long it has been since the periodic outdated-Helm-chart checker last completed a full pass.</li>
+<li><strong>Query Used</strong>: <code>time() - projectsveltos_outdated_helm_chart_check_last_run_timestamp_seconds</code></li>
+<li><strong>Interpretation</strong>: A climbing value means the checker has stopped running or is stuck — without this, a broken checker is indistinguishable from "every chart happens to be up to date," since <code>projectsveltos_outdated_helm_chart</code> alone reads the same in both cases. In a sharded deployment this metric is emitted only by the default (unsharded) instance, which keeps running the check for the whole fleet — there's no per-shard equivalent to scrape.</li>
 </ul>
 
 
