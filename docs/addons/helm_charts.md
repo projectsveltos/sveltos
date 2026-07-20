@@ -569,6 +569,54 @@ helmCharts:
 !!! note
     Helm's own force-replace mechanism deletes and recreates the affected resource, so expect a brief disruption, the same as `force` on `policyRefs`/`kustomizationRefs`.
 
+### Detecting Newer Helm Chart Versions
+
+Sveltos periodically checks whether a newer version of a deployed Helm chart has been published upstream, for charts sourced from either an HTTP chart repository or an OCI registry.
+
+!!! note
+    This is detection only. Sveltos never upgrades a chart automatically based on this check — `chartVersion` remains exactly what you set in the `ClusterProfile`/`Profile`. If you want to move to a newer version, update `chartVersion` yourself (or via your GitOps pipeline) as usual.
+
+Once a chart has been successfully deployed to a cluster, the result of the most recent check is reported on the corresponding `ClusterSummary`, alongside the release it refers to:
+
+```yaml
+status:
+  helmReleaseSummaries:
+  - releaseName: kyverno-latest
+    releaseNamespace: kyverno
+    status: Managing
+    chartName: kyverno/kyverno
+    repositoryName: kyverno
+    repoURL: https://kyverno.github.io/kyverno/
+    chartVersion: v3.3.3
+    latestVersion: v3.4.1
+    latestPatchVersion: v3.3.5
+    lastCheckedTime: "2026-07-20T09:00:00Z"
+```
+
+- **latestVersion** is the highest version currently published upstream, only set when it is strictly newer than `chartVersion`.
+- **latestPatchVersion** is the highest published version sharing `chartVersion`'s major/minor line, only set when it is strictly newer than `chartVersion`. This lets you distinguish a same-line bug-fix release from a bigger minor/major jump.
+- Both fields are absent whenever the deployed chart is already the latest available.
+
+Because both fields are only ever populated when something newer genuinely exists, their absence means "not currently behind" — it does not by itself confirm the chart was recently checked; an absent field looks identical whether the chart was verified up to date a minute ago or has never been checked at all. **lastCheckedTime** is the separate signal for that: it advances on every successful check regardless of outcome, so a recent `lastCheckedTime` with both version fields absent means "verified up to date as of this time," while a stale or missing `lastCheckedTime` means the check hasn't reached this chart recently.
+
+!!! note
+    A chart only shows up here once it has been successfully deployed at least once. A `ClusterProfile`/`Profile` that hasn't provisioned yet, or a chart sourced from a Flux `GitRepository`/`OCIRepository`/`Bucket` (where Flux itself owns version resolution and `chartVersion` is ignored), is never checked.
+
+#### Configuration
+
+The check runs on an interval, configurable via the `--helm-chart-update-check-interval` flag on the addon-controller Deployment (default: `1h`). Set it to `0` to disable the check entirely.
+
+```yaml hl_lines="3"
+args:
+- --diagnostics-address=:8443
+- --helm-chart-update-check-interval=2h
+```
+
+!!! note
+    In a sharded deployment, only the default (unsharded) addon-controller instance runs this check, since it needs visibility across every cluster to avoid checking the same chart more than once.
+
+See the [Grafana dashboard guide](../getting_started/optional/grafanadashboard.md#available-metrics) for the Prometheus metrics this check exposes.
+
 ### Options
 
 Sveltos allows you to configure Helm charts options during deployment.  For a complete list of Helm options, refer to the [CRD](https://github.com/projectsveltos/addon-controller/blob/806699b7aea2afba1b98b904fed439e825ddf65f/api/v1beta1/spec.go#L184).
