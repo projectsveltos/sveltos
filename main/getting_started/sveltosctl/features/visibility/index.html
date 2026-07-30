@@ -1196,6 +1196,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-helm-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show helm-updates
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4725,6 +4736,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-helm-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show helm-updates
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4862,6 +4884,45 @@
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>| SveltosCluster:gke/prod-cluster             | eng   | ci-cd          | *          | *         | *              | *     |
 </span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>| SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
 </span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>+---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
+</span></code></pre></div>
+<h3 id="show-helm-updates">show helm-updates</h3>
+<p><em>show helm-updates</em> displays, for every Helm release Sveltos manages in a cluster, whether a newer version or a newer same-minor patch is currently published upstream, based on addon-controller's periodic check (see <a href="../../../../addons/helm_charts/#detecting-newer-helm-chart-versions">Detecting Newer Helm Chart Versions</a>).</p>
+<p>The displayed information are:</p>
+<ul>
+<li>The CAPI/Sveltos Cluster in the form namespace/name;</li>
+<li>Release namespace;</li>
+<li>Release name;</li>
+<li>Currently deployed version;</li>
+<li>Newer version, if one is published upstream;</li>
+<li>Newer same-minor patch version, if one is published upstream.</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>helm-updates<span class="w"> </span>--namespace<span class="o">=</span>default<span class="w"> </span>--cluster<span class="o">=</span>clusterapi-workload
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>┌─────────────────────────────┬──────────────────────┬────────────────┬─────────────────┬───────────────┬─────────────────────┐
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>│<span class="w">           </span>CLUSTER<span class="w">           </span>│<span class="w">      </span>NAMESPACE<span class="w">       </span>│<span class="w">  </span>RELEASE<span class="w"> </span>NAME<span class="w">  </span>│<span class="w"> </span>CURRENT<span class="w"> </span>VERSION<span class="w"> </span>│<span class="w"> </span>NEWER<span class="w"> </span>VERSION<span class="w"> </span>│<span class="w"> </span>NEWER<span class="w"> </span>PATCH<span class="w"> </span>VERSION<span class="w"> </span>│
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>├─────────────────────────────┼──────────────────────┼────────────────┼─────────────────┼───────────────┼─────────────────────┤
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>│<span class="w"> </span>default/clusterapi-workload<span class="w"> </span>│<span class="w"> </span>nats<span class="w">                 </span>│<span class="w"> </span>nats<span class="w">           </span>│<span class="w"> </span><span class="m">1</span>.2.9<span class="w">           </span>│<span class="w"> </span><span class="m">2</span>.14.2<span class="w">        </span>│<span class="w"> </span><span class="m">1</span>.2.11<span class="w">              </span>│
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│<span class="w"> </span>default/clusterapi-workload<span class="w"> </span>│<span class="w"> </span>prometheus<span class="w">           </span>│<span class="w"> </span>prometheus<span class="w">     </span>│<span class="w"> </span><span class="m">26</span>.0.0<span class="w">          </span>│<span class="w"> </span><span class="m">29</span>.18.0<span class="w">       </span>│<span class="w"> </span><span class="m">26</span>.0.1<span class="w">              </span>│
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│<span class="w"> </span>default/clusterapi-workload<span class="w"> </span>│<span class="w"> </span>grafana<span class="w">              </span>│<span class="w"> </span>grafana<span class="w">        </span>│<span class="w"> </span><span class="m">11</span>.3.6<span class="w">          </span>│<span class="w"> </span><span class="m">12</span>.8.0<span class="w">        </span>│<span class="w"> </span><span class="m">11</span>.3.8<span class="w">              </span>│
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│<span class="w"> </span>default/clusterapi-workload<span class="w"> </span>│<span class="w"> </span>cert-manager<span class="w">         </span>│<span class="w"> </span>cert-manager<span class="w">   </span>│<span class="w"> </span>v1.19.4<span class="w">         </span>│<span class="w"> </span><span class="m">1</span>.21.0<span class="w">        </span>│<span class="w"> </span><span class="m">1</span>.19.6<span class="w">              </span>│
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>└─────────────────────────────┴──────────────────────┴────────────────┴─────────────────┴───────────────┴─────────────────────┘
+</span></code></pre></div>
+<p>A release with no entry in NEWER VERSION or NEWER PATCH VERSION is confirmed up to date as of the last check; a release Sveltos hasn't checked yet simply doesn't appear.</p>
+<p><em>show helm-updates</em> allows filtering by:</p>
+<ul>
+<li>clusters' namespace</li>
+<li>clusters' name</li>
+<li>clusters' type (<code>Capi</code> or <code>Sveltos</code>)</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$ sveltosctl show helm-updates --help
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Usage:
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  sveltosctl show helm-updates [options] [--namespace=&lt;name&gt;] [--cluster=&lt;name&gt;] [--cluster-type=&lt;type&gt;] [--verbose]
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>     --namespace=&lt;name&gt;      Show outdated helm charts deployed in clusters in this namespace.
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>                             If not specified all namespaces are considered.
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>     --cluster=&lt;name&gt;        Show outdated helm charts deployed in cluster with name.
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                             If not specified all cluster names are considered.
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>     --cluster-type=&lt;type&gt;   Show outdated helm charts deployed in cluster with this type
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                          (Capi or Sveltos). If not specified all cluster types are considered.
 </span></code></pre></div>
 
 
