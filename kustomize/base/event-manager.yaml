@@ -188,6 +188,34 @@ rules:
         - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: event-metrics-reader
+rules:
+    - nonResourceURLs:
+        - /metrics
+      verbs:
+        - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: event-proxy-role
+rules:
+    - apiGroups:
+        - authentication.k8s.io
+      resources:
+        - tokenreviews
+      verbs:
+        - create
+    - apiGroups:
+        - authorization.k8s.io
+      resources:
+        - subjectaccessreviews
+      verbs:
+        - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
     name: event-manager-rolebinding
@@ -199,6 +227,35 @@ subjects:
     - kind: ServiceAccount
       name: event-manager
       namespace: projectsveltos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: event-proxy-rolebinding
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: event-proxy-role
+subjects:
+    - kind: ServiceAccount
+      name: event-manager
+      namespace: projectsveltos
+---
+apiVersion: v1
+kind: Service
+metadata:
+    labels:
+        control-plane: event-manager
+    name: event-manager-metrics-service
+    namespace: projectsveltos
+spec:
+    ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+    selector:
+        control-plane: event-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -225,7 +282,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.12.0
+                    - --version=v1.13.0
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -242,7 +299,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/event-manager:v1.12.0
+                  image: docker.io/projectsveltos/event-manager:v1.13.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

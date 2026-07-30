@@ -68,6 +68,9 @@ rules:
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - classifierreports
+        - classifiers
+        - classifiers/status
         - debuggingconfigurations
         - eventreports
         - eventreports/status
@@ -75,6 +78,9 @@ rules:
         - eventsources/status
         - eventtriggers
         - eventtriggers/status
+        - managementclusterclassifierreports
+        - managementclusterclassifiers
+        - managementclusterclassifiers/status
         - sveltosclusters
         - sveltosclusters/status
       verbs:
@@ -147,7 +153,12 @@ spec:
                     - --v=5
                   command:
                     - /manager
-                  image: projectsveltos/ui-backend:v1.12.0
+                  env:
+                    - name: TOTAL_MEMORY_LIMIT
+                      valueFrom:
+                        resourceFieldRef:
+                            resource: limits.memory
+                  image: projectsveltos/ui-backend:v1.13.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -212,8 +223,8 @@ spec:
             containers:
                 - env:
                     - name: VITE_APP_VERSION
-                      value: v1.12.0
-                  image: docker.io/projectsveltos/dashboard:v1.12.0
+                      value: v1.13.0
+                  image: docker.io/projectsveltos/dashboard:v1.13.0
                   name: dashboard
                   ports:
                     - containerPort: 5173

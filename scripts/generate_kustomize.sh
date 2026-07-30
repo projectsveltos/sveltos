@@ -168,6 +168,11 @@ do
         continue
     fi
 
+    # ignore service monitor
+    if [[ "$f" == *"service_monitor.yaml"* ]]; then
+        continue
+    fi
+
     # this file contains the template to start a deployment
     # for managing a shard
     if [[ "$f" == *"deployment-shard.yaml"* ]]; then
@@ -191,6 +196,11 @@ for f in manifest/*.yaml
 do
     # ignore kustomization.yaml file
     if [[ "$f" == *"kustomization.yaml"* ]]; then
+        continue
+    fi
+
+    # ignore service monitor
+    if [[ "$f" == *"service_monitor.yaml"* ]]; then
         continue
     fi
 

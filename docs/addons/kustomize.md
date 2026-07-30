@@ -326,7 +326,7 @@ $ sveltosctl show addons
 
 ### Example: Express Path as Template
 
-The __path__ field within a _kustomizationRef_ object in Sveltos can be defined using a template. This allows you to dynamically set the path based on information from the cluster itself.
+The __path__ and __components__ fields within a _kustomizationRef_ object in Sveltos can be defined using a template (the same is true for __path__ in a _policyRef_ object, see [Referencing YAML resources](./raw_yaml.md)). This allows you to dynamically set the path based on information from the cluster itself.
 
 ```yaml
 ---
@@ -355,6 +355,36 @@ For instance:
 1. Cluster B: If cluster B has an annotation environment: pre-production, the resulting path will be: pre-production/helloWorld.
 
 This approach allows for flexible configuration based on individual cluster environments.
+
+`path`/`components` are not limited to cluster information: any resource in the management cluster referenced via `templateResourceRefs` (see [Additional Templates Information](../template/additional_template_info.md)) can be used the same way, through the `getResource` function.
+
+```yaml
+---
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: flux-system
+spec:
+  clusterSelector:
+    matchLabels:
+      region: west
+  syncMode: Continuous
+  templateResourceRefs:
+  - resource:
+      apiVersion: v1
+      kind: ConfigMap
+      name: overlay-selector
+      namespace: default
+    identifier: OverlaySelector
+  kustomizationRefs:
+  - namespace: flux2
+    name: flux2
+    kind: GitRepository
+    path: 'overlays/{{ (getResource "OverlaySelector").data.overlay }}'
+    targetNamespace: eng
+```
+
+Here the overlay directory is read from `overlay-selector`, a ConfigMap in the management cluster, rather than being derived from the cluster's own metadata.
 
 ### Example: Kustomize with ConfigMaps
 

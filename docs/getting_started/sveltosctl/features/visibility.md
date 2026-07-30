@@ -152,3 +152,49 @@ $ sveltosctl show admin-rbac
 | SveltosCluster:gke/prod-cluster             | hr    | human-resource | *          | *         | *              | *     |
 +---------------------------------------------+-------+----------------+------------+-----------+----------------+-------+
 ```
+
+### show helm-updates
+
+*show helm-updates* displays, for every Helm release Sveltos manages in a cluster, whether a newer version or a newer same-minor patch is currently published upstream, based on addon-controller's periodic check (see [Detecting Newer Helm Chart Versions](../../../addons/helm_charts.md#detecting-newer-helm-chart-versions)).
+
+The displayed information are:
+
+- The CAPI/Sveltos Cluster in the form namespace/name;
+- Release namespace;
+- Release name;
+- Currently deployed version;
+- Newer version, if one is published upstream;
+- Newer same-minor patch version, if one is published upstream.
+
+```bash
+$ sveltosctl show helm-updates --namespace=default --cluster=clusterapi-workload
+┌─────────────────────────────┬──────────────────────┬────────────────┬─────────────────┬───────────────┬─────────────────────┐
+│           CLUSTER           │      NAMESPACE       │  RELEASE NAME  │ CURRENT VERSION │ NEWER VERSION │ NEWER PATCH VERSION │
+├─────────────────────────────┼──────────────────────┼────────────────┼─────────────────┼───────────────┼─────────────────────┤
+│ default/clusterapi-workload │ nats                 │ nats           │ 1.2.9           │ 2.14.2        │ 1.2.11              │
+│ default/clusterapi-workload │ prometheus           │ prometheus     │ 26.0.0          │ 29.18.0       │ 26.0.1              │
+│ default/clusterapi-workload │ grafana              │ grafana        │ 11.3.6          │ 12.8.0        │ 11.3.8              │
+│ default/clusterapi-workload │ cert-manager         │ cert-manager   │ v1.19.4         │ 1.21.0        │ 1.19.6              │
+└─────────────────────────────┴──────────────────────┴────────────────┴─────────────────┴───────────────┴─────────────────────┘
+```
+
+A release with no entry in NEWER VERSION or NEWER PATCH VERSION is confirmed up to date as of the last check; a release Sveltos hasn't checked yet simply doesn't appear.
+
+*show helm-updates* allows filtering by:
+
+- clusters' namespace
+- clusters' name
+- clusters' type (`Capi` or `Sveltos`)
+
+```
+$ sveltosctl show helm-updates --help
+Usage:
+  sveltosctl show helm-updates [options] [--namespace=<name>] [--cluster=<name>] [--cluster-type=<type>] [--verbose]
+
+     --namespace=<name>      Show outdated helm charts deployed in clusters in this namespace.
+                             If not specified all namespaces are considered.
+     --cluster=<name>        Show outdated helm charts deployed in cluster with name.
+                             If not specified all cluster names are considered.
+     --cluster-type=<type>   Show outdated helm charts deployed in cluster with this type
+                          (Capi or Sveltos). If not specified all cluster types are considered.
+```
