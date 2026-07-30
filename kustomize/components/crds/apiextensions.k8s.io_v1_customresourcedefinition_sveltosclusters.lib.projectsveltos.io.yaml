@@ -18,6 +18,11 @@ spec:
       jsonPath: .status.ready
       name: Ready
       type: boolean
+    - description: Whether connection is healthy
+      jsonPath: .status.connectionStatus
+      name: ConnectionStatus
+      priority: 1
+      type: string
     - description: Kubernetes version associated with this Cluster
       jsonPath: .status.version
       name: Version

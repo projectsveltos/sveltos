@@ -34,7 +34,7 @@ The main goal of Sveltos is to deploy add-ons and applications in a fleet of clu
 ``` bash
 $ git clone https://github.com/projectsveltos/addon-controller && cd addon-controller/
 
-$ git checkout v1.12.0
+$ git checkout v1.13.0
 
 $ make quickstart
 ```

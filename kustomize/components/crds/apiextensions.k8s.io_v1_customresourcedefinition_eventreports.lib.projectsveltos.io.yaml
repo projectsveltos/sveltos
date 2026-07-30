@@ -128,6 +128,11 @@ spec:
           status:
             description: EventReportStatus defines the observed state of EventReport
             properties:
+              failureMessage:
+                description: |-
+                  FailureMessage reports the error hit while generating ClusterProfile(s) from this
+                  EventReport, if any. Set when processing fails; cleared on success.
+                type: string
               phase:
                 description: Phase represents the current phase of report.
                 enum:
