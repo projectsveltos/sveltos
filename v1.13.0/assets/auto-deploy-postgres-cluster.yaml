@@ -1,0 +1,70 @@
+# Anytime a SveltosCluster with label postgres: required
+# is created, deploys a postgres cluster.
+# Source cluster is the management cluster.
+# Destination cluster is the cluster with label type:services
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: detect-cluster-requiring-postgres
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: "lib.projectsveltos.io"
+    version: "v1beta1"
+    kind: "SveltosCluster"
+    labelFilters:
+    - key: postgres
+      operation: Equal
+      value: required
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: deploy-postgres-cluster
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      type: mgmt
+  destinationClusterSelector:
+    matchLabels:
+      type: services
+  eventSourceName: detect-cluster-requiring-postgres
+  oneForEvent: true
+  policyRefs:
+  - name: postgres-cluster
+    namespace: default
+    kind: ConfigMap
+---
+apiVersion: v1
+data:
+  cluster.yaml: |
+    apiVersion: postgresql.cnpg.io/v1
+    kind: Cluster
+    metadata:
+      name: cluster-{{ .Resource.metadata.name }}
+      namespace: {{ .Resource.metadata.namespace }}
+      labels:
+        cluster: {{ .Resource.metadata.namespace }}-{{ .Resource.metadata.name }}
+    spec:
+      instances: 3
+      bootstrap:
+        initdb:
+          database: todo
+      storage:
+        size: 1Gi
+      managed:
+        services:
+          disabledDefaultServices: ["ro", "r"]
+          additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: cluster-rw-lb
+              spec:
+                type: LoadBalancer
+kind: ConfigMap
+metadata:
+  annotations:
+    projectsveltos.io/instantiate: ok
+  name: postgres-cluster
+  namespace: default

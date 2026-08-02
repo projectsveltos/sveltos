@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: todo-insert
+  namespace: todo
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      containers:
+        - name: httpie
+          image: alpine/httpie:2.4.0
+          imagePullPolicy: Always
+          command: ["http"]
+          args:
+            [
+              "POST",
+              "todo-gitops:8080/api",
+              "title=Finished ProjectSveltos tutorial",
+              "--ignore-stdin"
+            ]
+      restartPolicy: Never
+  backoffLimit: 1
