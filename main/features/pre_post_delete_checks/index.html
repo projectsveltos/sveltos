@@ -4708,7 +4708,7 @@ These checks are defined within the <code>spec</code> section of a <code>Cluster
 </span></code></pre></div>
 <p>In the example above, Sveltos will not deploy the <code>Resources</code> feature until at least one <code>StorageClass</code> with the label <code>tier=ssd</code> exists in the managed cluster.</p>
 <h2 id="validate-health-checks">Validate Health Checks</h2>
-<p><code>ValidateHealthChecks</code> are executed after resources are deployed. They ensure that the application or infrastructure is not just present, but actually functional.</p>
+<p><code>ValidateHealthChecks</code> are executed after resources are deployed. They ensure that the application or infrastructure is not just present, but actually functional. Most checks inspect state already present in the cluster (a resource field, a Prometheus query); an Enterprise-only mode can instead run an active probe as a Kubernetes Job and use its outcome as the result — see <a href="../../addons/clusterprofile/#job-based-checks">Job-based checks</a>.</p>
 <p>For more details on how to configure these during deployment, see <a href="../../deployment_order/depends_on_with_health_checks/">Depends On with Health Checks</a>.</p>
 <h2 id="pre-delete-checks">Pre-Delete Checks</h2>
 <p><code>PreDeleteChecks</code> are executed before Sveltos begins the deletion process. If any of these checks fail, Sveltos will halt the deletion. This is essential for ensuring that prerequisites (like data backups or draining connections) are met before infrastructure is torn down.</p>
