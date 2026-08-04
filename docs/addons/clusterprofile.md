@@ -322,6 +322,56 @@ A single check can inspect a Kubernetes resource and evaluate metric values in t
         end
     ```
 
+#### Job-based checks
+
+*Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.*
+
+Resource- and metric-based checks evaluate state that is already present in the managed cluster. `jobCheck` instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own `Complete`/`Failed` outcome as the check result. This is useful for checks that can't be expressed as "is this field set correctly" — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster.
+
+Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and Sveltos deploys it, waits for it to reach `Complete` or `Failed`, then deletes it. `jobCheck.timeout` bounds how long Sveltos waits before treating the check as failed; it defaults to 5 minutes when unset. On failure, the check's message comes from the Job's own status conditions.
+
+`jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same check — a single `validateHealths` entry can't combine an active Job probe with a Lua/CEL evaluation.
+
+!!! example "Example - spec.validateHealths (Job)"
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: smoke-test-job
+      namespace: kyverno
+    data:
+      job.yaml: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: kyverno-smoke-test
+          namespace: kyverno
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+              - name: probe
+                image: curlimages/curl:8.11.0
+                command: ["curl", "-sf", "http://kyverno-svc.kyverno.svc:443/healthz"]
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: kyverno-with-smoke-test
+    spec:
+      validateHealths:
+      - name: kyverno-smoke-test
+        featureID: Helm
+        jobCheck:
+          jobRef:
+            kind: ConfigMap
+            namespace: kyverno
+            name: smoke-test-job
+          timeout: 2m
+    ```
+
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.

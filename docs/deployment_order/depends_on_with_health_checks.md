@@ -137,6 +137,52 @@ The check above prevents Sveltos from marking the Helm feature as healthy until 
 
 A single `validateHealths` entry supports only one evaluation path. To combine Kubernetes resource state with a metric check, add two entries under `validateHealths`: one using `script` or `evaluateCEL` against resource state, and one using `metricSource` + `metricQueries`. Both must pass before the feature is considered healthy.
 
+## Job-Based Health Validation
+
+*Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.*
+
+The Lua, CEL, and metric checks above all evaluate state that already exists in the managed cluster. `jobCheck` instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own `Complete`/`Failed` outcome as the check result. This is useful when the check itself needs to *do* something — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster — rather than inspect a field.
+
+### How it works
+
+Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest. Sveltos deploys it into the managed cluster, waits for it to reach `Complete` or `Failed` (up to `jobCheck.timeout`, which defaults to 5 minutes when unset), then deletes it. On failure, the check's message comes from the Job's own status conditions.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cert-manager-smoke-test
+  namespace: cert-manager
+data:
+  job.yaml: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: cert-manager-smoke-test
+      namespace: cert-manager
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: probe
+            image: curlimages/curl:8.11.0
+            command: ["curl", "-sf", "http://cert-manager-webhook.cert-manager.svc:443/healthz"]
+---
+validateHealths:
+- name: cert-manager-smoke-test
+  featureID: Helm
+  jobCheck:
+    jobRef:
+      kind: ConfigMap
+      namespace: cert-manager
+      name: cert-manager-smoke-test
+    timeout: 2m
+```
+
+`jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same `validateHealths` entry — a single entry runs either an active Job probe or a Lua/CEL evaluation, not both. To combine a Job probe with a resource or metric check, add separate entries under `validateHealths`, the same way described above for combining metrics with resource checks.
+
 ### Example: Nginx and Cert Manager
 
 In the below example, the ClusterPofile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.

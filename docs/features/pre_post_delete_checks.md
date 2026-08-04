@@ -34,7 +34,7 @@ In the example above, Sveltos will not deploy the `Resources` feature until at l
 
 ## Validate Health Checks
 
-`ValidateHealthChecks` are executed after resources are deployed. They ensure that the application or infrastructure is not just present, but actually functional.
+`ValidateHealthChecks` are executed after resources are deployed. They ensure that the application or infrastructure is not just present, but actually functional. Most checks inspect state already present in the cluster (a resource field, a Prometheus query); an Enterprise-only mode can instead run an active probe as a Kubernetes Job and use its outcome as the result — see [Job-based checks](../addons/clusterprofile.md#job-based-checks).
 
 For more details on how to configure these during deployment, see [Depends On with Health Checks](../deployment_order/depends_on_with_health_checks.md).
 
