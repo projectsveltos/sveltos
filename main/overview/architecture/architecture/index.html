@@ -4923,7 +4923,7 @@
 <h2 id="entry-point">Entry Point</h2>
 <p>Sveltos has no separate API server. The Kubernetes API of the management cluster is the only entry point. All Sveltos resources like <code>ClusterProfile</code>, <code>Classifier</code>, <code>EventTrigger</code>, <code>SveltosCluster</code>, and the rest are Kubernetes custom resources. Users interact with them using <code>kubectl</code>, Helm, or any GitOps controller pointed at the management cluster. Standard Kubernetes RBAC controls who can read and write Sveltos resources.</p>
 <h2 id="cluster-discovery-and-registration">Cluster Discovery and Registration</h2>
-<p>Sveltos supports several ways to bring a cluster under management: providing a kubeconfig <code>Secret</code>, using cloud workload identity (AWS IRSA, GKE Workload Identity), pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API <code>Cluster</code> objects. See <a href="../../register/register-cluster/">Register a Cluster</a> for details on each approach.</p>
+<p>Sveltos supports several ways to bring a cluster under management: providing a kubeconfig <code>Secret</code>, using cloud workload identity (AWS IRSA, GKE Workload Identity), pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API <code>Cluster</code> objects. See <a href="../../../register/register-cluster/">Register a Cluster</a> for details on each approach.</p>
 <p>Profiles target clusters by <strong>label selectors</strong>. A <code>ClusterProfile</code> does not name specific clusters; it declares which labels a cluster must carry. When a cluster is registered and its labels match an existing profile, Sveltos begins managing it immediately with no further configuration.</p>
 <h2 id="core-reconciliation-loop">Core Reconciliation Loop</h2>
 <p>The central reconciliation loop is what drives all add-on deployments.</p>
@@ -5250,7 +5250,7 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Pull Mode</p>
-<p>The Pull mode is orthogonal to Mode 1 and Mode 2. When a <code>SveltosCluster</code> sets the <code>spec.pullMode: true</code>, the <code>sveltos-applier</code> is deployed in the managed cluster and <strong>initiates outbound connections</strong> to the management cluster to fetch configurations. This is designed for clusters behind firewalls or in restricted networks where the management cluster cannot reach the managed cluster's API server. See <a href="../../register/register_cluster_pull_mode/">Registration Pull Mode</a> for more details.</p>
+<p>The Pull mode is orthogonal to Mode 1 and Mode 2. When a <code>SveltosCluster</code> sets the <code>spec.pullMode: true</code>, the <code>sveltos-applier</code> is deployed in the managed cluster and <strong>initiates outbound connections</strong> to the management cluster to fetch configurations. This is designed for clusters behind firewalls or in restricted networks where the management cluster cannot reach the managed cluster's API server. See <a href="../../../register/register_cluster_pull_mode/">Registration Pull Mode</a> for more details.</p>
 </div>
 <h2 id="next-steps">Next Steps</h2>
 <p>Continue with the <a href="../../architecture/custom_resource_definitions/">CRDs</a> sections.</p>
