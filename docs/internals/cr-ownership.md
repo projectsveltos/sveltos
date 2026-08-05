@@ -273,7 +273,7 @@ spec:
         value: postgresql
 ```
 
-More examples can be found [here](../features/labels_management.md/#classifier---automatically-manage-cluster-labels-and-add-ons).
+More examples can be found [here](../features/labels_management/#classifier-automatically-manage-cluster-labels-and-add-ons).
 
 ---
 
