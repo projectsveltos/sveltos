@@ -25,7 +25,7 @@ Sveltos supports two modes: **Mode 1** and **Mode 2**.
 - **Mode 2:** Sveltos agents will be created, per managed cluster, in the management cluster[^2]. The agents, while centrally located, will still monitor their designated managed cluster’s API server. Sveltos leaves no footprint on managed clusters in this mode.
 
 !!!tip
-    Once Sveltos is deployed to the **management** cluster, it is automatically registered in the `mgmt` namespace with the name `mgmt`. Add-ons and applications can be deployed as soon as the appropriate Kubernetes labels are added to the cluster. For more details, see the [registration section](../../register/register-cluster.md/#register-management-cluster).
+    Once Sveltos is deployed to the **management** cluster, it is automatically registered in the `mgmt` namespace with the name `mgmt`. Add-ons and applications can be deployed as soon as the appropriate Kubernetes labels are added to the cluster. For more details, see the [registration section](../../register/register-cluster/#register-management-cluster).
 
 ### Mode 1: Local Agent Mode (Manifest)
 

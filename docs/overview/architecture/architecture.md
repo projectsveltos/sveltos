@@ -20,7 +20,7 @@ Sveltos has no separate API server. The Kubernetes API of the management cluster
 
 ## Cluster Discovery and Registration
 
-Sveltos supports several ways to bring a cluster under management: providing a kubeconfig `Secret`, using cloud workload identity (AWS IRSA, GKE Workload Identity), pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API `Cluster` objects. See [Register a Cluster](../register/register-cluster.md) for details on each approach.
+Sveltos supports several ways to bring a cluster under management: providing a kubeconfig `Secret`, using cloud workload identity (AWS IRSA, GKE Workload Identity), pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API `Cluster` objects. See [Register a Cluster](../../register/register-cluster.md) for details on each approach.
 
 Profiles target clusters by **label selectors**. A `ClusterProfile` does not name specific clusters; it declares which labels a cluster must carry. When a cluster is registered and its labels match an existing profile, Sveltos begins managing it immediately with no further configuration.
 
@@ -259,7 +259,7 @@ The kubeconfig stored in the management cluster is generated for the `sa-deploye
 | Good for | Environments where managed-cluster API is reachable and a small in-cluster footprint is acceptable | Environments where managed clusters must remain untouched, or where centralising agent resource usage is preferred |
 
 !!! note "Pull Mode"
-    The Pull mode is orthogonal to Mode 1 and Mode 2. When a `SveltosCluster` sets the `spec.pullMode: true`, the `sveltos-applier` is deployed in the managed cluster and **initiates outbound connections** to the management cluster to fetch configurations. This is designed for clusters behind firewalls or in restricted networks where the management cluster cannot reach the managed cluster's API server. See [Registration Pull Mode](../register/register_cluster_pull_mode.md) for more details.
+    The Pull mode is orthogonal to Mode 1 and Mode 2. When a `SveltosCluster` sets the `spec.pullMode: true`, the `sveltos-applier` is deployed in the managed cluster and **initiates outbound connections** to the management cluster to fetch configurations. This is designed for clusters behind firewalls or in restricted networks where the management cluster cannot reach the managed cluster's API server. See [Registration Pull Mode](../../register/register_cluster_pull_mode.md) for more details.
 
 ## Next Steps
 
