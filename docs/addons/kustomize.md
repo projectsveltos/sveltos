@@ -528,6 +528,18 @@ kustomizationRefs:
 !!! note
     `force` causes the resource to be briefly unavailable while it is deleted and recreated. It never applies to `CustomResourceDefinitions`, since deleting one cascades to every instance of it.
 
+`force: true` on the `kustomizationRef` applies to every resource it produces. To force just one resource instead, without setting `force` for the whole `kustomizationRef`, annotate that resource with `projectsveltos.io/forceRecreate`:
+
+```yaml hl_lines="7"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  namespace: production
+  annotations:
+    projectsveltos.io/forceRecreate: ""
+```
+
 ## Next Steps
 
 For a better understanding of the Sveltos and Flux integration, check out the Flux Sources examples [here](./example_flux_sources.md).
