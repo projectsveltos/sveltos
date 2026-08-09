@@ -171,6 +171,18 @@ policyRefs:
 !!! note
     `force` causes the resource to be briefly unavailable while it is deleted and recreated. It never applies to `CustomResourceDefinitions`, since deleting one cascades to every instance of it.
 
+`force: true` on the `PolicyRef` applies to every resource it produces. To force just one resource instead, without setting `force` for the whole `PolicyRef`, annotate that resource with `projectsveltos.io/forceRecreate`:
+
+```yaml hl_lines="7"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  namespace: default
+  annotations:
+    projectsveltos.io/forceRecreate: ""
+```
+
 ### Example: Template-based Referencing for ConfigMaps and Secrets
 
 We can express `ConfigMap` and `Secret` **names** as templates. This allows us to generate them dynamically based on the available cluster information, simplifying management and reducing repetition.
