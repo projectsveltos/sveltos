@@ -5231,7 +5231,7 @@
 </tr>
 <tr>
 <td><code>http://</code> / <code>https://</code></td>
-<td>HTTP/HTTPS endpoint returning a gzipped tarball (<code>.tar.gz</code>) of the Kustomize directory</td>
+<td>HTTP/HTTPS endpoint returning a tarball (gzip-compressed or plain) of the Kustomize directory</td>
 </tr>
 </tbody>
 </table>
@@ -5250,14 +5250,15 @@
 </span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overlays/production</span>
 </span></code></pre></div>
 <h3 id="httphttps">HTTP/HTTPS</h3>
-<p>The URL must serve a gzipped tarball of the Kustomize directory, for example a repository archive:</p>
+<p>The URL must serve a tarball of the Kustomize directory — gzip-compressed or plain, both are accepted. A repository archive works well for this:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">spec</span><span class="p">:</span>
 </span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">kustomizationRefs</span><span class="p">:</span>
 </span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">remoteURL</span><span class="p">:</span>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/my-org/my-kustomize-repo/archive/refs/heads/main.tar.gz</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/gianlucam76/kustomize/archive/refs/heads/main.tar.gz</span>
 </span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h0m0s</span>
-</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-kustomize-repo-main/overlays/production</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize-main/production/helloWorld</span>
 </span></code></pre></div>
+<p><code>path</code> has to include the wrapper directory the archive is extracted into. GitHub names it <code>&lt;repo&gt;-&lt;branch&gt;</code> (here, <code>kustomize-main</code>); other hosts may follow a different convention, so it's worth checking the actual top-level directory in the downloaded tarball rather than assuming.</p>
 <h3 id="authentication">Authentication</h3>
 <p>Private sources are supported via a <code>secretRef</code>. If a <code>namespace</code> is omitted, Sveltos defaults to the matching cluster's namespace. Both <code>name</code> and <code>namespace</code> are treated as Go templates, so they can reference cluster fields.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">spec</span><span class="p">:</span>
