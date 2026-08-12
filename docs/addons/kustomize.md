@@ -492,6 +492,8 @@ spec:
 
 The Secret can contain the same keys as `policyRefs`' `remoteURL`: `token` (bearer token), `username`/`password` (basic auth, or an OCI registry username and a PAT with `read:packages` scope), and `caFile` (PEM-encoded CA certificate). See [Remote URL Sources](raw_yaml.md#remote-url-sources) for the full Secret setup.
 
+`kustomizationRefs`' `remoteURL` also supports the `plainHTTP` and `insecureSkipTLSVerify` fields, with the same semantics as `policyRefs`' `remoteURL` — see [Insecure Connections](raw_yaml.md#insecure-connections).
+
 ## Bypassing Automatic Namespace Creation
 
 By default, Sveltos checks whether the target namespace exists in the managed cluster before deploying resources from a `kustomizationRef`, and creates it if missing. This requires cluster-wide `get` and `create` permissions for Namespaces.

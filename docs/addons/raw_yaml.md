@@ -255,7 +255,7 @@ Instead of storing YAML in a `ConfigMap` or `Secret`, a `PolicyRef` entry can po
 
 | Scheme | Description |
 |--------|-------------|
-| `http://` / `https://` | HTTP/HTTPS endpoint returning raw YAML or JSON |
+| `http://` / `https://` | HTTP/HTTPS endpoint returning raw YAML/JSON, or a tarball (gzip-compressed or plain) of multiple YAML/JSON files |
 | `oci://` | OCI registry artifact containing YAML manifests |
 
 Sveltos fetches the content on every reconciliation and redeploys only when the content hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes).
@@ -270,6 +270,17 @@ spec:
   - deploymentType: Remote
     remoteURL:
       url: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+      interval: 1h0m0s
+```
+
+The endpoint can also return a tarball instead of a single file — gzip-compressed or plain, both are accepted. Every `.yaml`, `.yml`, and `.json` file found inside is extracted and concatenated, the same way OCI artifact layers are handled below; the tarball's directory structure is not preserved.
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: https://github.com/my-org/my-manifests/archive/refs/heads/main.tar.gz
       interval: 1h0m0s
 ```
 
@@ -343,6 +354,24 @@ spec:
       secretRef:
         name: registry-auth
         namespace: projectsveltos
+```
+
+### Insecure Connections
+
+Two optional fields on `remoteURL` control TLS/HTTP behavior, mirroring the equivalent settings for Helm OCI registries. Both default to `false`.
+
+| Field | Description |
+|-------|-------------|
+| `plainHTTP` | Connect to the OCI registry over plain HTTP instead of HTTPS. Only applies to `oci://` URLs — for `http://`/`https://` URLs the scheme already decides this. |
+| `insecureSkipTLSVerify` | Skip server certificate verification. Ignored if the `secretRef` Secret provides a `caFile`. |
+
+```yaml
+spec:
+  policyRefs:
+  - deploymentType: Remote
+    remoteURL:
+      url: oci://registry.internal.example.com/my-manifests:v1.0.0
+      plainHTTP: true
 ```
 
 ### Template rendering
