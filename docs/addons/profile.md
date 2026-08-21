@@ -224,6 +224,8 @@ The *dependsOn* property specifies a list of other Profiles that this instance r
 
 For example, profile-a can depend on another *profile-b*. This implies that any Helm charts or raw YAML files associated with CProfile A will not be deployed until all add-ons and applications specified in Profile B have been successfully provisioned.
 
+*dependsOn* also protects the reverse direction: profile-b's add-ons won't be undeployed from a cluster while profile-a still matches that cluster and still depends on it, regardless of which of the two Profiles is deleted first. See [Deletion Order](../deployment_order/depends_on.md#deletion-order) for details.
+
 ```yaml
 ---
 apiVersion: config.projectsveltos.io/v1beta1

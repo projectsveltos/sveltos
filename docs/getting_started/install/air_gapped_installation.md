@@ -34,6 +34,39 @@ Patches of both types can be persisted in a `ConfigMap` and passed to the compon
 
 The `Helm` chart offers a way to only specify the patches and the `ConfigMaps` will be created automatically so that they will be applied to the deployments before applying the *drift-detection-manager* and *sveltos-agent*.
 
+!!! warning "Targeting patches by name in Centralized/Agentless mode"
+    Every `target.name` shown in the examples below (`drift-detection-manager`, `sveltos-agent-manager`) assumes **Local Agent mode** — one Deployment per managed cluster, deployed inside that cluster, with a fixed, predictable name.
+
+    In **Centralized Agent mode** (`agent.managementCluster=true`, also called agentless mode), both agents instead run as one Deployment per managed cluster **inside the management cluster**, and each Deployment's name is generated dynamically per cluster (e.g. `sveltos-agent-buogojckqami0wcn90mt`, not `sveltos-agent-manager`) — Sveltos has to hand out a unique name per cluster now that many clusters' agents coexist in the same namespace. A patch `target.name` can't single out "the" Deployment for a given cluster in that mode; `target.name` is matched as a regular expression, not a glob, so even something like `sveltos-agent-*` will not do what it looks like it does (as a regex it just means "zero or more trailing dashes," and matches every agent Deployment's name as a substring, not a useful subset of one).
+
+    Use `target.labelSelector` instead, matching the `feature` label every one of these Deployments carries regardless of its generated name:
+
+    - sveltos-agent: `labelSelector: feature=sveltos-agent`
+    - drift-detection-manager: `labelSelector: feature=drift-detection`
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: sveltos-agent-config
+      namespace: projectsveltos
+    data:
+      deployment-patch: |-
+        patch: |-
+          - op: replace
+            path: /spec/template/spec/containers/0/resources/limits/cpu
+            value: 500m
+          - op: replace
+            path: /spec/template/spec/containers/0/resources/limits/memory
+            value: 2048Mi
+        target:
+          kind: Deployment
+          labelSelector: feature=sveltos-agent
+          namespace: projectsveltos
+    ```
+
+    This applies to every `name`-based patch target on this page — the global Helm-values patches below and the per-cluster override annotations further down — whenever the target cluster runs in Centralized/Agentless mode.
+
 ## drift-detection-manager Configuration
 
 To customize the *drift-detection-manager* deployment you can add your patches to the `Helm` values like here:

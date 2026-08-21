@@ -25,6 +25,48 @@ With the latest Sveltos release, users can take full advantage of the Sveltos Gr
 
 To allow Prometheus to collect metrics from the **Sveltos management** cluster, perform the below if Sveltos was installed using the Helm chart.
 
+### Metrics Endpoint Authentication
+
+Every Sveltos controller (addon-controller, classifier, event-manager, healthcheck-manager, access-manager, sveltoscluster-manager) serves `/metrics` on HTTPS port `8443`, authenticated and authorized by default — this is on by design, not a bug. Unless a controller is started with `--insecure-diagnostics` (which serves plain HTTP with no auth at all, and is only appropriate when the endpoint is not otherwise reachable, e.g. a local/test cluster), every scrape request must carry a valid Kubernetes bearer token, and that token's identity must be authorized to read `/metrics`. Two symptoms point at this:
+
+* **`401 Unauthorized`** — no bearer token was sent at all, so token authentication (`TokenReview`) never even ran.
+* **`403 Forbidden`, `Authorization denied for user system:serviceaccount:<ns>:<sa>`** — a token *was* sent and authenticated fine, but that ServiceAccount has no RBAC grant for the resource (`SubjectAccessReview` denied it).
+
+To fix the 403, bind whichever ServiceAccount your scraper runs as to a ClusterRole granting `get` on the `/metrics` non-resource URL:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metrics-reader
+rules:
+- nonResourceURLs:
+  - "/metrics"
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: metrics-reader-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: metrics-reader
+subjects:
+- kind: ServiceAccount
+  name: <your scraper's ServiceAccount name>
+  namespace: <your scraper's namespace>
+```
+
+This one ClusterRole is enough for every component's `/metrics` endpoint at once — `nonResourceURLs` authorization isn't scoped to a specific Service, so a single binding covers addon-controller, classifier, event-manager, and the rest. Each component does already ship its own pre-built role of this same shape (`addon-metrics-reader`, `classifier-metrics-reader`, `event-metrics-reader`, `sc-metrics-reader`, `drift-detection-metrics-reader`) — feel free to bind your scraper's ServiceAccount to one of those instead of creating a new `metrics-reader`, but there is no role literally named `metrics-reader` pre-installed by any component; the name above is yours to choose.
+
+!!! note
+    Don't bind a namespace's `default` ServiceAccount to `metrics-reader` just to unblock a scrape — anything else running as `default` in that namespace would inherit the same access. Use a ServiceAccount dedicated to your scraper.
+
+!!! note
+    The Helm chart's `addon-controller` `ServiceMonitor` (created when `prometheus.enabled=true`, below) points `bearerTokenFile` at `/var/run/secrets/kubernetes.io/serviceaccount/token` — that path is read from inside the **scraping Prometheus pod**, so it authenticates as Prometheus's *own* ServiceAccount. The chart does not create a `metrics-reader` binding for that ServiceAccount automatically, so unless your existing Prometheus RBAC already grants broad `nonResourceURLs` access (common in some `kube-prometheus-stack`-style setups, which already scrape kubelet/cAdvisor `/metrics` the same way), you'll need the binding above regardless of whether you're using the chart's ServiceMonitor or an external scraper like Grafana Alloy.
+
 ### Helm Chart
 
 ```bash
