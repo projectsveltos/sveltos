@@ -256,6 +256,33 @@ spec:
           status:
             description: ResourceSummaryStatus defines the status of ResourceSummary
             properties:
+              driftedHelmCharts:
+                description: |-
+                  DriftedHelmCharts lists the Helm releases that had at least one deployed resource
+                  change out of band since this status was last consumed. Set alongside HelmResourcesChanged,
+                  scoped to only the charts actually affected (as opposed to HelmResourcesChanged, which
+                  only says some Helm-deployed resource changed, without saying which chart). The consumer
+                  is expected to clear this list after acting on it, the same way it resets HelmResourcesChanged.
+                items:
+                  description: HelmChartRef identifies the Helm release a watched
+                    resource belongs to.
+                  properties:
+                    chartName:
+                      description: ChartName is the chart name
+                      type: string
+                    releaseName:
+                      description: ReleaseName is the chart release
+                      type: string
+                    releaseNamespace:
+                      description: ReleaseNamespace is the namespace the release is
+                        installed in
+                      type: string
+                  required:
+                  - chartName
+                  - releaseName
+                  - releaseNamespace
+                  type: object
+                type: array
               helmResourceHashes:
                 description: HelmResourceHashes specifies list of resource plus hash.
                 items:
@@ -266,6 +293,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-
@@ -316,6 +364,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-
@@ -365,6 +434,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-

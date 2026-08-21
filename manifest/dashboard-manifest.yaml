@@ -158,7 +158,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.memory
-                  image: projectsveltos/ui-backend:v1.13.0
+                  image: projectsveltos/ui-backend:v1.14.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -223,8 +223,8 @@ spec:
             containers:
                 - env:
                     - name: VITE_APP_VERSION
-                      value: v1.13.0
-                  image: docker.io/projectsveltos/dashboard:v1.13.0
+                      value: v1.14.0
+                  image: docker.io/projectsveltos/dashboard:v1.14.0
                   name: dashboard
                   ports:
                     - containerPort: 5173

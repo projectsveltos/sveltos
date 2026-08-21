@@ -162,6 +162,13 @@ When `frontend-app-1` is deployed, Sveltos first deploys `postgresql` and then `
 
 👉 [Read more here:](https://github.com/gianlucam76/devops-tutorial/tree/main/application-dependencies)
 
+## Deletion Order
+
+*dependsOn* is a two-way contract, the same pattern Kubernetes itself uses for a CRD with live custom resources, or a PVC still mounted by a pod: it doesn't just gate when a ClusterProfile is *allowed* to deploy, it also protects a prerequisite from being undeployed while a dependent still needs it.
+
+Reusing the Kyverno example above, `kyverno-admission-policies` depends on `kyverno`. If both ClusterProfiles are deleted around the same time, Sveltos won't undeploy the Kyverno Helm chart while the admission policies ClusterSummary for that cluster still exists and still lists `kyverno` in its *dependsOn*, even though the two deletions were triggered independently and in no particular order. The `kyverno` ClusterSummary stays in `Terminating`, and its `Status.Dependencies` field reports what it's still waiting on. Once every dependent ClusterSummary for that cluster has been removed, `kyverno`'s own undeploy proceeds.
+
+This is separate from [Dependency Deduplication](#dependency-deduplication) above: deduplication decides *whether* a shared dependency still needs to be removed at all (only once nothing on the cluster requires it anymore); this deletion ordering decides the *sequence* dependents and prerequisites undeploy in, so a dependent's add-ons are always torn down before the prerequisite they rely on disappears out from under them.
 
 [^1]: To create the ConfigMaps with Kyverno policies used in this example
 ```

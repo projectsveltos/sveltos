@@ -383,6 +383,8 @@ The *dependsOn* property specifies a list of other ClusterProfiles that this ins
 
 For example, clusterprofile-a can depend on another *clusterprofile-b*. This implies that any Helm charts or raw YAML files associated with ClusterProfile A will not be deployed until all add-ons and applications specified in ClusterProfile B have been successfully provisioned.
 
+*dependsOn* also protects the reverse direction: clusterprofile-b's add-ons won't be undeployed from a cluster while clusterprofile-a still matches that cluster and still depends on it, regardless of which of the two ClusterProfiles is deleted first. See [Deletion Order](../deployment_order/depends_on.md#deletion-order) for details.
+
 !!! example "Example - spec.dependsOn"
     ```yaml hl_lines="7-8"
     ---
