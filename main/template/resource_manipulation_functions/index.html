@@ -4589,7 +4589,7 @@
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span><span class="w">  </span><span class="c1"># add annotation to indicate Sveltos content is a template</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ copy &quot;ExternalSecret&quot; }}</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ copy "ExternalSecret" }}</span>
 </span></span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -4655,7 +4655,7 @@ Consequently, the Secret from the management cluster will be copied to any match
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span><span class="w">  </span><span class="c1"># add annotation to indicate Sveltos content is a template</span>
 </span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ setField &quot;NginxDeployment&quot; &quot;spec.replicas&quot; (int64 5) }}</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ setField "NginxDeployment" "spec.replicas" (int64 5) }}</span>
 </span></span></code></pre></div>
 <p>The template will:</p>
 <ol>
@@ -4673,7 +4673,7 @@ Consequently, the Secret from the management cluster will be copied to any match
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span><span class="w">  </span><span class="c1"># add annotation to indicate Sveltos content is a template</span>
 </span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ removeField &quot;NginxDeployment&quot; &quot;spec.replicas&quot; }}</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ removeField "NginxDeployment" "spec.replicas" }}</span>
 </span></span></code></pre></div>
 <p>The template above:</p>
 <ol>
@@ -4693,11 +4693,11 @@ Consequently, the Secret from the management cluster will be copied to any match
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span><span class="w">  </span><span class="c1"># add annotation to indicate Sveltos content is a template</span>
 </span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (getResource &quot;NginxDeployment&quot;) }}</span>
-</span></span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl &quot;spec.replicas&quot; (int64 1) ) }}</span>
-</span></span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl &quot;metadata.namespace&quot; .Cluster.metadata.namespace ) }}</span>
-</span></span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl &quot;spec.template.spec.serviceAccountName&quot; &quot;default&quot; ) }}</span>
-</span></span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl &quot;spec.paused&quot; true ) }}</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (getResource "NginxDeployment") }}</span>
+</span></span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl "spec.replicas" (int64 1) ) }}</span>
+</span></span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl "metadata.namespace" .Cluster.metadata.namespace ) }}</span>
+</span></span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl "spec.template.spec.serviceAccountName" "default" ) }}</span>
+</span></span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="hll"><span class="w">        </span><span class="no">{{ $depl := (chainSetField $depl "spec.paused" true ) }}</span>
 </span></span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="hll"><span class="w">        </span><span class="no">{{ toYaml $depl }}</span>
 </span></span></code></pre></div>
 <ol>
@@ -4720,12 +4720,12 @@ Consequently, the Secret from the management cluster will be copied to any match
 </span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span><span class="w">  </span><span class="c1"># add annotation to indicate Sveltos content is a template</span>
 </span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 </span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">      </span><span class="nt">secret.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ $currentContainers := (getField &quot;NginxDeployment&quot; &quot;spec.template.spec.containers&quot;) }}</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="hll"><span class="w">        </span><span class="no">{{ $currentContainers := (getField "NginxDeployment" "spec.template.spec.containers") }}</span>
 </span></span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="hll"><span class="w">        </span><span class="no">{{ $modifiedContainers := list }}</span>
 </span></span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="hll"><span class="w">        </span><span class="no">{{- range $element := $currentContainers }}</span>
-</span></span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="hll"><span class="w">          </span><span class="no">{{ $modifiedContainers = append $modifiedContainers (chainSetField $element &quot;image&quot; &quot;nginx:1.13&quot; ) }}</span>
+</span></span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="hll"><span class="w">          </span><span class="no">{{ $modifiedContainers = append $modifiedContainers (chainSetField $element "image" "nginx:1.13" ) }}</span>
 </span></span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="hll"><span class="w">        </span><span class="no">{{- end }}</span>
-</span></span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="hll"><span class="w">        </span><span class="no">{{ setField &quot;NginxDeployment&quot; &quot;spec.template.spec.containers&quot; $modifiedContainers }}</span>
+</span></span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="hll"><span class="w">        </span><span class="no">{{ setField "NginxDeployment" "spec.template.spec.containers" $modifiedContainers }}</span>
 </span></span></code></pre></div>
 
 

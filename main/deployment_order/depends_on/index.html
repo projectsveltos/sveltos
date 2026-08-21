@@ -2026,6 +2026,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#deletion-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Deletion Order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4550,6 +4561,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#deletion-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Deletion Order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4700,6 +4722,10 @@
 <p><img alt="Dependency Deduplication" src="../../assets/dependency-deduplication.png" /></p>
 <p>When <code>frontend-app-1</code> is deployed, Sveltos first deploys <code>postgresql</code> and then <code>backend-service-1</code>, resolving the dependency chain. Subsequently, when <code>frontend-app-2</code> is deployed to the same cluster, Sveltos recognizes that <code>postgresql</code> is already present and avoids redeploying it. If <code>frontend-app-1</code> is then removed, <code>backend-service-1</code> is also removed. However, <code>postgresql</code> persists because it remains a dependency of <code>frontend-app-2</code>. Finally, only when <code>frontend-app-2</code> is removed will Sveltos remove <code>backend-service-2</code> and <code>postgresql</code>, as they are no longer required by any active profile on the cluster.</p>
 <p>👉 <a href="https://github.com/gianlucam76/devops-tutorial/tree/main/application-dependencies">Read more here:</a></p>
+<h2 id="deletion-order">Deletion Order</h2>
+<p><em>dependsOn</em> is a two-way contract, the same pattern Kubernetes itself uses for a CRD with live custom resources, or a PVC still mounted by a pod: it doesn't just gate when a ClusterProfile is <em>allowed</em> to deploy, it also protects a prerequisite from being undeployed while a dependent still needs it.</p>
+<p>Reusing the Kyverno example above, <code>kyverno-admission-policies</code> depends on <code>kyverno</code>. If both ClusterProfiles are deleted around the same time, Sveltos won't undeploy the Kyverno Helm chart while the admission policies ClusterSummary for that cluster still exists and still lists <code>kyverno</code> in its <em>dependsOn</em>, even though the two deletions were triggered independently and in no particular order. The <code>kyverno</code> ClusterSummary stays in <code>Terminating</code>, and its <code>Status.Dependencies</code> field reports what it's still waiting on. Once every dependent ClusterSummary for that cluster has been removed, <code>kyverno</code>'s own undeploy proceeds.</p>
+<p>This is separate from <a href="#dependency-deduplication">Dependency Deduplication</a> above: deduplication decides <em>whether</em> a shared dependency still needs to be removed at all (only once nothing on the cluster requires it anymore); this deletion ordering decides the <em>sequence</em> dependents and prerequisites undeploy in, so a dependent's add-ons are always torn down before the prerequisite they rely on disappears out from under them.</p>
 <div class="footnote">
 <hr />
 <ol>

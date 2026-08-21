@@ -1281,6 +1281,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#metrics-endpoint-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Metrics Endpoint Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#helm-chart" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4937,6 +4948,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#metrics-endpoint-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Metrics Endpoint Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#helm-chart" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -5434,18 +5456,57 @@
 <h2 id="getting-started">Getting Started</h2>
 <p>With the latest Sveltos release, users can take full advantage of the Sveltos Grafana dashboard. Before we start using the capabilities, ensure <a href="https://artifacthub.io/packages/helm/grafana/grafana">Grafana</a> and <a href="https://artifacthub.io/packages/helm/prometheus-community/prometheus">Prometheus</a> are deployed on the <strong>Sveltos management</strong> cluster.</p>
 <p>To allow Prometheus to collect metrics from the <strong>Sveltos management</strong> cluster, perform the below if Sveltos was installed using the Helm chart.</p>
+<h3 id="metrics-endpoint-authentication">Metrics Endpoint Authentication</h3>
+<p>Every Sveltos controller (addon-controller, classifier, event-manager, healthcheck-manager, access-manager, sveltoscluster-manager) serves <code>/metrics</code> on HTTPS port <code>8443</code>, authenticated and authorized by default — this is on by design, not a bug. Unless a controller is started with <code>--insecure-diagnostics</code> (which serves plain HTTP with no auth at all, and is only appropriate when the endpoint is not otherwise reachable, e.g. a local/test cluster), every scrape request must carry a valid Kubernetes bearer token, and that token's identity must be authorized to read <code>/metrics</code>. Two symptoms point at this:</p>
+<ul>
+<li><strong><code>401 Unauthorized</code></strong> — no bearer token was sent at all, so token authentication (<code>TokenReview</code>) never even ran.</li>
+<li><strong><code>403 Forbidden</code>, <code>Authorization denied for user system:serviceaccount:&lt;ns&gt;:&lt;sa&gt;</code></strong> — a token <em>was</em> sent and authenticated fine, but that ServiceAccount has no RBAC grant for the resource (<code>SubjectAccessReview</code> denied it).</li>
+</ul>
+<p>To fix the 403, bind whichever ServiceAccount your scraper runs as to a ClusterRole granting <code>get</code> on the <code>/metrics</code> non-resource URL:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-reader</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nonResourceURLs</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"/metrics"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nn">---</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-reader-binding</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics-reader</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your scraper's ServiceAccount name&gt;</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your scraper's namespace&gt;</span>
+</span></code></pre></div>
+<p>This one ClusterRole is enough for every component's <code>/metrics</code> endpoint at once — <code>nonResourceURLs</code> authorization isn't scoped to a specific Service, so a single binding covers addon-controller, classifier, event-manager, and the rest. Each component does already ship its own pre-built role of this same shape (<code>addon-metrics-reader</code>, <code>classifier-metrics-reader</code>, <code>event-metrics-reader</code>, <code>sc-metrics-reader</code>, <code>drift-detection-metrics-reader</code>) — feel free to bind your scraper's ServiceAccount to one of those instead of creating a new <code>metrics-reader</code>, but there is no role literally named <code>metrics-reader</code> pre-installed by any component; the name above is yours to choose.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Don't bind a namespace's <code>default</code> ServiceAccount to <code>metrics-reader</code> just to unblock a scrape — anything else running as <code>default</code> in that namespace would inherit the same access. Use a ServiceAccount dedicated to your scraper.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Helm chart's <code>addon-controller</code> <code>ServiceMonitor</code> (created when <code>prometheus.enabled=true</code>, below) points <code>bearerTokenFile</code> at <code>/var/run/secrets/kubernetes.io/serviceaccount/token</code> — that path is read from inside the <strong>scraping Prometheus pod</strong>, so it authenticates as Prometheus's <em>own</em> ServiceAccount. The chart does not create a <code>metrics-reader</code> binding for that ServiceAccount automatically, so unless your existing Prometheus RBAC already grants broad <code>nonResourceURLs</code> access (common in some <code>kube-prometheus-stack</code>-style setups, which already scrape kubelet/cAdvisor <code>/metrics</code> the same way), you'll need the binding above regardless of whether you're using the chart's ServiceMonitor or an external scraper like Grafana Alloy.</p>
+</div>
 <h3 id="helm-chart">Helm Chart</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>helm<span class="w"> </span>upgrade<span class="w"> </span>&lt;your<span class="w"> </span>release<span class="w"> </span>name&gt;<span class="w"> </span>projectsveltos/projectsveltos<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--set<span class="w"> </span>prometheus.enabled<span class="o">=</span><span class="nb">true</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>helm<span class="w"> </span>upgrade<span class="w"> </span>&lt;your<span class="w"> </span>release<span class="w"> </span>name&gt;<span class="w"> </span>projectsveltos/projectsveltos<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--set<span class="w"> </span>prometheus.enabled<span class="o">=</span><span class="nb">true</span>
 </span></code></pre></div>
 <h4 id="interactive-import">Interactive Import</h4>
 <p>Once Grafana and Prometheus are available, proceed by adding the <a href="https://grafana.com/docs/grafana/latest/datasources/prometheus/configure-prometheus-data-source/">Prometheus data source</a> to Grafana and then <strong>importing</strong> the below Grafana dashboard.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard.json
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Depending on the Grafana/Prometheus installation, identify the <code>serviceMonitorSelector</code> label of the <strong>Prometheus</strong> instance and import it to the Sveltos <code>servicemonitor</code> resources as a label. Check out the example below.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>servicemonitor<span class="w"> </span>-n<span class="w"> </span>projectsveltos
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>patch<span class="w"> </span>servicemonitor<span class="w"> </span>addon-controller<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;{&quot;metadata&quot;:{&quot;labels&quot;:{&quot;prometheus&quot;:&quot;example-label&quot;}}}&#39;</span><span class="w"> </span>--type<span class="o">=</span>merge
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>servicemonitor<span class="w"> </span>-n<span class="w"> </span>projectsveltos
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>patch<span class="w"> </span>servicemonitor<span class="w"> </span>addon-controller<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>-p<span class="w"> </span><span class="s1">'{"metadata":{"labels":{"prometheus":"example-label"}}}'</span><span class="w"> </span>--type<span class="o">=</span>merge
 </span></code></pre></div>
 </div>
 <p>Confirm that all metrics are linked to their corresponding panels. The dashboard should automatically detect data connections from Prometheus.</p>
@@ -5457,7 +5518,7 @@
 <p>Detailed descriptions of the panels available on the dashboard and the tracked metrics are listed below.</p>
 <h4 id="automated-import-with-sidecar">Automated Import with Sidecar</h4>
 <p>Planning to use a sidecar for the dashboard import, feel free to use the below <code>.json</code> file. The same notes apply as in the <a href="#interactive-import">above</a> section.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard_sidecar.json
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/sveltosgrafanadashboard_sidecar.json
 </span></code></pre></div>
 <h2 id="available-metrics">Available Metrics</h2>
 <p>Sveltos lets users track and visualize a number of key operational metrics. All custom metrics are prefixed

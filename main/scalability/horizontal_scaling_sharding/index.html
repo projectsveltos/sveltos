@@ -4775,7 +4775,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>shard-components-config.yaml
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>kubectl<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>shard-controller<span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-p<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/spec/template/spec/containers/0/args/-&quot;,&quot;value&quot;:&quot;--shard-components-config=shard-components-config&quot;}]&#39;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--shard-components-config=shard-components-config"}]'</span>
 </span></code></pre></div>
 <p>From that point on, every new shard set the <code>shard controller</code> creates will have the patches applied. Updating the <code>ConfigMap</code> triggers an immediate re-deploy of all existing shard sets.</p>
 

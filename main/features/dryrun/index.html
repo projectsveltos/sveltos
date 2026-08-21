@@ -4588,15 +4588,15 @@
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>               name: validate-image-tag
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>               skipBackgroundRequests: true
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>               validate:
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>-                message: Using a mutable image tag e.g. &#39;latest&#39; is not allowed.
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>+                message: Using a mutable image tag e.g. &#39;latest&#39; is not allowed in this cluster.
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>-                message: Using a mutable image tag e.g. 'latest' is not allowed.
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>+                message: Using a mutable image tag e.g. 'latest' is not allowed in this cluster.
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>                 pattern:
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                     spec:
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>                         containers:
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>                             - image: &#39;!*:latest&#39;
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>                             - image: '!*:latest'
 </span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>-        validationFailureAction: audit
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>+        validationFailureAction: Enforce
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>     status: &quot;&quot;
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>     status: ""
 </span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
 </span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>Cluster: default/clusterapi-workload
 </span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>--- deployed: Deployment nginx-deployment
@@ -4618,11 +4618,11 @@
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>+-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>| default/clusterapi-workload | helm release  | kyverno    | kyverno-latest | Update Values | use --raw-diff to see full     | ClusterProfile/deploy-kyverno     |
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>|                             |               |            |                |               | diff for helm values           |                                   |
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>| default/clusterapi-workload | helm release  | prometheus | prometheus     | Upgrade       | Current version: &quot;23.4.0&quot;.     | ClusterProfile/prometheus-grafana |
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>| default/clusterapi-workload | helm release  | prometheus | prometheus     | Upgrade       | Current version: "23.4.0".     | ClusterProfile/prometheus-grafana |
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>|                             |               |            |                |               | Would move to version:         |                                   |
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>|                             |               |            |                |               | &quot;26.0.0&quot;                       |                                   |
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>| default/clusterapi-workload | helm release  | grafana    | grafana        | Upgrade       | Current version: &quot;6.58.9&quot;.     | ClusterProfile/prometheus-grafana |
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>|                             |               |            |                |               | Would move to version: &quot;8.6.4&quot; |                                   |
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>|                             |               |            |                |               | "26.0.0"                       |                                   |
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>| default/clusterapi-workload | helm release  | grafana    | grafana        | Upgrade       | Current version: "6.58.9".     | ClusterProfile/prometheus-grafana |
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>|                             |               |            |                |               | Would move to version: "8.6.4" |                                   |
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>+-----------------------------+---------------+------------+----------------+---------------+--------------------------------+-----------------------------------+
 </span></code></pre></div>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ sveltosctl show dryrun --raw-diff

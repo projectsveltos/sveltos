@@ -4849,7 +4849,7 @@
 <h4 id="2-configure-the-kubernetes-api-server">2. Configure the Kubernetes API Server</h4>
 <p>The Kubernetes API server must be configured to accept and validate OIDC tokens. The required and optional flags are documented <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens">here</a>.</p>
 <p>Here is an example of configuring OIDC in a k3d cluster, for demo/test purposes:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>k3d cluster create oidc-test   --k3s-arg &quot;--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*&quot;   --k3s-arg &quot;--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*&quot;   --k3s-arg &quot;--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*&quot;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>k3d cluster create oidc-test   --k3s-arg "--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*"   --k3s-arg "--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*"   --k3s-arg "--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"
 </span></code></pre></div>
 <p>In this example, we use the <code>--oidc-username-claim</code> parameter to let the API server use the <code>preferred_username</code> claim from the OIDC token as the username.</p>
 <h4 id="3-configure-rbac-for-oidc-users">3. Configure RBAC for OIDC Users</h4>
