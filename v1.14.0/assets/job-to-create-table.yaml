@@ -1,0 +1,60 @@
+apiVersion: config.projectsveltos.io/v1beta1
+kind: ClusterProfile
+metadata:
+  name: deploy-job
+spec:
+  clusterSelector:
+    matchLabels:
+      type: app
+  templateResourceRefs:
+  - resource:
+      apiVersion: v1
+      kind: Secret
+      name: "pg-credentials"
+    identifier: Credentials
+  - resource:
+      apiVersion: v1
+      kind: ConfigMap
+      name: "pg-loadbalancer-data"
+    identifier: LoadBalancer
+  policyRefs:
+  - name: job-to-create-table
+    namespace: default
+    kind: ConfigMap
+---
+apiVersion: v1
+data:
+  job-to-create-table.yaml: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: todo-table
+      namespace: todo
+    spec:
+      ttlSecondsAfterFinished: 1000
+      template:
+        spec:
+          containers:
+            - name: postgresql-client
+              image: postgres:12
+              imagePullPolicy: Always
+              env:
+                - name: PGPASSWORD
+                  value: {{ get (getResource "Credentials").data `password` |b64dec }}
+              command: ["psql"]
+              args:
+                [
+                  "--host={{ get (getResource `LoadBalancer`).data `external-ip` }}",
+                  "--port={{ get (getResource `LoadBalancer`).data `port` }}",
+                  "--username={{ get (getResource "Credentials").data `user` |b64dec }}",
+                  "--no-password",
+                  "--dbname=todo",
+                  "--command=create table Todo (id bigint not null,completed boolean not null,ordering integer,title varchar(255),url varchar(255),primary key (id));create sequence hibernate_sequence start with 1 increment by 1;",
+                ]
+          restartPolicy: Never
+kind: ConfigMap
+metadata:
+  annotations:
+    projectsveltos.io/template: ok
+  name: job-to-create-table
+  namespace: default

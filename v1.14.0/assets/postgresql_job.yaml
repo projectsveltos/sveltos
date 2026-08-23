@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: todo-table
+  namespace: todo
+spec:
+  ttlSecondsAfterFinished: 1000
+  template:
+    spec:
+      containers:
+        - name: postgresql-client
+          image: postgres:12
+          imagePullPolicy: Always
+          env:
+            - name: PGPASSWORD
+              value: admin
+          command: ["psql"]
+          args:
+            [
+              "--host=postgresql",
+              "--username=admin",
+              "--no-password",
+              "--dbname=todo",
+              "--command=create table Todo (id bigint not null,completed boolean not null,ordering integer,title varchar(255),url varchar(255),primary key (id));create sequence hibernate_sequence start with 1 increment by 1;",
+            ]
+      restartPolicy: Never
