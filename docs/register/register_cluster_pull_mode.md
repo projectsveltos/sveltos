@@ -15,11 +15,14 @@ authors:
     To learn more about the Sveltos **Pull Mode**, check out the [Youtube Video](https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be). If you find this valuable, we would be thrilled if you shared it! 😊
 
 
-## Sveltos Cluster Registration Pull Mode
+# Sveltos Cluster Registration Pull Mode :material-crown:{ title="Enterprise" }
 
 Sveltos supports managed cluster registration in **Pull Mode**. In this model, **managed** clusters actively **pull** configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.
 
 The **Pull Mode** is ideal for managed clusters behind a firewall, in air-gapped environments, edge deployments with limited bandwidth or highly regulated and secure setups.
+
+!!!info "Enterprise Feature"
+    Test the **Pull Mode** with up to **two** managed clusters for free. Need more than two clusters? Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
 
 If Sveltos is not already installed, have a look at the installation details located [here](../getting_started/install/install.md).
 
@@ -45,7 +48,7 @@ The following items are some of the benefits of utilising Sveltos in **Pull Mode
 - **Security**: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.
 
 !!!tip
-    Find out [here](../index.md#sveltos-at-the-edge) what is being deployed by Sveltos when we talk about Edge deployments.
+    Find out [here](../index.md#sveltos-for-edge-kubernetes) what is being deployed by Sveltos when we talk about Edge deployments.
 
 ## Register Cluster
 
@@ -97,9 +100,6 @@ service/sveltos-applier-metrics-service created
 deployment.apps/sveltos-applier-manager created
 secret/pcluster01-sveltos-kubeconfig created
 ```
-
-!!!note
-    Test the **Pull Mode** with up to **two** managed clusters for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
 
 ### Validation
 

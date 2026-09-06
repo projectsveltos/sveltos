@@ -23,9 +23,8 @@ The Sveltos Dashboard is not part of the generic Sveltos installation. It is a m
 
 To deploy the Sveltos Dashboard, run the below command using the `kubectl` utility.
 
-```
+```bash
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/main/manifest/dashboard-manifest.yaml
-
 ```
 
 ### Helm Installation
@@ -53,38 +52,35 @@ The Sveltos Dashboard supports two authentication methods: **manual token authen
 
 ### Manual Token Authentication
 
-To authenticate with the Sveltos Dashboard, we will utilise a `serviceAccount`, a `ClusterRoleBinding`/`RoleBinding` and a `token`.
+To authenticate with the Sveltos Dashboard, we will utilise a `serviceAccount`, a `ClusterRoleBinding`/`RoleBinding` and a `token`. Let's create a `service account` in the desired namespace.
 
-Let's create a `service account` in the desired namespace.
-
-```
+```bash
 $ kubectl create sa <user> -n <namespace>
 ```
 
-Let's provide the service account permissions to access the **managed** clusters in the **management** cluster.
+The next step is to provide the service account permissions to access the **managed** clusters in the **management** cluster.
 
-
-```
+```bash
 $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --serviceaccount <namespace>:<service_account>
 ```
 
 | Argument         | Description                                                                                                                                            |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `binding_name`   | It is a descriptive name for the rolebinding.                                                                                                          |
-| `role_name`      | It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see). |
+| `role_name`      | It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see).   |
 | `namespace`      | It is the service account's namespace.                                                                                                                 |
-| `service_account`| It is the service account that the permissions are being associated with.                                                                             |
+| `service_account`| It is the service account that the permissions are being associated with.                                                                              |
 
 #### Platform Administrator Example
 
-```
+```bash
 $ kubectl create sa platform-admin -n default
 $ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
 ```
 
 Create a login token for the service account with the name `platform-admin` in the `default` namespace. The token will be valid for **24 hours**.[^1]
 
-```
+```bash
 $ kubectl create token platform-admin --duration=24h
 ```
 
@@ -115,27 +111,29 @@ $ helm install sveltos-dashboard projectsveltos/sveltos-dashboard -n projectsvel
   --set auth.oidc.redirectUri=https://dashboard.example.com/oidc-callback
 ```
 
-Make sure that the client exists, it is configured as a **public client** (no client secret), and the redirect URI is registered in the OIDC provider.
-
-If `auth.oidc.issuer` and `auth.oidc.clientId` are not set, the dashboard falls back to manual token authentication.
+Make sure that the client exists, it is configured as a **public client** (no client secret), and the redirect URI is registered in the OIDC provider. If the `auth.oidc.issuer` and the `auth.oidc.clientId` values are not set, the dashboard falls back to the manual token authentication.
 
 #### 2. Configure the Kubernetes API Server
 
-The Kubernetes API server must be configured to accept and validate OIDC tokens. The required and optional flags are documented [here](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens).
+The **Kubernetes API server** must be configured to accept and validate OIDC tokens. The required and optional flags are documented [here](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens).
 
-Here is an example of configuring OIDC in a k3d cluster, for demo/test purposes:
+The below is an example of configuring OIDC in a k3d cluster.
+
+```bash
+$ k3d cluster create oidc-test \
+  --k3s-arg "--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*" \
+  --k3s-arg "--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*" \
+  --k3s-arg "--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"
 
 ```
-k3d cluster create oidc-test   --k3s-arg "--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*"   --k3s-arg "--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*"   --k3s-arg "--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"
-```
 
-In this example, we use the `--oidc-username-claim` parameter to let the API server use the `preferred_username` claim from the OIDC token as the username.
+In this example, we use the `--oidc-username-claim` parameter to let the Kubernetes API server use the `preferred_username` claim from the OIDC token as the username.
 
 #### 3. Configure RBAC for OIDC Users
 
-The API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens) for details on prefixing behaviour.
+The Kubernetes API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens) for details on prefixing behaviour.
 
-The following example grants `cluster-admin` to the OIDC user `test`:
+The following example grants `cluster-admin` permissions to the OIDC user `test`:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
