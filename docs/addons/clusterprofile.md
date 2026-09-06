@@ -322,9 +322,10 @@ A single check can inspect a Kubernetes resource and evaluate metric values in t
         end
     ```
 
-#### Job-based checks
+#### Job-based Checks :material-crown:{ title="Enterprise" }
 
-*Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.*
+!!!info "Enterprise Feature"
+    Available with Enterprise or Enterprise Plus license. Contact us at `support@projectsveltos.io` to explore license options.
 
 Resource- and metric-based checks evaluate state that is already present in the managed cluster. `jobCheck` instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own `Complete`/`Failed` outcome as the check result. This is useful for checks that can't be expressed as "is this field set correctly" — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster.
 

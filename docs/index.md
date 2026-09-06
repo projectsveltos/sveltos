@@ -1,6 +1,6 @@
 ---
-title: Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons
-description: Sveltos is a Kubernetes add-on controller for a fleet of clusters.
+title: Sveltos - Kubernetes Fleet Management Controller | Deploy Add-ons and Applications at Scale
+description: Sveltos is an open-source Kubernetes fleet management add-on controller. Deploy Helm, Kustomize, and YAML across clusters with drift detection, templating, and event-driven automation.
 tags:
     - Kubernetes
     - add-ons
@@ -10,7 +10,12 @@ tags:
     - jsonnet
     - clusterapi
     - multi-tenancy
+    - multi-cluster management
     - fleet management
+    - drift detection
+    - GitOps
+    - platform engineering
+    - edge
 authors:
     - Gianluca Mardente
     - Eleni Grosdouli
@@ -22,7 +27,7 @@ authors:
 
 [<img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo">](https://github.com/projectsveltos "Manage Kubernetes add-ons")
 
-<h1>Sveltos: Kubernetes Add-on Controller for Multi-Cluster Fleets</h1>
+<h1>Sveltos: Kubernetes Add-on Controller for Kubernetes Fleet Management</h1>
 
 **Deploy and manage Kubernetes add-ons and applications across hundreds of clusters from a single management cluster.** Helm, Kustomize, or raw YAML/JSON. Define once, deploy everywhere, with per-cluster variation, drift detection, and event-driven automation.
 
@@ -32,7 +37,7 @@ authors:
 
 ## What is Sveltos?
 
-[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is a [Kubernetes add-on controller](https://github.com/projectsveltos/addon-controller). It deploys and manages add-ons and applications across many clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities.
+[Sveltos](https://github.com/projectsveltos "Manage Kubernetes add-ons") is an open-source Kubernetes fleet management [add-on controller](https://github.com/projectsveltos/addon-controller). It deploys and manages add-ons and applications across a fleet of clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities.
 
 A GitOps controller monitors a repository and syncs manifests. In contrast, Sveltos takes these manifests and applies them across the entire fleet. Its configurations are cluster-agnostic; they do not reference a specific cluster. Instead, they target clusters by labels, which means when a new cluster joins the fleet, it requires no configuration changes, only the right labels. One configuration can serve any number of clusters that meet the defined criteria.
 
@@ -61,6 +66,9 @@ Here's how it works:
 * **📢 Observability**: Notifications via Slack, Teams, Discord, Webex, Telegram, SMTP, or Kubernetes events.
 * **🛡️ Pull Mode**: Deploy into restricted environments: air-gapped, edge, or behind firewalls.
 * **🚦 Progressive rollouts**: Phased deployments from a single configuration; no need to maintain multiple profiles.
+* **🧪 Job-based Checks**: Run active probes like smoke tests, synthetic transactions, connectivity checks as Kubernetes `Jobs` inside the managed clusters, using the Job outcome as the health verdict.       
+
+Sveltos is cloud-agnostic. It works across EKS, AKS, GKE, on-prem, and edge Kubernetes clusters. Define once, deploy everywhere regardless of the chosen provider. 
 
 ## Why Sveltos?
 
@@ -73,7 +81,7 @@ Sveltos stands out for:
 - **Per-cluster templating**: Same definition, different values per cluster.
 - **Event framework and progressive rollouts**: Safe, automated, and adaptable.
 
-## Sveltos at the Edge
+## Sveltos for Edge Kubernetes
 
 Running Kubernetes at the edge usually means a tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.
 
@@ -107,11 +115,6 @@ We are always thrilled to welcome new members to our community, and your contrib
 
 ## Support the Project
 
-If Sveltos saves you time, the single most helpful thing you can do is **star the repo**. It helps other engineers and the community to discover the project.
+If Sveltos saves you time, the single most helpful thing you can do is **star the repo**. It helps other engineers and the community to discover the project. Thank you for your support! 🙏 
 
 [:star: Star us on GitHub](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons"){:target="_blank" .md-button}
-
-**Thank you 🙏**
-
-
-<!-- If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.** -->
