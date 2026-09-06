@@ -18,7 +18,7 @@ authors:
 The `ClusterPromotion` Custom Resource Definition (CRD) solves the challenge of performing phased rollouts of cluster configurations and add-ons managed by Sveltos. We can avoid creating and managing multiple `ClusterProfile` resources with the same content. Instead, we define the configuration once and list the deployment stages in order.
 
 !!!info "Enterprise Feature"
-    Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two ClusterPromotion instances? Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
+    Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two `ClusterPromotion` instances? Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
 
 Sveltos automatically handles the workflow:
 
