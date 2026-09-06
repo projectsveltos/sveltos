@@ -2804,6 +2804,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#namespace-scoped-watch-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Namespace-Scoped Watch Mode
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4550,6 +4561,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#namespace-scoped-watch-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Namespace-Scoped Watch Mode
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4719,6 +4741,24 @@ Any changes made to the resources deployed by the Helm chart will be flagged as 
 </span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="nt">agent</span><span class="p">:</span>
 </span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="nt">managementCluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
+</div>
+<h2 id="namespace-scoped-watch-mode">Namespace-Scoped Watch Mode</h2>
+<p>When <code>drift-detection-manager</code> runs in the management cluster (agentless mode, <code>--agent-in-mgmt-cluster</code> above), the credential it uses to reach a managed cluster might already be restricted to a subset of namespaces — a managed cluster whose owner only grants Sveltos access to specific namespaces, for example. By default, <code>drift-detection-manager</code> watches resources cluster-wide, which such a restricted credential cannot do.</p>
+<p>Adding the annotation <code>agent.projectsveltos.io/watch-namespaces</code> to the Cluster or SveltosCluster instance, with a comma-separated list of namespaces, restricts its watches to just those namespaces. The same annotation also restricts <code>sveltos-agent</code>'s own watches, when <code>sveltos-agent</code> is deployed agentlessly against the same managed cluster (see <a href="../labels_management/#classifier-controller-configuration">Classifier Controller Configuration</a>) — one annotation controls both. Cluster-scoped resources are unaffected either way: RBAC for those is whatever the credential actually grants, independent of this setting.</p>
+<div class="admonition example">
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.x-k8s.io/v1beta1</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="hll"><span class="w">    </span><span class="nt">agent.projectsveltos.io/watch-namespaces</span><span class="p">:</span><span class="w"> </span><span class="s">"team-a,team-b"</span>
+</span></span></code></pre></div>
+</div>
+<p>Restricting the actual <strong>watches</strong> requires a valid Sveltos Enterprise or Enterprise Plus license granting the <code>NamespaceScopedAgents</code> feature. Without one, the annotation is ignored for that purpose and watches proceed cluster-wide, same as if it weren't set — a genuinely restricted credential still behaves correctly either way (it simply can't watch outside its granted namespaces), the license only gates whether Sveltos proactively narrows its own watch scope to match, rather than finding out the hard way.</p>
+<p><code>addon-controller</code>'s own search for <strong>stale</strong> resources (ones no longer referenced by a ClusterProfile/Profile's <code>policyRefs</code>/<code>kustomizationRefs</code>, that need removing) honors the same annotation too, but unconditionally, no license required — it only ever narrows where addon-controller itself looks, using whatever RBAC the same credential already has.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Contact <code>support@projectsveltos.io</code> to explore license options.</p>
 </div>
 
 
