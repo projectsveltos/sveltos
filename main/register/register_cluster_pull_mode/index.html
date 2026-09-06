@@ -1328,6 +1328,8 @@
       
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -1369,23 +1371,14 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#sveltos-cluster-registration-pull-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sveltos Cluster Registration Pull Mode
-      </span>
-    </span>
-  </a>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#how-does-it-work" class="md-nav__link">
@@ -4495,6 +4488,8 @@
                     
                     
                     
+                      
+                    
                     
                       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
                       <div class="md-sidebar-button__wrapper">
@@ -4510,23 +4505,14 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#sveltos-cluster-registration-pull-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sveltos Cluster Registration Pull Mode
-      </span>
-    </span>
-  </a>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#how-does-it-work" class="md-nav__link">
@@ -4624,15 +4610,17 @@
   
 
 
-  <h1 id="__skip">Register Cluster Pull Mode</h1>
-
 <div class="admonition video">
 <p class="admonition-title">Video</p>
 <p>To learn more about the Sveltos <strong>Pull Mode</strong>, check out the <a href="https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be">Youtube Video</a>. If you find this valuable, we would be thrilled if you shared it! 😊</p>
 </div>
-<h2 id="sveltos-cluster-registration-pull-mode">Sveltos Cluster Registration Pull Mode</h2>
+<h1 id="sveltos-cluster-registration-pull-mode">Sveltos Cluster Registration Pull Mode <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span></h1>
 <p>Sveltos supports managed cluster registration in <strong>Pull Mode</strong>. In this model, <strong>managed</strong> clusters actively <strong>pull</strong> configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.</p>
 <p>The <strong>Pull Mode</strong> is ideal for managed clusters behind a firewall, in air-gapped environments, edge deployments with limited bandwidth or highly regulated and secure setups.</p>
+<div class="admonition info">
+<p class="admonition-title">Enterprise Feature</p>
+<p>Test the <strong>Pull Mode</strong> with up to <strong>two</strong> managed clusters for free. Need more than two clusters? Contact us at <a href="mailto:support@projectsveltos.io"><code>support@projectsveltos.io</code></a> to explore license options.</p>
+</div>
 <p>If Sveltos is not already installed, have a look at the installation details located <a href="../../getting_started/install/install/">here</a>.</p>
 <h2 id="how-does-it-work">How does it work?</h2>
 <p>While the core Sveltos controllers run in a <strong>management</strong> cluster and orchestrate deployments, the concept of <strong>Pull Mode</strong> becomes relevant when managing clusters in challenging network environments such as firewalled, air-gapped, or edge deployments, where direct inbound access from the management cluster to the managed clusters is either not possible or not desired.</p>
@@ -4653,7 +4641,7 @@
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Find out <a href="../../#sveltos-at-the-edge">here</a> what is being deployed by Sveltos when we talk about Edge deployments.</p>
+<p>Find out <a href="../../#sveltos-for-edge-kubernetes">here</a> what is being deployed by Sveltos when we talk about Edge deployments.</p>
 </div>
 <h2 id="register-cluster">Register Cluster</h2>
 <p>To register a cluster in Pull mode, we use the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a>.</p>
@@ -4712,10 +4700,6 @@
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>deployment.apps/sveltos-applier-manager<span class="w"> </span>created
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>secret/pcluster01-sveltos-kubeconfig<span class="w"> </span>created
 </span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Test the <strong>Pull Mode</strong> with up to <strong>two</strong> managed clusters for free. Need more than two clusters? Contact us at <code>support@projectsveltos.io</code> to explore license options based on your needs!</p>
-</div>
 <h3 id="validation">Validation</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>

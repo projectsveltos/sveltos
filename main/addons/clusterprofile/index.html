@@ -1992,7 +1992,7 @@
   <a href="#job-based-checks" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Job-based checks
+        Job-based Checks <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span>
       </span>
     </span>
   </a>
@@ -4853,7 +4853,7 @@
   <a href="#job-based-checks" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Job-based checks
+        Job-based Checks <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span>
       </span>
     </span>
   </a>
@@ -5312,8 +5312,11 @@ Please refer to this <a href="../../deployment_order/rolling_update_strategy/">s
 </span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">    </span><span class="no">end</span>
 </span></code></pre></div>
 </div>
-<h4 id="job-based-checks">Job-based checks</h4>
-<p><em>Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.</em></p>
+<h4 id="job-based-checks">Job-based Checks <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span></h4>
+<div class="admonition info">
+<p class="admonition-title">Enterprise Feature</p>
+<p>Available with Enterprise or Enterprise Plus license. Contact us at <code>support@projectsveltos.io</code> to explore license options.</p>
+</div>
 <p>Resource- and metric-based checks evaluate state that is already present in the managed cluster. <code>jobCheck</code> instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own <code>Complete</code>/<code>Failed</code> outcome as the check result. This is useful for checks that can't be expressed as "is this field set correctly" — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster.</p>
 <p>Set <code>jobCheck.jobRef</code> to a ConfigMap or Secret containing the Job manifest, and Sveltos deploys it, waits for it to reach <code>Complete</code> or <code>Failed</code>, then deletes it. <code>jobCheck.timeout</code> bounds how long Sveltos waits before treating the check as failed; it defaults to 5 minutes when unset. On failure, the check's message comes from the Job's own status conditions.</p>
 <p><code>jobCheck</code> is mutually exclusive with <code>script</code> and <code>evaluateCEL</code> on the same check — a single <code>validateHealths</code> entry can't combine an active Job probe with a Lua/CEL evaluation.</p>

@@ -4698,8 +4698,12 @@
   
 
 
-<h1 id="cluster-promotion-progressive-rollouts">Cluster Promotion: Progressive Rollouts</h1>
+<h1 id="cluster-promotion-progressive-rollouts">Cluster Promotion: Progressive Rollouts <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span></h1>
 <p>The <code>ClusterPromotion</code> Custom Resource Definition (CRD) solves the challenge of performing phased rollouts of cluster configurations and add-ons managed by Sveltos. We can avoid creating and managing multiple <code>ClusterProfile</code> resources with the same content. Instead, we define the configuration once and list the deployment stages in order.</p>
+<div class="admonition info">
+<p class="admonition-title">Enterprise Feature</p>
+<p>Test the <strong>progressive rollout</strong> capabilities with up to <strong>two</strong> <code>ClusterPromotion</code> instances for free. Need more than two <code>ClusterPromotion</code> instances? Contact us at <a href="mailto:support@projectsveltos.io"><code>support@projectsveltos.io</code></a> to explore license options.</p>
+</div>
 <p>Sveltos automatically handles the workflow:</p>
 <ol>
 <li>It takes a single, shared configuration defined in <code>spec.profileSpec</code>.</li>
@@ -4964,10 +4968,6 @@
 </span></code></pre></div>
 </div>
 <p>In this flow, Sveltos will deploy the Job defined in the validation-job-staging ConfigMap after the 5-minute delay. The promotion will not move to the next stage until the validation-job-stage-staging runs and reports successful completion (i.e., the Job finishes without failure).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Test the <strong>progressive rollout</strong> capabilities with up to <strong>two</strong> <code>ClusterPromotion</code> instances for free. Need more than two clusters? Contact us at <code>support@projectsveltos.io</code> to explore license options based on your needs!</p>
-</div>
 <p>For more information about the <code>Automatic</code> and <code>Manual</code> promotion and available fields, have a look at the <a href="https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/clusterpromotion_types.go">ClusterPromotion Types</a>.</p>
 <h2 id="next-steps">Next Steps</h2>
 <p>Take a look at an <a href=".././example_rollout_and_progressive_rollout/">example</a> on how the rolling update and the progressive rollout approach work together.</p>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos is a Kubernetes add-on controller for a fleet of clusters.">
+        <meta name="description" content="Sveltos is an open-source Kubernetes fleet management add-on controller. Deploy Helm, Kustomize, and YAML across clusters with drift detection, templating, and event-driven automation.">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons - Projectsveltos Documentation</title>
+        <title>Sveltos - Kubernetes Fleet Management Controller | Deploy Add-ons and Applications at Scale - Projectsveltos Documentation</title>
       
     
     
@@ -141,7 +141,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos - Kubernetes Add-on Controller | Manage and Deploy Add-ons
+              Sveltos - Kubernetes Fleet Management Controller | Deploy Add-ons and Applications at Scale
             
           </span>
         </div>
@@ -347,10 +347,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sveltos-at-the-edge" class="md-nav__link">
+  <a href="#sveltos-for-edge-kubernetes" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Sveltos at the Edge
+        Sveltos for Edge Kubernetes
       </span>
     </span>
   </a>
@@ -4546,10 +4546,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sveltos-at-the-edge" class="md-nav__link">
+  <a href="#sveltos-for-edge-kubernetes" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Sveltos at the Edge
+        Sveltos for Edge Kubernetes
       </span>
     </span>
   </a>
@@ -4622,14 +4622,14 @@
 
 <p><a class="github-button" href="https://github.com/projectsveltos/sveltos-manager" data-icon="icon-park:star" data-show-count="true" aria-label="Star projectsveltos/sveltos-manager on GitHub">Star</a></p>
 <p><a href="https://github.com/projectsveltos" title="Manage Kubernetes add-ons"><img src="https://raw.githubusercontent.com/projectsveltos/sveltos/main/docs/assets/logo.png" width="200" alt="Sveltos logo"></a></p>
-<h1>Sveltos: Kubernetes Add-on Controller for Multi-Cluster Fleets</h1>
+<h1>Sveltos: Kubernetes Add-on Controller for Kubernetes Fleet Management</h1>
 
 <p><strong>Deploy and manage Kubernetes add-ons and applications across hundreds of clusters from a single management cluster.</strong> Helm, Kustomize, or raw YAML/JSON. Define once, deploy everywhere, with per-cluster variation, drift detection, and event-driven automation.</p>
 <p><a class="md-button md-button--primary" href="https://github.com/projectsveltos/addon-controller" target="_blank"><img alt="⭐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2b50.svg" title=":star:" /> Star us on GitHub</a>
 <a class="md-button" href="./getting_started/install/quick_start/"><img alt="🚀" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f680.svg" title=":rocket:" /> Quick Start</a>
 <a class="md-button" href="https://website.projectsveltos.io/" target="_blank"><img alt="🌐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f310.svg" title=":globe_with_meridians:" /> Website</a></p>
 <h2 id="what-is-sveltos">What is Sveltos?</h2>
-<p><a href="https://github.com/projectsveltos" title="Manage Kubernetes add-ons">Sveltos</a> is a <a href="https://github.com/projectsveltos/addon-controller">Kubernetes add-on controller</a>. It deploys and manages add-ons and applications across many clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities.</p>
+<p><a href="https://github.com/projectsveltos" title="Manage Kubernetes add-ons">Sveltos</a> is an open-source Kubernetes fleet management <a href="https://github.com/projectsveltos/addon-controller">add-on controller</a>. It deploys and manages add-ons and applications across a fleet of clusters using label-based matching. Sveltos does not compete with GitOps controllers like ArgoCD or Flux. Instead, it extends their capabilities.</p>
 <p>A GitOps controller monitors a repository and syncs manifests. In contrast, Sveltos takes these manifests and applies them across the entire fleet. Its configurations are cluster-agnostic; they do not reference a specific cluster. Instead, they target clusters by labels, which means when a new cluster joins the fleet, it requires no configuration changes, only the right labels. One configuration can serve any number of clusters that meet the defined criteria.</p>
 <div class="admonition tip">
 <p class="admonition-title">Have Questions?</p>
@@ -4657,7 +4657,9 @@
 <li><strong>📢 Observability</strong>: Notifications via Slack, Teams, Discord, Webex, Telegram, SMTP, or Kubernetes events.</li>
 <li><strong>🛡️ Pull Mode</strong>: Deploy into restricted environments: air-gapped, edge, or behind firewalls.</li>
 <li><strong>🚦 Progressive rollouts</strong>: Phased deployments from a single configuration; no need to maintain multiple profiles.</li>
+<li><strong>🧪 Job-based Checks</strong>: Run active probes like smoke tests, synthetic transactions, connectivity checks as Kubernetes <code>Jobs</code> inside the managed clusters, using the Job outcome as the health verdict.       </li>
 </ul>
+<p>Sveltos is cloud-agnostic. It works across EKS, AKS, GKE, on-prem, and edge Kubernetes clusters. Define once, deploy everywhere regardless of the chosen provider. </p>
 <h2 id="why-sveltos">Why Sveltos?</h2>
 <p>Sveltos was created to tackle the real challenges of managing multi-cluster add-ons. Sveltos complements GitOps controllers like ArgoCD and Flux by handling fleet-level orchestration and letting them continue to do what they do best.</p>
 <p>Sveltos stands out for:</p>
@@ -4667,7 +4669,7 @@
 <li><strong>Per-cluster templating</strong>: Same definition, different values per cluster.</li>
 <li><strong>Event framework and progressive rollouts</strong>: Safe, automated, and adaptable.</li>
 </ul>
-<h2 id="sveltos-at-the-edge">Sveltos at the Edge</h2>
+<h2 id="sveltos-for-edge-kubernetes">Sveltos for Edge Kubernetes</h2>
 <p>Running Kubernetes at the edge usually means a tight resource budget, limited CPU, memory, and bandwidth. Sveltos agents deployed in managed clusters are built for edge use cases. Sveltos deploys only what is actually needed.</p>
 <p><strong>What gets deployed and when</strong></p>
 <ul>
@@ -4695,10 +4697,8 @@
 </ol>
 <p>We are always thrilled to welcome new members to our community, and your contributions are always appreciated. Do not be shy - join us today and let's make Sveltos the best it can be! ❤️</p>
 <h2 id="support-the-project">Support the Project</h2>
-<p>If Sveltos saves you time, the single most helpful thing you can do is <strong>star the repo</strong>. It helps other engineers and the community to discover the project.</p>
+<p>If Sveltos saves you time, the single most helpful thing you can do is <strong>star the repo</strong>. It helps other engineers and the community to discover the project. Thank you for your support! 🙏 </p>
 <p><a class="md-button" href="https://github.com/projectsveltos/sveltos-manager" target="_blank" title="Manage Kubernetes add-ons"><img alt="⭐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2b50.svg" title=":star:" /> Star us on GitHub</a></p>
-<p><strong>Thank you 🙏</strong></p>
-<!-- If you like the project, please [give us a](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") [:octicons-star-fill-24:{ .heart }](https://github.com/projectsveltos/sveltos-manager "Manage Kubernetes add-ons") if you haven't done so yet. Your support means a lot to us. **Thank you :pray:.** -->
 
 
   <nav class="md-tags" >
@@ -4763,7 +4763,42 @@
       
       
       
+        <span class="md-tag">multi-cluster management</span>
+      
+    
+      
+      
+      
+      
         <span class="md-tag">fleet management</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">drift detection</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">GitOps</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">platform engineering</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">edge</span>
       
     
   </nav>
