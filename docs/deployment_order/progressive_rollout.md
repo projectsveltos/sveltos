@@ -13,9 +13,12 @@ authors:
     - Eleni Grosdouli
 ---
 
-# Cluster Promotion: Progressive Rollouts
+# Cluster Promotion: Progressive Rollouts :material-crown:{ title="Enterprise" }
 
 The `ClusterPromotion` Custom Resource Definition (CRD) solves the challenge of performing phased rollouts of cluster configurations and add-ons managed by Sveltos. We can avoid creating and managing multiple `ClusterProfile` resources with the same content. Instead, we define the configuration once and list the deployment stages in order.
+
+!!!info "Enterprise Feature"
+    Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two `ClusterPromotion` instances? Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
 
 Sveltos automatically handles the workflow:
 
@@ -265,9 +268,6 @@ This example shows how to roll out a critical application and then, after a 5-mi
     ```
 
 In this flow, Sveltos will deploy the Job defined in the validation-job-staging ConfigMap after the 5-minute delay. The promotion will not move to the next stage until the validation-job-stage-staging runs and reports successful completion (i.e., the Job finishes without failure).
-
-!!!note
-    Test the **progressive rollout** capabilities with up to **two** `ClusterPromotion` instances for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
 
 For more information about the `Automatic` and `Manual` promotion and available fields, have a look at the [ClusterPromotion Types](https://github.com/projectsveltos/addon-controller/blob/main/api/v1beta1/clusterpromotion_types.go).
 
