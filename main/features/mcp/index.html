@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-does-it-work" class="md-skip">
+        <a href="#sveltos-mcp-server" class="md-skip">
           Skip to content
         </a>
       
@@ -2830,6 +2830,8 @@
       
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -2870,6 +2872,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -4450,6 +4454,8 @@
                     
                     
                     
+                      
+                    
                     
                       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
                       <div class="md-sidebar-button__wrapper">
@@ -4464,6 +4470,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -4534,13 +4542,16 @@
   
 
 
-  <h1 id="__skip">Sveltos MCP Server - A Management Tool</h1>
-
+<h1 id="sveltos-mcp-server">Sveltos MCP Server <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span></h1>
 <div class="admonition video">
 <p class="admonition-title">Video</p>
 <p>To learn more about the Sveltos MCP Server, check out the <a href="../../assets/dashboard_mcp.mov">Video</a>! 😊</p>
 </div>
 <p>Sveltos has an integrated Model Context Protocol (MCP) server that connects AI assistants and chatbots to the Sveltos management cluster. It provides a <strong>structured</strong>, <strong>programmatic</strong> interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.</p>
+<div class="admonition info">
+<p class="admonition-title">Enterprise Feature</p>
+<p>You can test the <strong>Sveltos MCP Server</strong> directly from the Sveltos dashboard to verify your Sveltos installation and diagnose failures on a given cluster. To integrate the Sveltos MCP Server with AI Site Reliability Engineering (SRE) tools, contact us at <a href="mailto:support@projectsveltos.io"><code>support@projectsveltos.io</code></a> to discuss licensing options.</p>
+</div>
 <h2 id="how-does-it-work">How does it work?</h2>
 <p>The Sveltos MCP Server acts as a communication layer between AI agents and the Sveltos-managed infrastructure. Instead of an AI directly executing <em>kubectl</em> commands on individual clusters, it sends requests to the MCP Server using the <a href="https://modelcontextprotocol.io/docs/getting-started/intro">MCP</a>. The server then translates these high-level requests into specific Sveltos tool calls.</p>
 <p>The described process is not a simple command translation; it involves performing comprehensive checks on cluster statuses, the state of the Sveltos deployments, and the state of the Sveltos Custom Resources. Additionally, the server correlates the state of different resources that are tied to each other, providing a holistic view of the system's health. By consolidating these checks, the MCP Server provides a <strong>single</strong>, <strong>unified</strong> result to the AI, which can then present the findings to a user in a clear, conversational format.</p>
@@ -4598,10 +4609,6 @@
 </ul>
 <p><a href="../../assets/dashboard_mcp.mov">🎥 Dashboard MCP Video</a></p>
 <p>The seamless integration transforms the dashboard from a simple monitoring tool into a <strong>proactive</strong>, <strong>powerful</strong> debugging console, leveraging the full capabilities of the Sveltos MCP server to simplify multi-cluster management.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can test the <strong>Sveltos MCP Server</strong> directly from the Sveltos dashboard to verify your Sveltos installation and diagnose failures on a given cluster. If you want to integrate the Sveltos MCP Server with your AI Site Reliability Engineering (SRE) tools, contact us at <code>support@projectsveltos.io</code>  to discuss licensing options tailored to your specific needs.</p>
-</div>
 <h2 id="kubernetes-deployment-details">Kubernetes Deployment Details</h2>
 <p>The Sveltos MCP Server is deployed in the <em>projectsveltos</em> namespace.</p>
 <ul>
