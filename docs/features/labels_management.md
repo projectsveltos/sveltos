@@ -218,6 +218,8 @@ The Lua function must return a struct with:
 1. *report-mode*: By default, the `Classifier` controller running in the management cluster periodically collects ClassifierReport instances from each managed cluster. Setting report-mode to "1" will change this and have each `Classifier` Agent send back ClassifierReport to the management cluster. When setting report-mode to 1, *control-plane-endpoint* must be set as well. When in this mode, Sveltos automatically creates a ServiceAccount in the management cluster for Classifier Agent. Only permissions granted for this ServiceAccount are the update of ClassifierReports
 1. *control-plane-endpoint*: The management cluster controlplane endpoint. Format <ip\>:<port\>. This must be reachable from each managed cluster
 
+When `sveltos-agent` is deployed in the management cluster rather than each managed cluster (agentless mode), its watches can be restricted to specific namespaces the same way `drift-detection-manager`'s are — see [Namespace-Scoped Watch Mode](configuration_drift.md#namespace-scoped-watch-mode).
+
 ### How labels are applied to clusters
 
 The classifier controller applies labels to cluster objects using a standard Kubernetes `Update` call (not Server-Side Apply and not a strategic merge patch). The controller reads the current cluster object, modifies the labels map in memory, and writes the full object back. Sveltos internally keeps track of which `Classifier` instance owns each label key on a given cluster, so conflicting writes are detected and only the owning `Classifier` may write that key.

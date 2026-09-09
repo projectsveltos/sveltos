@@ -184,3 +184,26 @@ With the defined configuration, the `drift-detection-manager` will get deployed 
     agent:
       managementCluster: true
     ```
+
+## Namespace-Scoped Watch Mode
+
+When `drift-detection-manager` runs in the management cluster (agentless mode, `--agent-in-mgmt-cluster` above), the credential it uses to reach a managed cluster might already be restricted to a subset of namespaces — a managed cluster whose owner only grants Sveltos access to specific namespaces, for example. By default, `drift-detection-manager` watches resources cluster-wide, which such a restricted credential cannot do.
+
+Adding the annotation `agent.projectsveltos.io/watch-namespaces` to the Cluster or SveltosCluster instance, with a comma-separated list of namespaces, restricts its watches to just those namespaces. The same annotation also restricts `sveltos-agent`'s own watches, when `sveltos-agent` is deployed agentlessly against the same managed cluster (see [Classifier Controller Configuration](labels_management.md#classifier-controller-configuration)) — one annotation controls both. Cluster-scoped resources are unaffected either way: RBAC for those is whatever the credential actually grants, independent of this setting.
+
+!!! example ""
+    ```yaml hl_lines="6"
+    apiVersion: cluster.x-k8s.io/v1beta1
+    kind: Cluster
+    metadata:
+      name: my-cluster
+      annotations:
+        agent.projectsveltos.io/watch-namespaces: "team-a,team-b"
+    ```
+
+Restricting the actual **watches** requires a valid Sveltos Enterprise or Enterprise Plus license granting the `NamespaceScopedAgents` feature. Without one, the annotation is ignored for that purpose and watches proceed cluster-wide, same as if it weren't set — a genuinely restricted credential still behaves correctly either way (it simply can't watch outside its granted namespaces), the license only gates whether Sveltos proactively narrows its own watch scope to match, rather than finding out the hard way.
+
+`addon-controller`'s own search for **stale** resources (ones no longer referenced by a ClusterProfile/Profile's `policyRefs`/`kustomizationRefs`, that need removing) honors the same annotation too, but unconditionally, no license required — it only ever narrows where addon-controller itself looks, using whatever RBAC the same credential already has.
+
+!!! note
+    Contact `support@projectsveltos.io` to explore license options.

@@ -13,10 +13,15 @@ authors:
     - Eleni Grosdouli
 ---
 
+# Sveltos MCP Server :material-crown:{ title="Enterprise" }
+
 !!!video
     To learn more about the Sveltos MCP Server, check out the [Video](../assets/dashboard_mcp.mov)! 😊
 
 Sveltos has an integrated Model Context Protocol (MCP) server that connects AI assistants and chatbots to the Sveltos management cluster. It provides a **structured**, **programmatic** interface that allows AI agents to interact with Sveltos using natural language. This enables powerful features such as automated troubleshooting, real-time cluster analysis, and streamlined operational tasks across all the clusters Sveltos manages.
+
+!!!info "Enterprise Feature"
+    You can test the **Sveltos MCP Server** directly from the Sveltos dashboard to verify your Sveltos installation and diagnose failures on a given cluster. To integrate the Sveltos MCP Server with AI Site Reliability Engineering (SRE) tools, contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to discuss licensing options.
 
 ## How does it work?
 
@@ -67,9 +72,6 @@ The integrated client can:
 [🎥 Dashboard MCP Video](../assets/dashboard_mcp.mov)
 
 The seamless integration transforms the dashboard from a simple monitoring tool into a **proactive**, **powerful** debugging console, leveraging the full capabilities of the Sveltos MCP server to simplify multi-cluster management.
-
-!!!note
-    You can test the **Sveltos MCP Server** directly from the Sveltos dashboard to verify your Sveltos installation and diagnose failures on a given cluster. If you want to integrate the Sveltos MCP Server with your AI Site Reliability Engineering (SRE) tools, contact us at `support@projectsveltos.io`  to discuss licensing options tailored to your specific needs.
 
 ## Kubernetes Deployment Details
 
