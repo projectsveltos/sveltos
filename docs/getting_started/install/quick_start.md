@@ -294,7 +294,7 @@ The `ClusterProfile` can reference:
 1. ConfigMap whose BinaryData section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
 1. Secret (type addons.projectsveltos.io/cluster-profile) whose Data section contains __kustomize.tar.gz__ entry with tar.gz of kustomize directory;
 
-An example list is found [here](../../addons/kustomize.md). For more information about the Sveltos and FluxCD integration, check out the [information](../../use_cases/use_case_gitops.md).
+An example list is found [here](../../addons/kustomize.md). For more information about the Sveltos and FluxCD integration, check out the [information](../../use_cases/gitops_integration/use_case_gitops.md).
 
 ## Carvel ytt and Jsonnet
 
