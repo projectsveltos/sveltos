@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Helm chart values and resources contained in referenced ConfigMaps/Secrets can be defined as template.">
+        <meta name="description" content="Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.">
       
       
       
       
-        <link rel="prev" href="../bring_your_own_controller/">
+        <link rel="prev" href="../../gitops_integration/use_case_gitops/">
       
       
-        <link rel="next" href="../ytt_extension/">
+        <link rel="next" href="../use_case_multi_tenant_onboarding/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Templates - Projectsveltos Documentation</title>
+        <title>Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Multi-tenancy - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#use-case-description" class="md-skip">
+        <a href="#what-is-multi-tenancy" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +143,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Templates
+              Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Multi-tenancy
             
           </span>
         </div>
@@ -284,18 +284,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -315,7 +317,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -332,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/use_case_idp/" class="md-nav__link">
+      <a href="../../use_case_idp/" class="md-nav__link">
         
   
   
@@ -359,7 +361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -431,7 +433,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/gitops_integration/use_case_gitops/" class="md-nav__link">
+      <a href="../../gitops_integration/use_case_gitops/" class="md-nav__link">
         
   
   
@@ -463,18 +465,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
         
           
           <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
@@ -494,7 +498,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -508,10 +512,34 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../use_cases/multitenancy/use_case_multi-tenancy/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Multi-tenancy
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -526,6 +554,80 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-multi-tenancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What is Multi-tenancy?
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Common Challenges
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sveltos-multi-tenancy-full-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sveltos Multi-tenancy: Full Isolation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sveltos-multi-tenancy-cluster-sharing-between-tenants" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sveltos Multi-tenancy: Cluster Sharing Between Tenants
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#more-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        More Resources
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -538,7 +640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/multitenancy/use_case_multi_tenant_onboarding/" class="md-nav__link">
+      <a href="../use_case_multi_tenant_onboarding/" class="md-nav__link">
         
   
   
@@ -618,7 +720,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
+      <a href="../../clusterAPI/use_case_eks/" class="md-nav__link">
         
   
   
@@ -645,7 +747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
+      <a href="../../clusterAPI/use_case_azure/" class="md-nav__link">
         
   
   
@@ -672,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/clusterAPI/use_case_docker/" class="md-nav__link">
+      <a href="../../clusterAPI/use_case_docker/" class="md-nav__link">
         
   
   
@@ -2235,20 +2337,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -2268,7 +2368,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2285,7 +2385,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../intro_template/" class="md-nav__link">
+      <a href="../../../template/intro_template/" class="md-nav__link">
         
   
   
@@ -2312,7 +2412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../additional_template_info/" class="md-nav__link">
+      <a href="../../../template/additional_template_info/" class="md-nav__link">
         
   
   
@@ -2339,7 +2439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../resource_manipulation_functions/" class="md-nav__link">
+      <a href="../../../template/resource_manipulation_functions/" class="md-nav__link">
         
   
   
@@ -2366,7 +2466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../lua/" class="md-nav__link">
+      <a href="../../../template/lua/" class="md-nav__link">
         
   
   
@@ -2393,7 +2493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generate_sveltos_configuration/" class="md-nav__link">
+      <a href="../../../template/generate_sveltos_configuration/" class="md-nav__link">
         
   
   
@@ -2417,20 +2517,18 @@
                 
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_6" >
         
           
           <label class="md-nav__link" for="__nav_8_6" id="__nav_8_6_label" tabindex="0">
@@ -2450,7 +2548,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2467,7 +2565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../template_generic/" class="md-nav__link">
+      <a href="../../../template/examples/template_generic/" class="md-nav__link">
         
   
   
@@ -2494,7 +2592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../template_overlays/" class="md-nav__link">
+      <a href="../../../template/examples/template_overlays/" class="md-nav__link">
         
   
   
@@ -2521,7 +2619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../crossplane/" class="md-nav__link">
+      <a href="../../../template/examples/crossplane/" class="md-nav__link">
         
   
   
@@ -2548,7 +2646,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../external_secret/" class="md-nav__link">
+      <a href="../../../template/examples/external_secret/" class="md-nav__link">
         
   
   
@@ -2575,7 +2673,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bring_your_own_controller/" class="md-nav__link">
+      <a href="../../../template/examples/bring_your_own_controller/" class="md-nav__link">
         
   
   
@@ -2599,34 +2697,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Example Mutlicluster Iteration and Deployment
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../template/examples/multicluster_iteration_template/" class="md-nav__link">
         
   
   
@@ -2641,153 +2715,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#use-case-description" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Use Case Description
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#identify-sveltos-managed-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Identify Sveltos Managed Clusters
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Identify Sveltos Managed Clusters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eventreport-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        EventReport Output
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-service-creation" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Automatic Service Creation
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Automatic Service Creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        ClusterProfile
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        ConfigMap
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#results" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Results
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sveltos Clusters
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-services" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Kubernetes Services
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-updates-advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Automatic Updates Advantages
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2800,7 +2727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ytt_extension/" class="md-nav__link">
+      <a href="../../../template/examples/ytt_extension/" class="md-nav__link">
         
   
   
@@ -2827,7 +2754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../jsonnet_extension/" class="md-nav__link">
+      <a href="../../../template/examples/jsonnet_extension/" class="md-nav__link">
         
   
   
@@ -4665,10 +4592,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#use-case-description" class="md-nav__link">
+  <a href="#what-is-multi-tenancy" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Use Case Description
+        What is Multi-tenancy?
       </span>
     </span>
   </a>
@@ -4676,116 +4603,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#identify-sveltos-managed-clusters" class="md-nav__link">
+  <a href="#common-challenges" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Identify Sveltos Managed Clusters
+        Common Challenges
       </span>
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Identify Sveltos Managed Clusters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eventreport-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        EventReport Output
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#automatic-service-creation" class="md-nav__link">
+  <a href="#sveltos-multi-tenancy-full-isolation" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Automatic Service Creation
+        Sveltos Multi-tenancy: Full Isolation
       </span>
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Automatic Service Creation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusterprofile" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        ClusterProfile
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configmap" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        ConfigMap
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#results" class="md-nav__link">
+  <a href="#sveltos-multi-tenancy-cluster-sharing-between-tenants" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Results
+        Sveltos Multi-tenancy: Cluster Sharing Between Tenants
       </span>
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sveltos-clusters" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Sveltos Clusters
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-services" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Kubernetes Services
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#automatic-updates-advantages" class="md-nav__link">
+  <a href="#more-resources" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Automatic Updates Advantages
+        More Resources
       </span>
     </span>
   </a>
@@ -4810,161 +4664,80 @@
   
 
 
-  <h1 id="__skip">Templates</h1>
+  <h1 id="__skip">Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Multi-tenancy</h1>
 
-<h2 id="use-case-description">Use Case Description</h2>
-<p>There are a number of cases where platform administrators or operators want to discover and iterate through multiple clusters to deploy specific Kubernetes resources dynamically. One example is the formation of a NATS supercluster that requires each NATS instance provisioned by Sveltos to be aware of other clusters.</p>
-<p>The use case can be easily achieved by Sveltos with the use of the <a href=".././template_generic/">templating</a> functionality and <a href="../../../events/addon_event_deployment/">Sveltos Event Franmework</a>.</p>
-<h2 id="identify-sveltos-managed-clusters">Identify Sveltos Managed Clusters</h2>
-<p>Sveltos <code>Event Framework</code> will be used to dynamically detect all <strong>managed</strong> clusters (of type SveltosCluster) that are different from the management cluster. The management cluster has the Sveltos cluster label set to <code>type:mgmt</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example - EventSource and EventTrigger Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; eventsource_eventtrigger.yaml &lt;&lt;EOF</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nn">---</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventSource</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nt">collectResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nt">resourceSelectors</span><span class="p">:</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="s">"lib.projectsveltos.io"</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"v1beta1"</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s">"SveltosCluster"</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nt">labelFilters</span><span class="p">:</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Equal</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Different</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nn">---</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventTrigger</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-cluster</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">  </span><span class="nt">sourceClusterSelector</span><span class="p">:</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">  </span><span class="nt">oneForEvent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<p>Once the above YAML definition file is applied to the <strong>management</strong> cluster, an <code>EventReport</code> resource named <code>detect-clusters</code> will be created within the <code>projectsveltos</code> namespace.</p>
-<p>The report stores the information about all discovered managed clusters. Sveltos templating feature can reference the resource to retrieve a <strong>list</strong> of managed clusters. This allows a dynamic configuration based on the cluster environment.</p>
-<h3 id="eventreport-output">EventReport Output</h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventReport</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nn">...</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">matchingResources</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-1</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-2</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
-</span></code></pre></div>
-<h2 id="automatic-service-creation">Automatic Service Creation</h2>
-<p>Lets assume the clusters where the service should get deployed has the cluster label set to <code>type:nats</code>. The below YAML defintion will create a Sveltos <code>ClusterProfile</code> resource that points to the <code>EventReport</code> mentioned above and deploy a <code>ConfigMap</code> defined as a template.</p>
-<h3 id="clusterprofile">ClusterProfile</h3>
-<div class="admonition example">
-<p class="admonition-title">Example - ClusterProfile Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; clusterprofile_nats.yaml &lt;&lt;EOF</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nn">---</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-resources</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">templateResourceRefs</span><span class="p">:</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resource</span><span class="p">:</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventReport</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect-clusters</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterData</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats-services</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<h3 id="configmap">ConfigMap</h3>
-<div class="admonition example">
-<p class="admonition-title">Example - ConfigMap Definition</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; cm_nats_services.yaml &lt;&lt;EOF</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nn">---</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nats-services</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">services.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="no">{{ range $cluster := (getResource "ClusterData").spec.matchingResources }}</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="no">apiVersion: v1</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="no">kind: Service</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="no">metadata:</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="no">labels:</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">          </span><span class="no">app: nats</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">          </span><span class="no">tailscale.com/proxy-class: default</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">        </span><span class="no">annotations:</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">          </span><span class="no">tailscale.com/tailnet-fqdn: nats-{{ $cluster.name }}</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="no">name: nats-{{ $cluster.name }}</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="no">spec:</span>
-</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">        </span><span class="no">externalName: placeholder</span>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">        </span><span class="no">type: ExternalName</span>
-</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">    </span><span class="no">---</span>
-</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">    </span><span class="no">{{ end }}</span>
-</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
-</span></code></pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The ConfigMap resource will create the <code>nats-{{ $cluster.name }}</code> services in the <code>default</code> namespace on every cluster with the cluster label set to <code>type:nats</code>.</p>
-</div>
-<h2 id="results">Results</h2>
-<p>Once the <code>ClusterProfile</code> resource gets deployed on the management cluster, all the clusters with the label set to <code>type:nats</code> should get the Kubernetes service with the name <code>nats-{{ $cluster.name }}</code>.</p>
-<h3 id="sveltos-clusters">Sveltos Clusters</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-A<span class="w"> </span>--show-labels
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>NAMESPACE<span class="w">  </span>NAME<span class="w">    </span>READY<span class="w">  </span>VERSION<span class="w">    </span>LABELS
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>civo<span class="w">    </span>cluster-1<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.29.2+k3s1<span class="w">  </span>sveltos-agent<span class="o">=</span>present
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>civo<span class="w">    </span>cluster-2<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.28.7+k3s1<span class="w">  </span>sveltos-agent<span class="o">=</span>present
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>mgmt<span class="w">    </span>mgmt<span class="w">       </span><span class="nb">true</span><span class="w">  </span>v1.30.0<span class="w">       </span>sveltos-agent<span class="o">=</span>present,type<span class="o">=</span>mgmt
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>nats<span class="w">    </span>cluster-3<span class="w">  </span><span class="nb">true</span><span class="w">  </span>v1.28.7+k3s1<span class="w">  </span><span class="nv">type</span><span class="o">=</span>nats
-</span></code></pre></div>
-<h3 id="kubernetes-services">Kubernetes Services</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>service
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>NAME<span class="w">       </span>TYPE<span class="w">      </span>CLUSTER-IP<span class="w">  </span>EXTERNAL-IP<span class="w">  </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">  </span>AGE
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>...
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>nats-cluster-1<span class="w">  </span>ExternalName<span class="w">  </span>&lt;none&gt;<span class="w">    </span>placeholder<span class="w">  </span>&lt;none&gt;<span class="w">  </span>68s
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>nats-cluster-2<span class="w">  </span>ExternalName<span class="w">  </span>&lt;none&gt;<span class="w">    </span>placeholder<span class="w">  </span>&lt;none&gt;<span class="w">  </span>68s
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The output above is from the <code>cluster-3</code>.</p>
-</div>
-<h2 id="automatic-updates-advantages">Automatic Updates Advantages</h2>
-<p>The beauty of Sveltos is its automatic reaction to changes. If we create or destroy managed clusters, Sveltos will automatically:</p>
+<h2 id="what-is-multi-tenancy">What is Multi-tenancy?</h2>
+<p>Multi-tenancy in cloud computing is the concept of multiple clients sharing the same computing resources. Multi-tenancy in Kubernetes can appear in two forms, either share a cluster between multiple tenants within an organisation or have more than one clusters reserved by an organisation.</p>
+<h2 id="common-challenges">Common Challenges</h2>
 <ol>
-<li>Detect the change through the detect-clusters <code>EventSource</code></li>
-<li>Re-evaluate the nats-services template with updated data</li>
-<li>Add or remove Service instances in the mentioned clusters as needed</li>
+<li>How can platform admins grant permissions to tenant admins programmatically?</li>
+<li>How to control tenant admins' deployment actions based on their permissions?</li>
 </ol>
-<p>This ensures the clusters remain <strong>dynamically updated</strong> based on the managed cluster configuration.</p>
+<p>We mentioned two terms in the challenges above: <code>platform admins</code> and <code>tenant admins</code>.</p>
+<ul>
+<li>
+<p><strong>Platform admin:</strong> Manages the infrastructure of Kubernetes clusters, including tasks like creating clusters, managing nodes, and ensuring cluster health.</p>
+</li>
+<li>
+<p><strong>Tenant admin:</strong> Has admin access to clusters or namespaces where applications run, with permissions assigned by the platform admin.</p>
+</li>
+</ul>
+<h2 id="sveltos-multi-tenancy-full-isolation">Sveltos Multi-tenancy: Full Isolation</h2>
+<p>In a multi-tenant setup, each tenant is assigned a <strong>dedicated namespace</strong> within the <strong>management cluster</strong>. Tenant admins can create and manage clusters in their namespace, using <code>Profile</code> instances to define the add-ons and apps to deploy. Like <code>ClusterProfiles</code>, <code>Profiles</code> use a cluster selector and a list of add-ons and apps, but they operate within a specific namespace, matching only clusters created in that namespace.</p>
+<p><img alt="Profile vs ClusterProfile" src="../../../assets/Sveltos_Profile_ClusterProfile.jpg" /></p>
+<h2 id="sveltos-multi-tenancy-cluster-sharing-between-tenants">Sveltos Multi-tenancy: Cluster Sharing Between Tenants</h2>
+<p>Sveltos allows platform admins to utilise the Custom Resource Definition <code>RoleRequest</code> that will grant permissions to a number of tenant admins. More information can be found <a href="../../../features/multi-tenancy-sharing-cluster/">here</a>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example - RoleRequest</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoleRequest</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full-access</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="s">"eng"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">serviceAccountNamespace</span><span class="p">:</span><span class="w"> </span><span class="s">"default"</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">roleRefs</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full-access</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span></code></pre></div>
+</div>
+<p>Based on the YAML definition above, the following fields are defined:</p>
+<ul>
+<li><code>serviceAccountName</code>: The service account to which the permission will be applied.</li>
+<li><code>serviceAccountNamespace</code>: The namespace where the service account is deployed in the <strong>management cluster</strong>.</li>
+<li><code>clusterSelector</code>: A Kubernetes <code>label selector</code> used by Sveltos to identify clusters where permissions should be granted.</li>
+<li><code>roleRefs</code>: References to ConfigMaps/Secrets, each containing Kubernetes <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">ClusterRoles or Roles</a> that define the permissions to be granted.</li>
+</ul>
+<p>The <code>configMap</code> in the example above might look like the YAML definition below.</p>
+<div class="admonition example">
+<p class="admonition-title">Example - ConfigMap</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nn">---</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full-access</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">role.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="no">apiVersion: rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="no">kind: ClusterRole</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="no">name: eng-full-access</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="no">rules:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="no">- apiGroups: ["*"]</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="no">resources: ["*"]</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="no">verbs: ["*"]</span>
+</span></code></pre></div>
+</div>
+<p>Based on the YAML definitions above, here is what happens from a Sveltos perspective:</p>
+<p>By referencing the ConfigMap <code>default/full-access</code>, the <code>RoleRequest</code> named <code>full-access</code> will reserve a cluster matching the <code>clusterSelector</code> <em>env=prod</em> to the service account <code>eng</code>.</p>
+<h2 id="more-resources">More Resources</h2>
+<p>To explore how multi-tenancy onboaring looks like, take a look <a href=".././use_case_multi_tenant_onboarding/">here</a>. For more information about the Sveltos multi-tenancy capabilities, have a look <a href="../../../features/multi-tenancy-sharing-cluster/">here</a>.</p>
 
 
   <nav class="md-tags" >
@@ -4994,6 +4767,13 @@
       
       
       
+        <span class="md-tag">kustomize</span>
+      
+    
+      
+      
+      
+      
         <span class="md-tag">clusterapi</span>
       
     
@@ -5008,7 +4788,7 @@
       
       
       
-        <span class="md-tag">template</span>
+        <span class="md-tag">Sveltos</span>
       
     
   </nav>
@@ -5045,7 +4825,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../bring_your_own_controller/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Integrate Sveltos with own controller">
+          <a href="../../gitops_integration/use_case_gitops/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Flux GitOps Integration">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -5055,20 +4835,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Example Integrate Sveltos with own controller
+                Flux GitOps Integration
               </div>
             </div>
           </a>
         
         
           
-          <a href="../ytt_extension/" class="md-footer__link md-footer__link--next" aria-label="Next: Example Support for Carvel ytt">
+          <a href="../use_case_multi_tenant_onboarding/" class="md-footer__link md-footer__link--next" aria-label="Next: Multi-Tenant Onboarding">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Example Support for Carvel ytt
+                Multi-Tenant Onboarding
               </div>
             </div>
             <div class="md-footer__button md-icon">
