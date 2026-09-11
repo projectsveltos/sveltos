@@ -19,7 +19,7 @@ Flux is a CNCF graduate project that offers users a set of continuous and progre
 
 By integrating Flux with Sveltos, we can automate the synchronisation of any desired Kubernetes add-ons, removing any manual steps and ensuring consistent deployment across different clusters.
 
-![Flux and Sveltos Integration](../assets/flux_and_sveltos.png)
+![Flux and Sveltos Integration](../../assets/flux_and_sveltos.png)
 
 ## What are the benefits?
 
@@ -57,7 +57,7 @@ Install and run Flux in the management cluster. Configure it to synchronise the 
       url: https://github.com/gianlucam76/kustomize.git # (3)
     ```
 
-1. Enable Sveltos templating functionality. More information have a look [here](../template/intro_template.md).
+1. Enable Sveltos templating functionality. More information have a look [here](../../template/intro_template.md).
 2. How often to sync with the reposiroty
 3. Reflects the repository we want to use
 
@@ -98,4 +98,4 @@ Whenever there is a change in the Git repository, Sveltos will leverage the Kust
 
 ## More Resources
 
-For more information about the Sveltos and Flux integration, have a look [here](../addons/example_flux_sources.md).
+For more information about the Sveltos and Flux integration, have a look [here](../../addons/example_flux_sources.md).
