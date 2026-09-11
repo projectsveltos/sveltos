@@ -11,7 +11,7 @@
       
       
       
-        <link rel="prev" href="../tiers/">
+        <link rel="prev" href="../transition_from/">
       
       
         <link rel="next" href="../rolling_update_strategy/">
@@ -2095,6 +2095,33 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../transition_from/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Smooth Transitions with transitionFrom
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -2197,10 +2224,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#alternative-resolving-the-conflict-with-tiers-instead" class="md-nav__link">
+  <a href="#alternatives" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Alternative: Resolving the Conflict with Tiers Instead
+        Alternatives
       </span>
     </span>
   </a>
@@ -4645,10 +4672,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#alternative-resolving-the-conflict-with-tiers-instead" class="md-nav__link">
+  <a href="#alternatives" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Alternative: Resolving the Conflict with Tiers Instead
+        Alternatives
       </span>
     </span>
   </a>
@@ -4689,18 +4716,23 @@
 <h2 id="the-problem">The Problem</h2>
 <p>Some Helm releases, a CNI, an ingress controller, a service mesh, should never be fully removed and reinstalled just to move to a new version. A brief network outage while the CNI is uninstalled and reinstalled is often unacceptable.</p>
 <p>Teams frequently keep <code>ClusterProfile</code> resources immutable in Git and roll out changes by creating a <em>new</em> <code>ClusterProfile</code> rather than editing the existing one. This is done deliberately: editing an existing <code>ClusterProfile</code> in place immediately rolls the change out to every cluster matching its <code>clusterSelector</code>. Sveltos does offer its own controls for that (see <a href="../rolling_update_strategy/">Add-on Rollout Strategy</a> and <a href="../progressive_rollout/">Progressive Rollout Across Clusters</a>, which stage a change across the clusters already matching a single <code>ClusterProfile</code>), but many teams additionally want the coarser, explicit control of deciding cluster by cluster whether it should pick up a new <code>ClusterProfile</code> at all, which is why they create a new <code>ClusterProfile</code> with its own selector rather than editing the existing one in place.</p>
-<p>That pattern raises a question. If cluster <code>X</code> currently matches <code>ClusterProfile</code> <strong>A</strong> (which deploys a CNI Helm chart), and you want to move it to <code>ClusterProfile</code> <strong>B</strong> (which deploys a newer version of the same chart), what actually happens on the cluster when you make <code>X</code> stop matching <strong>A</strong> and start matching <strong>B</strong>?</p>
-<p>If you simply relabel the cluster so it stops matching <strong>A</strong> at the same time it starts matching <strong>B</strong>, Sveltos's default <code>stopMatchingBehavior</code> (<code>WithdrawPolicies</code>) removes everything <strong>A</strong> deployed, including uninstalling the Helm release for the CNI, before <strong>B</strong> installs it again. That uninstall/reinstall cycle is the outage you're trying to avoid.</p>
+<p>That pattern raises a question. If cluster <code>X</code> currently matches <code>ClusterProfile</code> <strong>A</strong> (which deploys a CNI Helm chart), and we want to move it to <code>ClusterProfile</code> <strong>B</strong> (which deploys a newer version of the same chart), what actually happens on the cluster when we make <code>X</code> stop matching <strong>A</strong> and start matching <strong>B</strong>?</p>
+<p>If we relabel the cluster to stop matching <strong>A</strong> and start matching <strong>B</strong> at the same time, Sveltos's default <code>stopMatchingBehavior</code> (<code>WithdrawPolicies</code>) removes everything <strong>A</strong> deployed. That includes uninstalling the Helm release for the CNI, before <strong>B</strong> installs it again. That uninstall/reinstall cycle is the outage we're trying to avoid.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The overlap-then-cutover technique on this page still works. But for a simpler version bump, <a href="../transition_from/"><code>transitionFrom</code></a> gives us the same in-place handover with just one label change: no overlap window to time, no second label to introduce. It also covers raw manifests and Kustomize output, not just Helm charts.</p>
+<p>Want the overlap-based approach anyway, for example because we want the old <code>ClusterProfile</code> to keep acting as a live fallback? Keep reading. Otherwise, see <a href="../transition_from/"><code>transitionFrom</code></a> for the simpler option.</p>
+</div>
 <h2 id="the-solution-overlap-dont-swap">The Solution: Overlap, Don't Swap</h2>
 <p>For Helm charts, Sveltos tracks, per release, which <code>ClusterSummary</code> currently owns it. When a <code>ClusterSummary</code> is being torn down (because its cluster stopped matching the parent <code>ClusterProfile</code>/<code>Profile</code>), Sveltos checks whether another <code>ClusterSummary</code> on the same cluster already wants to manage that same Helm release. If one exists, ownership of the release is <strong>handed over</strong> to that other <code>ClusterSummary</code> in place: the release is <em>upgraded</em>, not uninstalled and reinstalled.</p>
 <p>This means the outage isn't caused by the ownership model itself. It's caused by removing the old match and adding the new match in the same step, before the new <code>ClusterSummary</code> has had a chance to exist. The fix is to make the cluster match <strong>both</strong> <code>ClusterProfiles</code> for a brief overlap window, and only <em>then</em> remove it from the old one:</p>
 <ol>
 <li>The cluster starts matching the new <code>ClusterProfile</code> <strong>while still matching the old one</strong>. This creates a second <code>ClusterSummary</code> for the same Helm release. Sveltos detects the conflict, and the new <code>ClusterSummary</code> reports <code>FailedNonRetriable</code>, but it does nothing destructive. The chart already deployed by the old <code>ClusterProfile</code> is left untouched.</li>
-<li>Only after that second <code>ClusterSummary</code> exists do you make the cluster stop matching the old <code>ClusterProfile</code>. Sveltos tears down the old <code>ClusterSummary</code>, sees the new one is waiting to take over the same release, and hands over ownership in place. If the new <code>ClusterProfile</code> deploys a different chart version, Sveltos performs a Helm <strong>upgrade</strong> to that version, not an uninstall followed by an install.</li>
+<li>Only after that second <code>ClusterSummary</code> exists do we make the cluster stop matching the old <code>ClusterProfile</code>. Sveltos tears down the old <code>ClusterSummary</code>, sees the new one is waiting to take over the same release, and hands over ownership in place. If the new <code>ClusterProfile</code> deploys a different chart version, Sveltos performs a Helm <strong>upgrade</strong> to that version, not an uninstall followed by an install.</li>
 </ol>
-<p>If, instead, you removed the old match and added the new match at the same time (or removed the old one first), there is no overlap window: the old <code>ClusterSummary</code> is torn down with nothing yet waiting to take over, so <code>WithdrawPolicies</code> uninstalls the release before the new <code>ClusterSummary</code> is even created.</p>
+<p>If, instead, we removed the old match and added the new match at the same time (or removed the old one first), there is no overlap window: the old <code>ClusterSummary</code> is torn down with nothing yet waiting to take over, so <code>WithdrawPolicies</code> uninstalls the release before the new <code>ClusterSummary</code> is even created.</p>
 <h2 id="example-rolling-out-a-new-cni-chart-version-to-a-subset-of-clusters">Example: Rolling Out a New CNI Chart Version to a Subset of Clusters</h2>
-<p>Two <code>ClusterProfiles</code> are created up front, both immutable once committed. The first is already rolled out to every cluster; the second targets only the clusters you're ready to migrate.</p>
+<p>Two <code>ClusterProfiles</code> are created up front, both immutable once committed. The first is already rolled out to every cluster; the second targets only the clusters we're ready to migrate.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
@@ -4778,13 +4810,34 @@
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>helm<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;release-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;release-namespace&gt;<span class="w"> </span>--kube-context<span class="w"> </span>&lt;managed-cluster&gt;
 </span></code></pre></div>
 <p>A successful in-place transfer shows a single Helm release revision incrementing (an <code>upgrade</code> in <code>helm history</code>), never a <code>REVISION 1</code> with a new install timestamp following an uninstall.</p>
-<h2 id="alternative-resolving-the-conflict-with-tiers-instead">Alternative: Resolving the Conflict with Tiers Instead</h2>
-<p>The overlap-then-cutover choreography above isn't the only way to hand off a Helm release between two <code>ClusterProfiles</code>. <a href="../tiers/">Tiers</a> resolve the same "two <code>ClusterProfiles</code> target the same resource on the same cluster" conflict using priority instead of a timed cutover: give the new <code>ClusterProfile</code> a lower <code>tier</code> value, and it always wins over the old one for that release, for as long as both keep matching the cluster. For raw manifests (<code>policyRefs</code>) and Kustomize output (<code>kustomizationRefs</code>), tiers are not just an alternative, they're the only option, since the in-place handover described above is Helm-specific.</p>
-<p>Tiers are the simpler option when you're fine with the cluster matching both <code>ClusterProfiles</code> indefinitely. There's no ordering to get right, since the resolution happens by priority on every reconciliation rather than by which <code>ClusterSummary</code> was there first. The tradeoff: the old <code>ClusterProfile</code> is still silently in the loop. If the new one ever stops matching the cluster (a bad label change, a selector typo), Sveltos falls back to the old <code>ClusterProfile</code> and reverts the release to whatever it manages, which may not be what you want for something like a CNI version.</p>
-<p>Use the overlap-then-cutover approach in this page when you want a clean, permanent handoff with the old <code>ClusterProfile</code> fully out of the picture afterward. That's the common case when <code>ClusterProfiles</code> are treated as immutable and a new one is created per upgrade. Use tiers when a lightweight, permanent override is enough and you don't need to fully retire the old match.</p>
+<h2 id="alternatives">Alternatives</h2>
+<p>The overlap-then-cutover technique above isn't the only way to hand off a Helm release between two <code>ClusterProfiles</code>. Two alternatives resolve the same conflict without an overlap window:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>How it resolves the conflict</th>
+<th>Best used when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../transition_from/"><code>transitionFrom</code></a></td>
+<td>Name the old <code>ClusterProfile</code> in the new one's <code>transitionFrom</code>. A single label change gets us the same in-place handover this page's overlap window achieves manually, and it covers raw manifests and Kustomize output as well as Helm charts.</td>
+<td>Use it unless we specifically want the old <code>ClusterProfile</code> to keep acting as a live fallback.</td>
+</tr>
+<tr>
+<td><a href="../tiers/">Tiers</a></td>
+<td>Give the new <code>ClusterProfile</code> a lower <code>tier</code> value. It always wins over the old one for that release, for as long as both keep matching the cluster.</td>
+<td>We're fine with the cluster matching both <code>ClusterProfiles</code> indefinitely, and we want the old <code>ClusterProfile</code> to remain a live fallback: if the new one ever stops matching (a bad label change, a selector typo), Sveltos falls back to it and reverts the release to whatever it manages.</td>
+</tr>
+</tbody>
+</table>
+<p><code>transitionFrom</code> and the overlap technique on this page both intend a clean, permanent handoff instead, with the old <code>ClusterProfile</code> fully out of the picture afterward, which is why a stuck or absent successor blocks cleanup rather than silently falling back.</p>
+<p>Use the overlap-then-cutover approach on this page specifically when we want that same clean, permanent handoff but need to keep the old <code>ClusterProfile</code> matching for a while as a deliberate rollback window, longer than <code>transitionFrom</code>'s deploy-and-verify handover takes. Otherwise, prefer <code>transitionFrom</code>: it's less to get wrong (no timing, no second label) and it isn't Helm-specific.</p>
 <h2 id="caveats">Caveats</h2>
 <ul>
-<li><strong>This page covers Helm charts (<code>spec.helmCharts</code>) only.</strong> The in-place handover described here relies on Sveltos tracking Helm release ownership per <code>releaseName</code>/<code>releaseNamespace</code>. There is no equivalent mechanism for raw Kubernetes manifests deployed via <code>policyRefs</code> or Kustomize output deployed via <code>kustomizationRefs</code>: moving one of those between <code>ClusterProfiles</code> follows the default <code>stopMatchingBehavior</code> and is removed by the old <code>ClusterSummary</code> before the new one applies it, regardless of any overlap window. For those resource types, use <a href="../tiers/">Tiers</a> instead: tiers resolve ownership by priority rather than by handover, and apply to raw manifests and Kustomize output as well as Helm charts.</li>
+<li><strong>This page's overlap-then-cutover technique covers Helm charts (<code>spec.helmCharts</code>) only.</strong> The in-place handover it relies on is Sveltos tracking Helm release ownership per <code>releaseName</code>/<code>releaseNamespace</code>; there is no equivalent handover for raw Kubernetes manifests deployed via <code>policyRefs</code> or Kustomize output deployed via <code>kustomizationRefs</code> using this specific overlap mechanism. For those resource types (and for Helm charts too, if we'd rather avoid the overlap window entirely), use <a href="../transition_from/"><code>transitionFrom</code></a> or <a href="../tiers/">Tiers</a> instead: both resolve ownership without relying on Helm-specific release tracking, and apply to raw manifests and Kustomize output as well as Helm charts.</li>
 <li>This only works if the <em>same</em> Helm release (same <code>releaseName</code> and <code>releaseNamespace</code>) is targeted by both <code>ClusterProfiles</code>. If the new <code>ClusterProfile</code> renames the release or moves it to a different namespace, Sveltos has no way to know it's the "same" release, and the old one is removed independently of the new one being installed.</li>
 <li>The overlap window only needs to be long enough for the second <code>ClusterSummary</code> to be created and reconciled at least once, seconds, not minutes, but the two label changes must land as separate reconciliations, not a single atomic update.</li>
 <li>This pattern applies to any Helm based add-on managed by <code>ClusterProfile</code>/<code>Profile</code>, not just CNIs. It is the general mechanism Sveltos uses whenever ownership of a Helm release moves from one <code>ClusterSummary</code> to another. See <a href="../../internals/cr-ownership/">Custom Resource Ownership</a> for the underlying <code>ClusterProfile</code>/<code>Profile</code> → <code>ClusterSummary</code> ownership model.</li>
@@ -4862,7 +4915,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../tiers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Profile Tiers">
+          <a href="../transition_from/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Smooth Transitions with transitionFrom">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -4872,7 +4925,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Profile Tiers
+                Smooth Transitions with transitionFrom
               </div>
             </div>
           </a>
