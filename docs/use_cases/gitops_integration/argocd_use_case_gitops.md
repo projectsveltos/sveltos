@@ -10,10 +10,11 @@ tags:
     - multi-tenancy
     - Sveltos
     - GitOps
+    - argoCD
 authors:
     - Eleni Grosdouli
 ---
 
 ## Sveltos and GitOps
 
-Comming soon
+Comming soon!
