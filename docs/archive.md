@@ -15,6 +15,7 @@ authors:
 
 ## Previous Versions
 
+- [Version v1.15.0](https://projectsveltos.github.io/sveltos/v1.15.0/)
 - [Version v1.14.0](https://projectsveltos.github.io/sveltos/v1.14.0/)
 - [Version v1.13.0](https://projectsveltos.github.io/sveltos/v1.13.0/)
 - [Version v1.12.0](https://projectsveltos.github.io/sveltos/v1.12.0/)
