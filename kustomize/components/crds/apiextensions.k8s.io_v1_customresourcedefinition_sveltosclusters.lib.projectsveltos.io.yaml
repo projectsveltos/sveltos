@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.22.0
   name: sveltosclusters.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -611,13 +611,69 @@ spec:
                     - location
                     - projectID
                     type: object
+                  oidc:
+                    description: |-
+                      OIDC contains configuration for a generic OIDC client credentials grant.
+                      Required when Provider is OIDC.
+                    properties:
+                      caSecretRef:
+                        description: |-
+                          CASecretRef references a Secret in the management cluster containing the CA
+                          certificate of the IdP's token endpoint under the key "ca.crt". This is distinct
+                          from WorkloadIdentityConfig.CASecretRef, which trusts the managed cluster's own
+                          API server rather than the IdP. If not set, the system certificate pool is used.
+                        properties:
+                          name:
+                            default: ""
+                            description: |-
+                              Name of the referent.
+                              This field is effectively required, but due to backwards compatibility is
+                              allowed to be empty. Instances of this type with an empty value here are
+                              almost certainly wrong.
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      scopes:
+                        description: |-
+                          Scopes is the list of OAuth2 scopes to request alongside the client credentials
+                          grant. Leave empty if the IdP does not require one.
+                        items:
+                          type: string
+                        type: array
+                      secretRef:
+                        description: |-
+                          SecretRef references a Secret in the management cluster containing the client
+                          credentials, under the keys "client_id" and "client_secret".
+                          If Namespace is omitted, the cluster's namespace is used.
+                        properties:
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      tokenURL:
+                        description: TokenURL is the IdP's OAuth2 token endpoint.
+                        minLength: 1
+                        type: string
+                    required:
+                    - secretRef
+                    - tokenURL
+                    type: object
                   provider:
-                    description: Provider is the cloud provider implementing the workload
+                    description: |-
+                      Provider is the cloud provider, or generic OIDC IdP, implementing the workload
                       identity mechanism.
                     enum:
                     - AWS
                     - GCP
                     - Azure
+                    - OIDC
                     type: string
                 required:
                 - endpoint
@@ -630,6 +686,8 @@ spec:
                   rule: (self.provider == 'GCP') == has(self.gcp)
                 - message: azure must be set if and only if provider is Azure
                   rule: (self.provider == 'Azure') == has(self.azure)
+                - message: oidc must be set if and only if provider is OIDC
+                  rule: (self.provider == 'OIDC') == has(self.oidc)
             type: object
             x-kubernetes-validations:
             - message: 'workloadIdentity, kubeconfigName: conflict'
