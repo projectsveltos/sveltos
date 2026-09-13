@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.22.0
   name: configurationgroups.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -985,6 +985,18 @@ spec:
                 format: int32
                 minimum: 1
                 type: integer
+              transitionFrom:
+                description: |-
+                  TransitionFrom names the Profiles or ClusterProfiles this instance replaces.
+                  For matching target clusters, teardown of the replaced profiles is deferred
+                  until this instance reaches Provisioned. This instance is also permitted to
+                  adopt resources owned by the replaced profiles, ignoring tier restrictions.
+                  Same-kind only: a ClusterProfile names other ClusterProfiles, a Profile names
+                  other Profiles in the same namespace.
+                items:
+                  type: string
+                type: array
+                x-kubernetes-list-type: atomic
               updatePhase:
                 default: Ready
                 description: |-
@@ -1263,6 +1275,7 @@ spec:
                 - Removing
                 - Removed
                 - AgentRemoving
+                - Blocked
                 type: string
             type: object
         type: object
