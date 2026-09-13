@@ -21,9 +21,9 @@ Sveltos is not competing with GitOps controllers like ArgoCD or Flux. Instead, t
 
 ## Sveltos and ArgoCD
 
-ArgoCD is a widely adopted tool for continuous deployments, an open-source tool with hundreds of stars, adopters, and a huge community supporting it. ArgoCD is a popular tool for GitOps, especially for continuous deployments. However, it doesn't have native support for features like events and pipelines. They come through separate plugins such as Argo Events and Argo Workflows/Rollouts, which means extra components need to be installed and managed on top of the core setup.
+ArgoCD is a widely adopted tool for continuous deployments, an open-source tool with hundreds of stars, adopters, and a huge community supporting it. ArgoCD is a popular tool for GitOps, especially for continuous deployments. However, it does not have native support for features like events and pipelines. They come through separate plugins such as [Argo Events](https://argoproj.github.io/argo-events/) and [Argo Workflows/Rollouts](https://argoproj.github.io/workflows/), which means extra components need to be installed and managed on top of the core setup.
 
-This is where Sveltos comes in. Instead of stitching together plugins, we pair ArgoCD with Sveltos and get advanced templating, an Event Framework, and native Cluster API integration out of the box. Sveltos does not replace ArgoCD; it extends it. ArgoCD stays focused on syncing the source of truth to the management cluster, while Sveltos takes over a label-driven orchestration of add-ons and applications across Kubernetes fleets. The outcome is way simpler to scale complex, multi-cluster workloads without adding more tools to the existing stack.
+This is where Sveltos comes in. Instead of stitching together plugins, we pair ArgoCD with Sveltos and get advanced [templating](../../template/intro_template.md), an [Event Framework](../../events/addon_event_deployment.md), and native Cluster API integration out of the box. Sveltos does not replace ArgoCD; it extends it. ArgoCD stays focused on syncing the source of truth to the management cluster, while Sveltos takes over a label-driven orchestration of add-ons and applications across Kubernetes fleets. The outcome is way simpler to scale complex, multi-cluster workloads without adding more tools to the existing stack.
 
 ## Common Use-Cases
 
@@ -138,7 +138,7 @@ The GitOps workflow in this case looks like the following.
 Push to Repository
         │
         ▼
-ArgoCD syncs resources and Sveltos resources to the mgmt cluster
+ArgoCD syncs resources and Sveltos resources to the management cluster
         │
         ▼
 Sveltos deploys to Sveltos-managed clusters based on labels
