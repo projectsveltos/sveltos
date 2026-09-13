@@ -87,7 +87,7 @@ $ sveltosctl register cluster \
 #### Registration Examples
 
 !!!tip
-    To register EKS, GKE, or AKS clusters without storing a static kubeconfig, use [Workload Identity Registration](workload_identity.md) instead.
+    To register EKS, GKE, or AKS clusters without storing a static kubeconfig, use [Workload Identity Registration](workload_identity.md) instead. The same page also covers registering any other cluster fronted by a generic OIDC identity provider (Dex, Keycloak, Okta, …).
 
 ??? example "EKS"
     Once an EKS cluster is created, perform the below steps.

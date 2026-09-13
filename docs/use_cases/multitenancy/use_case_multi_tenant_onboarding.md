@@ -11,14 +11,15 @@ tags:
     - Sveltos
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 ## Advanced Multi-Tenant Onboarding with patchesFrom
 
 When managing a fleet of customer clusters, we typically deploy a standard set of "Day 2" agents (monitoring, logging, security).
-While 90% of customers use the base configuration, 10% require specific tweaks due to their unique infrastructure (e.g., Service Meshes, specialized hardware, or strict taints).
+While 90% of customers use the **base** configuration, 10% require specific tweaks due to unique requirements (e.g., Service Meshes, specialized hardware, or strict taints).
 
-Instead of creating a unique `ClusterProfile` for every customer, you can use a single profile that dynamically "plucks" patches from the environment if they exist.
+Instead of creating a unique `ClusterProfile` for every customer, we can use a single profile to dynamically "pluck" patches from the environment if they exist.
 
 ### Use Case: Standard Agent with Customer-Specific Requirements
 
@@ -119,4 +120,4 @@ They don't need permission to edit the Global ClusterProfile.
 **Conflict-Free Customization**: Because Sveltos uses `Strategic Merge Patches/JSON Patches`, if a customer needs both Istio and Tolerations, you can simply put both patches in the same ConfigMap.
 Sveltos will merge them intelligently into the base manifest.
 
-For more information on `patchesFrom`, have a look [here](../features/post-renderer-patches.md).
+For more information on `patchesFrom`, have a look [here](../../features/post-renderer-patches.md).
