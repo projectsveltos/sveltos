@@ -332,4 +332,4 @@ There is no one-size-fits-all approach. Before you begin, think about both your 
 
 ## More Resources
 
-For more information about the Sveltos and Flux integration, have a look [here](../../addons/example_flux_sources.md). An example respository is located [here](https://github.com/gianlucam76/kustomize/).
+For more information about the Sveltos and Flux integration, have a look [here](../../addons/example_flux_sources.md). An example respository is located [here](https://github.com/gianlucam76/kustomize/). To explore Sveltos' capabilities at a large scale, take a look at [Artem Lajko's post "GitOps for 15,000+ Clusters: What Large-Scale Testing with vCluster Taught Us"](https://itnext.io/gitops-for-15-000-clusters-what-large-scale-testing-with-vcluster-taught-us-41e4b0d43e0b)
