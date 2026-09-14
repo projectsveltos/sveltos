@@ -431,7 +431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../use_cases/gitops_integration/use_case_gitops/" class="md-nav__link">
+      <a href="../../../use_cases/gitops_integration/fluxcd_use_case_gitops/" class="md-nav__link">
         
   
   
@@ -439,6 +439,33 @@
     
   
   Flux GitOps Integration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../use_cases/gitops_integration/argocd_use_case_gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  ArgoCD GitOps Integration
 
     
   </span>
@@ -4867,7 +4894,7 @@
 <li>Fundamental knowledge of GitOps practices</li>
 </ul>
 <h2 id="how-does-it-work">How does it work?</h2>
-<p>To achieve the <strong>GitOps Bridge Pattern</strong>, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos <strong>management cluster</strong>. The YAML manifests (described in the sections below) are stored in a Git repository. The GitOps controller continuously monitors this repository and automatically applies any changes, ensuring the manifests in the Sveltos <strong>management cluster</strong> are always in sync with Git. This approach guarantees that the add-on deployments for <strong>managed clusters</strong> are <strong>versioned</strong> and <strong>auditable</strong>. Sveltos uses the updated resources to take care of the add-on deployment across the <strong>managed clusters</strong>. Sveltos has an integration with Flux; for more information, take a look <a href="../../../use_cases/gitops_integration/use_case_gitops/">here</a>.</p>
+<p>To achieve the <strong>GitOps Bridge Pattern</strong>, a GitOps controller such as ArgoCD or Flux is deployed in the Sveltos <strong>management cluster</strong>. The YAML manifests (described in the sections below) are stored in a Git repository. The GitOps controller continuously monitors this repository and automatically applies any changes, ensuring the manifests in the Sveltos <strong>management cluster</strong> are always in sync with Git. This approach guarantees that the add-on deployments for <strong>managed clusters</strong> are <strong>versioned</strong> and <strong>auditable</strong>. Sveltos uses the updated resources to take care of the add-on deployment across the <strong>managed clusters</strong>. Sveltos has an integration with Flux; for more information, take a look <a href="../../../use_cases/gitops_integration/fluxcd_use_case_gitops/">here</a>.</p>
 <p>As part of the flow, <strong>Crossplane</strong> provisions the required <strong>infrastructure</strong> (e.g., IAM Role), and once ready, <strong>Sveltos</strong> observes it. Sveltos pre-instantiates the manifests deployed and performs actions only when the required infrastructure is ready. For more details about how the <code>EventSource</code> and <code>EventTrigger</code> work, have a look <a href="../../addon_event_deployment/">here</a>.</p>
 <h3 id="gitops">GitOps</h3>
 <p><img alt="Sveltos Event Framework and CrossPlane for GitOps Bridge Pattern" src="../../../assets/sveltos_gitops.png" /></p>
