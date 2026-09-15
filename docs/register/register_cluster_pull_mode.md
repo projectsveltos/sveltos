@@ -110,3 +110,7 @@ $ kubectl get sveltoscluster -n monitoring
 NAMESPACE   NAME           READY   VERSION    AGE
 monitoring  prod-cluster   true    v1.30.5    9m15s
 ```
+
+### Automatic Token Renewal
+
+By default, the credential registered above is long-lived and does not renew itself. To have Sveltos renew it automatically instead, register with `--token` — see [Automatic Token Renewal: Pull Mode](token-renewal.md#pull-mode).

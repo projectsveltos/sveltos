@@ -13,6 +13,10 @@ authors:
 
 # Automatically Token Renewal
 
+Sveltos supports automatic token renewal for clusters registered in both [push mode](register-cluster.md) and [pull mode](register_cluster_pull_mode.md). The mechanics differ between the two (see [Pull Mode](#pull-mode) below), but the underlying idea is the same: a short-lived token gets renewed automatically instead of requiring a long-lived, non-expiring credential.
+
+## Push Mode
+
 To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl. However, due to potential expiration limits imposed by cloud providers, this can disrupt Sveltos' management of the cluster.
 
 To prevent this, configure automatic renewal: edit the `SveltosCluster` resource. Add or modify the `tokenRequestRenewalOption` section to include:
@@ -138,3 +142,49 @@ The `SveltosCluster.Status` field provides information about the last time the t
     connectionStatus: Healthy
     lastReconciledTokenRequestAt: "2024-10-08T07:36:42Z"
 ```
+
+## Pull Mode
+
+In [pull mode](register_cluster_pull_mode.md), the direction is reversed: the credential being renewed is the one **sveltos-applier**, running in the managed cluster, uses to connect back to the management cluster — not a credential the management cluster uses to reach into the managed cluster.
+
+Because of that, the ServiceAccount being renewed lives in the **management** cluster, and the component doing the renewing (`sveltoscluster-manager`) doesn't need any remote connectivity to do it: it renews the token locally, against its own cluster's API server.
+
+### Register with automatic renewal
+
+Pass `--token` when registering a cluster in pull mode:
+
+```bash
+$ export KUBECONFIG=</path/to/kubeconfig/management/cluster>
+
+$ sveltosctl register cluster \
+    --namespace=monitoring \
+    --cluster=prod-cluster \
+    --pullmode \
+    --token \
+    --management-cluster-url=https://<management-cluster-api-server>:6443 \
+    --labels=environment=production,tier=backend \
+    > sveltoscluster_registration.yaml
+```
+
+| Parameter                      | Description                                                                                                                                                                                                          |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--token`                       | Opt in to automatic renewal. Without it, `--pullmode` registration behaves as before: a long-lived, non-renewing Secret.                                                                                          |
+| `--management-cluster-url`      | Required with `--token`. The management cluster's externally reachable API server address, **including scheme** (e.g. `https://203.0.113.10:6443`) — the same kind of value found in a kubeconfig's `server:` field. See [why this is needed](#why-the-management-cluster-url-is-needed) below. |
+| `--sveltos-namespace`           | (Optional) The namespace Sveltos is installed in on the management cluster. Defaults to `projectsveltos`. Used to scope the renewal permission granted below to the right identity.                              |
+
+`--token` also creates a namespace-scoped `Role`/`RoleBinding` in the management cluster, granting `sveltoscluster-manager`'s own ServiceAccount permission to renew this cluster's token specifically — not a blanket grant. `sveltoscluster-manager` can only ever mint tokens for clusters actually registered with `--token`.
+
+Apply the generated file to the managed cluster exactly as in the [non-renewing pull mode flow](register_cluster_pull_mode.md#managed-cluster).
+
+### Why the management cluster URL is needed
+
+`sveltoscluster-manager` runs inside the management cluster, so its own view of "where the management cluster is" is typically an internal address (the `kubernetes.default.svc` ClusterIP) that the managed cluster cannot reach — and, on at least one provider (Civo), its in-cluster CA doesn't even validate the certificate presented at the externally reachable endpoint. `--management-cluster-url` is captured once, at registration time, from `sveltosctl`'s own working connection to the cluster (the same one already used to register it), and reused for every renewal after that.
+
+This is usually, but not necessarily, the same address as the kubeconfig `sveltosctl` itself is using — if you're registering through a port-forward, proxy, or VPN tunnel that isn't reachable from the managed cluster, pass the actual externally reachable address here instead.
+
+### How renewal is delivered
+
+Unlike push mode, `sveltoscluster-manager` cannot write the renewed kubeconfig directly into a Secret in the managed cluster — pull-mode clusters aren't reachable from the management cluster. Instead, the renewed kubeconfig is delivered through the same `ConfigurationGroup`/`ConfigurationBundle` mechanism pull mode already uses to deliver every other add-on. `sveltos-applier` watches for the update and, since a running process can't swap out its own connection to the management cluster, rebuilds that connection in-process (no pod restart).
+
+!!!tip "renewTokenRequestInterval and the renewal threshold"
+    Sveltos renews a token some time *before* it's actually due, as a safety margin — by default, 10 minutes before `renewTokenRequestInterval` would otherwise elapse. For most intervals (an hour or more) this is a small, sensible buffer. For short intervals — anywhere from just above 10 minutes up to roughly 20 minutes — that same fixed 10-minute margin eats a large fraction of the interval, so renewal (and, in pull mode, a connection rebuild) happens much more often than the configured interval suggests. If you're configuring a short renewal interval, prefer something comfortably above 20 minutes, or expect more frequent renewals than `renewTokenRequestInterval` alone implies.
