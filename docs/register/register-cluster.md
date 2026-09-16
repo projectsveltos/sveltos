@@ -303,6 +303,8 @@ $ sveltosctl deregister cluster \
 | `--cluster`      |    The **name** of the registered cluster to remove.                                         |
 | `--verbose`      |    (Optional) Print each deletion step for troubleshooting.                                  |
 
+!!!tip
+    Deregistering a cluster removes its `SveltosCluster` right away by default. If something in the management cluster needs a window to react before that happens (for instance a cleanup job for cloud resources the deleted cluster leaves behind, see [Event Driven Cleanup on Cluster Deletion](../events/examples/cluster_deletion_cleanup.md)), set [`Spec.CleanupGracePeriod`](features/cleanup_grace_period.md) on the `SveltosCluster` first.
 
 [^1]:
     As an alternative to generate kubeconfig have a look at the [script: get-kubeconfig.sh](https://raw.githubusercontent.com/gianlucam76/scripts/master/get-kubeconfig.sh). Read the script comments to get more clarity on the use and expected outcomes. This script was developed by [Gravitational Teleport](https://github.com/gravitational/teleport/blob/master/examples/k8s-auth/get-kubeconfig.sh). We simply slightly modified to fit Sveltos use case.

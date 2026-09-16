@@ -149,6 +149,9 @@ The *stopMatchingBehavior* field specifies the behavior when a cluster no longer
 
 When a cluster matches the ClusterProfile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the ClusterProfile, the Kyverno Helm chart will be uninstalled. However, if the *stopMatchingBehavior* property is set to *LeavePolicies*, Sveltos will retain the Kyverno Helm chart in the cluster.
 
+!!! tip
+    `stopMatchingBehavior` only governs resources Sveltos deployed *on the matched cluster*. If deleting a cluster leaves cloud resources behind (load balancers, disks, network interfaces, ...), only the management cluster can clean them up. See [Cleanup on Cluster Deletion](../events/examples/cluster_deletion_cleanup.md) for details.
+
 ### Spec.Reloader
 
 The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets. When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
