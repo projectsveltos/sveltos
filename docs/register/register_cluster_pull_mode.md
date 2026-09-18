@@ -101,6 +101,40 @@ deployment.apps/sveltos-applier-manager created
 secret/pcluster01-sveltos-kubeconfig created
 ```
 
+### Restricting sveltos-applier to Specific Namespaces
+
+By default, the `sveltos-applier` is granted a `ClusterRole` and can manage resources in **any** namespace of the managed cluster. To restrict it, pass the `--watch-namespaces` flag to the `sveltosctl register cluster` command:
+
+```bash
+$ sveltosctl register cluster \
+    --namespace=monitoring \
+    --cluster=prod-cluster \
+    --pullmode \
+    --labels=environment=production,tier=backend \
+    --watch-namespaces=team-a,team-b \
+    > sveltoscluster_registration.yaml
+```
+
+This sets the `agent.projectsveltos.io/watch-namespaces` annotation on the new `SveltosCluster`. It also adds the `--watch-namespaces` flag to the `sveltos-applier` manifest. For an already registered Sveltos cluster, add the annotation directly:
+
+```yaml hl_lines="6"
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: prod-cluster
+  annotations:
+    agent.projectsveltos.io/watch-namespaces: "team-a,team-b"
+```
+
+Sveltos relays this into `sveltos-applier`'s `--watch-namespaces` flag every time it deploys or upgrades the agent in the managed cluster. With it set, `sveltos-applier` only creates namespaced resources in `team-a` or `team-b`, erroring out if asked to create one in any other namespace. Stale-resource cleanup also only searches `team-a` and `team-b` instead of cluster-wide. Cluster-scoped resources are unaffected. This is the same annotation used to [restrict RBAC in agentless mode](../getting_started/install/agentless_limited_rbac.md#the-fix-namespace-scoped-watch-mode).
+
+Neither the `--watch-namespaces` nor the annotation narrows the `ClusterRole` in the `sveltoscluster_registration.yaml` manifest; it still grants cluster-wide access to whatever resource kinds `sveltos-applier` supports. Knowing which resource types the `ClusterProfiles`/`Profiles` use in the `team-a`/`team-b` namespaces, make sure to narrow the `ClusterRole`'s `rules` before applying them.
+
+!!! warning
+    On every Sveltos upgrade, the `sveltos-applier` Deployment, `ClusterRole`, and `ClusterRoleBinding` are all regenerated from scratch, including the `ClusterRole`'s rules. Editing the `ClusterRole` in the applied YAML only holds until the next upgrade, which resets it back to the default, cluster-wide rules. To narrow the `ClusterRole` and keep it across upgrades, use [Sveltos Applier Overrides](../getting_started/install/air_gapped_installation.md#sveltos-applier-overrides) instead.
+
+`sveltos-applier` is only half of a Pull Mode managed cluster's Sveltos footprint: `sveltos-agent`, which evaluates Classifiers, HealthChecks, EventSources and Reloaders, runs in the same cluster and defaults to its own cluster-wide `ClusterRole` too. For a worked example narrowing that one as well, pairing the same `--watch-namespaces` annotation with a `sveltosagent.projectsveltos.io/config-override-ref` patch and hand-created namespaced `Role`s, see [Restricting sveltos-agent RBAC in Pull Mode](pull_mode_sveltos_agent_scoped_rbac.md).
+
 ### Validation
 
 ```bash
