@@ -6,15 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos allows you to use Cluster API resources and automate the deployment of customised Kubernetes clusters on Docker.">
+        <meta name="description" content="Sveltos is an application designed to manage hundreds of clusters by providing declarative APIs to deploy Kubernetes add-ons across multiple clusters.">
       
       
       
       
-        <link rel="prev" href="../use_case_azure/">
+        <link rel="prev" href="../cross_cluster_configuration/">
       
       
-        <link rel="next" href="../../../overview/introdution/introduction_to_sveltos/">
+        <link rel="next" href="../loadbalancer/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Docker - Projectsveltos Documentation</title>
+        <title>Event Driven Cleanup on Cluster Deletion - Project Sveltos - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scenario" class="md-skip">
+        <a href="#the-problem-cloud-resources-that-outlive-the-cluster" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +143,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Docker
+              Event Driven Cleanup on Cluster Deletion - Project Sveltos
             
           </span>
         </div>
@@ -284,20 +284,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -317,7 +315,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -334,7 +332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_case_idp/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_idp/" class="md-nav__link">
         
   
   
@@ -361,7 +359,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use_case_hybrid_multicloud/" class="md-nav__link">
+      <a href="../../../use_cases/use_case_hybrid_multicloud/" class="md-nav__link">
         
   
   
@@ -433,7 +431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../gitops_integration/fluxcd_use_case_gitops/" class="md-nav__link">
+      <a href="../../../use_cases/gitops_integration/fluxcd_use_case_gitops/" class="md-nav__link">
         
   
   
@@ -460,7 +458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../gitops_integration/argocd_use_case_gitops/" class="md-nav__link">
+      <a href="../../../use_cases/gitops_integration/argocd_use_case_gitops/" class="md-nav__link">
         
   
   
@@ -540,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../multitenancy/use_case_multi-tenancy/" class="md-nav__link">
+      <a href="../../../use_cases/multitenancy/use_case_multi-tenancy/" class="md-nav__link">
         
   
   
@@ -567,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../multitenancy/use_case_multi_tenant_onboarding/" class="md-nav__link">
+      <a href="../../../use_cases/multitenancy/use_case_multi_tenant_onboarding/" class="md-nav__link">
         
   
   
@@ -599,20 +597,18 @@
                 
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
         
           
           <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
@@ -632,7 +628,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -649,7 +645,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../use_case_eks/" class="md-nav__link">
+      <a href="../../../use_cases/clusterAPI/use_case_eks/" class="md-nav__link">
         
   
   
@@ -676,7 +672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../use_case_azure/" class="md-nav__link">
+      <a href="../../../use_cases/clusterAPI/use_case_azure/" class="md-nav__link">
         
   
   
@@ -700,34 +696,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Cluster API on Docker
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../use_cases/clusterAPI/use_case_docker/" class="md-nav__link">
         
   
   
@@ -742,157 +714,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#scenario" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Scenario
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#github-resources" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Github Resources
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#diagram" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Diagram
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Prerequisites
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-1-create-a-kind-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 1: Create a Kind Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-2-initialise-and-deploy-capi-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 2: Initialise and Deploy CAPI Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-3-install-argocd-on-the-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 3: Install ArgoCD on the Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-deploy-sveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 4: Deploy Sveltos
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-push-a-prmerge-request-to-add-a-new-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 4: Push a PR/Merge Request to add a new user
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-5-install-cilium-as-container-network-interface-cni" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 5: Install Cilium as Container Network Interface (CNI)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-6-remove-a-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 6: Remove a User
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conclusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Conclusion
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -3434,18 +3255,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
@@ -3465,7 +3288,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
@@ -3482,7 +3305,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/addon_event_deployment/" class="md-nav__link">
+      <a href="../../addon_event_deployment/" class="md-nav__link">
         
   
   
@@ -3509,7 +3332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/aggregated_selection/" class="md-nav__link">
+      <a href="../../aggregated_selection/" class="md-nav__link">
         
   
   
@@ -3536,7 +3359,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/templating/" class="md-nav__link">
+      <a href="../../templating/" class="md-nav__link">
         
   
   
@@ -3563,7 +3386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/templating_all_resources_together/" class="md-nav__link">
+      <a href="../../templating_all_resources_together/" class="md-nav__link">
         
   
   
@@ -3590,7 +3413,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/generators/" class="md-nav__link">
+      <a href="../../generators/" class="md-nav__link">
         
   
   
@@ -3617,7 +3440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/nats/" class="md-nav__link">
+      <a href="../../nats/" class="md-nav__link">
         
   
   
@@ -3641,18 +3464,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_7" checked>
         
           
           <label class="md-nav__link" for="__nav_10_7" id="__nav_10_7_label" tabindex="0">
@@ -3672,7 +3497,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_10_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -3689,7 +3514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/secrets_on_demand/" class="md-nav__link">
+      <a href="../secrets_on_demand/" class="md-nav__link">
         
   
   
@@ -3716,7 +3541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/db-as-a-service/" class="md-nav__link">
+      <a href="../db-as-a-service/" class="md-nav__link">
         
   
   
@@ -3743,7 +3568,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/managed-services/" class="md-nav__link">
+      <a href="../managed-services/" class="md-nav__link">
         
   
   
@@ -3770,7 +3595,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/service_event_trigger/" class="md-nav__link">
+      <a href="../service_event_trigger/" class="md-nav__link">
         
   
   
@@ -3797,7 +3622,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/otel/" class="md-nav__link">
+      <a href="../otel/" class="md-nav__link">
         
   
   
@@ -3824,7 +3649,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/flux_sources/" class="md-nav__link">
+      <a href="../flux_sources/" class="md-nav__link">
         
   
   
@@ -3851,7 +3676,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/api_gateway_contour/" class="md-nav__link">
+      <a href="../api_gateway_contour/" class="md-nav__link">
         
   
   
@@ -3878,7 +3703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/cross_cluster_configuration/" class="md-nav__link">
+      <a href="../cross_cluster_configuration/" class="md-nav__link">
         
   
   
@@ -3902,10 +3727,34 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../events/examples/cluster_deletion_cleanup/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Example Cleanup on Cluster Deletion
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -3920,6 +3769,114 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-cloud-resources-that-outlive-the-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The Problem: Cloud Resources That Outlive the Cluster
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detecting-a-cluster-that-has-started-deleting" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Detecting a Cluster That Has Started Deleting
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detecting a Cluster That Has Started Deleting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sveltoscluster-no-provider-finalizer-to-rely-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SveltosCluster: No Provider Finalizer to Rely On
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-cleanup-job-in-the-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running the Cleanup Job in the Management Cluster
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the Cleanup Job in the Management Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eventsource-a-cluster-that-started-deleting" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        EventSource: a Cluster That Started Deleting
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventtrigger-deploy-the-cleanup-job-to-the-management-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        EventTrigger: Deploy the Cleanup Job to the Management Cluster
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-gives-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What This Gives You
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3932,7 +3889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/loadbalancer/" class="md-nav__link">
+      <a href="../loadbalancer/" class="md-nav__link">
         
   
   
@@ -3959,7 +3916,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
+      <a href="../dynamic_nginx_dep_based_ns_annotation/" class="md-nav__link">
         
   
   
@@ -3986,7 +3943,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/cluster_inventory/" class="md-nav__link">
+      <a href="../cluster_inventory/" class="md-nav__link">
         
   
   
@@ -4013,7 +3970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/cluster_inventory_push_model/" class="md-nav__link">
+      <a href="../cluster_inventory_push_model/" class="md-nav__link">
         
   
   
@@ -4040,7 +3997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/mcs_api/" class="md-nav__link">
+      <a href="../mcs_api/" class="md-nav__link">
         
   
   
@@ -4067,7 +4024,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/examples/sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
+      <a href="../sveltos_crossplane_gitops_bridge_pattern/" class="md-nav__link">
         
   
   
@@ -4804,10 +4761,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#scenario" class="md-nav__link">
+  <a href="#the-problem-cloud-resources-that-outlive-the-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Scenario
+        The Problem: Cloud Resources That Outlive the Cluster
       </span>
     </span>
   </a>
@@ -4815,120 +4772,77 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#github-resources" class="md-nav__link">
+  <a href="#detecting-a-cluster-that-has-started-deleting" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Github Resources
+        Detecting a Cluster That Has Started Deleting
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detecting a Cluster That Has Started Deleting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sveltoscluster-no-provider-finalizer-to-rely-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SveltosCluster: No Provider Finalizer to Rely On
       </span>
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#diagram" class="md-nav__link">
+  <a href="#running-the-cleanup-job-in-the-management-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Diagram
+        Running the Cleanup Job in the Management Cluster
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the Cleanup Job in the Management Cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eventsource-a-cluster-that-started-deleting" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        EventSource: a Cluster That Started Deleting
       </span>
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#eventtrigger-deploy-the-cleanup-job-to-the-management-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Prerequisites
+        EventTrigger: Deploy the Cleanup Job to the Management Cluster
       </span>
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#step-1-create-a-kind-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 1: Create a Kind Management Cluster
-      </span>
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-initialise-and-deploy-capi-management-cluster" class="md-nav__link">
+  <a href="#what-this-gives-you" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Step 2: Initialise and Deploy CAPI Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-3-install-argocd-on-the-management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 3: Install ArgoCD on the Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-deploy-sveltos" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 4: Deploy Sveltos
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-push-a-prmerge-request-to-add-a-new-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 4: Push a PR/Merge Request to add a new user
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-5-install-cilium-as-container-network-interface-cni" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 5: Install Cilium as Container Network Interface (CNI)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-6-remove-a-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Step 6: Remove a User
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conclusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Conclusion
+        What This Gives You
       </span>
     </span>
   </a>
@@ -4953,109 +4867,217 @@
   
 
 
-  <h1 id="__skip">Sveltos - Kubernetes Add-on Controller | Manage Kubernetes Add-ons with Ease | Cluster API clusters on Docker</h1>
+  <h1 id="__skip">Event Driven Cleanup on Cluster Deletion - Project Sveltos</h1>
 
-<h2 id="scenario">Scenario</h2>
-<p>In previous scenarios, <a href=".././use_case_eks/">Cluster API on EKS</a> and <a href=".././use_case_azure/">Cluster API on Azure</a>, we demonstrated how easy it is to deploy Kubernetes clusters across different hyperscalers using Sveltos and following a GitOps approach. But there are times when we need a local development environment running on a local machine using <a href="https://www.docker.com/">Docker</a>.</p>
-<p>In this post, we will outline how to automate local development environments using Docker, Kind, Cluster API (CAPI), and Sveltos!</p>
-<p>If you are not familiar with CAPI, take a look at the <a href="https://github.com/kubernetes-sigs/cluster-api">CAPI Github repository</a> and the <a href="https://cluster-api.sigs.k8s.io/">getting started guide</a>.</p>
-<h2 id="github-resources">Github Resources</h2>
-<p>The full code examples are located in the <a href="https://github.com/egrosdou01/blog-post-resources/tree/main/capi-docker-sveltos">GitHub repository</a>.</p>
-<h2 id="diagram">Diagram</h2>
-<p><img alt="Sveltos and Cluster API on Docker" src="../../../assets/capd.png" /></p>
-<h2 id="prerequisites">Prerequisites</h2>
-<ul>
-<li>Docker and <a href="https://kind.sigs.k8s.io/docs/user/quick-start/">Kind</a> are installed</li>
-<li>kubectl installed</li>
-<li>clusterctl installed</li>
-<li>Familiarity with CAPI</li>
-</ul>
-<h2 id="step-1-create-a-kind-management-cluster">Step 1: Create a Kind Management Cluster</h2>
-<p>As mentioned in the beginning, we can work on local development environments. For that reason, we will create a Kind cluster that can run on top of Docker.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="l l-Scalar l-Scalar-Plain">cat &gt; kind-cluster-with-extramounts.yaml &lt;&lt;EOF</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kind.x-k8s.io/v1alpha4</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">nodes</span><span class="p">:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">control-plane</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">extraMounts</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">containerPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="l l-Scalar l-Scalar-Plain">EOF</span>
+<h2 id="the-problem-cloud-resources-that-outlive-the-cluster">The Problem: Cloud Resources That Outlive the Cluster</h2>
+<p>Tools like Karpenter, CNI plugins, and cloud controller managers create cloud
+resources (EC2 instances, load balancers, EBS/disk volumes, network
+interfaces, security groups) on behalf of a Kubernetes cluster. Normally
+those tools clean up after themselves when the cluster is deleted. But that
+cleanup depends on the cluster's own API server still being reachable, and
+on the infrastructure provider's control plane still answering requests.</p>
+<p>By the time a <code>Cluster</code> is deleting, that is often no longer true. A common
+failure mode with Cluster API on AWS (CAPA): Karpenter deprovisions nodes
+through the EKS control plane, but CAPA deletes the control plane before
+Karpenter gets a chance to remove the EC2 instances it manages. Those
+instances, and the network interfaces attached to them, keep a reference to
+the cluster's security group. CAPA cannot delete that security group while
+the reference exists, and <code>Cluster</code> deletion stalls.</p>
+<p>The fix has to run somewhere that survives the managed cluster going away:
+the <strong>management</strong> cluster.</p>
+<h2 id="detecting-a-cluster-that-has-started-deleting">Detecting a Cluster That Has Started Deleting</h2>
+<p>Sveltos normally excludes a resource from matching as soon as
+<code>metadata.deletionTimestamp</code> is set, on the assumption that a resource being
+removed is not something to act on. <code>ResourceSelector</code> (used by <code>EventSource</code>,
+among others) has an opt-in field to disable that behavior:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">resourceSelectors</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.x-k8s.io</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1beta2</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">includeDeletingResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kind<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>--config<span class="w"> </span>kind-cluster-with-extramounts.yaml<span class="w"> </span>--kubeconfig<span class="o">=</span>/path/to/store/kubeconfig
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/path/to/mgmt/kubeconfig
-</span></code></pre></div>
-<h2 id="step-2-initialise-and-deploy-capi-management-cluster">Step 2: Initialise and Deploy CAPI Management Cluster</h2>
-<p>Let us begin by deploying CAPI using the Docker Infrastructure Provider.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_TOPOLOGY</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="c1"># Used to enable support for managed topologies and ClusterClass</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>$<span class="w"> </span>clusterctl<span class="w"> </span>init<span class="w"> </span>--infrastructure<span class="w"> </span>docker
-</span></code></pre></div>
-<h2 id="step-3-install-argocd-on-the-management-cluster">Step 3: Install ArgoCD on the Management Cluster</h2>
-<p>There are different ways to install ArgoCD on a Kubernetes cluster. For this demonstration, we will use the simplest option, the manifest installation. For more information about the different ArgoCD installation options, have a look <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/installation/">here</a>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>argocd
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>--current<span class="w"> </span>--namespace<span class="o">=</span>argocd
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>$<span class="w"> </span>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/argocd-server<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span><span class="m">8080</span>:443<span class="w"> </span><span class="c1"># Optional to get a glimpse of the ArgoCD UI</span>
-</span></code></pre></div>
+<p>With <code>includeDeletingResources: true</code>, a <code>Cluster</code> that has started deleting
+still matches. This works reliably for Cluster API clusters because the
+infrastructure provider (CAPA, CAPZ, CAPG, etc.) holds its own finalizer on
+the <code>Cluster</code> until its part of the teardown finishes. The object, and its
+labels and annotations, stay around for as long as that takes. Nothing about
+<code>includeDeletingResources</code> changes when the <code>Cluster</code> object is actually
+removed; it only changes whether Sveltos still considers it a match while
+it lingers with a <code>deletionTimestamp</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The admin password for the ArgoCD dashboard is in the Secret called <code>argocd-initial-admin-secret</code> in the argocd namespace.</p>
+<p>This field is opt-in and defaults to <code>false</code>. Every other Sveltos feature
+that matches resources (Classifier, HealthCheck, etc.) keeps ignoring
+deleting resources unless you explicitly set this field.</p>
 </div>
-<h2 id="step-4-deploy-sveltos">Step 4: Deploy Sveltos</h2>
-<p>We will leverage ArgoCD to automate the deployment of Sveltos to our management Kubernetes cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>argocd<span class="w"> </span>app<span class="w"> </span>create<span class="w"> </span>sveltos<span class="w"> </span>--repo<span class="w"> </span>https://github.com/projectsveltos/helm-charts.git<span class="w"> </span>--path<span class="w"> </span>charts/projectsveltos<span class="w"> </span>--dest-server<span class="w"> </span>https://kubernetes.default.svc<span class="w"> </span>--dest-namespace<span class="w"> </span>projectsveltos
+<h3 id="sveltoscluster-no-provider-finalizer-to-rely-on">SveltosCluster: No Provider Finalizer to Rely On</h3>
+<p>The reliability above comes from something Sveltos does not control: the
+infrastructure provider's own finalizer on a ClusterAPI <code>Cluster</code>. A cluster
+registered directly as a <code>SveltosCluster</code>, with no ClusterAPI involved, has no
+equivalent. Nothing holds that object open during deletion, so it can
+disappear before <code>includeDeletingResources</code> gets a chance to evaluate it.</p>
+<p><a href="../../../register/features/cleanup_grace_period/"><code>SveltosCluster.Spec.CleanupGracePeriod</code></a>
+closes that gap. When set, Sveltos holds its own finalizer on the
+<code>SveltosCluster</code> for that long after deletion is requested:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod-cluster</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">civo</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="hll"><span class="nt">spec</span><span class="p">:</span>
+</span></span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">cleanupGracePeriod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
 </span></code></pre></div>
-<p>Then, we will use the ArgoCD <code>Application</code> resource to set the location of our configuration related to CAPI and Sveltos. This will ensure ArgoCD deploys the configuration to the management cluster and keeps any code changes up to date. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>argocd<span class="w"> </span>app<span class="w"> </span>create<span class="w"> </span>sveltos-configuration<span class="w"> </span>--repo<span class="w"> </span>https://github.com/egrosdou01/blog-post-resources.git<span class="w"> </span>--path<span class="w"> </span>capi-azure-sveltos/pt3/<span class="w"> </span>--dest-server<span class="w"> </span>https://kubernetes.default.svc
+<p>With that in place, the same pattern documented below works for a bare
+<code>SveltosCluster</code> exactly as it does for a ClusterAPI <code>Cluster</code>: target
+<code>kind: SveltosCluster</code> (group <code>lib.projectsveltos.io</code>) in the <code>EventSource</code>'s
+<code>resourceSelectors</code> instead of <code>kind: Cluster</code>, and the <code>Job</code> gets the same
+guaranteed window.</p>
+<h2 id="running-the-cleanup-job-in-the-management-cluster">Running the Cleanup Job in the Management Cluster</h2>
+<p>Since Sveltos is deployed to the management cluster, it is automatically
+registered there as a <code>SveltosCluster</code> named <code>mgmt</code> in the <code>mgmt</code> namespace
+(see <a href="../../../register/register-cluster/#register-management-cluster">Register Management Cluster</a>).
+An <code>EventTrigger</code> can watch for the event in that same cluster and deploy
+the cleanup <code>Job</code> back into it, using
+<a href=".././cross_cluster_configuration/"><code>destinationCluster</code></a> to keep the target
+explicit.</p>
+<h3 id="eventsource-a-cluster-that-started-deleting">EventSource: a Cluster That Started Deleting</h3>
+<div class="admonition example">
+<p class="admonition-title">Example - EventSource Definition</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventSource</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleting-eks-clusters</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">collectResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">resourceSelectors</span><span class="p">:</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.x-k8s.io</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1beta2</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="nt">includeDeletingResources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="nt">evaluateCEL</span><span class="p">:</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eks_cluster_deleting</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span><span class="nt">rule</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="no">has(resource.metadata.deletionTimestamp) &amp;&amp;</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="no">resource.metadata.labels["provider-type"] == "aws" &amp;&amp;</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">        </span><span class="no">"eks-name" in resource.metadata.annotations</span>
 </span></code></pre></div>
-<p>The Sveltos configuration establishes a dynamic cluster creation process. Sveltos monitors a ConfigMap named <code>existing-users</code> in the <code>default</code> namespace. The resource keeps a list of users. Each entry shows the user's name, the type of environment, and the CAPI version to be deployed. When Sveltos spots a new user entry, it triggers the deployment of a CAPI configuration and creates a managed Kubernetes cluster in the Azure cloud.</p>
-<p>To allow Sveltos to manage resources in the Kubernetes management cluster, we will add the label <code>type: mgmt</code> to the cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>sveltoscluster<span class="w"> </span>mgmt<span class="w"> </span>-n<span class="w"> </span>mgmt<span class="w"> </span><span class="nv">type</span><span class="o">=</span>mgmt
+</div>
+<p><code>collectResources: true</code> is required: the <code>EventTrigger</code> template below needs
+the full <code>Cluster</code> object (its labels and annotations), not just its name and
+namespace.</p>
+<h3 id="eventtrigger-deploy-the-cleanup-job-to-the-management-cluster">EventTrigger: Deploy the Cleanup Job to the Management Cluster</h3>
+<div class="admonition example">
+<p class="admonition-title">Example - EventTrigger Definition</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EventTrigger</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eks-teardown-cleanup</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">sourceClusterSelector</span><span class="p">:</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">sveltos.projectsveltos.io/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">destinationCluster</span><span class="p">:</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mgmt</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="nt">eventSourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleting-eks-clusters</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="nt">oneForEvent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="nt">policyRefs</span><span class="p">:</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eks-cleanup-job</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nn">---</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eks-cleanup-job</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">    </span><span class="nt">projectsveltos.io/template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">  </span><span class="nt">job.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">    </span><span class="no">apiVersion: batch/v1</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">    </span><span class="no">kind: Job</span>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">    </span><span class="no">metadata:</span>
+</span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="w">      </span><span class="no">name: eks-cleanup-{{ .Resource.metadata.name }}</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="w">      </span><span class="no">namespace: default</span>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="w">    </span><span class="no">spec:</span>
+</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="w">      </span><span class="no">backoffLimit: 6</span>
+</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="w">      </span><span class="no">template:</span>
+</span><span id="__span-3-39"><a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="w">        </span><span class="no">spec:</span>
+</span><span id="__span-3-40"><a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="w">          </span><span class="no">restartPolicy: OnFailure</span>
+</span><span id="__span-3-41"><a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a><span class="w">          </span><span class="no">containers:</span>
+</span><span id="__span-3-42"><a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a><span class="w">          </span><span class="no">- name: cleanup</span>
+</span><span id="__span-3-43"><a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a><span class="w">            </span><span class="no">image: my-registry/eks-cleanup:latest</span>
+</span><span id="__span-3-44"><a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a><span class="w">            </span><span class="no">env:</span>
+</span><span id="__span-3-45"><a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a><span class="w">            </span><span class="no">- name: EKS_NAME</span>
+</span><span id="__span-3-46"><a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a><span class="w">              </span><span class="no">value: '{{ index .Resource.metadata.annotations "eks-name" }}'</span>
+</span><span id="__span-3-47"><a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a><span class="w">            </span><span class="no">- name: REGION</span>
+</span><span id="__span-3-48"><a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a><span class="w">              </span><span class="no">value: '{{ index .Resource.metadata.annotations "region" }}'</span>
 </span></code></pre></div>
-<h2 id="step-4-push-a-prmerge-request-to-add-a-new-user">Step 4: Push a PR/Merge Request to add a new user</h2>
-<p>To add a new user and trigger the creation of a corresponding Kubernetes cluster on Docker, we will implement a straightforward GitOps workflow. We will submit a Pull Request (PR)/Merge Request that modifies the <code>existing-users</code> ConfigMap within the previously defined repository. The PR will introduce a new user entry, <code>user01: test</code>, within the data section of the ConfigMap.
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">existing-users</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nt">data</span><span class="p">:</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="nt">user01</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="no">env: test</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="c1"># user02: |</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="c1">#   env: staging</span>
-</span></code></pre></div></p>
-<p>Once the PR is merged, ArgoCD will synchronise the changes to the Kubernetes management cluster. The synchronisation updates the ConfigMap. This signals Sveltos to start provisioning a new Kubernetes cluster for <code>user01</code> using CAPI.</p>
-<h2 id="step-5-install-cilium-as-container-network-interface-cni">Step 5: Install Cilium as Container Network Interface (CNI)</h2>
-<p>By the time one of the controller nodes is available and the kube-api is reachable, Sveltos installs <a href="https://docs.cilium.io/en/stable/index.html">Cilium</a> as our CNI. Everything is controlled by Sveltos using the below <code>ClusterProfile</code>, and there is no need for manual interventions.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nn">---</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.projectsveltos.io/v1beta1</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterProfile</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy-capd-managed</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">matchExpressions</span><span class="p">:</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="nt"> operator</span><span class="p">:</span><span class="w"> </span><span class="nv">In</span><span class="p p-Indicator">,</span><span class="nt"> values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">test</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">staging</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nt">syncMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="nt">helmCharts</span><span class="p">:</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">chartName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium/cilium</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.18.5</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">helmChartAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="nt">releaseNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="nt">repositoryName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cilium</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">repositoryURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://helm.cilium.io/</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="no">kubeProxyReplacement: true</span>
-</span></code></pre></div>
-<h2 id="step-6-remove-a-user">Step 6: Remove a User</h2>
-<p>To remove a user, update the <code>existing-users</code> ConfigMap. Then, submit a PR and merge the code. After that, let ArgoCD sync the change to the management cluster. Sveltos will handle the rest! Again, no magic, only Sveltos goodness!</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>In a few steps, we demonstrated how engineers can use Sveltos with CAPI on Docker following a GitOps approach to create scalable, maintainable, and easily managed Kubernetes clusters with versioned, auditable deployments.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sourceClusterSelector</code></td>
+<td>Matches the management cluster (<code>mgmt/mgmt</code>), so the <code>EventSource</code> above is evaluated there and not in a managed cluster.</td>
+</tr>
+<tr>
+<td><code>destinationCluster</code></td>
+<td>Points at the <code>mgmt</code> cluster, so the Job lands in the <strong>management</strong> cluster, not in the workload cluster being deleted.</td>
+</tr>
+<tr>
+<td><code>oneForEvent: true</code></td>
+<td>Gives every deleting cluster its own <code>ClusterProfile</code>, so one cluster's cleanup does not depend on, or interfere with, another's.</td>
+</tr>
+</tbody>
+</table>
+<p><code>{{ .Resource.metadata.name }}</code>, and any label or annotation on the deleting
+<code>Cluster</code>, are available to the template exactly as they would be for a live
+resource. Templating reads the object with a direct lookup, not through the
+(deletion-excluding) matching path.</p>
+<h2 id="what-this-gives-you">What This Gives You</h2>
+<ol>
+<li><strong>A live signal, while the resource still exists.</strong> The <code>Job</code> is created
+   as soon as <code>deletionTimestamp</code> is set, not after the <code>Cluster</code> is gone,
+   by which point nothing could target it anymore.</li>
+<li><strong>The <code>Job</code> runs in the management cluster</strong>, so it does not depend on
+   the workload cluster's API server, which may already be unreachable.</li>
+<li><strong>No Sveltos-held finalizer, no blocking.</strong> Sveltos does not hold up
+   <code>Cluster</code> deletion itself; whatever already keeps the <code>Cluster</code> object
+   present during teardown (the infrastructure provider's own finalizer, for
+   a Cluster API cluster) gives the <code>Job</code> the time it needs. A <code>Job</code> that
+   polls its cloud provider until a control plane is confirmed gone, before
+   acting, works the same way it would run anywhere else.</li>
+<li><strong>Automatic cleanup once the cluster is actually gone.</strong> When the
+   <code>Cluster</code> object is finally removed, it stops matching the <code>EventSource</code>,
+   and Sveltos removes the <code>ClusterProfile</code> (and the <code>Job</code> it deployed) that
+   was created for it, the same way it does for any other event-driven
+   <code>ClusterProfile</code> that stops matching.</li>
+<li><strong>Failure is visible, not silent.</strong> Deployment status for the <code>Job</code> is
+   tracked the same way as any other Sveltos-deployed resource, on the
+   generated <code>ClusterProfile</code>'s <code>ClusterSummary</code>.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>includeDeletingResources</code> only helps while the resource object still
+exists. It does not, by itself, keep an object around longer than it
+otherwise would be. For a Cluster API cluster this is not a problem, since
+the infrastructure provider already holds the object open for the
+duration of its own teardown. For a <code>SveltosCluster</code>, set
+<a href="../../../register/features/cleanup_grace_period/"><code>Spec.CleanupGracePeriod</code></a>
+to get the same guarantee. Any other resource with nothing else blocking
+its deletion can still disappear before Sveltos evaluates it.</p>
+</div>
 
 
   <nav class="md-tags" >
@@ -5078,20 +5100,6 @@
       
       
       
-        <span class="md-tag">helm</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">kustomize</span>
-      
-    
-      
-      
-      
-      
         <span class="md-tag">clusterapi</span>
       
     
@@ -5099,14 +5107,28 @@
       
       
       
-        <span class="md-tag">multi-tenancy</span>
+        <span class="md-tag">Sveltos</span>
       
     
       
       
       
       
-        <span class="md-tag">Sveltos</span>
+        <span class="md-tag">event driven</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">cluster deletion</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">cleanup</span>
       
     
   </nav>
@@ -5143,7 +5165,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../use_case_azure/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Cluster API on Azure">
+          <a href="../cross_cluster_configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example Cross-cluster Configuration">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -5153,20 +5175,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Cluster API on Azure
+                Example Cross-cluster Configuration
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../../overview/introdution/introduction_to_sveltos/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction to Sveltos">
+          <a href="../loadbalancer/" class="md-footer__link md-footer__link--next" aria-label="Next: Example Loadbalancer">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Introduction to Sveltos
+                Example Loadbalancer
               </div>
             </div>
             <div class="md-footer__button md-icon">
