@@ -242,6 +242,34 @@ metadata:
   namespace: east-registry-patch
 ```
 
+By default, `drift-detection-manager`'s `ClusterRole` (`drift-detection-manager-role`, [as addon-controller applies it](https://raw.githubusercontent.com/projectsveltos/addon-controller/refs/heads/main/pkg/drift-detection/drift-detection-manager.yaml)) includes this rule, which is what lets it watch arbitrary deployed resources cluster-wide:
+
+```yaml
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+```
+
+Remove it the same way, via a `clusterrole-patch` key in the same (or a separate) override ConfigMap:
+
+```yaml
+apiVersion: v1
+data:
+  clusterrole-patch: |-
+      patch: |-
+        - op: remove
+          path: /rules/1
+      target:
+        kind: ClusterRole
+        name: drift-detection-manager-role
+kind: ConfigMap
+metadata:
+  name: east-registry-patch
+  namespace: projectsveltos
+```
+
+Check the `ClusterRole` drift-detection-manager is actually running with before applying this: the exact rule index depends on the release. This patch is re-applied each time `drift-detection-manager` is redeployed, so it stays intact across future Sveltos upgrades, unlike editing the `ClusterRole` directly. Pair it with the [`agent.projectsveltos.io/watch-namespaces`](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces) annotation (honored in agentless mode and in [Pull Mode](../../register/register_cluster_pull_mode.md)) to also restrict the namespaces where `drift-detection-manager` watches resources.
+
 ### Sveltos Agent Overrides
 
 To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosagent.projectsveltos.io/config-override-ref`
@@ -296,7 +324,46 @@ metadata:
 
 ### Sveltos Applier Overrides
 
-To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosapplier.projectsveltos.io/config-override-ref`
+To provide a cluster-specific override for the sveltos-applier (the agent that deploys resources in [Pull Mode](../../register/register_cluster_pull_mode.md)), use the following annotation: `sveltosapplier.projectsveltos.io/config-override-ref`
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: prod-cluster
+  annotations:
+    # References a ConfigMap named 'applier-rbac-patch' in a specific namespace (e.g., 'default')
+    sveltosapplier.projectsveltos.io/config-override-ref: default/applier-rbac-patch
+spec:
+  # ...
+```
+
+with
+
+```yaml
+apiVersion: v1
+data:
+  clusterrole-patch: |-
+      patch: |-
+        - op: replace
+          path: /rules
+          value:
+          - apiGroups: ["apps"]
+            resources: ["deployments"]
+            verbs: ["get", "list", "watch", "create", "update", "delete"]
+          - apiGroups: [""]
+            resources: ["configmaps"]
+            verbs: ["get", "list", "watch", "create", "update", "delete"]
+      target:
+        kind: ClusterRole
+        name: sveltos-applier-manager-role
+kind: ConfigMap
+metadata:
+  name: applier-rbac-patch
+  namespace: default
+```
+
+This patch is re-applied each time `sveltos-applier` is redeployed. Unlike editing the `ClusterRole` directly, it stays intact across future Sveltos upgrades. Pair it with the [`agent.projectsveltos.io/watch-namespaces`](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces) annotation to also restrict the namespaces where `sveltos-applier` can manage resources.
 
 ## Next Steps
 
