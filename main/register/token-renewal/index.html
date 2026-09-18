@@ -1622,6 +1622,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#push-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Push Mode
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Push Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#gitops-compatibility-in-place-renewal" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1629,6 +1641,11 @@
       </span>
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1640,6 +1657,56 @@
       </span>
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Pull Mode
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pull Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register-with-automatic-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Register with automatic renewal
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-the-management-cluster-url-is-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Why the management cluster URL is needed
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-renewal-is-delivered" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How renewal is delivered
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4646,6 +4713,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#push-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Push Mode
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Push Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#gitops-compatibility-in-place-renewal" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4653,6 +4732,11 @@
       </span>
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4664,6 +4748,56 @@
       </span>
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Pull Mode
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pull Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register-with-automatic-renewal" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Register with automatic renewal
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-the-management-cluster-url-is-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Why the management cluster URL is needed
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-renewal-is-delivered" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How renewal is delivered
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4686,6 +4820,8 @@
 
 
 <h1 id="automatically-token-renewal">Automatically Token Renewal</h1>
+<p>Sveltos supports automatic token renewal for clusters registered in both <a href="../register-cluster/">push mode</a> and <a href="../register_cluster_pull_mode/">pull mode</a>. The mechanics differ between the two (see <a href="#pull-mode">Pull Mode</a> below), but the underlying idea is the same: a short-lived token gets renewed automatically instead of requiring a long-lived, non-expiring credential.</p>
+<h2 id="push-mode">Push Mode</h2>
 <p>To register a managed cluster (e.g., GKE, AKS, EKS) with Sveltos, a temporary Kubeconfig file is generated using sveltosctl. However, due to potential expiration limits imposed by cloud providers, this can disrupt Sveltos' management of the cluster.</p>
 <p>To prevent this, configure automatic renewal: edit the <code>SveltosCluster</code> resource. Add or modify the <code>tokenRequestRenewalOption</code> section to include:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">tokenRequestRenewalOption</span><span class="p">:</span>
@@ -4779,6 +4915,59 @@ To prevent the Kubeconfig from expiring and disrupting Sveltos' management of th
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">connectionStatus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Healthy</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">lastReconciledTokenRequestAt</span><span class="p">:</span><span class="w"> </span><span class="s">"2024-10-08T07:36:42Z"</span>
 </span></code></pre></div>
+<h2 id="pull-mode">Pull Mode</h2>
+<p>In <a href="../register_cluster_pull_mode/">pull mode</a>, the direction is reversed: the credential being renewed is the one <strong>sveltos-applier</strong>, running in the managed cluster, uses to connect back to the management cluster, rather than a credential the management cluster uses to reach into the managed cluster.</p>
+<p>Because of that, the ServiceAccount being renewed lives in the <strong>management</strong> cluster, and the component doing the renewing (<code>sveltoscluster-manager</code>) doesn't need any remote connectivity to do it: it renews the token locally, against its own cluster's API server.</p>
+<h3 id="register-with-automatic-renewal">Register with automatic renewal</h3>
+<p>Pass <code>--token</code> when registering a cluster in pull mode:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span>--token<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span>--management-cluster-url<span class="o">=</span>https://&lt;management-cluster-api-server&gt;:6443<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--token</code></td>
+<td>Opt in to automatic renewal. Without it, <code>--pullmode</code> registration behaves as before: a long-lived, non-renewing Secret.</td>
+</tr>
+<tr>
+<td><code>--management-cluster-url</code></td>
+<td>Required with <code>--token</code>. The management cluster's externally reachable API server address, <strong>including scheme</strong> (e.g. <code>https://203.0.113.10:6443</code>), the same kind of value found in a kubeconfig's <code>server:</code> field. See <a href="#why-the-management-cluster-url-is-needed">why this is needed</a> below.</td>
+</tr>
+<tr>
+<td><code>--sveltos-namespace</code></td>
+<td>(Optional) The namespace Sveltos is installed in on the management cluster. Defaults to <code>projectsveltos</code>. Used to scope the renewal permission granted below to the right identity.</td>
+</tr>
+</tbody>
+</table>
+<p><code>--token</code> also creates a namespace-scoped <code>Role</code>/<code>RoleBinding</code> in the management cluster, granting <code>sveltoscluster-manager</code>'s own ServiceAccount permission to renew this cluster's token specifically. This is not a blanket grant: <code>sveltoscluster-manager</code> can only ever mint tokens for clusters actually registered with <code>--token</code>.</p>
+<p>Apply the generated file to the <strong>managed</strong> cluster, exactly as in the <a href="../register_cluster_pull_mode/#managed-cluster">non-renewing pull mode flow</a>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/managed/cluster&gt;
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sveltoscluster_registration.yaml
+</span></code></pre></div>
+<h3 id="why-the-management-cluster-url-is-needed">Why the management cluster URL is needed</h3>
+<p><code>sveltoscluster-manager</code> runs inside the management cluster. Its view of "where the management cluster is" typically shows an internal address, the <code>kubernetes.default.svc</code> ClusterIP. The managed cluster cannot reach this address. Additionally, on at least one provider (Civo), the in-cluster CA does not validate the certificate presented at the externally reachable endpoint.</p>
+<p>This address is often the same as the one in the kubeconfig <code>sveltosctl</code> uses. But if a port-forward, proxy, or VPN tunnel is used that the managed cluster cannot access, enter the actual external address instead.</p>
+<h3 id="how-renewal-is-delivered">How renewal is delivered</h3>
+<p>Unlike push mode, <code>sveltoscluster-manager</code> cannot write the renewed kubeconfig directly into a Secret in the managed cluster: pull-mode clusters aren't reachable from the management cluster. Instead, the renewed kubeconfig is delivered through the same <code>ConfigurationGroup</code>/<code>ConfigurationBundle</code> mechanism pull mode already uses to deliver every other add-on. <code>sveltos-applier</code> watches for the update and, since a running process can't swap out its own connection to the management cluster, rebuilds that connection in-process (no pod restart).</p>
+<div class="admonition tip">
+<p class="admonition-title">renewTokenRequestInterval and the renewal threshold</p>
+<p>Sveltos renews a token a bit <em>before</em> it's due. This acts as a safety margin. By default, it renews 10 minutes before the <code>renewTokenRequestInterval</code> ends. For most intervals (an hour or more) this is a small, sensible buffer.</p>
+</div>
 
 
   <nav class="md-tags" >
