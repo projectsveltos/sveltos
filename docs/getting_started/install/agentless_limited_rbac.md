@@ -47,6 +47,8 @@ That's only half of it, though. Take a `ClusterProfile` that only ever deploys `
         agent.projectsveltos.io/watch-namespaces: "team-a,team-b"
     ```
 
+The same restriction can be applied to a Pull Mode cluster's `sveltos-applier` agent; see [Restricting sveltos-applier to Specific Namespaces](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces).
+
 ## Worked Example
 
 1. On the managed cluster, create a `ServiceAccount`, `Role`, and `RoleBinding` scoped to the namespace(s) and resource kinds your `ClusterProfiles`/`Classifiers` for this cluster actually need:
