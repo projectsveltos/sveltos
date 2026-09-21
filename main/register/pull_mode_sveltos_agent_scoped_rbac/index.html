@@ -6,15 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sveltos can register clusters that are behind a firewall, in air-gapped or edge environments, and in highly regulated setups using Pull Mode.">
+        <meta name="description" content="A worked example narrowing sveltos-agent's ClusterRole and pairing it with namespace-scoped watch mode, so a Pull Mode managed cluster's owner can grant Sveltos read access to only the namespaces and resource kinds it actually needs.">
       
       
       
       
-        <link rel="prev" href="../register-cluster/">
-      
-      
-        <link rel="next" href="../workload_identity/">
       
       
         
@@ -25,7 +21,7 @@
     
     
       
-        <title>Register Cluster Pull Mode - Projectsveltos Documentation</title>
+        <title>Restricting sveltos-agent RBAC in Pull Mode - Projectsveltos Documentation</title>
       
     
     
@@ -83,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sveltos-cluster-registration-pull-mode" class="md-skip">
+        <a href="#why-this-matters" class="md-skip">
           Skip to content
         </a>
       
@@ -143,7 +139,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Register Cluster Pull Mode
+              Restricting sveltos-agent RBAC in Pull Mode
             
           </span>
         </div>
@@ -1405,20 +1401,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -1438,7 +1432,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1479,36 +1473,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Registration Pull Mode
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../register_cluster_pull_mode/" class="md-nav__link">
         
   
   
@@ -1523,127 +1491,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#how-does-it-work" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        How does it work?
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="How does it work?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Advantages
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#register-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Register Cluster
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Register Cluster">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#managed-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Managed Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#restricting-sveltos-applier-to-specific-namespaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Restricting sveltos-applier to Specific Namespaces
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Validation
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#automatic-token-renewal" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Automatic Token Renewal
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -4751,8 +4598,6 @@
                     
                     
                     
-                      
-                    
                     
                       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
                       <div class="md-sidebar-button__wrapper">
@@ -4768,8 +4613,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -4778,22 +4621,77 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-does-it-work" class="md-nav__link">
+  <a href="#why-this-matters" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        How does it work?
+        Why This Matters
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="How does it work?">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Overview
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worked-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Worked Example
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Worked Example">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#advantages" class="md-nav__link">
+  <a href="#1-restrict-the-watch-to-team-a" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Advantages
+        1. Restrict the watch to <code>team-a</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-narrow-sveltos-agents-clusterrole" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2. Narrow sveltos-agent's ClusterRole
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-grant-back-whats-actually-needed-per-namespace" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        3. Grant back what's actually needed, per namespace
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        4. Verify
       </span>
     </span>
   </a>
@@ -4806,74 +4704,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#register-cluster" class="md-nav__link">
+  <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Register Cluster
+        Next Steps
       </span>
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Register Cluster">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#management-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Management Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#managed-cluster" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Managed Cluster
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#restricting-sveltos-applier-to-specific-namespaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Restricting sveltos-applier to Specific Namespaces
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Validation
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#automatic-token-renewal" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Automatic Token Renewal
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -4895,130 +4732,164 @@
   
 
 
-<div class="admonition video">
-<p class="admonition-title">Video</p>
-<p>To learn more about the Sveltos <strong>Pull Mode</strong>, check out the <a href="https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be">Youtube Video</a>. If you find this valuable, we would be thrilled if you shared it! 😊</p>
-</div>
-<h1 id="sveltos-cluster-registration-pull-mode">Sveltos Cluster Registration Pull Mode <span class="twemoji" title="Enterprise"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16 3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"/></svg></span></h1>
-<p>Sveltos supports managed cluster registration in <strong>Pull Mode</strong>. In this model, <strong>managed</strong> clusters actively <strong>pull</strong> configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.</p>
-<p>The <strong>Pull Mode</strong> is ideal for managed clusters behind a firewall, in air-gapped environments, edge deployments with limited bandwidth or highly regulated and secure setups.</p>
-<div class="admonition info">
-<p class="admonition-title">Enterprise Feature</p>
-<p>Test the <strong>Pull Mode</strong> with up to <strong>two</strong> managed clusters for free. Need more than two clusters? Contact us at <a href="mailto:support@projectsveltos.io"><code>support@projectsveltos.io</code></a> to explore license options.</p>
-</div>
-<p>If Sveltos is not already installed, have a look at the installation details located <a href="../../getting_started/install/install/">here</a>.</p>
-<h2 id="how-does-it-work">How does it work?</h2>
-<p>While the core Sveltos controllers run in a <strong>management</strong> cluster and orchestrate deployments, the concept of <strong>Pull Mode</strong> becomes relevant when managing clusters in challenging network environments such as firewalled, air-gapped, or edge deployments, where direct inbound access from the management cluster to the managed clusters is either not possible or not desired.</p>
-<p>This is how the <strong>Pull Mode</strong> flow works:</p>
+  <h1 id="__skip">Restricting sveltos-agent RBAC in Pull Mode</h1>
+
+<h2 id="why-this-matters">Why This Matters</h2>
+<p><a href="../register_cluster_pull_mode/#restricting-sveltos-applier-to-specific-namespaces">Restricting sveltos-applier to Specific Namespaces</a> only covers part of a Pull Mode managed cluster's Sveltos footprint. <code>sveltos-agent</code>, the component that evaluates Classifiers, HealthChecks, EventSources and Reloaders, runs in the same cluster and, by default, is also granted a cluster-wide <code>ClusterRole</code>: a wildcard <code>get</code>/<code>list</code>/<code>watch</code> grant across every group and resource, so it can evaluate whatever <code>resourceSelectors</code> any Classifier/HealthCheck/EventSource happens to target. <code>drift-detection-manager</code>, which watches whatever a <code>ClusterProfile</code>/<code>Profile</code> with <code>syncMode: ContinuousWithDriftDetection</code> deploys, runs there too with the same kind of cluster-wide wildcard <code>ClusterRole</code> (narrowed the same way via <a href="../../getting_started/install/air_gapped_installation/#drift-detection-manager-overrides">Drift Detection Manager Overrides</a>). Restricting <code>sveltos-applier</code> alone leaves both of those broader credentials untouched.</p>
+<p>This page walks through narrowing sveltos-agent's own footprint too, so registering a cluster in Pull Mode doesn't implicitly also grant Sveltos read access to the whole cluster.</p>
+<h2 id="overview">Overview</h2>
+<p>Three pieces work together:</p>
 <ol>
-<li><strong>Management Cluster</strong>: It defines the desired state. We define our <code>ClusterProfile</code>/<code>Profile</code> resources in the management cluster, specifying which add-ons and configurations should be applied to which managed clusters by utilising the Kubernetes labels selection concept.</li>
-<li><strong>Managed Cluster</strong>: Rather than the management cluster initiating all deployments, a component on the managed cluster initiates a connection to the management cluster.</li>
-<li><strong>Configuration Fetching</strong>: The managed cluster pulls the relevant configuration, manifest, or Helm chart <strong>from</strong> the <strong>management</strong> cluster. The <strong>management</strong> cluster prepares the relevant configuration bundle for the managed clusters in Pull Mode.</li>
-<li><strong>Apply</strong>: The managed cluster's local agent applies the pulled configurations to the cluster.</li>
+<li><strong><code>agent.projectsveltos.io/watch-namespaces</code></strong> on the <code>SveltosCluster</code>, restricts sveltos-agent's own watches (Classifier/HealthCheck/EventSource <code>resourceSelectors</code>, Reloader's ConfigMap/Secret/target watches) to the listed namespaces. It's the same annotation already used for <code>sveltos-applier</code> (previous section) and for agentless mode (<a href="../../getting_started/install/agentless_limited_rbac/#the-fix-namespace-scoped-watch-mode">Namespace-Scoped Watch Mode</a>); one annotation controls all of them.</li>
+<li><strong>A <code>sveltosagent.projectsveltos.io/config-override-ref</code> patch</strong>, narrows the <code>ClusterRole</code> classifier hands sveltos-agent, removing the wildcard rule.</li>
+<li><strong>Namespaced <code>Role</code>/<code>RoleBinding</code>s you create yourself</strong>, grant back, per namespace, exactly the resource kinds your Classifiers/HealthChecks/EventSources/Reloaders for this cluster actually target.</li>
 </ol>
-<p><img alt="Sveltos Pull Mode" src="../../assets/sveltos_pull_mode.png" /></p>
-<h3 id="advantages">Advantages</h3>
-<p>The following items are some of the benefits of utilising Sveltos in <strong>Pull Mode</strong>.</p>
-<ul>
-<li><strong>Firewalled and Air-Gapped Environments</strong>: This is the primary driver. When managed clusters are behind firewalls or in air-gapped networks, direct inbound connections from a central management cluster are not possible. Sveltos in <strong>Pull Mode</strong> allows the managed clusters to reach out to the management cluster or a Git repository to obtain deployment instructions.</li>
-<li><strong>Edge Deployments</strong>: For edge locations with intermittent connectivity or limited network bandwidth, the Sveltos <strong>Pull Mode</strong> offers resilience.</li>
-<li><strong>Security</strong>: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.</li>
-</ul>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Find out <a href="../../#sveltos-for-edge-kubernetes">here</a> what is being deployed by Sveltos when we talk about Edge deployments.</p>
-</div>
-<h2 id="register-cluster">Register Cluster</h2>
-<p>To register a cluster in Pull mode, we use the <a href="https://github.com/projectsveltos/sveltosctl" title="Sveltos CLI">sveltosctl</a>.</p>
-<h3 id="management-cluster">Management Cluster</h3>
-<p>Pointing the KUBECONFIG to the <strong>management</strong> cluster where Sveltos is installed, perform the following <code>sveltosctl register</code> command.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
-</span></code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--namespace</code></td>
-<td>The namespace in the <strong>management</strong> cluster where Sveltos stores information about the registered cluster.</td>
-</tr>
-<tr>
-<td><code>--cluster</code></td>
-<td>The name of the cluster to identify the registered cluster within Sveltos.</td>
-</tr>
-<tr>
-<td><code>--pullmode</code></td>
-<td>Enables the Sveltos <strong>Pull Mode</strong> registration.</td>
-</tr>
-<tr>
-<td><code>--labels</code></td>
-<td>(Optional) Comma-separated key-value pairs to define labels for the registered cluster.</td>
-</tr>
-</tbody>
-</table>
-<p>When the command is executed, looking at the <code>sveltosclusters</code> resource, we do see a new instance called <code>prod-cluster</code> in a not "Ready" state. This is the expected behaviour as we register the cluster in <strong>Pull Mode</strong>. Feel free to look at the generated file and identify what resources will be created for the <strong>managed</strong> cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>monitoring
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">           </span>READY<span class="w">   </span>VERSION<span class="w">   </span>AGE
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>monitoring<span class="w">  </span>prod-cluster<span class="w">                     </span>1m7s
-</span></code></pre></div>
-<h3 id="managed-cluster">Managed Cluster</h3>
-<p>Apply the generated file to the <strong>managed</strong> cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/managed/cluster&gt;
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>sveltoscluster_registration.yaml
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>namespace/projectsveltos<span class="w"> </span>created
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>serviceaccount/sveltos-applier-manager<span class="w"> </span>created
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>clusterrole.rbac.authorization.k8s.io/sveltos-applier-manager-role<span class="w"> </span>created
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>clusterrolebinding.rbac.authorization.k8s.io/sveltos-applier-manager-rolebinding<span class="w"> </span>created
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>service/sveltos-applier-metrics-service<span class="w"> </span>created
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>deployment.apps/sveltos-applier-manager<span class="w"> </span>created
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>secret/pcluster01-sveltos-kubeconfig<span class="w"> </span>created
-</span></code></pre></div>
-<h3 id="restricting-sveltos-applier-to-specific-namespaces">Restricting sveltos-applier to Specific Namespaces</h3>
-<p>By default, the <code>sveltos-applier</code> is granted a <code>ClusterRole</code> and can manage resources in <strong>any</strong> namespace of the managed cluster. To restrict it, pass the <code>--watch-namespaces</code> flag to the <code>sveltosctl register cluster</code> command:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>register<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span>--namespace<span class="o">=</span>monitoring<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span>--cluster<span class="o">=</span>prod-cluster<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span>--pullmode<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span>--labels<span class="o">=</span><span class="nv">environment</span><span class="o">=</span>production,tier<span class="o">=</span>backend<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span>--watch-namespaces<span class="o">=</span>team-a,team-b<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span>&gt;<span class="w"> </span>sveltoscluster_registration.yaml
-</span></code></pre></div>
-<p>This sets the <code>agent.projectsveltos.io/watch-namespaces</code> annotation on the new <code>SveltosCluster</code>. It also adds the <code>--watch-namespaces</code> flag to the <code>sveltos-applier</code> manifest. For an already registered Sveltos cluster, add the annotation directly:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod-cluster</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="hll"><span class="w">    </span><span class="nt">agent.projectsveltos.io/watch-namespaces</span><span class="p">:</span><span class="w"> </span><span class="s">"team-a,team-b"</span>
-</span></span></code></pre></div>
-<p>Sveltos relays this into <code>sveltos-applier</code>'s <code>--watch-namespaces</code> flag every time it deploys or upgrades the agent in the managed cluster. With it set, <code>sveltos-applier</code> only creates namespaced resources in <code>team-a</code> or <code>team-b</code>, erroring out if asked to create one in any other namespace. Stale-resource cleanup also only searches <code>team-a</code> and <code>team-b</code> instead of cluster-wide. Cluster-scoped resources are unaffected. This is the same annotation used to <a href="../../getting_started/install/agentless_limited_rbac/#the-fix-namespace-scoped-watch-mode">restrict RBAC in agentless mode</a>.</p>
-<p>Neither the <code>--watch-namespaces</code> nor the annotation narrows the <code>ClusterRole</code> in the <code>sveltoscluster_registration.yaml</code> manifest; it still grants cluster-wide access to whatever resource kinds <code>sveltos-applier</code> supports. Knowing which resource types the <code>ClusterProfiles</code>/<code>Profiles</code> use in the <code>team-a</code>/<code>team-b</code> namespaces, make sure to narrow the <code>ClusterRole</code>'s <code>rules</code> before applying them.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>On every Sveltos upgrade, the <code>sveltos-applier</code> Deployment, <code>ClusterRole</code>, and <code>ClusterRoleBinding</code> are all regenerated from scratch, including the <code>ClusterRole</code>'s rules. Editing the <code>ClusterRole</code> in the applied YAML only holds until the next upgrade, which resets it back to the default, cluster-wide rules. To narrow the <code>ClusterRole</code> and keep it across upgrades, use <a href="../../getting_started/install/air_gapped_installation/#sveltos-applier-overrides">Sveltos Applier Overrides</a> instead.</p>
+<p>Actually restricting the watches requires a valid Sveltos Enterprise or Enterprise Plus license granting the <code>NamespaceScopedAgents</code> feature, the same one agentless mode needs. Without one, <code>--watch-namespaces</code> is ignored by sveltos-agent and its watches proceed cluster-wide, which will fail against a namespace-scoped credential. Contact <code>support@projectsveltos.io</code> to explore license options.</p>
 </div>
-<p><code>sveltos-applier</code> is only part of a Pull Mode managed cluster's Sveltos footprint. <code>sveltos-agent</code>, which evaluates Classifiers, HealthChecks, EventSources and Reloaders, and <code>drift-detection-manager</code>, which watches whatever a <code>ClusterProfile</code>/<code>Profile</code> with <code>syncMode: ContinuousWithDriftDetection</code> deploys, both run in the same cluster and default to their own cluster-wide <code>ClusterRole</code>s too — both also honor the same <code>--watch-namespaces</code> annotation. For a worked example narrowing sveltos-agent's <code>ClusterRole</code>, pairing the annotation with a <code>sveltosagent.projectsveltos.io/config-override-ref</code> patch and hand-created namespaced <code>Role</code>s, see <a href="../pull_mode_sveltos_agent_scoped_rbac/">Restricting sveltos-agent RBAC in Pull Mode</a>. <code>drift-detection-manager</code>'s <code>ClusterRole</code> is narrowed the same way, via <a href="../../getting_started/install/air_gapped_installation/#drift-detection-manager-overrides">Drift Detection Manager Overrides</a>.</p>
-<h3 id="validation">Validation</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;/path/to/kubeconfig/management/cluster&gt;
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>sveltoscluster<span class="w"> </span>-n<span class="w"> </span>monitoring
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>NAMESPACE<span class="w">   </span>NAME<span class="w">           </span>READY<span class="w">   </span>VERSION<span class="w">    </span>AGE
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>monitoring<span class="w">  </span>prod-cluster<span class="w">   </span><span class="nb">true</span><span class="w">    </span>v1.30.5<span class="w">    </span>9m15s
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Classifier does not yet generate a narrowed RBAC bundle for sveltos-agent in Pull Mode: it always ships the same cluster-wide <code>ClusterRole</code> shown below, the same as it does today for <code>sveltos-applier</code>. Steps 2 and 3 below are something you apply yourself, on top of what Sveltos generates, the same way you already do for <code>sveltos-applier</code>'s <code>ClusterRole</code> (see <a href="../../getting_started/install/air_gapped_installation/#sveltos-applier-overrides">Sveltos Applier Overrides</a>).</p>
+</div>
+<h2 id="worked-example">Worked Example</h2>
+<p>Example environment: a cluster registered in Pull Mode (<code>prod-cluster</code> in namespace <code>monitoring</code>, following <a href="../register_cluster_pull_mode/">Register Cluster Pull Mode</a>), with Classifiers/HealthChecks/EventSources/Reloaders that only ever target <code>Deployments</code>, <code>ConfigMaps</code> and <code>Secrets</code> in namespace <code>team-a</code>.</p>
+<h3 id="1-restrict-the-watch-to-team-a">1. Restrict the watch to <code>team-a</code></h3>
+<p>Already covered in <a href="../register_cluster_pull_mode/#restricting-sveltos-applier-to-specific-namespaces">Restricting sveltos-applier to Specific Namespaces</a>: add (or reuse) the annotation on the <code>SveltosCluster</code>.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod-cluster</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="hll"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span></span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">agent.projectsveltos.io/watch-namespaces</span><span class="p">:</span><span class="w"> </span><span class="s">"team-a"</span>
 </span></code></pre></div>
-<h3 id="automatic-token-renewal">Automatic Token Renewal</h3>
-<p>By default, the credential registered above is long-lived and does not renew itself. To have Sveltos renew it automatically instead, register with <code>--token</code>. See <a href="../token-renewal/#pull-mode">Automatic Token Renewal: Pull Mode</a>.</p>
+<p>This is the same annotation, and it's enough by itself to also scope sveltos-agent's watches; no separate annotation is needed for it.</p>
+<h3 id="2-narrow-sveltos-agents-clusterrole">2. Narrow sveltos-agent's ClusterRole</h3>
+<p>By default, sveltos-agent's <code>ClusterRole</code> (<code>sveltos-agent-manager-role</code>, <a href="https://raw.githubusercontent.com/projectsveltos/classifier/refs/heads/main/pkg/agent/sveltos-agent.yaml">as classifier applies it</a>) includes this rule, which is what lets it evaluate arbitrary <code>resourceSelectors</code> cluster-wide:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"*"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"*"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"get"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"impersonate"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"list"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"watch"</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<p>Create a config-override ConfigMap that removes it, referenced via the <code>sveltosagent.projectsveltos.io/config-override-ref</code> annotation:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SveltosCluster</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod-cluster</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="hll"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span></span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">sveltosagent.projectsveltos.io/config-override-ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default/sveltos-agent-rbac-override</span>
+</span></code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-rbac-override</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">clusterrole-patch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="no">patch: |-</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="no">- op: remove</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">          </span><span class="no">path: /rules/1</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="no">target:</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="no">kind: ClusterRole</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="no">name: sveltos-agent-manager-role</span>
+</span></code></pre></div>
+<p>Check the <code>ClusterRole</code> sveltos-agent is actually running with before applying this: the exact rule index depends on the release. <code>classifierreports</code>, <code>eventreports</code>, <code>healthcheckreports</code> and <code>reloaderreports</code> already share one rule with <code>create</code>/<code>delete</code>/<code>get</code>/<code>list</code>/<code>patch</code>/<code>update</code>/<code>watch</code>, so removing the wildcard rule alone doesn't take <code>watch</code> away from any of them.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a <code>getPatchesFromConfigMap</code>-applied patch ever needs more than one op against the same object (for example, removing a rule <em>and</em> separately adding a verb elsewhere), put every op for that object in one <code>patch:</code> document, not one ConfigMap key per op. <code>getPatchesFromConfigMap</code> iterates a ConfigMap's keys in Go map order, which isn't deterministic, so index-based ops split across separate keys could apply in either order across reconciles. One key applies its ops as a single ordered <a href="https://www.rfc-editor.org/rfc/rfc6902">RFC6902</a> sequence instead.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Unlike the example in <a href="../../getting_started/install/air_gapped_installation/#sveltos-agent-overrides">Sveltos Agent Overrides</a>, don't <code>remove path: /rules</code> wholesale here: that also removes sveltos-agent's ability to create/update its own report CRs (<code>classifierreports</code>, <code>eventreports</code>, <code>healthcheckreports</code>, <code>reloaderreports</code>) and to <code>impersonate</code> tenant-admin ServiceAccounts, both unrelated to <code>--watch-namespaces</code> and needed regardless (see the breakdown below).</p>
+</div>
+<h3 id="3-grant-back-whats-actually-needed-per-namespace">3. Grant back what's actually needed, per namespace</h3>
+<p>sveltos-agent's remaining permissions fall into three groups.</p>
+<p><strong>Stays cluster-scoped, unaffected by <code>--watch-namespaces</code></strong>, already granted by the narrowed <code>ClusterRole</code>, nothing to add:</p>
+<ul>
+<li><code>lib.projectsveltos.io</code>: <code>classifiers</code>, <code>healthchecks</code>, <code>eventsources</code>, <code>reloaders</code> (+ <code>/finalizers</code>), <code>debuggingconfigurations</code>, these CRs are themselves cluster-scoped.</li>
+<li><code>authentication.k8s.io/tokenreviews</code>, <code>authorization.k8s.io/subjectaccessreviews</code>, used for sveltos-agent's own <code>SelfSubjectRulesReview</code> pre-check.</li>
+</ul>
+<p><strong>Needs a <code>Role</code> in sveltos-agent's own namespace (<code>projectsveltos</code>)</strong>, not part of <code>--watch-namespaces</code>, it's where sveltos-agent itself runs and writes reports:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Role</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reports</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"lib.projectsveltos.io"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classifierreports</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eventreports</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">healthcheckreports</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reloaderreports</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classifierreports/status</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eventreports/status</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">healthcheckreports/status</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reloaderreports/status</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"create"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"delete"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"get"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"list"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"patch"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"update"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"watch"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">""</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"serviceaccounts"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"impersonate"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"apps"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"deployments"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"list"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="nn">---</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoleBinding</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reports</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Role</span>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reports</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-manager</span>
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>apps</code>/<code>deployments</code> <code>list</code> rule above is unrelated to any Classifier/HealthCheck/EventSource/Reloader: sveltos-agent lists Deployments in its own namespace at startup to detect whether <code>sveltos-applier</code> (deployed there too) is present, which is how it tells Pull Mode apart from plain push mode. It's namespace-scoped to <code>projectsveltos</code> already, <code>list</code> is the only verb it needs, but it still has to be granted explicitly once the wildcard rule is gone.</p>
+</div>
+<p><strong>Needs a <code>Role</code> in each namespace listed in <code>--watch-namespaces</code></strong>, the resource kinds your Classifiers/HealthChecks/EventSources/Reloaders for this cluster actually target; here, <code>Deployments</code>, <code>ConfigMaps</code> and <code>Secrets</code> in <code>team-a</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Role</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reader</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team-a</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"apps"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"deployments"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"get"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"list"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"watch"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">""</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"configmaps"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"secrets"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"get"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"list"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"watch"</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nn">---</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoleBinding</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reader</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team-a</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Role</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-scoped-reader</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-agent-manager</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">projectsveltos</span>
+</span></code></pre></div>
+<p>If a Reloader targets a <code>Deployment</code>/<code>StatefulSet</code>/<code>DaemonSet</code> by name in one of these namespaces, sveltos-agent reads it individually rather than listing/watching it, so <code>get</code> alone would be enough for that specific kind if you'd rather not grant <code>list</code>/<code>watch</code> on it too. In practice it's simplest to grant all three together, as above.</p>
+<h3 id="4-verify">4. Verify</h3>
+<p>Bump sveltos-agent's log verbosity via the same override ConfigMap (a <code>deployment-patch</code> key targeting the <code>Deployment</code>'s <code>--v</code> arg can sit next to <code>clusterrole-patch</code> above, see <a href="../../getting_started/install/air_gapped_installation/#sveltos-agent-overrides">Sveltos Agent Overrides</a> for that patch shape), then check its logs for <code>forbidden</code> after a Classifier/HealthCheck/EventSource/Reloader reconciles:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>deployment/sveltos-agent-manager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>forbidden
+</span></code></pre></div>
+<p>A cluster-wide <code>List</code>/<code>Watch</code> still reaching past <code>team-a</code> shows up here immediately, as <code>&lt;resource&gt; is forbidden ... at the cluster scope</code>, meaning something is still being requested cluster-wide outside the namespaced <code>Role</code>s above, most often because a <code>resourceSelector</code> or Reloader target names a namespace you haven't also granted a <code>Role</code> in.</p>
+<p>Once the logs are clean, a Report for a resource in <code>team-a</code> populates normally, and one whose <code>resourceSelector</code> would otherwise match cluster-wide comes back with an empty match set for anything outside <code>team-a</code>, not an error: namespaces outside <code>--watch-namespaces</code> are never queried at all, so there's nothing there to be denied.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>Continue with <a href="../register_cluster_pull_mode/">Registration Pull Mode</a> validation, or apply the same narrowing to <code>sveltos-applier</code>'s own <code>ClusterRole</code> via <a href="../../getting_started/install/air_gapped_installation/#sveltos-applier-overrides">Sveltos Applier Overrides</a>.</p>
 
 
   <nav class="md-tags" >
@@ -5035,13 +4906,6 @@
       
       
         <span class="md-tag">add-ons</span>
-      
-    
-      
-      
-      
-      
-        <span class="md-tag">helm</span>
       
     
       
@@ -5087,44 +4951,6 @@
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href="../register-cluster/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Registration">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                Registration
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../workload_identity/" class="md-footer__link md-footer__link--next" aria-label="Next: Workload Identity Registration">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Workload Identity Registration
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
