@@ -365,6 +365,44 @@ metadata:
 
 This patch is re-applied each time `sveltos-applier` is redeployed. Unlike editing the `ClusterRole` directly, it stays intact across future Sveltos upgrades. Pair it with the [`agent.projectsveltos.io/watch-namespaces`](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces) annotation to also restrict the namespaces where `sveltos-applier` can manage resources.
 
+### Sharing Overrides Across Multiple Clusters
+
+The `config-override-ref` annotation is just a pointer, so any number of clusters can reference the same ConfigMap. This is useful when clusters group naturally by some shared trait, most commonly the cloud provider they run on: every AKS cluster needs the same [Azure Workload Identity](../../register/workload_identity.md) pod label, every EKS cluster needs the same AWS IRSA annotation, and so on. Rather than creating one override per cluster, create one override ConfigMap per group and point every cluster in that group at it.
+
+For example, to inject Azure Workload Identity into every `sveltos-agent` running on an AKS cluster:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-sveltos-agent-patch
+  namespace: projectsveltos
+data:
+  azure-workload-identity: |-
+    patch: |
+      - op: add
+        path: /spec/template/metadata/labels/azure.workload.identity~1use
+        value: "true"
+    target:
+      group: apps
+      kind: Deployment
+      labelSelector: feature=sveltos-agent
+```
+
+and a matching patch for `drift-detection-manager` (`labelSelector: feature=drift-detection`). Every AKS `SveltosCluster` (or CAPI `Cluster`) then gets:
+
+```yaml
+metadata:
+  annotations:
+    sveltosagent.projectsveltos.io/config-override-ref: projectsveltos/azure-sveltos-agent-patch
+    driftdetection.projectsveltos.io/config-override-ref: projectsveltos/azure-drift-detection-patch
+```
+
+EKS clusters would point at their own `eks-sveltos-agent-patch` / `eks-drift-detection-patch` pair instead, giving one ConfigMap pair per provider rather than per cluster.
+
+!!! warning
+    A cluster with a `config-override-ref` annotation is patched **only** using that ConfigMap; it never falls back to the global `agentPatchConfigMap` / `driftDetectionManagerPatchConfigMap` set via Helm. So each provider-bucket ConfigMap must include everything you'd otherwise want applied to that cluster, not just the provider-specific patch: this is a replace, not a merge.
+
 ## Next Steps
 
 Continue with the **sveltoctl** command-line interface (CLI) definition and installation [here](../sveltosctl/sveltosctl.md).
