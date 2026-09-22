@@ -4924,6 +4924,10 @@
 <li><code>mcp-server</code></li>
 <li><code>drift-detection-manager</code> and <code>sveltos-agent-manager</code>, but only when Sveltos runs in agentless mode (<code>agent.managementCluster: true</code> in the Helm chart)</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Workload identity for the per-cluster agents themselves</p>
+<p><code>drift-detection-manager</code> and <code>sveltos-agent-manager</code> are not installed by the Helm chart: Sveltos creates one instance of each per managed cluster. Each instance lives in the management cluster (agentless mode) or in the managed cluster itself (the default). In agentless mode, that instance needs to reach the managed cluster it was created for, which is why it's in the ServiceAccount list above. When one of these per-cluster instances needs a cloud workload identity of its own, for example an <code>azure.workload.identity/use: "true"</code> pod label to pull images from a private registry, patch its Deployment directly instead: see <a href="../../getting_started/install/air_gapped_installation/#sharing-overrides-across-multiple-clusters">Sharing Overrides Across Multiple Clusters</a>.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Preferred: set the annotation once via Helm</p>
 <p>If Sveltos is installed with the <code>projectsveltos</code> Helm chart, set <code>global.serviceAccountAnnotations</code> instead of annotating each ServiceAccount by hand. The value is merged into every ServiceAccount listed above, and a component-specific <code>&lt;component&gt;.serviceAccount.annotations</code> still takes precedence on key collisions:</p>
