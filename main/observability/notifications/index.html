@@ -4936,6 +4936,7 @@
 </li>
 </ul>
 <p>The <code>Spec.evaluateHealth</code> field must contain a Lua script with a function named <strong><code>evaluate()</code></strong>.</p>
+<p>The <a href="https://github.com/projectsveltos/healthcheck-manager/tree/main/examples/healthchecks"><code>healthcheck-manager/examples/healthchecks</code></a> directory collects ready-to-apply <code>HealthCheck</code> definitions for well-known CRDs (Velero <code>Backup</code>, Kyverno <code>PolicyReport</code>, cert-manager <code>Certificate</code>, <code>Job</code>, <code>StatefulSet</code> rollout, CloudNativePG <code>Cluster</code>, Contour <code>HTTPProxy</code>, Knative <code>Service</code>). Each one is covered by a unit test, so the scripts are exactly what's tested, not a copy that can drift out of sync.</p>
 <p><strong>Input Access:</strong>
 The function accesses all Kubernetes resources selected by <code>resourceSelectors</code> using the global Lua variable: <strong><code>resources</code></strong>.</p>
 <p><strong>Required Output:</strong>
