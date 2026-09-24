@@ -73,6 +73,8 @@ The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1b
 
 The `Spec.evaluateHealth` field must contain a Lua script with a function named **`evaluate()`**.
 
+The [`healthcheck-manager/examples/healthchecks`](https://github.com/projectsveltos/healthcheck-manager/tree/main/examples/healthchecks) directory collects ready-to-apply `HealthCheck` definitions for well-known CRDs (Velero `Backup`, Kyverno `PolicyReport`, cert-manager `Certificate`, `Job`, `StatefulSet` rollout, CloudNativePG `Cluster`, Contour `HTTPProxy`, Knative `Service`). Each one is covered by a unit test, so the scripts are exactly what's tested, not a copy that can drift out of sync.
+
 **Input Access:**
 The function accesses all Kubernetes resources selected by `resourceSelectors` using the global Lua variable: **`resources`**.
 
