@@ -70,6 +70,9 @@ The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1b
 * **`evaluateHealth`**
     * **Purpose:** Custom Health Evaluation
     * **Details:** A **mandatory** Lua script that performs the core health check logic on all the final, filtered resources.
+* **`flapping.consecutiveEvaluations`**
+    * **Purpose:** Flapping mitigation (Optional)
+    * **Details:** The number of consecutive evaluations a resource must be found in the same non-Healthy status before it is reported. Omit `flapping` entirely to report every non-Healthy resource immediately, exactly as before this field existed. See [Example: Filtering Out Flapping Resources](#example-filtering-out-flapping-resources) below.
 
 The `Spec.evaluateHealth` field must contain a Lua script with a function named **`evaluate()`**.
 
@@ -181,6 +184,65 @@ The below `ClusterHealthCheck` resources, will send a Webex message as notificat
     ```
 
 [^1]: Credit for this example to https://blog.cubieserver.de/2022/argocd-health-checks-for-opa-rules/
+
+## Example: Filtering Out Flapping Resources
+
+By default, a `HealthCheck` re-evaluates a resource only when Sveltos detects a change to it. This is efficient, but it also means a resource that flips briefly into a bad state (a Pod restarting once, a Job failing and immediately retrying) can trigger a `Degraded` report for something that was never really a problem.
+
+The `flapping` field tells Sveltos to hold a resource in a pending state until it has been observed in the same non-Healthy status for a set number of consecutive evaluations, instead of reporting it right away. Recovery is always immediate: as soon as a resource is evaluated `Healthy` again, any pending count for it is cleared.
+
+While a resource has not yet crossed the threshold, Sveltos keeps re-evaluating that `HealthCheck`, even without a new change on the resource, so the pending count keeps advancing until it either crosses the threshold or the resource recovers. In this scenario, `HealthCheck` instances are re-evaluated roughly every 10 seconds on average.
+
+Take the classic `CrashLoopBackOff` Pod: without `flapping`, a script has to hand-roll its own debounce logic, parsing `lastTransitionTime` off a condition and comparing it to `os.time()`. With `flapping`, the script only needs to report the instantaneous truth and Sveltos takes care of the rest:
+
+!!! example "Example - HealthCheck Definition with Flapping"
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: HealthCheck
+    metadata:
+      name: pod-crashloopbackoff
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: v1
+        kind: Pod
+      flapping:
+        consecutiveEvaluations: 6
+      evaluateHealth: |
+        function evaluate()
+          local statuses = {}
+
+          for _, pod in ipairs(resources) do
+            local hasError = false
+
+            if pod.status and pod.status.containerStatuses then
+              for _, container in ipairs(pod.status.containerStatuses) do
+                if container.state and container.state.waiting then
+                  local reason = container.state.waiting.reason
+                  if reason == "CrashLoopBackOff" or reason == "BackOff" then
+                    hasError = true
+                  end
+                end
+              end
+            end
+
+            if hasError then
+              table.insert(statuses, {resource = pod, status = "Degraded",
+                message = "Container is in CrashLoopBackOff"})
+            end
+          end
+
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses
+          end
+          return hs
+        end
+    ```
+
+With `HealthCheck` instances re-evaluated roughly every 10 seconds on average, `consecutiveEvaluations: 6` means a Pod has to be observed crash-looping for about 60 seconds before it is reported `Degraded`. A single restart, or two restarts a few seconds apart, never reaches the threshold and is never reported.
 
 ## Notifications and multi-tenancy
 
