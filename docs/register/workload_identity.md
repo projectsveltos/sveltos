@@ -13,6 +13,7 @@ tags:
     - OIDC
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 ## Workload Identity Registration
@@ -554,6 +555,97 @@ The guides below walk through the full cloud-side setup required before running 
 
     *`... is forbidden: User "sveltos" cannot get resource ...`*: the token is being
     accepted, but no RBAC grants that identity anything. Revisit Step 3.
+
+
+??? example "OIDC — Keycloak"
+
+    The setup is very similar to the one with DEX. We will provide instruction on how to allow Sveltos to register Kubernetes clusters using Keycloak as a Workload Identity. The full guide is available [here](https://blog.grosdouli.dev/blog/sveltos-managed-cluster-registration-oidc-keycloak).
+
+    **Step 1 — Realm, Client ID and Configuration Mappers**
+
+    **Realm and Client ID**
+
+    1. Create a new Realm with name `sveltos-realm`
+    2. Create a Client ID `test-env-auth`
+    3. Under **Capability config**: **Enable** `Client authentication` and **enable** `Service account roles` in the **Authentication flow** section
+    4. Save the configuration
+    
+
+    **Mapper Configuration -> Hardcoded claim**
+
+    1. Set Name to `test-env-user`
+    2. Set Token Claim Name to `test-env-user`
+    3. Set Claim value to `sveltos`
+    4. Set Claim JSON Type to `string`
+    5. **Enable** `Add to access token`
+    6. Save the configuration
+
+    **Mapper Configuration -> Audience**
+
+    1. Set Name to `test-env-audience`
+    2. Set **Included Custom Audience** to `test-env-auth`
+    3. **Disable** `Add to ID token`
+    4. **Enable** `Add to access token`
+    5. Save the configuration
+
+    **Step 2 — Update Managed Cluster Kubernetes API Server Details**
+
+    Add these flags to the managed cluster's `kube-apiserver`. The exact mechanism
+    depends on how the cluster is provisioned: kubeadm's `ClusterConfiguration`, a
+    Cluster API `KubeadmControlPlane`/`ClusterClass` patch, or your distribution's
+    equivalent.
+
+    ```yaml
+    --oidc-issuer-url=https://<Your Keycloak Domain>/realms/sveltos-realm
+    --oidc-client-id=test-env-auth
+    --oidc-username-claim=test-env-user
+    --oidc-username-prefix=-
+    --oidc-ca-file=/etc/kubernetes/pki/keycloak-ca.crt # Only if Keycloak's cert is not trusted
+    ```
+
+    The `oidc-username-claim=test-env-user` value resolves to **sveltos**. Remember, this comes from the Hardcoded claim created in a previous step. The `oidc-username-prefix=-` field means no prefix is added. The Kubernetes username is sveltos.
+
+    **Step 3 — Grant Indentity the Permissions Sveltos Requires**
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: sveltos-oidc-workload-identity
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: User
+        name: sveltos
+        apiGroup: rbac.authorization.k8s.io
+    ```
+
+    **Step 4 — Register the cluster**
+
+    See the OIDC tab under [Programmatic Registration](#programmatic-registration) for
+    the `SveltosCluster` and Secrets to apply. The cluster can be registered in a different namespace instead of `projectsveltos`. Choose the namespace of your preference.
+
+    **Step 5 — Verification**
+
+    ```bash
+    $ kubectl get sveltoscluster <name> -n <namespace>
+    ```
+
+    `READY` should become `true` within a few seconds.
+
+    **Troubleshooting**
+
+    *`x509: certificate signed by unknown authority` in sc-manager/addon-controller logs*:
+    the token exchange with Dex's own token endpoint is failing TLS verification. This is
+    a different trust boundary from Step 2: set `oidc.caSecretRef` in the `SveltosCluster`
+    to a Secret containing Dex's own CA (see [Programmatic Registration](#programmatic-registration)).
+
+    *`... is forbidden: User "sveltos" cannot get resource ...`*: the token is being
+    accepted, but no RBAC grants that identity anything. Revisit Step 3.
+
+
 
 ## Programmatic Registration
 
