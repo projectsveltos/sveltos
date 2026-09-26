@@ -559,13 +559,13 @@ The guides below walk through the full cloud-side setup required before running 
 
 ??? example "OIDC — Keycloak"
 
-    The setup is very similar to the one with DEX. We will provide instruction on how to allow Sveltos to register Kubernetes clusters using Keycloak as a Workload Identity. The full guide is available [here](https://blog.grosdouli.dev/blog/sveltos-managed-cluster-registration-oidc-keycloak).
+    The setup is very similar to the one with DEX. We will provide instructions on how to allow Sveltos to register Kubernetes clusters using Keycloak as a Workload Identity. The full guide is available [here](https://blog.grosdouli.dev/blog/sveltos-managed-cluster-registration-oidc-keycloak).
 
     **Step 1 — Realm, Client ID and Configuration Mappers**
 
     **Realm and Client ID**
 
-    1. Create a new Realm with name `sveltos-realm`
+    1. Create a new Realm with the name `sveltos-realm`
     2. Create a Client ID `test-env-auth`
     3. Under **Capability config**: **Enable** `Client authentication` and **enable** `Service account roles` in the **Authentication flow** section
     4. Save the configuration
@@ -638,7 +638,7 @@ The guides below walk through the full cloud-side setup required before running 
     **Troubleshooting**
 
     *`x509: certificate signed by unknown authority` in sc-manager/addon-controller logs*:
-    the token exchange with Dex's own token endpoint is failing TLS verification. This is
+    The token exchange with Dex's own token endpoint is failing TLS verification. This is
     a different trust boundary from Step 2: set `oidc.caSecretRef` in the `SveltosCluster`
     to a Secret containing Dex's own CA (see [Programmatic Registration](#programmatic-registration)).
 
