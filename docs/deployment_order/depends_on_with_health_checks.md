@@ -10,7 +10,7 @@ authors:
     - Gianluca Mardente
 ---
 
-Deploying resources and having them ready are two different things. Whether Sveltos deploys a Helm chart, a Kustomize overlay or a set of plain YAML manifests, Sveltos is done as soon as the resources are created in the managed cluster. What they need to actually work may still be starting: for an add-on like __cert-manager__, its pods and webhooks. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
+Deploying resources and having them ready are two different things. Whether Sveltos deploys a Helm chart, a Kustomize overlay or a set of plain YAML manifests, the deployment is considered done as soon as the resources are created in the managed cluster. What they need to actually work may still be starting: for an add-on like __cert-manager__, its pods and webhooks. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
 
 Sveltos solves this with two fields:
 
