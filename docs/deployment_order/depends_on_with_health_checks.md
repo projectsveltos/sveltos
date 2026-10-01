@@ -10,12 +10,12 @@ authors:
     - Gianluca Mardente
 ---
 
-Deploying an add-on and having it ready are two different things. Helm returns as soon as the resources are created, but the pods and webhooks of an add-on like __cert-manager__ may still be starting. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
+Deploying resources and having them ready are two different things. Whether Sveltos deploys a Helm chart, a Kustomize overlay or a set of plain YAML manifests, Sveltos is done as soon as the resources are created in the managed cluster. What they need to actually work may still be starting: for an add-on like __cert-manager__, its pods and webhooks. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
 
 Sveltos solves this with two fields:
 
 1. `dependsOn` makes a ClusterProfile wait for another ClusterProfile. Applications that need cert-manager can list a central cert-manager ClusterProfile in `dependsOn`, so it is deployed first.
-1. `validateHealths` defines what "ready" means for a ClusterProfile. Sveltos sets the ClusterProfile as `provisioned`, and lets the ones depending on it proceed, only once all its health checks pass.
+1. `validateHealths` defines what "ready" means for a ClusterProfile. Sveltos sets the ClusterProfile as `provisioned`, and lets the ones depending on it proceed, only once all its health checks pass. Each check sets `featureID` to say what it follows: `Helm` for Helm charts, `Kustomize` for Kustomize overlays, or `Resources` for plain YAML manifests.
 
 There are four ways to define a health check:
 
