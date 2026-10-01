@@ -10,11 +10,29 @@ authors:
     - Gianluca Mardente
 ---
 
-Managing multiple applications across different teams, each of them requiring the presence of the __cert-manager__, consider utilizing a ClusterProfile to deploy cert-manager **centrally**.
+Deploying an add-on and having it ready are two different things. Helm returns as soon as the resources are created, but the pods and webhooks of an add-on like __cert-manager__ may still be starting. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
 
-This approach enables other ClusterProfiles, responsible for deploying applications that depend on cert-manager, to leverage the `dependsOn` field to ensure the cert-manager is present prior to application deployment.
+Sveltos solves this with two fields:
 
-To guarantee that cert-manager is not only deployed but also functional, employ the __validateHealths__ flag. The below ClusterProfile will deploy cert-manager in any cluster matching the label selector `env=fv` and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before setting the ClusterProfile as `provisioned`.
+1. `dependsOn` makes a ClusterProfile wait for another ClusterProfile. Applications that need cert-manager can list a central cert-manager ClusterProfile in `dependsOn`, so it is deployed first.
+1. `validateHealths` defines what "ready" means for a ClusterProfile. Sveltos sets the ClusterProfile as `provisioned`, and lets the ones depending on it proceed, only once all its health checks pass.
+
+There are four ways to define a health check:
+
+| Check | What it evaluates | Use it when |
+|-------|-------------------|-------------|
+| [Lua](#lua-health-validation) | A resource in the managed cluster | You need full scripting to decide if a resource is healthy |
+| [CEL](#cel-health-validation) | A resource in the managed cluster | A short expression is enough |
+| [Metrics](#metric-based-health-validation) | A Prometheus query | Health depends on live signals like an error rate |
+| [Job](#job-based-health-validation) (Enterprise) | The outcome of a Kubernetes Job | You need an active probe like a smoke test |
+
+The rest of this page goes through each check, using cert-manager as the running example, and ends with a ClusterProfile that depends on it.
+
+## Lua health validation
+
+With Lua, Sveltos evaluates the `evaluate()` function against each resource selected by the `validateHealths` entry (available as `obj`), and the function returns whether the resource is healthy and a message explaining why not.
+
+The below ClusterProfile will deploy cert-manager in any cluster matching the label selector `env=fv` and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before setting the ClusterProfile as `provisioned`.
 
 !!! example ""
     ```yaml
@@ -55,7 +73,7 @@ To guarantee that cert-manager is not only deployed but also functional, employ 
           end
     ```
 
-#### Common Expression Language (CEL) for Health Validation
+## CEL health validation
 
 Alternatively, you can use Common Expression Language ([CEL](https://cel.dev)), which offers a more concise way to define the same health rule. The example below uses a CEL expression to check if the _availableReplicas_ are equal to the _requested replicas_. The result is the same as the Lua script, providing a healthy and succinct way to validate the state of your deployments.
 
@@ -183,9 +201,9 @@ validateHealths:
 
 `jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same `validateHealths` entry — a single entry runs either an active Job probe or a Lua/CEL evaluation, not both. To combine a Job probe with a resource or metric check, add separate entries under `validateHealths`, the same way described above for combining metrics with resource checks.
 
-### Example: Nginx and Cert Manager
+## Putting it together: Nginx and cert-manager
 
-In the below example, the ClusterPofile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.
+In the below example, the ClusterProfile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.
 
 !!! example ""
     ```yaml
