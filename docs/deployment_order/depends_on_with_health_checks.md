@@ -147,6 +147,8 @@ The Lua, CEL, and metric checks above all evaluate state that already exists in 
 
 Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest. Sveltos deploys it into the managed cluster, waits for it to reach `Complete` or `Failed` (up to `jobCheck.timeout`, which defaults to 5 minutes when unset), then deletes it. On failure, the check's message comes from the Job's own status conditions.
 
+![Job-based health check](../assets/job_check.gif)
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
