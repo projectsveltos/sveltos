@@ -51,7 +51,7 @@ spec:
                   This can be useful for more sophisticated tasks, such as identifying resources
                   that are related to each other or that have similar properties.
                   The Lua function must return a struct with:
-                  - "resources" field: slice of matching resorces;
+                  - "resources" field: slice of matching resources;
                   - "message" field: (optional) message.
                 type: string
               collectResources:
@@ -140,6 +140,15 @@ spec:
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
+                    includeDeletingResources:
+                      default: false
+                      description: |-
+                        IncludeDeletingResources indicates whether resources with a non-zero
+                        metadata.deletionTimestamp should still be considered for a match.
+                        By default, such resources are excluded. Set this to true to react
+                        while a resource is being deleted but still exists, for instance to
+                        run cleanup logic before it is fully removed.
+                      type: boolean
                     kind:
                       description: Kind of the resource deployed in the Cluster.
                       minLength: 1

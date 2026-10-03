@@ -136,6 +136,91 @@ spec:
           status:
             description: HealthCheckReportStatus defines the observed state of HealthCheckReport
             properties:
+              agentFailureMessage:
+                description: |-
+                  AgentFailureMessage reports the error sveltos-agent hit while evaluating the HealthCheck
+                  this HealthCheckReport is for, if any. Set by sveltos-agent itself, in the managed cluster,
+                  when it cannot refresh Spec.ResourceStatuses. Spec is left exactly as it was from the last
+                  successful evaluation while this is set. Cleared on the next successful evaluation.
+                type: string
+              pendingResourceStatuses:
+                description: |-
+                  PendingResourceStatuses tracks resources currently observed in a non-Healthy status that
+                  have not yet crossed HealthCheck.Spec.Flapping.ConsecutiveEvaluations. Once a resource's
+                  count reaches the threshold it moves to Spec.ResourceStatuses and is removed here.
+                  Agent-local bookkeeping only: not propagated to the management-cluster copy of this report.
+                items:
+                  description: |-
+                    PendingResourceStatus tracks a resource currently observed in a non-Healthy status that
+                    has not yet crossed HealthCheck.Spec.Flapping.ConsecutiveEvaluations.
+                  properties:
+                    consecutiveCount:
+                      description: |-
+                        ConsecutiveCount is the number of consecutive evaluations HealthStatus
+                        has been observed for this object
+                      format: int32
+                      type: integer
+                    healthStatus:
+                      description: HealthStatus is the status last observed for the
+                        object
+                      enum:
+                      - Healthy
+                      - Progressing
+                      - Degraded
+                      - Suspended
+                      type: string
+                    message:
+                      description: Message is an extra message for human consumption
+                      type: string
+                    objectRef:
+                      description: ObjectRef for which status is reported
+                      properties:
+                        apiVersion:
+                          description: API version of the referent.
+                          type: string
+                        fieldPath:
+                          description: |-
+                            If referring to a piece of an object instead of an entire object, this string
+                            should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                            For example, if the object reference is to a container within a pod, this would take on a value like:
+                            "spec.containers{name}" (where "name" refers to the name of the container that triggered
+                            the event) or if no container name is specified "spec.containers[2]" (container with
+                            index 2 in this pod). This syntax is chosen only to have some well-defined way of
+                            referencing a part of an object.
+                          type: string
+                        kind:
+                          description: |-
+                            Kind of the referent.
+                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                          type: string
+                        name:
+                          description: |-
+                            Name of the referent.
+                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          type: string
+                        namespace:
+                          description: |-
+                            Namespace of the referent.
+                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+                          type: string
+                        resourceVersion:
+                          description: |-
+                            Specific resourceVersion to which this reference is made, if any.
+                            More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+                          type: string
+                        uid:
+                          description: |-
+                            UID of the referent.
+                            More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  required:
+                  - consecutiveCount
+                  - healthStatus
+                  - objectRef
+                  type: object
+                type: array
               phase:
                 description: Phase represents the current phase of report.
                 enum:
