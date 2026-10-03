@@ -82,6 +82,16 @@ spec:
                 - from
                 - to
                 type: object
+              cleanupGracePeriod:
+                description: |-
+                  CleanupGracePeriod delays removal of the SveltosCluster finalizer after
+                  deletion is requested, keeping the object present (with a non-zero
+                  deletionTimestamp) for this long before it is actually removed.
+                  This is useful when some cleanup needs to happen while the cluster is
+                  still considered registered, for instance running a job that depends
+                  on the SveltosCluster still existing.
+                  If not specified, the finalizer is removed immediately.
+                type: string
               consecutiveFailureThreshold:
                 default: 3
                 description: |-
@@ -171,6 +181,15 @@ spec:
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
+                          includeDeletingResources:
+                            default: false
+                            description: |-
+                              IncludeDeletingResources indicates whether resources with a non-zero
+                              metadata.deletionTimestamp should still be considered for a match.
+                              By default, such resources are excluded. Set this to true to react
+                              while a resource is being deleted but still exists, for instance to
+                              run cleanup logic before it is fully removed.
+                            type: boolean
                           kind:
                             description: Kind of the resource deployed in the Cluster.
                             minLength: 1
@@ -354,6 +373,15 @@ spec:
                           group:
                             description: Group of the resource deployed in the Cluster.
                             type: string
+                          includeDeletingResources:
+                            default: false
+                            description: |-
+                              IncludeDeletingResources indicates whether resources with a non-zero
+                              metadata.deletionTimestamp should still be considered for a match.
+                              By default, such resources are excluded. Set this to true to react
+                              while a resource is being deleted but still exists, for instance to
+                              run cleanup logic before it is fully removed.
+                            type: boolean
                           kind:
                             description: Kind of the resource deployed in the Cluster.
                             minLength: 1
@@ -476,14 +504,18 @@ spec:
                   saName:
                     description: |-
                       SAName is name of the ServiceAccount to renew the token for.
-                      If specified, ServiceAccount must exist in the managed cluster.
-                      If not specified, sveltos will try to deduce it from current kubeconfig
+                      For clusters in push mode, this ServiceAccount must exist in the managed cluster,
+                      and if not specified, sveltos will try to deduce it from the current kubeconfig.
+                      For clusters in pull mode, this ServiceAccount must exist in the management cluster
+                      (sveltosctl creates it there when registering the cluster).
                     type: string
                   saNamespace:
                     description: |-
                       SANamespace is the namespace of the ServiceAccount to renew the token for.
-                      If specified, ServiceAccount must exist in the managed cluster.
-                      If not specified, sveltos will try to deduce it from current kubeconfig
+                      For clusters in push mode, this ServiceAccount must exist in the managed cluster,
+                      and if not specified, sveltos will try to deduce it from the current kubeconfig.
+                      For clusters in pull mode, this ServiceAccount must exist in the management cluster
+                      (sveltosctl creates it there when registering the cluster).
                     type: string
                   tokenDuration:
                     description: |-

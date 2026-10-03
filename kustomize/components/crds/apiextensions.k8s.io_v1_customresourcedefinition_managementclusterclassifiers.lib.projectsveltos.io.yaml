@@ -118,6 +118,15 @@ spec:
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
+                    includeDeletingResources:
+                      default: false
+                      description: |-
+                        IncludeDeletingResources indicates whether resources with a non-zero
+                        metadata.deletionTimestamp should still be considered for a match.
+                        By default, such resources are excluded. Set this to true to react
+                        while a resource is being deleted but still exists, for instance to
+                        run cleanup logic before it is fully removed.
+                      type: boolean
                     kind:
                       description: Kind of the resource deployed in the Cluster.
                       minLength: 1

@@ -65,6 +65,23 @@ spec:
                   Set this to true if the Lua script evaluates each resource independently.
                   Set this to false if the Lua script needs to compare all selected resources
                 type: boolean
+              flapping:
+                description: |-
+                  Flapping, when set, delays reporting a resource in a non-Healthy status until the
+                  same status has been observed for ConsecutiveEvaluations consecutive evaluations.
+                  This filters out transient status changes. Recovery to Healthy is always immediate:
+                  a single Healthy evaluation clears any pending count for that resource.
+                properties:
+                  consecutiveEvaluations:
+                    default: 3
+                    description: |-
+                      ConsecutiveEvaluations is the number of consecutive evaluations a resource must be
+                      found in the same non-Healthy status before it is reported in
+                      HealthCheckReport.Spec.ResourceStatuses.
+                    format: int32
+                    minimum: 2
+                    type: integer
+                type: object
               resourceSelectors:
                 description: ResourceSelectors identifies what resources to select
                   to evaluate health
@@ -108,6 +125,15 @@ spec:
                     group:
                       description: Group of the resource deployed in the Cluster.
                       type: string
+                    includeDeletingResources:
+                      default: false
+                      description: |-
+                        IncludeDeletingResources indicates whether resources with a non-zero
+                        metadata.deletionTimestamp should still be considered for a match.
+                        By default, such resources are excluded. Set this to true to react
+                        while a resource is being deleted but still exists, for instance to
+                        run cleanup logic before it is fully removed.
+                      type: boolean
                     kind:
                       description: Kind of the resource deployed in the Cluster.
                       minLength: 1
