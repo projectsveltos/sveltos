@@ -4845,6 +4845,7 @@
 
 <p>In these examples, we will configure Sveltos to send a notification whenever all the add-ons and applications listed in the <code>ClusterProfile</code> are deployed to the clusters matching the cluster label selector set to <strong>env=fv</strong>.</p>
 <p>Once the defined conditions are met, a notification will be generated and send out.</p>
+<p>Every notification can also define a <code>policy</code> to reduce noise (notify only on state changes, rate limit, or wait for a failure to last before reporting it). See <a href=".././notifications/#notification-policy">Notification policy</a>.</p>
 <h2 id="slack">Slack</h2>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>

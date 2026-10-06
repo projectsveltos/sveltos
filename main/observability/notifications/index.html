@@ -4088,6 +4088,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#notification-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Notification policy
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#healthcheck-crd" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4119,6 +4130,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         Example: Filtering Out Flapping Resources
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-reducing-notification-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Example: Reducing Notification Volume
       </span>
     </span>
   </a>
@@ -4831,6 +4853,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#notification-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Notification policy
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#healthcheck-crd" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4862,6 +4895,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         Example: Filtering Out Flapping Resources
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-reducing-notification-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Example: Reducing Notification Volume
       </span>
     </span>
   </a>
@@ -4913,9 +4957,49 @@
 <p>The <code>livenessCheck</code> field is a list of <strong>cluster liveness checks</strong> to be evaluated.</p>
 <p>The supported types are:</p>
 <ol>
-<li><strong>Addons</strong>: Addons type instructs Sveltos to evaluate state of add-ond deployment in such a cluster;</li>
-<li><strong>HealthCheck</strong>: HealthCheck type allows to define a custom health check for any Kubernetes type.</li>
+<li><strong>Addons</strong>: tracks the <strong>deployment</strong> of the add-ons. It is satisfied when Sveltos has successfully deployed everything the matching ClusterProfiles/Profiles ask for;</li>
+<li><strong>HealthCheck</strong>: tracks the <strong>live state</strong> of resources in the managed clusters. It evaluates any Kubernetes resource, whether or not Sveltos deployed it, and keeps watching it.</li>
 </ol>
+<p>The two types answer different questions, and it is important to pick the right one.</p>
+<p>An <strong>Addons</strong> liveness check reflects the status of the ClusterSummary, and the ClusterSummary status changes only when Sveltos has something to do: a new cluster matches, a ClusterProfile changes, a referenced ConfigMap or Secret changes, or drift is detected and reconciled. Once everything is deployed, nothing changes in the ClusterSummary until one of those events happens. Sveltos does not keep checking whether the deployed workloads are actually running.</p>
+<p>A <strong>HealthCheck</strong> liveness check does not depend on what Sveltos deploys or when. It evaluates the resources in the managed cluster continuously, and a state change of those resources is reflected in the ClusterHealthCheck.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Sveltos deploys a Deployment on day 0. The ClusterSummary reports <code>Provisioned</code>, and the <strong>Addons</strong> liveness check passes. A week later the Pods start crash-looping because of an expired credential or a node problem. Nobody changed the ClusterProfile and the Deployment is not drifted, so the ClusterSummary stays <code>Provisioned</code> and the <strong>Addons</strong> liveness check keeps passing. Only a <strong>HealthCheck</strong> that evaluates those Pods (see <a href="#example-filtering-out-flapping-resources">Example: Filtering Out Flapping Resources</a>) detects the problem and triggers the notification.</p>
+</div>
+<p>In short:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Addons</th>
+<th>HealthCheck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Question answered</td>
+<td>Did Sveltos deploy what was asked?</td>
+<td>Are the resources healthy right now?</td>
+</tr>
+<tr>
+<td>Changes when</td>
+<td>Sveltos deploys, updates or removes something, or reconciles drift</td>
+<td>The state of the watched resources changes in the managed cluster</td>
+</tr>
+<tr>
+<td>Detects a Pod crashing a week after deployment</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Detects a resource not deployed by Sveltos</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Most production setups use both: <strong>Addons</strong> to know when a cluster is ready, <strong>HealthCheck</strong> to know it is still healthy afterwards.</p>
 <h3 id="notifications">Notifications</h3>
 <p>The notifications fields is a list of all <strong>notifications</strong> to be sent when the liveness check state changes.</p>
 <p>The supported types are:</p>
@@ -4928,6 +5012,47 @@
 <li><img src="../../../assets/smtp_logo.png" alt="SMTP" width="25" />  <a href=".././example_addon_notification/#smtp">SMTP</a></li>
 <li><img src="../../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> <a href=".././example_addon_notification/#kubernetes-event">Kubernetes events</a> (<strong>reason=ClusterHealthCheck</strong>)</li>
 </ol>
+<h3 id="notification-policy">Notification policy</h3>
+<p>By default, a notification is sent the first time a cluster is evaluated, every time the state of a liveness check flips, and every time the failure message changes while a liveness check is failing. Any change causes Sveltos to send the notification again to all the channels configured for that cluster.</p>
+<p>On a large fleet, or with a liveness check that flips often, this can become noisy. Each notification can define an optional <strong>policy</strong> that decides when that notification is delivered. Policies are evaluated per cluster and per notification, so the same ClusterHealthCheck can page a team immediately on one channel and send a calmer summary on another.</p>
+<ul>
+<li><strong><code>policy.onlyOnTransition</code></strong><ul>
+<li><strong>Purpose:</strong> Notify on state changes only (Optional)</li>
+<li><strong>Details:</strong> When <code>true</code>, a notification is sent only when a cluster moves from passing to failing, or from failing to passing. A change of the failure message while the cluster is still failing is not sent.</li>
+</ul>
+</li>
+<li><strong><code>policy.minInterval</code></strong><ul>
+<li><strong>Purpose:</strong> Rate limit (Optional)</li>
+<li><strong>Details:</strong> The minimum time between two deliveries of this notification for the same cluster. A notification held back by <code>minInterval</code> is not lost: once the interval has elapsed, Sveltos sends it, unless the cluster is back in the state that was last delivered.</li>
+</ul>
+</li>
+<li><strong><code>policy.failingFor</code></strong><ul>
+<li><strong>Purpose:</strong> Hold-back for transient failures (Optional)</li>
+<li><strong>Details:</strong> How long a cluster must have been failing before the failure is reported. If the cluster recovers within this time, nothing is sent: neither the failure nor the recovery.</li>
+</ul>
+</li>
+</ul>
+<p>Both <code>minInterval</code> and <code>failingFor</code> are durations, for example <code>30s</code>, <code>5m</code> or <code>1h</code>. The three fields can be combined.</p>
+<p>A few things worth knowing:</p>
+<ol>
+<li>A notification without a <code>policy</code> (or with an empty one) behaves exactly as described above. Existing ClusterHealthCheck instances are not affected.</li>
+<li>When a policy is set, a cluster that is healthy the first time it is evaluated is not notified. There is nothing to report until something fails.</li>
+<li><code>failingFor</code> is measured from the moment the oldest failing liveness check started failing. It only delays a failure being reported. A recovery is sent right away, but only if the failure it recovers from was reported before.</li>
+<li>If a delivery fails (for example, the Slack API is unreachable), Sveltos retries without waiting for <code>minInterval</code>.</li>
+<li>A notification with a policy is evaluated on its own. A change that makes another notification fire does not re-send this one.</li>
+<li>When a notification is being held back, Sveltos schedules a new evaluation for the moment the hold-back ends. There is no need for the cluster state to change again.</li>
+</ol>
+<p>Sveltos records what it last delivered in the ClusterHealthCheck status, for each cluster and for each notification, inside <code>notificationSummaries</code>:</p>
+<ul>
+<li><strong><code>lastSentTime</code></strong>: when the notification was last delivered;</li>
+<li><strong><code>lastSentFailing</code></strong>: whether the cluster was failing at that time;</li>
+<li><strong><code>lastSentMessageHash</code></strong>: a short hash identifying the failure message that was delivered.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>policy</code> field acts on the ClusterHealthCheck notifications, so on the state of a cluster as a whole. To avoid reporting a single resource that flips briefly, see the <code>flapping</code> field of the <a href="#healthcheck-crd">HealthCheck CRD</a>. The two can be used together: <code>flapping</code> filters noise out of a single HealthCheck, <code>policy</code> controls how often the resulting state is notified.</p>
+</div>
+<p>See <a href="#example-reducing-notification-volume">Example: Reducing Notification Volume</a> below.</p>
 <h3 id="healthcheck-crd">HealthCheck CRD</h3>
 <p>The <a href="https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go">HealthCheck</a> resource defines a custom health assessment by first selecting Kubernetes resources and then applying custom evaluation logic to determine their collective health.</p>
 <ul>
@@ -5124,44 +5249,97 @@ It must return an <strong>array of tables</strong> (structured instances), with 
 </span></code></pre></div>
 </div>
 <p>With <code>HealthCheck</code> instances re-evaluated roughly every 10 seconds on average, <code>consecutiveEvaluations: 6</code> means a Pod has to be observed crash-looping for about 60 seconds before it is reported <code>Degraded</code>. A single restart, or two restarts a few seconds apart, never reaches the threshold and is never reported.</p>
+<h2 id="example-reducing-notification-volume">Example: Reducing Notification Volume</h2>
+<p>In the following ClusterHealthCheck, the same liveness checks drive two notifications with different policies:</p>
+<ul>
+<li>the <code>slack-oncall</code> notification is sent only when a cluster has been failing for at least 5 minutes, and it is sent at most once every 30 minutes for a given cluster. It is not sent again when the failure message changes while the cluster is still failing;</li>
+<li>the <code>kubernetes-events</code> notification has no policy: every change is recorded as a Kubernetes event, as before.</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Example - ClusterHealthCheck with Notification Policies</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterHealthCheck</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">clusterSelector</span><span class="p">:</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">livenessChecks</span><span class="p">:</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">addons</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Addons</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pods</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">livenessSourceRef</span><span class="p">:</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod-crashloopbackoff</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span><span class="nt">notifications</span><span class="p">:</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-oncall</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Slack</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">    </span><span class="nt">notificationRef</span><span class="p">:</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">    </span><span class="nt">policy</span><span class="p">:</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">      </span><span class="nt">onlyOnTransition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">      </span><span class="nt">minInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30m</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">      </span><span class="nt">failingFor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes-events</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KubernetesEvent</span>
+</span></code></pre></div>
+</div>
+<p>With this configuration:</p>
+<ol>
+<li>A cluster that is healthy when first evaluated does not trigger a Slack message.</li>
+<li>A cluster that starts failing is reported on Slack only if it is still failing 5 minutes later. A failure that clears within 5 minutes produces no message at all.</li>
+<li>When the cluster recovers, Slack is notified, provided the failure was reported and at least 30 minutes have passed since the previous Slack message for that cluster. If not, the recovery is sent as soon as the 30 minutes have elapsed.</li>
+<li>If the cluster is still failing and the failure message changes (for example, a second Pod starts crash-looping), no new Slack message is sent because <code>onlyOnTransition</code> is set. Remove <code>onlyOnTransition</code> to be notified of these changes, still at most once every 30 minutes.</li>
+</ol>
+<p>To see what was last delivered for a cluster:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>clusterhealthcheck<span class="w"> </span>production<span class="w"> </span>-o<span class="w"> </span>yaml
+</span></code></pre></div>
+<p>and look at <code>status.clusterCondition[*].notificationSummaries</code>.</p>
 <h2 id="notifications-and-multi-tenancy">Notifications and multi-tenancy</h2>
 <p>If the below label is set on the HealthCheck instance created by the tenant admin</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>projectsveltos.io/admin-name: &lt;admin&gt;
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>projectsveltos.io/admin-name: &lt;admin&gt;
 </span></code></pre></div>
 <p>Sveltos will ensure the tenant admin can define notifications only by looking at the resources it has been <a href="../../features/multi-tenancy-sharing-cluster/">authorized to by platform admin</a>.</p>
 <p>Sveltos suggests using the below Kyverno ClusterPolicy, which takes care of adding proper labels to each HealthCheck at creation time.</p>
 <div class="admonition example">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nn">---</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno.io/v1</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterPolicy</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add-labels</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">policies.kyverno.io/title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add Labels</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">policies.kyverno.io/description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="no">Adds projectsveltos.io/admin-name label on each HealthCheck</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="no">created by tenant admin. It assumes each tenant admin is</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">      </span><span class="no">represented in the management cluster by a ServiceAccount.</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">exclude</span><span class="p">:</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="nt">any</span><span class="p">:</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">clusterRoles</span><span class="p">:</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-admin</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="nt">match</span><span class="p">:</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">      </span><span class="nt">all</span><span class="p">:</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resources</span><span class="p">:</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">          </span><span class="nt">kinds</span><span class="p">:</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
-</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">mutate</span><span class="p">:</span>
-</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">      </span><span class="nt">patchStrategicMerge</span><span class="p">:</span>
-</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">          </span><span class="nt">labels</span><span class="p">:</span>
-</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">            </span><span class="nt">+(projectsveltos.io/serviceaccount-name)</span><span class="p">:</span><span class="w"> </span><span class="s">'{{serviceAccountName}}'</span>
-</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">            </span><span class="nt">+(projectsveltos.io/serviceaccount-namespace)</span><span class="p">:</span><span class="w"> </span><span class="s">'{{serviceAccountNamespace}}'</span>
-</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add-labels</span>
-</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">  </span><span class="nt">validationFailureAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enforce</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nn">---</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyverno.io/v1</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterPolicy</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add-labels</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nt">policies.kyverno.io/title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add Labels</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">policies.kyverno.io/description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="no">Adds projectsveltos.io/admin-name label on each HealthCheck</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">      </span><span class="no">created by tenant admin. It assumes each tenant admin is</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">      </span><span class="no">represented in the management cluster by a ServiceAccount.</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">exclude</span><span class="p">:</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">      </span><span class="nt">any</span><span class="p">:</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">clusterRoles</span><span class="p">:</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-admin</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="nt">match</span><span class="p">:</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">      </span><span class="nt">all</span><span class="p">:</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">resources</span><span class="p">:</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">          </span><span class="nt">kinds</span><span class="p">:</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HealthCheck</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">    </span><span class="nt">mutate</span><span class="p">:</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">      </span><span class="nt">patchStrategicMerge</span><span class="p">:</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">          </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">            </span><span class="nt">+(projectsveltos.io/serviceaccount-name)</span><span class="p">:</span><span class="w"> </span><span class="s">'{{serviceAccountName}}'</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="w">            </span><span class="nt">+(projectsveltos.io/serviceaccount-namespace)</span><span class="p">:</span><span class="w"> </span><span class="s">'{{serviceAccountNamespace}}'</span>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add-labels</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="w">  </span><span class="nt">validationFailureAction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enforce</span>
 </span></code></pre></div>
 </div>
 <div class="footnote">
