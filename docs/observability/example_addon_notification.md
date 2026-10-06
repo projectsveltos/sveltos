@@ -19,6 +19,8 @@ In these examples, we will configure Sveltos to send a notification whenever all
 
 Once the defined conditions are met, a notification will be generated and send out.
 
+Every notification can also define a `policy` to reduce noise (notify only on state changes, rate limit, or wait for a failure to last before reporting it). See [Notification policy](./notifications.md#notification-policy).
+
 ## Slack
 
 !!! example ""
