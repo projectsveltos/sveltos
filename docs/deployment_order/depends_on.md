@@ -160,7 +160,7 @@ Sveltos efficiently manages shared dependencies by ensuring they are deployed on
 
 When `frontend-app-1` is deployed, Sveltos first deploys `postgresql` and then `backend-service-1`, resolving the dependency chain. Subsequently, when `frontend-app-2` is deployed to the same cluster, Sveltos recognizes that `postgresql` is already present and avoids redeploying it. If `frontend-app-1` is then removed, `backend-service-1` is also removed. However, `postgresql` persists because it remains a dependency of `frontend-app-2`. Finally, only when `frontend-app-2` is removed will Sveltos remove `backend-service-2` and `postgresql`, as they are no longer required by any active profile on the cluster.
 
-👉 [Read more here:](https://github.com/gianlucam76/devops-tutorial/tree/main/application-dependencies)
+👉 Read more [here](https://github.com/gianlucam76/devops-tutorial/tree/main/application-dependencies).
 
 ## Deletion Order
 
