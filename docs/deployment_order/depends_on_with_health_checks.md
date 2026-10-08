@@ -10,7 +10,7 @@ authors:
     - Gianluca Mardente
 ---
 
-Deploying resources and having them ready are two different things. Whether Sveltos deploys a Helm chart, a Kustomize overlay or a set of plain YAML manifests, the deployment is considered done as soon as the resources are created in the managed cluster. What they need to actually work may still be starting: for an add-on like __cert-manager__, its pods and webhooks. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
+Deploying resources and having them ready are two different things. Whether Sveltos deploys a Helm chart, a Kustomize overlay, or a set of plain YAML manifests, the deployment is considered done as soon as the resources are created in the managed cluster. What they need to actually work may still be starting: for an add-on like __cert-manager__, its pods and webhooks. A ClusterProfile that depends on cert-manager can then deploy against something that is not ready yet, and fail.
 
 Sveltos solves this with two fields:
 
@@ -24,15 +24,19 @@ There are four ways to define a health check:
 | [Lua](#lua-health-validation) | A resource in the managed cluster | You need full scripting to decide if a resource is healthy |
 | [CEL](#cel-health-validation) | A resource in the managed cluster | A short expression is enough |
 | [Metrics](#metric-based-health-validation) | A Prometheus query | Health depends on live signals like an error rate |
-| [Job](#job-based-health-validation) (Enterprise) | The outcome of a Kubernetes Job | You need an active probe like a smoke test |
+| [Job](#job-based-health-validation) :material-crown:{ title="Enterprise" } | The outcome of a Kubernetes Job | You need an active probe like a smoke test |
 
-The rest of this page goes through each check, using cert-manager as the running example, and ends with a ClusterProfile that depends on it.
+The rest of this page goes through each check, using cert-manager as the running example, and ends with a `ClusterProfile` that depends on it.
 
-## Lua health validation
+## Health Validations with Lua/CEL
+
+Explore the examples listed below and get an understanding of how to use Lua/CEL to craft `validateHealths` conditions.
+
+### Lua Health Validation
 
 With Lua, Sveltos evaluates the `evaluate()` function against each resource selected by the `validateHealths` entry (available as `obj`), and the function returns whether the resource is healthy and a message explaining why not.
 
-The below ClusterProfile will deploy cert-manager in any cluster matching the label selector `env=fv` and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before setting the ClusterProfile as `provisioned`.
+The `ClusterProfile` below will deploy cert-manager in any cluster matching the label selector `env=fv` and subsequently wait for all deployments in the cert-manager namespace to reach a healthy state (active replicas matching requested replicas) before setting the `ClusterProfile` as `provisioned`.
 
 !!! example ""
     ```yaml
@@ -73,10 +77,9 @@ The below ClusterProfile will deploy cert-manager in any cluster matching the la
           end
     ```
 
-## CEL health validation
+### CEL Health Validation
 
 Alternatively, you can use Common Expression Language ([CEL](https://cel.dev)), which offers a more concise way to define the same health rule. The example below uses a CEL expression to check if the _availableReplicas_ are equal to the _requested replicas_. The result is the same as the Lua script, providing a healthy and succinct way to validate the state of your deployments.
-
 
 !!! example ""
     ```yaml
@@ -112,12 +115,39 @@ Alternatively, you can use Common Expression Language ([CEL](https://cel.dev)), 
           rule: resource.status.availableReplicas == resource.spec.replicas
     ```
 
+### Example: Combine with _dependsOn_
+
+In the example below, the `ClusterProfile` deploys __traefik__ to clusters with the label set to `env:fv` only after the cert-manager deployment finishes successfully. Take a look at the `ClusterProfile` examples listed above.
+
+!!! example ""
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: traefik
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: fv
+      syncMode: Continuous
+      helmCharts:
+      - repositoryURL:    https://traefik.github.io/charts
+        repositoryName:   traefik
+        chartName:        traefik/traefik
+        chartVersion:     "41.5.0"
+        releaseName:      traefik
+        releaseNamespace: traefik
+        helmChartAction:  Install
+      dependsOn:
+      - cert-manager
+    ```
 
 ## Metric-Based Health Validation
 
 In addition to checking Kubernetes resource state, `validateHealths` entries can query a **Prometheus-compatible metrics endpoint** to gate deployment on live application signals. For example, Sveltos can confirm an error rate is below a threshold before considering a release healthy.
 
-### How it works
+### How does it work?
 
 Add a `metricSource` field with the URL of the Prometheus endpoint, and one or more `metricQueries`. Each query is a named PromQL expression that must return a **scalar** value. Sveltos evaluates each query and exposes the results as a global `metrics` table inside the Lua `evaluate()` function. The key of each entry is the `name` given to the query.
 
@@ -155,79 +185,58 @@ The check above prevents Sveltos from marking the Helm feature as healthy until 
 
 A single `validateHealths` entry supports only one evaluation path. To combine Kubernetes resource state with a metric check, add two entries under `validateHealths`: one using `script` or `evaluateCEL` against resource state, and one using `metricSource` + `metricQueries`. Both must pass before the feature is considered healthy.
 
-## Job-Based Health Validation
+## Job-Based Health Validation :material-crown:{ title="Enterprise" }
 
-*Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.*
+!!!info "Enterprise Feature"
+    The job-based Health Validations feature is part of the Enterprise offering. Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
 
 The Lua, CEL, and metric checks above all evaluate state that already exists in the managed cluster. `jobCheck` instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own `Complete`/`Failed` outcome as the check result. This is useful when the check itself needs to *do* something — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster — rather than inspect a field.
 
-### How it works
+### How does it work?
 
 Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest. Sveltos deploys it into the managed cluster, waits for it to reach `Complete` or `Failed` (up to `jobCheck.timeout`, which defaults to 5 minutes when unset), then deletes it. On failure, the check's message comes from the Job's own status conditions.
 
 ![Job-based health check](../assets/job_check.gif)
 
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cert-manager-smoke-test
-  namespace: cert-manager
-data:
-  job.yaml: |
-    apiVersion: batch/v1
-    kind: Job
-    metadata:
-      name: cert-manager-smoke-test
-      namespace: cert-manager
-    spec:
-      backoffLimit: 0
-      template:
-        spec:
-          restartPolicy: Never
-          containers:
-          - name: probe
-            image: curlimages/curl:8.11.0
-            command: ["curl", "-sf", "http://cert-manager-webhook.cert-manager.svc:443/healthz"]
----
-validateHealths:
-- name: cert-manager-smoke-test
-  featureID: Helm
-  jobCheck:
-    jobRef:
-      kind: ConfigMap
-      namespace: cert-manager
-      name: cert-manager-smoke-test
-    timeout: 2m
-```
-
-`jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same `validateHealths` entry — a single entry runs either an active Job probe or a Lua/CEL evaluation, not both. To combine a Job probe with a resource or metric check, add separate entries under `validateHealths`, the same way described above for combining metrics with resource checks.
-
-## Putting it together: Nginx and cert-manager
-
-In the below example, the ClusterProfile to deploy the __nginx ingress__ depends on the __cert-manager__ ClusterProfile defined above.
-
-!!! example ""
+!!! example "ConfigMap with smoke-test Job"
     ```yaml
-    ---
-    apiVersion: config.projectsveltos.io/v1beta1
-    kind: ClusterProfile
+    apiVersion: v1
+    kind: ConfigMap
     metadata:
-      name: ingress-nginx
-    spec:
-      clusterSelector:
-        matchLabels:
-          env: fv
-      syncMode: Continuous
-      helmCharts:
-      - repositoryURL:    https://kubernetes.github.io/ingress-nginx
-        repositoryName:   ingress-nginx
-        chartName:        ingress-nginx/ingress-nginx
-        chartVersion:     "4.8.4"
-        releaseName:      ingress-nginx
-        releaseNamespace: ingress-nginx
-        helmChartAction:  Install
-      dependsOn:
-      - cert-manager
+      name: cert-manager-smoke-test
+      namespace: cert-manager
+    data:
+      job.yaml: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: cert-manager-smoke-test
+          namespace: cert-manager
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+              - name: probe
+                image: curlimages/curl:8.11.0
+                command: ["curl", "-sf", "http://cert-manager-webhook.cert-manager.svc:443/healthz"]
     ```
 
+!!! example "ClusterProfile validateHealths"
+    ```yaml
+        validateHealths:
+        - name: cert-manager-smoke-test
+          featureID: Helm
+          jobCheck:
+            jobRef:
+              kind: ConfigMap
+              namespace: cert-manager
+              name: cert-manager-smoke-test
+            timeout: 2m
+    ```
+
+!!!note
+    The second example does not contain the complete `ClusterProfile`. Take a look at [earlier sections](#lua-health-validation) to get an understanding of what the complete `ClusterProfile` looks like.
+
+The `jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same `validateHealths` entry. A single entry runs either an **active Job probe** or a **Lua/CEL** evaluation, but not both. To combine a Job probe with a resource or a metric check, add separate entries under `validateHealths`, the same way described above for combining metrics with resource checks.
