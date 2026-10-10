@@ -43,9 +43,15 @@ The Sveltos MCP Server empowers AI with the ability to:
 
 - **Automate Troubleshooting**: When a user reports an issue, the AI can use the MCP Server's tools to perform diagnostic checks automatically. For example, it can call the `analyze_profile_deployment` tool to investigate a deployment failure, identify the specific error, and provide a resolution plan. It can also list every ClusterProfile and Profile targeting a cluster with per-feature status (Helm, Resources, Kustomize) and pending dependencies.
 
-- **Deep-Dive into Helm and Kustomize**: The AI can retrieve detailed information about a specific Helm release — combining Sveltos metadata with the actual Helm state from the workload cluster (deployed, failed, pending-upgrade, user values) — or verify that every Flux source (GitRepository, OCIRepository, Bucket) and plain source (ConfigMap, Secret) referenced by Kustomize profiles exists and is ready.
+- **Diagnose in One Call**: Instead of running the troubleshooting steps one after the other, the AI can call `diagnose_cluster` or `diagnose_profile`. `diagnose_cluster` checks that the cluster is ready and not paused, the Sveltos agents, every feature of every profile that is not yet Provisioned (with the message recorded in the status), the resources the profiles reference, the pending updates and, when they apply, pull mode and configuration drift. `diagnose_profile` checks a profile on all the clusters it matches and groups the clusters that fail the same way, so a failure on 200 clusters is one finding with a count and a few examples. Both return the findings, most severe first, each naming the tool that goes deeper, and a summary of what is healthy.
+
+- **Deep-Dive into Helm and Kustomize**: The AI can retrieve detailed information about a specific Helm release — combining Sveltos metadata with the actual Helm state from the workload cluster (deployed, failed, pending-upgrade, user values) — or verify that every Flux source (GitRepository, OCIRepository, Bucket) and plain source (ConfigMap, Secret) referenced by Kustomize profiles exists and is ready. It can also list the Helm releases Sveltos manages on a cluster that have a newer version, or a newer patch, published upstream.
 
 - **Trace Profile Dependencies**: The AI can walk the full `DependsOn` chain of a profile on a cluster and identify the root-cause node when a profile is stalled because a dependency is not yet provisioned.
+
+- **Analyze Pull Mode Deployments**: For a cluster in [pull mode](../register/register_cluster_pull_mode.md) the management cluster does not connect to the managed cluster, so a deployment that does not complete has causes that do not show up as in push mode. The AI can check the heartbeat of the `sveltos-applier` and the failure it reported, and each ConfigurationGroup: still being prepared, not yet processed by the applier, or failed with a message. It can also tell which Helm releases the applier is asked to apply and which it skips because they did not change. It only reads the management cluster.
+
+- **Report Configuration Drift**: The AI can answer which resources drifted, when, and whether Sveltos already corrected the drift, for a cluster, a profile or both. For a profile without a record it says why: drift detection is not enabled, or nothing drifted. See [Configuration Drift](configuration_drift.md#which-resources-drifted).
 
 - **Ensure Configuration Consistency**: The `compare_managed_clusters` tool allows AI to proactively monitor for configuration drift between clusters. It can quickly identify what is common, different, or unique across two clusters and alert operators to potential compliance issues or misconfigurations.
 
@@ -58,6 +64,39 @@ The Sveltos MCP Server empowers AI with the ability to:
 - **Monitor Health Checks**: The AI can trace the full health-check pipeline for a cluster: validating that ClusterHealthCheck selectors match, confirming HealthCheck resource distribution, inspecting HealthCheckReports for resource-level results (Healthy, Degraded, Progressing), and reporting notification delivery status.
 
 - **Manage Progressive Delivery**: The AI can list all ClusterPromotion pipelines with their current stage and whether any pipeline is blocked waiting for manual approval. It can also provide a detailed per-stage breakdown of a single pipeline — selector, trigger type, approval state, timing configuration, and runtime status — so it can explain exactly what is blocking a promotion.
+
+## Available Tools
+
+The AI picks the tool by the question being asked.
+
+| Tool | Use it to |
+|---|---|
+| `installation_status` | Verify the health of the Sveltos components in the management cluster and of the Sveltos agents in the managed clusters. |
+| `list_managed_clusters` | List the managed clusters with their readiness, whether they are paused or in pull mode, and the health of their agents. |
+| `list_clusters_by_selector` | List the managed clusters that match a label selector. |
+| `compare_managed_clusters` | Compare the Kubernetes resources and Helm releases of two clusters. |
+| `diagnose_cluster` | Check a cluster in one call and get the findings, most severe first. |
+| `diagnose_profile` | Check a ClusterProfile or Profile on all the clusters it matches in one call. |
+| `list_deployed_resources` | List the Kubernetes resources and Helm charts Sveltos deployed on a cluster. |
+| `list_profiles_for_cluster` | List every ClusterProfile and Profile targeting a cluster, with the status of each feature and the pending dependencies. |
+| `list_deployement_errors` | List what failed to deploy on a cluster. |
+| `get_helm_release_details` | Get the details of one Helm release, combining the Sveltos data with the Helm state in the managed cluster. |
+| `list_outdated_helm_charts` | List the Helm releases on a cluster that have a newer version published upstream. |
+| `list_configuration_drift` | Get the configuration drift history recorded for a cluster, a profile or both: which resources drifted and when. |
+| `analyze_profile_deployment` | Analyze the deployment of a profile on a cluster. |
+| `analyze_profile_cluster_match` | Explain why a cluster does or does not match a profile. |
+| `analyze_profile_dependencies` | Trace the `DependsOn` chain of a profile and find the profile that blocks it. |
+| `list_pending_profiles_for_cluster` | List the profiles whose update to a cluster is pending, because the cluster is suspended or because of a `MaxUpdate` throttle. |
+| `analyze_kustomize_deployment` | Check that the sources referenced by Kustomize profiles exist and are ready. |
+| `list_dryrun_changes_for_cluster` | Preview what profiles in DryRun mode would change. |
+| `analyze_pull_mode_deployment` | Find out why a deployment to a cluster in pull mode does not complete. |
+| `analyze_event_deployment_pipeline` | Trace an event-driven deployment from the EventSource to the deployed resources. |
+| `list_triggered_profiles` | List the ClusterProfiles created by EventTriggers. |
+| `analyze_healthcheck_pipeline` | Trace the health check pipeline of a cluster, up to the notifications. |
+| `analyze_classifier_pipeline` | Find out why a cluster is not labeled as a Classifier or ManagementClusterClassifier expects. |
+| `list_classifier_managed_labels` | List the labels managed by classifiers across the clusters, and the conflicts. |
+| `list_cluster_promotions` | List the ClusterPromotion pipelines, and the ones that failed or wait for approval. |
+| `analyze_cluster_promotion` | Analyze one ClusterPromotion pipeline stage by stage. |
 
 ## Integrated Dashboard Functionality
 
