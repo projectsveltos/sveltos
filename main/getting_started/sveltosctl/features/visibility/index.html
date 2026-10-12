@@ -1335,6 +1335,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-drift-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show drift-history
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4834,6 +4845,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-drift-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show drift-history
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5010,6 +5032,52 @@
 </span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                             If not specified all cluster names are considered.
 </span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>     --cluster-type=&lt;type&gt;   Show outdated helm charts deployed in cluster with this type
 </span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                          (Capi or Sveltos). If not specified all cluster types are considered.
+</span></code></pre></div>
+<h3 id="show-drift-history">show drift-history</h3>
+<p><em>show drift-history</em> displays the resources that drifted from the configuration Sveltos deployed, and when each drift was detected. Drift is only detected for profiles with <code>syncMode</code> set to <code>ContinuousWithDriftDetection</code> (see <a href="../../../../features/configuration_drift/#which-resources-drifted">Configuration Drift</a>).</p>
+<p>The displayed information are:</p>
+<ul>
+<li>The CAPI/Sveltos Cluster in the form namespace/name;</li>
+<li>The (Cluster)Profile in the form kind/name;</li>
+<li>The feature that deployed the resource (<code>Helm</code>, <code>Resources</code> or <code>Kustomize</code>);</li>
+<li>The kind of the drifted resource, in the form Kind.group (just Kind for resources in the core group);</li>
+<li>The namespace and name of the drifted resource;</li>
+<li>When the latest drift of the resource was detected. Times are RFC3339, in UTC;</li>
+<li>The Helm release that deployed the resource (only for the <code>Helm</code> feature).</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>drift-history<span class="w"> </span>--namespace<span class="o">=</span>civo<span class="w"> </span>--cluster<span class="o">=</span>civo-cluster1
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>┌────────────────────┬───────────────────────────────────┬───────────┬─────────────────┬───────────────┬──────────────────────────────────┬──────────────────────┬───────────────────────┐
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>│<span class="w">      </span>CLUSTER<span class="w">       </span>│<span class="w">              </span>PROFILE<span class="w">              </span>│<span class="w">  </span>FEATURE<span class="w">  </span>│<span class="w">      </span>KIND<span class="w">       </span>│<span class="w">   </span>NAMESPACE<span class="w">   </span>│<span class="w">               </span>NAME<span class="w">               </span>│<span class="w">       </span>DETECTED<span class="w">       </span>│<span class="w">     </span>HELM<span class="w"> </span>RELEASE<span class="w">      </span>│
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>├────────────────────┼───────────────────────────────────┼───────────┼─────────────────┼───────────────┼──────────────────────────────────┼──────────────────────┼───────────────────────┤
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-baseline-app<span class="w">  </span>│<span class="w"> </span>Resources<span class="w"> </span>│<span class="w"> </span>ConfigMap<span class="w">       </span>│<span class="w"> </span>demo-app<span class="w">      </span>│<span class="w"> </span>app-config<span class="w">                       </span>│<span class="w"> </span><span class="m">2026</span>-10-10T10:58:56Z<span class="w"> </span>│<span class="w"> </span>-<span class="w">                     </span>│
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-nginx-ingress<span class="w"> </span>│<span class="w"> </span>Helm<span class="w">      </span>│<span class="w"> </span>ServiceAccount<span class="w">  </span>│<span class="w"> </span>ingress-nginx<span class="w"> </span>│<span class="w"> </span>ingress-nginx-ingress<span class="w">            </span>│<span class="w"> </span><span class="m">2026</span>-10-10T10:58:56Z<span class="w"> </span>│<span class="w"> </span>ingress-nginx/ingress<span class="w"> </span>│
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-nginx-ingress<span class="w"> </span>│<span class="w"> </span>Helm<span class="w">      </span>│<span class="w"> </span>Deployment.apps<span class="w"> </span>│<span class="w"> </span>ingress-nginx<span class="w"> </span>│<span class="w"> </span>ingress-nginx-ingress-controller<span class="w"> </span>│<span class="w"> </span><span class="m">2026</span>-10-10T10:28:36Z<span class="w"> </span>│<span class="w"> </span>ingress-nginx/ingress<span class="w"> </span>│
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>└────────────────────┴───────────────────────────────────┴───────────┴─────────────────┴───────────────┴──────────────────────────────────┴──────────────────────┴───────────────────────┘
+</span></code></pre></div>
+<p>For each feature, the most recently drifted resources are displayed first. A resource that drifts again is displayed once, with the time of its latest drift. Sveltos keeps at most 20 resources for each feature, dropping the oldest ones.</p>
+<p>When a drift was detected but the resources that changed were not reported, the KIND column displays <code>(not reported)</code>. When the latest drift involved more resources than could be reported, a note below the table says the list is incomplete.</p>
+<p><em>show drift-history</em> allows filtering by:</p>
+<ul>
+<li>clusters' namespace</li>
+<li>clusters' name</li>
+<li>clusters' type (<code>Capi</code> or <code>Sveltos</code>)</li>
+<li>profile name</li>
+<li>feature (<code>Helm</code>, <code>Resources</code> or <code>Kustomize</code>)</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$ sveltosctl show drift-history --help
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Usage:
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  sveltosctl show drift-history [options] [--namespace=&lt;name&gt;] [--cluster=&lt;name&gt;] [--cluster-type=&lt;type&gt;] [--profile=&lt;name&gt;] [--feature=&lt;name&gt;] [--verbose]
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>     --namespace=&lt;name&gt;      Show drift history of clusters in this namespace.
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                             If not specified all namespaces are considered.
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>     --cluster=&lt;name&gt;        Show drift history of cluster with name.
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>                             If not specified all cluster names are considered.
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>     --cluster-type=&lt;type&gt;   Show drift history of clusters with this type
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>                             (Capi or Sveltos). If not specified all cluster types are considered.
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>     --profile=&lt;name&gt;        Show drift history of resources deployed by the (Cluster)Profile with this name.
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>                             If not specified all profiles are considered.
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>     --feature=&lt;name&gt;        Show drift history of resources deployed by this feature
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>                             (Helm, Resources or Kustomize). If not specified all features are considered.
 </span></code></pre></div>
 
 
