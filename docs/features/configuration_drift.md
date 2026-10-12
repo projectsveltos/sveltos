@@ -46,6 +46,57 @@ Sveltos ensures the systems are always **consistent** and **predictable**, preve
 !!! note
     To learn more about the available `syncMode` options, take a look [here](https://projectsveltos.github.io/sveltos/main/addons/clusterprofile/#specsyncmode).
 
+## Which Resources Drifted
+
+When Sveltos detects a configuration drift, it records which resources changed in the ClusterSummary, one history for each feature (`Helm`, `Resources`, `Kustomize`). The history is in `status.featureSummaries[].driftHistory`.
+
+```bash
+$ kubectl get clustersummary -n <cluster namespace> <clustersummary name> -o yaml
+```
+
+!!! example ""
+    ```yaml
+    status:
+      featureSummaries:
+      - featureID: Helm
+        lastAppliedTime: "2026-10-08T08:32:10Z"
+        driftHistory:
+          lastDetectedTime: "2026-10-08T08:31:53Z"
+          resources:
+          - group: ""
+            kind: ServiceAccount
+            namespace: nginx
+            name: nginx-latest-nginx-ingress
+            helmReleaseName: nginx-latest
+            helmReleaseNamespace: nginx
+            detectedTime: "2026-10-08T08:31:53Z"
+          - group: apps
+            kind: Deployment
+            namespace: nginx
+            name: nginx-latest-nginx-ingress-controller
+            helmReleaseName: nginx-latest
+            helmReleaseNamespace: nginx
+            detectedTime: "2026-10-08T08:25:12Z"
+    ```
+
+- `lastDetectedTime` is when the most recent drift was detected.
+- `resources` lists the resources that drifted, the most recently drifted first: group, kind, namespace (empty for a cluster scoped resource) and name. `detectedTime` is when that resource last drifted. For the Helm feature, `helmReleaseName` and `helmReleaseNamespace` tell which release deployed the resource.
+- `truncated` is set to `true` when the most recent drift involved more than 20 resources. Only the first 20 were reported.
+
+`sveltosctl show drift-history` displays the same information as a table, for any cluster and profile (see [show drift-history](../getting_started/sveltosctl/features/visibility.md#show-drift-history)). The dashboard shows it in the **Drift history** button of the cluster's Profiles tab.
+
+A few things to know:
+
+- Each new drift is added to the history. A resource that drifts more than once is listed once, with the time of its latest drift. Up to 20 resources are kept for each feature, and when that number is exceeded the resource that drifted longest ago is dropped.
+- The history stays in the ClusterSummary after Sveltos has corrected the drift. To tell whether the most recent drift was already corrected, compare `lastDetectedTime` with `lastAppliedTime`. If `lastAppliedTime` is later, Sveltos has deployed the resources again since that drift.
+- The history is only set for a ClusterProfile or Profile in `ContinuousWithDriftDetection` mode.
+- When the component that detected the drift does not report which resources changed (an older `drift-detection-manager` or, for a cluster in [pull mode](../register/register_cluster_pull_mode.md), an older `sveltos-applier`), `lastDetectedTime` is updated and the resources already in the history are kept unchanged.
+
+The `drift-detection-manager` lists the drifted resources in the `status.driftedResources` of the ResourceSummary, up to 20 and with `driftedResourcesTruncated` set when there are more. The addon-controller adds them to the history in the ClusterSummary and then clears the list, so you normally read the ClusterSummary.
+
+!!! note
+    The [Sveltos MCP Server](mcp.md) has a `list_configuration_drift` tool that returns this history for a cluster, a profile or both, so an AI assistant can answer "why was this chart redeployed?" or "what keeps changing this Deployment?".
+
 ## Ignore Annotation
 
 We can stop certain resources from being tracked for configuration drift. This is done by adding a special annotation `projectsveltos.io/driftDetectionIgnore` to the resources of interest.

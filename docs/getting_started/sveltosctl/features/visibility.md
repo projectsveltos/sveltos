@@ -198,3 +198,57 @@ Usage:
      --cluster-type=<type>   Show outdated helm charts deployed in cluster with this type
                           (Capi or Sveltos). If not specified all cluster types are considered.
 ```
+
+### show drift-history
+
+*show drift-history* displays the resources that drifted from the configuration Sveltos deployed, and when each drift was detected. Drift is only detected for profiles with `syncMode` set to `ContinuousWithDriftDetection` (see [Configuration Drift](../../../features/configuration_drift.md#which-resources-drifted)).
+
+The displayed information are:
+
+- The CAPI/Sveltos Cluster in the form namespace/name;
+- The (Cluster)Profile in the form kind/name;
+- The feature that deployed the resource (`Helm`, `Resources` or `Kustomize`);
+- The kind of the drifted resource, in the form Kind.group (just Kind for resources in the core group);
+- The namespace and name of the drifted resource;
+- When the latest drift of the resource was detected. Times are RFC3339, in UTC;
+- The Helm release that deployed the resource (only for the `Helm` feature).
+
+```bash
+$ sveltosctl show drift-history --namespace=civo --cluster=civo-cluster1
+┌────────────────────┬───────────────────────────────────┬───────────┬─────────────────┬───────────────┬──────────────────────────────────┬──────────────────────┬───────────────────────┐
+│      CLUSTER       │              PROFILE              │  FEATURE  │      KIND       │   NAMESPACE   │               NAME               │       DETECTED       │     HELM RELEASE      │
+├────────────────────┼───────────────────────────────────┼───────────┼─────────────────┼───────────────┼──────────────────────────────────┼──────────────────────┼───────────────────────┤
+│ civo/civo-cluster1 │ ClusterProfile/civo-baseline-app  │ Resources │ ConfigMap       │ demo-app      │ app-config                       │ 2026-10-10T10:58:56Z │ -                     │
+│ civo/civo-cluster1 │ ClusterProfile/civo-nginx-ingress │ Helm      │ ServiceAccount  │ ingress-nginx │ ingress-nginx-ingress            │ 2026-10-10T10:58:56Z │ ingress-nginx/ingress │
+│ civo/civo-cluster1 │ ClusterProfile/civo-nginx-ingress │ Helm      │ Deployment.apps │ ingress-nginx │ ingress-nginx-ingress-controller │ 2026-10-10T10:28:36Z │ ingress-nginx/ingress │
+└────────────────────┴───────────────────────────────────┴───────────┴─────────────────┴───────────────┴──────────────────────────────────┴──────────────────────┴───────────────────────┘
+```
+
+For each feature, the most recently drifted resources are displayed first. A resource that drifts again is displayed once, with the time of its latest drift. Sveltos keeps at most 20 resources for each feature, dropping the oldest ones.
+
+When a drift was detected but the resources that changed were not reported, the KIND column displays `(not reported)`. When the latest drift involved more resources than could be reported, a note below the table says the list is incomplete.
+
+*show drift-history* allows filtering by:
+
+- clusters' namespace
+- clusters' name
+- clusters' type (`Capi` or `Sveltos`)
+- profile name
+- feature (`Helm`, `Resources` or `Kustomize`)
+
+```
+$ sveltosctl show drift-history --help
+Usage:
+  sveltosctl show drift-history [options] [--namespace=<name>] [--cluster=<name>] [--cluster-type=<type>] [--profile=<name>] [--feature=<name>] [--verbose]
+
+     --namespace=<name>      Show drift history of clusters in this namespace.
+                             If not specified all namespaces are considered.
+     --cluster=<name>        Show drift history of cluster with name.
+                             If not specified all cluster names are considered.
+     --cluster-type=<type>   Show drift history of clusters with this type
+                             (Capi or Sveltos). If not specified all cluster types are considered.
+     --profile=<name>        Show drift history of resources deployed by the (Cluster)Profile with this name.
+                             If not specified all profiles are considered.
+     --feature=<name>        Show drift history of resources deployed by this feature
+                             (Helm, Resources or Kustomize). If not specified all features are considered.
+```
