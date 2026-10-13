@@ -208,37 +208,71 @@ $ kubectl get clustersummary <clustersummary name> -n <clustersummary namespace>
 We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click [here](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) to join us.
 
 
-## Kubernetes Warning Events for Deployment Failures
+## Kubernetes Events
 
-When Sveltos encounters certain failure conditions it emits a Kubernetes `Warning` event on the relevant `ClusterSummary`. These events surface the root cause immediately, without requiring log inspection.
-
-A Warning event is raised in the following situations:
-
-| Condition | Meaning |
-|-----------|---------|
-| **Conflict** | Two ClusterProfiles are trying to manage the same resource and their ownership rules conflict. |
-| **Missing referenced resource** | A ConfigMap, Secret, or other object referenced in the ClusterProfile does not exist. |
-| **Template instantiation error** | Template rendering failed with a non-retriable error (e.g. a missing key or a type mismatch in a template expression). |
-| **Max consecutive failures reached** | The controller gave up after hitting the maximum consecutive failure count for a feature. |
+Sveltos components record Kubernetes events when something fails, when a cluster stops or resumes being reachable, and when a ClusterPromotion changes stage. An event states the cause, so the root cause of a failure is visible without reading the logs.
 
 ### Viewing events
 
+Events are recorded on the Sveltos resource the user knows. To see the events of one resource:
+
 ```bash
-kubectl describe clustersummary <name> -n <namespace>
+$ kubectl describe clustersummary <name> -n <namespace>
 ```
 
-The `Events` section at the bottom of the output lists the Warning events with a `Reason` and `Message` field that identify the specific failure. For example:
+To list the Warning events of all Sveltos resources, in all namespaces:
+
+```bash
+$ kubectl get events -A --field-selector type=Warning
+```
+
+For example, a Helm chart that cannot be installed on a cluster:
 
 ```
 Events:
-  Type     Reason                   Age   From              Message
-  ----     ------                   ----  ----              -------
-  Warning  MissingReferencedObject  2m    addon-controller  ConfigMap default/my-config not found
-  Warning  MaxFailuresReached       1m    addon-controller  feature Helm reached max consecutive failures; giving up
+  Type     Reason         Age   From              Message
+  ----     ------         ----  ----              -------
+  Warning  FeatureFailed  2m    addon-controller  Feature Helm for cluster Sveltos default/cluster1 failed: ...
 ```
 
+!!! note
+    - Events about a cluster-scoped resource (for instance ClusterHealthCheck, EventTrigger, Classifier or ClusterPromotion) are recorded in the `default` namespace.
+    - Kubernetes keeps events for about one hour. No event does not mean that nothing failed earlier: the status of the resource still has the last failure message.
+
+### Events are not repeated
+
+An event is recorded the first time a failure is seen, and again when the failure message changes. A failure that is retried and fails the same way is not recorded again, so a cluster that keeps failing does not fill the event list. Nothing is recorded for expected states: a paused cluster, a cluster that is not ready, or a deployment still in progress.
+
+### Events recorded by Sveltos
+
+| Recorded on | Reason | Type | Recorded when |
+|-------------|--------|------|---------------|
+| ClusterSummary | `FeatureDeployed` | Normal | A feature (Helm, Resources, Kustomize) was deployed on a cluster. |
+| ClusterSummary | `FeatureFailed` | Warning | A feature failed to deploy, or to be removed, and Sveltos will retry. |
+| ClusterSummary | `FeatureFailedNonRetriable` | Warning | A feature failed and will not be retried until something changes, for instance a template that cannot be instantiated. |
+| ClusterSummary | `ProfileConflict` | Warning | A resource the profile wants to deploy is already managed by another profile. |
+| ClusterSummary | `LicenseInvalid` | Warning | The cluster is in pull mode and is not covered by a license. |
+| SveltosCluster | `ClusterUnreachable` | Warning | The management cluster cannot connect to the cluster (push mode). Recorded when the connection goes down. |
+| SveltosCluster | `AgentUnhealthy` | Warning | The Sveltos agent of a cluster in pull mode is not healthy. Recorded when the connection goes down. |
+| SveltosCluster | `ClusterRecovered` | Normal | A cluster that was reported with `ClusterUnreachable` or `AgentUnhealthy` is healthy again. |
+| Classifier, ManagementClusterClassifier | `ClassifierFailed` | Warning | The classifier could not be evaluated or could not label a cluster. |
+| Classifier, ManagementClusterClassifier | `ClassifierLabelConflict` | Warning | More than one classifier wants to manage the same label key on a cluster. One event per cluster. |
+| EventTrigger | `EventTriggerFailed` | Warning | The EventTrigger could not be deployed to a cluster, or removed from it. The cluster is the related object. |
+| EventReport | `EventTriggerFailed` | Warning | The ClusterProfile instances for an EventReport could not be generated. The event is in the namespace of the cluster. |
+| ClusterHealthCheck | `ClusterHealthCheckFailed` | Warning | The ClusterHealthCheck could not be deployed to a cluster, or removed from it. |
+| ClusterHealthCheck | `NotificationFailed` | Warning | A notification (Slack, Webex, Discord, Teams, Telegram, SMTP) could not be delivered for a cluster. |
+| ClusterPromotion | `StageStarted` | Normal | A stage is being provisioned. |
+| ClusterPromotion | `StageProvisioned` | Normal | A stage is deployed to all its clusters. |
+| ClusterPromotion | `PromotionCompleted` | Normal | All the stages are provisioned. |
+| ClusterPromotion | `ApprovalRequired` | Warning | A stage with a manual trigger is provisioned and waits for the approval. |
+| ClusterPromotion | `StageFailed` | Warning | A feature failed on a cluster of the stage. One event for the stage, with the first failure and the number of failed features. |
+
+The `Kubernetes events` notification of a ClusterHealthCheck is a different thing: it records the result of the liveness checks, with the reason `ClusterHealthCheck`. See [notifications](../observability/notifications.md).
+
+Not every failure has an event yet. There are none for a ClusterProfile or Profile whose selector or dependencies cannot be resolved, for the Sveltos agent, drift detection, or the AccessRequest and RoleRequest resources. For those, use the status of the resource or the logs.
+
 !!! tip
-    Event-watching tools (e.g. `kubectl get events -n <namespace> --field-selector involvedObject.name=<clustersummary-name>`) and observability platforms that ingest Kubernetes events will surface these warnings automatically.
+    Event-watching tools and observability platforms that ingest Kubernetes events surface these warnings automatically. The [Sveltos MCP server](../features/mcp.md) reads them with the `list_sveltos_events` tool.
 
 ## Debugging
 
