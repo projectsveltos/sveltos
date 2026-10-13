@@ -45,6 +45,8 @@ The Sveltos MCP Server empowers AI with the ability to:
 
 - **Diagnose in One Call**: Instead of running the troubleshooting steps one after the other, the AI can call `diagnose_cluster` or `diagnose_profile`. `diagnose_cluster` checks that the cluster is ready and not paused, the Sveltos agents, every feature of every profile that is not yet Provisioned (with the message recorded in the status), the resources the profiles reference, the pending updates and, when they apply, pull mode and configuration drift. `diagnose_profile` checks a profile on all the clusters it matches and groups the clusters that fail the same way, so a failure on 200 clusters is one finding with a count and a few examples. Both return the findings, most severe first, each naming the tool that goes deeper, and a summary of what is healthy.
 
+- **Read What Sveltos Reported**: When the status of a resource has no explanation, the AI can call `list_sveltos_events` to get the Kubernetes events Sveltos components recorded: failed feature deployments, failed health check notifications, failed event triggers, classifier failures and conflicts, clusters that became unreachable or recovered, and the stages of a ClusterPromotion. Identical events are grouped with a count, and the AI can limit the result to one object. Kubernetes keeps events for about one hour, so the tool reports recent failures only.
+
 - **Deep-Dive into Helm and Kustomize**: The AI can retrieve detailed information about a specific Helm release — combining Sveltos metadata with the actual Helm state from the workload cluster (deployed, failed, pending-upgrade, user values) — or verify that every Flux source (GitRepository, OCIRepository, Bucket) and plain source (ConfigMap, Secret) referenced by Kustomize profiles exists and is ready. It can also list the Helm releases Sveltos manages on a cluster that have a newer version, or a newer patch, published upstream.
 
 - **Trace Profile Dependencies**: The AI can walk the full `DependsOn` chain of a profile on a cluster and identify the root-cause node when a profile is stalled because a dependency is not yet provisioned.
@@ -83,6 +85,7 @@ The AI picks the tool by the question being asked.
 | `get_helm_release_details` | Get the details of one Helm release, combining the Sveltos data with the Helm state in the managed cluster. |
 | `list_outdated_helm_charts` | List the Helm releases on a cluster that have a newer version published upstream. |
 | `list_configuration_drift` | Get the configuration drift history recorded for a cluster, a profile or both: which resources drifted and when. |
+| `list_sveltos_events` | List the Kubernetes events Sveltos recorded, such as failed deployments, failed notifications and unreachable clusters, grouped with a count. |
 | `analyze_profile_deployment` | Analyze the deployment of a profile on a cluster. |
 | `analyze_profile_cluster_match` | Explain why a cluster does or does not match a profile. |
 | `analyze_profile_dependencies` | Trace the `DependsOn` chain of a profile and find the profile that blocks it. |
