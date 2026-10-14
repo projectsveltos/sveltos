@@ -75,6 +75,31 @@ spec:
   clusterType: Sveltos
 ```
 
+#### First contribution scope: ClusterSummary and ClusterConfiguration
+
+Issue
+[projectsveltos/addon-controller#117](https://github.com/projectsveltos/addon-controller/issues/117)
+tracks documenting Custom Resource ownership relationships. A small first pass
+can focus on the resources generated from `ClusterProfile` and `Profile`
+reconciliation:
+
+| Relationship | Created | Updated | Deleted | Ownership notes |
+| ------------ | ------- | ------- | ------- | --------------- |
+| `ClusterProfile`/`Profile` -> `ClusterSummary` | When a cluster matches a `ClusterProfile` or `Profile`. | When the selected profile configuration or reconciliation status changes. | When the parent is deleted, or when the cluster stops matching and policies are withdrawn. | The `ClusterSummary` has an `ownerReferences` entry pointing to the owning `ClusterProfile` or `Profile`. |
+| `ClusterProfile`/`Profile` -> `ClusterConfiguration` | When Sveltos records resources deployed to a matching cluster. | When deployed resources or Helm chart information changes. | Cleanup behavior should be verified from the live object and controller behavior for the Sveltos version in use. | `ClusterConfiguration.status.clusterProfileResources` and `ClusterConfiguration.status.profileResources` identify which profile caused resources to be deployed. |
+
+Useful fields to inspect:
+
+- `ClusterSummary.spec.clusterName`, `spec.clusterNamespace`, `spec.clusterType`
+- `ClusterSummary.spec.clusterProfileSpec`
+- `ClusterSummary.status.featureSummaries`
+- `ClusterConfiguration.status.clusterProfileResources[].clusterProfileName`
+- `ClusterConfiguration.status.profileResources[].profileName`
+- `ClusterConfiguration.status.*.Features[].charts` and `status.*.Features[].resources`
+
+Future focused updates can document additional ownership chains, including
+`EventSource` -> `EventReport` and `Classifier` -> `ClassifierReport`.
+
 ---
 
 ### EventSource → EventReport
