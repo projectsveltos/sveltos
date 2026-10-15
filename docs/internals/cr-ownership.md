@@ -509,21 +509,29 @@ spec:
 
 ### RoleRequest → RBAC Resources
 
-Multi-tenancy RBAC provisioning.
+Multi-tenancy RBAC provisioning. `RoleRequest.Spec.RoleRefs` references a set of ConfigMaps/Secrets in the management cluster; the content of those resources is a set of Role/ClusterRole manifests to deploy.
 
 ```mermaid
 graph TB
-    A[RoleRequest] -->|creates in| B[Managed Clusters]
-    B -->|deploys| C[Role]
-    B -->|deploys| D[RoleBinding]
-    C -->|grants permissions to| E[ServiceAccount]
-    D -->|binds| C
-    D -->|to| E
+    A[RoleRequest] -->|selects| B[Managed Clusters]
+    A -->|Spec.RoleRefs references| R[ConfigMap / Secret]
+    R -->|content contains| S[Role / ClusterRole manifests]
+    B -->|creates| SA[ServiceAccount]
+    S -->|deployed as| C[Role]
+    S -->|deployed as| D[ClusterRole]
+    C -->|bound via| RB[RoleBinding]
+    D -->|bound via| CRB[ClusterRoleBinding]
+    RB -->|grants to| SA
+    CRB -->|grants to| SA
+    SA -->|kubeconfig stored in| K[Secret in management cluster]
 ```
 
 **Owner**: `RoleRequest`
 
-**Created Resources**: `Role` and `RoleBinding` in managed clusters
+**Created Resources**:
+
+- In each matching managed cluster: `ServiceAccount`, one `Role`/`ClusterRole` per manifest found in a referenced ConfigMap/Secret, and a `RoleBinding`/`ClusterRoleBinding` per deployed Role/ClusterRole, binding it to the ServiceAccount
+- In the management cluster: a `Secret` holding the kubeconfig for the ServiceAccount created in the managed cluster
 
 **Controller**: `role-request-controller`
 
@@ -531,21 +539,22 @@ graph TB
 
 #### When Created
 
-- Clusters match the `clusterSelector` in RoleRequest
-- Role and RoleBinding are deployed to each matching cluster
-- Permissions are granted to specified ServiceAccount
+- A cluster matches the `clusterSelector` in RoleRequest
+- The controller collects the content of every ConfigMap/Secret referenced in `Spec.RoleRefs`
+- Each Role/ClusterRole manifest found in that content is deployed to the managed cluster, along with a matching RoleBinding/ClusterRoleBinding for the ServiceAccount
+- The ServiceAccount's kubeconfig is written back to a Secret in the management cluster
 
 #### When Deleted
 
-- RoleRequest is deleted
-- Cluster stops matching the selector
-- Deployment is withdrawn per policy
+- RoleRequest is deleted: the ServiceAccount, every Role/ClusterRole/RoleBinding/ClusterRoleBinding it owns, and the kubeconfig Secret are removed
+- Cluster stops matching the selector: deployment is withdrawn from that cluster
+- A Role/ClusterRole manifest is removed from a referenced ConfigMap/Secret: only that Role/ClusterRole and its binding are cleaned up on the next reconcile, identified by checking that the RoleRequest is its only owner reference
 
 #### Relationship with Other CRs
 
-- RoleRequest selects clusters similar to ClusterProfile
-- Deploys RBAC resources (Role, RoleBinding) to matched clusters
-- Used for multi-tenancy scenarios
+- RoleRequest selects clusters the same way ClusterProfile does, via `clusterSelector`
+- Content is sourced indirectly through ConfigMap/Secret, the same reference mechanism ClusterProfile uses for Helm values and raw manifests
+- Used for multi-tenancy scenarios, granting a tenant's ServiceAccount exactly the RBAC permissions encoded in the referenced manifests
 
 #### Example
 
