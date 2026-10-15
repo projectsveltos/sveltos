@@ -123,6 +123,15 @@ spec:
                   type: string
                 type: array
                 x-kubernetes-list-type: atomic
+              skipApply:
+                default: false
+                description: |-
+                  SkipApply indicates the resources in this ConfigurationBundle must not be applied to the
+                  managed cluster in this pass because the component that created the bundle knows they
+                  are already deployed with this exact content. The resources are still reported as
+                  deployed, so they are not treated as stale and removed.
+                  By default (false) the resources are applied.
+                type: boolean
               skipNamespaceCreation:
                 default: false
                 description: |-

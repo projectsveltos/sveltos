@@ -283,6 +283,78 @@ spec:
                   - releaseNamespace
                   type: object
                 type: array
+              driftedResources:
+                description: |-
+                  DriftedResources lists the resources that changed out of band since this status was last
+                  consumed. It names the resources behind ResourcesChanged, KustomizeResourcesChanged and
+                  HelmResourcesChanged. Entries are unique and the list holds at most MaxDriftedResources
+                  of them; DriftedResourcesTruncated tells when more resources drifted than are listed.
+                  The consumer is expected to clear this list after acting on it, the same way it resets
+                  the changed flags.
+                items:
+                  description: DriftedResource identifies a resource deployed by Sveltos
+                    that was changed out of band.
+                  properties:
+                    detectedTime:
+                      description: DetectedTime is when the drift was detected.
+                      format: date-time
+                      type: string
+                    featureID:
+                      description: FeatureID is the feature that deployed the resource.
+                      enum:
+                      - Resources
+                      - Helm
+                      - Kustomize
+                      type: string
+                    group:
+                      description: Group of the drifted resource.
+                      type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies the Helm release that deployed the resource.
+                        Only set when FeatureID is Helm.
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
+                    kind:
+                      description: Kind of the drifted resource.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the drifted resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the drifted resource.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                  required:
+                  - detectedTime
+                  - featureID
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: array
+              driftedResourcesTruncated:
+                description: |-
+                  DriftedResourcesTruncated is true when more resources drifted than are listed in
+                  DriftedResources.
+                type: boolean
               helmResourceHashes:
                 description: HelmResourceHashes specifies list of resource plus hash.
                 items:
