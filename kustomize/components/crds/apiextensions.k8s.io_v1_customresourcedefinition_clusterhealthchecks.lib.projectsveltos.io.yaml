@@ -39,6 +39,55 @@ spec:
           spec:
             description: ClusterHealthCheckSpec defines the desired state of ClusterHealthCheck
             properties:
+              clusterRefs:
+                description: |-
+                  ClusterRefs identifies clusters to associate to.
+                  These are added to the clusters matched by ClusterSelector.
+                items:
+                  description: ObjectReference contains enough information to let
+                    you inspect or modify the referred object.
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: |-
+                        If referring to a piece of an object instead of an entire object, this string
+                        should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within a pod, this would take on a value like:
+                        "spec.containers{name}" (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]" (container with
+                        index 2 in this pod). This syntax is chosen only to have some well-defined way of
+                        referencing a part of an object.
+                      type: string
+                    kind:
+                      description: |-
+                        Kind of the referent.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                      type: string
+                    name:
+                      description: |-
+                        Name of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+                      type: string
+                    resourceVersion:
+                      description: |-
+                        Specific resourceVersion to which this reference is made, if any.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+                      type: string
+                    uid:
+                      description: |-
+                        UID of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
               clusterSelector:
                 description: Selector identifies clusters to associate to.
                 properties:
@@ -206,6 +255,31 @@ spec:
                           type: string
                       type: object
                       x-kubernetes-map-type: atomic
+                    policy:
+                      description: |-
+                        Policy tunes when this notification is delivered, to reduce the number of notifications
+                        sent while a cluster is changing. When not set, a notification is delivered every time the
+                        status of a liveness check changes or, while a liveness check keeps failing, every time its
+                        failure message changes.
+                      properties:
+                        failingFor:
+                          description: |-
+                            FailingFor is how long a cluster has to keep failing before a failure is delivered.
+                            A failure ending before that is never delivered, and neither is its recovery.
+                          type: string
+                        minInterval:
+                          description: |-
+                            MinInterval is the minimum time between two notifications for the same cluster.
+                            Changes happening inside the interval are coalesced: when the interval ends, the current
+                            state is delivered if it differs from the last delivered one.
+                          type: string
+                        onlyOnTransition:
+                          description: |-
+                            OnlyOnTransition, when true, delivers a notification only when the cluster moves between
+                            passing and failing. A change of the failure message while the cluster keeps failing is not
+                            delivered. A cluster found passing the first time it is evaluated is not delivered either.
+                          type: boolean
+                      type: object
                     type:
                       description: NotificationType specifies the type of notification
                       enum:
@@ -360,6 +434,22 @@ spec:
                             description: |-
                               FailureMessage is a human consumable message explaining the
                               misconfiguration
+                            type: string
+                          lastSentFailing:
+                            description: |-
+                              LastSentFailing tells whether the cluster was failing when this notification
+                              was last delivered. Only set for notifications with a Policy.
+                            type: boolean
+                          lastSentMessageHash:
+                            description: |-
+                              LastSentMessageHash is a hash of the failure message delivered the last time.
+                              Used to detect a change of the failure message. Only set for notifications with a Policy.
+                            type: string
+                          lastSentTime:
+                            description: |-
+                              LastSentTime is when this notification was last delivered for the cluster.
+                              Only set for notifications with a Policy.
+                            format: date-time
                             type: string
                           name:
                             description: Name of the notification check.

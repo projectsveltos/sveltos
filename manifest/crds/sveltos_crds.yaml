@@ -746,6 +746,55 @@ spec:
           spec:
             description: ClusterHealthCheckSpec defines the desired state of ClusterHealthCheck
             properties:
+              clusterRefs:
+                description: |-
+                  ClusterRefs identifies clusters to associate to.
+                  These are added to the clusters matched by ClusterSelector.
+                items:
+                  description: ObjectReference contains enough information to let
+                    you inspect or modify the referred object.
+                  properties:
+                    apiVersion:
+                      description: API version of the referent.
+                      type: string
+                    fieldPath:
+                      description: |-
+                        If referring to a piece of an object instead of an entire object, this string
+                        should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
+                        For example, if the object reference is to a container within a pod, this would take on a value like:
+                        "spec.containers{name}" (where "name" refers to the name of the container that triggered
+                        the event) or if no container name is specified "spec.containers[2]" (container with
+                        index 2 in this pod). This syntax is chosen only to have some well-defined way of
+                        referencing a part of an object.
+                      type: string
+                    kind:
+                      description: |-
+                        Kind of the referent.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                      type: string
+                    name:
+                      description: |-
+                        Name of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+                      type: string
+                    resourceVersion:
+                      description: |-
+                        Specific resourceVersion to which this reference is made, if any.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+                      type: string
+                    uid:
+                      description: |-
+                        UID of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
               clusterSelector:
                 description: Selector identifies clusters to associate to.
                 properties:
@@ -913,6 +962,31 @@ spec:
                           type: string
                       type: object
                       x-kubernetes-map-type: atomic
+                    policy:
+                      description: |-
+                        Policy tunes when this notification is delivered, to reduce the number of notifications
+                        sent while a cluster is changing. When not set, a notification is delivered every time the
+                        status of a liveness check changes or, while a liveness check keeps failing, every time its
+                        failure message changes.
+                      properties:
+                        failingFor:
+                          description: |-
+                            FailingFor is how long a cluster has to keep failing before a failure is delivered.
+                            A failure ending before that is never delivered, and neither is its recovery.
+                          type: string
+                        minInterval:
+                          description: |-
+                            MinInterval is the minimum time between two notifications for the same cluster.
+                            Changes happening inside the interval are coalesced: when the interval ends, the current
+                            state is delivered if it differs from the last delivered one.
+                          type: string
+                        onlyOnTransition:
+                          description: |-
+                            OnlyOnTransition, when true, delivers a notification only when the cluster moves between
+                            passing and failing. A change of the failure message while the cluster keeps failing is not
+                            delivered. A cluster found passing the first time it is evaluated is not delivered either.
+                          type: boolean
+                      type: object
                     type:
                       description: NotificationType specifies the type of notification
                       enum:
@@ -1067,6 +1141,22 @@ spec:
                             description: |-
                               FailureMessage is a human consumable message explaining the
                               misconfiguration
+                            type: string
+                          lastSentFailing:
+                            description: |-
+                              LastSentFailing tells whether the cluster was failing when this notification
+                              was last delivered. Only set for notifications with a Policy.
+                            type: boolean
+                          lastSentMessageHash:
+                            description: |-
+                              LastSentMessageHash is a hash of the failure message delivered the last time.
+                              Used to detect a change of the failure message. Only set for notifications with a Policy.
+                            type: string
+                          lastSentTime:
+                            description: |-
+                              LastSentTime is when this notification was last delivered for the cluster.
+                              Only set for notifications with a Policy.
+                            format: date-time
                             type: string
                           name:
                             description: Name of the notification check.
@@ -1514,6 +1604,15 @@ spec:
                   type: string
                 type: array
                 x-kubernetes-list-type: atomic
+              skipApply:
+                default: false
+                description: |-
+                  SkipApply indicates the resources in this ConfigurationBundle must not be applied to the
+                  managed cluster in this pass because the component that created the bundle knows they
+                  are already deployed with this exact content. The resources are still reported as
+                  deployed, so they are not treated as stale and removed.
+                  By default (false) the resources are applied.
+                type: boolean
               skipNamespaceCreation:
                 default: false
                 description: |-
@@ -4629,6 +4728,78 @@ spec:
                   - releaseNamespace
                   type: object
                 type: array
+              driftedResources:
+                description: |-
+                  DriftedResources lists the resources that changed out of band since this status was last
+                  consumed. It names the resources behind ResourcesChanged, KustomizeResourcesChanged and
+                  HelmResourcesChanged. Entries are unique and the list holds at most MaxDriftedResources
+                  of them; DriftedResourcesTruncated tells when more resources drifted than are listed.
+                  The consumer is expected to clear this list after acting on it, the same way it resets
+                  the changed flags.
+                items:
+                  description: DriftedResource identifies a resource deployed by Sveltos
+                    that was changed out of band.
+                  properties:
+                    detectedTime:
+                      description: DetectedTime is when the drift was detected.
+                      format: date-time
+                      type: string
+                    featureID:
+                      description: FeatureID is the feature that deployed the resource.
+                      enum:
+                      - Resources
+                      - Helm
+                      - Kustomize
+                      type: string
+                    group:
+                      description: Group of the drifted resource.
+                      type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies the Helm release that deployed the resource.
+                        Only set when FeatureID is Helm.
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
+                    kind:
+                      description: Kind of the drifted resource.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the drifted resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the drifted resource.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                  required:
+                  - detectedTime
+                  - featureID
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: array
+              driftedResourcesTruncated:
+                description: |-
+                  DriftedResourcesTruncated is true when more resources drifted than are listed in
+                  DriftedResources.
+                type: boolean
               helmResourceHashes:
                 description: HelmResourceHashes specifies list of resource plus hash.
                 items:
@@ -7421,6 +7592,52 @@ spec:
                                     `ExtraLabels`, the value from `ExtraLabels` will override the existing value.
                                     (Deprecated use Patches instead)
                                 type: object
+                            healthMonitoring:
+                                description: |-
+                                    HealthMonitoring, when enabled, continuously monitors the health of the resources
+                                    this profile deploys in each matching cluster. Unlike ValidateHealths, which are
+                                    evaluated once during deployment, these checks run for as long as the profile
+                                    is deployed. Results are available as HealthCheckReports.
+                                properties:
+                                    defaultChecks:
+                                        default: true
+                                        description: |-
+                                            DefaultChecks, when true (default), monitors the Deployments, StatefulSets, DaemonSets,
+                                            Jobs and PersistentVolumeClaims deployed by this profile (raw resources and Helm charts).
+                                            Set it to false to monitor only the HealthChecks listed in HealthChecks.
+                                        type: boolean
+                                    enabled:
+                                        description: |-
+                                            Enabled turns health monitoring on for the resources deployed by this profile.
+                                            When true, Sveltos creates a HealthCheck and a ClusterHealthCheck for each
+                                            matching cluster once the profile is provisioned there, and removes them
+                                            when monitoring is disabled or the cluster does not match anymore.
+                                        type: boolean
+                                    healthChecks:
+                                        description: |-
+                                            HealthChecks is a list of names of HealthCheck instances to monitor in addition
+                                            to the default checks. Those are deployed as they are: selecting only the
+                                            resources deployed by this profile is up to the HealthCheck.
+
+                                            Only a ClusterProfile can set it. It is ignored for a (namespaced) Profile, which gets the
+                                            default checks only. A HealthCheck is a cluster-scoped resource referenced by name, and the
+                                            report it produces is shared by every profile that references it on a given cluster, with
+                                            no filtering by namespace. Allowing a Profile to reference one would let a tenant name
+                                            a HealthCheck it does not own, and learn about resources outside its namespace through
+                                            the shared report. The default checks are safe for a Profile: they select only the
+                                            resources that profile deployed.
+                                        items:
+                                            type: string
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                required:
+                                    - enabled
+                                type: object
+                                x-kubernetes-validations:
+                                    - message: healthChecks can only be set when enabled is true
+                                      rule: self.enabled || !has(self.healthChecks) || size(self.healthChecks) == 0
+                                    - message: 'defaultChecks cannot be false when healthChecks is empty: there would be nothing to monitor'
+                                      rule: '!self.enabled || !has(self.defaultChecks) || self.defaultChecks || (has(self.healthChecks) && size(self.healthChecks) > 0)'
                             helmCharts:
                                 description: Helm charts is a list of helm charts that need to be deployed
                                 items:
@@ -9844,6 +10061,52 @@ spec:
                                             type: object
                                         type: array
                                         x-kubernetes-list-type: atomic
+                                    healthMonitoring:
+                                        description: |-
+                                            HealthMonitoring, when enabled, continuously monitors the health of the resources
+                                            this profile deploys in each matching cluster. Unlike ValidateHealths, which are
+                                            evaluated once during deployment, these checks run for as long as the profile
+                                            is deployed. Results are available as HealthCheckReports.
+                                        properties:
+                                            defaultChecks:
+                                                default: true
+                                                description: |-
+                                                    DefaultChecks, when true (default), monitors the Deployments, StatefulSets, DaemonSets,
+                                                    Jobs and PersistentVolumeClaims deployed by this profile (raw resources and Helm charts).
+                                                    Set it to false to monitor only the HealthChecks listed in HealthChecks.
+                                                type: boolean
+                                            enabled:
+                                                description: |-
+                                                    Enabled turns health monitoring on for the resources deployed by this profile.
+                                                    When true, Sveltos creates a HealthCheck and a ClusterHealthCheck for each
+                                                    matching cluster once the profile is provisioned there, and removes them
+                                                    when monitoring is disabled or the cluster does not match anymore.
+                                                type: boolean
+                                            healthChecks:
+                                                description: |-
+                                                    HealthChecks is a list of names of HealthCheck instances to monitor in addition
+                                                    to the default checks. Those are deployed as they are: selecting only the
+                                                    resources deployed by this profile is up to the HealthCheck.
+
+                                                    Only a ClusterProfile can set it. It is ignored for a (namespaced) Profile, which gets the
+                                                    default checks only. A HealthCheck is a cluster-scoped resource referenced by name, and the
+                                                    report it produces is shared by every profile that references it on a given cluster, with
+                                                    no filtering by namespace. Allowing a Profile to reference one would let a tenant name
+                                                    a HealthCheck it does not own, and learn about resources outside its namespace through
+                                                    the shared report. The default checks are safe for a Profile: they select only the
+                                                    resources that profile deployed.
+                                                items:
+                                                    type: string
+                                                type: array
+                                                x-kubernetes-list-type: set
+                                        required:
+                                            - enabled
+                                        type: object
+                                        x-kubernetes-validations:
+                                            - message: healthChecks can only be set when enabled is true
+                                              rule: self.enabled || !has(self.healthChecks) || size(self.healthChecks) == 0
+                                            - message: 'defaultChecks cannot be false when healthChecks is empty: there would be nothing to monitor'
+                                              rule: '!self.enabled || !has(self.defaultChecks) || self.defaultChecks || (has(self.healthChecks) && size(self.healthChecks) > 0)'
                                     helmCharts:
                                         description: Helm charts is a list of helm charts that need to be deployed
                                         items:
@@ -13386,6 +13649,52 @@ spec:
                                             `ExtraLabels`, the value from `ExtraLabels` will override the existing value.
                                             (Deprecated use Patches instead)
                                         type: object
+                                    healthMonitoring:
+                                        description: |-
+                                            HealthMonitoring, when enabled, continuously monitors the health of the resources
+                                            this profile deploys in each matching cluster. Unlike ValidateHealths, which are
+                                            evaluated once during deployment, these checks run for as long as the profile
+                                            is deployed. Results are available as HealthCheckReports.
+                                        properties:
+                                            defaultChecks:
+                                                default: true
+                                                description: |-
+                                                    DefaultChecks, when true (default), monitors the Deployments, StatefulSets, DaemonSets,
+                                                    Jobs and PersistentVolumeClaims deployed by this profile (raw resources and Helm charts).
+                                                    Set it to false to monitor only the HealthChecks listed in HealthChecks.
+                                                type: boolean
+                                            enabled:
+                                                description: |-
+                                                    Enabled turns health monitoring on for the resources deployed by this profile.
+                                                    When true, Sveltos creates a HealthCheck and a ClusterHealthCheck for each
+                                                    matching cluster once the profile is provisioned there, and removes them
+                                                    when monitoring is disabled or the cluster does not match anymore.
+                                                type: boolean
+                                            healthChecks:
+                                                description: |-
+                                                    HealthChecks is a list of names of HealthCheck instances to monitor in addition
+                                                    to the default checks. Those are deployed as they are: selecting only the
+                                                    resources deployed by this profile is up to the HealthCheck.
+
+                                                    Only a ClusterProfile can set it. It is ignored for a (namespaced) Profile, which gets the
+                                                    default checks only. A HealthCheck is a cluster-scoped resource referenced by name, and the
+                                                    report it produces is shared by every profile that references it on a given cluster, with
+                                                    no filtering by namespace. Allowing a Profile to reference one would let a tenant name
+                                                    a HealthCheck it does not own, and learn about resources outside its namespace through
+                                                    the shared report. The default checks are safe for a Profile: they select only the
+                                                    resources that profile deployed.
+                                                items:
+                                                    type: string
+                                                type: array
+                                                x-kubernetes-list-type: set
+                                        required:
+                                            - enabled
+                                        type: object
+                                        x-kubernetes-validations:
+                                            - message: healthChecks can only be set when enabled is true
+                                              rule: self.enabled || !has(self.healthChecks) || size(self.healthChecks) == 0
+                                            - message: 'defaultChecks cannot be false when healthChecks is empty: there would be nothing to monitor'
+                                              rule: '!self.enabled || !has(self.defaultChecks) || self.defaultChecks || (has(self.healthChecks) && size(self.healthChecks) > 0)'
                                     helmCharts:
                                         description: Helm charts is a list of helm charts that need to be deployed
                                         items:
@@ -15483,6 +15792,67 @@ spec:
                                             items:
                                                 type: string
                                             type: array
+                                        driftHistory:
+                                            description: |-
+                                                DriftHistory records the configuration drifts detected on the resources this feature
+                                                deployed. Only set when SyncMode is ContinuousWithDriftDetection. It is kept after a
+                                                drift has been corrected by a redeploy, and every new drift is added to it.
+                                            properties:
+                                                lastDetectedTime:
+                                                    description: |-
+                                                        LastDetectedTime is when the most recent drift was detected. When the component that
+                                                        detected it did not report a time, it is the time the drift was collected.
+                                                    format: date-time
+                                                    type: string
+                                                resources:
+                                                    description: |-
+                                                        Resources lists the resources that drifted, the most recently drifted first. A resource
+                                                        that drifts again is listed once, with the time of its latest drift. When more than
+                                                        MaxDriftedResources resources drifted, the oldest ones are dropped. Empty when the
+                                                        component that detected the drift did not report which resources changed.
+                                                    items:
+                                                        description: DriftedResourceRef identifies a resource that drifted.
+                                                        properties:
+                                                            detectedTime:
+                                                                description: DetectedTime is when the latest drift of this resource was detected.
+                                                                format: date-time
+                                                                type: string
+                                                            group:
+                                                                description: Group of the resource.
+                                                                type: string
+                                                            helmReleaseName:
+                                                                description: |-
+                                                                    HelmReleaseName is the name of the Helm release that deployed the resource.
+                                                                    Only set for the Helm feature.
+                                                                type: string
+                                                            helmReleaseNamespace:
+                                                                description: |-
+                                                                    HelmReleaseNamespace is the namespace of the Helm release that deployed the resource.
+                                                                    Only set for the Helm feature.
+                                                                type: string
+                                                            kind:
+                                                                description: Kind of the resource.
+                                                                type: string
+                                                            name:
+                                                                description: Name of the resource.
+                                                                type: string
+                                                            namespace:
+                                                                description: Namespace of the resource. Empty for cluster scoped resources.
+                                                                type: string
+                                                        required:
+                                                            - detectedTime
+                                                            - kind
+                                                            - name
+                                                        type: object
+                                                    type: array
+                                                truncated:
+                                                    description: |-
+                                                        Truncated is true when the most recent drift involved more resources than the component
+                                                        that detected it could report, so some of the resources that drifted are not listed.
+                                                    type: boolean
+                                            required:
+                                                - lastDetectedTime
+                                            type: object
                                         failureMessage:
                                             description: FailureMessage provides more information about the error.
                                             type: string
@@ -15537,6 +15907,15 @@ spec:
                                     directly managed by ClusterProfile.
                                 items:
                                     properties:
+                                        appliedContentHash:
+                                            description: |-
+                                                AppliedContentHash is, in pull mode, the hash of what sveltos-applier last confirmed as applied
+                                                for this chart: the rendered resources plus the settings that change how they are applied.
+                                                While it matches the hash of the chart about to be applied, and drift-detection has not
+                                                reported the chart, sveltos-applier is told not to apply it again.
+                                                Not set in push mode.
+                                            format: byte
+                                            type: string
                                         chartName:
                                             description: |-
                                                 ChartName, RepositoryName, RepoURL, and ChartVersion mirror the fully resolved
@@ -15605,6 +15984,14 @@ spec:
                                         repoURL:
                                             type: string
                                         repositoryName:
+                                            type: string
+                                        stagedContentHash:
+                                            description: |-
+                                                StagedContentHash is, in pull mode, the hash of what has been staged for sveltos-applier and
+                                                is not yet confirmed as applied. It becomes AppliedContentHash once sveltos-applier reports
+                                                success. While set, the chart is never skipped, so a failed apply is retried.
+                                                Not set in push mode.
+                                            format: byte
                                             type: string
                                         status:
                                             description: |-
@@ -18503,6 +18890,52 @@ spec:
                                     `ExtraLabels`, the value from `ExtraLabels` will override the existing value.
                                     (Deprecated use Patches instead)
                                 type: object
+                            healthMonitoring:
+                                description: |-
+                                    HealthMonitoring, when enabled, continuously monitors the health of the resources
+                                    this profile deploys in each matching cluster. Unlike ValidateHealths, which are
+                                    evaluated once during deployment, these checks run for as long as the profile
+                                    is deployed. Results are available as HealthCheckReports.
+                                properties:
+                                    defaultChecks:
+                                        default: true
+                                        description: |-
+                                            DefaultChecks, when true (default), monitors the Deployments, StatefulSets, DaemonSets,
+                                            Jobs and PersistentVolumeClaims deployed by this profile (raw resources and Helm charts).
+                                            Set it to false to monitor only the HealthChecks listed in HealthChecks.
+                                        type: boolean
+                                    enabled:
+                                        description: |-
+                                            Enabled turns health monitoring on for the resources deployed by this profile.
+                                            When true, Sveltos creates a HealthCheck and a ClusterHealthCheck for each
+                                            matching cluster once the profile is provisioned there, and removes them
+                                            when monitoring is disabled or the cluster does not match anymore.
+                                        type: boolean
+                                    healthChecks:
+                                        description: |-
+                                            HealthChecks is a list of names of HealthCheck instances to monitor in addition
+                                            to the default checks. Those are deployed as they are: selecting only the
+                                            resources deployed by this profile is up to the HealthCheck.
+
+                                            Only a ClusterProfile can set it. It is ignored for a (namespaced) Profile, which gets the
+                                            default checks only. A HealthCheck is a cluster-scoped resource referenced by name, and the
+                                            report it produces is shared by every profile that references it on a given cluster, with
+                                            no filtering by namespace. Allowing a Profile to reference one would let a tenant name
+                                            a HealthCheck it does not own, and learn about resources outside its namespace through
+                                            the shared report. The default checks are safe for a Profile: they select only the
+                                            resources that profile deployed.
+                                        items:
+                                            type: string
+                                        type: array
+                                        x-kubernetes-list-type: set
+                                required:
+                                    - enabled
+                                type: object
+                                x-kubernetes-validations:
+                                    - message: healthChecks can only be set when enabled is true
+                                      rule: self.enabled || !has(self.healthChecks) || size(self.healthChecks) == 0
+                                    - message: 'defaultChecks cannot be false when healthChecks is empty: there would be nothing to monitor'
+                                      rule: '!self.enabled || !has(self.defaultChecks) || self.defaultChecks || (has(self.healthChecks) && size(self.healthChecks) > 0)'
                             helmCharts:
                                 description: Helm charts is a list of helm charts that need to be deployed
                                 items:
