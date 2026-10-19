@@ -1155,7 +1155,7 @@ spec:
                             matchingClusters:
                                 description: |-
                                     MatchingClusterRefs reference all the clusters currently matching
-                                    ClusterHealthCheck ClusterSelector
+                                    ClusterHealthCheck ClusterSelector or listed in ClusterRefs
                                 items:
                                     description: ObjectReference contains enough information to let you inspect or modify the referred object.
                                     properties:
@@ -7607,6 +7607,21 @@ spec:
                                                                 disable hooks on install
                                                                 Default to false
                                                             type: boolean
+                                                        existingCRDs:
+                                                            default: Fail
+                                                            description: |-
+                                                                ExistingCRDs controls what happens when a CRD in the chart's crds/ directory (subcharts
+                                                                included) already exists in the cluster with a different definition. CRDs not yet in the
+                                                                cluster are always created. Ignored when SkipCRDs is true.
+                                                                Fail fails the installation and reports the CRDs that differ. No CRD is created or changed.
+                                                                Skip leaves the existing CRD as it is, logs it and carries on with the rest of the chart.
+                                                                Overwrite applies the CRD of the chart over the existing one.
+                                                                Default to Fail
+                                                            enum:
+                                                                - Skip
+                                                                - Fail
+                                                                - Overwrite
+                                                            type: string
                                                         recoverAfterConsecutiveFailures:
                                                             default: 5
                                                             description: |-
@@ -10076,6 +10091,21 @@ spec:
                                                                         disable hooks on install
                                                                         Default to false
                                                                     type: boolean
+                                                                existingCRDs:
+                                                                    default: Fail
+                                                                    description: |-
+                                                                        ExistingCRDs controls what happens when a CRD in the chart's crds/ directory (subcharts
+                                                                        included) already exists in the cluster with a different definition. CRDs not yet in the
+                                                                        cluster are always created. Ignored when SkipCRDs is true.
+                                                                        Fail fails the installation and reports the CRDs that differ. No CRD is created or changed.
+                                                                        Skip leaves the existing CRD as it is, logs it and carries on with the rest of the chart.
+                                                                        Overwrite applies the CRD of the chart over the existing one.
+                                                                        Default to Fail
+                                                                    enum:
+                                                                        - Skip
+                                                                        - Fail
+                                                                        - Overwrite
+                                                                    type: string
                                                                 recoverAfterConsecutiveFailures:
                                                                     default: 5
                                                                     description: |-
@@ -13664,6 +13694,21 @@ spec:
                                                                         disable hooks on install
                                                                         Default to false
                                                                     type: boolean
+                                                                existingCRDs:
+                                                                    default: Fail
+                                                                    description: |-
+                                                                        ExistingCRDs controls what happens when a CRD in the chart's crds/ directory (subcharts
+                                                                        included) already exists in the cluster with a different definition. CRDs not yet in the
+                                                                        cluster are always created. Ignored when SkipCRDs is true.
+                                                                        Fail fails the installation and reports the CRDs that differ. No CRD is created or changed.
+                                                                        Skip leaves the existing CRD as it is, logs it and carries on with the rest of the chart.
+                                                                        Overwrite applies the CRD of the chart over the existing one.
+                                                                        Default to Fail
+                                                                    enum:
+                                                                        - Skip
+                                                                        - Fail
+                                                                        - Overwrite
+                                                                    type: string
                                                                 recoverAfterConsecutiveFailures:
                                                                     default: 5
                                                                     description: |-
@@ -16283,6 +16328,21 @@ spec:
                                                                 disable hooks on install
                                                                 Default to false
                                                             type: boolean
+                                                        existingCRDs:
+                                                            default: Fail
+                                                            description: |-
+                                                                ExistingCRDs controls what happens when a CRD in the chart's crds/ directory (subcharts
+                                                                included) already exists in the cluster with a different definition. CRDs not yet in the
+                                                                cluster are always created. Ignored when SkipCRDs is true.
+                                                                Fail fails the installation and reports the CRDs that differ. No CRD is created or changed.
+                                                                Skip leaves the existing CRD as it is, logs it and carries on with the rest of the chart.
+                                                                Overwrite applies the CRD of the chart over the existing one.
+                                                                Default to Fail
+                                                            enum:
+                                                                - Skip
+                                                                - Fail
+                                                                - Overwrite
+                                                            type: string
                                                         recoverAfterConsecutiveFailures:
                                                             default: 5
                                                             description: |-
@@ -23992,7 +24052,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/mcp-server:v1.16.0
+                  image: docker.io/projectsveltos/mcp-server:main
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
