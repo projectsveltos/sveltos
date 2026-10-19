@@ -28,6 +28,9 @@ There are four ways to define a health check:
 
 The rest of this page goes through each check, using cert-manager as the running example, and ends with a `ClusterProfile` that depends on it.
 
+!!! note
+    `validateHealths` decides when a ClusterProfile is ready. To keep watching what a ClusterProfile deployed after that, and to see which resources are not healthy, use [healthMonitoring](../features/health_monitoring.md). It does not hold the deployment, it only reports.
+
 ## Health Validations with Lua/CEL
 
 Explore the examples listed below and get an understanding of how to use Lua/CEL to craft `validateHealths` conditions.
