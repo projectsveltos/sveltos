@@ -376,6 +376,45 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
           timeout: 2m
     ```
 
+### Spec.HealthMonitoring
+
+The *healthMonitoring* property tells Sveltos to keep watching the resources this ClusterProfile deployed, after the deployment, and report the ones that are not healthy. Raw YAML resources and Helm charts are both covered. By default Sveltos monitors Deployments, StatefulSets, DaemonSets, Jobs and PersistentVolumeClaims.
+
+While *validateHealths* holds the ClusterProfile (and the ones that depend on it) until the add-ons are ready, *healthMonitoring* does not affect the deployment: it only reports.
+
+!!! example "Example - spec.healthMonitoring"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: nginx-ingress
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://kubernetes.github.io/ingress-nginx
+        repositoryName:   ingress-nginx
+        chartName:        ingress-nginx/ingress-nginx
+        chartVersion:     4.12.0
+        releaseName:      ingress-nginx
+        releaseNamespace: ingress-nginx
+        helmChartAction:  Install
+      healthMonitoring:
+        enabled: true
+    ```
+
+The following fields are available:
+
+- `enabled` turns health monitoring on;
+- `defaultChecks` (default `true`) monitors the default kinds. Set it to `false` to monitor only the HealthChecks listed in `healthChecks`;
+- `healthChecks` is a list of HealthCheck names to monitor in addition to the default checks. A ClusterProfile can set it. A Profile cannot: it is ignored there.
+
+`healthChecks` can only be set when `enabled` is `true`, and `enabled: true` with `defaultChecks: false` needs at least one entry in `healthChecks`.
+
+Use `sveltosctl show unhealthy-resources` to see the result. Refer to [Health Monitoring](../features/health_monitoring.md) for the kinds covered, their limitations, the states and the ways to see the result.
+
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
