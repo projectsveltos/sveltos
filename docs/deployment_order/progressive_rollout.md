@@ -27,7 +27,7 @@ Sveltos automatically handles the workflow:
 1. Upon successful deployment of the current stage, Sveltos waits for the configured `promotion trigger` (e.g., a time delay) before proceeding to the next stage.
 
 
-![Rollouts Across Clusters](../assets/cluster_promotion.png)
+![Rollouts Across Clusters](../assets/cluster_promotion.gif)
 
 | Concept | Description |
 | :--- | :--- |

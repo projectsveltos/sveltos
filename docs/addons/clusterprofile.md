@@ -376,6 +376,45 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
           timeout: 2m
     ```
 
+### Spec.HealthMonitoring
+
+The *healthMonitoring* property tells Sveltos to monitor the resources deployed by this `ClusterProfile`. It checks for any unhealthy ones and reports them. Raw YAML resources and Helm charts are both covered. By default, Sveltos monitors Deployments, StatefulSets, DaemonSets, Jobs, and PersistentVolumeClaims.
+
+While *validateHealths* keeps the `ClusterProfile` and its dependencies until the add-ons are ready, *healthMonitoring* only reports and does not impact the deployment.
+
+!!! example "Example - spec.healthMonitoring"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: traefik
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://traefik.github.io/charts
+        repositoryName:   traefik
+        chartName:        traefik/traefik
+        chartVersion:     42.1.3
+        releaseName:      traefik
+        releaseNamespace: traefik
+        helmChartAction:  Install
+      healthMonitoring:
+        enabled: true
+    ```
+
+The following fields are available:
+
+- `enabled` turns health monitoring on
+- `defaultChecks` (default `true`) monitors the default kinds. Set it to `false` to monitor only the HealthChecks listed in `healthChecks`
+- `healthChecks` is a list of HealthCheck names to monitor in addition to the default checks. A ClusterProfile can set it. A Profile cannot; it is ignored there.
+
+`healthChecks` can only be set when `enabled` is set to true. If `enabled: true` and `defaultChecks: false`, we need at least one entry in `healthChecks`.
+
+Use `sveltosctl show unhealthy-resources` to see the result. Refer to [Health Monitoring](../features/health_monitoring.md) for the kinds covered, their limitations, the states and the ways to see the result.
+
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
