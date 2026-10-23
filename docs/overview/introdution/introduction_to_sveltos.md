@@ -30,10 +30,19 @@ Sveltos comes with a rich set of features designed for the modern era of Continu
 * **📢 Observability**: Notifications via Slack, Teams, Discord, Webex, Telegram, SMTP, or Kubernetes events.
 * **🛡️ Pull Mode**: Deploy into restricted environments: air-gapped, edge, or behind firewalls.
 * **🚦 Progressive rollouts**: Phased deployments from a single configuration; no need to maintain multiple profiles.
+* **🧪 Job-based Checks**: Run active probes like smoke tests, synthetic transactions, connectivity checks as Kubernetes `Jobs` inside the managed clusters, using the Job outcome as the health verdict.
 
 ## Sveltos for Edge Deployments
 
 Sveltos is built with edge constraints in mind. Agents are lightweight and only deploy what is actually needed. Resource consumption scales with what you ask Sveltos to do.Nothing more. To explore Sveltos' capabilities at a large scale, take a look at [Artem Lajko's post "GitOps for 15,000+ Clusters: What Large-Scale Testing with vCluster Taught Us"](https://itnext.io/gitops-for-15-000-clusters-what-large-scale-testing-with-vcluster-taught-us-41e4b0d43e0b).
+
+## Get Involved
+
+We shape Sveltos based on community feedback and the different use cases we see in the field. Get in touch and help us shape the future of Kubernetes fleet management!
+
+1. Open a bug/feature enhancement on GitHub [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/projectsveltos/sveltos-manager/issues "Contribute to Sveltos: open issues").
+1. Chat with us on Slack in the #projectsveltos channel [![Slack](https://img.shields.io/badge/join%20slack-%23projectsveltos-brightgreen)](https://join.slack.com/t/projectsveltos/shared_invite/zt-1hraownbr-W8NTs6LTimxLPB8Erj8Q6Q).
+1. If you prefer to reach out directly, just shoot us an [email](mailto:support@projectsveltos.io).
 
 ## Next Steps
 

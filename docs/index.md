@@ -66,7 +66,7 @@ Here's how it works:
 * **📢 Observability**: Notifications via Slack, Teams, Discord, Webex, Telegram, SMTP, or Kubernetes events.
 * **🛡️ Pull Mode**: Deploy into restricted environments: air-gapped, edge, or behind firewalls.
 * **🚦 Progressive rollouts**: Phased deployments from a single configuration; no need to maintain multiple profiles.
-* **🧪 Job-based Checks**: Run active probes like smoke tests, synthetic transactions, connectivity checks as Kubernetes `Jobs` inside the managed clusters, using the Job outcome as the health verdict.       
+* **🧪 Job-based Checks**: Run active probes like smoke tests, synthetic transactions, connectivity checks as Kubernetes `Jobs` inside the managed clusters, using the Job outcome as the health verdict.
 
 Sveltos is cloud-agnostic. It works across EKS, AKS, GKE, on-prem, and edge Kubernetes clusters. Define once, deploy everywhere regardless of the chosen provider. 
 
