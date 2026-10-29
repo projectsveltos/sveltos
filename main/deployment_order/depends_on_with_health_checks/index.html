@@ -3101,6 +3101,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/health_monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Health Monitoring
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/post-renderer-patches/" class="md-nav__link">
         
   
@@ -3298,10 +3325,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_12" >
         
           
-          <label class="md-nav__link" for="__nav_9_11" id="__nav_9_11_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_12" id="__nav_9_12_label" tabindex="0">
             
   
   
@@ -3318,8 +3345,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4984,6 +5011,10 @@
 </tbody>
 </table>
 <p>The rest of this page goes through each check, using cert-manager as the running example, and ends with a <code>ClusterProfile</code> that depends on it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>validateHealths</code> decides when a <code>ClusterProfile</code> is ready. To monitor a <code>ClusterProfile</code> after deployment and check for unhealthy resources, use <a href="../../features/health_monitoring/">healthMonitoring</a>. It does not hold the deployment; it only reports.</p>
+</div>
 <h2 id="health-validations-with-luacel">Health Validations with Lua/CEL</h2>
 <p>Explore the examples listed below and get an understanding of how to use Lua/CEL to craft <code>validateHealths</code> conditions.</p>
 <h3 id="lua-health-validation">Lua Health Validation</h3>

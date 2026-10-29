@@ -1346,6 +1346,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-unhealthy-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show unhealthy-resources
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3071,6 +3082,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../features/health_monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Health Monitoring
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../features/post-renderer-patches/" class="md-nav__link">
         
   
@@ -3268,10 +3306,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_12" >
         
           
-          <label class="md-nav__link" for="__nav_9_11" id="__nav_9_11_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9_12" id="__nav_9_12_label" tabindex="0">
             
   
   
@@ -3288,8 +3326,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_11">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_12">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4856,6 +4894,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#show-unhealthy-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show unhealthy-resources
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5078,6 +5127,55 @@
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>                             If not specified all profiles are considered.
 </span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>     --feature=&lt;name&gt;        Show drift history of resources deployed by this feature
 </span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>                             (Helm, Resources or Kustomize). If not specified all features are considered.
+</span></code></pre></div>
+<h3 id="show-unhealthy-resources">show unhealthy-resources</h3>
+<p><em>show unhealthy-resources</em> displays the resources that <a href="../../../../features/health_monitoring/">health monitoring</a> found not healthy. Health monitoring is enabled with <code>spec.healthMonitoring</code> in a ClusterProfile or Profile.</p>
+<p>The displayed information are:</p>
+<ul>
+<li>The CAPI/Sveltos Cluster in the form namespace/name;</li>
+<li>The (Cluster)Profile that owns the HealthCheck that reported the resource, in the form kind/name. When no profile owns the HealthCheck, the HealthCheck is displayed instead, in the form HealthCheck/name;</li>
+<li>The kind of the resource, in the form Kind.group (just Kind for resources in the core group);</li>
+<li>The namespace and name of the resource;</li>
+<li>The status of the resource (<code>Degraded</code>, <code>Progressing</code> or <code>Suspended</code>);</li>
+<li>Why the resource is not healthy.</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>sveltosctl<span class="w"> </span>show<span class="w"> </span>unhealthy-resources<span class="w"> </span>--namespace<span class="o">=</span>civo<span class="w"> </span>--cluster<span class="o">=</span>civo-cluster1
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>┌────────────────────┬───────────────────────────────────┬───────────────────────┬───────────────┬──────────────────────────┬─────────────┬──────────────────────────────────────────────────────────────────────┐
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>│<span class="w">      </span>CLUSTER<span class="w">       </span>│<span class="w">              </span>PROFILE<span class="w">              </span>│<span class="w">         </span>KIND<span class="w">          </span>│<span class="w">   </span>NAMESPACE<span class="w">   </span>│<span class="w">           </span>NAME<span class="w">           </span>│<span class="w">   </span>STATUS<span class="w">    </span>│<span class="w">                               </span>MESSAGE<span class="w">                                </span>│
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>├────────────────────┼───────────────────────────────────┼───────────────────────┼───────────────┼──────────────────────────┼─────────────┼──────────────────────────────────────────────────────────────────────┤
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-nginx-ingress<span class="w"> </span>│<span class="w"> </span>Deployment.apps<span class="w">       </span>│<span class="w"> </span>ingress-nginx<span class="w"> </span>│<span class="w"> </span>ingress-nginx-controller<span class="w"> </span>│<span class="w"> </span>Degraded<span class="w">    </span>│<span class="w"> </span>Deployment<span class="w"> </span><span class="s2">"ingress-nginx-controller"</span><span class="w"> </span>exceeded<span class="w"> </span>its<span class="w"> </span>progress<span class="w"> </span>deadline<span class="w"> </span>│
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-baseline-app<span class="w">  </span>│<span class="w"> </span>Job.batch<span class="w">             </span>│<span class="w"> </span>demo-app<span class="w">      </span>│<span class="w"> </span>db-migrate<span class="w">               </span>│<span class="w"> </span>Degraded<span class="w">    </span>│<span class="w"> </span>Job<span class="w"> </span>failed:<span class="w"> </span>BackoffLimitExceeded<span class="w">                                     </span>│
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>ClusterProfile/civo-baseline-app<span class="w">  </span>│<span class="w"> </span>PersistentVolumeClaim<span class="w"> </span>│<span class="w"> </span>demo-app<span class="w">      </span>│<span class="w"> </span>data<span class="w">                     </span>│<span class="w"> </span>Progressing<span class="w"> </span>│<span class="w"> </span>PersistentVolumeClaim<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>bound<span class="w"> </span>yet<span class="w">                               </span>│
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>│<span class="w"> </span>civo/civo-cluster1<span class="w"> </span>│<span class="w"> </span>HealthCheck/crashloop-pods<span class="w">        </span>│<span class="w"> </span>Pod<span class="w">                   </span>│<span class="w"> </span>demo-app<span class="w">      </span>│<span class="w"> </span>worker-7d9f6<span class="w">             </span>│<span class="w"> </span>Degraded<span class="w">    </span>│<span class="w"> </span>container<span class="w"> </span>worker<span class="w"> </span>is<span class="w"> </span><span class="k">in</span><span class="w"> </span>CrashLoopBackOff<span class="w">                              </span>│
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>└────────────────────┴───────────────────────────────────┴───────────────────────┴───────────────┴──────────────────────────┴─────────────┴──────────────────────────────────────────────────────────────────────┘
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>Note:<span class="w"> </span>civo/civo-cluster2:<span class="w"> </span>no<span class="w"> </span>unhealthy<span class="w"> </span>resources.
+</span></code></pre></div>
+<p>The resources owned by a profile are displayed first, the worst status first. The ones no profile owns follow.</p>
+<p>Only the resources that are not healthy are displayed. When nothing is displayed for a cluster, a note below the table says why, so that an empty table is never mistaken for a healthy cluster:</p>
+<ul>
+<li>health monitoring is not enabled;</li>
+<li>health monitoring is enabled but no health report has been received yet;</li>
+<li>there are no unhealthy resources.</li>
+</ul>
+<p><em>show unhealthy-resources</em> allows filtering by:</p>
+<ul>
+<li>clusters' namespace</li>
+<li>clusters' name</li>
+<li>clusters' type (<code>Capi</code> or <code>Sveltos</code>)</li>
+<li>profile name. Only the resources reported through that profile are displayed, and the ones no profile owns are not. The note under the table, if any, is about that profile.</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$ sveltosctl show unhealthy-resources --help
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Usage:
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  sveltosctl show unhealthy-resources [options] [--namespace=&lt;name&gt;] [--cluster=&lt;name&gt;] [--cluster-type=&lt;type&gt;] [--profile=&lt;name&gt;] [--verbose]
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>     --namespace=&lt;name&gt;      Show unhealthy resources of clusters in this namespace.
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>                             If not specified all namespaces are considered.
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>     --cluster=&lt;name&gt;        Show unhealthy resources of cluster with name.
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>                             If not specified all cluster names are considered.
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>     --cluster-type=&lt;type&gt;   Show unhealthy resources of clusters with this type
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>                             (Capi or Sveltos). If not specified all cluster types are considered.
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>     --profile=&lt;name&gt;        Show only the unhealthy resources reported through the (Cluster)Profile with this name.
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>                             Resources no profile owns are not displayed. If not specified all profiles are considered.
 </span></code></pre></div>
 
 
