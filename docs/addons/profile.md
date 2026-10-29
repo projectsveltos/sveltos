@@ -213,6 +213,43 @@ Checks can inspect Kubernetes resources (Lua or CEL), query Prometheus-compatibl
           end
     ```
 
+### Spec.HealthMonitoring
+
+The *healthMonitoring* property tells Sveltos to monitor the resources deployed by this `Profile`. It checks for any unhealthy ones and reports them. Raw YAML resources and Helm charts are both covered. Sveltos monitors Deployments, StatefulSets, DaemonSets, Jobs, and PersistentVolumeClaims.
+
+While *validateHealths* keeps the `Profile` until the add-ons are ready, *healthMonitoring* only reports and does not impact the deployment.
+
+!!! example "Example - spec.healthMonitoring"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: Profile
+    metadata:
+      name: traefik
+      namespace: eng
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://traefik.github.io/charts
+        repositoryName:   traefik
+        chartName:        traefik/traefik
+        chartVersion:     42.1.3
+        releaseName:      traefik
+        releaseNamespace: traefik
+        helmChartAction:  Install
+      healthMonitoring:
+        enabled: true
+    ```
+
+`enabled` turns health monitoring on. `defaultChecks` (default `true`) monitors the default kinds.
+
+!!! important
+    A Profile gets the default checks only. `healthChecks`, the list of HealthChecks to monitor in addition, is ignored for a Profile. A HealthCheck is cluster scoped and the report it produces is shared by every profile that references it, so allowing a Profile to name one would let a tenant learn about resources outside its namespace. The default checks select only the resources the Profile deployed. A ClusterProfile can set `healthChecks`: see [Spec.HealthMonitoring](./clusterprofile.md#spechealthmonitoring).
+
+Use `sveltosctl show unhealthy-resources --profile=traefik` to see the result. Refer to [Health Monitoring](../features/health_monitoring.md) for the kinds covered, their limitations, the states and the ways to see the result.
+
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.

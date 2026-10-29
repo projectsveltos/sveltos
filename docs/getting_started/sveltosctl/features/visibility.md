@@ -252,3 +252,59 @@ Usage:
      --feature=<name>        Show drift history of resources deployed by this feature
                              (Helm, Resources or Kustomize). If not specified all features are considered.
 ```
+
+### show unhealthy-resources
+
+*show unhealthy-resources* displays the resources that [health monitoring](../../../features/health_monitoring.md) found not healthy. Health monitoring is enabled with `spec.healthMonitoring` in a ClusterProfile or Profile.
+
+The displayed information are:
+
+- The CAPI/Sveltos Cluster in the form namespace/name;
+- The (Cluster)Profile that owns the HealthCheck that reported the resource, in the form kind/name. When no profile owns the HealthCheck, the HealthCheck is displayed instead, in the form HealthCheck/name;
+- The kind of the resource, in the form Kind.group (just Kind for resources in the core group);
+- The namespace and name of the resource;
+- The status of the resource (`Degraded`, `Progressing` or `Suspended`);
+- Why the resource is not healthy.
+
+```bash
+$ sveltosctl show unhealthy-resources --namespace=civo --cluster=civo-cluster1
+┌────────────────────┬───────────────────────────────────┬───────────────────────┬───────────────┬──────────────────────────┬─────────────┬──────────────────────────────────────────────────────────────────────┐
+│      CLUSTER       │              PROFILE              │         KIND          │   NAMESPACE   │           NAME           │   STATUS    │                               MESSAGE                                │
+├────────────────────┼───────────────────────────────────┼───────────────────────┼───────────────┼──────────────────────────┼─────────────┼──────────────────────────────────────────────────────────────────────┤
+│ civo/civo-cluster1 │ ClusterProfile/civo-nginx-ingress │ Deployment.apps       │ ingress-nginx │ ingress-nginx-controller │ Degraded    │ Deployment "ingress-nginx-controller" exceeded its progress deadline │
+│ civo/civo-cluster1 │ ClusterProfile/civo-baseline-app  │ Job.batch             │ demo-app      │ db-migrate               │ Degraded    │ Job failed: BackoffLimitExceeded                                     │
+│ civo/civo-cluster1 │ ClusterProfile/civo-baseline-app  │ PersistentVolumeClaim │ demo-app      │ data                     │ Progressing │ PersistentVolumeClaim is not bound yet                               │
+│ civo/civo-cluster1 │ HealthCheck/crashloop-pods        │ Pod                   │ demo-app      │ worker-7d9f6             │ Degraded    │ container worker is in CrashLoopBackOff                              │
+└────────────────────┴───────────────────────────────────┴───────────────────────┴───────────────┴──────────────────────────┴─────────────┴──────────────────────────────────────────────────────────────────────┘
+Note: civo/civo-cluster2: no unhealthy resources.
+```
+
+The resources owned by a profile are displayed first, the worst status first. The ones no profile owns follow.
+
+Only the resources that are not healthy are displayed. When nothing is displayed for a cluster, a note below the table says why, so that an empty table is never mistaken for a healthy cluster:
+
+- health monitoring is not enabled;
+- health monitoring is enabled but no health report has been received yet;
+- there are no unhealthy resources.
+
+*show unhealthy-resources* allows filtering by:
+
+- clusters' namespace
+- clusters' name
+- clusters' type (`Capi` or `Sveltos`)
+- profile name. Only the resources reported through that profile are displayed, and the ones no profile owns are not. The note under the table, if any, is about that profile.
+
+```
+$ sveltosctl show unhealthy-resources --help
+Usage:
+  sveltosctl show unhealthy-resources [options] [--namespace=<name>] [--cluster=<name>] [--cluster-type=<type>] [--profile=<name>] [--verbose]
+
+     --namespace=<name>      Show unhealthy resources of clusters in this namespace.
+                             If not specified all namespaces are considered.
+     --cluster=<name>        Show unhealthy resources of cluster with name.
+                             If not specified all cluster names are considered.
+     --cluster-type=<type>   Show unhealthy resources of clusters with this type
+                             (Capi or Sveltos). If not specified all cluster types are considered.
+     --profile=<name>        Show only the unhealthy resources reported through the (Cluster)Profile with this name.
+                             Resources no profile owns are not displayed. If not specified all profiles are considered.
+```

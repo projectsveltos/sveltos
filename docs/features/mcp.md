@@ -85,6 +85,7 @@ The AI picks the tool by the question being asked.
 | `get_helm_release_details` | Get the details of one Helm release, combining the Sveltos data with the Helm state in the managed cluster. |
 | `list_outdated_helm_charts` | List the Helm releases on a cluster that have a newer version published upstream. |
 | `list_configuration_drift` | Get the configuration drift history recorded for a cluster, a profile or both: which resources drifted and when. |
+| `get_cluster_health` | List the resources that [health monitoring](health_monitoring.md) reports as not healthy on a cluster, with the profile that owns each of them. |
 | `list_sveltos_events` | List the Kubernetes events Sveltos recorded, such as failed deployments, failed notifications and unreachable clusters, grouped with a count. |
 | `analyze_profile_deployment` | Analyze the deployment of a profile on a cluster. |
 | `analyze_profile_cluster_match` | Explain why a cluster does or does not match a profile. |
