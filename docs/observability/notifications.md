@@ -28,6 +28,31 @@ Sveltos uses ClusterProfiles/Profiles to automatically track matching clusters a
 
 The `clusterSelector` field is a Kubernetes label selector. Sveltos uses it to detect all the clusters to assess health and send out notifications.
 
+The `clusterRefs` field lists clusters by reference, which is useful for a cluster that has no label to select it by. The clusters in `clusterRefs` are added to the ones matching `clusterSelector`, and a cluster that is in both is evaluated once. Each reference needs the `apiVersion`, `kind` (`SveltosCluster` or `Cluster`), `namespace` and `name` of the cluster. A reference to a cluster that does not exist does not make the ClusterHealthCheck fail.
+
+!!! example ""
+    ```yaml hl_lines="10-18"
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: ClusterHealthCheck
+    metadata:
+      name: prod-health
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      clusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1beta1
+        kind: SveltosCluster
+        namespace: mgmt
+        name: edge-1
+      - apiVersion: cluster.x-k8s.io/v1beta2
+        kind: Cluster
+        namespace: default
+        name: capi-staging
+      ...
+    ```
+
 ### LivenessChecks
 The `livenessCheck` field is a list of __cluster liveness checks__ to be evaluated.
 

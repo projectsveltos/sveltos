@@ -50,6 +50,27 @@ To access the dashboard, expose the `dashboard` service in the `projectsveltos` 
 
 The Sveltos Dashboard supports two authentication methods: **manual token authentication** (default) and **OIDC authentication**. The active method is determined at deploy time by the Helm values provided.
 
+### Dashboard ClusterRoles
+
+With both methods the dashboard acts as the logged in user: what a user sees, and what a user can change, is decided by the RBAC rules bound to that user. Sveltos ships two ClusterRoles, so there is no need to bind users to `cluster-admin`.
+
+| ClusterRole | Grants |
+|---|---|
+| `sveltos-dashboard-viewer` | `get`, `list` and `watch` on every kind the dashboard reads: Cluster API `clusters`, SveltosClusters, ClusterProfiles, Profiles, ClusterSummaries, Classifiers, ManagementClusterClassifiers and EventTriggers. |
+| `sveltos-dashboard-editor` | Everything in `sveltos-dashboard-viewer`, plus `create`, `update`, `patch` and `delete` on ClusterProfiles and Profiles, and `create`, `delete`, `get` and `update` on ConfigMaps. The dashboard stores the YAML of a profile in a ConfigMap. |
+
+The roles are in the `config/user-rbac` directory of the [ui-backend](https://github.com/projectsveltos/ui-backend/tree/main/config/user-rbac) repository. Apply them to the management cluster:
+
+```bash
+$ kubectl apply -k "https://github.com/projectsveltos/ui-backend/config/user-rbac?ref=v1.17.0"
+```
+
+!!!note
+    Neither role grants access to Secrets, and `sveltos-dashboard-viewer` grants no access to ConfigMaps. If a profile references a Secret, grant access to it with a namespaced `Role` in the namespace of the Secret: `get` and `update` to view and edit it from the dashboard, `delete` to remove it together with the profile.
+
+!!!warning
+    Write access to ClusterProfiles is effectively admin access to every cluster they select, because addon-controller deploys their content with its own privileges. The ConfigMap permissions of `sveltos-dashboard-editor` apply in every namespace. Bind `sveltos-dashboard-editor` only to users who are trusted with that.
+
 ### Manual Token Authentication
 
 To authenticate with the Sveltos Dashboard, we will utilise a `serviceAccount`, a `ClusterRoleBinding`/`RoleBinding` and a `token`. Let's create a `service account` in the desired namespace.
@@ -67,26 +88,26 @@ $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --s
 | Argument         | Description                                                                                                                                            |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `binding_name`   | It is a descriptive name for the rolebinding.                                                                                                          |
-| `role_name`      | It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see).   |
+| `role_name`      | It is one of the [Sveltos dashboard ClusterRoles](#dashboard-clusterroles) (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see). |
 | `namespace`      | It is the service account's namespace.                                                                                                                 |
 | `service_account`| It is the service account that the permissions are being associated with.                                                                              |
 
-#### Platform Administrator Example
+#### Viewer Example
 
 ```bash
-$ kubectl create sa platform-admin -n default
-$ kubectl create clusterrolebinding platform-admin-access --clusterrole cluster-admin --serviceaccount default:platform-admin
+$ kubectl create sa dashboard-viewer -n default
+$ kubectl create clusterrolebinding dashboard-viewer-access --clusterrole sveltos-dashboard-viewer --serviceaccount default:dashboard-viewer
 ```
 
-Create a login token for the service account with the name `platform-admin` in the `default` namespace. The token will be valid for **24 hours**.[^1]
+Create a login token for the service account with the name `dashboard-viewer` in the `default` namespace. The token will be valid for **24 hours**.
 
 ```bash
-$ kubectl create token platform-admin --duration=24h
+$ kubectl create token dashboard-viewer --duration=24h
 ```
 
 Copy the token generated, login to the Sveltos Dashboard and submit it.
 
-[^1]: While the example uses __cluster-admin__ for simplicity, the dashboard only requires read access to Sveltos CRs and Cluster API cluster instances.
+To also create and edit ClusterProfiles and Profiles from the dashboard, bind the service account to `sveltos-dashboard-editor` instead.
 
 ### OIDC Authentication
 
@@ -219,17 +240,17 @@ Without token passthrough, only OIDC logins work through the proxy.
 
 The Kubernetes API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens) for details on prefixing behaviour.
 
-The following example grants `cluster-admin` permissions to the OIDC user `test`:
+Bind the OIDC users, or the groups they belong to, to one of the [Sveltos dashboard ClusterRoles](#dashboard-clusterroles). The following example gives the OIDC user `test` read access to everything the dashboard shows. Use `sveltos-dashboard-editor` as the `roleRef` for users who also create and edit ClusterProfiles and Profiles:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: k8s-oidc-dashboard-admin
+  name: k8s-oidc-dashboard-viewer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cluster-admin
+  name: sveltos-dashboard-viewer
 subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: User
@@ -248,7 +269,7 @@ subjects:
 ```
 
 !!!note
-    In production, avoid granting admin level grants to the dashboard users.
+    Avoid binding dashboard users to `cluster-admin`. The dashboard roles above cover everything the dashboard needs.
 
 #### 4. Logging In
 

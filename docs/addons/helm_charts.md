@@ -519,6 +519,42 @@ Once these CRDs are updated, Sveltos will proceed with the Helm upgrade process.
             upgradeCRDs: true
     ```
 
+### Existing CRDs on Install
+
+When Sveltos installs a chart, it first creates the CRDs of the chart (the _crds/_ directory, subcharts included) that are not yet in the cluster. A CRD that already exists is never modified, unless you ask for it. This follows the behavior of Helm for the _crds/_ directory. The CRD may have been installed by another tool or chart, or by a previous release of the same chart. Overwriting it silently could also replace a newer definition with an older one.
+
+If an existing CRD is identical to the one in the chart, there is nothing to decide. If it differs, the `existingCRDs` field of `installOptions` selects what Sveltos does:
+
+| Value | Behavior |
+|---|---|
+| `Fail` (default) | The installation fails and the ClusterSummary reports the CRDs that differ. No CRD of the chart is created or changed. |
+| `Skip` | The existing CRD is left as it is and logged. The other CRDs of the chart are created and the installation carries on. |
+| `Overwrite` | The CRD of the chart is applied over the existing one. |
+
+!!! example ""
+    ```yaml hl_lines="15-17"
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: XXXX
+    spec:
+      ...
+      helmCharts:
+      - repositoryURL:    <REPO URL>
+        repositoryName:   <REPO NAME>
+        chartName:        <CHART NAME>
+        chartVersion:     <CHART VERSION>
+        releaseName:      <...>
+        releaseNamespace: <...>
+        options:
+          installOptions:
+            existingCRDs: Skip
+    ```
+
+!!! note
+    `existingCRDs` applies when a chart is installed. To update the CRDs when a chart is upgraded, use [upgradeCRDs](#upgrade-crds). If `skipCRDs` is set to true, Sveltos does not install the CRDs of the chart and `existingCRDs` is ignored.
+
 ### Run Helm Tests
 
 Set `runTests: true` on a helmChart entry to have Sveltos automatically run [Helm test hooks](https://helm.sh/docs/topics/chart_tests/) (`helm.sh/hook: test`) after each successful install or upgrade. Failing tests are treated as a deployment failure and the error is surfaced in the `ClusterSummary` status, providing an automated operational gate.
