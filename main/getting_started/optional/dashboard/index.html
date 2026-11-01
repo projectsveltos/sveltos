@@ -1449,6 +1449,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#dashboard-clusterroles" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Dashboard ClusterRoles
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#manual-token-authentication" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1461,10 +1472,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#platform-administrator-example" class="md-nav__link">
+  <a href="#viewer-example" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Platform Administrator Example
+        Viewer Example
       </span>
     </span>
   </a>
@@ -4962,6 +4973,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#dashboard-clusterroles" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Dashboard ClusterRoles
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#manual-token-authentication" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4974,10 +4996,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#platform-administrator-example" class="md-nav__link">
+  <a href="#viewer-example" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Platform Administrator Example
+        Viewer Example
       </span>
     </span>
   </a>
@@ -5168,12 +5190,43 @@
 <p>To access the dashboard, expose the <code>dashboard</code> service in the <code>projectsveltos</code> namespace. The deployment, by default, is configured as a <em>ClusterIP</em> service. To expose the service externally, we can edit it to either a <em>LoadBalancer</em> service or use an Ingress/Gateway API.</p>
 <h2 id="authentication">Authentication</h2>
 <p>The Sveltos Dashboard supports two authentication methods: <strong>manual token authentication</strong> (default) and <strong>OIDC authentication</strong>. The active method is determined at deploy time by the Helm values provided.</p>
+<h3 id="dashboard-clusterroles">Dashboard ClusterRoles</h3>
+<p>With both methods the dashboard acts as the logged in user: what a user sees, and what a user can change, is decided by the RBAC rules bound to that user. Sveltos ships two ClusterRoles, so there is no need to bind users to <code>cluster-admin</code>.</p>
+<table>
+<thead>
+<tr>
+<th>ClusterRole</th>
+<th>Grants</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sveltos-dashboard-viewer</code></td>
+<td><code>get</code>, <code>list</code> and <code>watch</code> on every kind the dashboard reads: Cluster API <code>clusters</code>, SveltosClusters, ClusterProfiles, Profiles, ClusterSummaries, Classifiers, ManagementClusterClassifiers and EventTriggers.</td>
+</tr>
+<tr>
+<td><code>sveltos-dashboard-editor</code></td>
+<td>Everything in <code>sveltos-dashboard-viewer</code>, plus <code>create</code>, <code>update</code>, <code>patch</code> and <code>delete</code> on ClusterProfiles and Profiles, and <code>create</code>, <code>delete</code>, <code>get</code> and <code>update</code> on ConfigMaps. The dashboard stores the YAML of a profile in a ConfigMap.</td>
+</tr>
+</tbody>
+</table>
+<p>The roles are in the <code>config/user-rbac</code> directory of the <a href="https://github.com/projectsveltos/ui-backend/tree/main/config/user-rbac">ui-backend</a> repository. Apply them to the management cluster:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span><span class="s2">"https://github.com/projectsveltos/ui-backend/config/user-rbac?ref=v1.17.0"</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Neither role grants access to Secrets, and <code>sveltos-dashboard-viewer</code> grants no access to ConfigMaps. If a profile references a Secret, grant access to it with a namespaced <code>Role</code> in the namespace of the Secret: <code>get</code> and <code>update</code> to view and edit it from the dashboard, <code>delete</code> to remove it together with the profile.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Write access to ClusterProfiles is effectively admin access to every cluster they select, because addon-controller deploys their content with its own privileges. The ConfigMap permissions of <code>sveltos-dashboard-editor</code> apply in every namespace. Bind <code>sveltos-dashboard-editor</code> only to users who are trusted with that.</p>
+</div>
 <h3 id="manual-token-authentication">Manual Token Authentication</h3>
 <p>To authenticate with the Sveltos Dashboard, we will utilise a <code>serviceAccount</code>, a <code>ClusterRoleBinding</code>/<code>RoleBinding</code> and a <code>token</code>. Let's create a <code>service account</code> in the desired namespace.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>sa<span class="w"> </span>&lt;user&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>sa<span class="w"> </span>&lt;user&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </span></code></pre></div>
 <p>The next step is to provide the service account permissions to access the <strong>managed</strong> clusters in the <strong>management</strong> cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>clusterrolebinding<span class="w"> </span>&lt;binding_name&gt;<span class="w"> </span>--clusterrole<span class="w"> </span>&lt;role_name&gt;<span class="w"> </span>--serviceaccount<span class="w"> </span>&lt;namespace&gt;:&lt;service_account&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>clusterrolebinding<span class="w"> </span>&lt;binding_name&gt;<span class="w"> </span>--clusterrole<span class="w"> </span>&lt;role_name&gt;<span class="w"> </span>--serviceaccount<span class="w"> </span>&lt;namespace&gt;:&lt;service_account&gt;
 </span></code></pre></div>
 <table>
 <thead>
@@ -5189,7 +5242,7 @@
 </tr>
 <tr>
 <td><code>role_name</code></td>
-<td>It is one of the default cluster roles (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see).</td>
+<td>It is one of the <a href="#dashboard-clusterroles">Sveltos dashboard ClusterRoles</a> (or a custom cluster role) specifying permissions (i.e., which managed clusters this serviceAccount can see).</td>
 </tr>
 <tr>
 <td><code>namespace</code></td>
@@ -5201,14 +5254,15 @@
 </tr>
 </tbody>
 </table>
-<h4 id="platform-administrator-example">Platform Administrator Example</h4>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>sa<span class="w"> </span>platform-admin<span class="w"> </span>-n<span class="w"> </span>default
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>clusterrolebinding<span class="w"> </span>platform-admin-access<span class="w"> </span>--clusterrole<span class="w"> </span>cluster-admin<span class="w"> </span>--serviceaccount<span class="w"> </span>default:platform-admin
+<h4 id="viewer-example">Viewer Example</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>sa<span class="w"> </span>dashboard-viewer<span class="w"> </span>-n<span class="w"> </span>default
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>clusterrolebinding<span class="w"> </span>dashboard-viewer-access<span class="w"> </span>--clusterrole<span class="w"> </span>sveltos-dashboard-viewer<span class="w"> </span>--serviceaccount<span class="w"> </span>default:dashboard-viewer
 </span></code></pre></div>
-<p>Create a login token for the service account with the name <code>platform-admin</code> in the <code>default</code> namespace. The token will be valid for <strong>24 hours</strong>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>token<span class="w"> </span>platform-admin<span class="w"> </span>--duration<span class="o">=</span>24h
+<p>Create a login token for the service account with the name <code>dashboard-viewer</code> in the <code>default</code> namespace. The token will be valid for <strong>24 hours</strong>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>token<span class="w"> </span>dashboard-viewer<span class="w"> </span>--duration<span class="o">=</span>24h
 </span></code></pre></div>
 <p>Copy the token generated, login to the Sveltos Dashboard and submit it.</p>
+<p>To also create and edit ClusterProfiles and Profiles from the dashboard, bind the service account to <code>sveltos-dashboard-editor</code> instead.</p>
 <h3 id="oidc-authentication">OIDC Authentication</h3>
 <p>The dashboard supports OIDC authentication using the <strong>Authorization Code Flow with PKCE</strong> (public client). When enabled, the login page will show the OIDC login option instead of the manual token form.</p>
 <p>Setting up OIDC requires three steps: configuring the dashboard, configuring the Kubernetes API server, and setting up RBAC for your dashboard users.</p>
@@ -5250,10 +5304,10 @@
 </tr>
 </tbody>
 </table>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>sveltos-dashboard<span class="w"> </span>projectsveltos/sveltos-dashboard<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.issuer<span class="o">=</span>https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.clientId<span class="o">=</span>k8s-oidc-client<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.redirectUri<span class="o">=</span>https://dashboard.example.com/oidc-callback
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>sveltos-dashboard<span class="w"> </span>projectsveltos/sveltos-dashboard<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.issuer<span class="o">=</span>https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.clientId<span class="o">=</span>k8s-oidc-client<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>--set<span class="w"> </span>auth.oidc.redirectUri<span class="o">=</span>https://dashboard.example.com/oidc-callback
 </span></code></pre></div>
 <p>Make sure that the client exists, it is configured as a <strong>public client</strong> (no client secret), and the redirect URI is registered in the OIDC provider. If the <code>auth.oidc.issuer</code> and the <code>auth.oidc.clientId</code> values are not set, the dashboard falls back to the manual token authentication.</p>
 <h5 id="which-token-the-dashboard-sends">Which token the dashboard sends</h5>
@@ -5283,41 +5337,41 @@
 <h5 id="option-a-oidc-flags-on-the-api-server">Option A: OIDC flags on the API server</h5>
 <p>The required and optional flags are documented <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens">here</a>.</p>
 <p>The below is an example of configuring OIDC in a k3d cluster.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>k3d<span class="w"> </span>cluster<span class="w"> </span>create<span class="w"> </span>oidc-test<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*"</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*"</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>k3d<span class="w"> </span>cluster<span class="w"> </span>create<span class="w"> </span>oidc-test<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--k3s-arg<span class="w"> </span><span class="s2">"--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"</span>
 </span></code></pre></div>
 <p>In this example, we use the <code>--oidc-username-claim</code> parameter to let the Kubernetes API server use the <code>preferred_username</code> claim from the OIDC token as the username.</p>
 <h5 id="option-b-kube-oidc-proxy-in-front-of-the-api-server">Option B: kube-oidc-proxy in front of the API server</h5>
 <p><code>kube-oidc-proxy</code> validates the OIDC token of the user, then calls the real API server on behalf of that user using impersonation. The real API server needs no OIDC configuration.</p>
 <p>Deploy <code>kube-oidc-proxy</code> in the management cluster, with the same issuer and client ID given to the dashboard. The below example uses the <code>kube-oidc-proxy</code> Helm chart (version 1.8.1) and the <code>email</code> claim as username.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>kube-oidc-proxy<span class="w"> </span>oci://ghcr.io/rafpe/charts/kube-oidc-proxy<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.8.1<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--namespace<span class="w"> </span>kube-oidc-proxy<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--set<span class="w"> </span>tls.secretName<span class="o">=</span>kube-oidc-proxy-tls<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--set<span class="w"> </span>oidc.issuerUrl<span class="o">=</span>https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>--set<span class="w"> </span>oidc.clientId<span class="o">=</span>k8s-oidc-client<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span>--set<span class="w"> </span>oidc.usernameClaim<span class="o">=</span>email<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span>--set<span class="w"> </span>tokenPassthrough.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span>--set<span class="w"> </span><span class="s1">'tokenPassthrough.audiences={https://kubernetes.default.svc.cluster.local}'</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>helm<span class="w"> </span>install<span class="w"> </span>kube-oidc-proxy<span class="w"> </span>oci://ghcr.io/rafpe/charts/kube-oidc-proxy<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.8.1<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>--namespace<span class="w"> </span>kube-oidc-proxy<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>--set<span class="w"> </span>tls.secretName<span class="o">=</span>kube-oidc-proxy-tls<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>--set<span class="w"> </span>oidc.issuerUrl<span class="o">=</span>https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span>--set<span class="w"> </span>oidc.clientId<span class="o">=</span>k8s-oidc-client<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>--set<span class="w"> </span>oidc.usernameClaim<span class="o">=</span>email<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span>--set<span class="w"> </span>tokenPassthrough.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span>--set<span class="w"> </span><span class="s1">'tokenPassthrough.audiences={https://kubernetes.default.svc.cluster.local}'</span>
 </span></code></pre></div>
 <p>The Secret <code>kube-oidc-proxy-tls</code> holds the serving certificate of the proxy. Its DNS names must include the address the dashboard uses to reach the proxy, for instance <code>kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local</code>.</p>
 <p>Then point the Sveltos Dashboard backend (<code>ui-backend</code>) to the proxy. Only the requests made with the token of the dashboard user go to the proxy. The backend keeps using its own ServiceAccount to talk to the real API server, so do not change <code>KUBERNETES_SERVICE_HOST</code> for it.</p>
 <p>First create a Secret with the CA that signed the certificate of the proxy, in the namespace of the dashboard:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>kube-oidc-proxy-ca<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.crt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>kube-oidc-proxy-ca<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.crt
 </span></code></pre></div>
 <p>Then set the following Helm values of the dashboard chart:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">uiBackendManager</span><span class="p">:</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">manager</span><span class="p">:</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">extraArgs</span><span class="p">:</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">      </span><span class="nt">oidc-proxy-host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local:443</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">      </span><span class="nt">oidc-proxy-ca-file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/oidc-proxy-ca/ca.crt</span>
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="nt">extraVolumes</span><span class="p">:</span>
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oidc-proxy-ca</span>
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/oidc-proxy-ca</span>
-</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">        </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">        </span><span class="nt">secret</span><span class="p">:</span>
-</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">          </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-oidc-proxy-ca</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">uiBackendManager</span><span class="p">:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">manager</span><span class="p">:</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="nt">extraArgs</span><span class="p">:</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">      </span><span class="nt">oidc-proxy-host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local:443</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">      </span><span class="nt">oidc-proxy-ca-file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/oidc-proxy-ca/ca.crt</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nt">extraVolumes</span><span class="p">:</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oidc-proxy-ca</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/oidc-proxy-ca</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">        </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">        </span><span class="nt">secret</span><span class="p">:</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">          </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-oidc-proxy-ca</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -5352,30 +5406,30 @@
 </div>
 <h4 id="3-configure-rbac-for-oidc-users">3. Configure RBAC for OIDC Users</h4>
 <p>The Kubernetes API server maps the username claim from the OIDC token to RBAC subjects. The subject name may include the issuer URL to avoid name clashes, based on the API server OIDC configuration. Refer to the <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens">Kubernetes documentation</a> for details on prefixing behaviour.</p>
-<p>The following example grants <code>cluster-admin</code> permissions to the OIDC user <code>test</code>:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-oidc-dashboard-admin</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nt">roleRef</span><span class="p">:</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
-</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-admin</span>
-</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="nt">subjects</span><span class="p">:</span>
-</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
-</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User</span>
-</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc#test</span>
+<p>Bind the OIDC users, or the groups they belong to, to one of the <a href="#dashboard-clusterroles">Sveltos dashboard ClusterRoles</a>. The following example gives the OIDC user <code>test</code> read access to everything the dashboard shows. Use <code>sveltos-dashboard-editor</code> as the <code>roleRef</code> for users who also create and edit ClusterProfiles and Profiles:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-oidc-dashboard-viewer</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sveltos-dashboard-viewer</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc#test</span>
 </span></code></pre></div>
 <p>Note that <code>subjects.name</code> includes the OIDC issuer URL prefix followed by the username claim value.</p>
 <p>With <code>kube-oidc-proxy</code> (Option B) the same rules apply, because the proxy uses the Kubernetes OIDC authenticator. For instance, when the username claim is <code>email</code>, no prefix is added and the subject is the email address itself:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">subjects</span><span class="p">:</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alice@example.com</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alice@example.com</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In production, avoid granting admin level grants to the dashboard users.</p>
+<p>Avoid binding dashboard users to <code>cluster-admin</code>. The dashboard roles above cover everything the dashboard needs.</p>
 </div>
 <h4 id="4-logging-in">4. Logging In</h4>
 <p>Once all three steps are complete, the dashboard login page will display the OIDC login option. Clicking it redirects the user to the OIDC provider. After a successful sign-in, the provider redirects back to the configured redirect URI, and the user is taken to the dashboard.</p>
@@ -5412,11 +5466,11 @@
 </table>
 <h4 id="troubleshooting-a-401-behind-kube-oidc-proxy">Troubleshooting a 401 Behind kube-oidc-proxy</h4>
 <p>When the backend cannot validate a token, it logs the reason and describes the token that was sent. The token itself is never logged. For example:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>failed to validate token: the server has asked for the client to provide credentials.
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>Token (Kubernetes ServiceAccount token, issuer="https://kubernetes.default.svc.cluster.local"
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>audience=[https://kubernetes.default.svc.cluster.local] expires=2026-10-08T07:49:59Z (valid))
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>was sent to https://kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local:443.
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>An OIDC proxy refuses ServiceAccount tokens unless token passthrough is enabled on it.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>failed to validate token: the server has asked for the client to provide credentials.
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>Token (Kubernetes ServiceAccount token, issuer="https://kubernetes.default.svc.cluster.local"
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>audience=[https://kubernetes.default.svc.cluster.local] expires=2026-10-08T07:49:59Z (valid))
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>was sent to https://kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local:443.
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>An OIDC proxy refuses ServiceAccount tokens unless token passthrough is enabled on it.
 </span></code></pre></div>
 <p>The description tells the kind of token (a JWT, a Kubernetes ServiceAccount token or an opaque token), its issuer, audience and expiry, and where it was sent. Compare the issuer and the audience with the proxy's <code>oidc.issuerUrl</code> and <code>oidc.clientId</code>.</p>
 <p>Other messages in the log:</p>
@@ -5449,14 +5503,6 @@
 <li>The token is signed with a key the proxy does not hold. The proxy loads the signing keys of the issuer at startup, so after the provider restarts and rotates its keys (for instance Dex with in-memory storage), restart the proxy.</li>
 <li>The token is malformed.</li>
 </ol>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>While the example uses <strong>cluster-admin</strong> for simplicity, the dashboard only requires read access to Sveltos CRs and Cluster API cluster instances.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
 
 
   <nav class="md-tags" >
