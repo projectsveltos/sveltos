@@ -16,7 +16,7 @@ ClusterProfile instances can leverage other ClusterProfiles to establish a deplo
 
 ### Example: Kyverno ClusterProfiles
 
-The below examaple displays a ClusterProfile which encapsulates all Kyverno policies for a cluster and declares a ClusterProfile dependency named `kyverno`, which is responsible for installing the Kyverno Helm chart.
+The below examaple displays a ClusterProfile which encapsulates all Kyverno policies for a cluster and declares a ClusterProfile dependency named `kyverno`, which is responsible for installing the Kyverno Helm chart. [^1]
 
 !!! example ""
     ```yaml
@@ -39,7 +39,6 @@ The below examaple displays a ClusterProfile which encapsulates all Kyverno poli
           name: restrict-wildcard-verbs
           namespace: default
     ```
-[^1]
 
 !!! example ""
     ```yaml
