@@ -12,7 +12,7 @@ authors:
 ---
 
 !!!video
-    To learn more about the **Sveltos Dashboard**, check out the [Sveltos Dashboard Introduction Youtube Video](https://www.youtube.com/embed/FjFtvrG8LWQ?si=mS8Yt2pleGsl33fK) and [Features and Debugging with Sveltos](https://www.youtube.com/embed/rN8gqsghev0?si=Q5xUVIW13rKOJ2mo). If you find this valuable, we would be thrilled if you shared it! 😊
+    To learn more about the **Sveltos Dashboard**, check out the [![Sveltos Dashboard Introduction](https://img.youtube.com/vi/L3bSYYvclJU/hqdefault.jpg)](https://www.youtube.com/watch?v=L3bSYYvclJU). If you find this valuable, we would be thrilled if you shared it! 😊
 
 
 ## Introduction to Sveltos Dashboard
