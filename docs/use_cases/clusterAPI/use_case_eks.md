@@ -18,7 +18,7 @@ authors:
 
 Imagine a scenario where we need to provide dedicated Kubernetes environments to individual users or teams on demand. Manually creating and managing these clusters can be time-consuming and error-prone. We will demonstrate how to automate this process using a powerful combination of [**ArgoCD**](https://argo-cd.readthedocs.io/en/stable/), **Sveltos**, and [**Cluster API**](https://cluster-api.sigs.k8s.io/).
 
-The goal is to set up a GitOps workflow where adding a new user via a Pull/Merge request triggers the automatic provisioning of a dedicated [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) cluster. ArgoCD will keep the management cluster in the right state. Sveltos will spot changes and manage cluster creation. Meanwhile, Cluster API will take care of setting up the EKS clusters. This is a hands-on turotial building a robust and scalable cluster provisioning pipeline. 
+The goal is to set up a GitOps workflow where adding a new user via a Pull/Merge request triggers the automatic provisioning of a dedicated [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) cluster. ArgoCD will keep the management cluster in the right state. Sveltos will spot changes and manage cluster creation. Meanwhile, Cluster API will take care of setting up the EKS clusters. This is a hands-on turotial building a robust and scalable cluster provisioning pipeline.
 
 ## Github Resources
 
