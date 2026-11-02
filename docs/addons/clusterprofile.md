@@ -336,7 +336,7 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
 
 `jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same check — a single `validateHealths` entry can't combine an active Job probe with a Lua/CEL evaluation.
 
-!!! example "Example - spec.validateHealths (Job)"
+!!! example "Example - ConfigMap (Job) for spec.validateHealths"
     ```yaml
     apiVersion: v1
     kind: ConfigMap
@@ -359,11 +359,10 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
               - name: probe
                 image: curlimages/curl:8.11.0
                 command: ["curl", "-sf", "http://kyverno-svc.kyverno.svc:443/healthz"]
-    ---
-    apiVersion: config.projectsveltos.io/v1beta1
-    kind: ClusterProfile
-    metadata:
-      name: kyverno-with-smoke-test
+    ```
+
+!!! example "Example - ClusterProfile spec.validateHealths"
+    ```yaml
     spec:
       validateHealths:
       - name: kyverno-smoke-test
