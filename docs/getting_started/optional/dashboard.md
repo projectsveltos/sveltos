@@ -9,11 +9,13 @@ tags:
     - multi-tenancy
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 !!!video
-    To learn more about the **Sveltos Dashboard**, check out the [![Sveltos Dashboard Introduction](https://img.youtube.com/vi/L3bSYYvclJU/hqdefault.jpg)](https://www.youtube.com/watch?v=L3bSYYvclJU). If you find this valuable, we would be thrilled if you shared it! 😊
+    To learn more about the **Sveltos Dashboard**, check out the [Sveltos Dashboard](https://www.youtube.com/watch?v=L3bSYYvclJU) in action. If you find this valuable, we would be thrilled if you shared it! 😊
 
+![Sveltos Dashboard Overview](../../assets/sveltos_dashboard_v1170.png)
 
 ## Introduction to Sveltos Dashboard
 
@@ -95,7 +97,7 @@ $ kubectl create clusterrolebinding <binding_name> --clusterrole <role_name> --s
 #### Viewer Example
 
 ```bash
-$ kubectl create sa dashboard-viewer -n default
+$ kubectl create sa dashboard-viewer
 $ kubectl create clusterrolebinding dashboard-viewer-access --clusterrole sveltos-dashboard-viewer --serviceaccount default:dashboard-viewer
 ```
 
@@ -113,11 +115,11 @@ To also create and edit ClusterProfiles and Profiles from the dashboard, bind th
 
 The dashboard supports OIDC authentication using the **Authorization Code Flow with PKCE** (public client). When enabled, the login page will show the OIDC login option instead of the manual token form.
 
-Setting up OIDC requires three steps: configuring the dashboard, configuring the Kubernetes API server, and setting up RBAC for your dashboard users.
+Setting up OIDC requires **three steps**: configuring the dashboard, configuring the Kubernetes API server, and setting up RBAC for your dashboard users.
 
 #### 1. Configure the Dashboard
 
-OIDC is enabled by providing the following Helm values at install time:
+OIDC is enabled by providing the following Helm values at install time.
 
 | Helm Value | Description | Default |
 |---|---|---|
@@ -136,9 +138,11 @@ $ helm install sveltos-dashboard projectsveltos/sveltos-dashboard -n projectsvel
 
 Make sure that the client exists, it is configured as a **public client** (no client secret), and the redirect URI is registered in the OIDC provider. If the `auth.oidc.issuer` and the `auth.oidc.clientId` values are not set, the dashboard falls back to the manual token authentication.
 
+---
+
 ##### Which token the dashboard sends
 
-After the login, the OIDC provider returns an **access token** and an **ID token**. The dashboard sends one of them to the Kubernetes API server (or to the OIDC proxy in front of it), as set by `auth.oidc.tokenType`.
+After the login, the OIDC provider returns an **access token** and an **ID token**. The dashboard sends one of them to the **Kubernetes API server** (or to the OIDC proxy in front of it), as set by `auth.oidc.tokenType`.
 
 The default is `access_token`. Some providers need it, for example AKS with Microsoft Entra ID, where the access token must be issued for the AKS server application (set `auth.oidc.scopes` accordingly).
 
@@ -158,12 +162,14 @@ The ID token is also the token that `kubectl` plugins such as `kubelogin` send, 
 
 #### 2. Configure the Kubernetes API Server
 
-The **Kubernetes API server** must accept and validate the tokens of the OIDC provider. There are two ways to achieve it:
+The **Kubernetes API server** must accept and validate the tokens of the OIDC provider. There are two ways to achieve it.
 
-- configure the API server itself with the OIDC flags, if you can change them;
-- run an OIDC-aware proxy in front of the API server, such as `kube-oidc-proxy`, when the API server cannot be configured (for instance a managed control plane that does not expose the flags).
+1. Configure the Kubernetes API server with the OIDC flags (if they can be changed)
+1. Run an OIDC-aware proxy in front of the Kubernetes API server, such as `kube-oidc-proxy`, when the API server cannot be configured (for instance a managed control plane that does not expose the flags).
 
-##### Option A: OIDC flags on the API server
+---
+
+##### Option 1: OIDC flags Kubernetes API server
 
 The required and optional flags are documented [here](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens).
 
@@ -174,16 +180,17 @@ $ k3d cluster create oidc-test \
   --k3s-arg "--kube-apiserver-arg=oidc-issuer-url=https://k8s-oidc-domain.example.com/auth/realms/k8s-oidc@server:*" \
   --k3s-arg "--kube-apiserver-arg=oidc-client-id=k8s-oidc-client@server:*" \
   --k3s-arg "--kube-apiserver-arg=oidc-username-claim=preferred_username@server:*"
-
 ```
 
 In this example, we use the `--oidc-username-claim` parameter to let the Kubernetes API server use the `preferred_username` claim from the OIDC token as the username.
 
-##### Option B: kube-oidc-proxy in front of the API server
+---
 
-`kube-oidc-proxy` validates the OIDC token of the user, then calls the real API server on behalf of that user using impersonation. The real API server needs no OIDC configuration.
+##### Option 2: kube-oidc-proxy in front of Kubernetes API server
 
-Deploy `kube-oidc-proxy` in the management cluster, with the same issuer and client ID given to the dashboard. The below example uses the `kube-oidc-proxy` Helm chart (version 1.8.1) and the `email` claim as username.
+`kube-oidc-proxy` validates the OIDC token of the user. It then calls the real API server on behalf of the user using impersonation. The real API server needs no OIDC configuration.
+
+Deploy `kube-oidc-proxy` in the **management** cluster, with the same **issuer** and **client ID** given to the dashboard. The below example uses the `kube-oidc-proxy` Helm chart _v1.8.1_ and the `email` claim as username.
 
 ```bash
 $ helm install kube-oidc-proxy oci://ghcr.io/rafpe/charts/kube-oidc-proxy --version 1.8.1 \
@@ -200,13 +207,13 @@ The Secret `kube-oidc-proxy-tls` holds the serving certificate of the proxy. Its
 
 Then point the Sveltos Dashboard backend (`ui-backend`) to the proxy. Only the requests made with the token of the dashboard user go to the proxy. The backend keeps using its own ServiceAccount to talk to the real API server, so do not change `KUBERNETES_SERVICE_HOST` for it.
 
-First create a Secret with the CA that signed the certificate of the proxy, in the namespace of the dashboard:
+First create a Secret with the CA that signed the certificate of the proxy, in the namespace of the dashboard.
 
 ```bash
 $ kubectl create secret generic kube-oidc-proxy-ca -n projectsveltos --from-file=ca.crt=ca.crt
 ```
 
-Then set the following Helm values of the dashboard chart:
+Then set the following Helm values to the dashboard chart.
 
 ```yaml
 uiBackendManager:
@@ -287,7 +294,7 @@ Once all three steps are complete, the dashboard login page will display the OID
 
 #### Troubleshooting a 401 Behind kube-oidc-proxy
 
-When the backend cannot validate a token, it logs the reason and describes the token that was sent. The token itself is never logged. For example:
+If the backend cannot validate a token, it logs the reason and outlines the token that was sent. The token itself is never logged.
 
 ```
 failed to validate token: the server has asked for the client to provide credentials.
@@ -297,9 +304,9 @@ was sent to https://kube-oidc-proxy.kube-oidc-proxy.svc.cluster.local:443.
 An OIDC proxy refuses ServiceAccount tokens unless token passthrough is enabled on it.
 ```
 
-The description tells the kind of token (a JWT, a Kubernetes ServiceAccount token or an opaque token), its issuer, audience and expiry, and where it was sent. Compare the issuer and the audience with the proxy's `oidc.issuerUrl` and `oidc.clientId`.
+The above tells us the kind of token (a JWT, a Kubernetes ServiceAccount token or an opaque token), its issuer, audience and expiry, and where it was sent. Compare the issuer and the audience with the proxy's `oidc.issuerUrl` and `oidc.clientId`.
 
-Other messages in the log:
+**Other Messages**
 
 | Message | Meaning |
 |---|---|
@@ -307,9 +314,13 @@ Other messages in the log:
 | `authorization header is not a bearer token` | The header is present but is not of the form `Bearer <token>`. |
 | `token is missing` | The header is `Bearer` with an empty token. |
 
-The log of the proxy for the same request shows `auth_method: none` with `decision: deny`. This does **not** mean that no token was sent: the proxy logs it for any token it cannot authenticate. These are the causes:
+The log of the proxy for the same request shows `auth_method: none` with `decision: deny`. This does **not** mean that no token was sent: the proxy logs it for any token it cannot authenticate. Some of the most common causes are listed below.
 
 1. A ServiceAccount token was sent while token passthrough is off on the proxy. Enable `tokenPassthrough`.
-2. The token is not one the proxy accepts: it is opaque or encrypted, or it has a different issuer or audience. Set `auth.oidc.tokenType=id_token`, and check the issuer and the client ID of the proxy.
-3. The token is signed with a key the proxy does not hold. The proxy loads the signing keys of the issuer at startup, so after the provider restarts and rotates its keys (for instance Dex with in-memory storage), restart the proxy.
-4. The token is malformed.
+1. The token is not one the proxy accepts: it is opaque or encrypted, or it has a different issuer or audience. Set `auth.oidc.tokenType=id_token`, and check the issuer and the client ID of the proxy.
+1. The token is signed with a key the proxy does not hold. The proxy loads the signing keys of the issuer at startup, so after the provider restarts and rotates its keys (for instance Dex with in-memory storage), restart the proxy.
+1. The token is malformed.
+
+## Deployment Examples
+
+An example of integrating the Sveltos dashboard with [Keycloak](https://www.keycloak.org/) using OIDC Authentication is available [here](https://blog.grosdouli.dev/blog/sveltos-dashboard-oidc-keycloak-cilium-gateway-api).
