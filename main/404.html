@@ -92,18 +92,40 @@
           <aside class="md-banner md-banner--warning">
             <div class="md-banner__inner md-grid md-typeset">
               
-  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+  <style>
+    .md-banner--warning {
+      background-color: #1e4fa3;
+      color: #ffffff;
+    }
+    .md-banner--warning a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+    .md-banner--warning a.btn {
+      padding: 5px 12px;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .md-banner--warning a.btn-primary {
+      background-color: #8ecbff;
+      color: #0b2a5b;
+    }
+    .md-banner--warning a.btn-secondary {
+      border: 1px solid #ffffff;
+    }
+  </style>
+
+  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; text-align: center;">
+    <span style="flex-basis: 100%; margin-bottom: 8px;">⭐️ If you like Sveltos, give it a star on <a href="https://github.com/projectsveltos/addon-controller" target="_blank" rel="noopener">GitHub</a>! ⭐️</span>
+
     <span>You're viewing the main documentation.</span>
-    
-    <a href="https://projectsveltos.github.io/sveltos/latest/" 
-       style="background-color: #0066cc; color: white; padding: 5px 12px; border-radius: 3px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 13px;">
-      View Latest Version
-    </a>
-    
-    <a href="https://projectsveltos.github.io/sveltos/main/archive/" 
-       style="background-color: #f0f0f0; color: #333; padding: 5px 12px; border-radius: 3px; text-decoration: none; font-weight: 600; display: inline-block; border: 1px solid #ccc; font-size: 13px;">
-      All Versions
-    </a>
+
+    <a class="btn btn-primary" href="https://projectsveltos.github.io/sveltos/latest/">View Latest Version</a>
+
+    <a class="btn btn-secondary" href="https://projectsveltos.github.io/sveltos/main/archive/">All Versions</a>
   </div>
 
             </div>
