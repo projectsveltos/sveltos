@@ -18,7 +18,7 @@ authors:
 
 Imagine a scenario where we need to provide dedicated Kubernetes environments to individual users or teams on demand. Manually creating and managing these clusters can be time-consuming and error-prone. We will demonstrate how to automate this process using a powerful combination of [**ArgoCD**](https://argo-cd.readthedocs.io/en/stable/), **Sveltos**, and [**Cluster API**](https://cluster-api.sigs.k8s.io/).
 
-The goal is to set up a GitOps workflow where adding a new user via a Pull/Merge request triggers the automatic provisioning of a dedicated [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) cluster. ArgoCD will keep the management cluster in the right state. Sveltos will spot changes and manage cluster creation. Meanwhile, Cluster API will take care of setting up the EKS clusters. This is a hands-on turotial building a robust and scalable cluster provisioning pipeline. 
+The goal is to set up a GitOps workflow where adding a new user via a Pull/Merge request triggers the automatic provisioning of a dedicated [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) cluster. ArgoCD will keep the management cluster in the right state. Sveltos will spot changes and manage cluster creation. Meanwhile, Cluster API will take care of setting up the EKS clusters. This is a hands-on turotial building a robust and scalable cluster provisioning pipeline.
 
 ## Github Resources
 
@@ -179,6 +179,9 @@ Sveltos, upon detecting this change, proceeds to delete all the Cluster API reso
 Because Cluster API operates declaratively, deleting these resources triggers the deletion of the underlying EKS cluster. ClusterAPI's AWS infrastructure provider interprets the removal of these resources as a request to terminate the corresponding cloud resources.
 
 Therefore, by simply removing the user entry from the existing-users.yaml ConfigMap and allowing ArgoCD and Sveltos to synchronise the changes, we effectively automate the entire lifecycle of the EKS cluster, from creation to deletion. This ensures that resources are efficiently managed and that orphaned clusters are avoided, maintaining a clean and cost-effective environment.
+
+!!! note
+    Cluster API's AWS provider only removes what it created as `Machine`/infrastructure resources. Tools like Karpenter can leave behind EC2 instances, network interfaces, and security groups that CAPA cannot delete on its own once the EKS control plane is gone. See [Cleanup on Cluster Deletion](../../events/examples/cluster_deletion_cleanup.md) for how to run a cleanup job in the management cluster while the `Cluster` is still deleting.
 
 ## Conclusion
 

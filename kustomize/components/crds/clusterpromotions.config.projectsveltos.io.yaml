@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
     annotations:
-        controller-gen.kubebuilder.io/version: v0.21.0
+        controller-gen.kubebuilder.io/version: v0.23.0
     name: clusterpromotions.config.projectsveltos.io
 spec:
     group: config.projectsveltos.io
@@ -133,6 +133,52 @@ spec:
                                             type: object
                                         type: array
                                         x-kubernetes-list-type: atomic
+                                    healthMonitoring:
+                                        description: |-
+                                            HealthMonitoring, when enabled, continuously monitors the health of the resources
+                                            this profile deploys in each matching cluster. Unlike ValidateHealths, which are
+                                            evaluated once during deployment, these checks run for as long as the profile
+                                            is deployed. Results are available as HealthCheckReports.
+                                        properties:
+                                            defaultChecks:
+                                                default: true
+                                                description: |-
+                                                    DefaultChecks, when true (default), monitors the Deployments, StatefulSets, DaemonSets,
+                                                    Jobs and PersistentVolumeClaims deployed by this profile (raw resources and Helm charts).
+                                                    Set it to false to monitor only the HealthChecks listed in HealthChecks.
+                                                type: boolean
+                                            enabled:
+                                                description: |-
+                                                    Enabled turns health monitoring on for the resources deployed by this profile.
+                                                    When true, Sveltos creates a HealthCheck and a ClusterHealthCheck for each
+                                                    matching cluster once the profile is provisioned there, and removes them
+                                                    when monitoring is disabled or the cluster does not match anymore.
+                                                type: boolean
+                                            healthChecks:
+                                                description: |-
+                                                    HealthChecks is a list of names of HealthCheck instances to monitor in addition
+                                                    to the default checks. Those are deployed as they are: selecting only the
+                                                    resources deployed by this profile is up to the HealthCheck.
+
+                                                    Only a ClusterProfile can set it. It is ignored for a (namespaced) Profile, which gets the
+                                                    default checks only. A HealthCheck is a cluster-scoped resource referenced by name, and the
+                                                    report it produces is shared by every profile that references it on a given cluster, with
+                                                    no filtering by namespace. Allowing a Profile to reference one would let a tenant name
+                                                    a HealthCheck it does not own, and learn about resources outside its namespace through
+                                                    the shared report. The default checks are safe for a Profile: they select only the
+                                                    resources that profile deployed.
+                                                items:
+                                                    type: string
+                                                type: array
+                                                x-kubernetes-list-type: set
+                                        required:
+                                            - enabled
+                                        type: object
+                                        x-kubernetes-validations:
+                                            - message: healthChecks can only be set when enabled is true
+                                              rule: self.enabled || !has(self.healthChecks) || size(self.healthChecks) == 0
+                                            - message: 'defaultChecks cannot be false when healthChecks is empty: there would be nothing to monitor'
+                                              rule: '!self.enabled || !has(self.defaultChecks) || self.defaultChecks || (has(self.healthChecks) && size(self.healthChecks) > 0)'
                                     helmCharts:
                                         description: Helm charts is a list of helm charts that need to be deployed
                                         items:
@@ -207,6 +253,34 @@ spec:
                                                                         disable hooks on install
                                                                         Default to false
                                                                     type: boolean
+                                                                existingCRDs:
+                                                                    default: Fail
+                                                                    description: |-
+                                                                        ExistingCRDs controls what happens when a CRD in the chart's crds/ directory (subcharts
+                                                                        included) already exists in the cluster with a different definition. CRDs not yet in the
+                                                                        cluster are always created. Ignored when SkipCRDs is true.
+                                                                        Fail fails the installation and reports the CRDs that differ. No CRD is created or changed.
+                                                                        Skip leaves the existing CRD as it is, logs it and carries on with the rest of the chart.
+                                                                        Overwrite applies the CRD of the chart over the existing one.
+                                                                        Default to Fail
+                                                                    enum:
+                                                                        - Skip
+                                                                        - Fail
+                                                                        - Overwrite
+                                                                    type: string
+                                                                recoverAfterConsecutiveFailures:
+                                                                    default: 5
+                                                                    description: |-
+                                                                        RecoverAfterConsecutiveFailures is the number of consecutive install failures for this
+                                                                        chart after which Sveltos uninstalls any existing release under this name before
+                                                                        retrying, to clear potentially stale Helm release history that would otherwise keep
+                                                                        blocking every subsequent install attempt. This only ever runs when there is no
+                                                                        currently deployed release to protect: a release that is deployed, or mid-upgrade, or
+                                                                        failed while already existing, is always retried through helm upgrade instead, never
+                                                                        through this. It only applies to a release that was never successfully installed, or
+                                                                        was already cleanly uninstalled.
+                                                                        Default to 5
+                                                                    type: integer
                                                                 replace:
                                                                     default: true
                                                                     description: Replaces if set indicates to replace an older release with this one
@@ -630,6 +704,9 @@ spec:
                                                         KustomizationRef when an update is rejected with an error that only a delete+recreate
                                                         can resolve (eg an invalid combination of fields, or a field enforced as immutable).
                                                         By default, such errors are surfaced instead of recreating the resource.
+                                                        This applies to every resource produced by this KustomizationRef. To force just one
+                                                        resource, regardless of this field's value, annotate that resource with
+                                                        projectsveltos.io/forceRecreate instead.
                                                     type: boolean
                                                 kind:
                                                     description: |-
@@ -682,11 +759,23 @@ spec:
                                                         or a ConfigMap/Secret.
                                                         When set, Kind/Name/Namespace must be omitted.
                                                     properties:
+                                                        insecureSkipTLSVerify:
+                                                            default: false
+                                                            description: |-
+                                                                InsecureSkipTLSVerify controls server certificate verification.
+                                                                Ignored if the referenced SecretRef provides a "caFile".
+                                                            type: boolean
                                                         interval:
                                                             description: |-
                                                                 Interval defines how often Sveltos re-fetches the source to detect changes.
                                                                 Defaults to 5 minutes.
                                                             type: string
+                                                        plainHTTP:
+                                                            default: false
+                                                            description: |-
+                                                                PlainHTTP indicates to use insecure HTTP connections when URL uses the
+                                                                "oci://" scheme. Ignored for "http://"/"https://" URLs.
+                                                            type: boolean
                                                         secretRef:
                                                             description: |-
                                                                 SecretRef references a Secret in the management cluster containing optional
@@ -716,6 +805,9 @@ spec:
                                                                                             (.tar.gz) of the Kustomize directory
                                                                   "oci://"                — OCI registry artifact whose layers are extracted
                                                                                             the same way, preserving the directory tree
+                                                                URL can be expressed as a template and instantiated using any cluster field,
+                                                                so a single profile can fetch different content for each matching cluster,
+                                                                e.g. "oci://registry.example/space/app-{{ .Cluster.metadata.name }}:latest".
                                                             pattern: ^(https?|oci)://
                                                             type: string
                                                     required:
@@ -981,6 +1073,9 @@ spec:
                                                         PolicyRef when an update is rejected with an error that only a delete+recreate can
                                                         resolve (eg an invalid combination of fields, or a field enforced as immutable).
                                                         By default, such errors are surfaced instead of recreating the resource.
+                                                        This applies to every resource produced by this PolicyRef. To force just one
+                                                        resource, regardless of this field's value, annotate that resource with
+                                                        projectsveltos.io/forceRecreate instead.
                                                     type: boolean
                                                 kind:
                                                     description: |-
@@ -1031,11 +1126,23 @@ spec:
                                                         RemoteURL configures fetching content from an HTTP/HTTPS endpoint or an OCI registry.
                                                         When set, Kind/Name/Namespace must be omitted.
                                                     properties:
+                                                        insecureSkipTLSVerify:
+                                                            default: false
+                                                            description: |-
+                                                                InsecureSkipTLSVerify controls server certificate verification.
+                                                                Ignored if the referenced SecretRef provides a "caFile".
+                                                            type: boolean
                                                         interval:
                                                             description: |-
                                                                 Interval defines how often Sveltos re-fetches the source to detect changes.
                                                                 Defaults to 5 minutes.
                                                             type: string
+                                                        plainHTTP:
+                                                            default: false
+                                                            description: |-
+                                                                PlainHTTP indicates to use insecure HTTP connections when URL uses the
+                                                                "oci://" scheme. Ignored for "http://"/"https://" URLs.
+                                                            type: boolean
                                                         secretRef:
                                                             description: |-
                                                                 SecretRef references a Secret in the management cluster containing optional
@@ -1068,8 +1175,16 @@ spec:
                                                                 Sveltos fetches the content on every reconciliation and redeploys if the
                                                                 content hash has changed.
                                                                 Supported schemes:
-                                                                  "http://" or "https://" — HTTP/HTTPS endpoint returning raw YAML/JSON
-                                                                  "oci://"                — OCI registry artifact containing YAML manifests
+                                                                  "http://" or "https://" — HTTP/HTTPS endpoint returning a raw YAML/JSON
+                                                                                            document, a gzip-compressed document, an
+                                                                                            uncompressed tar, or a gzip-compressed tar of
+                                                                                            .yaml/.yml/.json files
+                                                                  "oci://"                — OCI registry artifact whose layers are accepted
+                                                                                            in the same shapes: raw YAML/JSON, gzip-compressed
+                                                                                            YAML/JSON, uncompressed tar, or gzip-compressed tar
+                                                                URL can be expressed as a template and instantiated using any cluster field,
+                                                                so a single profile can fetch different content for each matching cluster,
+                                                                e.g. "oci://registry.example/space/app-{{ .Cluster.metadata.name }}:latest".
                                                             pattern: ^(https?|oci)://
                                                             type: string
                                                     required:
@@ -1139,7 +1254,7 @@ spec:
                                                     type: array
                                                 featureID:
                                                     description: |-
-                                                        FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                        FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                         This field indicates when to run this check.
                                                         For instance:
                                                         - if set to Helm this check will be run after all helm
@@ -1157,6 +1272,45 @@ spec:
                                                         Group of the resource to fetch in the managed Cluster.
                                                         Required when Kind is set. Leave empty for metric-only checks.
                                                     type: string
+                                                jobCheck:
+                                                    description: |-
+                                                        JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                        outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                    properties:
+                                                        jobRef:
+                                                            description: |-
+                                                                JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                deploy in the managed Cluster as this check.
+                                                            properties:
+                                                                kind:
+                                                                    description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                    enum:
+                                                                        - Secret
+                                                                        - ConfigMap
+                                                                    type: string
+                                                                name:
+                                                                    description: Name of the referenced resource.
+                                                                    minLength: 1
+                                                                    type: string
+                                                                namespace:
+                                                                    description: |-
+                                                                        Namespace of the referenced resource.
+                                                                        Namespace can be left empty. In such a case, namespace will
+                                                                        be implicit set to cluster's namespace.
+                                                                    type: string
+                                                            required:
+                                                                - kind
+                                                                - name
+                                                                - namespace
+                                                            type: object
+                                                        timeout:
+                                                            description: |-
+                                                                Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                before treating the check as failed. Defaults to 5 minutes when unset.
+                                                            type: string
+                                                    required:
+                                                        - jobRef
+                                                    type: object
                                                 kind:
                                                     description: |-
                                                         Kind of the resource to fetch in the managed Cluster.
@@ -1268,6 +1422,9 @@ spec:
                                                 - featureID
                                                 - name
                                             type: object
+                                            x-kubernetes-validations:
+                                                - message: jobCheck cannot be set together with script or evaluateCEL
+                                                  rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                         type: array
                                         x-kubernetes-list-type: atomic
                                     preDeleteChecks:
@@ -1305,7 +1462,7 @@ spec:
                                                     type: array
                                                 featureID:
                                                     description: |-
-                                                        FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                        FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                         This field indicates when to run this check.
                                                         For instance:
                                                         - if set to Helm this check will be run after all helm
@@ -1323,6 +1480,45 @@ spec:
                                                         Group of the resource to fetch in the managed Cluster.
                                                         Required when Kind is set. Leave empty for metric-only checks.
                                                     type: string
+                                                jobCheck:
+                                                    description: |-
+                                                        JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                        outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                    properties:
+                                                        jobRef:
+                                                            description: |-
+                                                                JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                deploy in the managed Cluster as this check.
+                                                            properties:
+                                                                kind:
+                                                                    description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                    enum:
+                                                                        - Secret
+                                                                        - ConfigMap
+                                                                    type: string
+                                                                name:
+                                                                    description: Name of the referenced resource.
+                                                                    minLength: 1
+                                                                    type: string
+                                                                namespace:
+                                                                    description: |-
+                                                                        Namespace of the referenced resource.
+                                                                        Namespace can be left empty. In such a case, namespace will
+                                                                        be implicit set to cluster's namespace.
+                                                                    type: string
+                                                            required:
+                                                                - kind
+                                                                - name
+                                                                - namespace
+                                                            type: object
+                                                        timeout:
+                                                            description: |-
+                                                                Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                before treating the check as failed. Defaults to 5 minutes when unset.
+                                                            type: string
+                                                    required:
+                                                        - jobRef
+                                                    type: object
                                                 kind:
                                                     description: |-
                                                         Kind of the resource to fetch in the managed Cluster.
@@ -1434,6 +1630,9 @@ spec:
                                                 - featureID
                                                 - name
                                             type: object
+                                            x-kubernetes-validations:
+                                                - message: jobCheck cannot be set together with script or evaluateCEL
+                                                  rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                         type: array
                                         x-kubernetes-list-type: atomic
                                     preDeployChecks:
@@ -1471,7 +1670,7 @@ spec:
                                                     type: array
                                                 featureID:
                                                     description: |-
-                                                        FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                        FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                         This field indicates when to run this check.
                                                         For instance:
                                                         - if set to Helm this check will be run after all helm
@@ -1489,6 +1688,45 @@ spec:
                                                         Group of the resource to fetch in the managed Cluster.
                                                         Required when Kind is set. Leave empty for metric-only checks.
                                                     type: string
+                                                jobCheck:
+                                                    description: |-
+                                                        JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                        outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                    properties:
+                                                        jobRef:
+                                                            description: |-
+                                                                JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                deploy in the managed Cluster as this check.
+                                                            properties:
+                                                                kind:
+                                                                    description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                    enum:
+                                                                        - Secret
+                                                                        - ConfigMap
+                                                                    type: string
+                                                                name:
+                                                                    description: Name of the referenced resource.
+                                                                    minLength: 1
+                                                                    type: string
+                                                                namespace:
+                                                                    description: |-
+                                                                        Namespace of the referenced resource.
+                                                                        Namespace can be left empty. In such a case, namespace will
+                                                                        be implicit set to cluster's namespace.
+                                                                    type: string
+                                                            required:
+                                                                - kind
+                                                                - name
+                                                                - namespace
+                                                            type: object
+                                                        timeout:
+                                                            description: |-
+                                                                Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                before treating the check as failed. Defaults to 5 minutes when unset.
+                                                            type: string
+                                                    required:
+                                                        - jobRef
+                                                    type: object
                                                 kind:
                                                     description: |-
                                                         Kind of the resource to fetch in the managed Cluster.
@@ -1600,6 +1838,9 @@ spec:
                                                 - featureID
                                                 - name
                                             type: object
+                                            x-kubernetes-validations:
+                                                - message: jobCheck cannot be set together with script or evaluateCEL
+                                                  rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                         type: array
                                         x-kubernetes-list-type: atomic
                                     reloader:
@@ -1750,6 +1991,18 @@ spec:
                                         format: int32
                                         minimum: 1
                                         type: integer
+                                    transitionFrom:
+                                        description: |-
+                                            TransitionFrom names the Profiles or ClusterProfiles this instance replaces.
+                                            For matching target clusters, teardown of the replaced profiles is deferred
+                                            until this instance reaches Provisioned. This instance is also permitted to
+                                            adopt resources owned by the replaced profiles, ignoring tier restrictions.
+                                            Same-kind only: a ClusterProfile names other ClusterProfiles, a Profile names
+                                            other Profiles in the same namespace.
+                                        items:
+                                            type: string
+                                        type: array
+                                        x-kubernetes-list-type: atomic
                                     validateHealths:
                                         description: |-
                                             ValidateHealths is a slice of checks to run against the managed cluster
@@ -1785,7 +2038,7 @@ spec:
                                                     type: array
                                                 featureID:
                                                     description: |-
-                                                        FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                        FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                         This field indicates when to run this check.
                                                         For instance:
                                                         - if set to Helm this check will be run after all helm
@@ -1803,6 +2056,45 @@ spec:
                                                         Group of the resource to fetch in the managed Cluster.
                                                         Required when Kind is set. Leave empty for metric-only checks.
                                                     type: string
+                                                jobCheck:
+                                                    description: |-
+                                                        JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                        outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                    properties:
+                                                        jobRef:
+                                                            description: |-
+                                                                JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                deploy in the managed Cluster as this check.
+                                                            properties:
+                                                                kind:
+                                                                    description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                    enum:
+                                                                        - Secret
+                                                                        - ConfigMap
+                                                                    type: string
+                                                                name:
+                                                                    description: Name of the referenced resource.
+                                                                    minLength: 1
+                                                                    type: string
+                                                                namespace:
+                                                                    description: |-
+                                                                        Namespace of the referenced resource.
+                                                                        Namespace can be left empty. In such a case, namespace will
+                                                                        be implicit set to cluster's namespace.
+                                                                    type: string
+                                                            required:
+                                                                - kind
+                                                                - name
+                                                                - namespace
+                                                            type: object
+                                                        timeout:
+                                                            description: |-
+                                                                Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                before treating the check as failed. Defaults to 5 minutes when unset.
+                                                            type: string
+                                                    required:
+                                                        - jobRef
+                                                    type: object
                                                 kind:
                                                     description: |-
                                                         Kind of the resource to fetch in the managed Cluster.
@@ -1914,6 +2206,9 @@ spec:
                                                 - featureID
                                                 - name
                                             type: object
+                                            x-kubernetes-validations:
+                                                - message: jobCheck cannot be set together with script or evaluateCEL
+                                                  rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                         type: array
                                         x-kubernetes-list-type: atomic
                                 type: object
@@ -2019,7 +2314,7 @@ spec:
                                                                         type: array
                                                                     featureID:
                                                                         description: |-
-                                                                            FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                                            FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                                             This field indicates when to run this check.
                                                                             For instance:
                                                                             - if set to Helm this check will be run after all helm
@@ -2037,6 +2332,45 @@ spec:
                                                                             Group of the resource to fetch in the managed Cluster.
                                                                             Required when Kind is set. Leave empty for metric-only checks.
                                                                         type: string
+                                                                    jobCheck:
+                                                                        description: |-
+                                                                            JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                                            outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                                        properties:
+                                                                            jobRef:
+                                                                                description: |-
+                                                                                    JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                                    deploy in the managed Cluster as this check.
+                                                                                properties:
+                                                                                    kind:
+                                                                                        description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                                        enum:
+                                                                                            - Secret
+                                                                                            - ConfigMap
+                                                                                        type: string
+                                                                                    name:
+                                                                                        description: Name of the referenced resource.
+                                                                                        minLength: 1
+                                                                                        type: string
+                                                                                    namespace:
+                                                                                        description: |-
+                                                                                            Namespace of the referenced resource.
+                                                                                            Namespace can be left empty. In such a case, namespace will
+                                                                                            be implicit set to cluster's namespace.
+                                                                                        type: string
+                                                                                required:
+                                                                                    - kind
+                                                                                    - name
+                                                                                    - namespace
+                                                                                type: object
+                                                                            timeout:
+                                                                                description: |-
+                                                                                    Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                                    before treating the check as failed. Defaults to 5 minutes when unset.
+                                                                                type: string
+                                                                        required:
+                                                                            - jobRef
+                                                                        type: object
                                                                     kind:
                                                                         description: |-
                                                                             Kind of the resource to fetch in the managed Cluster.
@@ -2148,6 +2482,9 @@ spec:
                                                                     - featureID
                                                                     - name
                                                                 type: object
+                                                                x-kubernetes-validations:
+                                                                    - message: jobCheck cannot be set together with script or evaluateCEL
+                                                                      rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                                             type: array
                                                         preHealthCheckDeployment:
                                                             description: |-
@@ -2173,6 +2510,9 @@ spec:
                                                                             PolicyRef when an update is rejected with an error that only a delete+recreate can
                                                                             resolve (eg an invalid combination of fields, or a field enforced as immutable).
                                                                             By default, such errors are surfaced instead of recreating the resource.
+                                                                            This applies to every resource produced by this PolicyRef. To force just one
+                                                                            resource, regardless of this field's value, annotate that resource with
+                                                                            projectsveltos.io/forceRecreate instead.
                                                                         type: boolean
                                                                     kind:
                                                                         description: |-
@@ -2223,11 +2563,23 @@ spec:
                                                                             RemoteURL configures fetching content from an HTTP/HTTPS endpoint or an OCI registry.
                                                                             When set, Kind/Name/Namespace must be omitted.
                                                                         properties:
+                                                                            insecureSkipTLSVerify:
+                                                                                default: false
+                                                                                description: |-
+                                                                                    InsecureSkipTLSVerify controls server certificate verification.
+                                                                                    Ignored if the referenced SecretRef provides a "caFile".
+                                                                                type: boolean
                                                                             interval:
                                                                                 description: |-
                                                                                     Interval defines how often Sveltos re-fetches the source to detect changes.
                                                                                     Defaults to 5 minutes.
                                                                                 type: string
+                                                                            plainHTTP:
+                                                                                default: false
+                                                                                description: |-
+                                                                                    PlainHTTP indicates to use insecure HTTP connections when URL uses the
+                                                                                    "oci://" scheme. Ignored for "http://"/"https://" URLs.
+                                                                                type: boolean
                                                                             secretRef:
                                                                                 description: |-
                                                                                     SecretRef references a Secret in the management cluster containing optional
@@ -2260,8 +2612,16 @@ spec:
                                                                                     Sveltos fetches the content on every reconciliation and redeploys if the
                                                                                     content hash has changed.
                                                                                     Supported schemes:
-                                                                                      "http://" or "https://" — HTTP/HTTPS endpoint returning raw YAML/JSON
-                                                                                      "oci://"                — OCI registry artifact containing YAML manifests
+                                                                                      "http://" or "https://" — HTTP/HTTPS endpoint returning a raw YAML/JSON
+                                                                                                                document, a gzip-compressed document, an
+                                                                                                                uncompressed tar, or a gzip-compressed tar of
+                                                                                                                .yaml/.yml/.json files
+                                                                                      "oci://"                — OCI registry artifact whose layers are accepted
+                                                                                                                in the same shapes: raw YAML/JSON, gzip-compressed
+                                                                                                                YAML/JSON, uncompressed tar, or gzip-compressed tar
+                                                                                    URL can be expressed as a template and instantiated using any cluster field,
+                                                                                    so a single profile can fetch different content for each matching cluster,
+                                                                                    e.g. "oci://registry.example/space/app-{{ .Cluster.metadata.name }}:latest".
                                                                                 pattern: ^(https?|oci)://
                                                                                 type: string
                                                                         required:
@@ -2376,7 +2736,7 @@ spec:
                                                                         type: array
                                                                     featureID:
                                                                         description: |-
-                                                                            FeatureID is an indentifier of the feature (Helm/Kustomize/Resources)
+                                                                            FeatureID is an identifier of the feature (Helm/Kustomize/Resources)
                                                                             This field indicates when to run this check.
                                                                             For instance:
                                                                             - if set to Helm this check will be run after all helm
@@ -2394,6 +2754,45 @@ spec:
                                                                             Group of the resource to fetch in the managed Cluster.
                                                                             Required when Kind is set. Leave empty for metric-only checks.
                                                                         type: string
+                                                                    jobCheck:
+                                                                        description: |-
+                                                                            JobCheck runs a Job in the managed cluster and uses its Complete/Failed
+                                                                            outcome as the check result. Mutually exclusive with Script and EvaluateCEL.
+                                                                        properties:
+                                                                            jobRef:
+                                                                                description: |-
+                                                                                    JobRef references the Secret/ConfigMap containing the Job manifest to
+                                                                                    deploy in the managed Cluster as this check.
+                                                                                properties:
+                                                                                    kind:
+                                                                                        description: 'Kind of the resource. Supported kinds are: Secrets and ConfigMaps.'
+                                                                                        enum:
+                                                                                            - Secret
+                                                                                            - ConfigMap
+                                                                                        type: string
+                                                                                    name:
+                                                                                        description: Name of the referenced resource.
+                                                                                        minLength: 1
+                                                                                        type: string
+                                                                                    namespace:
+                                                                                        description: |-
+                                                                                            Namespace of the referenced resource.
+                                                                                            Namespace can be left empty. In such a case, namespace will
+                                                                                            be implicit set to cluster's namespace.
+                                                                                        type: string
+                                                                                required:
+                                                                                    - kind
+                                                                                    - name
+                                                                                    - namespace
+                                                                                type: object
+                                                                            timeout:
+                                                                                description: |-
+                                                                                    Timeout is how long to wait for the Job to reach Complete or Failed
+                                                                                    before treating the check as failed. Defaults to 5 minutes when unset.
+                                                                                type: string
+                                                                        required:
+                                                                            - jobRef
+                                                                        type: object
                                                                     kind:
                                                                         description: |-
                                                                             Kind of the resource to fetch in the managed Cluster.
@@ -2505,6 +2904,9 @@ spec:
                                                                     - featureID
                                                                     - name
                                                                 type: object
+                                                                x-kubernetes-validations:
+                                                                    - message: jobCheck cannot be set together with script or evaluateCEL
+                                                                      rule: '!has(self.jobCheck) || (!has(self.script) && !has(self.evaluateCEL))'
                                                             type: array
                                                         preHealthCheckDeployment:
                                                             description: |-
@@ -2530,6 +2932,9 @@ spec:
                                                                             PolicyRef when an update is rejected with an error that only a delete+recreate can
                                                                             resolve (eg an invalid combination of fields, or a field enforced as immutable).
                                                                             By default, such errors are surfaced instead of recreating the resource.
+                                                                            This applies to every resource produced by this PolicyRef. To force just one
+                                                                            resource, regardless of this field's value, annotate that resource with
+                                                                            projectsveltos.io/forceRecreate instead.
                                                                         type: boolean
                                                                     kind:
                                                                         description: |-
@@ -2580,11 +2985,23 @@ spec:
                                                                             RemoteURL configures fetching content from an HTTP/HTTPS endpoint or an OCI registry.
                                                                             When set, Kind/Name/Namespace must be omitted.
                                                                         properties:
+                                                                            insecureSkipTLSVerify:
+                                                                                default: false
+                                                                                description: |-
+                                                                                    InsecureSkipTLSVerify controls server certificate verification.
+                                                                                    Ignored if the referenced SecretRef provides a "caFile".
+                                                                                type: boolean
                                                                             interval:
                                                                                 description: |-
                                                                                     Interval defines how often Sveltos re-fetches the source to detect changes.
                                                                                     Defaults to 5 minutes.
                                                                                 type: string
+                                                                            plainHTTP:
+                                                                                default: false
+                                                                                description: |-
+                                                                                    PlainHTTP indicates to use insecure HTTP connections when URL uses the
+                                                                                    "oci://" scheme. Ignored for "http://"/"https://" URLs.
+                                                                                type: boolean
                                                                             secretRef:
                                                                                 description: |-
                                                                                     SecretRef references a Secret in the management cluster containing optional
@@ -2617,8 +3034,16 @@ spec:
                                                                                     Sveltos fetches the content on every reconciliation and redeploys if the
                                                                                     content hash has changed.
                                                                                     Supported schemes:
-                                                                                      "http://" or "https://" — HTTP/HTTPS endpoint returning raw YAML/JSON
-                                                                                      "oci://"                — OCI registry artifact containing YAML manifests
+                                                                                      "http://" or "https://" — HTTP/HTTPS endpoint returning a raw YAML/JSON
+                                                                                                                document, a gzip-compressed document, an
+                                                                                                                uncompressed tar, or a gzip-compressed tar of
+                                                                                                                .yaml/.yml/.json files
+                                                                                      "oci://"                — OCI registry artifact whose layers are accepted
+                                                                                                                in the same shapes: raw YAML/JSON, gzip-compressed
+                                                                                                                YAML/JSON, uncompressed tar, or gzip-compressed tar
+                                                                                    URL can be expressed as a template and instantiated using any cluster field,
+                                                                                    so a single profile can fetch different content for each matching cluster,
+                                                                                    e.g. "oci://registry.example/space/app-{{ .Cluster.metadata.name }}:latest".
                                                                                 pattern: ^(https?|oci)://
                                                                                 type: string
                                                                         required:

@@ -78,6 +78,9 @@ rules:
         - eventsources/status
         - eventtriggers
         - eventtriggers/status
+        - healthcheckreports
+        - healthcheckreports/status
+        - healthchecks
         - managementclusterclassifierreports
         - managementclusterclassifiers
         - managementclusterclassifiers/status
@@ -154,11 +157,15 @@ spec:
                   command:
                     - /manager
                   env:
+                    - name: NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.namespace
                     - name: TOTAL_MEMORY_LIMIT
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.memory
-                  image: projectsveltos/ui-backend:v1.13.0
+                  image: projectsveltos/ui-backend:v1.17.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -205,6 +212,96 @@ spec:
             serviceAccountName: ui-backend-manager
             terminationGracePeriodSeconds: 10
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: sveltos-dashboard-editor
+rules:
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - config.projectsveltos.io
+      resources:
+        - clustersummaries
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - config.projectsveltos.io
+      resources:
+        - clusterprofiles
+        - profiles
+      verbs:
+        - create
+        - delete
+        - get
+        - list
+        - patch
+        - update
+        - watch
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+      verbs:
+        - create
+        - delete
+        - get
+        - update
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers
+        - eventtriggers
+        - managementclusterclassifiers
+        - sveltosclusters
+      verbs:
+        - get
+        - list
+        - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: sveltos-dashboard-viewer
+rules:
+    - apiGroups:
+        - cluster.x-k8s.io
+      resources:
+        - clusters
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - config.projectsveltos.io
+      resources:
+        - clusterprofiles
+        - clustersummaries
+        - profiles
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - classifiers
+        - eventtriggers
+        - managementclusterclassifiers
+        - sveltosclusters
+      verbs:
+        - get
+        - list
+        - watch
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -223,8 +320,8 @@ spec:
             containers:
                 - env:
                     - name: VITE_APP_VERSION
-                      value: v1.13.0
-                  image: docker.io/projectsveltos/dashboard:v1.13.0
+                      value: v1.17.0
+                  image: docker.io/projectsveltos/dashboard:v1.17.0
                   name: dashboard
                   ports:
                     - containerPort: 5173

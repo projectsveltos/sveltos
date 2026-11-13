@@ -104,6 +104,14 @@ rules:
         - update
         - watch
     - apiGroups:
+        - events.k8s.io
+      resources:
+        - events
+      verbs:
+        - create
+        - patch
+        - update
+    - apiGroups:
         - lib.projectsveltos.io
       resources:
         - clustersets
@@ -250,10 +258,10 @@ metadata:
     namespace: projectsveltos
 spec:
     ports:
-        - name: https
+        - name: metrics
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
     selector:
         control-plane: event-manager
 ---
@@ -282,7 +290,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.13.0
+                    - --version=v1.17.0
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -299,7 +307,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/event-manager:v1.13.0
+                  image: docker.io/projectsveltos/event-manager:v1.17.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

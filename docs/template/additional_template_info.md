@@ -72,7 +72,9 @@ kind: ClusterProfile
 metadata:
   name: deploy-resources
 spec:
-  clusterSelector: env=production
+  clusterSelector:
+    matchLabels:
+      env: production
   templateResourceRefs:
   - resource:
       apiVersion: v1
@@ -86,14 +88,26 @@ spec:
     namespace: default
 ```
 
-We can reference this Secret in a template using the `getResource` function with its alias.
+We can reference this Secret in a template using the `getResource` function with its alias. Below is the full **autoscaler-template** ConfigMap referenced above, defining the Secret to deploy on the managed clusters.
 
-```yaml
-  name: autoscaler
-  namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
+```yaml hl_lines="7"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: autoscaler-template
+  namespace: default
+  annotations:
+    projectsveltos.io/template: ok  # add annotation to indicate Sveltos content is a template
 data:
-  token: {{ (getResource "AutoscalerSecret").data.token }}
-  ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
+  secret.yaml: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: autoscaler
+      namespace: {{ (getResource "AutoscalerSecret").metadata.namespace }}
+    data:
+      token: {{ (getResource "AutoscalerSecret").data.token }}
+      ca.crt: {{ $data:=(getResource "AutoscalerSecret").data }} {{ (index $data "ca.crt") }}
 ```
 
 ## Role Based Access Control (RBAC)

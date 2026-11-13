@@ -149,6 +149,9 @@ The *stopMatchingBehavior* field specifies the behavior when a cluster no longer
 
 When a cluster matches the ClusterProfile, Kyverno Helm chart will be deployed in such a cluster. If the cluster's labels are subsequently modified and cluster no longer matches the ClusterProfile, the Kyverno Helm chart will be uninstalled. However, if the *stopMatchingBehavior* property is set to *LeavePolicies*, Sveltos will retain the Kyverno Helm chart in the cluster.
 
+!!! tip
+    `stopMatchingBehavior` only governs resources Sveltos deployed *on the matched cluster*. If deleting a cluster leaves cloud resources behind (load balancers, disks, network interfaces, ...), only the management cluster can clean them up. See [Cleanup on Cluster Deletion](../events/examples/cluster_deletion_cleanup.md) for details.
+
 ### Spec.Reloader
 
 The *reloader* property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this ClusterProfile when changes are made to mounted ConfigMaps or Secrets. When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.
@@ -322,9 +325,10 @@ A single check can inspect a Kubernetes resource and evaluate metric values in t
         end
     ```
 
-#### Job-based checks
+#### Job-based Checks :material-crown:{ title="Enterprise" }
 
-*Part of the Enterprise offering — requires a valid Enterprise or Enterprise Plus license.*
+!!!info "Enterprise Feature"
+    Available with Enterprise or Enterprise Plus license. Contact us at `support@projectsveltos.io` to explore license options.
 
 Resource- and metric-based checks evaluate state that is already present in the managed cluster. `jobCheck` instead runs an active probe: Sveltos deploys a Kubernetes Job into the managed cluster and uses the Job's own `Complete`/`Failed` outcome as the check result. This is useful for checks that can't be expressed as "is this field set correctly" — a smoke test, a synthetic transaction, a connectivity probe from inside the cluster.
 
@@ -332,7 +336,7 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
 
 `jobCheck` is mutually exclusive with `script` and `evaluateCEL` on the same check — a single `validateHealths` entry can't combine an active Job probe with a Lua/CEL evaluation.
 
-!!! example "Example - spec.validateHealths (Job)"
+!!! example "Example - ConfigMap (Job) for spec.validateHealths"
     ```yaml
     apiVersion: v1
     kind: ConfigMap
@@ -355,11 +359,10 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
               - name: probe
                 image: curlimages/curl:8.11.0
                 command: ["curl", "-sf", "http://kyverno-svc.kyverno.svc:443/healthz"]
-    ---
-    apiVersion: config.projectsveltos.io/v1beta1
-    kind: ClusterProfile
-    metadata:
-      name: kyverno-with-smoke-test
+    ```
+
+!!! example "Example - ClusterProfile spec.validateHealths"
+    ```yaml
     spec:
       validateHealths:
       - name: kyverno-smoke-test
@@ -372,6 +375,45 @@ Set `jobCheck.jobRef` to a ConfigMap or Secret containing the Job manifest, and 
           timeout: 2m
     ```
 
+### Spec.HealthMonitoring
+
+The *healthMonitoring* property tells Sveltos to monitor the resources deployed by this `ClusterProfile`. It checks for any unhealthy ones and reports them. Raw YAML resources and Helm charts are both covered. By default, Sveltos monitors Deployments, StatefulSets, DaemonSets, Jobs, and PersistentVolumeClaims.
+
+While *validateHealths* keeps the `ClusterProfile` and its dependencies until the add-ons are ready, *healthMonitoring* only reports and does not impact the deployment.
+
+!!! example "Example - spec.healthMonitoring"
+    ```yaml
+    ---
+    apiVersion: config.projectsveltos.io/v1beta1
+    kind: ClusterProfile
+    metadata:
+      name: traefik
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      helmCharts:
+      - repositoryURL:    https://traefik.github.io/charts
+        repositoryName:   traefik
+        chartName:        traefik/traefik
+        chartVersion:     42.1.3
+        releaseName:      traefik
+        releaseNamespace: traefik
+        helmChartAction:  Install
+      healthMonitoring:
+        enabled: true
+    ```
+
+The following fields are available:
+
+- `enabled` turns health monitoring on
+- `defaultChecks` (default `true`) monitors the default kinds. Set it to `false` to monitor only the HealthChecks listed in `healthChecks`
+- `healthChecks` is a list of HealthCheck names to monitor in addition to the default checks. A ClusterProfile can set it. A Profile cannot; it is ignored there.
+
+`healthChecks` can only be set when `enabled` is set to true. If `enabled: true` and `defaultChecks: false`, we need at least one entry in `healthChecks`.
+
+Use `sveltosctl show unhealthy-resources` to see the result. Refer to [Health Monitoring](../features/health_monitoring.md) for the kinds covered, their limitations, the states and the ways to see the result.
+
 ### Spec.TemplateResourceRefs
 
 The *templateResourceRefs* property specifies a collection of resources to be gathered from the management cluster. The values extracted from these resources will be utilized to instantiate templates embedded within referenced PolicyRefs and Helm charts.
@@ -382,6 +424,8 @@ Refer to [template](../template/examples/template_generic.md) section for more i
 The *dependsOn* property specifies a list of other ClusterProfiles that this instance relies on. In any managed cluster that matches to this ClusterProfile, the add-ons and applications defined in this instance will only be deployed after all add-ons and applications in the designated dependency ClusterProfiles have been successfully deployed.
 
 For example, clusterprofile-a can depend on another *clusterprofile-b*. This implies that any Helm charts or raw YAML files associated with ClusterProfile A will not be deployed until all add-ons and applications specified in ClusterProfile B have been successfully provisioned.
+
+*dependsOn* also protects the reverse direction: clusterprofile-b's add-ons won't be undeployed from a cluster while clusterprofile-a still matches that cluster and still depends on it, regardless of which of the two ClusterProfiles is deleted first. See [Deletion Order](../deployment_order/depends_on.md#deletion-order) for details.
 
 !!! example "Example - spec.dependsOn"
     ```yaml hl_lines="7-8"

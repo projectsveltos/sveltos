@@ -12,12 +12,26 @@ rules:
     - apiGroups:
         - ""
       resources:
+        - configmaps
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - ""
+      resources:
         - secrets
       verbs:
         - get
         - list
         - update
         - watch
+    - apiGroups:
+        - ""
+      resources:
+        - serviceaccounts/token
+      verbs:
+        - create
     - apiGroups:
         - authentication.k8s.io
       resources:
@@ -31,17 +45,18 @@ rules:
       verbs:
         - create
     - apiGroups:
-        - lib.projectsveltos.io
+        - events.k8s.io
       resources:
-        - debuggingconfigurations
-        - sveltoslicenses
+        - events
       verbs:
-        - get
-        - list
-        - watch
+        - create
+        - patch
+        - update
     - apiGroups:
         - lib.projectsveltos.io
       resources:
+        - configurationbundles
+        - configurationgroups
         - sveltosclusters
       verbs:
         - create
@@ -50,6 +65,25 @@ rules:
         - list
         - patch
         - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationbundles/status
+      verbs:
+        - get
+        - list
+        - update
+        - watch
+    - apiGroups:
+        - lib.projectsveltos.io
+      resources:
+        - configurationgroups/status
+        - debuggingconfigurations
+        - sveltoslicenses
+      verbs:
+        - get
+        - list
         - watch
     - apiGroups:
         - lib.projectsveltos.io
@@ -187,7 +221,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/sveltoscluster-manager:v1.13.0
+                  image: docker.io/projectsveltos/sveltoscluster-manager:v1.17.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:

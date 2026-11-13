@@ -34,6 +34,39 @@ Patches of both types can be persisted in a `ConfigMap` and passed to the compon
 
 The `Helm` chart offers a way to only specify the patches and the `ConfigMaps` will be created automatically so that they will be applied to the deployments before applying the *drift-detection-manager* and *sveltos-agent*.
 
+!!! warning "Targeting patches by name in Centralized/Agentless mode"
+    Every `target.name` shown in the examples below (`drift-detection-manager`, `sveltos-agent-manager`) assumes **Local Agent mode** — one Deployment per managed cluster, deployed inside that cluster, with a fixed, predictable name.
+
+    In **Centralized Agent mode** (`agent.managementCluster=true`, also called agentless mode), both agents instead run as one Deployment per managed cluster **inside the management cluster**, and each Deployment's name is generated dynamically per cluster (e.g. `sveltos-agent-buogojckqami0wcn90mt`, not `sveltos-agent-manager`) — Sveltos has to hand out a unique name per cluster now that many clusters' agents coexist in the same namespace. A patch `target.name` can't single out "the" Deployment for a given cluster in that mode; `target.name` is matched as a regular expression, not a glob, so even something like `sveltos-agent-*` will not do what it looks like it does (as a regex it just means "zero or more trailing dashes," and matches every agent Deployment's name as a substring, not a useful subset of one).
+
+    Use `target.labelSelector` instead, matching the `feature` label every one of these Deployments carries regardless of its generated name:
+
+    - sveltos-agent: `labelSelector: feature=sveltos-agent`
+    - drift-detection-manager: `labelSelector: feature=drift-detection`
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: sveltos-agent-config
+      namespace: projectsveltos
+    data:
+      deployment-patch: |-
+        patch: |-
+          - op: replace
+            path: /spec/template/spec/containers/0/resources/limits/cpu
+            value: 500m
+          - op: replace
+            path: /spec/template/spec/containers/0/resources/limits/memory
+            value: 2048Mi
+        target:
+          kind: Deployment
+          labelSelector: feature=sveltos-agent
+          namespace: projectsveltos
+    ```
+
+    This applies to every `name`-based patch target on this page — the global Helm-values patches below and the per-cluster override annotations further down — whenever the target cluster runs in Centralized/Agentless mode.
+
 ## drift-detection-manager Configuration
 
 To customize the *drift-detection-manager* deployment you can add your patches to the `Helm` values like here:
@@ -209,6 +242,34 @@ metadata:
   namespace: east-registry-patch
 ```
 
+By default, `drift-detection-manager`'s `ClusterRole` (`drift-detection-manager-role`, [as addon-controller applies it](https://raw.githubusercontent.com/projectsveltos/addon-controller/refs/heads/main/pkg/drift-detection/drift-detection-manager.yaml)) includes this rule, which is what lets it watch arbitrary deployed resources cluster-wide:
+
+```yaml
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+```
+
+Remove it the same way, via a `clusterrole-patch` key in the same (or a separate) override ConfigMap:
+
+```yaml
+apiVersion: v1
+data:
+  clusterrole-patch: |-
+      patch: |-
+        - op: remove
+          path: /rules/1
+      target:
+        kind: ClusterRole
+        name: drift-detection-manager-role
+kind: ConfigMap
+metadata:
+  name: east-registry-patch
+  namespace: projectsveltos
+```
+
+Check the `ClusterRole` drift-detection-manager is actually running with before applying this: the exact rule index depends on the release. This patch is re-applied each time `drift-detection-manager` is redeployed, so it stays intact across future Sveltos upgrades, unlike editing the `ClusterRole` directly. Pair it with the [`agent.projectsveltos.io/watch-namespaces`](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces) annotation (honored in agentless mode and in [Pull Mode](../../register/register_cluster_pull_mode.md)) to also restrict the namespaces where `drift-detection-manager` watches resources.
+
 ### Sveltos Agent Overrides
 
 To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosagent.projectsveltos.io/config-override-ref`
@@ -263,7 +324,84 @@ metadata:
 
 ### Sveltos Applier Overrides
 
-To provide a cluster-specific override for the sveltos-agent (the agent responsible for classification), use the following annotation: `sveltosapplier.projectsveltos.io/config-override-ref`
+To provide a cluster-specific override for the sveltos-applier (the agent that deploys resources in [Pull Mode](../../register/register_cluster_pull_mode.md)), use the following annotation: `sveltosapplier.projectsveltos.io/config-override-ref`
+
+```yaml
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: prod-cluster
+  annotations:
+    # References a ConfigMap named 'applier-rbac-patch' in a specific namespace (e.g., 'default')
+    sveltosapplier.projectsveltos.io/config-override-ref: default/applier-rbac-patch
+spec:
+  # ...
+```
+
+with
+
+```yaml
+apiVersion: v1
+data:
+  clusterrole-patch: |-
+      patch: |-
+        - op: replace
+          path: /rules
+          value:
+          - apiGroups: ["apps"]
+            resources: ["deployments"]
+            verbs: ["get", "list", "watch", "create", "update", "delete"]
+          - apiGroups: [""]
+            resources: ["configmaps"]
+            verbs: ["get", "list", "watch", "create", "update", "delete"]
+      target:
+        kind: ClusterRole
+        name: sveltos-applier-manager-role
+kind: ConfigMap
+metadata:
+  name: applier-rbac-patch
+  namespace: default
+```
+
+This patch is re-applied each time `sveltos-applier` is redeployed. Unlike editing the `ClusterRole` directly, it stays intact across future Sveltos upgrades. Pair it with the [`agent.projectsveltos.io/watch-namespaces`](../../register/register_cluster_pull_mode.md#restricting-sveltos-applier-to-specific-namespaces) annotation to also restrict the namespaces where `sveltos-applier` can manage resources.
+
+### Sharing Overrides Across Multiple Clusters
+
+The `config-override-ref` annotation is just a pointer, so any number of clusters can reference the same ConfigMap. This is useful when clusters group naturally by some shared trait, most commonly the cloud provider they run on: every AKS cluster needs the same [Azure Workload Identity](../../register/workload_identity.md) pod label, every EKS cluster needs the same AWS IRSA annotation, and so on. Rather than creating one override per cluster, create one override ConfigMap per group and point every cluster in that group at it.
+
+For example, to inject Azure Workload Identity into every `sveltos-agent` running on an AKS cluster:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-sveltos-agent-patch
+  namespace: projectsveltos
+data:
+  azure-workload-identity: |-
+    patch: |
+      - op: add
+        path: /spec/template/metadata/labels/azure.workload.identity~1use
+        value: "true"
+    target:
+      group: apps
+      kind: Deployment
+      labelSelector: feature=sveltos-agent
+```
+
+and a matching patch for `drift-detection-manager` (`labelSelector: feature=drift-detection`). Every AKS `SveltosCluster` (or CAPI `Cluster`) then gets:
+
+```yaml
+metadata:
+  annotations:
+    sveltosagent.projectsveltos.io/config-override-ref: projectsveltos/azure-sveltos-agent-patch
+    driftdetection.projectsveltos.io/config-override-ref: projectsveltos/azure-drift-detection-patch
+```
+
+EKS clusters would point at their own `eks-sveltos-agent-patch` / `eks-drift-detection-patch` pair instead, giving one ConfigMap pair per provider rather than per cluster.
+
+!!! warning
+    A cluster with a `config-override-ref` annotation is patched **only** using that ConfigMap; it never falls back to the global `agentPatchConfigMap` / `driftDetectionManagerPatchConfigMap` set via Helm. So each provider-bucket ConfigMap must include everything you'd otherwise want applied to that cluster, not just the provider-specific patch: this is a replace, not a merge.
 
 ## Next Steps
 

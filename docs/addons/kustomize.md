@@ -440,7 +440,7 @@ Instead of a Flux `GitRepository`/`OCIRepository`/`Bucket` or a `ConfigMap`/`Sec
 | Scheme | Description |
 |--------|-------------|
 | `oci://` | OCI registry artifact containing the Kustomize directory |
-| `http://` / `https://` | HTTP/HTTPS endpoint returning a gzipped tarball (`.tar.gz`) of the Kustomize directory |
+| `http://` / `https://` | HTTP/HTTPS endpoint returning a tarball (gzip-compressed or plain) of the Kustomize directory |
 
 Sveltos fetches the content on every reconciliation and redeploys only when the content hash changes. A configurable `interval` controls how often Sveltos re-fetches (default: 5 minutes).
 
@@ -462,16 +462,18 @@ spec:
 
 ### HTTP/HTTPS
 
-The URL must serve a gzipped tarball of the Kustomize directory, for example a repository archive:
+The URL must serve a tarball of the Kustomize directory — gzip-compressed or plain, both are accepted. A repository archive works well for this:
 
 ```yaml
 spec:
   kustomizationRefs:
   - remoteURL:
-      url: https://github.com/my-org/my-kustomize-repo/archive/refs/heads/main.tar.gz
+      url: https://github.com/gianlucam76/kustomize/archive/refs/heads/main.tar.gz
       interval: 1h0m0s
-    path: my-kustomize-repo-main/overlays/production
+    path: kustomize-main/production/helloWorld
 ```
+
+`path` has to include the wrapper directory the archive is extracted into. GitHub names it `<repo>-<branch>` (here, `kustomize-main`); other hosts may follow a different convention, so it's worth checking the actual top-level directory in the downloaded tarball rather than assuming.
 
 ### Authentication
 
@@ -489,6 +491,8 @@ spec:
 ```
 
 The Secret can contain the same keys as `policyRefs`' `remoteURL`: `token` (bearer token), `username`/`password` (basic auth, or an OCI registry username and a PAT with `read:packages` scope), and `caFile` (PEM-encoded CA certificate). See [Remote URL Sources](raw_yaml.md#remote-url-sources) for the full Secret setup.
+
+`kustomizationRefs`' `remoteURL` also supports the `plainHTTP` and `insecureSkipTLSVerify` fields, with the same semantics as `policyRefs`' `remoteURL` — see [Insecure Connections](raw_yaml.md#insecure-connections).
 
 ## Bypassing Automatic Namespace Creation
 
@@ -527,6 +531,18 @@ kustomizationRefs:
 
 !!! note
     `force` causes the resource to be briefly unavailable while it is deleted and recreated. It never applies to `CustomResourceDefinitions`, since deleting one cascades to every instance of it.
+
+`force: true` on the `kustomizationRef` applies to every resource it produces. To force just one resource instead, without setting `force` for the whole `kustomizationRef`, annotate that resource with `projectsveltos.io/forceRecreate`:
+
+```yaml hl_lines="7"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  namespace: production
+  annotations:
+    projectsveltos.io/forceRecreate: ""
+```
 
 ## Next Steps
 

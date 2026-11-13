@@ -28,6 +28,8 @@ By default, add-ons/applications are deployed in the same cluster where the even
 
 For more information, take a peek at [this](./examples/cross_cluster_configuration.md) link.
 
+Cross-cluster deployment is also what makes it possible to react to a cluster being deleted from the **management** cluster itself, for instance to run a cleanup job there while the cluster's own API server may already be unreachable. See [Cleanup on Cluster Deletion](./examples/cluster_deletion_cleanup.md).
+
 ![Event Framework](../assets/events.png)
 
 !!!tip

@@ -28,13 +28,58 @@ Sveltos uses ClusterProfiles/Profiles to automatically track matching clusters a
 
 The `clusterSelector` field is a Kubernetes label selector. Sveltos uses it to detect all the clusters to assess health and send out notifications.
 
+The `clusterRefs` field lists clusters by reference, which is useful for a cluster that has no label to select it by. The clusters in `clusterRefs` are added to the ones matching `clusterSelector`, and a cluster that is in both is evaluated once. Each reference needs the `apiVersion`, `kind` (`SveltosCluster` or `Cluster`), `namespace` and `name` of the cluster. A reference to a cluster that does not exist does not make the ClusterHealthCheck fail.
+
+!!! example ""
+    ```yaml hl_lines="10-18"
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: ClusterHealthCheck
+    metadata:
+      name: prod-health
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: prod
+      clusterRefs:
+      - apiVersion: lib.projectsveltos.io/v1beta1
+        kind: SveltosCluster
+        namespace: mgmt
+        name: edge-1
+      - apiVersion: cluster.x-k8s.io/v1beta2
+        kind: Cluster
+        namespace: default
+        name: capi-staging
+      ...
+    ```
+
 ### LivenessChecks
 The `livenessCheck` field is a list of __cluster liveness checks__ to be evaluated.
 
 The supported types are:
 
-1. __Addons__: Addons type instructs Sveltos to evaluate state of add-ond deployment in such a cluster;
-2. __HealthCheck__: HealthCheck type allows to define a custom health check for any Kubernetes type.
+1. __Addons__: tracks the __deployment__ of the add-ons. It is satisfied when Sveltos has successfully deployed everything the matching ClusterProfiles/Profiles ask for;
+2. __HealthCheck__: tracks the __live state__ of resources in the managed clusters. It evaluates any Kubernetes resource, whether or not Sveltos deployed it, and keeps watching it.
+
+The two types answer different questions, and it is important to pick the right one.
+
+An __Addons__ liveness check reflects the status of the ClusterSummary, and the ClusterSummary status changes only when Sveltos has something to do: a new cluster matches, a ClusterProfile changes, a referenced ConfigMap or Secret changes, or drift is detected and reconciled. Once everything is deployed, nothing changes in the ClusterSummary until one of those events happens. Sveltos does not keep checking whether the deployed workloads are actually running.
+
+A __HealthCheck__ liveness check does not depend on what Sveltos deploys or when. It evaluates the resources in the managed cluster continuously, and a state change of those resources is reflected in the ClusterHealthCheck.
+
+!!! example "Example"
+    Sveltos deploys a Deployment on day 0. The ClusterSummary reports `Provisioned`, and the __Addons__ liveness check passes. A week later the Pods start crash-looping because of an expired credential or a node problem. Nobody changed the ClusterProfile and the Deployment is not drifted, so the ClusterSummary stays `Provisioned` and the __Addons__ liveness check keeps passing. Only a __HealthCheck__ that evaluates those Pods (see [Example: Filtering Out Flapping Resources](#example-filtering-out-flapping-resources)) detects the problem and triggers the notification.
+
+In short:
+
+| | Addons | HealthCheck |
+|---|---|---|
+| Question answered | Did Sveltos deploy what was asked? | Are the resources healthy right now? |
+| Changes when | Sveltos deploys, updates or removes something, or reconciles drift | The state of the watched resources changes in the managed cluster |
+| Detects a Pod crashing a week after deployment | No | Yes |
+| Detects a resource not deployed by Sveltos | No | Yes |
+
+Most production setups use both: __Addons__ to know when a cluster is ready, __HealthCheck__ to know it is still healthy afterwards.
 
 ### Notifications
 
@@ -50,6 +95,43 @@ The supported types are:
 1. <img src="../../assets/smtp_logo.png" alt="SMTP" width="25" />  [SMTP](./example_addon_notification.md#smtp)
 1. <img src="../../assets/kubernetes_logo.png" alt="Kubernetes" width="25" /> [Kubernetes events](./example_addon_notification.md#kubernetes-event) (__reason=ClusterHealthCheck__)
 
+### Notification policy
+
+By default, a notification is sent the first time a cluster is evaluated, every time the state of a liveness check flips, and every time the failure message changes while a liveness check is failing. Any change causes Sveltos to send the notification again to all the channels configured for that cluster.
+
+On a large fleet, or with a liveness check that flips often, this can become noisy. Each notification can define an optional __policy__ that decides when that notification is delivered. Policies are evaluated per cluster and per notification, so the same ClusterHealthCheck can page a team immediately on one channel and send a calmer summary on another.
+
+* **`policy.onlyOnTransition`**
+    * **Purpose:** Notify on state changes only (Optional)
+    * **Details:** When `true`, a notification is sent only when a cluster moves from passing to failing, or from failing to passing. A change of the failure message while the cluster is still failing is not sent.
+* **`policy.minInterval`**
+    * **Purpose:** Rate limit (Optional)
+    * **Details:** The minimum time between two deliveries of this notification for the same cluster. A notification held back by `minInterval` is not lost: once the interval has elapsed, Sveltos sends it, unless the cluster is back in the state that was last delivered.
+* **`policy.failingFor`**
+    * **Purpose:** Hold-back for transient failures (Optional)
+    * **Details:** How long a cluster must have been failing before the failure is reported. If the cluster recovers within this time, nothing is sent: neither the failure nor the recovery.
+
+Both `minInterval` and `failingFor` are durations, for example `30s`, `5m` or `1h`. The three fields can be combined.
+
+A few things worth knowing:
+
+1. A notification without a `policy` (or with an empty one) behaves exactly as described above. Existing ClusterHealthCheck instances are not affected.
+1. When a policy is set, a cluster that is healthy the first time it is evaluated is not notified. There is nothing to report until something fails.
+1. `failingFor` is measured from the moment the oldest failing liveness check started failing. It only delays a failure being reported. A recovery is sent right away, but only if the failure it recovers from was reported before.
+1. If a delivery fails (for example, the Slack API is unreachable), Sveltos retries without waiting for `minInterval`.
+1. A notification with a policy is evaluated on its own. A change that makes another notification fire does not re-send this one.
+1. When a notification is being held back, Sveltos schedules a new evaluation for the moment the hold-back ends. There is no need for the cluster state to change again.
+
+Sveltos records what it last delivered in the ClusterHealthCheck status, for each cluster and for each notification, inside `notificationSummaries`:
+
+* **`lastSentTime`**: when the notification was last delivered;
+* **`lastSentFailing`**: whether the cluster was failing at that time;
+* **`lastSentMessageHash`**: a short hash identifying the failure message that was delivered.
+
+!!! note
+    The `policy` field acts on the ClusterHealthCheck notifications, so on the state of a cluster as a whole. To avoid reporting a single resource that flips briefly, see the `flapping` field of the [HealthCheck CRD](#healthcheck-crd). The two can be used together: `flapping` filters noise out of a single HealthCheck, `policy` controls how often the resulting state is notified.
+
+See [Example: Reducing Notification Volume](#example-reducing-notification-volume) below.
 
 ### HealthCheck CRD
 
@@ -70,8 +152,13 @@ The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1b
 * **`evaluateHealth`**
     * **Purpose:** Custom Health Evaluation
     * **Details:** A **mandatory** Lua script that performs the core health check logic on all the final, filtered resources.
+* **`flapping.consecutiveEvaluations`**
+    * **Purpose:** Flapping mitigation (Optional)
+    * **Details:** The number of consecutive evaluations a resource must be found in the same non-Healthy status before it is reported. Omit `flapping` entirely to report every non-Healthy resource immediately, exactly as before this field existed. See [Example: Filtering Out Flapping Resources](#example-filtering-out-flapping-resources) below.
 
 The `Spec.evaluateHealth` field must contain a Lua script with a function named **`evaluate()`**.
+
+The [`healthcheck-manager/examples/healthchecks`](https://github.com/projectsveltos/healthcheck-manager/tree/main/examples/healthchecks) directory collects ready-to-apply `HealthCheck` definitions for well-known CRDs (Velero `Backup`, Kyverno `PolicyReport`, cert-manager `Certificate`, `Job`, `StatefulSet` rollout, CloudNativePG `Cluster`, Contour `HTTPProxy`, Knative `Service`). Each one is covered by a unit test, so the scripts are exactly what's tested, not a copy that can drift out of sync.
 
 **Input Access:**
 The function accesses all Kubernetes resources selected by `resourceSelectors` using the global Lua variable: **`resources`**.
@@ -179,6 +266,123 @@ The below `ClusterHealthCheck` resources, will send a Webex message as notificat
     ```
 
 [^1]: Credit for this example to https://blog.cubieserver.de/2022/argocd-health-checks-for-opa-rules/
+
+## Example: Filtering Out Flapping Resources
+
+By default, a `HealthCheck` re-evaluates a resource only when Sveltos detects a change to it. This is efficient, but it also means a resource that flips briefly into a bad state (a Pod restarting once, a Job failing and immediately retrying) can trigger a `Degraded` report for something that was never really a problem.
+
+The `flapping` field tells Sveltos to hold a resource in a pending state until it has been observed in the same non-Healthy status for a set number of consecutive evaluations, instead of reporting it right away. Recovery is always immediate: as soon as a resource is evaluated `Healthy` again, any pending count for it is cleared.
+
+While a resource has not yet crossed the threshold, Sveltos keeps re-evaluating that `HealthCheck`, even without a new change on the resource, so the pending count keeps advancing until it either crosses the threshold or the resource recovers. In this scenario, `HealthCheck` instances are re-evaluated roughly every 10 seconds on average.
+
+Take the classic `CrashLoopBackOff` Pod: without `flapping`, a script has to hand-roll its own debounce logic, parsing `lastTransitionTime` off a condition and comparing it to `os.time()`. With `flapping`, the script only needs to report the instantaneous truth and Sveltos takes care of the rest:
+
+!!! example "Example - HealthCheck Definition with Flapping"
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: HealthCheck
+    metadata:
+      name: pod-crashloopbackoff
+    spec:
+      collectResources: true
+      resourceSelectors:
+      - group: ""
+        version: v1
+        kind: Pod
+      flapping:
+        consecutiveEvaluations: 6
+      evaluateHealth: |
+        function evaluate()
+          local statuses = {}
+
+          for _, pod in ipairs(resources) do
+            local hasError = false
+
+            if pod.status and pod.status.containerStatuses then
+              for _, container in ipairs(pod.status.containerStatuses) do
+                if container.state and container.state.waiting then
+                  local reason = container.state.waiting.reason
+                  if reason == "CrashLoopBackOff" or reason == "BackOff" then
+                    hasError = true
+                  end
+                end
+              end
+            end
+
+            if hasError then
+              table.insert(statuses, {resource = pod, status = "Degraded",
+                message = "Container is in CrashLoopBackOff"})
+            end
+          end
+
+          local hs = {}
+          if #statuses > 0 then
+            hs.resources = statuses
+          end
+          return hs
+        end
+    ```
+
+With `HealthCheck` instances re-evaluated roughly every 10 seconds on average, `consecutiveEvaluations: 6` means a Pod has to be observed crash-looping for about 60 seconds before it is reported `Degraded`. A single restart, or two restarts a few seconds apart, never reaches the threshold and is never reported.
+
+## Example: Reducing Notification Volume
+
+In the following ClusterHealthCheck, the same liveness checks drive two notifications with different policies:
+
+* the `slack-oncall` notification is sent only when a cluster has been failing for at least 5 minutes, and it is sent at most once every 30 minutes for a given cluster. It is not sent again when the failure message changes while the cluster is still failing;
+* the `kubernetes-events` notification has no policy: every change is recorded as a Kubernetes event, as before.
+
+!!! example "Example - ClusterHealthCheck with Notification Policies"
+    ```yaml
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: ClusterHealthCheck
+    metadata:
+      name: production
+    spec:
+      clusterSelector:
+        matchLabels:
+          env: production
+      livenessChecks:
+      - name: addons
+        type: Addons
+      - name: pods
+        type: HealthCheck
+        livenessSourceRef:
+          kind: HealthCheck
+          apiVersion: lib.projectsveltos.io/v1beta1
+          name: pod-crashloopbackoff
+      notifications:
+      - name: slack-oncall
+        type: Slack
+        notificationRef:
+          apiVersion: v1
+          kind: Secret
+          name: slack
+          namespace: default
+        policy:
+          onlyOnTransition: true
+          minInterval: 30m
+          failingFor: 5m
+      - name: kubernetes-events
+        type: KubernetesEvent
+    ```
+
+With this configuration:
+
+1. A cluster that is healthy when first evaluated does not trigger a Slack message.
+1. A cluster that starts failing is reported on Slack only if it is still failing 5 minutes later. A failure that clears within 5 minutes produces no message at all.
+1. When the cluster recovers, Slack is notified, provided the failure was reported and at least 30 minutes have passed since the previous Slack message for that cluster. If not, the recovery is sent as soon as the 30 minutes have elapsed.
+1. If the cluster is still failing and the failure message changes (for example, a second Pod starts crash-looping), no new Slack message is sent because `onlyOnTransition` is set. Remove `onlyOnTransition` to be notified of these changes, still at most once every 30 minutes.
+
+To see what was last delivered for a cluster:
+
+```bash
+kubectl get clusterhealthcheck production -o yaml
+```
+
+and look at `status.clusterCondition[*].notificationSummaries`.
 
 ## Notifications and multi-tenancy
 

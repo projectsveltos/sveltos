@@ -32,11 +32,11 @@ We mentioned two terms in the challenges above: `platform admins` and `tenant ad
 
 In a multi-tenant setup, each tenant is assigned a **dedicated namespace** within the **management cluster**. Tenant admins can create and manage clusters in their namespace, using `Profile` instances to define the add-ons and apps to deploy. Like `ClusterProfiles`, `Profiles` use a cluster selector and a list of add-ons and apps, but they operate within a specific namespace, matching only clusters created in that namespace.
 
-![Profile vs ClusterProfile](../assets/Sveltos_Profile_ClusterProfile.jpg)
+![Profile vs ClusterProfile](../../assets/Sveltos_Profile_ClusterProfile.jpg)
 
 ## Sveltos Multi-tenancy: Cluster Sharing Between Tenants
 
-Sveltos allows platform admins to utilise the Custom Resource Definition `RoleRequest` that will grant permissions to a number of tenant admins. More information can be found [here](../features/multi-tenancy-sharing-cluster.md).
+Sveltos allows platform admins to utilise the Custom Resource Definition `RoleRequest` that will grant permissions to a number of tenant admins. More information can be found [here](../../features/multi-tenancy-sharing-cluster.md).
 
 !!! example "Example - RoleRequest"
     ```yaml
@@ -91,4 +91,4 @@ By referencing the ConfigMap `default/full-access`, the `RoleRequest` named `ful
 
 ## More Resources
 
-For more information about the Sveltos multi-tenancy capabilities, have a look [here](../features/multi-tenancy-sharing-cluster.md).
+To explore how multi-tenancy onboaring looks like, take a look [here](./use_case_multi_tenant_onboarding.md). For more information about the Sveltos multi-tenancy capabilities, have a look [here](../../features/multi-tenancy-sharing-cluster.md).

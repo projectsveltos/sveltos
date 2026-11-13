@@ -15,11 +15,14 @@ authors:
     To learn more about the Sveltos **Pull Mode**, check out the [Youtube Video](https://www.youtube.com/watch?v=Y3dW5XYjg5I&amp;feature=youtu.be). If you find this valuable, we would be thrilled if you shared it! 😊
 
 
-## Sveltos Cluster Registration Pull Mode
+# Sveltos Cluster Registration Pull Mode :material-crown:{ title="Enterprise" }
 
 Sveltos supports managed cluster registration in **Pull Mode**. In this model, **managed** clusters actively **pull** configuration and add-ons from a central source, rather than having the management cluster push them directly to the managed clusters.
 
 The **Pull Mode** is ideal for managed clusters behind a firewall, in air-gapped environments, edge deployments with limited bandwidth or highly regulated and secure setups.
+
+!!!info "Enterprise Feature"
+    Test the **Pull Mode** with up to **two** managed clusters for free. Need more than two clusters? Contact us at [`support@projectsveltos.io`](mailto:support@projectsveltos.io) to explore license options.
 
 If Sveltos is not already installed, have a look at the installation details located [here](../getting_started/install/install.md).
 
@@ -45,7 +48,7 @@ The following items are some of the benefits of utilising Sveltos in **Pull Mode
 - **Security**: Reducing the need for inbound ports to managed clusters enhances the security posture of an environment by minimising the attack surface.
 
 !!!tip
-    Find out [here](../index.md#sveltos-at-the-edge) what is being deployed by Sveltos when we talk about Edge deployments.
+    Find out [here](../index.md#sveltos-for-edge-kubernetes) what is being deployed by Sveltos when we talk about Edge deployments.
 
 ## Register Cluster
 
@@ -98,8 +101,39 @@ deployment.apps/sveltos-applier-manager created
 secret/pcluster01-sveltos-kubeconfig created
 ```
 
-!!!note
-    Test the **Pull Mode** with up to **two** managed clusters for free. Need more than two clusters? Contact us at `support@projectsveltos.io` to explore license options based on your needs!
+### Restricting sveltos-applier to Specific Namespaces
+
+By default, the `sveltos-applier` is granted a `ClusterRole` and can manage resources in **any** namespace of the managed cluster. To restrict it, pass the `--watch-namespaces` flag to the `sveltosctl register cluster` command:
+
+```bash
+$ sveltosctl register cluster \
+    --namespace=monitoring \
+    --cluster=prod-cluster \
+    --pullmode \
+    --labels=environment=production,tier=backend \
+    --watch-namespaces=team-a,team-b \
+    > sveltoscluster_registration.yaml
+```
+
+This sets the `agent.projectsveltos.io/watch-namespaces` annotation on the new `SveltosCluster`. It also adds the `--watch-namespaces` flag to the `sveltos-applier` manifest. For an already registered Sveltos cluster, add the annotation directly:
+
+```yaml hl_lines="6"
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: SveltosCluster
+metadata:
+  name: prod-cluster
+  annotations:
+    agent.projectsveltos.io/watch-namespaces: "team-a,team-b"
+```
+
+Sveltos relays this into `sveltos-applier`'s `--watch-namespaces` flag every time it deploys or upgrades the agent in the managed cluster. With it set, `sveltos-applier` only creates namespaced resources in `team-a` or `team-b`, erroring out if asked to create one in any other namespace. Stale-resource cleanup also only searches `team-a` and `team-b` instead of cluster-wide. Cluster-scoped resources are unaffected. This is the same annotation used to [restrict RBAC in agentless mode](../getting_started/install/agentless_limited_rbac.md#the-fix-namespace-scoped-watch-mode).
+
+Neither the `--watch-namespaces` nor the annotation narrows the `ClusterRole` in the `sveltoscluster_registration.yaml` manifest; it still grants cluster-wide access to whatever resource kinds `sveltos-applier` supports. Knowing which resource types the `ClusterProfiles`/`Profiles` use in the `team-a`/`team-b` namespaces, make sure to narrow the `ClusterRole`'s `rules` before applying them.
+
+!!! warning
+    On every Sveltos upgrade, the `sveltos-applier` Deployment, `ClusterRole`, and `ClusterRoleBinding` are all regenerated from scratch, including the `ClusterRole`'s rules. Editing the `ClusterRole` in the applied YAML only holds until the next upgrade, which resets it back to the default, cluster-wide rules. To narrow the `ClusterRole` and keep it across upgrades, use [Sveltos Applier Overrides](../getting_started/install/air_gapped_installation.md#sveltos-applier-overrides) instead.
+
+`sveltos-applier` is only part of a Pull Mode managed cluster's Sveltos footprint. `sveltos-agent`, which evaluates Classifiers, HealthChecks, EventSources and Reloaders, and `drift-detection-manager`, which watches whatever a `ClusterProfile`/`Profile` with `syncMode: ContinuousWithDriftDetection` deploys, both run in the same cluster and default to their own cluster-wide `ClusterRole`s too — both also honor the same `--watch-namespaces` annotation. For a worked example narrowing sveltos-agent's `ClusterRole`, pairing the annotation with a `sveltosagent.projectsveltos.io/config-override-ref` patch and hand-created namespaced `Role`s, see [Restricting sveltos-agent RBAC in Pull Mode](pull_mode_sveltos_agent_scoped_rbac.md). `drift-detection-manager`'s `ClusterRole` is narrowed the same way, via [Drift Detection Manager Overrides](../getting_started/install/air_gapped_installation.md#drift-detection-manager-overrides).
 
 ### Validation
 
@@ -110,3 +144,7 @@ $ kubectl get sveltoscluster -n monitoring
 NAMESPACE   NAME           READY   VERSION    AGE
 monitoring  prod-cluster   true    v1.30.5    9m15s
 ```
+
+### Automatic Token Renewal
+
+By default, the credential registered above is long-lived and does not renew itself. To have Sveltos renew it automatically instead, register with `--token`. See [Automatic Token Renewal: Pull Mode](token-renewal.md#pull-mode).

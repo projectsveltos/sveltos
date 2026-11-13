@@ -20,7 +20,7 @@ Sveltos has no separate API server. The Kubernetes API of the management cluster
 
 ## Cluster Discovery and Registration
 
-Sveltos supports several ways to bring a cluster under management: providing a kubeconfig `Secret`, using cloud workload identity (AWS IRSA, GKE Workload Identity), pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API `Cluster` objects. See [Register a Cluster](../../register/register-cluster.md) for details on each approach.
+Sveltos supports several ways to bring a cluster under management: providing a kubeconfig `Secret`, using cloud workload identity (AWS IRSA, GKE Workload Identity, Azure Workload Identity) or a generic OIDC identity provider, pull mode for clusters not reachable from the management cluster, and automatic discovery of Cluster API `Cluster` objects. See [Register a Cluster](../../register/register-cluster.md) for details on each approach.
 
 Profiles target clusters by **label selectors**. A `ClusterProfile` does not name specific clusters; it declares which labels a cluster must carry. When a cluster is registered and its labels match an existing profile, Sveltos begins managing it immediately with no further configuration.
 

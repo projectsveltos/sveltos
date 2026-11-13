@@ -1,6 +1,6 @@
 ---
 title: Workload Identity Registration
-description: Register managed clusters with Sveltos using cloud provider workload identity (GKE, EKS, AKS) — no static kubeconfig required.
+description: Register managed clusters with Sveltos using cloud provider workload identity (GKE, EKS, AKS) or a generic OIDC identity provider (Dex, Keycloak, Okta). No static kubeconfig required.
 tags:
     - Kubernetes
     - add-ons
@@ -10,25 +10,29 @@ tags:
     - GKE
     - EKS
     - AKS
+    - OIDC
 authors:
     - Gianluca Mardente
+    - Eleni Grosdouli
 ---
 
 ## Workload Identity Registration
 
-Standard Sveltos cluster registration stores a long-lived kubeconfig in a Kubernetes Secret. With Workload Identity registration we remove that requirement. Sveltos obtains short-lived credentials from the cloud provider at runtime, using the management cluster pod's own identity.
+Standard Sveltos cluster registration stores a long-lived kubeconfig in a Kubernetes Secret. With Workload Identity registration we remove that requirement. Sveltos obtains short-lived credentials at runtime instead of reading them from a Secret.
 
-This approach works when:
+Two different mechanisms are covered by this page:
 
-- The management and the managed clusters are in the same cloud account or project.
-- The management cluster runs with a cloud provider identity (GKE Workload Identity, AWS IRSA, or Azure Workload Identity).
+- **Cloud provider workload identity** (GKE, EKS, AKS): the management cluster pod's own cloud identity is used to obtain credentials for the managed cluster. This works when the management and the managed clusters are in the same cloud account or project, and the management cluster runs with a cloud provider identity (GKE Workload Identity, AWS IRSA, or Azure Workload Identity).
+- **Generic OIDC** (Dex, Keycloak, Okta, or any RFC 6749 compliant identity provider): for managed clusters that are not on one of the three cloud providers above, for example an on-prem or self-managed cluster fronted by an enterprise IdP. This is not secretless: Sveltos holds a standing `client_id`/`client_secret` in a Secret and exchanges it directly at the IdP's token endpoint using the standard OAuth2 client credentials grant.
 
-No kubeconfig `Secret` is stored in the Sveltos management cluster. The credentials are refreshed automatically when they expire.
+Either way, no kubeconfig `Secret` is stored in the Sveltos management cluster, and credentials are refreshed automatically before they expire.
 
 !!!note
-    Workload Identity registration requires Sveltos **v1.12.0** or later.
+    Workload Identity registration requires Sveltos **v1.12.0** or later for GKE/EKS/AKS. Generic OIDC support was added later; check the [release notes](https://github.com/projectsveltos/libsveltos/releases) for the version that first includes it.
 
 ## Which Service Accounts Need the Cloud Identity Annotation
+
+This section applies to the three cloud providers (GKE, EKS, AKS) only. OIDC does not use a ServiceAccount annotation at all: the client credentials live in a regular Secret referenced by the `SveltosCluster`, so there is nothing to annotate or roll out. See [Programmatic Registration](#programmatic-registration) below.
 
 Only the Sveltos components that talk to managed clusters need the cloud provider's workload identity annotation on their ServiceAccount:
 
@@ -40,6 +44,9 @@ Only the Sveltos components that talk to managed clusters need the cloud provide
 - `techsupport-controller`
 - `mcp-server`
 - `drift-detection-manager` and `sveltos-agent-manager`, but only when Sveltos runs in agentless mode (`agent.managementCluster: true` in the Helm chart)
+
+!!! note "Workload identity for the per-cluster agents themselves"
+    `drift-detection-manager` and `sveltos-agent-manager` are not installed by the Helm chart: Sveltos creates one instance of each per managed cluster. Each instance lives in the management cluster (agentless mode) or in the managed cluster itself (the default). In agentless mode, that instance needs to reach the managed cluster it was created for, which is why it's in the ServiceAccount list above. When one of these per-cluster instances needs a cloud workload identity of its own, for example an `azure.workload.identity/use: "true"` pod label to pull images from a private registry, patch its Deployment directly instead: see [Sharing Overrides Across Multiple Clusters](../getting_started/install/air_gapped_installation.md#sharing-overrides-across-multiple-clusters).
 
 !!! tip "Preferred: set the annotation once via Helm"
     If Sveltos is installed with the `projectsveltos` Helm chart, set `global.serviceAccountAnnotations` instead of annotating each ServiceAccount by hand. The value is merged into every ServiceAccount listed above, and a component-specific `<component>.serviceAccount.annotations` still takes precedence on key collisions:
@@ -63,7 +70,10 @@ Only the Sveltos components that talk to managed clusters need the cloud provide
 
 ## Register a Cluster
 
-When using workload identity, each cloud provider has a dedicated subcommand: `register cluster-eks` for Amazon EKS, `register cluster-gke` for Google GKE, and `register cluster-aks` for Azure AKS. If you are registering a cluster with a kubeconfig, use `register cluster` instead.
+When using cloud provider workload identity, each provider has a dedicated subcommand: `register cluster-eks` for Amazon EKS, `register cluster-gke` for Google GKE, and `register cluster-aks` for Azure AKS. If you are registering a cluster with a kubeconfig, use `register cluster` instead.
+
+!!! note
+    OIDC has no dedicated `sveltosctl register` subcommand yet. Apply the `SveltosCluster` and its Secrets directly: see the OIDC tab under [Programmatic Registration](#programmatic-registration).
 
 ### AWS (EKS)
 
@@ -457,6 +467,186 @@ The guides below walk through the full cloud-side setup required before running 
 
     *`PROJECT` is empty*: Shell variables are lost between sessions. Re-export them before running any `gcloud` commands.
 
+??? example "OIDC — Dex"
+
+    Unlike the cloud examples above, the management and managed clusters don't need to
+    be related in any way. All that's required is that the managed cluster's
+    kube-apiserver trusts Dex as an OIDC issuer, and that Sveltos holds a
+    `client_id`/`client_secret` Dex will accept.
+
+    **Step 1 — Enable the client credentials grant on Dex**
+
+    The client credentials grant (RFC 6749 §4.4) is what lets Sveltos exchange a
+    `client_id`/`client_secret` directly for a token, without a user login. It must be
+    turned on explicitly:
+
+    ```bash
+    $ export DEX_CLIENT_CREDENTIAL_GRANT_ENABLED_BY_DEFAULT=true
+    ```
+
+    ```yaml
+    # dex config.yaml
+    oauth2:
+      grantTypes:
+        - "client_credentials"
+    staticClients:
+      - id: sveltos
+        secret: <a-strong-secret>
+        name: Sveltos
+    ```
+
+    **Step 2 — Trust Dex from the managed cluster's kube-apiserver**
+
+    Add these flags to the managed cluster's `kube-apiserver`. The exact mechanism
+    depends on how the cluster is provisioned: kubeadm's `ClusterConfiguration`, a
+    Cluster API `KubeadmControlPlane`/`ClusterClass` patch, or your distribution's
+    equivalent.
+
+    ```
+    --oidc-issuer-url=https://<dex-host>:<port>/dex
+    --oidc-client-id=sveltos
+    --oidc-username-claim=aud
+    --oidc-username-prefix=-
+    --oidc-ca-file=/etc/kubernetes/pki/dex-ca.crt   # only if Dex's cert isn't already trusted
+    ```
+
+    `--oidc-username-claim=aud` reads the token's audience claim, which the client
+    credentials grant sets to the `client_id` verbatim (`sveltos` here). Combined with
+    `--oidc-username-prefix=-` (no prefix), the resulting Kubernetes username is exactly
+    `sveltos`. That's simpler to reason about than the `sub` claim, which Dex encodes
+    internally rather than leaving as the plain client_id.
+
+    **Step 3 — Grant that identity the permissions Sveltos needs**
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: sveltos-oidc-workload-identity
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: User
+        name: sveltos
+        apiGroup: rbac.authorization.k8s.io
+    ```
+
+    **Step 4 — Register the cluster**
+
+    See the OIDC tab under [Programmatic Registration](#programmatic-registration) for
+    the `SveltosCluster` and Secrets to apply.
+
+    **Step 5 — Verify**
+
+    ```bash
+    $ kubectl get sveltoscluster <name> -n <namespace>
+    ```
+
+    `READY` should become `true` within a few seconds.
+
+    **Troubleshooting**
+
+    *`x509: certificate signed by unknown authority` in sc-manager/addon-controller logs*:
+    the token exchange with Dex's own token endpoint is failing TLS verification. This is
+    a different trust boundary from Step 2: set `oidc.caSecretRef` in the `SveltosCluster`
+    to a Secret containing Dex's own CA (see [Programmatic Registration](#programmatic-registration)).
+
+    *`... is forbidden: User "sveltos" cannot get resource ...`*: the token is being
+    accepted, but no RBAC grants that identity anything. Revisit Step 3.
+
+
+??? example "OIDC — Keycloak"
+
+    The setup is very similar to the one with DEX. We will provide instructions on how to allow Sveltos to register Kubernetes clusters using Keycloak as a Workload Identity. The full guide is available [here](https://blog.grosdouli.dev/blog/sveltos-managed-cluster-registration-oidc-keycloak).
+
+    **Step 1 — Realm, Client ID and Configuration Mappers**
+
+    **Realm and Client ID**
+
+    1. Create a new Realm with the name `sveltos-realm`
+    2. Create a Client ID `test-env-auth`
+    3. Under **Capability config**: **Enable** `Client authentication` and **enable** `Service account roles` in the **Authentication flow** section
+    4. Save the configuration
+    
+
+    **Mapper Configuration -> Hardcoded claim**
+
+    1. Set Name to `test-env-user`
+    2. Set Token Claim Name to `test-env-user`
+    3. Set Claim value to `sveltos`
+    4. Set Claim JSON Type to `string`
+    5. **Enable** `Add to access token`
+    6. Save the configuration
+
+    **Mapper Configuration -> Audience**
+
+    1. Set Name to `test-env-audience`
+    2. Set **Included Custom Audience** to `test-env-auth`
+    3. **Disable** `Add to ID token`
+    4. **Enable** `Add to access token`
+    5. Save the configuration
+
+    **Step 2 — Update Managed Cluster Kubernetes API Server Details**
+
+    Add these flags to the managed cluster's `kube-apiserver`. The exact mechanism
+    depends on how the cluster is provisioned: kubeadm's `ClusterConfiguration`, a
+    Cluster API `KubeadmControlPlane`/`ClusterClass` patch, or your distribution's
+    equivalent.
+
+    ```yaml
+    --oidc-issuer-url=https://<Your Keycloak Domain>/realms/sveltos-realm
+    --oidc-client-id=test-env-auth
+    --oidc-username-claim=test-env-user
+    --oidc-username-prefix=-
+    --oidc-ca-file=/etc/kubernetes/pki/keycloak-ca.crt # Only if Keycloak's cert is not trusted
+    ```
+
+    The `oidc-username-claim=test-env-user` value resolves to **sveltos**. Remember, this comes from the Hardcoded claim created in a previous step. The `oidc-username-prefix=-` field means no prefix is added. The Kubernetes username is sveltos.
+
+    **Step 3 — Grant Indentity the Permissions Sveltos Requires**
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: sveltos-oidc-workload-identity
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: User
+        name: sveltos
+        apiGroup: rbac.authorization.k8s.io
+    ```
+
+    **Step 4 — Register the cluster**
+
+    See the OIDC tab under [Programmatic Registration](#programmatic-registration) for
+    the `SveltosCluster` and Secrets to apply. The cluster can be registered in a different namespace instead of `projectsveltos`. Choose the namespace of your preference.
+
+    **Step 5 — Verification**
+
+    ```bash
+    $ kubectl get sveltoscluster <name> -n <namespace>
+    ```
+
+    `READY` should become `true` within a few seconds.
+
+    **Troubleshooting**
+
+    *`x509: certificate signed by unknown authority` in sc-manager/addon-controller logs*:
+    The token exchange with Dex's own token endpoint is failing TLS verification. This is
+    a different trust boundary from Step 2: set `oidc.caSecretRef` in the `SveltosCluster`
+    to a Secret containing Dex's own CA (see [Programmatic Registration](#programmatic-registration)).
+
+    *`... is forbidden: User "sveltos" cannot get resource ...`*: the token is being
+    accepted, but no RBAC grants that identity anything. Revisit Step 3.
+
+
+
 ## Programmatic Registration
 
 To create the resources in a programmatic manner, apply a `SveltosCluster` with `spec.workloadIdentity` set.
@@ -516,6 +706,40 @@ To create the resources in a programmatic manner, apply a `SveltosCluster` with 
           # subscriptionID, resourceGroup, clusterName are optional
     ```
 
+=== "OIDC (Dex, Keycloak, Okta, …)"
+    ```yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: oidc-managed-creds
+      namespace: projectsveltos
+    stringData:
+      client_id: sveltos
+      client_secret: <a-strong-secret>
+    ---
+    apiVersion: lib.projectsveltos.io/v1beta1
+    kind: SveltosCluster
+    metadata:
+      name: oidc-managed
+      namespace: projectsveltos
+    spec:
+      workloadIdentity:
+        provider: OIDC
+        endpoint: "https://<managed-cluster-api-server>"
+        caSecretRef:
+          name: oidc-managed-ca        # Secret with key ca.crt: the managed cluster's own API server CA
+        oidc:
+          tokenURL: "https://<idp-host>/token"
+          secretRef:
+            name: oidc-managed-creds
+          # scopes: ["some-scope"]     # optional; leave out if the IdP doesn't require one
+          # caSecretRef:
+          #   name: oidc-idp-ca        # Secret with key ca.crt: the IdP's own CA, only if it's
+          #                            # behind a private CA. Distinct from the caSecretRef
+          #                            # above: that one is for the managed cluster's API
+          #                            # server, this one is for the IdP's token endpoint.
+    ```
+
 The CA Secret referenced by `caSecretRef` must contain a `ca.crt` key:
 
 ```yaml
@@ -527,3 +751,5 @@ metadata:
 data:
   ca.crt: <base64-encoded-CA-certificate>
 ```
+
+For OIDC, `secretRef` under `oidc` must contain `client_id` and `client_secret` keys, as shown above.

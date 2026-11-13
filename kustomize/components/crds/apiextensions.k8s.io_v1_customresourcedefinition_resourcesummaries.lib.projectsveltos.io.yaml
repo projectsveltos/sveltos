@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.23.0
   name: resourcesummaries.lib.projectsveltos.io
 spec:
   group: lib.projectsveltos.io
@@ -256,6 +256,105 @@ spec:
           status:
             description: ResourceSummaryStatus defines the status of ResourceSummary
             properties:
+              driftedHelmCharts:
+                description: |-
+                  DriftedHelmCharts lists the Helm releases that had at least one deployed resource
+                  change out of band since this status was last consumed. Set alongside HelmResourcesChanged,
+                  scoped to only the charts actually affected (as opposed to HelmResourcesChanged, which
+                  only says some Helm-deployed resource changed, without saying which chart). The consumer
+                  is expected to clear this list after acting on it, the same way it resets HelmResourcesChanged.
+                items:
+                  description: HelmChartRef identifies the Helm release a watched
+                    resource belongs to.
+                  properties:
+                    chartName:
+                      description: ChartName is the chart name
+                      type: string
+                    releaseName:
+                      description: ReleaseName is the chart release
+                      type: string
+                    releaseNamespace:
+                      description: ReleaseNamespace is the namespace the release is
+                        installed in
+                      type: string
+                  required:
+                  - chartName
+                  - releaseName
+                  - releaseNamespace
+                  type: object
+                type: array
+              driftedResources:
+                description: |-
+                  DriftedResources lists the resources that changed out of band since this status was last
+                  consumed. It names the resources behind ResourcesChanged, KustomizeResourcesChanged and
+                  HelmResourcesChanged. Entries are unique and the list holds at most MaxDriftedResources
+                  of them; DriftedResourcesTruncated tells when more resources drifted than are listed.
+                  The consumer is expected to clear this list after acting on it, the same way it resets
+                  the changed flags.
+                items:
+                  description: DriftedResource identifies a resource deployed by Sveltos
+                    that was changed out of band.
+                  properties:
+                    detectedTime:
+                      description: DetectedTime is when the drift was detected.
+                      format: date-time
+                      type: string
+                    featureID:
+                      description: FeatureID is the feature that deployed the resource.
+                      enum:
+                      - Resources
+                      - Helm
+                      - Kustomize
+                      type: string
+                    group:
+                      description: Group of the drifted resource.
+                      type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies the Helm release that deployed the resource.
+                        Only set when FeatureID is Helm.
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
+                    kind:
+                      description: Kind of the drifted resource.
+                      minLength: 1
+                      type: string
+                    name:
+                      description: Name of the drifted resource.
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the drifted resource.
+                        Empty for resources scoped at cluster level.
+                      type: string
+                  required:
+                  - detectedTime
+                  - featureID
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: array
+              driftedResourcesTruncated:
+                description: |-
+                  DriftedResourcesTruncated is true when more resources drifted than are listed in
+                  DriftedResources.
+                type: boolean
               helmResourceHashes:
                 description: HelmResourceHashes specifies list of resource plus hash.
                 items:
@@ -266,6 +365,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-
@@ -316,6 +436,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-
@@ -365,6 +506,27 @@ spec:
                     hash:
                       description: Hash is the hash of a resource's data.
                       type: string
+                    helmChartRef:
+                      description: |-
+                        HelmChartRef identifies which Helm release this resource was deployed by.
+                        Only set when this ResourceHash was generated for a Helm-deployed resource
+                        (i.e. as part of HelmResourceHashes).
+                      properties:
+                        chartName:
+                          description: ChartName is the chart name
+                          type: string
+                        releaseName:
+                          description: ReleaseName is the chart release
+                          type: string
+                        releaseNamespace:
+                          description: ReleaseNamespace is the namespace the release
+                            is installed in
+                          type: string
+                      required:
+                      - chartName
+                      - releaseName
+                      - releaseNamespace
+                      type: object
                     ignoreForConfigurationDrift:
                       default: false
                       description: |-
