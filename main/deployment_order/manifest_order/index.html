@@ -11,6 +11,7 @@
       
       
       
+      
         <link rel="prev" href="../../addons/profile/">
       
       
@@ -21,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.53">
+      <meta name="generator" content="zensical-0.1.1">
     
     
       
@@ -32,12 +33,12 @@
       
         
       
-      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.20815dad.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.ebb7f775.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -79,14 +80,11 @@
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#introduction-to-deployment-resource-order" class="md-skip">
-          Skip to content
-        </a>
-      
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
     </div>
     <div data-md-component="announce">
       
@@ -134,7 +132,7 @@
   </div>
 
             </div>
-            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../..",location),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
           </aside>
         
       </div>
@@ -151,9 +149,10 @@
   <img src="../../assets/logo.png" alt="Projectsveltos Documentation">
 
     </a>
-    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+    <label class="md-header__button md-icon" for="__drawer">
       
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+      <span class="md-visually-hidden">Navigation</span>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -205,9 +204,10 @@
     
       
       
-        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+        <label class="md-header__button md-icon" for="__search">
           
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+          <span class="md-visually-hidden">Search</span>
         </label>
         <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
   <button type="button" class="md-search__button">
@@ -337,18 +337,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Use Cases
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -372,10 +373,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -399,10 +400,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -436,18 +437,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2_3">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   GitOps Integration
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -471,10 +473,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -498,18 +500,19 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -543,18 +546,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_4">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2_4">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Multi-tenancy
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -578,10 +582,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -605,18 +609,19 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -650,18 +655,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_5">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2_5">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Cluster API Automation
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -685,10 +691,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -712,10 +718,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -739,18 +745,20 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -791,18 +799,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Overview
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -826,10 +835,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -853,10 +862,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -880,10 +889,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -924,18 +934,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Getting Started
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -969,18 +980,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_1">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4_1">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Installation
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1004,10 +1016,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1031,10 +1043,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1058,10 +1070,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1085,18 +1097,19 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1130,18 +1143,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4_2">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   sveltosctl
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1165,10 +1179,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1202,18 +1216,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4_2_2">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   sveltosctl Features
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1237,10 +1252,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1264,10 +1279,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1291,26 +1306,28 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1344,18 +1361,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4_3">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Optional
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1379,10 +1397,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1406,18 +1424,20 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -1458,18 +1478,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Register Clusters
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1493,10 +1514,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1520,10 +1541,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1547,10 +1568,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1574,10 +1595,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1601,10 +1622,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1638,18 +1659,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_6">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5_6">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Features
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1673,10 +1695,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1700,10 +1722,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1727,18 +1749,20 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -1779,18 +1803,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Deploy add-ons and applications
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1814,10 +1839,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1841,10 +1866,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1868,10 +1893,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1895,10 +1920,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1922,10 +1947,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1949,10 +1974,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1976,10 +2001,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2003,10 +2028,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2030,10 +2055,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -2076,18 +2102,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Resource Deployment Order
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
     
@@ -2204,10 +2231,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2231,10 +2258,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2258,10 +2285,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2285,10 +2312,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2312,10 +2339,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2339,10 +2366,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2366,10 +2393,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2393,10 +2420,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2420,10 +2447,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2447,10 +2474,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -2491,18 +2519,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Templating
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -2526,10 +2555,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2553,10 +2582,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2580,10 +2609,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2607,10 +2636,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2634,10 +2663,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2671,18 +2700,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_6">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_8_6">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Examples
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -2706,10 +2736,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2733,10 +2763,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2760,10 +2790,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2787,10 +2817,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2814,10 +2844,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2841,10 +2871,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2868,10 +2898,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -2895,18 +2925,20 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -2947,18 +2979,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_9">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Features
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -2982,10 +3015,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3009,10 +3042,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3036,10 +3069,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3063,10 +3096,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3090,10 +3123,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3117,10 +3150,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3144,10 +3177,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3171,10 +3204,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3198,10 +3231,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3225,10 +3258,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3252,10 +3285,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3289,18 +3322,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_12">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_12_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_9_12">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Multi-tenancy
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -3324,10 +3358,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3351,18 +3385,19 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3386,10 +3421,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -3430,18 +3466,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_10">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Event Framework
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -3465,10 +3502,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3492,10 +3529,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3519,10 +3556,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3546,10 +3583,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3573,10 +3610,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3600,10 +3637,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3637,18 +3674,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_10_7">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_10_7">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Examples
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -3672,10 +3710,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3699,10 +3737,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3726,10 +3764,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3753,10 +3791,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3780,10 +3818,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3807,10 +3845,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3834,10 +3872,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3861,10 +3899,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3888,10 +3926,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3915,10 +3953,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3942,10 +3980,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3969,10 +4007,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -3996,10 +4034,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4023,10 +4061,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4050,18 +4088,20 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -4102,18 +4142,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_11">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Cluster Observability
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -4137,10 +4178,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4164,10 +4205,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4191,10 +4232,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4218,10 +4259,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4245,10 +4286,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4272,10 +4313,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4299,10 +4340,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4326,10 +4367,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4353,10 +4394,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4380,10 +4421,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -4424,18 +4466,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_12">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Scalability
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -4459,10 +4502,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4486,10 +4529,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -4530,18 +4574,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_13">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_13">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Help and Tutorials
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -4565,10 +4610,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -4609,18 +4655,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_14">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_14">
+              <span class="md-nav__icon md-icon"></span>
+              
   
   Reference
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -4644,10 +4691,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -4671,10 +4718,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -4830,13 +4878,15 @@
             <div class="md-content" data-md-component="content">
               
               <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
                 
                   
+
   
   
 
 
-  <h1 id="__skip">Resource Deployment Order - Manifest Order</h1>
+  <h1>Profile Resource Deployment Order</h1>
 
 <h2 id="introduction-to-deployment-resource-order">Introduction to Deployment Resource Order</h2>
 <p>When Kubernetes resources are deployed in a cluster, it is sometimes necessary to deploy them in a specific order. For example, a CustomResourceDefinition (CRD)
@@ -5084,20 +5134,25 @@ must exist before a custom resources of that type can be created.</p>
 </footer>
       
     </div>
-    <div class="md-dialog" data-md-component="dialog">
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+      
+<div class="md-progress" data-md-component="progress" role="progressbar" aria-label="Loading"></div>
     
     
     
       
       
-      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.code.copy","content.code.annotate","search.share","navigation.footer","navigation.instant.progress"],"search":"../../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":{"alias":true,"default":["latest"],"provider":"mike"}}</script>
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.code.copy","content.code.annotate","search.share","navigation.footer","navigation.instant.progress"],"redirect":null,"search":"../../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":{"alias":true,"default":["latest"],"provider":"mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.69c251d7.min.js"></script>
+      <script src="../../assets/javascripts/bundle.3cb411a8.min.js"></script>
       
         <script src="../../javascript/extra.js"></script>
       
