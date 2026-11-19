@@ -29,7 +29,9 @@ In agentless mode, `sveltos-agent` and `drift-detection-manager` run in the mana
 
 ## What RBAC Do They Actually Need?
 
-There is no fixed, one-size-fits-all Role to grant. `sveltos-agent` and `drift-detection-manager` only need `get`/`list`/`watch` on whatever resource kinds your `ClusterProfiles`/`Classifiers` actually target in that cluster, not on every resource type Kubernetes has. This alone is already a meaningful boundary: a customer or application team can see exactly, kind by kind, what Sveltos is able to read.
+There is no fixed, one-size-fits-all Role to grant. `sveltos-agent` only needs `get`/`list`/`watch` on whatever resource kinds the `resourceSelectors` of your `Classifiers`, `EventSources`, `HealthChecks` and `Reloaders` actually target in that cluster. `drift-detection-manager` only needs the same verbs on whatever resource kinds your `ClusterProfiles`/`Profiles` with `syncMode: ContinuousWithDriftDetection` deploy there. Neither needs access to every resource type Kubernetes has. This alone is already a meaningful boundary: a customer or application team can see exactly, kind by kind, what Sveltos is able to read.
+
+`sveltos-agent` also needs one write permission in the managed cluster: when a `HealthCheck` finds a resource `Degraded`, it raises a Kubernetes Event on that resource, in the managed cluster, so the Event shows up in `kubectl describe` next to the resource. The credential therefore needs `create`, `patch` and `update` on `events` (API group `events.k8s.io`) in every namespace it has been granted access to. Without it the Event is rejected and logged by `sveltos-agent`; the `HealthCheckReport` is still created and is not affected.
 
 That's only half of it, though. Take a `ClusterProfile` that only ever deploys `Deployments` and `ConfigMaps` into the `team-a` namespace: the credential only needs `get`/`list`/`watch` on those two kinds. But by default, `sveltos-agent` and `drift-detection-manager` still watch `Deployments` and `ConfigMaps` **cluster-wide**, not just in `team-a`. A cluster-wide watch needs a `ClusterRole`; a `Role` scoped to `team-a` alone can't satisfy it, no matter how correctly the resource kinds are scoped. Narrowing the resource kinds isn't enough by itself: the watch also has to be narrowed to the same namespace, which is exactly what the next section covers.
 
@@ -51,7 +53,7 @@ The same restriction can be applied to a Pull Mode cluster's `sveltos-applier` a
 
 ## Worked Example
 
-1. On the managed cluster, create a `ServiceAccount`, `Role`, and `RoleBinding` scoped to the namespace(s) and resource kinds your `ClusterProfiles`/`Classifiers` for this cluster actually need:
+1. On the managed cluster, create a `ServiceAccount`, `Role`, and `RoleBinding` scoped to the namespace(s) and resource kinds that the `Classifiers`, `EventSources`, `HealthChecks` and `Reloaders` for this cluster select, plus the resource kinds your `ClusterProfiles`/`Profiles` with drift detection deploy there:
 
     ```yaml
     apiVersion: v1
@@ -72,6 +74,9 @@ The same restriction can be applied to a Pull Mode cluster's `sveltos-applier` a
     - apiGroups: [""]
       resources: ["configmaps"]
       verbs: ["get", "list", "watch"]
+    - apiGroups: ["events.k8s.io"]
+      resources: ["events"]
+      verbs: ["create", "patch", "update"]
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
