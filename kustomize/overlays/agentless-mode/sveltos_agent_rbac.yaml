@@ -1,6 +1,8 @@
 # When classifier is configured to deploy sveltos-agent in the management cluster, 
 # sveltos-agent will create a Service and a Deployment per cluster.
 # Those extra permissions are needed.
+# With --agent-clusters-per-instance greater than one, classifier also writes the ConfigMap
+# listing the clusters served by each group of sveltos-agent.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -11,6 +13,7 @@ rules:
   - ""
   resources:
   - services
+  - configmaps
   verbs:
   - "*"
 - apiGroups:

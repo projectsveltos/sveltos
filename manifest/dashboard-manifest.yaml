@@ -317,6 +317,7 @@ spec:
             labels:
                 app: dashboard
         spec:
+            automountServiceAccountToken: false
             containers:
                 - env:
                     - name: VITE_APP_VERSION
@@ -325,6 +326,57 @@ spec:
                   name: dashboard
                   ports:
                     - containerPort: 5173
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+                    readOnlyRootFilesystem: true
+                  volumeMounts:
+                    - mountPath: /app/dist
+                      name: dist
+                    - mountPath: /etc/nginx/conf.d
+                      name: nginx-conf
+                    - mountPath: /run/nginx
+                      name: nginx-run
+                    - mountPath: /var/lib/nginx/tmp
+                      name: nginx-tmp
+                    - mountPath: /var/log/nginx
+                      name: nginx-log
+            initContainers:
+                - command:
+                    - sh
+                    - -c
+                    - cp -R /app/dist/. /work/
+                  image: docker.io/projectsveltos/dashboard:v1.17.0
+                  name: copy-dist
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                        drop:
+                            - ALL
+                    readOnlyRootFilesystem: true
+                  volumeMounts:
+                    - mountPath: /work
+                      name: dist
+            securityContext:
+                fsGroup: 101
+                runAsGroup: 101
+                runAsNonRoot: true
+                runAsUser: 100
+                seccompProfile:
+                    type: RuntimeDefault
+            volumes:
+                - emptyDir: {}
+                  name: dist
+                - emptyDir: {}
+                  name: nginx-conf
+                - emptyDir: {}
+                  name: nginx-run
+                - emptyDir: {}
+                  name: nginx-tmp
+                - emptyDir: {}
+                  name: nginx-log
 ---
 apiVersion: v1
 kind: Service
