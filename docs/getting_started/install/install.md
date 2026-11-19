@@ -43,6 +43,9 @@ If you do not want to have any Sveltos agent in any **managed cluster**, run the
 $ kubectl apply -f https://raw.githubusercontent.com/projectsveltos/sveltos/v1.17.0/manifest/agents_in_mgmt_cluster_manifest.yaml
 ```
 
+!!! note
+    In this mode Sveltos starts one `sveltos-agent` and one `drift-detection-manager` per managed cluster. With a large fleet, [Agent Grouping](agentless_agent_grouping.md) (Enterprise) lets a single instance serve several clusters.
+
 !!! warning
     Sveltos is deployed in the `projectsveltos` namespace.
 
