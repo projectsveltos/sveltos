@@ -22,7 +22,7 @@ There are four ways to define a health check:
 | Check | What it evaluates | Use it when |
 |-------|-------------------|-------------|
 | [Lua](#lua-health-validation) | A resource in the managed cluster | You need full scripting to decide if a resource is healthy |
-| [CEL](#cel-health-validation) | A resource in the managed cluster | A short expression is enough |
+| [CEL](#cel-health-validation) | A resource in the managed cluster | A short expression is enough, and you want the best performance |
 | [Metrics](#metric-based-health-validation) | A Prometheus query | Health depends on live signals like an error rate |
 | [Job](#job-based-health-validation) :material-crown:{ title="Enterprise" } | The outcome of a Kubernetes Job | You need an active probe like a smoke test |
 
@@ -83,6 +83,9 @@ The `ClusterProfile` below will deploy cert-manager in any cluster matching the 
 ### CEL Health Validation
 
 Alternatively, you can use Common Expression Language ([CEL](https://cel.dev)), which offers a more concise way to define the same health rule. The example below uses a CEL expression to check if the _availableReplicas_ are equal to the _requested replicas_. The result is the same as the Lua script, providing a healthy and succinct way to validate the state of your deployments.
+
+!!! tip "Prefer CEL for performance"
+    Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards. CEL evaluation therefore performs significantly better than Lua. Use Lua when you need full scripting, and CEL when a short expression is enough.
 
 !!! example ""
     ```yaml

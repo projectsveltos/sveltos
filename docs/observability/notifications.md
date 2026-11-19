@@ -148,7 +148,7 @@ The [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1b
     * **Details:** An optional Lua script used to *additionally* filter resources before the main health check is performed.
 * **`resourceSelectors[*].EvaluateCEL`**
     * **Purpose:** CEL Pre-Filter (Optional)
-    * **Details:** An optional list of Common Expression Language (CEL) rules used to *additionally* filter resources.
+    * **Details:** An optional list of Common Expression Language (CEL) rules used to *additionally* filter resources. CEL rules are compiled the first time they are processed, so prefer CEL over the Lua pre-filter for better performance.
 * **`evaluateHealth`**
     * **Purpose:** Custom Health Evaluation
     * **Details:** A **mandatory** Lua script that performs the core health check logic on all the final, filtered resources.

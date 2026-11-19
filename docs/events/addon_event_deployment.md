@@ -110,6 +110,9 @@ When providing Sveltos with a [Lua script](https://www.lua.org/), Sveltos expect
 
 Sveltos supports custom events written in the [CEL](https://cel.dev) language.
 
+!!! tip "Prefer CEL for performance"
+    Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards. CEL evaluation therefore performs significantly better than Lua. Use Lua when you need full scripting, and CEL when a short expression is enough.
+
 !!! example ""
     ```yaml
     ---
