@@ -15,6 +15,9 @@ authors:
 
 # Lua
 
+!!! tip "Prefer CEL for performance"
+    Where Lua is used to filter resources or express a condition (events, health checks, classification), [CEL](https://cel.dev/) is also supported. Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards, so CEL evaluation performs significantly better than Lua. Use Lua when you need full scripting.
+
 Sveltos enables the execution of [Lua](https://www.lua.org/) code stored within ConfigMap or Secret Kubernetes resources. To allow Sveltos to identify and reference these resources within the Sveltos profiles, the annotation `projectsveltos.io/lua` annotation needs to be defined within the resources. Check out the example below. The Lua code gets executed, and the resulting output is used to *deploy configurations* to matching clusters.
 
 This will instruct Sveltos to fetch the Secret __imported-secret__ in the __default__ namespace and replicate it to any __env: prod__ cluster:

@@ -157,7 +157,7 @@ The __Techsupport__ CRD allows filtering pods and resources using the label and 
 - *schedulingConfig.schedule* field specifies when a tech-support needs to be collected. It is in [Cron format](https://en.wikipedia.org/wiki/Cron).
 
 !!! note
-    The [CEL](https://cel.dev/) language can be used as a way to express logic.
+    The [CEL](https://cel.dev/) language can be used as a way to express logic. CEL rules are compiled the first time they are processed, so CEL performs significantly better than Lua.
 
 ## Delivery Options
 

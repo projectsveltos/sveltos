@@ -209,7 +209,7 @@ The Lua function must return a struct with:
 - "message" field: (optional) message
 
 !!! note
-    Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic.
+    Keep in mind the [CEL](https://cel.dev/) language can be used as a way to express logic. CEL rules are compiled the first time they are processed, so CEL performs significantly better than Lua.
 
 ### Classifier Controller Configuration
 

@@ -200,7 +200,7 @@ Set `group`, `version`, and `kind` to identify the resource type. Sveltos fetche
         end
     ```
 
-CEL is also supported:
+CEL is also supported. Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards, so CEL evaluation performs significantly better than Lua:
 
 !!! example "Example - spec.validateHealths (CEL)"
     ```yaml
