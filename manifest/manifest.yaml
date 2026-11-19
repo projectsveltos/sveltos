@@ -18914,7 +18914,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.17.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -18931,7 +18931,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/addon-controller:v1.17.0
+                  image: docker.io/projectsveltos/addon-controller:main
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
@@ -18990,7 +18990,7 @@ spec:
                             fieldPath: metadata.namespace
                     - name: IS_INITIALIZATION
                       value: "true"
-                  image: docker.io/projectsveltos/addon-controller:v1.17.0
+                  image: docker.io/projectsveltos/addon-controller:main
                   imagePullPolicy: IfNotPresent
                   name: initialization
                   securityContext:
@@ -19753,7 +19753,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.17.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -19770,7 +19770,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/healthcheck-manager:v1.17.0
+                  image: docker.io/projectsveltos/healthcheck-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -22791,7 +22791,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.17.0
+                    - --version=main
                     - --agent-in-mgmt-cluster=false
                   command:
                     - /manager
@@ -22808,7 +22808,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/event-manager:v1.17.0
+                  image: docker.io/projectsveltos/event-manager:main
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -23138,7 +23138,7 @@ spec:
                     - --shard-key=
                     - --capi-onboard-annotation=
                     - --v=5
-                    - --version=v1.17.0
+                    - --version=main
                     - --registry=
                     - --agent-in-mgmt-cluster=false
                   command:
@@ -23156,7 +23156,7 @@ spec:
                       valueFrom:
                         fieldRef:
                             fieldPath: metadata.namespace
-                  image: docker.io/projectsveltos/classifier:v1.17.0
+                  image: docker.io/projectsveltos/classifier:main
                   imagePullPolicy: IfNotPresent
                   livenessProbe:
                     failureThreshold: 3
@@ -23204,7 +23204,7 @@ spec:
                             fieldPath: metadata.namespace
                     - name: IS_INITIALIZATION
                       value: "true"
-                  image: docker.io/projectsveltos/classifier:v1.17.0
+                  image: docker.io/projectsveltos/classifier:main
                   imagePullPolicy: IfNotPresent
                   name: migrate
                   resources:
