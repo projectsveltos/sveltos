@@ -4839,6 +4839,10 @@
 
 
 <h1 id="lua">Lua</h1>
+<div class="admonition tip">
+<p class="admonition-title">Prefer CEL for performance</p>
+<p>Where Lua is used to filter resources or express a condition (events, health checks, classification), <a href="https://cel.dev/">CEL</a> is also supported. Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards, so CEL evaluation performs significantly better than Lua. Use Lua when you need full scripting.</p>
+</div>
 <p>Sveltos enables the execution of <a href="https://www.lua.org/">Lua</a> code stored within ConfigMap or Secret Kubernetes resources. To allow Sveltos to identify and reference these resources within the Sveltos profiles, the annotation <code>projectsveltos.io/lua</code> annotation needs to be defined within the resources. Check out the example below. The Lua code gets executed, and the resulting output is used to <em>deploy configurations</em> to matching clusters.</p>
 <p>This will instruct Sveltos to fetch the Secret <strong>imported-secret</strong> in the <strong>default</strong> namespace and replicate it to any <strong>env: prod</strong> cluster:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>

@@ -4835,7 +4835,7 @@
 <p>When a cluster is registered with Sveltos, Sveltos attempts to connect to its <code>API server</code>. A successful connection results in the cluster's status being set to a <code>Ready</code> state. This status is a prerequisite for Sveltos to deploy add-ons and applications to clusters.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><a href="https://www.lua.org/">Lua</a> and <a href="https://cel.dev/">CEL</a> languages can be used as a way to express logic.</p>
+<p><a href="https://www.lua.org/">Lua</a> and <a href="https://cel.dev/">CEL</a> languages can be used as a way to express logic. CEL rules are compiled the first time they are processed, so CEL performs significantly better than Lua.</p>
 </div>
 <h2 id="sveltoscluster-readiness-checks">SveltosCluster Readiness Checks</h2>
 <p>While basic API server connectivity is a good initial indicator, it is not always a comprehensive measure of a cluster's readiness condition. In many cases, a cluster might be reachable via its API server, but be in a transitional state. For example, the control plane might be running, but the worker nodes, responsible for running workloads, might still be joining the cluster. As a result, deploying applications to such a cluster could lead to failures. Sveltos needs a more nuanced approach to determine when a cluster is in a <code>stable</code> and <code>operational</code> state. To address these limitations, Sveltos provides a mechanism for defining custom <code>readiness checks</code> for each registered cluster. The <code>readiness checks</code> allow administrators to specify the same conditions that must be met before Sveltos considers a cluster <code>Ready</code>.</p>

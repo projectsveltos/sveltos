@@ -5195,7 +5195,7 @@
 </li>
 <li><strong><code>resourceSelectors[*].EvaluateCEL</code></strong><ul>
 <li><strong>Purpose:</strong> CEL Pre-Filter (Optional)</li>
-<li><strong>Details:</strong> An optional list of Common Expression Language (CEL) rules used to <em>additionally</em> filter resources.</li>
+<li><strong>Details:</strong> An optional list of Common Expression Language (CEL) rules used to <em>additionally</em> filter resources. CEL rules are compiled the first time they are processed, so prefer CEL over the Lua pre-filter for better performance.</li>
 </ul>
 </li>
 <li><strong><code>evaluateHealth</code></strong><ul>

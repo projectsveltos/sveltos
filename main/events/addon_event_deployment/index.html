@@ -5117,6 +5117,10 @@
 </ol>
 <h3 id="example-createdelete-service-event-using-cel">Example: Create/Delete Service Event using CEL</h3>
 <p>Sveltos supports custom events written in the <a href="https://cel.dev">CEL</a> language.</p>
+<div class="admonition tip">
+<p class="admonition-title">Prefer CEL for performance</p>
+<p>Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards. CEL evaluation therefore performs significantly better than Lua. Use Lua when you need full scripting, and CEL when a short expression is enough.</p>
+</div>
 <div class="admonition example">
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lib.projectsveltos.io/v1beta1</span>

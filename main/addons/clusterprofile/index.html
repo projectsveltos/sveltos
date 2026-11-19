@@ -5567,7 +5567,7 @@ Please refer to this <a href="../../deployment_order/rolling_update_strategy/">s
 </span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="no">end</span>
 </span></code></pre></div>
 </div>
-<p>CEL is also supported:</p>
+<p>CEL is also supported. Sveltos compiles a CEL rule the first time it is processed and reuses the compiled program afterwards, so CEL evaluation performs significantly better than Lua:</p>
 <div class="admonition example">
 <p class="admonition-title">Example - spec.validateHealths (CEL)</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">validateHealths</span><span class="p">:</span>
