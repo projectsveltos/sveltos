@@ -4398,6 +4398,23 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Vertical Scaling
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="././" class="md-nav__link md-nav__link--active">
         
   
@@ -4413,6 +4430,63 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#management-cluster-api-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Management cluster API rate limit
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Management cluster API rate limit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Helm
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Manifest
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -4710,6 +4784,11 @@
                     
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -4719,6 +4798,53 @@
   
   
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#management-cluster-api-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Management cluster API rate limit
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Management cluster API rate limit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Helm
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Manifest
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -4744,8 +4870,47 @@
 <ol>
 <li><em>concurrent-reconciles</em>: By default the Sveltos manager reconcilers runs with a <strong>parallelism</strong> set to <strong>10</strong>. This arg can be used to change level of parallelism for ClusterProfiles and ClusterSummary;</li>
 <li><em>worker-number</em>: The number of workers performing long running task. By default it is set to <strong>20</strong>. Increase it number if the managed clusters is above 100.</li>
+<li><em>kube-api-qps</em> and <em>kube-api-burst</em>: the rate limit of the add-on controller client towards the management cluster Kubernetes API server. By default <strong>40</strong> queries per second, with bursts of up to <strong>120</strong>. Increase them when many ClusterSummary instances are created or updated at once (see below);</li>
+<li><em>managed-cluster-kube-api-qps</em> and <em>managed-cluster-kube-api-burst</em>: the same limit, applied separately to the API server of each managed cluster. By default <strong>20</strong> queries per second, with bursts of up to <strong>60</strong>.</li>
 </ol>
 <p>More infromation can be found in the folllowing <a href="https://medium.com/@gianluca.mardente/how-to-handle-long-running-tasks-in-kubernetes-reconciliation-loop-3cc04bfa2681">Medium post</a> on how Sveltos handles long running task.</p>
+<h2 id="management-cluster-api-rate-limit">Management cluster API rate limit</h2>
+<p>Every ClusterSummary the add-on controller creates, reads or updates goes through the client rate limit set by <em>kube-api-qps</em> and <em>kube-api-burst</em>. When many ClusterSummary instances change at once, for instance when a ClusterProfile matching many clusters is created, the controller can spend its time waiting on this limit instead of working. In that case adding workers does not help, while raising the limit does.</p>
+<p>The following test shows the effect. It deploys 20 ClusterProfiles, with raw YAML resources only, to 25 clusters: 306 ClusterSummary instances. The management cluster is a kind cluster and the managed clusters are bare Kubernetes API servers, so absolute times on a real fleet will differ.</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>All ClusterSummaries created</th>
+<th>Last ClusterSummary provisioned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Defaults (<em>kube-api-qps</em>=40, <em>kube-api-burst</em>=120)</td>
+<td>45 seconds</td>
+<td>81 seconds</td>
+</tr>
+<tr>
+<td><em>kube-api-qps</em>=200, <em>kube-api-burst</em>=400</td>
+<td>10 seconds</td>
+<td>45 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>In the same test, raising <em>worker-number</em> to 60 and <em>concurrent-reconciles</em> to 30, with the default rate limit, left the time to deploy everything unchanged.</p>
+<p>A higher limit moves the load to the management cluster API server and etcd. Raise <em>kube-api-qps</em> and <em>kube-api-burst</em> together, in steps, and watch the API server CPU and request latency.</p>
+<h3 id="helm">Helm</h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>helm<span class="w"> </span>upgrade<span class="w"> </span>projectsveltos<span class="w"> </span>projectsveltos/projectsveltos<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>--reuse-values<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>--set<span class="w"> </span>addonController.controller.extraArgs.kube-api-qps<span class="o">=</span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>--set<span class="w"> </span>addonController.controller.extraArgs.kube-api-burst<span class="o">=</span><span class="m">400</span>
+</span></code></pre></div>
+<p>When Sveltos runs in agentless mode (<code>agent.managementCluster=true</code>), use <code>addonController.controller.extraArgsAgentMgmtCluster</code> instead of <code>addonController.controller.extraArgs</code>.</p>
+<h3 id="manifest">Manifest</h3>
+<p>Add the arguments to the <code>addon-controller</code> Deployment:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>-n<span class="w"> </span>projectsveltos<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>addon-controller<span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kube-api-qps=200"},{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kube-api-burst=400"}]'</span>
+</span></code></pre></div>
 
 
   <nav class="md-tags" >
