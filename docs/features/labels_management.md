@@ -24,6 +24,9 @@ Sveltos can track each cluster's runtime status by combining the `Classifier` wi
 
 ![Classifier in action](../assets/classifier.gif)
 
+!!! note
+    The `Classifier` needs `sveltos-agent`. When `sveltos-agent` is [disabled](../overview/architecture/architecture.md#disabling-sveltos-agent), no `Classifier` is deployed to the managed clusters and no label is managed. [ManagementClusterClassifier](mgmt_cluster_classification.md) does not use `sveltos-agent` and is not affected.
+
 ## Use Case: Upgrade Helm Charts when Kubernetes Cluster is Upgraded
 
 Suppose we are managing several Kubernetes clusters with different versions, and we want to deploy the points below.

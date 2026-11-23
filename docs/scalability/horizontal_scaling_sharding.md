@@ -29,6 +29,19 @@ The benefits of using a sharding strategy include:
 1. __Increased scalability__: Sharding allows Sveltos to manage a larger number of managed clusters and applications.
 1. __Reduced risk__: If one instance of a Sveltos controller fails, the other instances can continue to manage the applications in their respective cluster shards.
 
+## Shard Controller Flags for Agents
+
+The `shard controller` can pass options to the controllers it deploys for a shard. All of them are set with flags on the `shard-controller` Deployment.
+
+| Flag | Passed to | Effect |
+|---|---|---|
+| `--disable-sveltos-agent=true` | `addon-controller` and `classifier-manager` | Same meaning as when [disabling sveltos-agent](../overview/architecture/architecture.md#disabling-sveltos-agent). `event-manager` and `healthcheck-manager` are not deployed for a shard. |
+| `--sveltos-agent-clusters-per-instance=<N>` | `classifier-manager`, as `--agent-clusters-per-instance=<N>` | Agentless mode (`--agent-in-mgmt-cluster`) only. How many clusters one `sveltos-agent` serves. Passed only when N is 2 or more. Needs a license granting AgentGrouping. |
+| `--drift-detection-clusters-per-instance=<N>` | `addon-controller`, as `--agent-clusters-per-instance=<N>` | Agentless mode only. How many clusters one `drift-detection-manager` serves. Passed only when N is 2 or more. Needs a license granting AgentGrouping. |
+
+!!!important
+    Only the default `classifier-manager`, the one started without a shard key, deploys `sveltos-agent` and the CRDs, for **every** cluster including the ones in a shard. A shard `classifier-manager` only collects reports. So `--disable-sveltos-agent` and `--agent-clusters-per-instance` must also be set on the default `classifier-manager`. For drift detection, the shard `addon-controller` deploys the `drift-detection-manager` of the clusters in its shard, so the value passed by `--drift-detection-clusters-per-instance` is the one that applies to a shard. The default `addon-controller` needs the same options for the clusters it manages.
+
 ## Customising Shard Component Deployments
 
 When the `shard controller` creates a new set of Sveltos controllers for a shard, it uses built-in deployment templates. In some environments you may need to customise those deployments — for example to change the image registry, adjust resource requests and limits, add node selectors or tolerations, or inject imagePullSecrets.

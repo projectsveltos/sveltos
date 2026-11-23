@@ -15,6 +15,9 @@ authors:
 
 ## Introduction to Sveltos Event Framework
 
+!!! note
+    Events are detected by `sveltos-agent`. When `sveltos-agent` is [disabled](../overview/architecture/architecture.md#disabling-sveltos-agent), `EventSource` instances are not deployed to the managed clusters and no `EventTrigger` fires.
+
 Sveltos supports an event-driven workflow:
 
 1. Define what an event is;
