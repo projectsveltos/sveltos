@@ -162,6 +162,9 @@ When set to true, Sveltos automatically initiates rolling upgrades for affected 
 
 Please refer to this [section](../features/rolling_upgrade.md) for more information.
 
+!!! note
+    The *reloader* property relies on `sveltos-agent`. When `sveltos-agent` is [disabled](../overview/architecture/architecture.md#disabling-sveltos-agent), the property is ignored: no `Reloader` instance is deployed and no rolling upgrade is triggered.
+
 ### Spec.MaxUpdate
 
 A Profile might match more than one cluster. When a change is maded to a Profile, by default all matching clusters are update concurrently.

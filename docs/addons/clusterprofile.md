@@ -158,6 +158,9 @@ The *reloader* property determines whether rolling upgrades should be triggered 
 
 Refer to the [dedicated section](../features/rolling_upgrade.md) for more information.
 
+!!! note
+    The *reloader* property relies on `sveltos-agent`. When `sveltos-agent` is [disabled](../overview/architecture/architecture.md#disabling-sveltos-agent), the property is ignored: no `Reloader` instance is deployed and no rolling upgrade is triggered.
+
 ### Spec.MaxUpdate
 
 A ClusterProfile might match more than one cluster. When a change is maded to a ClusterProfile, by default all matching clusters are update concurrently. The *maxUpdate* field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the ClusterProfile's add-ons or applications. The specified value can be an absolute number (e.g., 5) or a percentage of the desired cluster count (e.g., 10%). The default value is 100%, allowing all matching Clusters to be updated simultaneously.

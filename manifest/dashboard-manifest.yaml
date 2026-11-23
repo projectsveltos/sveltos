@@ -165,7 +165,7 @@ spec:
                       valueFrom:
                         resourceFieldRef:
                             resource: limits.memory
-                  image: projectsveltos/ui-backend:v1.17.0
+                  image: projectsveltos/ui-backend:v1.18.0
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -321,8 +321,8 @@ spec:
             containers:
                 - env:
                     - name: VITE_APP_VERSION
-                      value: v1.17.0
-                  image: docker.io/projectsveltos/dashboard:v1.17.0
+                      value: v1.18.0
+                  image: docker.io/projectsveltos/dashboard:v1.18.0
                   name: dashboard
                   ports:
                     - containerPort: 5173
@@ -348,7 +348,7 @@ spec:
                     - sh
                     - -c
                     - cp -R /app/dist/. /work/
-                  image: docker.io/projectsveltos/dashboard:v1.17.0
+                  image: docker.io/projectsveltos/dashboard:v1.18.0
                   name: copy-dist
                   securityContext:
                     allowPrivilegeEscalation: false

@@ -57,7 +57,7 @@ The **addon-controller** continuously monitors the system using efficient event-
 
 ![Sveltos Controllers](../../assets/architecture-controllers.png)
 
-These controllers are **always** deployed and **cannot** be disabled.
+These controllers are **always** deployed and **cannot** be disabled. `event-manager` and `healthcheck-manager` rely on `sveltos-agent` to detect events and evaluate health: when [sveltos-agent is disabled](#disabling-sveltos-agent) they have nothing to process.
 
 | Component | Helm key | Purpose |
 |---|---|---|
@@ -77,7 +77,22 @@ These components can be disabled when not needed.
 | **shard-controller** | `shardController.enabled` | `true` | Enables horizontal scaling. When a managed cluster carries the `sharding.projectsveltos.io/key` annotation, the shard controller automatically deploys a dedicated set of Sveltos controllers for that shard. When the annotation is removed, it tears the shard down. | Safe to disable when managing a small enough fleet that a single controller set is sufficient. |
 | **techsupport-controller** | `techsupportController.enabled` | `true` | Manages `TechSupport` resources; collects logs, events, and resource state from management and managed clusters. | Safe to disable when not using `TechSupport` resources. |
 | **mcp-server** | `mcpServer.enabled` | `true` | Exposes a Model Context Protocol (MCP) server so AI tools can inspect and manage the Sveltos fleet. | Safe to disable when not integrating with AI tooling. Part of the Enterprise offering. |
+| **sveltos-agent** | `agent.enabled` | `true` | Evaluates `Classifier`, `EventSource`, `HealthCheck` and `Reloader` instances in each managed cluster and reports the results. See [Disabling sveltos-agent](#disabling-sveltos-agent). | Safe to disable when none of `Classifier`, event-driven add-ons, `HealthCheck`/`ClusterHealthCheck`, `healthMonitoring` or `reloader` is used. |
 | **clusterInventory** | `clusterInventory.enabled` | `false` | Bridges the [Kubernetes Cluster Inventory API](https://github.com/kubernetes-sigs/cluster-inventory-api) to Sveltos by watching `ClusterProfile` objects (`multicluster.x-k8s.io`) and creating the corresponding `SveltosCluster` and kubeconfig `Secret`. | Enable only when integrating with a cluster inventory provider that implements the Cluster Inventory API. |
+
+### Disabling sveltos-agent
+
+`sveltos-agent` is deployed by `classifier-manager`, which cannot be disabled. When `agent.enabled` is set to `false`, `classifier-manager`, `addon-controller` and `shard-controller` are all started with the matching option, so that:
+
+1. `classifier-manager` does not deploy `sveltos-agent` and does not deploy any `Classifier` instance to the managed clusters. In every managed cluster it only installs the `DebuggingConfiguration` and `ResourceSummary` CRDs, which are consumed by components other than `sveltos-agent`. The CRDs consumed only by `sveltos-agent` (`Classifier`, `EventSource`, `HealthCheck`, `Reloader` and their reports) are not installed.
+1. `addon-controller` ignores `spec.healthMonitoring` and `spec.reloader` of `ClusterProfile` and `Profile`. The profile is still deployed. For `healthMonitoring`, a Warning event with reason `SveltosAgentDisabled` is added to the `ClusterSummary`; the `HealthCheck` and `ClusterHealthCheck` instances previously created for it are removed. Existing `Reloader` instances are removed too.
+1. `shard-controller` passes the option to the `addon-controller` and `classifier-manager` it deploys for a shard, and does not create `event-manager` and `healthcheck-manager` for that shard.
+
+The following features need `sveltos-agent` and have **no effect** while it is disabled: `Classifier`, `EventSource` and `EventTrigger`, `HealthCheck` and `ClusterHealthCheck`, `healthMonitoring`, `reloader`. Drift detection (`syncMode: ContinuousWithDriftDetection`) does not need `sveltos-agent` and keeps working, and so does `ManagementClusterClassifier`.
+
+!!!note
+    - Turning the option on does not remove a `sveltos-agent` that is already running, the CRDs it needed, or the `event-manager` and `healthcheck-manager` Deployments already created for a shard. Remove them manually. The `HealthCheck`, `ClusterHealthCheck` and `Reloader` instances created for a profile are removed by `addon-controller` the next time the profile is reconciled.
+    - In [pull mode](../../register/register_cluster_pull_mode.md) `sveltos-applier` is still deployed and upgraded, as pull mode needs it.
 
 ### Installation Jobs
 
@@ -94,7 +109,7 @@ Two agents handle work that requires direct access to the managed cluster's API 
 
 | Agent | Purpose |
 |---|---|
-| **sveltos-agent** | Evaluates `Classifier`, `EventSource`, and `HealthCheck` rules against the resources in a cluster. Writes `ClassifierReport`, `EventReport`, `HealthCheckReport`, and `ReloaderReport` results. |
+| **sveltos-agent** | Evaluates `Classifier`, `EventSource`, and `HealthCheck` rules against the resources in a cluster. Writes `ClassifierReport`, `EventReport`, `HealthCheckReport`, and `ReloaderReport` results. It can be [disabled](#disabling-sveltos-agent). |
 | **drift-detection-manager** | Watches the resources that Sveltos deployed to a cluster. When any of those resources is modified externally, it signals the management cluster to reconcile. Deployed only for clusters that have at least one profile with `syncMode: ContinuousWithDriftDetection`. |
 
 ## Deployment Modes

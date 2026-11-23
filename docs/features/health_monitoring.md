@@ -48,6 +48,9 @@ That is all it takes. Sveltos starts monitoring a profile in a cluster once the 
 !!! note
     Health monitoring does not change how a profile is deployed. It only reports. To make a profile wait until the resources are ready, and to make profiles that depend on it wait too, use [validateHealths](../deployment_order/depends_on_with_health_checks.md).
 
+!!! note
+    Health monitoring relies on `sveltos-agent`. When `sveltos-agent` is [disabled](../overview/architecture/architecture.md#disabling-sveltos-agent), *healthMonitoring* is ignored: no `HealthCheck` or `ClusterHealthCheck` is created, the profile is deployed as usual and a Warning event with reason `SveltosAgentDisabled` is added to the `ClusterSummary`.
+
 ## What Is Monitored
 
 By default, Sveltos monitors the following kinds, when they were deployed by the profile:
