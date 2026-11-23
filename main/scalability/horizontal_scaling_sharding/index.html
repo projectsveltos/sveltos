@@ -4495,6 +4495,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shard-controller-flags-for-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shard Controller Flags for Agents
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#customising-shard-component-deployments" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4872,6 +4883,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shard-controller-flags-for-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shard Controller Flags for Agents
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#customising-shard-component-deployments" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4967,6 +4989,38 @@
 <li><strong>Increased scalability</strong>: Sharding allows Sveltos to manage a larger number of managed clusters and applications.</li>
 <li><strong>Reduced risk</strong>: If one instance of a Sveltos controller fails, the other instances can continue to manage the applications in their respective cluster shards.</li>
 </ol>
+<h2 id="shard-controller-flags-for-agents">Shard Controller Flags for Agents</h2>
+<p>The <code>shard controller</code> can pass options to the controllers it deploys for a shard. All of them are set with flags on the <code>shard-controller</code> Deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Passed to</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--disable-sveltos-agent=true</code></td>
+<td><code>addon-controller</code> and <code>classifier-manager</code></td>
+<td>Same meaning as when <a href="../../overview/architecture/architecture/#disabling-sveltos-agent">disabling sveltos-agent</a>. <code>event-manager</code> and <code>healthcheck-manager</code> are not deployed for a shard.</td>
+</tr>
+<tr>
+<td><code>--sveltos-agent-clusters-per-instance=&lt;N&gt;</code></td>
+<td><code>classifier-manager</code>, as <code>--agent-clusters-per-instance=&lt;N&gt;</code></td>
+<td>Agentless mode (<code>--agent-in-mgmt-cluster</code>) only. How many clusters one <code>sveltos-agent</code> serves. Passed only when N is 2 or more. Needs a license granting AgentGrouping.</td>
+</tr>
+<tr>
+<td><code>--drift-detection-clusters-per-instance=&lt;N&gt;</code></td>
+<td><code>addon-controller</code>, as <code>--agent-clusters-per-instance=&lt;N&gt;</code></td>
+<td>Agentless mode only. How many clusters one <code>drift-detection-manager</code> serves. Passed only when N is 2 or more. Needs a license granting AgentGrouping.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Only the default <code>classifier-manager</code>, the one started without a shard key, deploys <code>sveltos-agent</code> and the CRDs, for <strong>every</strong> cluster including the ones in a shard. A shard <code>classifier-manager</code> only collects reports. So <code>--disable-sveltos-agent</code> and <code>--agent-clusters-per-instance</code> must also be set on the default <code>classifier-manager</code>. For drift detection, the shard <code>addon-controller</code> deploys the <code>drift-detection-manager</code> of the clusters in its shard, so the value passed by <code>--drift-detection-clusters-per-instance</code> is the one that applies to a shard. The default <code>addon-controller</code> needs the same options for the clusters it manages.</p>
+</div>
 <h2 id="customising-shard-component-deployments">Customising Shard Component Deployments</h2>
 <p>When the <code>shard controller</code> creates a new set of Sveltos controllers for a shard, it uses built-in deployment templates. In some environments you may need to customise those deployments — for example to change the image registry, adjust resource requests and limits, add node selectors or tolerations, or inject imagePullSecrets.</p>
 <p>You can provide these customisations through a single <code>ConfigMap</code> stored in the Sveltos namespace. Each entry in the <code>ConfigMap</code>'s <code>data</code> field is an independent patch. Both <a href="http://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/">Strategic Merge Patch</a> and <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a> are supported.</p>

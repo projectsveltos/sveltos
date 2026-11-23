@@ -5435,6 +5435,10 @@ For a complete list of features, refer to the <a href="../helm_charts/">Helm cha
 <p>The <em>reloader</em> property determines whether rolling upgrades should be triggered for Deployment, StatefulSet, or DaemonSet instances managed by Sveltos and associated with this Profile when changes are made to mounted ConfigMaps or Secrets.
 When set to true, Sveltos automatically initiates rolling upgrades for affected Deployment, StatefulSet, or DaemonSet instances whenever any mounted ConfigMap or Secret is modified. This ensures that the latest configuration updates are applied to the respective workloads.</p>
 <p>Please refer to this <a href="../../features/rolling_upgrade/">section</a> for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>reloader</em> property relies on <code>sveltos-agent</code>. When <code>sveltos-agent</code> is <a href="../../overview/architecture/architecture/#disabling-sveltos-agent">disabled</a>, the property is ignored: no <code>Reloader</code> instance is deployed and no rolling upgrade is triggered.</p>
+</div>
 <h3 id="specmaxupdate">Spec.MaxUpdate</h3>
 <p>A Profile might match more than one cluster. When a change is maded to a Profile, by default all matching clusters are update concurrently.
 The <em>maxUpdate</em> field specifies the maximum number of Clusters that can be updated concurrently during an update operation triggered by changes to the Profile's add-ons or applications.

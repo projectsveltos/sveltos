@@ -5064,6 +5064,10 @@
 <p class="admonition-title">Note</p>
 <p>Health monitoring does not change how a profile is deployed. It only reports. To make a profile wait until the resources are ready, and to make profiles that depend on it wait too, use <a href="../../deployment_order/depends_on_with_health_checks/">validateHealths</a>.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Health monitoring relies on <code>sveltos-agent</code>. When <code>sveltos-agent</code> is <a href="../../overview/architecture/architecture/#disabling-sveltos-agent">disabled</a>, <em>healthMonitoring</em> is ignored: no <code>HealthCheck</code> or <code>ClusterHealthCheck</code> is created, the profile is deployed as usual and a Warning event with reason <code>SveltosAgentDisabled</code> is added to the <code>ClusterSummary</code>.</p>
+</div>
 <h2 id="what-is-monitored">What Is Monitored</h2>
 <p>By default, Sveltos monitors the following kinds, when they were deployed by the profile:</p>
 <table>

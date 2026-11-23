@@ -5033,6 +5033,10 @@
   <h1>Addon Event Deployment</h1>
 
 <h2 id="introduction-to-sveltos-event-framework">Introduction to Sveltos Event Framework</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Events are detected by <code>sveltos-agent</code>. When <code>sveltos-agent</code> is <a href="../../overview/architecture/architecture/#disabling-sveltos-agent">disabled</a>, <code>EventSource</code> instances are not deployed to the managed clusters and no <code>EventTrigger</code> fires.</p>
+</div>
 <p>Sveltos supports an event-driven workflow:</p>
 <ol>
 <li>Define what an event is;</li>

@@ -972,6 +972,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#disabling-sveltos-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Disabling sveltos-agent
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#installation-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -4997,6 +5008,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#disabling-sveltos-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Disabling sveltos-agent
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#installation-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -5135,7 +5157,7 @@
 <h2 id="management-cluster-components">Management Cluster Components</h2>
 <h3 id="core-controllers">Core Controllers</h3>
 <p><img alt="Sveltos Controllers" src="../../../assets/architecture-controllers.png" /></p>
-<p>These controllers are <strong>always</strong> deployed and <strong>cannot</strong> be disabled.</p>
+<p>These controllers are <strong>always</strong> deployed and <strong>cannot</strong> be disabled. <code>event-manager</code> and <code>healthcheck-manager</code> rely on <code>sveltos-agent</code> to detect events and evaluate health: when <a href="#disabling-sveltos-agent">sveltos-agent is disabled</a> they have nothing to process.</p>
 <table>
 <thead>
 <tr>
@@ -5214,6 +5236,13 @@
 <td>Safe to disable when not integrating with AI tooling. Part of the Enterprise offering.</td>
 </tr>
 <tr>
+<td><strong>sveltos-agent</strong></td>
+<td><code>agent.enabled</code></td>
+<td><code>true</code></td>
+<td>Evaluates <code>Classifier</code>, <code>EventSource</code>, <code>HealthCheck</code> and <code>Reloader</code> instances in each managed cluster and reports the results. See <a href="#disabling-sveltos-agent">Disabling sveltos-agent</a>.</td>
+<td>Safe to disable when none of <code>Classifier</code>, event-driven add-ons, <code>HealthCheck</code>/<code>ClusterHealthCheck</code>, <code>healthMonitoring</code> or <code>reloader</code> is used.</td>
+</tr>
+<tr>
 <td><strong>clusterInventory</strong></td>
 <td><code>clusterInventory.enabled</code></td>
 <td><code>false</code></td>
@@ -5222,6 +5251,21 @@
 </tr>
 </tbody>
 </table>
+<h3 id="disabling-sveltos-agent">Disabling sveltos-agent</h3>
+<p><code>sveltos-agent</code> is deployed by <code>classifier-manager</code>, which cannot be disabled. When <code>agent.enabled</code> is set to <code>false</code>, <code>classifier-manager</code>, <code>addon-controller</code> and <code>shard-controller</code> are all started with the matching option, so that:</p>
+<ol>
+<li><code>classifier-manager</code> does not deploy <code>sveltos-agent</code> and does not deploy any <code>Classifier</code> instance to the managed clusters. In every managed cluster it only installs the <code>DebuggingConfiguration</code> and <code>ResourceSummary</code> CRDs, which are consumed by components other than <code>sveltos-agent</code>. The CRDs consumed only by <code>sveltos-agent</code> (<code>Classifier</code>, <code>EventSource</code>, <code>HealthCheck</code>, <code>Reloader</code> and their reports) are not installed.</li>
+<li><code>addon-controller</code> ignores <code>spec.healthMonitoring</code> and <code>spec.reloader</code> of <code>ClusterProfile</code> and <code>Profile</code>. The profile is still deployed. For <code>healthMonitoring</code>, a Warning event with reason <code>SveltosAgentDisabled</code> is added to the <code>ClusterSummary</code>; the <code>HealthCheck</code> and <code>ClusterHealthCheck</code> instances previously created for it are removed. Existing <code>Reloader</code> instances are removed too.</li>
+<li><code>shard-controller</code> passes the option to the <code>addon-controller</code> and <code>classifier-manager</code> it deploys for a shard, and does not create <code>event-manager</code> and <code>healthcheck-manager</code> for that shard.</li>
+</ol>
+<p>The following features need <code>sveltos-agent</code> and have <strong>no effect</strong> while it is disabled: <code>Classifier</code>, <code>EventSource</code> and <code>EventTrigger</code>, <code>HealthCheck</code> and <code>ClusterHealthCheck</code>, <code>healthMonitoring</code>, <code>reloader</code>. Drift detection (<code>syncMode: ContinuousWithDriftDetection</code>) does not need <code>sveltos-agent</code> and keeps working, and so does <code>ManagementClusterClassifier</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li>Turning the option on does not remove a <code>sveltos-agent</code> that is already running, the CRDs it needed, or the <code>event-manager</code> and <code>healthcheck-manager</code> Deployments already created for a shard. Remove them manually. The <code>HealthCheck</code>, <code>ClusterHealthCheck</code> and <code>Reloader</code> instances created for a profile are removed by <code>addon-controller</code> the next time the profile is reconciled.</li>
+<li>In <a href="../../../register/register_cluster_pull_mode/">pull mode</a> <code>sveltos-applier</code> is still deployed and upgraded, as pull mode needs it.</li>
+</ul>
+</div>
 <h3 id="installation-jobs">Installation Jobs</h3>
 <p>Two Jobs run at <strong>install</strong> and <strong>upgrade</strong> time. They are not long-running controllers.</p>
 <table>
@@ -5254,7 +5298,7 @@
 <tbody>
 <tr>
 <td><strong>sveltos-agent</strong></td>
-<td>Evaluates <code>Classifier</code>, <code>EventSource</code>, and <code>HealthCheck</code> rules against the resources in a cluster. Writes <code>ClassifierReport</code>, <code>EventReport</code>, <code>HealthCheckReport</code>, and <code>ReloaderReport</code> results.</td>
+<td>Evaluates <code>Classifier</code>, <code>EventSource</code>, and <code>HealthCheck</code> rules against the resources in a cluster. Writes <code>ClassifierReport</code>, <code>EventReport</code>, <code>HealthCheckReport</code>, and <code>ReloaderReport</code> results. It can be <a href="#disabling-sveltos-agent">disabled</a>.</td>
 </tr>
 <tr>
 <td><strong>drift-detection-manager</strong></td>

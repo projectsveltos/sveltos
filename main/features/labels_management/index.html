@@ -5116,6 +5116,10 @@
 <p>Once the <code>Classifier</code> is deployed in the <strong>management</strong> cluster, it is distributed to each cluster. A Sveltos service runs in every managed cluster to monitor the cluster's runtime state. As soon as a match is detected, the information is transmitted back to the management cluster, and the cluster labels are appropriately updated by Sveltos.</p>
 <p>Sveltos can track each cluster's runtime status by combining the <code>Classifier</code> with the <code>ClusterProfile</code> resource. When the cluster's state changes, it updates the cluster labels and manages the deployment and upgrade of Kubernetes add-ons as needed.</p>
 <p><img alt="Classifier in action" src="../../assets/classifier.gif" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>Classifier</code> needs <code>sveltos-agent</code>. When <code>sveltos-agent</code> is <a href="../../overview/architecture/architecture/#disabling-sveltos-agent">disabled</a>, no <code>Classifier</code> is deployed to the managed clusters and no label is managed. <a href="../mgmt_cluster_classification/">ManagementClusterClassifier</a> does not use <code>sveltos-agent</code> and is not affected.</p>
+</div>
 <h2 id="use-case-upgrade-helm-charts-when-kubernetes-cluster-is-upgraded">Use Case: Upgrade Helm Charts when Kubernetes Cluster is Upgraded</h2>
 <p>Suppose we are managing several Kubernetes clusters with different versions, and we want to deploy the points below.</p>
 <ol>
