@@ -270,7 +270,7 @@ The kubeconfig stored in the management cluster is generated for the `sa-deploye
 | RBAC in managed cluster | ClusterRole with `get/list/watch *.*` plus write on Sveltos report CRDs | Not applicable. Permissions come via the provided kubeconfig |
 | Outbound connection | Management cluster connects to managed cluster API servers | Management cluster connects to managed cluster API servers |
 | access-manager needed | Yes for `RoleRequest`; only for `AccessRequest` in report-push mode | Only if using `RoleRequest` |
-| Resource consumption | Agent pods run in managed clusters (small footprint, good for edge) | Agent pods run in management cluster (resource usage centralized) |
+| Resource consumption | Agent pods run in managed clusters (small footprint, good for edge) | Agent pods run in management cluster (resource usage centralized). [Agent Grouping](../../getting_started/install/agentless_agent_grouping.md) (Enterprise) lets one agent pod serve several clusters |
 | Good for | Environments where managed-cluster API is reachable and a small in-cluster footprint is acceptable | Environments where managed clusters must remain untouched, or where centralising agent resource usage is preferred |
 
 !!! note "Pull Mode"
