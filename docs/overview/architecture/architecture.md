@@ -88,6 +88,22 @@ These components can be disabled when not needed.
 1. `addon-controller` ignores `spec.healthMonitoring` and `spec.reloader` of `ClusterProfile` and `Profile`. The profile is still deployed. For `healthMonitoring`, a Warning event with reason `SveltosAgentDisabled` is added to the `ClusterSummary`; the `HealthCheck` and `ClusterHealthCheck` instances previously created for it are removed. Existing `Reloader` instances are removed too.
 1. `shard-controller` passes the option to the `addon-controller` and `classifier-manager` it deploys for a shard, and does not create `event-manager` and `healthcheck-manager` for that shard.
 
+**Helm configuration.** With the Helm chart, set `agent.enabled` to `false`:
+
+```bash
+$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace \
+  --set agent.enabled=false
+```
+
+or, in a values file:
+
+```yaml
+agent:
+  enabled: false
+```
+
+The chart starts `classifier-manager`, `addon-controller` and `shard-controller` with `--disable-sveltos-agent=true` and does not deploy `event-manager` and `healthcheck-manager`. No other value needs to change. The option works in every mode, so it can be combined with `agent.managementCluster=true`. To disable it on an existing installation, run `helm upgrade` with the same value.
+
 The following features need `sveltos-agent` and have **no effect** while it is disabled: `Classifier`, `EventSource` and `EventTrigger`, `HealthCheck` and `ClusterHealthCheck`, `healthMonitoring`, `reloader`. Drift detection (`syncMode: ContinuousWithDriftDetection`) does not need `sveltos-agent` and keeps working, and so does `ManagementClusterClassifier`.
 
 !!!note
@@ -158,6 +174,8 @@ $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --
 ```
 
 The agents run in the **management cluster**, one `Deployment` per managed cluster. Sveltos leaves **no footprint** on managed clusters.
+
+With a large fleet, [Agent Grouping](../../getting_started/install/agentless_agent_grouping.md) (Enterprise) lets one agent serve several clusters. With Helm, it is enabled by setting `agent-clusters-per-instance` on `classifier-manager` and `addon-controller`: see [Enabling Agent Grouping](../../getting_started/install/agentless_agent_grouping.md#helm).
 
 ```
 Management cluster

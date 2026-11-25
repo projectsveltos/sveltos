@@ -42,6 +42,43 @@ The `shard controller` can pass options to the controllers it deploys for a shar
 !!!important
     Only the default `classifier-manager`, the one started without a shard key, deploys `sveltos-agent` and the CRDs, for **every** cluster including the ones in a shard. A shard `classifier-manager` only collects reports. So `--disable-sveltos-agent` and `--agent-clusters-per-instance` must also be set on the default `classifier-manager`. For drift detection, the shard `addon-controller` deploys the `drift-detection-manager` of the clusters in its shard, so the value passed by `--drift-detection-clusters-per-instance` is the one that applies to a shard. The default `addon-controller` needs the same options for the clusters it manages.
 
+### Helm Configuration
+
+With the Helm chart, `sveltos-agent` is disabled with `agent.enabled=false`. The chart passes `--disable-sveltos-agent=true` to the `shard-controller`, to the default `addon-controller` and to the default `classifier-manager`, so there is nothing else to set.
+
+The other flags are arguments of the `shard-controller` and are set with the extra arguments of its Deployment. In agentless mode (`agent.managementCluster=true`) they are `shardController.manager.extraArgsAgentMgmtCluster`. [Agent Grouping](../getting_started/install/agentless_agent_grouping.md) is agentless only, so this is where the grouping flags belong:
+
+```sh
+$ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --create-namespace \
+    --set agent.managementCluster=true \
+    --set shardController.manager.extraArgsAgentMgmtCluster.sveltos-agent-clusters-per-instance=10 \
+    --set shardController.manager.extraArgsAgentMgmtCluster.drift-detection-clusters-per-instance=10 \
+    --set classifierManager.manager.extraArgsAgentMgmtCluster.agent-clusters-per-instance=10 \
+    --set addonController.controller.extraArgsAgentMgmtCluster.agent-clusters-per-instance=10
+```
+
+The last two values are the ones the important note above asks for: they set the same option on the default `classifier-manager` and `addon-controller`.
+
+The same configuration in a values file:
+
+```yaml
+agent:
+  managementCluster: true
+shardController:
+  manager:
+    extraArgsAgentMgmtCluster:
+      sveltos-agent-clusters-per-instance: 10
+      drift-detection-clusters-per-instance: 10
+classifierManager:
+  manager:
+    extraArgsAgentMgmtCluster:
+      agent-clusters-per-instance: 10
+addonController:
+  controller:
+    extraArgsAgentMgmtCluster:
+      agent-clusters-per-instance: 10
+```
+
 ## Customising Shard Component Deployments
 
 When the `shard controller` creates a new set of Sveltos controllers for a shard, it uses built-in deployment templates. In some environments you may need to customise those deployments — for example to change the image registry, adjust resource requests and limits, add node selectors or tolerations, or inject imagePullSecrets.

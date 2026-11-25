@@ -64,7 +64,7 @@ With both methods the dashboard acts as the logged in user: what a user sees, an
 The roles are in the `config/user-rbac` directory of the [ui-backend](https://github.com/projectsveltos/ui-backend/tree/main/config/user-rbac) repository. Apply them to the management cluster:
 
 ```bash
-$ kubectl apply -k "https://github.com/projectsveltos/ui-backend/config/user-rbac?ref=v1.17.0"
+$ kubectl apply -k "https://github.com/projectsveltos/ui-backend/config/user-rbac?ref=v1.18.0"
 ```
 
 !!!note
