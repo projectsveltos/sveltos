@@ -15,7 +15,7 @@
         <link rel="prev" href="../air_gapped_installation/">
       
       
-        <link rel="next" href="../../sveltosctl/sveltosctl/">
+        <link rel="next" href="../agentless_agent_grouping/">
       
       
         
@@ -1193,6 +1193,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#many-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Many Clusters
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1207,6 +1218,33 @@
   
 </nav>
       
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agentless_agent_grouping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent Grouping in Agentless Mode
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -4890,6 +4928,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#many-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Many Clusters
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -5006,6 +5055,8 @@
 <p class="admonition-title">Warning</p>
 <p>Restricting the actual <strong>watches</strong> requires a valid Sveltos Enterprise or Enterprise Plus license granting the <code>NamespaceScopedAgents</code> feature. Without one, the annotation is ignored for that purpose and watches proceed cluster-wide, which will still fail against a namespace-scoped credential. Contact <code>support@projectsveltos.io</code> to explore license options.</p>
 </div>
+<h2 id="many-clusters">Many Clusters</h2>
+<p>In agentless mode Sveltos starts one <code>sveltos-agent</code> and one <code>drift-detection-manager</code> per cluster. When the fleet is large, <a href="../agentless_agent_grouping/#combining-agent-grouping-with-limited-rbac">Agent Grouping</a> lets one instance of each serve several clusters, and still honors the credential and the <code>agent.projectsveltos.io/watch-namespaces</code> annotation of every cluster.</p>
 <h2 id="next-steps">Next Steps</h2>
 <p>Continue with the <strong>sveltoctl</strong> command-line interface (CLI) definition and installation <a href="../../sveltosctl/sveltosctl/">here</a>.</p>
 
@@ -5098,13 +5149,13 @@
         
         
           
-          <a href="../../sveltosctl/sveltosctl/" class="md-footer__link md-footer__link--next" aria-label="Next: sveltosctl">
+          <a href="../agentless_agent_grouping/" class="md-footer__link md-footer__link--next" aria-label="Next: Agent Grouping in Agentless Mode">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                sveltosctl
+                Agent Grouping in Agentless Mode
               </div>
             </div>
             <div class="md-footer__button md-icon">

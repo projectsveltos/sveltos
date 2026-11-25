@@ -1363,6 +1363,33 @@
 
                 
               
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agentless_agent_grouping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent Grouping in Agentless Mode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
             </ul>
           </nav>
         
@@ -5248,6 +5275,10 @@
 <p>If you do not want to have any Sveltos agent in any <strong>managed cluster</strong>, run the commands below.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/projectsveltos/sveltos/v1.17.0/manifest/agents_in_mgmt_cluster_manifest.yaml
 </span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this mode Sveltos starts one <code>sveltos-agent</code> and one <code>drift-detection-manager</code> per managed cluster. With a large fleet, <a href="../agentless_agent_grouping/">Agent Grouping</a> (Enterprise) lets a single instance serve several clusters.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Sveltos is deployed in the <code>projectsveltos</code> namespace.</p>
