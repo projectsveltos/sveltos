@@ -113,7 +113,7 @@ With both pieces in place, `sveltos-agent` and `drift-detection-manager` watch o
 
 ## Many Clusters
 
-In agentless mode Sveltos starts one `sveltos-agent` and one `drift-detection-manager` per cluster. When the fleet is large, [Agent Grouping](agentless_agent_grouping.md#combining-agent-grouping-with-limited-rbac) lets one instance of each serve several clusters, and still honors the credential and the `agent.projectsveltos.io/watch-namespaces` annotation of every cluster.
+In agentless mode Sveltos starts one `sveltos-agent` and one `drift-detection-manager` per cluster. When the fleet is large, [Agent Grouping](agentless_agent_grouping.md#combining-agent-grouping-with-limited-rbac) lets one instance of each serve several clusters (with Helm, it is [enabled](agentless_agent_grouping.md#helm) by setting `agent-clusters-per-instance` on `classifier-manager` and `addon-controller`), and still honors the credential and the `agent.projectsveltos.io/watch-namespaces` annotation of every cluster.
 
 ## Next Steps
 

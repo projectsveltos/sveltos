@@ -41,6 +41,25 @@ $ helm install projectsveltos projectsveltos/projectsveltos -n projectsveltos --
     --set addonController.controller.extraArgsAgentMgmtCluster.agent-clusters-per-instance=10
 ```
 
+The same configuration in a values file:
+
+```yaml
+agent:
+  managementCluster: true
+classifierManager:
+  manager:
+    extraArgsAgentMgmtCluster:
+      agent-clusters-per-instance: 10
+addonController:
+  controller:
+    extraArgsAgentMgmtCluster:
+      agent-clusters-per-instance: 10
+```
+
+The chart adds each entry of `extraArgsAgentMgmtCluster` to the arguments of the Deployment as `--<key>=<value>`. These values are used when `agent.managementCluster=true`, which is the agentless mode. On an existing installation, run `helm upgrade` with the same values: both Deployments restart.
+
+If [sharding](../../scalability/horizontal_scaling_sharding.md) is used, also set the options of the `shard-controller`, see [Helm configuration of the shard controller flags](../../scalability/horizontal_scaling_sharding.md#helm-configuration).
+
 ### Manifest or Kustomize
 
 Add the flag to the arguments of the two Deployments. With Kustomize, for instance:
@@ -49,7 +68,7 @@ Add the flag to the arguments of the two Deployments. With Kustomize, for instan
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode?timeout=120&ref=v1.17.0
+- https://github.com/projectsveltos/sveltos.git//kustomize/overlays/agentless-mode?timeout=120&ref=v1.18.0
 patches:
 - target:
     kind: Deployment
