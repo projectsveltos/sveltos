@@ -5056,7 +5056,7 @@
 <p>Restricting the actual <strong>watches</strong> requires a valid Sveltos Enterprise or Enterprise Plus license granting the <code>NamespaceScopedAgents</code> feature. Without one, the annotation is ignored for that purpose and watches proceed cluster-wide, which will still fail against a namespace-scoped credential. Contact <code>support@projectsveltos.io</code> to explore license options.</p>
 </div>
 <h2 id="many-clusters">Many Clusters</h2>
-<p>In agentless mode Sveltos starts one <code>sveltos-agent</code> and one <code>drift-detection-manager</code> per cluster. When the fleet is large, <a href="../agentless_agent_grouping/#combining-agent-grouping-with-limited-rbac">Agent Grouping</a> lets one instance of each serve several clusters, and still honors the credential and the <code>agent.projectsveltos.io/watch-namespaces</code> annotation of every cluster.</p>
+<p>In agentless mode Sveltos starts one <code>sveltos-agent</code> and one <code>drift-detection-manager</code> per cluster. When the fleet is large, <a href="../agentless_agent_grouping/#combining-agent-grouping-with-limited-rbac">Agent Grouping</a> lets one instance of each serve several clusters (with Helm, it is <a href="../agentless_agent_grouping/#helm">enabled</a> by setting <code>agent-clusters-per-instance</code> on <code>classifier-manager</code> and <code>addon-controller</code>), and still honors the credential and the <code>agent.projectsveltos.io/watch-namespaces</code> annotation of every cluster.</p>
 <h2 id="next-steps">Next Steps</h2>
 <p>Continue with the <strong>sveltoctl</strong> command-line interface (CLI) definition and installation <a href="../../sveltosctl/sveltosctl/">here</a>.</p>
 
