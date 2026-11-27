@@ -275,6 +275,42 @@ spec:
 
 More examples can be found [here](../features/labels_management/#classifier-automatically-manage-cluster-labels-and-add-ons).
 
+#### Classification Flow
+
+The diagram above compresses several reconciliation steps into a single arrow. This is the actual sequence, end to end.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant CM as classifier-manager<br/>(management cluster)
+    participant MC as Managed Cluster
+    participant SA as sveltos-agent<br/>(in Managed Cluster)
+
+    User->>CM: create Classifier
+    CM->>MC: deploy CRDs (Classifier, ClassifierReport, ...)
+    CM->>MC: deploy sveltos-agent
+    Note over CM,MC: deployment is a declarative apply,<br/>so an already-running agent is left untouched
+    CM->>MC: deploy Classifier instance
+    SA->>MC: watch resources matching<br/>spec.deployedResourceConstraints.resourceSelectors
+    SA->>MC: watch cluster Kubernetes version<br/>for spec.kubernetesVersionConstraints
+
+    loop on every watched create/update/delete, and on version change
+        SA->>SA: evaluate Classifier rules against current cluster state
+        SA->>MC: create or update ClassifierReport with the result
+    end
+
+    CM->>MC: collect ClassifierReport
+    CM->>CM: updateLabelsOnCluster:<br/>ask keymanager which labels this Classifier may set
+    CM->>CM: apply the SveltosCluster/CAPI Cluster labels<br/>this Classifier is authorized to manage
+```
+
+The agent watches two independent trigger classes:
+
+- **Resource events**: `spec.deployedResourceConstraints.resourceSelectors` names the Group/Version/Kind (plus optional label/field filters) of the resources the agent watches inside the managed cluster. Any create, update, or delete of a matching resource re-runs the evaluation.
+- **Kubernetes version changes**: `spec.kubernetesVersionConstraints` matches against the managed cluster's own Kubernetes version, so a cluster upgrade re-runs the evaluation too.
+
+A managed cluster can be targeted by more than one Classifier, and two Classifiers can both try to set the same label key. `classifier-manager` resolves this through `keymanager`, which tracks which Classifier currently owns each label key on each cluster; `updateLabelsOnCluster` only writes a label if `keymanager` confirms this Classifier is allowed to manage it, and `removeLabelsFromCluster` only clears a label the Classifier itself owns. This is the same conflict resolution `ManagementClusterClassifier` uses, described in [Classify Clusters from Management Cluster Resources](../features/mgmt_cluster_classification.md).
+
 ---
 
 ### ClusterSet/Set → Cluster Selection
