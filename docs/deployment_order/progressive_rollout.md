@@ -199,6 +199,42 @@ The `ManualTrigger` stops the pipeline and needs human intervention. It is usual
 * **`automaticReset`** (Type: `boolean`)
     If set to `true` (default), Sveltos will automatically reset the `approved` field to `nil`/`false` after successfully promoting to the next stage.
 
+## Stage Clusters and Failure Tolerance
+
+A stage is complete when every cluster it selects is provisioned. Sveltos reports the state of those clusters in the stage status, and two optional fields of the stage tell how failures and paused clusters are handled.
+
+* **`maxFailedClusters`** (Type: `int or percentage`, default: `0`)
+    How many clusters selected by the stage can fail (the deployment fails, or a post-deployment health check reports the cluster unhealthy) while the stage is still considered complete. The value is an absolute number (e.g. `5`) or a percentage of the clusters selected by the stage (e.g. `10%`). When more clusters than this fail, the pipeline stops at the stage. The default of `0` means every cluster selected by the stage must succeed.
+
+* **`waitForPausedClusters`** (Type: `boolean`, default: `true`)
+    When `true`, the stage waits for clusters which are ready but paused: it is not complete until Sveltos has deployed to them. When `false`, paused clusters are not waited for and are not counted. Clusters which are not ready are always waited for.
+
+```yaml
+stages:
+- name: production
+  clusterSelector:
+    matchLabels:
+      env: production
+  maxFailedClusters: 5%
+  trigger:
+    auto:
+      delay: 5m
+```
+
+!!!note
+    Tolerated failures are not hidden. Failed clusters are listed in the stage status, with the failure message. Only clusters where the deployment failed are tolerated: clusters which are still provisioning, or not ready, are always waited for. If the `maxUpdate` field is set, a failed cluster keeps counting as being updated: when as many clusters as `maxUpdate` fail, no other cluster is updated.
+
+### Stage Status
+
+For each stage, `status.stages` reports:
+
+* **`clusterCounts`**: how many clusters the stage selects (`matching`) and how many are `provisioned`, `provisioning`, `pending` (no deployment started yet, for instance because of `maxUpdate`) and `failed`. The counts are always set.
+* **`pendingClusters`**, **`provisioningClusters`**, **`failedClusters`**: the clusters which are not provisioned yet. Provisioned clusters are only counted. Each list contains at most 100 clusters, and `clusterListsTruncated` is `true` when a list is cut. `failedClusters` also has the failure message of each cluster.
+
+```bash
+$ kubectl get clusterpromotion <ClusterPromotion name> -o jsonpath='{.status.stages[*].clusterCounts}'
+```
+
 ## Pre-Health Check Deployments
 
 The `PreHealthCheckDeployment` field to the `AutoTrigger` allows to run explicit validation or testing configurations after a soak period but before the final health gate is checked.
